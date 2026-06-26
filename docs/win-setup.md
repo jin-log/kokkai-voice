@@ -1,0 +1,110 @@
+# Windows での作業（Mac と同じこと）
+
+最終更新: 2026-06-26（Mac 作業分の引き継ぎ）
+
+---
+
+## CF（Cloudflare）って何？
+
+**サイトをネットに公開する無料の配信サービス。** ドメイン `seiji1192.site` の DNS はすでに CF 経由。
+
+| 用語 | 意味 |
+|------|------|
+| **Cloudflare（CF）** | ドメイン・HTTPS・CDN・**Pages（静的サイトホスティング）** |
+| **CF Pages** | GitHub の `kokkai-voice` をビルドして `seiji1192.site` で配信する機能 |
+| **jin-log との関係** | 同じ CF アカウントを使える。リポ・ドメインは別 |
+
+**いま:** コードは GitHub にある。**本番公開（Pages 接続）は未完了** — Win でも Mac でも同じ手順でできる。
+
+---
+
+## Win 初回セットアップ
+
+```powershell
+cd C:\Users\bero1\Projects
+git clone https://github.com/jin-log/kokkai-voice.git
+cd kokkai-voice
+npm ci
+npm run dev
+```
+
+→ http://localhost:4321
+
+すでに clone 済みなら:
+
+```powershell
+cd C:\Users\bero1\Projects\kokkai-voice
+git pull
+npm ci
+```
+
+### ceo-sync（エージェント用ルール）
+
+```powershell
+cd C:\Users\bero1\Projects\ceo-sync
+.\scripts\ceosync.ps1 pull
+```
+
+---
+
+## Mac で終わっていること（2026-06-26）
+
+| 項目 | 状態 |
+|------|------|
+| Astro 本番 | ✅ `src/` · 22 ページ |
+| 実データ | ✅ 20 案件 + X URL 95/100 |
+| GitHub | ✅ `main` @ `c0adf08` 以降 |
+| O8 法務方針 | ✅ `docs/owner-policy.md` |
+| O14 公開 GO | ✅ `bouka-taisaku` publishReady |
+| X アカ | ✅ `@seiji1192site`（フッターにリンク済み） |
+| note | 方針のみ・URL 未 |
+| **CF Pages デプロイ** | ⬜ **未**（API トークンなしで Mac からは失敗） |
+
+---
+
+## 本番公開（Win でも Mac でも同じ）
+
+**A. CF ダッシュボード（おすすめ・トークン不要）**
+
+1. https://dash.cloudflare.com → **Workers & Pages** → **Create** → **Connect to Git**
+2. リポ `jin-log/kokkai-voice`
+3. Framework **Astro** · Build `npm run build` · Output `dist` · `NODE_VERSION=20`
+4. **Custom domains** → `seiji1192.site`
+
+**B. wrangler（jin-log と同じトークンが使える場合）**
+
+```powershell
+$env:CLOUDFLARE_API_TOKEN="（トークン）"
+$env:CLOUDFLARE_ACCOUNT_ID="（アカウントID）"
+npm run build
+npx wrangler pages deploy dist --project-name=kokkai-voice --branch=main
+```
+
+**C. GitHub Actions** — `.github/workflows/deploy-pages.yml` をリポに入れたうえで、Secrets に上記 2 つを設定（PAT に `workflow` 権限が必要）。
+
+詳細: `docs/deploy-cloudflare.md`
+
+---
+
+## 日常の開発コマンド（Mac と同一）
+
+| 作業 | コマンド |
+|------|----------|
+| 開発サーバー | `npm run dev` → :4321 |
+| 本番ビルド | `npm run build` → `dist/` |
+| サンプル UI | `cd samples` → `.\preview.ps1` → :8770 |
+| 法務チェック | `node scripts/check-publish-ready.mjs --slug bouka-taisaku` |
+| 記事再生成 | `node scripts/generate-case-pages.mjs` |
+
+---
+
+## 同期のしかた
+
+| やりたいこと | コマンド |
+|--------------|----------|
+| Win で最新を取る | `git pull`（kokkai-voice） |
+| ルール同期 | `ceo-sync\scripts\ceosync.ps1 pull` |
+| Mac に上げる | `git add` → `commit` → `push` |
+| 両方まとめて | オーナーが **ceosync push** と言う → CEO が ceo-sync を push |
+
+**コードの正本は GitHub。** `node_modules` と `dist` は pull 後に `npm ci` / `npm run build` で再生成。

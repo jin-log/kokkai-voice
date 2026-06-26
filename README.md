@@ -26,6 +26,7 @@
 | [docs/shorts-pipeline.md](docs/shorts-pipeline.md) | ショート量産 |
 | [docs/i18n-en.md](docs/i18n-en.md) | **英語版・海外 SEO・シンクロ公開** |
 | [docs/release-taskboard.md](docs/release-taskboard.md) | **リリースまでタスク・達成度** |
+| [docs/win-setup.md](docs/win-setup.md) | **Windows 作業・CF 説明・Mac 引き継ぎ** |
 | [docs/sns-strategy.md](docs/sns-strategy.md) | 集客・X 方針 |
 | [docs/x-archive.md](docs/x-archive.md) | X リンク＋スクショ保存（API 不使用） |
 
