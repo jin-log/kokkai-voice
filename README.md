@@ -20,6 +20,7 @@
 | [docs/architecture.md](docs/architecture.md) | 技術構成案 |
 | [docs/monetization.md](docs/monetization.md) | 収益化 |
 | [docs/mvp-roadmap.md](docs/mvp-roadmap.md) | 開発フェーズ |
+| [docs/sns-strategy.md](docs/sns-strategy.md) | X 取り込み・サイト集客 |
 
 ## ローカル
 

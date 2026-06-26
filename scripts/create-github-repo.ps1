@@ -50,7 +50,7 @@ foreach ($uri in @("https://api.github.com/orgs/$Org/repos", 'https://api.github
 if (-not $owner) { throw 'Could not create repository' }
 
 Set-Location $repoRoot
-git remote remove origin 2>$null | Out-Null
+cmd /c "git remote remove origin 2>nul"
 git remote add origin "https://github.com/$owner/$Name.git"
 git branch -M main
 git push -u origin main
