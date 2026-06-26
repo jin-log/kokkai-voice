@@ -42,8 +42,22 @@
 | Build | `npm run build` |
 | Output | `dist` |
 | NODE_VERSION | `20` |
+| GitHub Actions | `.github/workflows/deploy-pages.yml`（`main` push で自動） |
 
-**Custom domains:** `seiji1192.site` / `www.seiji1192.site`
+**初回のみ（どちらか）**
+
+**A. GitHub Secrets（jin-log と同じ CF アカウントならトークン流用可）**
+
+1. GitHub → `jin-log/kokkai-voice` → Settings → Secrets → Actions
+2. `CLOUDFLARE_API_TOKEN` / `CLOUDFLARE_ACCOUNT_ID` を追加
+3. `main` に push → Actions が `kokkai-voice` プロジェクトへ deploy
+
+**B. CF ダッシュボードで Git 接続**
+
+1. Workers & Pages → Create → Connect to Git → `kokkai-voice`
+2. 上表のビルド設定 → Save and Deploy
+
+**Custom domains:** `seiji1192.site` / `www.seiji1192.site`（Pages プロジェクト → Custom domains）
 
 NS 移管済みなら CF が自動で DNS を張る。未移管の場合はムームー側 CNAME（`.site` も NS 移管推奨）。
 

@@ -1,11 +1,28 @@
 ---
+import { SITE } from "../lib/site-config.mjs";
+
 interface Props {
   note?: string;
 }
 
-const { note = "国会議事録 API + スクショアーカイブ。AI要約は解釈を含みます。" } = Astro.props;
+const { note } = Astro.props;
 ---
 
 <footer class="site-footer">
-  <p>{note}</p>
+  <nav class="site-footer__links" aria-label="フッター">
+    <a href={SITE.domain}>トップ</a>
+    <a href="/search">案件一覧</a>
+    <a href={SITE.xUrl} target="_blank" rel="noopener noreferrer">X {SITE.xHandle}</a>
+    {
+      SITE.noteUrl && (
+        <a href={SITE.noteUrl} target="_blank" rel="noopener noreferrer">
+          noteで応援
+        </a>
+      )
+    }
+  </nav>
+  <p class="site-footer__note">
+    {note ??
+      "国会議事録 API + スクショアーカイブ。AI要約は解釈を含みます。党の宣伝・投票の呼びかけはしません。"}
+  </p>
 </footer>
