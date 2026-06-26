@@ -18,32 +18,18 @@
 
 ---
 
-## Win 初回セットアップ
-
-```powershell
-cd C:\Users\bero1\Projects
-git clone https://github.com/jin-log/kokkai-voice.git
-cd kokkai-voice
-npm ci
-npm run dev
-```
-
-→ http://localhost:4321
-
-すでに clone 済みなら:
-
-```powershell
-cd C:\Users\bero1\Projects\kokkai-voice
-git pull
-npm ci
-```
-
-### ceo-sync（エージェント用ルール）
+## Win で続けるとき（ceosync pull だけ）
 
 ```powershell
 cd C:\Users\bero1\Projects\ceo-sync
 .\scripts\ceosync.ps1 pull
 ```
+
+→ ルール同期 + **kokkai-voice 含む全プロジェクト pull** + `npm ci` まで自動。
+
+Mac も同様: `~/Projects/ceo-sync/scripts/ceosync.sh pull`
+
+手動の `git clone` / `git pull` は **不要**（初回も ceosync pull だけで可）。
 
 ---
 
@@ -102,9 +88,7 @@ npx wrangler pages deploy dist --project-name=kokkai-voice --branch=main
 
 | やりたいこと | コマンド |
 |--------------|----------|
-| Win で最新を取る | `git pull`（kokkai-voice） |
-| ルール同期 | `ceo-sync\scripts\ceosync.ps1 pull` |
-| Mac に上げる | `git add` → `commit` → `push` |
-| 両方まとめて | オーナーが **ceosync push** と言う → CEO が ceo-sync を push |
+| **全部取り込む（これだけ）** | `ceo-sync\scripts\ceosync.ps1 pull`（Win） / `ceo-sync/scripts/ceosync.sh pull`（Mac） |
+| ルールを上げる | オーナーが **ceosync push** → CEO が push |
 
-**コードの正本は GitHub。** `node_modules` と `dist` は pull 後に `npm ci` / `npm run build` で再生成。
+`ceosync pull` = ceo-sync + jin-log + ff14 + **kokkai-voice** の clone/pull + npm ci。
