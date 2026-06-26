@@ -3,25 +3,20 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>物価高のあの話どうなった？｜日本の政治なう</title>
+  <title>物価高対策 — あの話どうなった？｜日本の政治なう</title>
+  <meta name="description" content="○片山国務大臣 令和六年度の一般会計予算の原油価格・物価高騰対策及び賃上げ促進環境整備対応予備費、当初一・〇兆円ですね。 物価が当初の想定よりも高騰した場合に備えて計上していたということよりは、物価の高止まりが国民生活に与える影響の先行きを">
   <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="../css/tokens.css">
-  <link rel="stylesheet" href="../css/main.css">
+  <link rel="stylesheet" href="../css/tokens.css?v=20260626f">
+  <link rel="stylesheet" href="../css/main.css?v=20260626f">
 </head>
 <body data-case="bouka-taisaku">
   <header class="site-header">
     <div class="container site-header__inner site-header__inner--search">
       <a class="logo" href="../index.html">
-        <img class="logo__img" src="../assets/logo-header-nihon-seiji-naw.png" alt="日本の政治なう — あの話どうなった？" width="520" height="130">
+        <img class="logo__img" src="../assets/logo-header-nihon-seiji-naw.png" alt="日本の政治なう" width="520" height="130">
       </a>
-      <form class="site-search" data-search-form role="search" action="../search.html" method="get">
-        <label class="visually-hidden" for="header-q">案件を検索</label>
-        <input id="header-q" class="site-search__input" type="search" name="q" placeholder="物価高、都知事…">
-        <button type="submit" class="site-search__btn">検索</button>
-      </form>
       <nav class="nav" aria-label="メイン">
         <a href="../search.html">一覧</a>
-        <a href="bouka-taisaku.html">物価高</a>
       </nav>
     </div>
   </header>
@@ -30,151 +25,287 @@
     <header class="case-hero">
       <div class="case-hero__tags">
         <span class="tag">経済</span>
-        <span class="tag">第215回国会</span>
-        <span class="tag tag--deleted">X 削除記録 1件</span>
+        <span class="tag">国会</span>
+        <span class="tag tag--source">国会議事録 API</span>
       </div>
-      <h1 class="case-hero__title">物価高対策 — あの話どうなった？</h1>
+      <h1 class="case-hero__title">物価高対策</h1>
 
-      <div class="now-box">
+      <div class="now-box" id="sec-now">
         <p class="now-box__label">いまの結論（AI・平易語）</p>
-        <p class="now-box__text">
-          ガソリン・電気代の補助は<strong>2026年9月まで延長</strong>でほぼ決まり。
-          一方で「給付金を増やす」案は<strong>与野党で折り合いついておらず</strong>、来月の本会議で再議論の見込み。
-          つまり <strong>コストは抑える方向、現金給付はまだゴタゴタ中</strong>。
-        </p>
-        <p class="now-box__updated">最終更新: 2026年6月26日 · ソース 3件</p>
+
+        <ul class="now-box__bullets">
+          <li>物価高止まりが続く前提で、対策用の予備費1兆円を確保</li>
+          <li>単なる高騰想定の予備ではなく、不足時の機動対応が目的</li>
+          <li>2024年9月、燃料油価格対策などに使途を決定</li>
+        </ul>
+        <p class="now-box__updated">データ取得: 2026-06-26 · APIヒット 1101件 · 要約更新: 2026-06-26 · AI補助による平易語要約です。解釈を含みます。数字・引用・発言内容の正本は primarySpeech.speechFull（国会議事録原文）をご確認ください。</p>
       </div>
 
-      <div class="reaction-summary" aria-label="国民の評価">
-        <span class="reaction-summary__label">国民の気持ち</span>
+      <div class="reaction-summary" id="sec-mood" aria-label="みんなのキモチ">
+        <span class="reaction-summary__label">みんなのキモチ</span>
         <div class="reaction-bar" aria-hidden="true">
-          <div class="reaction-bar__good" data-good-bar style="width: 62%"></div>
+          <div class="reaction-bar__good" data-good-bar style="width: 0%"></div>
+          <div class="reaction-bar__neutral" data-neutral-bar style="width: 0%"></div>
+          <div class="reaction-bar__bad" data-bad-bar style="width: 0%"></div>
         </div>
         <span class="reaction-summary__nums">
-          <span class="good">😊 <span data-good-num>847</span></span>
-          &nbsp;/&nbsp;
-          <span class="bad">😠 <span data-bad-num>521</span></span>
+          <span class="good"><span class="reaction-emoji" aria-hidden="true">😊</span> <span data-good-num>0</span></span>
+          <span class="neutral"><span class="reaction-emoji" aria-hidden="true">😐</span> <span data-neutral-num>0</span></span>
+          <span class="bad"><span class="reaction-emoji" aria-hidden="true">😠</span> <span data-bad-num>0</span></span>
         </span>
         <button type="button" class="btn btn--primary" data-react="good" hidden>Good</button>
+        <button type="button" class="btn" data-react="neutral" hidden>Neutral</button>
         <button type="button" class="btn" data-react="bad" hidden>Bad</button>
       </div>
+
+      <section id="sec-detail" class="summary-layers" aria-label="AI要約">
+      <div class="plain-box">
+        <p class="plain-box__label">AI要約（箇条書き）</p>
+        <ul class="summary-bullets">
+          <li>対策費の不足が出たときに柔軟に充てられる枠。</li>
+          <li>賃上げ促進の環境整備も対象に含む。</li>
+          <li>燃料油価格激変緩和事業へ充当済み。</li>
+          <li>2024年9月、関連経費などに使途を決定。</li>
+        </ul>
+      </div>
+      <div class="plain-box">
+        <p class="plain-box__label">AI平易語解説</p>
+        <p>衆議院の決算行政監視委員会（2026-06-03）で、片山さつき（自由民主党・無所属の会）が発言した内容を整理しています。 要点は「単なる高騰想定の予備ではなく、不足時の機動対応が目的 2024年9月、燃料油価格対策などに使途を決定」などです。</p><p>ここでの整理は発言の一部を平易に言い換えたもので、政府・与党・野党の公式見解を断定するものではありません。数字や引用の正本は原文リンクで確認できます。</p>
+      </div>
+      </section>
     </header>
+
+    <section class="stance-matrix" aria-labelledby="stance-matrix-title">
+      <div class="stance-matrix__head">
+        <span class="stance-matrix__badge">公言 ↔ 行動</span>
+        <h2 id="stance-matrix-title">物価高対策に対する公言と行動</h2>
+        <p class="stance-matrix__lead">「言ったこと（方針）」と「動き（行動）」を並べ、記号で整理します。嘘判定・信頼性スコアは付けません。</p>
+      </div>
+      <div class="stance-matrix__legend" role="list" aria-label="記号の意味">
+        <div class="stance-legend-chip stance-legend-chip--match">
+          <span class="stance-legend-chip__sym">◎</span>
+          <span class="stance-legend-chip__text">方向・規模おおむね一致</span>
+        </div>
+
+        <div class="stance-legend-chip stance-legend-chip--partial">
+          <span class="stance-legend-chip__sym">▲</span>
+          <span class="stance-legend-chip__text">方向一致・規模など一部ずれ</span>
+        </div>
+
+        <div class="stance-legend-chip stance-legend-chip--mismatch">
+          <span class="stance-legend-chip__sym">❌</span>
+          <span class="stance-legend-chip__text">方向逆 or 明確な矛盾</span>
+        </div>
+
+        <div class="stance-legend-chip stance-legend-chip--unknown">
+          <span class="stance-legend-chip__sym">？</span>
+          <span class="stance-legend-chip__text">データ不足・未判定</span>
+        </div>
+      </div>
+      <p class="stance-matrix__criteria"><strong>政党の抜粋:</strong> 物価争点で国会発言または党方針が確認できる主要4党を手動選定（PoC）。掲載順は与野党の審議上の位置づけに近い並びで、全政党・全派閥ではありません。</p>
+      <div class="stance-party-grid">
+        <article class="stance-party-card stance-party-card--match">
+          <header class="stance-party-card__head">
+            <div>
+              <h3 class="stance-party-card__party">自由民主党</h3>
+              <p class="stance-party-card__reason">閣僚説明の方針（予備費・機動対応）と使用決定の行動が一致（PoC手動判定）</p>
+            </div>
+            <span class="stance-party-card__sym stance-party-card__sym--match" title="閣僚説明の方針（予備費・機動対応）と使用決定の行動が一致（PoC手動判定）">◎</span>
+          </header>
+          <div class="stance-party-card__body">
+            
+          <div class="stance-cell stance-cell--stance">
+            <span class="stance-cell__label">方針</span>
+            <p class="stance-cell__text">物価高止まりを前提に予備費で機動的に対応し、賃上げ環境整備も含めて支援</p>
+            <a class="stance-cell__link" href="https://kokkai.ndl.go.jp/txt/122104127X00220260603/32" target="_blank" rel="noopener">出典を見る ↗</a>
+          </div>
+            <div class="stance-party-card__arrow" aria-hidden="true">→</div>
+            
+          <div class="stance-cell stance-cell--action">
+            <span class="stance-cell__label">行動</span>
+            <p class="stance-cell__text">令和6年度予備費1兆円枠のうち、同年9月に燃料油価格対策等へ使用決定</p>
+            <a class="stance-cell__link" href="https://kokkai.ndl.go.jp/txt/122104127X00220260603/32" target="_blank" rel="noopener">国会・関連 ↗</a>
+          </div>
+          </div>
+        </article>
+
+        <article class="stance-party-card stance-party-card--unknown">
+          <header class="stance-party-card__head">
+            <div>
+              <h3 class="stance-party-card__party">国民民主党</h3>
+              <p class="stance-party-card__reason">方針発言はあるが、同一争点の党議決・投票データ未紐付け</p>
+            </div>
+            <span class="stance-party-card__sym stance-party-card__sym--unknown" title="方針発言はあるが、同一争点の党議決・投票データ未紐付け">？</span>
+          </header>
+          <div class="stance-party-card__body">
+            
+          <div class="stance-cell stance-cell--stance">
+            <span class="stance-cell__label">方針</span>
+            <p class="stance-cell__text">物価対策の本質は賃上げ。税制優遇等の短期策だけでは不十分との立場</p>
+            <a class="stance-cell__link" href="https://kokkai.ndl.go.jp/txt/122104080X00720260513/129" target="_blank" rel="noopener">出典を見る ↗</a>
+          </div>
+            <div class="stance-party-card__arrow" aria-hidden="true">→</div>
+            
+          <div class="stance-cell stance-cell--action">
+            <span class="stance-cell__label">行動</span>
+            <p class="stance-cell__text">未整理（採決・提出法案の紐付け待ち）</p>
+            <span class="stance-cell__pending">出典未登録</span>
+          </div>
+          </div>
+        </article>
+      </div>
+      
+      <div class="stance-politicians">
+        <h3 class="stance-matrix__subhead">議員の整理（抜粋）</h3>
+        <p class="stance-matrix__criteria stance-matrix__criteria--politicians">本案件の閣僚答弁（片山さつき）と、同一争点で別の論点（賃上げ重視）を国会で述べた議員（丹野みどり）を対比用に掲載。全議員ではありません。</p>
+        <div class="stance-politicians__grid">
+        <article class="stance-politician stance-politician--match">
+          <div class="stance-politician__top">
+            <div>
+              <h3 class="stance-politician__name">片山さつき</h3>
+              <p class="stance-politician__party">自由民主党・無所属の会</p>
+            </div>
+            <span class="stance-politician__sym stance-politician__sym--match">◎</span>
+          </div>
+          <div class="stance-politician__track" aria-label="追跡件数"><span class="stance-politician__count stance-politician__count--match"><span class="stance-politician__count-sym" aria-hidden="true">◎</span>1</span><span class="stance-politician__count stance-politician__count--partial"><span class="stance-politician__count-sym" aria-hidden="true">▲</span>0</span><span class="stance-politician__count stance-politician__count--bad"><span class="stance-politician__count-sym" aria-hidden="true">❌</span>0</span><span class="stance-politician__count stance-politician__count--muted"><span class="stance-politician__count-sym" aria-hidden="true">？</span>0</span></div>
+          <div class="stance-politician__grid">
+            
+          <div class="stance-cell stance-cell--stance">
+            <span class="stance-cell__label">方針</span>
+            <p class="stance-cell__text">物価高止まり下で予備費を機動的に使い、燃料油対策等に充当</p>
+            <a class="stance-cell__link" href="https://kokkai.ndl.go.jp/txt/122104127X00220260603/32" target="_blank" rel="noopener">発言 ↗</a>
+          </div>
+            
+          <div class="stance-cell stance-cell--action">
+            <span class="stance-cell__label">行動</span>
+            <p class="stance-cell__text">閣僚として予備費の位置づけを説明し、2024年9月の使用決定を言及</p>
+            <a class="stance-cell__link" href="https://kokkai.ndl.go.jp/txt/122104127X00220260603/32" target="_blank" rel="noopener">関連 ↗</a>
+          </div>
+          </div>
+          <p class="stance-politician__note">本人発言と説明内容が一致（閣僚答弁・PoC）</p>
+        </article>
+
+        <article class="stance-politician stance-politician--unknown">
+          <div class="stance-politician__top">
+            <div>
+              <h3 class="stance-politician__name">丹野みどり</h3>
+              <p class="stance-politician__party">国民民主党・無所属クラブ</p>
+            </div>
+            <span class="stance-politician__sym stance-politician__sym--unknown">？</span>
+          </div>
+          <div class="stance-politician__track" aria-label="追跡件数"><span class="stance-politician__count stance-politician__count--match"><span class="stance-politician__count-sym" aria-hidden="true">◎</span>0</span><span class="stance-politician__count stance-politician__count--partial"><span class="stance-politician__count-sym" aria-hidden="true">▲</span>0</span><span class="stance-politician__count stance-politician__count--bad"><span class="stance-politician__count-sym" aria-hidden="true">❌</span>0</span><span class="stance-politician__count stance-politician__count--muted"><span class="stance-politician__count-sym" aria-hidden="true">？</span>1</span></div>
+          <div class="stance-politician__grid">
+            
+          <div class="stance-cell stance-cell--stance">
+            <span class="stance-cell__label">方針</span>
+            <p class="stance-cell__text">物価対策として税制優遇は短期的には理解できるが、本質は賃上げ</p>
+            <a class="stance-cell__link" href="https://kokkai.ndl.go.jp/txt/122104080X00720260513/129" target="_blank" rel="noopener">発言 ↗</a>
+          </div>
+            
+          <div class="stance-cell stance-cell--action">
+            <span class="stance-cell__label">行動</span>
+            <p class="stance-cell__text">同一争点の採決・法案投票は未紐付け</p>
+            <a class="stance-cell__link" href="https://kokkai.ndl.go.jp/txt/122104080X00720260513/129" target="_blank" rel="noopener">関連 ↗</a>
+          </div>
+          </div>
+          <p class="stance-politician__note">発言はあるが、政府予備費方針との対比用の投票データ未整理</p>
+        </article>
+        </div>
+      </div>
+      <p class="stance-matrix__note">党・個人の評価ではなく、出典付きの事実整理です。PoC手動データ。 · <a href="../index.html">方法論</a>は <code>docs/policy-matrix.md</code> · PoC v1-poc-manual</p>
+    </section>
 
     <section class="glossary" aria-labelledby="glossary-title">
       <h2 id="glossary-title">この案件の用語（ヒヨコでも分かる版）</h2>
       <dl>
-        <dt>財政出動</dt>
-        <dd>国がお金を出して経済を支えること。補助金や給付の総称。</dd>
-        <dt>補正予算</dt>
-        <dd>年度の途中で「追加の国の財布」を parliament で決める手続き。</dd>
-        <dt>エネルギー価格抑制策</dt>
-        <dd>ガソリン・電気・ガスが高いのを抑えるための補助・減税など。</dd>
+        <dt>物価</dt>
+        <dd>物やサービスの値段水準のこと</dd>
+
+        <dt>物価高騰</dt>
+        <dd>物の値段が続けて上がること</dd>
+
+        <dt>賃上げ</dt>
+        <dd>企業が従業員の給料や賃金を引き上げること</dd>
+
+        <dt>予備費</dt>
+        <dd>予見しにくい支出に備えて、年度の予算に最初から計上しておく経費</dd>
       </dl>
     </section>
-
-    <section class="timeline" aria-label="案件タイムライン">
+    <section class="timeline" id="sec-timeline" aria-label="案件タイムライン">
       <article class="timeline-item">
-        <time class="timeline-item__date" datetime="2026-03-15">2026年3月15日</time>
-        <p class="timeline-item__type">国会 · 衆院本会議</p>
+        <time class="timeline-item__date" datetime="2026-06-03">2026年6月3日</time>
+        <p class="timeline-item__type">国会 · 衆議院 · 決算行政監視委員会</p>
         <div class="event-card">
-          <p class="event-card__who">田中 一郎 議員（○○党）</p>
-          <p class="event-card__meta">第215回国会 · 本会議 · 発言 #142</p>
+          <p class="event-card__who">片山さつき（自由民主党・無所属の会）</p>
+          <p class="event-card__meta">第221回国会 · 号 第2号 · speechID 122104127X00220260603_032</p>
           <div class="plain-box">
-            <p class="plain-box__label">つまりこういうこと</p>
-            <p>
-              「物価が上がって生活がキツい。国は
-              <span class="term" data-tip="国がお金を出して経済を支えること">財政出動</span>
-              でエネルギー代を下げる支援を続けろ。給付金も検討しろ」と言っている。
-            </p>
+            <p class="plain-box__label">原文抜粋（speechFull 参照）</p>
+            <p>○片山国務大臣 令和六年度の一般会計予算の原油価格・物価高騰対策及び賃上げ促進環境整備対応予備費、当初一・〇兆円ですね。 物価が当初の想定よりも高騰した場合に備えて計上していたということよりは、物価の高止まりが国民生活に与える影響の先行きを正確に見通すことが困難であるような中で、物価と賃金の好循環に向け、賃上げ促進の環境整備を含め、物価高対策に必要となる経費に予期せぬ不足が生じた際には機動的に対応できるようにするために計上したというふうに承知しております。 そのために、当初の想定よりも物価が高騰したかどうかを理由としたというわけではなくて、…</p>
           </div>
           <blockquote class="quote-block">
-            「物価高騰は国民生活に直撃しており、エネルギー価格抑制策の継続と、低所得者層への給付拡大が不可欠である…」
-            <br><a href="https://kokkai.ndl.go.jp/" target="_blank" rel="noopener">国会議事録で原文を見る ↗</a>
+            <a href="https://kokkai.ndl.go.jp/txt/122104127X00220260603/32" target="_blank" rel="noopener">国会議事録で原文を見る ↗</a>
+            · <a href="https://kokkai.ndl.go.jp/txt/122104127X00220260603" target="_blank" rel="noopener">会議全文 ↗</a>
           </blockquote>
         </div>
       </article>
-
+      
       <article class="timeline-item">
-        <time class="timeline-item__date" datetime="2026-04-02">2026年4月2日</time>
-        <p class="timeline-item__type">X（削除済み · スクショ保存）</p>
+        <p class="timeline-item__type">X · 枠 1</p>
         <div class="event-card">
-          <p class="event-card__who">佐藤 健太 議員 @sato_example</p>
-          <p class="event-card__meta">取得: 2026-04-02 22:14 · SHA256 記録済み</p>
-          <div class="plain-box">
-            <p class="plain-box__label">つまりこういうこと</p>
-            <p>「物価対策は十分。追加給付は財源がない」と SNS で発信 → <strong>4月5日に投稿削除</strong>。当サイトは取得時スクショを保持。</p>
-          </div>
-          <figure class="x-shot">
-            <div class="x-shot__header">
-              <span>スクリーンショットアーカイブ</span>
-              <span class="x-shot__badge">削除済み</span>
-            </div>
-            <div class="x-shot__body">
-              <div class="x-shot__user">
-                <div class="x-shot__avatar" aria-hidden="true"></div>
-                <div>
-                  <div class="x-shot__name">佐藤 健太</div>
-                  <div class="x-shot__handle">@sato_example · 4月2日</div>
-                </div>
-              </div>
-              <p>物価対策は既に手厚い。野党が求める追加給付には現実的な財源がありません。責任ある財政運営を。</p>
-            </div>
-            <figcaption class="x-shot__footer">
-              元URL: x.com/sato_example/status/1234567890（2026-04-05 削除確認）
-            </figcaption>
-          </figure>
-        </div>
-      </article>
-
-      <article class="timeline-item">
-        <time class="timeline-item__date" datetime="2026-05-10">2026年5月10日</time>
-        <p class="timeline-item__type">国会 · 予算委員会</p>
-        <div class="event-card">
-          <p class="event-card__who">山本 裕子 議員（△△党）</p>
-          <p class="event-card__meta">予算委員会 · 第3号</p>
-          <div class="plain-box">
-            <p class="plain-box__label">つまりこういうこと</p>
-            <p>
-              与党は「エネルギー支援の延長」、野党は「現金給付 3 万円案」をぶつけた。
-              <strong>数字の根拠</strong>をめぐって答弁が空回り — まだ結論なし。
-            </p>
-          </div>
+          <p class="event-card__who">玉木雄一郎（国民民主党） @tamakiyuichiro</p>
+          <p class="event-card__meta">URL登録済み · スクショ取得待ち</p>
+          <div class="plain-box"><p class="plain-box__label">投稿内容</p><p>国民会議の中間取りまとめ（案）を改めて見ましたが、内容がひどい。 「つなぎ」としての飲食料品消費税減税の問題点は縷々記述しているものの、その具体的な解決策は一切示さず、 「給付の先行導入を組み合わせることが適当との取りまとめに向けた意見があった」 と記述しているのは不誠実です。 財源については、必要額の記述すらなく「P」（ペンディング）のみです。 各党から反発が出るのも理解できます。 経済財政政策の根幹に関わることなので、数の力で強引に</p></div>
           <blockquote class="quote-block">
-            「抑制策の延長は理解するが、一律給付の財源裏付けを具体的に示してほしい…」
-            <br><a href="https://kokkai.ndl.go.jp/" target="_blank" rel="noopener">国会議事録で原文を見る ↗</a>
+            <a href="https://x.com/tamakiyuichiro/status/2069942382020485487" target="_blank" rel="noopener">元投稿を見る ↗</a>
           </blockquote>
+          
         </div>
       </article>
 
       <article class="timeline-item">
-        <time class="timeline-item__date" datetime="2026-06-20">2026年6月20日</time>
-        <p class="timeline-item__type">X · ショート動画</p>
+        <p class="timeline-item__type">X · 枠 2</p>
         <div class="event-card">
-          <p class="event-card__who">田中 一郎 議員 @tanaka_example</p>
-          <p class="event-card__meta">スクショ + 動画 · 投稿は現在も公開中</p>
+          <p class="event-card__who">蓮舫 @renho_sha</p>
+          <p class="event-card__meta">URL登録済み · スクショ取得待ち</p>
+          <div class="plain-box"><p class="plain-box__label">投稿内容</p><p>高市総理、あまりにも認識が甘いです。ナフサ供給不足に価格高騰。この現実に目を向け…</p></div>
+          <blockquote class="quote-block">
+            <a href="https://x.com/renho_sha/status/2061945530402668905" target="_blank" rel="noopener">元投稿を見る ↗</a>
+          </blockquote>
+          
+        </div>
+      </article>
+
+      <article class="timeline-item">
+        <p class="timeline-item__type">X · 枠 3</p>
+        <div class="event-card">
+          <p class="event-card__who">高市早苗 @takaichi_sanae</p>
+          <p class="event-card__meta">URL登録済み · スクショ取得待ち</p>
+          <div class="plain-box"><p class="plain-box__label">投稿内容</p><p>原油やナフサを含む石油製品は、「日本全体として必要となる量」を確保できていますが、シンナーや塗料については、依然として流通の目詰まりがあり、お困りだというお声が多いため、その原料であるトルエン等の供給を、石油元売からの供給も含めて、例年の需要の1.8倍まで拡大し、シンナーや塗料の生産メーカーにお届けする仕組みを実施しています。 更に、シンナーを実際に使用する工務店や自動車整備業をはじめとする需要家の皆様のお手元に確実に届けるため、経済産</p></div>
+          <blockquote class="quote-block">
+            <a href="https://x.com/takaichi_sanae/status/2069027015483859146" target="_blank" rel="noopener">元投稿を見る ↗</a>
+          </blockquote>
+          
+        </div>
+      </article>
+
+      <article class="timeline-item">
+        <p class="timeline-item__type">X · 枠 4（URL未登録）</p>
+        <div class="event-card event-card--pending">
+          <p class="event-card__meta">国会議員の関連投稿 — スクショ取得待ち</p>
           <div class="plain-box">
-            <p class="plain-box__label">つまりこういうこと</p>
-            <p>「来月、本会議で物価対策を再度議論する」と X で告知。30秒動画で要点を説明。</p>
+            <p class="plain-box__label">X調査中</p>
+            <p>ツイートURLを登録 → Playwrightスクショ → R2保存（API不使用）</p>
           </div>
-          <figure class="x-shot">
-            <div class="x-shot__header">
-              <span>スクリーンショットアーカイブ</span>
-              <span class="x-shot__badge x-shot__badge--live">投稿存続</span>
-            </div>
-            <div class="x-shot__body">
-              <div class="x-shot__user">
-                <div class="x-shot__avatar" aria-hidden="true"></div>
-                <div>
-                  <div class="x-shot__name">田中 一郎</div>
-                  <div class="x-shot__handle">@tanaka_example · 6月20日</div>
-                </div>
-              </div>
-              <p>来月の本会議で物価高対策を再度議論します。生活直結のエネルギー支援継続を。詳細は動画で👇</p>
-            </div>
-            <figcaption class="x-shot__footer">取得: 2026-06-20 09:02 · 元URL 有効</figcaption>
-          </figure>
-          <div class="video-embed" role="img" aria-label="YouTube Shorts 埋め込み（デモ）">
-            ▶ ショート動画（9:16）<br>本番は YouTube embed
+        </div>
+      </article>
+
+      <article class="timeline-item">
+        <p class="timeline-item__type">X · 枠 5（URL未登録）</p>
+        <div class="event-card event-card--pending">
+          <p class="event-card__meta">国会議員の関連投稿 — スクショ取得待ち</p>
+          <div class="plain-box">
+            <p class="plain-box__label">X調査中</p>
+            <p>ツイートURLを登録 → Playwrightスクショ → R2保存（API不使用）</p>
           </div>
         </div>
       </article>
@@ -189,30 +320,47 @@
       </form>
       <ul class="comment-list" data-comment-list>
         <li class="comment">
-          <div class="comment__author">大阪のサラリーマン</div>
-          <p class="comment__body">エネルギー支援延長は助かる。給付金もっと欲しい派。</p>
-          <div class="comment__time">2時間前</div>
-        </li>
-        <li class="comment">
-          <div class="comment__author">政治好き大学生</div>
-          <p class="comment__body">削除された X 残してるの地味に価値ある。メディアに載らないやつ。</p>
-          <div class="comment__time">5時間前</div>
+          <div class="comment__author">読者A</div>
+          <p class="comment__body">国会の原文がそのまま見られるのは助かる。平易語の要約も欲しい。</p>
+          <div class="comment__time">デモ</div>
         </li>
       </ul>
     </section>
-
-    <p class="demo-note">※ 人物名・発言・数値は UI デモ用の架空データです。</p>
+    <p class="demo-note">※ 発言は国会議事録APIの実データ。X枠は構造のみ（URL・スクショ未）。YouTubeショートは未実装。</p>
   </main>
 
-  <div class="float-react" aria-label="国民の気持ち">
-    <button type="button" class="float-react__btn float-react__btn--good" data-float-good aria-label="賛同（にっこり）">
-      😊 <span class="float-react__count" data-float-good-num>847</span>
+  <nav class="float-toc" data-float-toc aria-label="ページ目次">
+    <button type="button" class="float-toc__toggle" data-float-toc-toggle aria-expanded="false" aria-controls="float-toc-panel">
+      目次
+    </button>
+    <div class="float-toc__panel" id="float-toc-panel">
+      <p class="float-toc__title">このページ</p>
+      <ol class="float-toc__list">
+          <li><a class="float-toc__link" href="#sec-now">いまの結論</a></li>
+          <li><a class="float-toc__link" href="#sec-mood">みんなのキモチ</a></li>
+          <li><a class="float-toc__link" href="#sec-detail">AI要約</a></li>
+          <li><a class="float-toc__link" href="#stance-matrix-title">公言と行動</a></li>
+          <li><a class="float-toc__link" href="#glossary-title">用語</a></li>
+          <li><a class="float-toc__link" href="#sec-timeline">タイムライン</a></li>
+          <li><a class="float-toc__link" href="#comments-title">コメント</a></li>
+      </ol>
+    </div>
+  </nav>
+
+  <div class="float-react" aria-label="みんなのキモチ">
+    <button type="button" class="float-react__btn float-react__btn--good" data-float-good aria-label="賛成（にっこり）">
+      <span class="float-react__emoji" aria-hidden="true">😊</span>
+      <span class="float-react__count" data-float-good-num>0</span>
+    </button>
+    <button type="button" class="float-react__btn float-react__btn--neutral" data-float-neutral aria-label="真顔（どちらでもない）">
+      <span class="float-react__emoji" aria-hidden="true">😐</span>
+      <span class="float-react__count" data-float-neutral-num>0</span>
     </button>
     <button type="button" class="float-react__btn float-react__btn--bad" data-float-bad aria-label="反対（怒り）">
-      😠 <span class="float-react__count" data-float-bad-num>521</span>
+      <span class="float-react__emoji" aria-hidden="true">😠</span>
+      <span class="float-react__count" data-float-bad-num>0</span>
     </button>
   </div>
-
-  <script src="../js/app.js"></script>
+  <script src="../js/app.js?v=20260626f"></script>
 </body>
 </html>

@@ -2,7 +2,7 @@
 
 **政治で関心が高いこと**を案件単位で追い、国民の **😊/😠** とコメントで「みんなの気持ち」が見えるメディア。
 
-**ステータス:** 企画・調査フェーズ（MVP 未着手）
+**ステータス:** MVP 構築中（Astro 静的サイト）
 
 ## コンセプト
 
@@ -35,7 +35,17 @@
 ~/Projects/kokkai-voice   （Win: C:\Users\bero1\Projects\kokkai-voice）
 ```
 
-### UI サンプル（デザインモック）
+### Astro 本番サイト（MVP）
+
+```bash
+npm install
+npm run dev    # http://localhost:4321
+npm run build  # → dist/（Cloudflare Pages）
+```
+
+案件ページ例: http://localhost:4321/case/bouka-taisaku
+
+### UI サンプル（デザインモック・参照用）
 
 ```powershell
 cd C:\Users\bero1\Projects\kokkai-voice\samples

@@ -1,0 +1,24 @@
+---
+const { article } = Astro.props;
+const bullets = article.summaryBullets || [];
+const hasBullets = bullets.length > 0;
+const aiDisclaimer =
+  article.nowSummary?.disclaimer ||
+  "AI補助による要約です。解釈を含みます。数字・引用・発言内容の正本は国会議事録リンクをご確認ください。";
+---
+
+{
+  hasBullets && (
+    <section id="sec-detail" class="summary-layers" aria-label="詳しいポイント">
+      <div class="plain-box">
+        <p class="plain-box__label">詳しいポイント（AI）</p>
+        <ul class="summary-bullets">
+          {bullets.map((b) => (
+            <li>{typeof b === "string" ? b : b.text}</li>
+          ))}
+        </ul>
+      </div>
+      <p class="summary-layers__disclaimer">{aiDisclaimer}</p>
+    </section>
+  )
+}

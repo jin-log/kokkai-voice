@@ -1,0 +1,42 @@
+---
+import { ASSET_V } from "../lib/case-helpers.mjs";
+import "../styles/tokens.css";
+import "../styles/main.css";
+
+interface Props {
+  title: string;
+  description?: string;
+  bodyClass?: string;
+  bodyDataCase?: string;
+  includeAppJs?: boolean;
+}
+
+const {
+  title,
+  description = "国会の発言と政治家の X を案件ごとに追いかける。日本の政治なう",
+  bodyClass,
+  bodyDataCase,
+  includeAppJs = false,
+} = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
+  </head>
+  <body class={bodyClass} data-case={bodyDataCase}>
+    <slot />
+    {includeAppJs && <script is:inline src={`/js/app.js?v=${ASSET_V}`}></script>}
+    <!-- Cloudflare Web Analytics -->
+    <script
+      defer
+      src="https://static.cloudflareinsights.com/beacon.min.js"
+      data-cf-beacon='{"token": "99a12445d1fc46a186cb3189f679088d"}'></script>
+    <!-- End Cloudflare Web Analytics -->
+  </body>
+</html>

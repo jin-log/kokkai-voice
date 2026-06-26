@@ -1,0 +1,36 @@
+---
+import { reactionNums } from "../../lib/case-helpers.mjs";
+
+const { article } = Astro.props;
+const { good, neutral, bad } = reactionNums(article);
+---
+
+<div class="float-react" aria-label="みんなのキモチ">
+  <button
+    type="button"
+    class="float-react__btn float-react__btn--good"
+    data-float-good
+    aria-label="賛成（にっこり）"
+  >
+    <span class="float-react__emoji" aria-hidden="true">😊</span>
+    <span class="float-react__count" data-float-good-num>{good}</span>
+  </button>
+  <button
+    type="button"
+    class="float-react__btn float-react__btn--neutral"
+    data-float-neutral
+    aria-label="真顔（どちらでもない）"
+  >
+    <span class="float-react__emoji" aria-hidden="true">😐</span>
+    <span class="float-react__count" data-float-neutral-num>{neutral}</span>
+  </button>
+  <button
+    type="button"
+    class="float-react__btn float-react__btn--bad"
+    data-float-bad
+    aria-label="反対（怒り）"
+  >
+    <span class="float-react__emoji" aria-hidden="true">😠</span>
+    <span class="float-react__count" data-float-bad-num>{bad}</span>
+  </button>
+</div>

@@ -1,0 +1,301 @@
+#!/usr/bin/env node
+/**
+ * X投稿URLリサーチ（API不使用・Web経由）
+ * - Jina Reader で政治家プロフィールから status URL 抽出
+ * - fxtwitter API で投稿本文・表示名取得（公開ページの代替）
+ * - data/articles/*.json の xPosts を更新
+ */
+import { readFile, readdir, writeFile } from "node:fs/promises";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const root = path.join(__dirname, "..");
+const articlesDir = path.join(root, "data/articles");
+
+/** @type {Record<string, { handles: string[], keywords: string[], seed?: Array<{url:string, label?:string, text?:string}> }>} */
+const TOPIC_CONFIG = {
+  物価: {
+    handles: ["takaichi_sanae", "renho_sha", "tamakiyuichiro", "izumi_kenta", "FurukawaMot", "inadatomomi"],
+    keywords: ["物価", "消費税", "インフレ", "値上", "ガソリン", "食料", "給付", "価格", "ナフサ", "補助"],
+    seed: [
+      {
+        url: "https://x.com/renho_sha/status/2061945530402668905",
+        label: "蓮舫 @renho_sha",
+        text: "高市総理、あまりにも認識が甘いです。ナフサ供給不足に価格高騰。この現実に目を向け…",
+      },
+    ],
+  },
+  "食料品 消費税": {
+    handles: ["takaichi_sanae", "tamakiyuichiro", "FurukawaMot", "izumi_kenta", "inadatomomi"],
+    keywords: ["消費税", "食料", "食品", "減税", "給付", "1%", "ゼロ", "実質"],
+  },
+  外国人: {
+    handles: ["shindo_y", "sakurauchikoshi", "sasagawah", "Jimihana", "matsushima_midori", "izumi_kenta", "cdp_japan"],
+    keywords: ["外国人", "入管", "在留", "移民", "共生", "ビザ", "不法", "永住", "難民"],
+    seed: [
+      {
+        url: "https://x.com/shindo_y/status/2065378501486858685",
+        label: "新藤義孝 @shindo_y",
+        text: "外国人政策本部長として「外国人政策に関する第二次提言」を高市総理に手交。不法滞在・不法就労対策の強化など。",
+      },
+      {
+        url: "https://x.com/sakurauchikoshi/status/2063902920303940066",
+      },
+    ],
+  },
+  防衛費: {
+    handles: ["takaichi_sanae", "NakataniGen", "izumi_kenta", "koike_akira", "renho_sha"],
+    keywords: ["防衛", "安保", "自衛", "軍事", "国防", "抑止"],
+  },
+  年金: {
+    handles: ["takaichi_sanae", "izumi_kenta", "tamakiyuichiro", "cdp_japan", "NodaSeiko"],
+    keywords: ["年金", "老後", "社会保障", "受給", "支給"],
+  },
+  少子化: {
+    handles: ["takaichi_sanae", "izumi_kenta", "tamakiyuichiro", "NodaSeiko", "cdp_japan"],
+    keywords: ["少子", "子育", "出生", "育児", "人口"],
+  },
+  "大学 無償": {
+    handles: ["izumi_kenta", "tamakiyuichiro", "NodaSeiko", "takaichi_sanae", "cdp_japan"],
+    keywords: ["大学", "無償", "学費", "教育", "奨学"],
+  },
+  賃上げ: {
+    handles: ["takaichi_sanae", "tamakiyuichiro", "izumi_kenta", "cdp_japan", "NodaSeiko"],
+    keywords: ["賃上", "最低賃金", "賃金", "給与", "労働"],
+  },
+  エネルギー: {
+    handles: ["takaichi_sanae", "renho_sha", "izumi_kenta", "koike_akira", "NakataniGen"],
+    keywords: ["エネルギー", "原発", "電力", "再生可能", "石油", "ガソリン", "ナフサ", "脱炭素"],
+  },
+  政治資金: {
+    handles: ["izumi_kenta", "cdp_japan", "tamakiyuichiro", "NodaSeiko", "renho_sha"],
+    keywords: ["政治資金", "政党助成", "裏金", "献金", "パーティ"],
+  },
+  選挙制度: {
+    handles: ["izumi_kenta", "cdp_japan", "tamakiyuichiro", "NodaSeiko", "renho_sha"],
+    keywords: ["選挙", "比例", "小選挙区", "投票", "選挙制度"],
+  },
+  介護: {
+    handles: ["takaichi_sanae", "izumi_kenta", "tamakiyuichiro", "cdp_japan", "NodaSeiko"],
+    keywords: ["介護", "医療", "高齢", "福祉", "看護"],
+  },
+  地方創生: {
+    handles: ["takaichi_sanae", "izumi_kenta", "NodaSeiko", "tamakiyuichiro", "cdp_japan"],
+    keywords: ["地方創生", "地方", "移住", "地域", "過疎"],
+  },
+  補正予算: {
+    handles: ["takaichi_sanae", "renho_sha", "izumi_kenta", "tamakiyuichiro", "cdp_japan"],
+    keywords: ["補正予算", "予備費", "予算", "財政", "歳出"],
+  },
+  裏金: {
+    handles: ["izumi_kenta", "cdp_japan", "NodaSeiko", "renho_sha", "tamakiyuichiro", "matsumotojoji"],
+    keywords: ["裏金", "政治資金", "派閥", "収支", "パーティ", "政治とカネ", "資金"],
+  },
+  カジノ: {
+    handles: ["izumi_kenta", "tamakiyuichiro", "NodaSeiko", "cdp_japan", "renho_sha"],
+    keywords: ["カジノ", "IR", "統合型", "ギャンブル"],
+  },
+  憲法改正: {
+    handles: ["takaichi_sanae", "izumi_kenta", "NodaSeiko", "shindo_y", "cdp_japan"],
+    keywords: ["憲法", "改憲", "九条", "護憲", "緊急事態"],
+  },
+  関税: {
+    handles: ["takaichi_sanae", "izumi_kenta", "tamakiyuichiro", "NodaSeiko", "cdp_japan"],
+    keywords: ["関税", "貿易", "トランプ", "米国", "輸出", "輸入"],
+  },
+  内閣: {
+    handles: ["takaichi_sanae", "izumi_kenta", "NodaSeiko", "cdp_japan", "tamakiyuichiro"],
+    keywords: ["内閣", "総理", "政権", "閣僚", "首相"],
+  },
+  国民民主党: {
+    handles: ["tamakiyuichiro", "FurukawaMot", "izumi_kenta", "NodaSeiko", "cdp_japan"],
+    keywords: ["国民民主", "公明", "野党", "中道", "与野党"],
+  },
+};
+
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+function parseStatus(url) {
+  const m = url.match(/(?:x|twitter)\.com\/([A-Za-z0-9_]+)\/status\/(\d+)/i);
+  if (!m) return null;
+  return { handle: m[1], id: m[2] };
+}
+
+function scoreText(text, keywords) {
+  const t = text.toLowerCase();
+  return keywords.reduce((n, k) => (t.includes(k.toLowerCase()) ? n + 1 : n), 0);
+}
+
+async function fetchProfileStatuses(handle) {
+  const res = await fetch(`https://r.jina.ai/https://x.com/${handle}`, {
+    headers: { "User-Agent": "kokkai-voice-x-research/1.0" },
+  });
+  if (!res.ok) return [];
+  const text = await res.text();
+  const re = new RegExp(`https?://(?:x|twitter)\\.com/${handle}/status/\\d+`, "gi");
+  return [...new Set(text.match(re) ?? [])].map((u) => u.replace("twitter.com", "x.com"));
+}
+
+async function fetchTweetMeta(handle, id) {
+  const res = await fetch(`https://api.fxtwitter.com/${handle}/status/${id}`, {
+    headers: { "User-Agent": "kokkai-voice-x-research/1.0" },
+  });
+  if (!res.ok) return null;
+  const data = await res.json();
+  const tw = data?.tweet;
+  if (!tw?.id) return null;
+  const author = tw.author ?? {};
+  const screen = author.screen_name ?? handle;
+  return {
+    post_url: `https://x.com/${screen}/status/${tw.id}`,
+    account_label: `${author.name ?? screen} @${screen}`,
+    post_text: (tw.text ?? "").replace(/\s+/g, " ").slice(0, 220),
+    handle: screen,
+    score: 0,
+  };
+}
+
+async function collectForTopic(keyword, config) {
+  const candidates = new Map();
+  const add = (item, score) => {
+    const key = item.post_url;
+    const prev = candidates.get(key);
+    if (!prev || score > prev.score) candidates.set(key, { ...item, score });
+  };
+
+  for (const seed of config.seed ?? []) {
+    const parsed = parseStatus(seed.url);
+    if (!parsed) continue;
+    const meta = await fetchTweetMeta(parsed.handle, parsed.id);
+    if (meta) {
+      meta.account_label = seed.label ?? meta.account_label;
+      meta.post_text = seed.text ?? meta.post_text;
+      meta.score = Math.max(scoreText(meta.post_text, config.keywords), 2);
+      add(meta, meta.score);
+    } else if (seed.label) {
+      add(
+        {
+          post_url: seed.url.replace("twitter.com", "x.com"),
+          account_label: seed.label,
+          post_text: seed.text ?? "",
+          handle: parsed.handle,
+          score: 2,
+        },
+        2,
+      );
+    }
+    await sleep(300);
+  }
+
+  for (const handle of config.handles) {
+    let urls = [];
+    try {
+      urls = await fetchProfileStatuses(handle);
+    } catch {
+      /* ignore */
+    }
+    await sleep(400);
+    for (const url of urls.slice(0, 20)) {
+      const parsed = parseStatus(url);
+      if (!parsed) continue;
+      try {
+        const meta = await fetchTweetMeta(parsed.handle, parsed.id);
+        if (!meta) continue;
+        const sc = scoreText(meta.post_text, config.keywords);
+        if (sc > 0) add(meta, sc);
+      } catch {
+        /* ignore */
+      }
+      await sleep(250);
+    }
+  }
+
+  const sorted = [...candidates.values()].sort((a, b) => b.score - a.score);
+  const picked = [];
+  const usedHandles = new Set();
+  for (const item of sorted) {
+    if (picked.length >= 5) break;
+    if (usedHandles.has(item.handle)) continue;
+    usedHandles.add(item.handle);
+    picked.push(item);
+  }
+  return picked;
+}
+
+function buildSlots(found) {
+  return Array.from({ length: 5 }, (_, i) => {
+    const item = found[i];
+    if (item?.post_url) {
+      return {
+        slot: i + 1,
+        status: "url_found",
+        post_url: item.post_url,
+        account_label: item.account_label,
+        post_text: item.post_text || null,
+        speaker_hint: item.account_label,
+        captured_at: null,
+        screenshot: null,
+        note: "URLのみ登録（x-archive.md Phase2でスクショ）",
+        researched_at: new Date().toISOString(),
+      };
+    }
+    return {
+      slot: i + 1,
+      status: "search_failed",
+      post_url: null,
+      account_label: null,
+      post_text: null,
+      speaker_hint: null,
+      captured_at: null,
+      screenshot: null,
+      note: "Web検索・プロフィール走査で該当URL未特定",
+      researched_at: new Date().toISOString(),
+    };
+  });
+}
+
+async function main() {
+  const only = process.argv.slice(2);
+  const files = await readdir(articlesDir);
+  const articleFiles = files.filter((f) => f.endsWith(".json") && f !== "index.json");
+  let totalFound = 0;
+  const report = [];
+
+  for (const file of articleFiles) {
+    const slug = file.replace(/\.json$/, "");
+    if (only.length && !only.includes(slug)) continue;
+
+    const articlePath = path.join(articlesDir, file);
+    const article = JSON.parse(await readFile(articlePath, "utf8"));
+    const kw = article.searchKeyword;
+    const config = TOPIC_CONFIG[kw];
+    if (!config) {
+      console.warn(`SKIP ${slug}: no config for keyword "${kw}"`);
+      continue;
+    }
+
+    console.log(`Researching ${slug} (${kw})...`);
+    const found = await collectForTopic(kw, config);
+    const urlCount = found.filter((f) => f.post_url).length;
+    totalFound += Math.min(urlCount, 5);
+    article.xPosts = buildSlots(found);
+    article.xResearch = {
+      researched_at: new Date().toISOString(),
+      urls_found: urlCount,
+      method: "jina_reader+fxtwitter_public",
+    };
+    await writeFile(articlePath, JSON.stringify(article, null, 2) + "\n", "utf8");
+    report.push({ slug, urls_found: urlCount });
+    console.log(`  -> ${urlCount}/5 URLs`);
+  }
+
+  console.log("\n=== CEO REPORT ===");
+  console.log(`URLs found: ${totalFound} / 100`);
+  for (const r of report) console.log(`  ${r.slug}: ${r.urls_found}/5`);
+}
+
+main().catch((e) => {
+  console.error(e);
+  process.exit(1);
+});

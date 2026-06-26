@@ -1,0 +1,27 @@
+<section class="comments" aria-labelledby="comments-title">
+  <h2 id="comments-title">コメント（デモ）</h2>
+  <form class="comment-form" data-comment-form>
+    <input
+      type="text"
+      name="name"
+      placeholder="ニックネーム"
+      maxlength="32"
+      aria-label="ニックネーム"
+    />
+    <textarea
+      name="body"
+      placeholder="この案件についての意見…"
+      maxlength="500"
+      required
+      aria-label="コメント"
+    ></textarea>
+    <button type="submit" class="btn btn--primary">投稿（デモ・即表示）</button>
+  </form>
+  <ul class="comment-list" data-comment-list>
+    <li class="comment">
+      <div class="comment__author">読者A</div>
+      <p class="comment__body">国会の原文がそのまま見られるのは助かる。平易語の要約も欲しい。</p>
+      <div class="comment__time">デモ</div>
+    </li>
+  </ul>
+</section>

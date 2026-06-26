@@ -1,0 +1,32 @@
+---
+import { getFloatTocItems } from "../../lib/case-helpers.mjs";
+
+const { article, hasStance } = Astro.props;
+const items = getFloatTocItems(article, hasStance);
+---
+
+<nav class="float-toc" data-float-toc aria-label="ページ目次">
+  <button
+    type="button"
+    class="float-toc__toggle"
+    data-float-toc-toggle
+    aria-expanded="false"
+    aria-controls="float-toc-panel"
+  >
+    目次
+  </button>
+  <div class="float-toc__panel" id="float-toc-panel">
+    <p class="float-toc__title">このページ</p>
+    <ol class="float-toc__list">
+      {
+        items.map((item) => (
+          <li>
+            <a class="float-toc__link" href={item.href}>
+              {item.label}
+            </a>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</nav>

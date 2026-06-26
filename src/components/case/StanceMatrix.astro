@@ -1,0 +1,222 @@
+---
+import {
+  articlePolicyTitle,
+  formatDate,
+  shouldPublishParty,
+  symbolTone,
+  SYMBOL_LEGEND,
+} from "../../lib/case-helpers.mjs";
+
+const { article, stance } = Astro.props;
+const { matrix, politicians, meta } = stance;
+const publishParties = (matrix.parties ?? []).filter(shouldPublishParty);
+if (!publishParties.length) return null;
+
+const policyTitle = articlePolicyTitle(article, matrix);
+const sectionTitle = `${policyTitle}に対する公言と行動`;
+const excerpt = meta?.excerpt || matrix.excerpt || {};
+const partyExcerptNote =
+  excerpt.parties ||
+  "この争点で国会・党文書に立場が確認できる政党を掲載します（全政党ではありません）。";
+const politicianExcerptNote =
+  excerpt.politicians ||
+  "本案件の国会タイムラインに関係する議員のうち、対比に意味がある発言者を掲載します（全議員ではありません）。";
+const disclaimer =
+  meta?.disclaimer || matrix.disclaimer || "党・個人の評価ではなく、出典付きの事実整理です。";
+
+const politicianCards = politicians
+  .map((pol) => {
+    const claim = pol.claims?.find((c) => c.policySlug === matrix.policySlug);
+    if (!claim) return null;
+    return { pol, claim };
+  })
+  .filter(Boolean);
+---
+
+<section class="stance-matrix" aria-labelledby="stance-matrix-title">
+  <div class="stance-matrix__head">
+    <span class="stance-matrix__badge">公言 ↔ 行動</span>
+    <h2 id="stance-matrix-title">{sectionTitle}</h2>
+    <p class="stance-matrix__lead">
+      「言ったこと（方針）」と「動き（行動）」を並べ、記号で整理します。嘘判定・信頼性スコアは付けません。
+    </p>
+  </div>
+  <div class="stance-matrix__legend" role="list" aria-label="記号の意味">
+    {
+      SYMBOL_LEGEND.map((l) => (
+        <div class={`stance-legend-chip stance-legend-chip--${symbolTone(l.sym)}`}>
+          <span class="stance-legend-chip__sym">{l.sym}</span>
+          <span class="stance-legend-chip__text">{l.label}</span>
+        </div>
+      ))
+    }
+  </div>
+  <p class="stance-matrix__criteria">
+    <strong>政党の抜粋:</strong> {partyExcerptNote}
+  </p>
+  <div class="stance-party-grid">
+    {
+      publishParties.map((p) => {
+        const tone = symbolTone(p.symbol);
+        const isPending = tone === "unknown" && !p.stance?.sourceUrl;
+        return (
+          <article
+            class={`stance-party-card stance-party-card--${tone}${isPending ? " stance-party-card--draft" : ""}`}
+          >
+            <header class="stance-party-card__head">
+              <div>
+                <h3 class="stance-party-card__party">{p.partyLabel}</h3>
+                {p.symbolReason && (
+                  <p class="stance-party-card__reason">{p.symbolReason}</p>
+                )}
+              </div>
+              <span
+                class={`stance-party-card__sym stance-party-card__sym--${tone}`}
+                title={p.symbolReason || ""}
+              >
+                {p.symbol}
+              </span>
+            </header>
+            <div class="stance-party-card__body">
+              <div class="stance-cell stance-cell--stance">
+                <span class="stance-cell__label">方針</span>
+                <p class="stance-cell__text">{p.stance?.text}</p>
+                {
+                  p.stance?.sourceUrl ? (
+                    <a
+                      class="stance-cell__link"
+                      href={p.stance.sourceUrl}
+                      target="_blank"
+                      rel="noopener"
+                    >
+                      出典を見る ↗
+                    </a>
+                  ) : (
+                    <span class="stance-cell__pending">出典未登録</span>
+                  )
+                }
+              </div>
+              <div class="stance-party-card__arrow" aria-hidden="true">→</div>
+              <div class="stance-cell stance-cell--action">
+                <span class="stance-cell__label">行動</span>
+                <p class="stance-cell__text">{p.action?.text}</p>
+                {
+                  p.action?.speechUrl ? (
+                    <a
+                      class="stance-cell__link"
+                      href={p.action.speechUrl}
+                      target="_blank"
+                      rel="noopener"
+                    >
+                      国会・関連 ↗
+                    </a>
+                  ) : (
+                    <span class="stance-cell__pending">出典未登録</span>
+                  )
+                }
+              </div>
+            </div>
+          </article>
+        );
+      })
+    }
+  </div>
+  {
+    politicianCards.length > 0 && (
+      <div class="stance-politicians">
+        <h3 class="stance-matrix__subhead">議員の整理（抜粋）</h3>
+        <p class="stance-matrix__criteria stance-matrix__criteria--politicians">
+          {politicianExcerptNote}
+        </p>
+        <div class="stance-politicians__grid">
+          {
+            politicianCards.map(({ pol, claim }) => {
+              const tone = symbolTone(claim.symbol);
+              const ts = pol.trackingSummary;
+              return (
+                <article class={`stance-politician stance-politician--${tone}`}>
+                  <div class="stance-politician__top">
+                    <div>
+                      <h3 class="stance-politician__name">{pol.name}</h3>
+                      <p class="stance-politician__party">{pol.party}</p>
+                    </div>
+                    <span class={`stance-politician__sym stance-politician__sym--${tone}`}>
+                      {claim.symbol}
+                    </span>
+                  </div>
+                  {
+                    ts && (
+                      <div class="stance-politician__track" aria-label="追跡件数">
+                        <span class="stance-politician__count stance-politician__count--match">
+                          <span class="stance-politician__count-sym" aria-hidden="true">◎</span>
+                          {ts.match}
+                        </span>
+                        <span class="stance-politician__count stance-politician__count--partial">
+                          <span class="stance-politician__count-sym" aria-hidden="true">▲</span>
+                          {ts.partial}
+                        </span>
+                        <span class="stance-politician__count stance-politician__count--bad">
+                          <span class="stance-politician__count-sym" aria-hidden="true">❌</span>
+                          {ts.mismatch}
+                        </span>
+                        <span class="stance-politician__count stance-politician__count--muted">
+                          <span class="stance-politician__count-sym" aria-hidden="true">？</span>
+                          {ts.unknown}
+                        </span>
+                      </div>
+                    )
+                  }
+                  <div class="stance-politician__grid">
+                    <div class="stance-cell stance-cell--stance">
+                      <span class="stance-cell__label">方針</span>
+                      <p class="stance-cell__text">{claim.stance?.text}</p>
+                      {
+                        claim.stance?.sourceUrl ? (
+                          <a
+                            class="stance-cell__link"
+                            href={claim.stance.sourceUrl}
+                            target="_blank"
+                            rel="noopener"
+                          >
+                            発言 ↗
+                          </a>
+                        ) : (
+                          <span class="stance-cell__pending">出典未登録</span>
+                        )
+                      }
+                    </div>
+                    <div class="stance-cell stance-cell--action">
+                      <span class="stance-cell__label">行動</span>
+                      <p class="stance-cell__text">{claim.action?.text}</p>
+                      {
+                        claim.action?.speechUrl ? (
+                          <a
+                            class="stance-cell__link"
+                            href={claim.action.speechUrl}
+                            target="_blank"
+                            rel="noopener"
+                          >
+                            関連 ↗
+                          </a>
+                        ) : (
+                          <span class="stance-cell__pending">出典未登録</span>
+                        )
+                      }
+                    </div>
+                  </div>
+                  {claim.symbolReason && (
+                    <p class="stance-politician__note">{claim.symbolReason}</p>
+                  )}
+                </article>
+              );
+            })
+          }
+        </div>
+      </div>
+    )
+  }
+  <p class="stance-matrix__note">
+    {disclaimer} · <a href="/">方法論</a>は <code>docs/policy-matrix.md</code> · PoC{" "}
+    {matrix.methodologyVersion || "v1"}
+  </p>
+</section>

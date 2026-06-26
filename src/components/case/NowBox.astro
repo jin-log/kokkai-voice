@@ -1,0 +1,25 @@
+---
+const { article } = Astro.props;
+const ns = article.nowSummary ?? {};
+const bullets = ns.bullets ?? [];
+const updatedNote = ns.updatedAt ? ` · 要約更新: ${ns.updatedAt.slice(0, 10)}` : "";
+---
+
+<div class="now-box" id="sec-now">
+  <p class="now-box__label">{ns.label}</p>
+  {
+    bullets.length > 0 ? (
+      <ul class="now-box__bullets">
+        {bullets.map((b) => (
+          <li>{b}</li>
+        ))}
+      </ul>
+    ) : ns.text ? (
+      <p class="now-box__text">{ns.text}</p>
+    ) : null
+  }
+  <p class="now-box__updated">
+    データ取得: {article.fetchedAt.slice(0, 10)} · APIヒット {article.apiHits}件{updatedNote} ·{" "}
+    {ns.disclaimer}
+  </p>
+</div>

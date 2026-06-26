@@ -1,0 +1,32 @@
+---
+import { reactionNums } from "../../lib/case-helpers.mjs";
+
+const { article } = Astro.props;
+const { good, neutral, bad, goodPct, neutralPct, badPct } = reactionNums(article);
+---
+
+<div class="reaction-summary" id="sec-mood" aria-label="みんなのキモチ">
+  <span class="reaction-summary__label">みんなのキモチ</span>
+  <div class="reaction-bar" aria-hidden="true">
+    <div class="reaction-bar__good" data-good-bar style={`width: ${goodPct}%`}></div>
+    <div class="reaction-bar__neutral" data-neutral-bar style={`width: ${neutralPct}%`}></div>
+    <div class="reaction-bar__bad" data-bad-bar style={`width: ${badPct}%`}></div>
+  </div>
+  <span class="reaction-summary__nums">
+    <span class="good"
+      ><span class="reaction-emoji" aria-hidden="true">😊</span>
+      <span data-good-num>{good}</span></span
+    >
+    <span class="neutral"
+      ><span class="reaction-emoji" aria-hidden="true">😐</span>
+      <span data-neutral-num>{neutral}</span></span
+    >
+    <span class="bad"
+      ><span class="reaction-emoji" aria-hidden="true">😠</span>
+      <span data-bad-num>{bad}</span></span
+    >
+  </span>
+  <button type="button" class="btn btn--primary" data-react="good" hidden>Good</button>
+  <button type="button" class="btn" data-react="neutral" hidden>Neutral</button>
+  <button type="button" class="btn" data-react="bad" hidden>Bad</button>
+</div>

@@ -1,0 +1,37 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import SiteHeader from "../components/SiteHeader.astro";
+import SiteFooter from "../components/SiteFooter.astro";
+import CaseCard from "../components/CaseCard.astro";
+import { loadAllArticles } from "../lib/articles.mjs";
+
+const articles = await loadAllArticles();
+---
+
+<BaseLayout title="日本の政治なう — あの話どうなった？">
+  <SiteHeader showSearch />
+  <main class="container hero">
+    <span class="hero__badge">MVP v1</span>
+    <h1 class="hero__title">あの話<br />どうなった？</h1>
+    <p class="hero__lead">
+      国会の発言と政治家の X を<strong>案件ごと</strong>に追いかける。
+      難しい言葉は AI が<strong>ヒヨコでも分かる</strong>言葉に。消された投稿も<strong
+        >スクショで残す</strong
+      >。
+    </p>
+    <ul class="hero__points">
+      <li>📋 案件タイムライン</li>
+      <li>💬 平易語サマリ</li>
+      <li>📸 X スクショ保存</li>
+      <li>😊😐😠 みんなのキモチ</li>
+    </ul>
+  </main>
+
+  <section class="container case-grid" aria-label="注目の案件">
+    {articles.map((article) => (
+      <CaseCard article={article} />
+    ))}
+  </section>
+
+  <SiteFooter note="国会議事録 API + スクショアーカイブ。AI要約は解釈を含みます。" />
+</BaseLayout>

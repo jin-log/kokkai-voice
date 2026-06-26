@@ -1,0 +1,22 @@
+---
+import { getGlossary } from "../../lib/case-helpers.mjs";
+
+const { article } = Astro.props;
+const items = getGlossary(article);
+---
+
+{
+  items.length > 0 && (
+    <section class="glossary" aria-labelledby="glossary-title">
+      <h2 id="glossary-title">この案件の用語（ヒヨコでも分かる版）</h2>
+      <dl>
+        {items.map((g) => (
+          <div>
+            <dt>{g.term}</dt>
+            <dd>{g.definition}</dd>
+          </div>
+        ))}
+      </dl>
+    </section>
+  )
+}

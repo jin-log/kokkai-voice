@@ -1,0 +1,11 @@
+---
+interface Props {
+  note?: string;
+}
+
+const { note = "国会議事録 API + スクショアーカイブ。AI要約は解釈を含みます。" } = Astro.props;
+---
+
+<footer class="site-footer">
+  <p>{note}</p>
+</footer>
