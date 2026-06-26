@@ -10,14 +10,17 @@
 | KV | **Cloudflare KV** | Good/Bad 集計キャッシュ |
 | AI | OpenAI / Claude API（CEO パイプライン） | 要約・解説 |
 | 動画 | YouTube oEmbed | 自前配信はコスト大のため外部 embed |
+| X 記録 | **R2 + スクショ** | API 不使用。詳細 `docs/x-archive.md` |
 
 ## データモデル（案）
 
 ```
-speeches      … API から取った発言（原文）
-articles      … 公開記事（speech_id, summary, body_html, video_url）
-reactions     … good | bad（article_id, visitor_hash, created_at）
-comments      … article_id, author, body, status
+speeches      … 議事録 API から取った発言（原文）
+cases         … 案件（タイトル、status_summary、用語辞典）
+case_events   … タイムライン行（speech | x_post | video）
+social_posts  … X URL, screenshot_url, captured_at, sha256, status(live|deleted)
+reactions     … good | bad（case_id or event_id）
+comments      … case_id, author, body, status
 ```
 
 `visitor_hash` = IP + UA のハッシュ（個人特定しない）
