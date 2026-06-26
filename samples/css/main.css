@@ -47,9 +47,20 @@ a { color: var(--color-primary); }
   text-decoration: none;
   color: var(--color-text);
   letter-spacing: -0.02em;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
 }
 
 .logo span { color: var(--color-primary); }
+
+.logo__sub {
+  display: block;
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  letter-spacing: 0.02em;
+}
 
 .nav { display: flex; gap: 1.25rem; font-size: 0.9rem; }
 
@@ -629,6 +640,11 @@ a { color: var(--color-primary); }
 
 .float-react__btn.is-voted {
   outline: 2px solid currentColor;
+}
+
+.float-react__count {
+  font-variant-numeric: tabular-nums;
+  min-width: 1.5em;
 }
 
 .demo-note {

@@ -6,6 +6,8 @@
   const badNum = document.querySelector('[data-bad-num]');
   const floatGood = document.querySelector('[data-float-good]');
   const floatBad = document.querySelector('[data-float-bad]');
+  const floatGoodNum = document.querySelector('[data-float-good-num]');
+  const floatBadNum = document.querySelector('[data-float-bad-num]');
 
   if (!goodBtn) return;
 
@@ -19,6 +21,8 @@
     if (goodBar) goodBar.style.width = pct + '%';
     if (goodNum) goodNum.textContent = String(good);
     if (badNum) badNum.textContent = String(bad);
+    if (floatGoodNum) floatGoodNum.textContent = String(good);
+    if (floatBadNum) floatBadNum.textContent = String(bad);
   }
 
   function vote(type) {

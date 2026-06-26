@@ -22,6 +22,7 @@
 | [docs/monetization.md](docs/monetization.md) | 収益化 |
 | [docs/mvp-roadmap.md](docs/mvp-roadmap.md) | 開発フェーズ |
 | [docs/kpi.md](docs/kpi.md) | **KGI / KPI（公開前・公開後）** |
+| [docs/branding.md](docs/branding.md) | サイト名・公開条件・Cloudflare |
 | [docs/sns-strategy.md](docs/sns-strategy.md) | 集客・X 方針 |
 | [docs/x-archive.md](docs/x-archive.md) | X リンク＋スクショ保存（API 不使用） |
 
