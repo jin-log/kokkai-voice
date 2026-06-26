@@ -24,6 +24,8 @@
 | [docs/branding.md](docs/branding.md) | 日本の政治なう・公開条件 |
 | [docs/search-ux.md](docs/search-ux.md) | 検索・ソート |
 | [docs/shorts-pipeline.md](docs/shorts-pipeline.md) | ショート量産 |
+| [docs/i18n-en.md](docs/i18n-en.md) | **英語版・海外 SEO・シンクロ公開** |
+| [docs/release-taskboard.md](docs/release-taskboard.md) | **リリースまでタスク・達成度** |
 | [docs/sns-strategy.md](docs/sns-strategy.md) | 集客・X 方針 |
 | [docs/x-archive.md](docs/x-archive.md) | X リンク＋スクショ保存（API 不使用） |
 

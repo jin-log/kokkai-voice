@@ -1,0 +1,81 @@
+# Cloudflare 接続手順 — seiji1192.site
+
+最終更新: 2026-06-26  
+前提: ムームーでドメイン取得・支払い済み
+
+---
+
+## いまやること（順番）
+
+| # | 誰 | 作業 |
+|---|-----|------|
+| 1 | **オーナー** | ムームーで `seiji1192.site` が **有効** か確認 |
+| 2 | **オーナー** | [Cloudflare 登録](https://dash.cloudflare.com/sign-up) — **Google ログイン推奨**（メール OTP 回避） |
+| 3 | **オーナー** | CF ダッシュボード → **ウェブサイトを追加** → `seiji1192.site` |
+| 4 | **オーナー** | CF が表示する **ネームサーバー 2 つ** をコピー |
+| 5 | **オーナー** | [ムームー CP](https://muumuu-domain.com/?mode=conpane) → ドメイン → **ネームサーバー設定** → 上記 2 つに変更 |
+| 6 | — | **数時間〜最大 48h** で CF にドメインが Active になる |
+| 7 | **CEO** | Astro 本番化 → GitHub → **Pages 接続** → カスタムドメイン追加 |
+
+---
+
+## ムームー：ネームサーバー変更
+
+1. コントロールパネル → `seiji1192.site`
+2. **ネームサーバー設定**（DNS レコードではない）
+3. 「その他のサービスのネームサーバーを利用する」
+4. Cloudflare からコピーした例（実際の値は CF 画面のもの）:
+   - `ada.ns.cloudflare.com`
+   - `bob.ns.cloudflare.com`
+5. 保存
+
+※ **DNS レコードだけ触っても Pages には繋がらない。** NS 移管が先。
+
+---
+
+## Cloudflare Pages（CEO・Astro 完成後）
+
+| 項目 | 値 |
+|------|-----|
+| リポ | `jin-log/kokkai-voice` |
+| Framework | Astro |
+| Build | `npm run build` |
+| Output | `dist` |
+| NODE_VERSION | `20` |
+
+**Custom domains:** `seiji1192.site` / `www.seiji1192.site`
+
+NS 移管済みなら CF が自動で DNS を張る。未移管の場合はムームー側 CNAME（`.site` も NS 移管推奨）。
+
+---
+
+## 支払い済み確認（ムームー）
+
+- ドメイン一覧で **有効期限** が入っている
+- ステータスが **有効** / **利用中**
+- まだ **設定待ち** なら 1〜2 時間待ってから NS 変更
+
+---
+
+## オーナーがやらなくていいこと
+
+- Astro コード・Git push → **CEO**
+- 議事録 API・実データ → **CEO**
+- GSC 登録 → 公開直前で OK（CEO 手順案内）
+
+---
+
+## トラブル
+
+| 症状 | 対処 |
+|------|------|
+| CF 登録で OTP 届かない | **Google / Apple でログイン** |
+| NS 変更後も Active にならない | 24h 待つ。ムームーの NS が CF と完全一致か確認 |
+| 楽天 SMS で決済失敗 | 支払い済みなら無視。未払いなら別カード or 振込 |
+
+---
+
+## 接続完了の合図
+
+Cloudflare → `seiji1192.site` → **有効（Active）** ✅ 2026-06-26  
+→ **次:** CEO が Astro 本番化 → Pages → カスタムドメイン `seiji1192.site`

@@ -52,9 +52,13 @@ comments      … case_id, author, body, status
 - `<iframe>` or Astro コンポーネント（lazy load）
 - 著作権・埋め込みポリシーは YouTube 側に準拠
 
-## ドメイン（未決）
+## ドメイン（確定）
 
-候補はオーナー判断。`.jp` 政治系は空きドメイン要調査。
+| 項目 | 内容 |
+|------|------|
+| **URL** | `https://seiji1192.site` |
+| **レジストラ** | ムームードメイン（取得済 2026-06-26） |
+| **ホスティング** | Cloudflare Pages（無料枠）— 手順 `docs/deploy-cloudflare.md` |
 
 ## 環境変数（`.env.example`）
 
