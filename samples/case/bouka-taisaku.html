@@ -9,10 +9,15 @@
 </head>
 <body data-case="bouka-taisaku">
   <header class="site-header">
-    <div class="container site-header__inner">
+    <div class="container site-header__inner site-header__inner--search">
       <a class="logo" href="../index.html">日本<span>なう</span><span class="logo__sub">政治、今どうなった？</span></a>
+      <form class="site-search" data-search-form role="search" action="../search.html" method="get">
+        <label class="visually-hidden" for="header-q">案件を検索</label>
+        <input id="header-q" class="site-search__input" type="search" name="q" placeholder="物価高、都知事…">
+        <button type="submit" class="site-search__btn">検索</button>
+      </form>
       <nav class="nav" aria-label="メイン">
-        <a href="../index.html">案件一覧</a>
+        <a href="../search.html">一覧</a>
         <a href="bouka-taisaku.html">物価高</a>
       </nav>
     </div>

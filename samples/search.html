@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>検索｜日本なう</title>
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container site-header__inner site-header__inner--search">
+      <a class="logo" href="index.html">日本<span>なう</span><span class="logo__sub">政治、今どうなった？</span></a>
+      <form class="site-search" data-search-form role="search" action="search.html" method="get">
+        <label class="visually-hidden" for="q">案件を検索</label>
+        <input id="q" class="site-search__input" type="search" name="q" data-search-input placeholder="物価高、都知事、リコール…" autocomplete="off">
+        <button type="submit" class="site-search__btn">検索</button>
+      </form>
+    </div>
+  </header>
+
+  <main class="container search-page">
+    <h1 class="search-page__title">案件を探す</h1>
+    <p class="search-page__lead" data-search-meta>読み込み中…</p>
+
+    <div class="sort-tabs" role="tablist" aria-label="並び替え">
+      <button type="button" class="sort-tab sort-tab--active" data-sort="heat" role="tab" aria-selected="true">関心順</button>
+      <button type="button" class="sort-tab" data-sort="trend" role="tab" aria-selected="false">話題順</button>
+      <button type="button" class="sort-tab" data-sort="new" role="tab" aria-selected="false">新着</button>
+      <button type="button" class="sort-tab" data-sort="chrono" role="tab" aria-selected="false">時系列</button>
+    </div>
+    <p class="sort-hint">デフォルトは <strong>関心順</strong>（😊😠・コメント・直近アクセス）。話題順は直近 48h の伸び。</p>
+
+    <div class="search-results" data-search-results></div>
+  </main>
+
+  <footer class="site-footer">
+    <p>サンプル — ソートはデモ用スコア。本番は D1 + Workers API。</p>
+  </footer>
+  <script src="js/search.js"></script>
+</body>
+</html>
