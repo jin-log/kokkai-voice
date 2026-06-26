@@ -1,7 +1,6 @@
-# kokkai-voice（仮称）
+# 日本の政治なう（仮称 kokkai-voice リポ）
 
-**政治で関心が高いこと**を案件単位で追い、国民が **Good / Bad** で感情を示し、コメント・ショート動画とともに議論できるメディア。  
-国会議事録は柱の一つ。都政・リコール・スキャンダル等も同じ UI で扱う（`docs/politics-scope.md`）。
+**政治で関心が高いこと**を案件単位で追い、国民の **😊/😠** とコメントで「みんなの気持ち」が見えるメディア。
 
 **ステータス:** 企画・調査フェーズ（MVP 未着手）
 
@@ -22,6 +21,7 @@
 | [docs/monetization.md](docs/monetization.md) | 収益化 |
 | [docs/mvp-roadmap.md](docs/mvp-roadmap.md) | 開発フェーズ |
 | [docs/kpi.md](docs/kpi.md) | **KGI / KPI（公開前・公開後）** |
+| [docs/branding.md](docs/branding.md) | 日本の政治なう・公開条件 |
 | [docs/search-ux.md](docs/search-ux.md) | 検索・ソート |
 | [docs/shorts-pipeline.md](docs/shorts-pipeline.md) | ショート量産 |
 | [docs/sns-strategy.md](docs/sns-strategy.md) | 集客・X 方針 |
