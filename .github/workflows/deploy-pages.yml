@@ -1,3 +1,6 @@
+# Secrets 未設定時は workflow をスキップ（失敗メール防止）
+# CF ダッシュボードで Pages 接続する場合は Secrets 不要
+
 name: Deploy to Cloudflare Pages
 
 on:
@@ -7,6 +10,7 @@ on:
 
 jobs:
   deploy:
+    if: ${{ secrets.CLOUDFLARE_API_TOKEN != '' && secrets.CLOUDFLARE_ACCOUNT_ID != '' }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -21,17 +25,6 @@ jobs:
 
       - run: npm ci
       - run: npm run build
-
-      - name: Check Cloudflare secrets
-        run: |
-          if [ -z "${{ secrets.CLOUDFLARE_API_TOKEN }}" ]; then
-            echo "::error::GitHub Secrets に CLOUDFLARE_API_TOKEN がありません"
-            exit 1
-          fi
-          if [ -z "${{ secrets.CLOUDFLARE_ACCOUNT_ID }}" ]; then
-            echo "::error::GitHub Secrets に CLOUDFLARE_ACCOUNT_ID がありません"
-            exit 1
-          fi
 
       - uses: cloudflare/wrangler-action@v3
         with:
