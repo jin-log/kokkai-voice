@@ -29,6 +29,16 @@
 ~/Projects/kokkai-voice   （Win: C:\Users\bero1\Projects\kokkai-voice）
 ```
 
+### UI サンプル（デザインモック）
+
+```powershell
+cd C:\Users\bero1\Projects\kokkai-voice\samples
+.\preview.ps1
+```
+
+→ http://localhost:8770/ （トップ）  
+→ http://localhost:8770/case/bouka-taisaku.html （案件デモ）
+
 ## 注意
 
 - 医療ブログ（jin-log）とは **別プロジェクト**
