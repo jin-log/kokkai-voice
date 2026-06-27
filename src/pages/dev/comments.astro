@@ -1,0 +1,141 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import SiteHeader from "../../components/SiteHeader.astro";
+import SiteFooter from "../../components/SiteFooter.astro";
+---
+
+<BaseLayout title="[開発] コメント管理 — 日本の政治なう" description="開発者用" noindex={true}>
+  <SiteHeader showSearch />
+  <div id="dev-gate" style="display:none">
+    <main class="container status-page">
+      <nav class="dev-nav" aria-label="管理メニュー">
+        <a href="/dev/status/">完成度・記事</a>
+        <a href="/dev/comments/" aria-current="page">コメント</a>
+      </nav>
+      <h1 class="status-page__title">コメント管理</h1>
+      <p class="status-page__lead">
+        案件ページのコメント（デモ）。本番は承認キュー導入予定（D1 / reCAPTCHA）。
+      </p>
+
+      <section class="dev-comments-admin">
+        <div id="comments-stats" class="dev-comments-admin__stats"></div>
+        <ul id="comments-queue" class="dev-comments-admin__list"></ul>
+        <p id="comments-empty" class="dev-comments-admin__empty" hidden>承認待ちコメントはありません。</p>
+      </section>
+    </main>
+  </div>
+
+  <div id="dev-lock" style="display:none">
+    <div style="min-height:60vh;display:flex;align-items:center;justify-content:center">
+      <div style="text-align:center;padding:2rem">
+        <p style="font-size:1.1rem;margin-bottom:1rem">🔒 PINを入力してください</p>
+        <input id="pin-input" type="password" maxlength="8"
+          style="font-size:1.5rem;text-align:center;width:8rem;padding:0.5rem;border:2px solid var(--color-border);border-radius:0.5rem"
+          placeholder="••••" />
+        <br><br>
+        <button id="pin-submit"
+          style="background:var(--color-primary);color:#fff;border:none;padding:0.6rem 1.5rem;border-radius:2rem;font-size:1rem;cursor:pointer">
+          入力
+        </button>
+        <p id="pin-error" style="color:red;margin-top:0.5rem;display:none">PINが違います</p>
+      </div>
+    </div>
+  </div>
+  <SiteFooter note="開発者専用ページ" />
+</BaseLayout>
+
+<script>
+const PIN = "1192";
+const KEY = "dev_auth";
+const STORE = "kokkai-comments-v1";
+
+function show(id) { document.getElementById(id).style.display = "block"; }
+function hide(id) { document.getElementById(id).style.display = "none"; }
+
+function gate() {
+  if (localStorage.getItem(KEY) === PIN) {
+    show("dev-gate");
+    renderQueue();
+  } else {
+    show("dev-lock");
+    document.getElementById("pin-submit").addEventListener("click", () => {
+      const val = document.getElementById("pin-input").value;
+      if (val === PIN) {
+        localStorage.setItem(KEY, PIN);
+        hide("dev-lock");
+        show("dev-gate");
+        renderQueue();
+      } else {
+        document.getElementById("pin-error").style.display = "block";
+      }
+    });
+  }
+}
+
+function loadAll() {
+  try {
+    return JSON.parse(localStorage.getItem(STORE) || "{}");
+  } catch {
+    return {};
+  }
+}
+
+function saveAll(data) {
+  localStorage.setItem(STORE, JSON.stringify(data));
+}
+
+function renderQueue() {
+  const data = loadAll();
+  const pending = [];
+  for (const [slug, items] of Object.entries(data)) {
+    for (const c of items) {
+      if (c.status === "pending") {
+        pending.push({ slug, ...c });
+      }
+    }
+  }
+  pending.sort((a, b) => (b.at || "").localeCompare(a.at || ""));
+
+  document.getElementById("comments-stats").textContent =
+    `承認待ち ${pending.length} 件（このブラウザのデモデータ）`;
+
+  const list = document.getElementById("comments-queue");
+  list.innerHTML = "";
+  document.getElementById("comments-empty").hidden = pending.length > 0;
+
+  for (const c of pending) {
+    const li = document.createElement("li");
+    li.className = "dev-comments-admin__item";
+    li.innerHTML = `
+      <div class="dev-comments-admin__meta">
+        <strong>${c.name || "匿名"}</strong>
+        <span>/case/${c.slug}/</span>
+        <time>${c.at ? new Date(c.at).toLocaleString("ja-JP") : ""}</time>
+      </div>
+      <p class="dev-comments-admin__body"></p>
+      <div class="dev-comments-admin__actions">
+        <button type="button" class="dev-deploy__btn" data-act="approve">承認</button>
+        <button type="button" class="dev-deploy__btn dev-admin-btn--danger" data-act="reject">削除</button>
+      </div>`;
+    li.querySelector(".dev-comments-admin__body").textContent = c.body;
+    li.querySelector('[data-act="approve"]').addEventListener("click", () => {
+      updateStatus(c.slug, c.id, "approved");
+      renderQueue();
+    });
+    li.querySelector('[data-act="reject"]').addEventListener("click", () => {
+      updateStatus(c.slug, c.id, "rejected");
+      renderQueue();
+    });
+    list.appendChild(li);
+  }
+}
+
+function updateStatus(slug, id, status) {
+  const data = loadAll();
+  const items = data[slug] || [];
+  data[slug] = items.map((c) => (c.id === id ? { ...c, status } : c));
+  saveAll(data);
+}
+
+gate();
+</script>

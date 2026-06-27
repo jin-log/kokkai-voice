@@ -20,6 +20,10 @@ function formatJa(iso) {
   <SiteHeader showSearch />
   <div id="dev-gate" style="display:none">
     <main class="container status-page">
+      <nav class="dev-nav" aria-label="管理メニュー">
+        <a href="/dev/status/" aria-current="page">完成度・記事</a>
+        <a href="/dev/comments/">コメント</a>
+      </nav>
       <p class="status-page__lead" style="color:var(--color-text-muted);font-size:0.8rem;margin-bottom:0.5rem">
         🔒 開発者専用ページ
       </p>
@@ -73,6 +77,12 @@ function formatJa(iso) {
               </dl>
             </section>
 
+            <section class="dev-workflow-panel" id="workflow-panel" aria-live="polite">
+              <h2>⚙️ GitHub Actions（デプロイ・生成の状況）</h2>
+              <p id="workflow-summary" class="dev-workflow-panel__summary">読み込み中…</p>
+              <ul id="workflow-list" class="dev-workflow-panel__list"></ul>
+            </section>
+
             <section class="dev-deploy" aria-label="本番反映">
               <h2>🚀 本番に反映</h2>
               <p class="dev-deploy__note">GitHub main の最新を Cloudflare にデプロイします（1〜2分）。Cursor で直しただけの変更は、先に main へ push されている必要があります。</p>
@@ -83,13 +93,25 @@ function formatJa(iso) {
             <section class="status-slugs" aria-label="案件別">
               <h2>案件別</h2>
               {status.slugs.map((s) => (
-                <article class="status-card">
+                <article class:list={["status-card", s.adminHidden && "status-card--hidden"]} data-slug={s.slug}>
                   <header class="status-card__head">
                     <h3 class="status-card__title">
-                      {s.published ? <a href={`/case/${s.slug}/`}>{s.shortTitle}</a> : s.shortTitle}
+                      {s.published && !s.adminHidden ? (
+                        <a href={`/case/${s.slug}/`}>{s.shortTitle}</a>
+                      ) : (
+                        s.shortTitle
+                      )}
+                      {s.adminHidden && <span class="status-card__badge">非表示</span>}
                     </h3>
                     <span class="status-card__pct">{s.goldPct}%</span>
                   </header>
+                  <p class="status-card__slug"><code>{s.slug}</code></p>
+                  <p class="status-card__next">{s.nextAction ?? "npm run status で次アクションを更新"}</p>
+                  <div class="status-card__title-edit">
+                    <input type="text" class="status-card__title-input" value={s.title} data-slug={s.slug} aria-label="タイトル編集" />
+                    <button type="button" class="dev-deploy__btn save-title-btn" data-slug={s.slug}>タイトル保存</button>
+                    <span class="title-save-status" data-slug={s.slug} hidden></span>
+                  </div>
                   <div class="status-card__bar" role="progressbar" aria-valuenow={s.goldPct} aria-valuemin={0} aria-valuemax={100}>
                     <span style={`width: ${s.goldPct}%`} />
                   </div>
@@ -112,6 +134,15 @@ function formatJa(iso) {
                     ) : (
                       <p class="status-card__deploy-hint">①〜④が全部OKになると反映ボタンが使えます（現在 {s.gatePct}%）</p>
                     )}
+                  </div>
+                  <div class="status-card__admin">
+                    {s.adminHidden ? (
+                      <button type="button" class="dev-deploy__btn unhide-btn" data-slug={s.slug}>👁️ 表示に戻す</button>
+                    ) : (
+                      <button type="button" class="dev-deploy__btn hide-btn" data-slug={s.slug}>🙈 非表示</button>
+                    )}
+                    <button type="button" class="dev-deploy__btn dev-admin-btn--danger delete-btn" data-slug={s.slug}>🗑️ 削除</button>
+                    <span class="admin-action-status" data-slug={s.slug} hidden></span>
                   </div>
                 </article>
               ))}
@@ -317,4 +348,115 @@ document.getElementById("new-generate").addEventListener("click", async () => {
     document.getElementById("new-generate").disabled = false;
   }
 });
+
+function workflowLabel(run) {
+  if (run.inProgress) return "⏳ 実行中";
+  if (run.conclusion === "success") return "✅ 完了";
+  if (run.conclusion === "failure") return "❌ 失敗";
+  if (run.conclusion === "cancelled") return "— キャンセル";
+  return run.status;
+}
+
+async function refreshWorkflows() {
+  const pin = getPin();
+  if (!pin) return;
+  const summary = document.getElementById("workflow-summary");
+  const list = document.getElementById("workflow-list");
+  if (!summary || !list) return;
+
+  try {
+    const res = await fetch(`/api/admin-status?pin=${encodeURIComponent(pin)}`);
+    const data = await res.json();
+    if (!data.ok) throw new Error(data.error || "取得失敗");
+
+    if (data.activeCount > 0) {
+      summary.className = "dev-workflow-panel__summary is-active";
+      summary.textContent = `🔄 いま ${data.activeCount} 件が実行中 — 完了まで1〜3分かかることがあります`;
+    } else {
+      summary.className = "dev-workflow-panel__summary";
+      summary.textContent = "待機中（実行中の workflow なし）";
+    }
+
+    list.innerHTML = "";
+    for (const run of data.runs.slice(0, 8)) {
+      const li = document.createElement("li");
+      li.className = "dev-workflow-panel__item";
+      if (run.inProgress) li.classList.add("is-active");
+      const when = new Date(run.createdAt).toLocaleString("ja-JP", { month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" });
+      li.innerHTML = `<span class="dev-workflow-panel__state"></span><span class="dev-workflow-panel__name"></span><time></time>`;
+      li.querySelector(".dev-workflow-panel__state").textContent = workflowLabel(run);
+      li.querySelector(".dev-workflow-panel__name").textContent = run.name;
+      li.querySelector("time").textContent = when;
+      if (run.url) {
+        li.style.cursor = "pointer";
+        li.title = "GitHub で詳細";
+        li.addEventListener("click", () => window.open(run.url, "_blank"));
+      }
+      list.appendChild(li);
+    }
+  } catch (e) {
+    summary.className = "dev-workflow-panel__summary is-error";
+    summary.textContent = "⚠️ 状況取得失敗: " + e.message;
+  }
+}
+
+if (localStorage.getItem(KEY) === PIN) {
+  refreshWorkflows();
+  setInterval(refreshWorkflows, 15000);
+}
+
+document.querySelectorAll(".save-title-btn").forEach((btn) => {
+  btn.addEventListener("click", async () => {
+    const slug = btn.dataset.slug;
+    const input = document.querySelector(`.status-card__title-input[data-slug="${slug}"]`);
+    const statusEl = document.querySelector(`.title-save-status[data-slug="${slug}"]`);
+    const title = input?.value?.trim();
+    if (!title) { alert("タイトルを入力してください"); return; }
+    btn.disabled = true;
+    statusEl.hidden = false;
+    statusEl.className = "title-save-status is-loading";
+    statusEl.textContent = "⏳ 保存中…";
+    try {
+      const data = await callDispatch("update_title", { slug, title });
+      statusEl.className = "title-save-status is-ok";
+      statusEl.textContent = "✅ " + data.message;
+    } catch (e) {
+      statusEl.className = "title-save-status is-error";
+      statusEl.textContent = "❌ " + e.message;
+    } finally {
+      btn.disabled = false;
+    }
+  });
+});
+
+document.querySelectorAll(".hide-btn").forEach((btn) => {
+  btn.addEventListener("click", () => adminAction(btn, "hide", "非表示にしますか？"));
+});
+document.querySelectorAll(".unhide-btn").forEach((btn) => {
+  btn.addEventListener("click", () => adminAction(btn, "unhide", "表示に戻しますか？"));
+});
+document.querySelectorAll(".delete-btn").forEach((btn) => {
+  btn.addEventListener("click", () => adminAction(btn, "delete_article", "完全に削除します。元に戻せません。よろしいですか？"));
+});
+
+async function adminAction(btn, action, confirmMsg) {
+  const slug = btn.dataset.slug;
+  if (!confirm(confirmMsg)) return;
+  const statusEl = document.querySelector(`.admin-action-status[data-slug="${slug}"]`);
+  btn.disabled = true;
+  statusEl.hidden = false;
+  statusEl.className = "admin-action-status is-loading";
+  statusEl.textContent = "⏳ 処理中…";
+  try {
+    const data = await callDispatch(action, { slug });
+    statusEl.className = "admin-action-status is-ok";
+    statusEl.textContent = "✅ " + data.message + " — 15秒後に再読込";
+    setTimeout(() => location.reload(), 15000);
+    refreshWorkflows();
+  } catch (e) {
+    statusEl.className = "admin-action-status is-error";
+    statusEl.textContent = "❌ " + e.message;
+    btn.disabled = false;
+  }
+}
 </script>

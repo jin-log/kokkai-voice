@@ -1,4 +1,11 @@
-<section class="comments" aria-labelledby="comments-title">
+---
+interface Props {
+  slug: string;
+}
+const { slug } = Astro.props;
+---
+
+<section class="comments" aria-labelledby="comments-title" data-comment-section data-slug={slug}>
   <h2 id="comments-title">コメント（デモ）</h2>
   <form class="comment-form" data-comment-form>
     <input
@@ -15,13 +22,68 @@
       required
       aria-label="コメント"
     ></textarea>
-    <button type="submit" class="btn btn--primary">投稿（デモ・即表示）</button>
+    <button type="submit" class="btn btn--primary">投稿（デモ・承認待ち）</button>
   </form>
-  <ul class="comment-list" data-comment-list>
-    <li class="comment">
-      <div class="comment__author">読者A</div>
-      <p class="comment__body">国会の原文がそのまま見られるのは助かる。平易語の要約も欲しい。</p>
-      <div class="comment__time">デモ</div>
-    </li>
-  </ul>
+  <p class="comment-form__note" style="font-size:0.8rem;color:var(--color-text-muted)">
+    デモ段階：投稿は承認待ちキューに入ります（<a href="/dev/comments/">管理画面</a>）。
+  </p>
+  <ul class="comment-list" data-comment-list></ul>
 </section>
+
+<script define:vars={{ slug }}>
+const STORE = "kokkai-comments-v1";
+
+function loadAll() {
+  try { return JSON.parse(localStorage.getItem(STORE) || "{}"); }
+  catch { return {}; }
+}
+
+function saveAll(data) {
+  localStorage.setItem(STORE, JSON.stringify(data));
+}
+
+function render() {
+  const list = document.querySelector("[data-comment-list]");
+  const items = (loadAll()[slug] || []).filter((c) => c.status === "approved");
+  list.innerHTML = "";
+  if (!items.length) {
+    list.innerHTML = `<li class="comment"><div class="comment__author">—</div><p class="comment__body">承認済みコメントはまだありません。</p></li>`;
+    return;
+  }
+  for (const c of items) {
+    const li = document.createElement("li");
+    li.className = "comment";
+    li.innerHTML = `<div class="comment__author"></div><p class="comment__body"></p><div class="comment__time"></div>`;
+    li.querySelector(".comment__author").textContent = c.name || "匿名";
+    li.querySelector(".comment__body").textContent = c.body;
+    li.querySelector(".comment__time").textContent = c.at
+      ? new Date(c.at).toLocaleString("ja-JP")
+      : "";
+    list.appendChild(li);
+  }
+}
+
+document.querySelector("[data-comment-form]")?.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const fd = new FormData(e.target);
+  const name = String(fd.get("name") || "").trim() || "匿名";
+  const body = String(fd.get("body") || "").trim();
+  if (!body) return;
+
+  const data = loadAll();
+  const items = data[slug] || [];
+  items.push({
+    id: crypto.randomUUID?.() || String(Date.now()),
+    name,
+    body,
+    at: new Date().toISOString(),
+    status: "pending",
+  });
+  data[slug] = items;
+  saveAll(data);
+  e.target.reset();
+  alert("投稿しました。承認後に表示されます（デモ）。");
+});
+
+render();
+</script>

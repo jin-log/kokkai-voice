@@ -4,7 +4,7 @@ on:
   push:
     branches: [main]
   workflow_run:
-    workflows: ["新規記事作成", "記事を本番反映"]
+    workflows: ["新規記事作成", "記事を本番反映", "記事管理"]
     types: [completed]
     branches: [main]
   workflow_dispatch:

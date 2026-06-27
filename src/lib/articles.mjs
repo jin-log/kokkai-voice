@@ -12,8 +12,9 @@ export function isPublishable(article) {
 }
 
 export async function filterPublishable(articles) {
+  const visible = articles.filter((a) => !a.adminHidden);
   const checked = await Promise.all(
-    articles.map(async (article) => ({
+    visible.map(async (article) => ({
       article,
       result: await checkCasePageWithFiles(article),
     })),

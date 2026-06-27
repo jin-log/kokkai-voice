@@ -8,7 +8,7 @@
  *
  * POST body:
  *   { pin, action?, slug?, keyword?, title?, category?, sources? }
- *   action: "create" | "deploy" | "deploy_article"  (default: create)
+ *   action: "create" | "deploy" | "deploy_article" | "update_title" | "hide" | "unhide" | "delete_article"
  */
 export async function onRequestPost(context) {
   const { GH_TOKEN, ADMIN_PIN } = context.env;
@@ -53,6 +53,47 @@ export async function onRequestPost(context) {
       "publish-article.yml",
       { slug },
       `「${slug}」の本番反映を起動しました。ゲートチェック後、1〜2分で反映されます。`,
+    );
+  }
+
+  if (action === "update_title") {
+    const slug = slugIn?.trim();
+    const title = titleIn?.trim();
+    if (!slug || !title) {
+      return json({ error: "slug と title は必須です" }, 400);
+    }
+    return dispatchWorkflow(
+      GH_TOKEN,
+      "admin-article.yml",
+      { action: "update_title", slug, title },
+      `タイトルを更新しました。1〜2分後に本番へ反映されます（deploy 自動）。`,
+    );
+  }
+
+  if (action === "hide" || action === "unhide") {
+    const slug = slugIn?.trim();
+    if (!slug) {
+      return json({ error: "slug は必須です" }, 400);
+    }
+    const label = action === "hide" ? "非表示" : "表示";
+    return dispatchWorkflow(
+      GH_TOKEN,
+      "admin-article.yml",
+      { action, slug, title: "" },
+      `「${slug}」を${label}にしました。`,
+    );
+  }
+
+  if (action === "delete_article") {
+    const slug = slugIn?.trim();
+    if (!slug) {
+      return json({ error: "slug は必須です" }, 400);
+    }
+    return dispatchWorkflow(
+      GH_TOKEN,
+      "admin-article.yml",
+      { action: "delete", slug, title: "" },
+      `「${slug}」を削除しました。`,
     );
   }
 

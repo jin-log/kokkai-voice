@@ -71,6 +71,54 @@ function pct(ok, total) {
   return total === 0 ? 0 : Math.round((ok / total) * 100);
 }
 
+/** @param {unknown} article @param {Awaited<ReturnType<typeof checkCasePageWithFiles>>} gate @param {{ id: string, ok: boolean }[]} pipeline */
+export function computeNextAction(article, gate, pipeline) {
+  if (article.adminHidden) {
+    return "👁️ 非表示中 — 「表示に戻す」でトップに出せます";
+  }
+
+  const preDeploy = pipeline.filter((p) => p.preDeploy);
+  const preOk = preDeploy.filter((p) => p.ok).length;
+  if (preOk === preDeploy.length && !gate.ok) {
+    return "🚀 ①〜④完了 — 「本番に反映」ボタンを押してください";
+  }
+  if (gate.ok) {
+    return "✅ 公開ゲートOK — 本番ページあり";
+  }
+
+  const hints = {
+    A2_primarySpeech: "国会発言 or ソースURLを追加",
+    B1_nowSummary: "いまの結論（3行）を入力",
+    C1_summaryBullets: "要点リストを追加",
+    D1_arcSummary: "経緯サマリ（日付付き）を追加",
+    E1_timeline_count: "タイムラインを3件以上",
+    E2_timeline_speeches: "国会発言リンクを追加",
+    F1_glossary: "用語解説を追加",
+    G2_policy_matrix_file: "公言と行動表（policy-matrix）を作成",
+    G3_parties_min: "2党以上のスタンスを入力",
+    G4_parties_source: "各党に出典URL",
+    G5_parties_symbol: "◎▲❌ を確定",
+    H1_xPosts: "X投稿URLを検索・登録",
+    I1_legal: "法務チェックを実行",
+  };
+
+  const parts = gate.blockers.slice(0, 3).map((b) => hints[b.id] || b.detail || b.id);
+
+  if (article.category && article.category !== "国会" && !article.sourceUrls?.length) {
+    parts.unshift("📰 ソースURL（報道・会見）を管理画面で追加して再生成");
+  }
+
+  const xFailed = (article.xPosts ?? []).filter((p) => p.status === "search_failed").length;
+  if (xFailed >= 3) {
+    parts.push(`X調査: ${xFailed}枠が未特定 — キーワード見直し or 手動URL`);
+  }
+
+  if (parts.length === 0) {
+    return "CEO/ライター作業待ち — ブロッカーを確認";
+  }
+  return parts.join(" → ");
+}
+
 export async function computeProjectStatus() {
   const index = JSON.parse(
     await readFile(path.join(root, "data/articles/index.json"), "utf8"),
@@ -104,10 +152,13 @@ export async function computeProjectStatus() {
 
     const pipeline = pipelineChecks(article, gate, policyMatrix);
     const publishGateOk = isPublishGate(pipeline);
+    const nextAction = computeNextAction(article, gate, pipeline);
 
     slugs.push({
       slug,
+      title: article.title ?? slug,
       shortTitle: article.title?.replace(/ — あの話どうなった？$/, "") ?? slug,
+      adminHidden: article.adminHidden === true,
       gatePct: pct(
         pipeline.filter((p) => p.preDeploy && p.ok).length,
         pipeline.filter((p) => p.preDeploy).length,
@@ -121,6 +172,7 @@ export async function computeProjectStatus() {
       pipeline,
       gold: pipeline,
       blockers: gate.blockers.map((b) => ({ id: b.id, detail: b.detail })),
+      nextAction,
     });
   }
 

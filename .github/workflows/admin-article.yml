@@ -1,0 +1,50 @@
+name: 記事管理
+
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        description: "update_title | hide | unhide | delete"
+        required: true
+      slug:
+        description: "記事スラグ"
+        required: true
+      title:
+        description: "新タイトル（update_title 時のみ）"
+        required: false
+        default: ""
+
+permissions:
+  contents: write
+
+jobs:
+  admin:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - run: npm install
+
+      - name: 記事操作
+        run: |
+          CMD="node scripts/admin-article.mjs --action ${{ github.event.inputs.action }} --slug ${{ github.event.inputs.slug }}"
+          if [ "${{ github.event.inputs.action }}" = "update_title" ]; then
+            CMD="$CMD --title \"${{ github.event.inputs.title }}\""
+          fi
+          $CMD
+
+      - name: 完成度更新
+        run: node scripts/update-project-status.mjs
+
+      - name: コミット & プッシュ
+        run: |
+          git config user.email "bot@seiji1192.site"
+          git config user.name "kokkai-bot"
+          git add data/
+          git diff --staged --quiet || git commit -m "admin: ${{ github.event.inputs.action }} ${{ github.event.inputs.slug }}"
+          git push
