@@ -1,6 +1,6 @@
 ---
 import { SITE } from "../lib/site-config.mjs";
-import { noteMembershipLink } from "../lib/note-link.mjs";
+import { noteMembershipLink, noteMembershipButtonLabel } from "../lib/note-link.mjs";
 
 interface Props {
   /** 案件 slug（計測用） */
@@ -13,7 +13,7 @@ const noteBase = noteMembershipLink("support_cta", context);
 const noteUrl = noteBase
   ? `${noteBase}&utm_campaign=ab_${variant}`
   : null;
-const noteIsMembership = Boolean(SITE.noteMembershipUrl);
+const noteBtnLabel = noteMembershipButtonLabel();
 ---
 
 <section class="support-cta" aria-labelledby="support-cta-title" data-support-cta data-ab={variant}>
@@ -37,7 +37,7 @@ const noteIsMembership = Boolean(SITE.noteMembershipUrl);
         data-track="support-note"
         data-ab={variant}
       >
-        noteIsMembership ? "note メンバーになる" : "note をフォロー"
+        {noteBtnLabel}
       </a>
     ) : (
       <p class="support-cta__soon">

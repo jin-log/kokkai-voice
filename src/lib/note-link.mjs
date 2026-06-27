@@ -5,7 +5,10 @@ import { SITE } from "./site-config.mjs";
  * @param {string} [content] slug or page id
  */
 export function noteMembershipLink(medium, content) {
-  const base = SITE.noteMembershipUrl || SITE.noteUrl;
+  const base =
+    SITE.noteMembershipLive && SITE.noteMembershipUrl
+      ? SITE.noteMembershipUrl
+      : SITE.noteUrl;
   if (!base) return null;
   const url = new URL(base);
   url.searchParams.set("utm_source", "seiji1192");
@@ -15,5 +18,9 @@ export function noteMembershipLink(medium, content) {
 }
 
 export function hasNoteMembership() {
-  return Boolean(SITE.noteMembershipUrl);
+  return Boolean(SITE.noteUrl);
+}
+
+export function noteMembershipButtonLabel() {
+  return SITE.noteMembershipLive ? "note メンバーになる" : "note をフォロー";
 }
