@@ -5,5 +5,9 @@ import sitemap from "@astrojs/sitemap";
 export default defineConfig({
   site: "https://seiji1192.site",
   output: "static",
-  integrations: [sitemap()],
+  integrations: [
+    sitemap({
+      filter: (page) => !page.includes("/dev/"),
+    }),
+  ],
 });
