@@ -11,7 +11,7 @@ const xCount = events.filter((e) => e.type === "x_post").length;
 
 <a class="case-card" href={`/case/${article.slug}`}>
   <span class="case-card__tag">{tagLine} · 更新 {updated}</span>
-  <h2 class="case-card__title">{article.title}</h2>
+  <h2 class="case-card__title">{articleShortTitle(article)}</h2>
   <p class="case-card__summary">{summary}</p>
   <div class="case-card__meta">
     <span>イベント {eventCount}件 · X {xCount}件</span>

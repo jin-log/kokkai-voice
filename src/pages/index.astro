@@ -6,6 +6,28 @@ import CaseCard from "../components/CaseCard.astro";
 import { loadAllArticles } from "../lib/articles.mjs";
 
 const articles = await loadAllArticles();
+
+// 注目：国会での発言量（apiHits）上位5件
+const featured = [...articles]
+  .sort((a, b) => (b.apiHits ?? 0) - (a.apiHits ?? 0))
+  .slice(0, 5);
+const featuredSlugs = new Set(featured.map((a) => a.slug));
+
+// 新着：最終更新日の新しい順5件（注目と重複除く）
+const recent = [...articles]
+  .filter((a) => !featuredSlugs.has(a.slug))
+  .sort((a, b) => {
+    const da = a.nowSummary?.updatedAt ?? a.fetchedAt ?? "";
+    const db = b.nowSummary?.updatedAt ?? b.fetchedAt ?? "";
+    return db.localeCompare(da);
+  })
+  .slice(0, 5);
+const recentSlugs = new Set(recent.map((a) => a.slug));
+
+// 残り全件
+const rest = articles.filter(
+  (a) => !featuredSlugs.has(a.slug) && !recentSlugs.has(a.slug)
+);
 ---
 
 <BaseLayout title="日本の政治なう — あの話どうなった？">
@@ -18,11 +40,34 @@ const articles = await loadAllArticles();
     </p>
   </main>
 
-  <section class="container case-grid" aria-label="注目の案件">
-    {articles.map((article) => (
-      <CaseCard article={article} />
-    ))}
+  <section class="container case-section" aria-label="注目の案件">
+    <h2 class="case-section__heading">🔥 注目の案件</h2>
+    <div class="case-grid">
+      {featured.map((article) => (
+        <CaseCard article={article} />
+      ))}
+    </div>
   </section>
+
+  <section class="container case-section" aria-label="新着の案件">
+    <h2 class="case-section__heading">🆕 新着</h2>
+    <div class="case-grid">
+      {recent.map((article) => (
+        <CaseCard article={article} />
+      ))}
+    </div>
+  </section>
+
+  {rest.length > 0 && (
+    <section class="container case-section" aria-label="すべての案件">
+      <h2 class="case-section__heading">すべての案件</h2>
+      <div class="case-grid">
+        {rest.map((article) => (
+          <CaseCard article={article} />
+        ))}
+      </div>
+    </section>
+  )}
 
   <SiteFooter note="国会議事録 API + スクショアーカイブ。AI要約は解釈を含みます。" />
 </BaseLayout>
