@@ -32,13 +32,17 @@ function formatJa(iso) {
       <!-- 新規記事作成UI -->
       <section class="dev-new-article" id="new-article">
         <h2>🆕 新規記事を作成</h2>
-        <p class="dev-new-article__note">キーワードを入れて「生成」を押すだけ。タイトル・URL・記事生成→デプロイまで自動（2〜3分）</p>
+        <p class="dev-new-article__note">キーワードを入れて「生成」。国会＝議事録API／それ以外＝ソースURL＋X調査（2〜3分）</p>
         <div class="dev-new-article__form">
-          <input id="new-keyword" type="text" placeholder="キーワード（例: 小池百合子リコール、防衛増税）" class="dev-new-article__input" />
+          <input id="new-keyword" type="text" placeholder="キーワード（例: 東京リコール、防衛増税）" class="dev-new-article__input" />
+          <input id="new-title" type="text" placeholder="タイトル（空欄なら自動）" class="dev-new-article__input" />
+          <input id="new-sources" type="text" placeholder="ソースURL（カンマ区切り・任意）" class="dev-new-article__input" />
           <select id="new-category" class="dev-new-article__select">
             <option value="国会">国会</option>
             <option value="地方">地方</option>
             <option value="行政">行政</option>
+            <option value="選挙">選挙</option>
+            <option value="リコール">リコール</option>
           </select>
         </div>
         <button id="new-generate" class="dev-new-article__btn">▶ 生成スタート</button>
@@ -176,12 +180,24 @@ function makeTitle(keyword) {
   return `${keyword.trim()} — あの話どうなった？`;
 }
 
+document.getElementById("new-keyword").addEventListener("input", () => {
+  const kw = document.getElementById("new-keyword").value.trim();
+  if (!document.getElementById("new-title").dataset.manual) {
+    document.getElementById("new-title").value = kw ? `${kw} — あの話どうなった？` : "";
+  }
+});
+document.getElementById("new-title").addEventListener("input", () => {
+  document.getElementById("new-title").dataset.manual = "1";
+});
+
 // 記事生成
 document.getElementById("new-generate").addEventListener("click", async () => {
   const keyword  = document.getElementById("new-keyword").value.trim();
+  const titleIn  = document.getElementById("new-title").value.trim();
+  const sources  = document.getElementById("new-sources").value.trim();
   const category = document.getElementById("new-category").value;
   const pin      = localStorage.getItem("dev_auth") || "";
-  const title    = makeTitle(keyword);
+  const title    = titleIn || makeTitle(keyword);
   const slug     = makeSlug(keyword);
 
   if (!keyword) { alert("キーワードを入力してください"); return; }
@@ -196,7 +212,7 @@ document.getElementById("new-generate").addEventListener("click", async () => {
     const res = await fetch("/api/dispatch", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ pin, slug, keyword, title, category }),
+      body: JSON.stringify({ pin, slug, keyword, title, category, sources }),
     });
     const data = await res.json();
     if (data.ok) {

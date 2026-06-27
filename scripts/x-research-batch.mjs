@@ -349,10 +349,15 @@ async function main() {
     const articlePath = path.join(articlesDir, file);
     const article = JSON.parse(await readFile(articlePath, "utf8"));
     const kw = article.searchKeyword;
-    const config = TOPIC_CONFIG[kw];
-    if (!config) {
-      console.warn(`SKIP ${slug}: no config for keyword "${kw}"`);
-      continue;
+    const config = TOPIC_CONFIG[kw] ?? {
+      handles: [],
+      keywords: kw.split(/[\s　]+/).filter(Boolean),
+      seed: (article.sourceUrls ?? [])
+        .filter((u) => /x\.com|twitter\.com/i.test(u))
+        .map((url) => ({ url })),
+    };
+    if (!TOPIC_CONFIG[kw]) {
+      console.log(`  fallback config for "${kw}" (handles=0, seed=${config.seed.length})`);
     }
 
     const dateRange = getArticleDateRange(article);

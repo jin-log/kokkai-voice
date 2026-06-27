@@ -33,7 +33,9 @@ const hasStance =
   stance &&
   (stance.matrix.parties ?? []).filter(shouldPublishParty).length > 0;
 const shortTitle = articleShortTitle(article);
-const description = article.primarySpeech.excerpt.slice(0, 120);
+const description = article.primarySpeech?.excerpt?.slice(0, 120) ||
+  article.nowSummary?.bullets?.[0]?.slice(0, 120) ||
+  "";
 ---
 
 <BaseLayout

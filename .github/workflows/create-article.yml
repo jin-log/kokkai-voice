@@ -20,6 +20,10 @@ on:
         description: "タグ (カンマ区切り)"
         required: false
         default: ""
+      sources:
+        description: "ソースURL (カンマ区切り・任意)"
+        required: false
+        default: ""
 
 permissions:
   contents: write
@@ -39,13 +43,33 @@ jobs:
 
       - name: 記事生成
         run: |
-          node scripts/init-article.mjs \
-            --slug "${{ github.event.inputs.slug }}" \
-            --keyword "${{ github.event.inputs.keyword }}" \
-            --title "${{ github.event.inputs.title }}" \
-            --category "${{ github.event.inputs.category }}" \
-            --tags "${{ github.event.inputs.tags }}" \
-            --force
+          if [ "${{ github.event.inputs.category }}" = "国会" ]; then
+            node scripts/init-article.mjs \
+              --slug "${{ github.event.inputs.slug }}" \
+              --keyword "${{ github.event.inputs.keyword }}" \
+              --title "${{ github.event.inputs.title }}" \
+              --category "${{ github.event.inputs.category }}" \
+              --tags "${{ github.event.inputs.tags }}" \
+              --force
+          else
+            node scripts/init-article-general.mjs \
+              --slug "${{ github.event.inputs.slug }}" \
+              --keyword "${{ github.event.inputs.keyword }}" \
+              --title "${{ github.event.inputs.title }}" \
+              --category "${{ github.event.inputs.category }}" \
+              --tags "${{ github.event.inputs.tags }}" \
+              --sources "${{ github.event.inputs.sources }}" \
+              --force
+          fi
+
+      - name: index登録
+        run: node scripts/register-article-index.mjs --slug "${{ github.event.inputs.slug }}"
+
+      - name: X調査
+        run: node scripts/x-research-batch.mjs "${{ github.event.inputs.slug }}" || true
+
+      - name: 法務チェック
+        run: node scripts/legal-check.mjs --slug "${{ github.event.inputs.slug }}" || true
 
       - name: コミット & プッシュ
         run: |

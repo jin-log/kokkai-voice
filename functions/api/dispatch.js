@@ -16,7 +16,7 @@ export async function onRequestPost(context) {
     return json({ error: "invalid JSON" }, 400);
   }
 
-  const { pin, slug: slugIn, keyword, title: titleIn, category = "国会", tags = "" } = body;
+  const { pin, slug: slugIn, keyword, title: titleIn, category = "国会", tags = "", sources = "" } = body;
 
   if (!ADMIN_PIN || pin !== ADMIN_PIN) {
     return json({ error: "unauthorized" }, 401);
@@ -43,7 +43,7 @@ export async function onRequestPost(context) {
       },
       body: JSON.stringify({
         ref: "main",
-        inputs: { slug, keyword, title, category, tags },
+        inputs: { slug, keyword, title, category, tags, sources },
       }),
     }
   );
