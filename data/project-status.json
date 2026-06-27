@@ -1,11 +1,11 @@
 {
-  "generatedAt": "2026-06-27T20:04:53.615Z",
+  "generatedAt": "2026-06-27T20:13:43.616Z",
   "strategy": "quality-first",
   "activeCount": 26,
   "parkedCount": 0,
   "publishedCount": 20,
   "overallGoldPct": 92,
-  "overallGatePct": 100,
+  "overallGatePct": 99,
   "slugs": [
     {
       "slug": "shussho-budget-seika",
@@ -118,12 +118,12 @@
       "shortTitle": "副首都構想って何？",
       "adminHidden": false,
       "pageReady": false,
-      "publishState": "draft",
-      "previewUrl": "/dev/preview/fukushuto-koso/",
-      "gatePct": 100,
-      "goldPct": 67,
+      "publishState": "wip",
+      "previewUrl": null,
+      "gatePct": 75,
+      "goldPct": 50,
       "published": false,
-      "publishGateOk": true,
+      "publishGateOk": false,
       "pipeline": [
         {
           "id": "content",
@@ -137,7 +137,7 @@
           "label": "②〇×2党確定",
           "phase": 2,
           "preDeploy": true,
-          "ok": true
+          "ok": false
         },
         {
           "id": "x",
@@ -181,7 +181,7 @@
           "label": "②〇×2党確定",
           "phase": 2,
           "preDeploy": true,
-          "ok": true
+          "ok": false
         },
         {
           "id": "x",
@@ -212,10 +212,17 @@
           "ok": false
         }
       ],
-      "blockers": [],
-      "blockerCount": 0,
+      "blockers": [
+        {
+          "id": "G5_parties_symbol",
+          "label": "◎▲❌",
+          "todo": "各党の記号を確定",
+          "detail": "◎▲❌ 確定 1/2 党以上"
+        }
+      ],
+      "blockerCount": 1,
       "runState": "idle",
-      "nextAction": "📋 完成・非公開 — プレビューで確認して「公開する」を押してください"
+      "nextAction": "◎▲❌ を確定 → X調査: 4枠が未特定 — キーワード見直し or 手動URL"
     },
     {
       "slug": "osaka-to-metropolis",
@@ -2738,7 +2745,7 @@
       "nextAction": "✅ 公開中 — /case/ に表示されています"
     }
   ],
-  "deltaGoldPct": 3,
-  "previousGoldPct": 89,
+  "deltaGoldPct": 0,
+  "previousGoldPct": 92,
   "deployedAt": "2026-06-27T05:45:35.982Z"
 }
