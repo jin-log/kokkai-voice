@@ -11,6 +11,36 @@ export const root = path.join(__dirname, "../..");
 
 /** @typedef {{ id: string, ok: boolean, detail?: string, blocker?: boolean }} CheckResult */
 
+/** 管理画面・オーナー向けラベル（IDは開発者用） */
+export const CHECK_LABELS = {
+  A1_title: { label: "タイトル", todo: "タイトルを入力" },
+  A2_primarySpeech: { label: "一次ソース", todo: "報道URL・国会リンクを追加" },
+  B1_nowSummary: { label: "いまの結論", todo: "3行の要約を書く" },
+  B2_disclaimer: { label: "AI注記", todo: "disclaimer を追加" },
+  C1_summaryBullets: { label: "要点", todo: "summaryBullets を3点以上" },
+  D1_arcSummary: { label: "経緯", todo: "日付付き経緯を3行以上" },
+  E1_timeline_count: { label: "タイムライン", todo: "出来事を3件以上" },
+  E2_timeline_speeches: { label: "国会発言リンク", todo: "タイムラインに国会URLを2件" },
+  F1_glossary: { label: "用語解説", todo: "用語を2語以上" },
+  G1_stanceMatrix_ref: { label: "〇×表リンク", todo: "stanceMatrix を設定" },
+  G2_policy_matrix_file: { label: "公言と行動ファイル", todo: "policy-matrix JSON を作成" },
+  G3_parties_min: { label: "政党数", todo: "2党以上を登録" },
+  G4_parties_source: { label: "党の出典URL", todo: "各党に sourceUrl" },
+  G5_parties_symbol: { label: "◎▲❌", todo: "各党の記号を確定" },
+  H1_xPosts: { label: "X投稿", todo: "検証済みX URLを1件以上" },
+  I1_legal: { label: "法務", todo: "legal-check を実行" },
+};
+
+export function blockerToHuman(blocker) {
+  const meta = CHECK_LABELS[blocker.id];
+  return {
+    id: blocker.id,
+    label: meta?.label ?? blocker.id,
+    todo: meta?.todo ?? blocker.detail ?? "",
+    detail: blocker.detail ?? "",
+  };
+}
+
 /** @param {unknown} article */
 export function checkCasePage(article, opts = {}) {
   const { policyMatrix = null } = opts;

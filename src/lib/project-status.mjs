@@ -4,7 +4,7 @@
  */
 import { readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
-import { checkCasePageWithFiles, root } from "./page-ready.mjs";
+import { checkCasePageWithFiles, root, blockerToHuman } from "./page-ready.mjs";
 import { filterPublishable, loadArticle } from "./articles.mjs";
 
 /** @typedef {{ id: string, label: string, phase: number, preDeploy: boolean }} PipelineItemDef */
@@ -171,7 +171,9 @@ export async function computeProjectStatus() {
       publishGateOk,
       pipeline,
       gold: pipeline,
-      blockers: gate.blockers.map((b) => ({ id: b.id, detail: b.detail })),
+      blockers: gate.blockers.map((b) => blockerToHuman(b)),
+      blockerCount: gate.blockers.length,
+      runState: "idle",
       nextAction,
     });
   }

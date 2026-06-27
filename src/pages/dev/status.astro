@@ -106,6 +106,7 @@ function formatJa(iso) {
                     <span class="status-card__pct">{s.goldPct}%</span>
                   </header>
                   <p class="status-card__slug"><code>{s.slug}</code></p>
+                  <p class="status-card__run-state" data-run-state={s.slug}>⏸️ 待機中（自動処理なし）</p>
                   <p class="status-card__next">{s.nextAction ?? "npm run status で次アクションを更新"}</p>
                   <div class="status-card__title-edit">
                     <input type="text" class="status-card__title-input" value={s.title} data-slug={s.slug} aria-label="タイトル編集" />
@@ -121,7 +122,17 @@ function formatJa(iso) {
                     ))}
                   </ul>
                   {!s.published && s.blockers.length > 0 && (
-                    <p class="status-card__blockers">未了: {s.blockers.map((b) => b.id).join(", ")}</p>
+                    <div class="status-card__blockers">
+                      <p class="status-card__blockers-title">あと {s.blockerCount ?? s.blockers.length} 項目（CEO/ライター作業）</p>
+                      <ol class="status-card__blockers-list">
+                        {s.blockers.map((b) => (
+                          <li>
+                            <strong>{b.label ?? b.id}</strong>
+                            <span>{b.todo ?? b.detail}</span>
+                          </li>
+                        ))}
+                      </ol>
+                    </div>
                   )}
                   <div class="status-card__deploy">
                     {s.publishGateOk ? (
@@ -149,6 +160,13 @@ function formatJa(iso) {
             </section>
 
             <section class="status-legend">
+              <h2>状態の見方</h2>
+              <ul class="status-legend__states">
+                <li><strong>🔄 処理中</strong> — GitHub が記事生成・デプロイ中（1〜3分）</li>
+                <li><strong>⏸️ 待機中</strong> — 自動処理は動いていない。下の「あと N 項目」をCEOが埋める</li>
+                <li><strong>🚀 デプロイ待ち</strong> — 中身OK。青い「本番に反映」ボタンを押す</li>
+                <li><strong>✅ 公開済み</strong> — 本番ページあり</li>
+              </ul>
               <h2>パイプライン（順番固定）</h2>
               <ol>
                 <li>①コンテンツ（経緯・国会・要約）</li>
@@ -337,6 +355,8 @@ document.getElementById("new-generate").addEventListener("click", async () => {
     if (data.ok) {
       statusEl.className = "dev-new-article__status is-ok";
       statusEl.textContent = `✅ ${data.message}（/${slug}/）`;
+      markPendingSlug(slug, "新規記事生成");
+      refreshWorkflows();
     } else {
       statusEl.className = "dev-new-article__status is-error";
       statusEl.textContent = "❌ " + (data.error || "エラーが発生しました");
@@ -357,11 +377,43 @@ function workflowLabel(run) {
   return run.status;
 }
 
+function setRunState(slug, text, kind = "idle") {
+  const el = document.querySelector(`[data-run-state="${slug}"]`);
+  if (!el) return;
+  el.textContent = text;
+  el.className = "status-card__run-state";
+  if (kind === "active") el.classList.add("is-active");
+  if (kind === "ready") el.classList.add("is-ready");
+  if (kind === "done") el.classList.add("is-done");
+}
+
+function markPendingSlug(slug, label) {
+  try {
+    sessionStorage.setItem("kv_pending_slug", JSON.stringify({ slug, label, at: Date.now() }));
+  } catch { /* ignore */ }
+}
+
+function readPendingSlug() {
+  try {
+    const raw = sessionStorage.getItem("kv_pending_slug");
+    if (!raw) return null;
+    const p = JSON.parse(raw);
+    if (Date.now() - p.at > 15 * 60 * 1000) {
+      sessionStorage.removeItem("kv_pending_slug");
+      return null;
+    }
+    return p;
+  } catch {
+    return null;
+  }
+}
+
 async function refreshWorkflows() {
   const pin = getPin();
   if (!pin) return;
   const summary = document.getElementById("workflow-summary");
   const list = document.getElementById("workflow-list");
+  const panel = document.getElementById("workflow-panel");
   if (!summary || !list) return;
 
   try {
@@ -369,12 +421,44 @@ async function refreshWorkflows() {
     const data = await res.json();
     if (!data.ok) throw new Error(data.error || "取得失敗");
 
+    const activeBySlug = data.activeBySlug || {};
+    const pending = readPendingSlug();
+
     if (data.activeCount > 0) {
       summary.className = "dev-workflow-panel__summary is-active";
-      summary.textContent = `🔄 いま ${data.activeCount} 件が実行中 — 完了まで1〜3分かかることがあります`;
+      summary.textContent = `🔄 いま ${data.activeCount} 件が GitHub 上で動いています（1〜3分）— 完了すると自動でデプロイ`;
+      panel?.classList.add("is-live");
     } else {
       summary.className = "dev-workflow-panel__summary";
-      summary.textContent = "待機中（実行中の workflow なし）";
+      summary.textContent = "⏸️ いま動いている自動処理はなし — 記事が進まないのは「待機中」= CEO/ライター手作業待ち";
+      panel?.classList.remove("is-live");
+    }
+
+    document.querySelectorAll("[data-run-state]").forEach((el) => {
+      const slug = el.getAttribute("data-run-state");
+      if (activeBySlug[slug]) {
+        setRunState(slug, `🔄 処理中: ${activeBySlug[slug]}`, "active");
+      } else if (pending?.slug === slug && data.activeCount > 0) {
+        setRunState(slug, "🔄 起動直後 — GitHub 反映待ち", "active");
+      } else {
+        const card = el.closest(".status-card");
+        const pct = card?.querySelector(".status-card__pct")?.textContent || "";
+        const gateHint = card?.querySelector(".status-card__deploy-hint");
+        const deployBtn = card?.querySelector(".deploy-slug-btn");
+        if (deployBtn) {
+          setRunState(slug, "🚀 中身OK — 「本番に反映」を押してください", "ready");
+        } else if (gateHint) {
+          setRunState(slug, "⏸️ 待機中 — 下の「あと N 項目」を埋める（自動では動かない）", "idle");
+        } else if (pct === "100%") {
+          setRunState(slug, "✅ 公開ゲートOK", "done");
+        } else {
+          setRunState(slug, "⏸️ 待機中 — 中身の作成待ち", "idle");
+        }
+      }
+    });
+
+    if (data.activeCount === 0 && pending) {
+      sessionStorage.removeItem("kv_pending_slug");
     }
 
     list.innerHTML = "";
@@ -383,9 +467,10 @@ async function refreshWorkflows() {
       li.className = "dev-workflow-panel__item";
       if (run.inProgress) li.classList.add("is-active");
       const when = new Date(run.createdAt).toLocaleString("ja-JP", { month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" });
+      const slugNote = run.slugHint ? ` [${run.slugHint}]` : "";
       li.innerHTML = `<span class="dev-workflow-panel__state"></span><span class="dev-workflow-panel__name"></span><time></time>`;
       li.querySelector(".dev-workflow-panel__state").textContent = workflowLabel(run);
-      li.querySelector(".dev-workflow-panel__name").textContent = run.name;
+      li.querySelector(".dev-workflow-panel__name").textContent = run.name + slugNote;
       li.querySelector("time").textContent = when;
       if (run.url) {
         li.style.cursor = "pointer";
@@ -396,7 +481,7 @@ async function refreshWorkflows() {
     }
   } catch (e) {
     summary.className = "dev-workflow-panel__summary is-error";
-    summary.textContent = "⚠️ 状況取得失敗: " + e.message;
+    summary.textContent = "⚠️ 状況取得失敗（GH_TOKEN に Actions:Read が必要）: " + e.message;
   }
 }
 

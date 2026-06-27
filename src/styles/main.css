@@ -2046,6 +2046,32 @@ body.has-progress-strip {
   font-size: 0.85rem;
   line-height: 1.5;
 }
+.status-card__run-state {
+  margin: 0.35rem 0;
+  font-size: 0.88rem;
+  font-weight: 700;
+  padding: 0.35rem 0.5rem;
+  border-radius: 0.35rem;
+  background: #f3f4f6;
+  color: #374151;
+}
+.status-card__run-state.is-active { background: #fef3c7; color: #92400e; animation: pulse-soft 2s infinite; }
+.status-card__run-state.is-ready { background: #dbeafe; color: #1e40af; }
+.status-card__run-state.is-done { background: #dcfce7; color: #14532d; }
+@keyframes pulse-soft { 0%,100%{opacity:1} 50%{opacity:0.75} }
+.status-card__blockers { margin-top: 0.75rem; }
+.status-card__blockers-title { font-size: 0.85rem; font-weight: 700; margin: 0 0 0.35rem; }
+.status-card__blockers-list {
+  margin: 0;
+  padding-left: 1.2rem;
+  font-size: 0.82rem;
+  line-height: 1.55;
+}
+.status-card__blockers-list li { margin-bottom: 0.25rem; }
+.status-card__blockers-list strong { margin-right: 0.35rem; }
+.status-card__blockers-list span { color: var(--color-text-muted); }
+.dev-workflow-panel.is-live { border-color: #f59e0b; box-shadow: 0 0 0 2px rgb(245 158 11 / 0.2); }
+.status-legend__states { font-size: 0.88rem; line-height: 1.7; padding-left: 1.2rem; }
 .status-card__title-edit {
   display: flex;
   flex-wrap: wrap;

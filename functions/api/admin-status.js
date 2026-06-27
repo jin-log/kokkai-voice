@@ -26,18 +26,22 @@ export async function onRequestGet(context) {
   }
 
   const data = await res.json();
-  const runs = (data.workflow_runs ?? []).map((r) => ({
-    id: r.id,
-    name: r.name,
-    status: r.status,
-    conclusion: r.conclusion,
-    createdAt: r.created_at,
-    updatedAt: r.updated_at,
-    url: r.html_url,
-    event: r.event,
-    inProgress: r.status === "in_progress" || r.status === "queued" || r.status === "waiting",
-    pending: r.status === "queued" || r.status === "waiting",
-  }));
+  const runs = (data.workflow_runs ?? []).map((r) => {
+    const slugHint = parseSlugFromRun(r);
+    return {
+      id: r.id,
+      name: r.name,
+      status: r.status,
+      conclusion: r.conclusion,
+      createdAt: r.created_at,
+      updatedAt: r.updated_at,
+      url: r.html_url,
+      event: r.event,
+      slugHint,
+      inProgress: r.status === "in_progress" || r.status === "queued" || r.status === "waiting" || r.status === "pending",
+      pending: r.status === "queued" || r.status === "waiting" || r.status === "pending",
+    };
+  });
 
   const active = runs.filter((r) => r.inProgress);
   const recentFailed = runs.filter((r) => r.conclusion === "failure").slice(0, 3);
@@ -49,7 +53,31 @@ export async function onRequestGet(context) {
     active,
     recentFailed,
     runs,
+    /** slug → いま動いている workflow 名 */
+    activeBySlug: buildActiveBySlug(runs),
   });
+}
+
+/** @param {{ slugHint?: string|null, inProgress?: boolean, name?: string }[]} runs */
+function buildActiveBySlug(runs) {
+  /** @type {Record<string, string>} */
+  const map = {};
+  for (const r of runs) {
+    if (!r.inProgress || !r.slugHint) continue;
+    map[r.slugHint] = r.name ?? "処理中";
+  }
+  return map;
+}
+
+function parseSlugFromRun(run) {
+  const msg = run.head_commit?.message || run.display_title || "";
+  let m = msg.match(/article:\s*(\S+)/);
+  if (m) return m[1];
+  m = msg.match(/admin:\s*\w+\s+(\S+)/);
+  if (m) return m[1];
+  m = msg.match(/記事[：:]\s*(\S+)/);
+  if (m) return m[1];
+  return null;
 }
 
 function ghHeaders(token) {
