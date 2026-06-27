@@ -88,6 +88,14 @@
     });
   }
 
+  function getScrollOffset() {
+    const header = document.querySelector('.site-header');
+    if (header) return Math.ceil(header.getBoundingClientRect().height) + 16;
+    const root = getComputedStyle(document.documentElement);
+    const v = parseFloat(root.getPropertyValue('--header-offset'));
+    return Number.isFinite(v) ? v + 16 : 120;
+  }
+
   function initToc() {
     const toc = document.querySelector('[data-float-toc]');
     const tocToggle = document.querySelector('[data-float-toc-toggle]');
@@ -138,7 +146,7 @@
 
       const onScroll = () => {
         let current = sections[0];
-        const offset = 120;
+        const offset = getScrollOffset();
         for (const section of sections) {
           if (section.getBoundingClientRect().top <= offset) current = section;
         }

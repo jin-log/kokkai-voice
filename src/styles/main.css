@@ -4,7 +4,7 @@
 
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: 4rem;
+  scroll-padding-top: calc(var(--header-offset) + 0.75rem);
 }
 
 body {
@@ -1150,6 +1150,18 @@ a { color: var(--color-primary); }
   line-height: 1.55;
 }
 
+/* 目次アンカー — ヘッダー被り防止 */
+#sec-now,
+#sec-arc,
+#sec-mood,
+#sec-detail,
+#stance-matrix-title,
+#glossary-title,
+#sec-timeline,
+#comments-title {
+  scroll-margin-top: calc(var(--header-offset) + 0.75rem);
+}
+
 /* Floating table of contents */
 .float-toc {
   position: fixed;
@@ -1218,6 +1230,11 @@ a { color: var(--color-primary); }
   color: #fff;
 }
 
+.float-toc__link:focus-visible {
+  outline: 2px solid #93c5fd;
+  outline-offset: 2px;
+}
+
 .float-toc__link.is-active {
   background: rgb(255 255 255 / 0.15);
   color: #fff;
@@ -1237,7 +1254,7 @@ a { color: var(--color-primary); }
 /* PC: 右上に常時表示（開きっぱなし） */
 @media (min-width: 900px) {
   .float-toc {
-    top: 7.5rem;
+    top: calc(var(--header-offset) + 0.75rem);
     right: 1.25rem;
     left: auto;
     bottom: auto;
@@ -1594,7 +1611,9 @@ a { color: var(--color-primary); }
 }
 
 @media (min-width: 641px) {
-  html { scroll-padding-top: 8rem; }
+  :root {
+    --header-offset: calc(10.5rem + 0.86rem);
+  }
 
   .logo__img {
     height: 10.5rem;
