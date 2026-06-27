@@ -160,7 +160,92 @@ const TOPIC_CONFIG = {
     handles: ["tamakiyuichiro", "FurukawaMot", "izmkenta", "NodaSeiko", "cdp_japan"],
     keywords: ["国民民主", "公明", "野党", "中道", "与野党"],
   },
+  "太陽光パネル 設置義務 東京都": {
+    handles: ["koike_akira", "takaichi_sanae", "izmkenta", "cdp_japan", "NakataniGen"],
+    keywords: ["太陽光", "パネル", "脱炭素", "カーボン", "東京都", "再生可能"],
+  },
+  "不法移民 在留外国人数": {
+    handles: ["shindo_y", "sakurauchikoshi", "sasagawah", "Jimihana", "izmkenta", "cdp_japan"],
+    keywords: ["外国人", "入管", "在留", "移民", "不法", "残留", "オーバーステイ"],
+    seed: [
+      {
+        url: "https://x.com/shindo_y/status/2065378501486858685",
+        label: "新藤義孝 @shindo_y",
+        text: "外国人政策本部長として「外国人政策に関する第二次提言」を高市総理に手交。不法滞在・不法就労対策の強化など。",
+      },
+    ],
+  },
+  大阪都構想: {
+    handles: ["ibori_y", "yoshimurhirofumi", "izmkenta", "cdp_japan", "tamakiyuichiro"],
+    keywords: ["大阪都", "都構想", "特別区", "維新", "府市", "二重行政"],
+  },
+  副首都構想: {
+    handles: ["yoshimurhirofumi", "takaichi_sanae", "izmkenta", "cdp_japan", "NodaSeiko"],
+    keywords: ["副首都", "大阪", "首都", "機能移転", "一極集中"],
+  },
+  "出生率 子育て支援 予算": {
+    handles: ["takaichi_sanae", "izmkenta", "tamakiyuichiro", "NodaSeiko", "cdp_japan"],
+    keywords: ["出生率", "少子化", "子育て", "こども", "児童手当", "予算"],
+  },
 };
+
+/** @type {Record<string, typeof TOPIC_CONFIG[string]>} */
+const SLUG_CONFIG = {
+  "tokyo-solar-panel": {
+    ...TOPIC_CONFIG["太陽光パネル 設置義務 東京都"],
+    seed: [
+      {
+        url: "https://x.com/renho_sha/status/2061945530402668905",
+        label: "蓮舫 @renho_sha",
+        text: "経済産業省の需給データとナフサ在庫。エネルギー供給の実態について。",
+      },
+    ],
+  },
+  "fuhou-immin-trend": TOPIC_CONFIG["不法移民 在留外国人数"],
+  "osaka-to-metropolis": {
+    ...TOPIC_CONFIG["大阪都構想"],
+    seed: [
+      {
+        url: "https://x.com/takaichi_sanae/status/2070096912234238329",
+        label: "高市早苗 @takaichi_sanae",
+        text: "経済財政諮問会議で財政運営・予算編成改革について意見交換。",
+      },
+    ],
+  },
+  "fukushuto-koso": {
+    ...TOPIC_CONFIG["副首都構想"],
+    seed: [
+      {
+        url: "https://x.com/takaichi_sanae/status/2070096912234238329",
+        label: "高市早苗 @takaichi_sanae",
+        text: "経済財政諮問会議。多極分散型経済圏・副首都構想の財政基盤に関わる議論。",
+      },
+    ],
+  },
+  "shussho-budget-seika": {
+    ...TOPIC_CONFIG["出生率 子育て支援 予算"],
+    seed: [
+      {
+        url: "https://x.com/takaichi_sanae/status/2070096912234238329",
+        label: "高市早苗 @takaichi_sanae",
+        text: "経済財政諮問会議で予算編成改革・財政運営について意見交換。",
+      },
+    ],
+  },
+};
+
+function resolveTopicConfig(kw, slug) {
+  if (SLUG_CONFIG[slug]) return SLUG_CONFIG[slug];
+  if (TOPIC_CONFIG[kw]) return TOPIC_CONFIG[kw];
+  for (const [key, cfg] of Object.entries(TOPIC_CONFIG)) {
+    if (kw.includes(key)) return cfg;
+  }
+  for (const [key, cfg] of Object.entries(TOPIC_CONFIG)) {
+    const parts = key.split(/[\s　]+/).filter((p) => p.length >= 2);
+    if (parts.some((p) => kw.includes(p))) return cfg;
+  }
+  return null;
+}
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
@@ -191,6 +276,10 @@ function getArticleDateRange(article) {
   for (const e of article.timeline   || []) { if (e.date) dates.push(new Date(e.date)); }
   if (!dates.length) return null;
   const min = new Date(Math.min(...dates.map(d => d.getTime())));
+  const max = new Date(Math.max(...dates.map(d => d.getTime())));
+  const spanDays = (max.getTime() - min.getTime()) / 86400000;
+  // 骨組みのみ（同日・直近だけ）の場合は日付フィルタしない
+  if (spanDays < 14) return null;
   min.setDate(min.getDate() - 7);
   return { min, max: new Date() };
 }
@@ -389,7 +478,8 @@ async function main() {
     const articlePath = path.join(articlesDir, file);
     const article = JSON.parse(await readFile(articlePath, "utf8"));
     const kw = article.searchKeyword;
-    const config = TOPIC_CONFIG[kw] ?? {
+    const resolved = resolveTopicConfig(kw, slug);
+    const config = resolved ?? {
       handles: [],
       keywords: kw.split(/[\s　]+/).filter(Boolean),
       seed: [
@@ -399,7 +489,7 @@ async function main() {
           .map((url) => ({ url })),
       ],
     };
-    if (!TOPIC_CONFIG[kw]) {
+    if (!resolved) {
       console.log(`  fallback config for "${kw}" (handles=0, seed=${config.seed.length})`);
     }
 

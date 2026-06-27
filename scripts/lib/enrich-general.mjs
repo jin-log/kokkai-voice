@@ -55,8 +55,18 @@ export function isGeneralContentReady(article) {
   const tl = article.timeline ?? [];
   const linked = tl.filter((e) => e.sourceUrl || e.speech?.speechURL);
   const bullets = article.nowSummary?.bullets ?? [];
-  if (bullets.some((b) => /ソースURL|追加してください|整理中/.test(String(b)))) return false;
-  return linked.length >= 3 && bullets.length >= 2;
+  const sb = article.summaryBullets ?? [];
+  if (
+    bullets.some((b) =>
+      /ソースURL|追加してください|整理中|順次整理|整理します|登録済み/.test(String(b)),
+    )
+  ) {
+    return false;
+  }
+  if (sb.length < 3) return false;
+  const arc = article.arcSummary ?? [];
+  if (arc.filter((x) => x.date && x.text).length < 3) return false;
+  return linked.length >= 3 && bullets.length >= 3;
 }
 
 /** @param {Record<string, unknown>} article */
@@ -65,12 +75,15 @@ export async function enrichGeneralArticle(article, root) {
   let sourceUrls = [...(article.sourceUrls ?? [])];
 
   if (sourceUrls.length < 2) {
-    const found = await discoverSourceUrls(keyword, 8);
+    const found = await discoverUrls(keyword, {
+      limit: 8,
+      title: article.title,
+    });
     sourceUrls = [...new Set([...sourceUrls, ...found])].slice(0, 8);
   }
 
   if (sourceUrls.length >= 2) {
-    const readable = await pickReadableSources(sourceUrls, 2);
+    const readable = await pickReadableSources(sourceUrls, 5);
     if (readable.length >= 2) {
       sourceUrls = readable;
     }
