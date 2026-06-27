@@ -97,12 +97,13 @@ export function checkCasePage(article, opts = {}) {
   } else if (xBad.length > 0) {
     add("H1_xPosts", false, `未検証URL ${xBad.length} 件 — reset-xposts または post_text 補完`);
   } else {
+    const xMin = article.xPostsMinRequired ?? 1;
     add(
       "H1_xPosts",
-      xVerified.length >= 2,
-      xVerified.length >= 2
+      xVerified.length >= xMin,
+      xVerified.length >= xMin
         ? `検証済み ${xVerified.length} 件`
-        : `検証済み ${xVerified.length}/2 件（公開前必須）`,
+        : `検証済み ${xVerified.length}/${xMin} 件（公開前必須）`,
     );
   }
 

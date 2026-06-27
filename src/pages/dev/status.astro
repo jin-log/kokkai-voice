@@ -73,6 +73,13 @@ function formatJa(iso) {
               </dl>
             </section>
 
+            <section class="dev-deploy" aria-label="本番反映">
+              <h2>🚀 本番に反映</h2>
+              <p class="dev-deploy__note">GitHub main の最新を Cloudflare にデプロイします（1〜2分）。Cursor で直しただけの変更は、先に main へ push されている必要があります。</p>
+              <button type="button" id="deploy-all" class="dev-deploy__btn dev-deploy__btn--primary">全体を本番に反映</button>
+              <div id="deploy-all-status" class="dev-deploy__status" style="display:none"></div>
+            </section>
+
             <section class="status-slugs" aria-label="案件別">
               <h2>案件別</h2>
               {status.slugs.map((s) => (
@@ -94,6 +101,18 @@ function formatJa(iso) {
                   {!s.published && s.blockers.length > 0 && (
                     <p class="status-card__blockers">未了: {s.blockers.map((b) => b.id).join(", ")}</p>
                   )}
+                  <div class="status-card__deploy">
+                    {s.publishGateOk ? (
+                      <>
+                        <button type="button" class="dev-deploy__btn dev-deploy__btn--slug deploy-slug-btn" data-slug={s.slug}>
+                          📤 この記事を本番に反映
+                        </button>
+                        <span class="deploy-slug-status" data-slug={s.slug} hidden></span>
+                      </>
+                    ) : (
+                      <p class="status-card__deploy-hint">①〜④が全部OKになると反映ボタンが使えます（現在 {s.gatePct}%）</p>
+                    )}
+                  </div>
                 </article>
               ))}
             </section>
@@ -190,13 +209,82 @@ document.getElementById("new-title").addEventListener("input", () => {
   document.getElementById("new-title").dataset.manual = "1";
 });
 
+function getPin() {
+  return localStorage.getItem(KEY) || "";
+}
+
+function setDeployStatus(el, type, text) {
+  el.style.display = "block";
+  el.className = type === "loading"
+    ? "dev-deploy__status is-loading"
+    : type === "ok"
+      ? "dev-deploy__status is-ok"
+      : "dev-deploy__status is-error";
+  el.textContent = text;
+}
+
+async function callDispatch(action, extra = {}) {
+  const res = await fetch("/api/dispatch", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ pin: getPin(), action, ...extra }),
+  });
+  const data = await res.json();
+  if (!res.ok || !data.ok) {
+    throw new Error(data.error || data.detail || "エラーが発生しました");
+  }
+  return data;
+}
+
+document.getElementById("deploy-all")?.addEventListener("click", async () => {
+  const btn = document.getElementById("deploy-all");
+  const statusEl = document.getElementById("deploy-all-status");
+  if (!confirm("main の最新を本番（seiji1192.site）に反映します。よろしいですか？")) return;
+
+  btn.disabled = true;
+  setDeployStatus(statusEl, "loading", "⏳ 本番デプロイを起動中…");
+
+  try {
+    const data = await callDispatch("deploy");
+    setDeployStatus(statusEl, "ok", "✅ " + data.message);
+  } catch (e) {
+    setDeployStatus(statusEl, "error", "❌ " + e.message);
+  } finally {
+    btn.disabled = false;
+  }
+});
+
+document.querySelectorAll(".deploy-slug-btn").forEach((btn) => {
+  btn.addEventListener("click", async () => {
+    const slug = btn.dataset.slug;
+    const statusEl = document.querySelector(`.deploy-slug-status[data-slug="${slug}"]`);
+    if (!confirm(`「${slug}」を本番に反映します。\nゲートチェック後デプロイします。よろしいですか？`)) return;
+
+    btn.disabled = true;
+    statusEl.hidden = false;
+    statusEl.className = "deploy-slug-status is-loading";
+    statusEl.textContent = "⏳ 起動中…";
+
+    try {
+      const data = await callDispatch("deploy_article", { slug });
+      statusEl.className = "deploy-slug-status is-ok";
+      statusEl.textContent = "✅ " + data.message;
+    } catch (e) {
+      statusEl.className = "deploy-slug-status is-error";
+      statusEl.textContent = "❌ " + e.message;
+    } finally {
+      btn.disabled = false;
+    }
+  });
+});
+
 // 記事生成
 document.getElementById("new-generate").addEventListener("click", async () => {
   const keyword  = document.getElementById("new-keyword").value.trim();
   const titleIn  = document.getElementById("new-title").value.trim();
   const sources  = document.getElementById("new-sources").value.trim();
   const category = document.getElementById("new-category").value;
-  const pin      = localStorage.getItem("dev_auth") || "";
+  const pin      = getPin();
   const title    = titleIn || makeTitle(keyword);
   const slug     = makeSlug(keyword);
 

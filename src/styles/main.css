@@ -1962,6 +1962,48 @@ body.has-progress-strip {
 .dev-new-article__status.is-ok      { background: #dcfce7; color: #14532d; }
 .dev-new-article__status.is-error   { background: #fee2e2; color: #7f1d1d; }
 
+.dev-deploy {
+  margin: 1.5rem 0 2rem;
+  padding: 1.25rem;
+  border: 1px solid var(--color-border);
+  border-radius: 0.75rem;
+  background: var(--color-surface, #fafafa);
+}
+.dev-deploy h2 { margin: 0 0 0.5rem; font-size: 1.1rem; }
+.dev-deploy__note { font-size: 0.85rem; color: var(--color-text-muted); margin: 0 0 1rem; }
+.dev-deploy__btn {
+  border: none;
+  border-radius: 2rem;
+  padding: 0.55rem 1.25rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  background: var(--color-border);
+  color: var(--color-text);
+}
+.dev-deploy__btn:disabled { opacity: 0.6; cursor: not-allowed; }
+.dev-deploy__btn--primary {
+  background: var(--color-primary);
+  color: #fff;
+  font-size: 1rem;
+  padding: 0.75rem 1.5rem;
+}
+.dev-deploy__btn--slug { margin-top: 0.75rem; }
+.dev-deploy__status,
+.deploy-slug-status {
+  margin-top: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  font-size: 0.85rem;
+}
+.dev-deploy__status.is-loading,
+.deploy-slug-status.is-loading { background: #fef9c3; color: #713f12; }
+.dev-deploy__status.is-ok,
+.deploy-slug-status.is-ok { background: #dcfce7; color: #14532d; }
+.dev-deploy__status.is-error,
+.deploy-slug-status.is-error { background: #fee2e2; color: #7f1d1d; }
+.status-card__deploy { margin-top: 0.75rem; }
+.status-card__deploy-hint { font-size: 0.8rem; color: var(--color-text-muted); margin: 0.75rem 0 0; }
+
 @media (max-width: 640px) {
   .status-hero {
     grid-template-columns: 1fr;

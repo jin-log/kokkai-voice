@@ -1,0 +1,31 @@
+name: 記事を本番反映
+
+on:
+  workflow_dispatch:
+    inputs:
+      slug:
+        description: "記事スラグ (例: shohizei-genmen)"
+        required: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: 公開ゲートチェック
+        run: node scripts/check-case-page.mjs --slug "${{ inputs.slug }}"
+
+      - name: 法務チェック
+        run: node scripts/legal-check.mjs --slug "${{ inputs.slug }}"
+
+      - name: 完了
+        run: echo "slug=${{ inputs.slug }} — ゲートOK。Deploy workflow が続けて起動します。"

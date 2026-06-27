@@ -4,14 +4,20 @@ on:
   push:
     branches: [main]
   workflow_run:
-    workflows: ["新規記事作成"]
+    workflows: ["新規記事作成", "記事を本番反映"]
     types: [completed]
     branches: [main]
+  workflow_dispatch:
+    inputs:
+      slug:
+        description: "記事スラグ（監査用・空可）"
+        required: false
+        default: ""
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    if: ${{ github.event_name == 'push' || github.event.workflow_run.conclusion == 'success' }}
+    if: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
     permissions:
       contents: read
       deployments: write

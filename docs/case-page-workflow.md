@@ -21,7 +21,7 @@
 
 | # | 担当 | 成果物 | デプロイ前? |
 |---|------|--------|------------|
-| ① | ライター | 経緯・要約・timeline | 前 |
+| ① | ライター | 経緯・要約・timeline（**`docs/writer-editorial.md` 必読**） | 前 |
 | ② | ライター | policy-matrix + stanceMatrix | 前 |
 | ③ | x-researcher | X検証2件+ | 前 |
 | ④ | 法務 | legalReview.status: ok | **前（最終関門）** |
