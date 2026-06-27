@@ -5,14 +5,20 @@
   "private": true,
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "node scripts/update-project-status.mjs --quiet && astro build",
     "preview": "astro preview",
-    "deploy": "npm run build && wrangler pages deploy dist --project-name=kokkai-voice --branch=main"
+    "deploy": "node scripts/update-project-status.mjs --quiet && astro build && wrangler pages deploy dist --project-name=kokkai-voice --branch=main && node scripts/update-project-status.mjs --deployed",
+    "status": "node scripts/update-project-status.mjs --print",
+    "check:case": "node scripts/check-case-page.mjs",
+    "check:case:all": "node scripts/check-case-page.mjs --all",
+    "pipeline": "node scripts/run-case-pipeline.mjs",
+    "pipeline:promote": "node scripts/run-case-pipeline.mjs --promote",
+    "pipeline:autorun": "node scripts/pipeline-autorun.mjs"
   },
   "dependencies": {
     "astro": "^5.7.0"
   },
   "devDependencies": {
-    "wrangler": "^4.104.0"
+    "wrangler": "^4.105.0"
   }
 }

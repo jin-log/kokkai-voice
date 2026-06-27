@@ -1,12 +1,11 @@
 /** Shared helpers — patterns from scripts/generate-case-pages.mjs */
 
-export const ASSET_V = "20260626f";
+export const ASSET_V = "20260627d";
 
 export const SYMBOL_LEGEND = [
-  { sym: "◎", label: "方向・規模おおむね一致" },
-  { sym: "▲", label: "方向一致・規模など一部ずれ" },
-  { sym: "❌", label: "方向逆 or 明確な矛盾" },
-  { sym: "？", label: "データ不足・未判定" },
+  { sym: "○", label: "公言通り実施済み（完了）" },
+  { sym: "▲", label: "方向一致で動いている（進行中）" },
+  { sym: "×", label: "方向が違う、または動きがない" },
 ];
 
 export function formatDate(iso) {
@@ -31,10 +30,10 @@ export function reactionNums(article) {
 }
 
 export function symbolTone(sym) {
-  if (sym === "◎") return "match";
+  if (sym === "○") return "match";
   if (sym === "▲") return "partial";
-  if (sym === "❌") return "mismatch";
-  return "unknown";
+  if (sym === "×") return "mismatch";
+  return "mismatch";
 }
 
 export function articlePolicyTitle(article, matrix) {
@@ -59,9 +58,12 @@ export function getGlossary(article) {
 
 export function getFloatTocItems(article, hasStance) {
   const items = [{ href: "#sec-now", label: "いまの結論" }];
+  if (article.arcSummary?.length) {
+    items.push({ href: "#sec-arc", label: "経緯" });
+  }
   items.push({ href: "#sec-mood", label: "みんなのキモチ" });
   if (article.summaryBullets?.length) {
-    items.push({ href: "#sec-detail", label: "詳しく" });
+    items.push({ href: "#sec-detail", label: "根拠" });
   }
   if (hasStance) {
     items.push({ href: "#stance-matrix-title", label: "公言と行動" });

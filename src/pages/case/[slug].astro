@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import SiteHeader from "../../components/SiteHeader.astro";
+import ArcSummary from "../../components/case/ArcSummary.astro";
 import NowBox from "../../components/case/NowBox.astro";
 import ReactionSummary from "../../components/case/ReactionSummary.astro";
 import SummaryLayers from "../../components/case/SummaryLayers.astro";
@@ -41,7 +42,7 @@ const description = article.primarySpeech.excerpt.slice(0, 120);
   bodyDataCase={article.slug}
   includeAppJs
 >
-  <SiteHeader />
+  <SiteHeader showSearch />
   <main class="container">
     <header class="case-hero">
       <div class="case-hero__tags">
@@ -53,6 +54,7 @@ const description = article.primarySpeech.excerpt.slice(0, 120);
       <h1 class="case-hero__title">{shortTitle}</h1>
 
       <NowBox article={article} />
+      <ArcSummary article={article} />
       <ReactionSummary article={article} />
       <SummaryLayers article={article} />
     </header>

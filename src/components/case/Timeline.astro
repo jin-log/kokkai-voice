@@ -1,99 +1,197 @@
 ---
 import { formatDate } from "../../lib/case-helpers.mjs";
+import {
+  getTimelineEvents,
+  sortTimelineEvents,
+  TIMELINE_INITIAL_VISIBLE,
+} from "../../lib/timeline.mjs";
 
 const { article } = Astro.props;
-const s = article.primarySpeech;
-const xPosts = article.xPosts || [];
+const defaultOrder = "desc";
+const events = sortTimelineEvents(getTimelineEvents(article), defaultOrder);
 ---
 
-<section class="timeline" id="sec-timeline" aria-label="案件タイムライン">
-  <article class="timeline-item">
-    <time class="timeline-item__date" datetime={s.date}>{formatDate(s.date)}</time>
-    <p class="timeline-item__type">
-      国会 · {s.nameOfHouse} · {s.nameOfMeeting}
-    </p>
-    <div class="event-card">
-      <p class="event-card__who">
-        {s.speaker}{s.speakerGroup ? `（${s.speakerGroup}）` : ""}
-      </p>
-      <p class="event-card__meta">
-        第{s.session}回国会 · 号 {s.issue} · speechID {s.speechID}
-      </p>
-      <div class="plain-box">
-        <p class="plain-box__label">原文抜粋（speechFull 参照）</p>
-        <p>{s.excerpt}</p>
-      </div>
-      <blockquote class="quote-block">
-        <a href={s.speechURL} target="_blank" rel="noopener">国会議事録で原文を見る ↗</a>
-        · <a href={s.meetingURL} target="_blank" rel="noopener">会議全文 ↗</a>
-      </blockquote>
+<section class="timeline-section" id="sec-timeline" aria-label="案件タイムライン">
+  <div class="timeline-section__head">
+    <h2 class="timeline-section__title">経緯タイムライン</h2>
+    <div class="timeline-controls" data-timeline-controls>
+      <button
+        type="button"
+        class="timeline-controls__btn"
+        data-timeline-sort="asc"
+        aria-pressed="false"
+      >
+        古い順
+      </button>
+      <button
+        type="button"
+        class="timeline-controls__btn is-active"
+        data-timeline-sort="desc"
+        aria-pressed="true"
+      >
+        新しい順
+      </button>
     </div>
-  </article>
+  </div>
+
   {
-    xPosts.map((p) =>
-      p.post_url ? (
-        <article class="timeline-item">
-          <p class="timeline-item__type">X · 枠 {p.slot}</p>
-          <div class="event-card">
-            <p class="event-card__who">{p.account_label || p.speaker_hint}</p>
-            <p class="event-card__meta">
-              {p.captured_at
-                ? `取得: ${formatDate(p.captured_at.slice(0, 10))} · スクショ済み`
-                : "URL登録済み · スクショ取得待ち"}
-            </p>
-            {p.post_text && (
-              <div class="plain-box">
-                <p class="plain-box__label">投稿内容</p>
-                <p>{p.post_text}</p>
-              </div>
-            )}
-            <blockquote class="quote-block">
-              <a href={p.post_url} target="_blank" rel="noopener">元投稿を見る ↗</a>
-            </blockquote>
-            {
-              p.screenshot && (
-                <figure class="x-shot">
-                  <div class="x-shot__header">
-                    <span>スクリーンショットアーカイブ</span>
-                    {
-                      p.status === "deleted" ? (
-                        <span class="x-shot__badge">削除済み</span>
-                      ) : (
-                        <span class="x-shot__badge x-shot__badge--live">投稿存続</span>
-                      )
-                    }
-                  </div>
-                  <div class="x-shot__body">
-                    <img
-                      src={p.screenshot}
-                      alt={`X投稿のスクリーンショット（枠 ${p.slot}）`}
-                      loading="lazy"
-                    />
-                  </div>
-                  <figcaption class="x-shot__footer">
-                    元URL:{" "}
-                    <a href={p.post_url} target="_blank" rel="noopener">
-                      {p.post_url}
-                    </a>
-                    {p.captured_at && ` · 取得: ${p.captured_at.slice(0, 10)}`}
-                  </figcaption>
-                </figure>
-              )
-            }
-          </div>
-        </article>
-      ) : (
-        <article class="timeline-item">
-          <p class="timeline-item__type">X · 枠 {p.slot}（URL未登録）</p>
-          <div class="event-card event-card--pending">
-            <p class="event-card__meta">国会議員の関連投稿 — スクショ取得待ち</p>
-            <div class="plain-box">
-              <p class="plain-box__label">X調査中</p>
-              <p>ツイートURLを登録 → Playwrightスクショ → R2保存（API不使用）</p>
-            </div>
-          </div>
-        </article>
-      )
+    events.length === 0 ? (
+      <p class="timeline-empty">国会・X のイベントはこれから追加します。</p>
+    ) : (
+      <div
+        class="timeline"
+        data-timeline-list
+        data-timeline-default-sort={defaultOrder}
+      >
+        {
+          events.map((ev, idx) => {
+            const hidden = idx >= TIMELINE_INITIAL_VISIBLE;
+            const year = ev.date?.slice(0, 4) || "日付不明";
+            const prevYear = events[idx - 1]?.date?.slice(0, 4) || "日付不明";
+            const showYear = idx === 0 || year !== prevYear;
+            return (
+              <>
+                {showYear && (
+                  <p class="timeline-year" data-timeline-year={year}>
+                    {year}
+                  </p>
+                )}
+                <article
+                  class:list={["timeline-item", hidden && "timeline-item--hidden"]}
+                  data-timeline-item
+                  data-timeline-date={ev.date || ""}
+                  data-timeline-index={idx}
+                  hidden={hidden || undefined}
+                >
+                  {ev.date && (
+                    <time class="timeline-item__date" datetime={ev.date}>
+                      {formatDate(ev.date)}
+                    </time>
+                  )}
+                  {ev.type === "speech" && ev.speech && (
+                    <>
+                      <p class="timeline-item__type">
+                        国会 · {ev.speech.nameOfHouse} · {ev.speech.nameOfMeeting}
+                      </p>
+                      <div class="event-card">
+                        <p class="event-card__who">
+                          {ev.speech.speaker}
+                          {ev.speech.speakerGroup
+                            ? `（${ev.speech.speakerGroup}）`
+                            : ""}
+                        </p>
+                        {ev.summaryPlain && (
+                          <div class="plain-box">
+                            <p class="plain-box__label">ヒヨコでも分かる要約</p>
+                            <p>{ev.summaryPlain}</p>
+                          </div>
+                        )}
+                        <blockquote class="quote-block">
+                          <a
+                            href={ev.speech.speechURL}
+                            target="_blank"
+                            rel="noopener"
+                          >
+                            国会議事録で原文を見る ↗
+                          </a>
+                          {ev.speech.meetingURL && (
+                            <>
+                              {" "}
+                              ·{" "}
+                              <a
+                                href={ev.speech.meetingURL}
+                                target="_blank"
+                                rel="noopener"
+                              >
+                                会議全文 ↗
+                              </a>
+                            </>
+                          )}
+                        </blockquote>
+                      </div>
+                    </>
+                  )}
+                  {ev.type === "milestone" && (
+                    <>
+                      <p class="timeline-item__type">出来事</p>
+                      <div class="event-card">
+                        <p class="event-card__who">{ev.milestone?.label}</p>
+                        {ev.summaryPlain && <p>{ev.summaryPlain}</p>}
+                        {ev.milestone?.sourceUrl && (
+                          <blockquote class="quote-block">
+                            <a
+                              href={ev.milestone.sourceUrl}
+                              target="_blank"
+                              rel="noopener"
+                            >
+                              出典 ↗
+                            </a>
+                          </blockquote>
+                        )}
+                      </div>
+                    </>
+                  )}
+                  {ev.type === "x_post" && ev.xPost && (
+                    <>
+                      <p class="timeline-item__type">X</p>
+                      <div class="event-card">
+                        <p class="event-card__who">
+                          {ev.xPost.account_label || ev.xPost.speaker_hint}
+                        </p>
+                        <p class="event-card__meta">
+                          {ev.xPost.captured_at
+                            ? `取得: ${formatDate(ev.xPost.captured_at.slice(0, 10))} · スクショ済み`
+                            : "URL登録済み · スクショ取得待ち"}
+                        </p>
+                        {ev.summaryPlain && (
+                          <div class="plain-box">
+                            <p class="plain-box__label">投稿内容</p>
+                            <p>{ev.xPost?.post_text || ev.summaryPlain}</p>
+                          </div>
+                        )}
+                        {!ev.summaryPlain && ev.xPost?.post_text && (
+                          <div class="plain-box">
+                            <p class="plain-box__label">投稿内容</p>
+                            <p>{ev.xPost.post_text}</p>
+                          </div>
+                        )}
+                        <blockquote class="quote-block">
+                          <a
+                            href={ev.xPost.post_url}
+                            target="_blank"
+                            rel="noopener"
+                          >
+                            元投稿を見る ↗
+                          </a>
+                        </blockquote>
+                        {ev.xPost.screenshot && (
+                          <figure class="x-shot">
+                            <div class="x-shot__body">
+                              <img
+                                src={ev.xPost.screenshot}
+                                alt="X投稿のスクリーンショット"
+                                loading="lazy"
+                              />
+                            </div>
+                          </figure>
+                        )}
+                      </div>
+                    </>
+                  )}
+                </article>
+              </>
+            );
+          })
+        }
+      </div>
+    )
+  }
+
+  {
+    events.length > TIMELINE_INITIAL_VISIBLE && (
+      <button type="button" class="btn timeline-more" data-timeline-more>
+        もっと見る（あと{events.length - TIMELINE_INITIAL_VISIBLE}件）
+      </button>
     )
   }
 </section>

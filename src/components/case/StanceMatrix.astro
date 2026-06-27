@@ -148,7 +148,7 @@ const politicianCards = politicians
                     ts && (
                       <div class="stance-politician__track" aria-label="追跡件数">
                         <span class="stance-politician__count stance-politician__count--match">
-                          <span class="stance-politician__count-sym" aria-hidden="true">◎</span>
+                          <span class="stance-politician__count-sym" aria-hidden="true">○</span>
                           {ts.match}
                         </span>
                         <span class="stance-politician__count stance-politician__count--partial">
@@ -216,7 +216,6 @@ const politicianCards = politicians
     )
   }
   <p class="stance-matrix__note">
-    {disclaimer} · <a href="/">方法論</a>は <code>docs/policy-matrix.md</code> · PoC{" "}
-    {matrix.methodologyVersion || "v1"}
+    {disclaimer} · 出典付きの事実整理（PoC {matrix.methodologyVersion || "v1"}）
   </p>
 </section>

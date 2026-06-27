@@ -9,9 +9,12 @@ const aiDisclaimer =
 
 {
   hasBullets && (
-    <section id="sec-detail" class="summary-layers" aria-label="詳しいポイント">
+    <section id="sec-detail" class="summary-layers" aria-label="根拠となるポイント">
       <div class="plain-box">
-        <p class="plain-box__label">詳しいポイント（AI）</p>
+        <p class="plain-box__label">根拠となるポイント（国会の発言から）</p>
+        <p class="summary-layers__lead">
+          上の「いまの結論」を支える事実の整理。結論そのものではなく、国会で語られた内容の要点です。
+        </p>
         <ul class="summary-bullets">
           {bullets.map((b) => (
             <li>{typeof b === "string" ? b : b.text}</li>

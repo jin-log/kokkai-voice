@@ -60,7 +60,7 @@
 | C11 | **コメント pending → 承認フロー** | ⬜ | |
 | C12 | **X スクショ R2 保存** | ⬜ | x-archive.md |
 | C13 | **利用規約・プライバシー** | ⬜ | テンプレから |
-| C14 | **Cloudflare Pages デプロイ** | 🟡 | `seiji1192.site` **CF Active 済**（2026-06-26）→ Astro + Pages 接続待ち |
+| C14 | **Cloudflare Pages デプロイ** | ✅ | `seiji1192.site` + pages.dev 稼働中 |
 | C15 | **GSC / sitemap / robots** | ⬜ | 公開前 |
 | C16 | **リダイレクト・404** | ⬜ | |
 | C17 | **モデレーション方針文書** | ⬜ | 内部 1 ページ |

@@ -44,7 +44,8 @@ Mac も同様: `~/Projects/ceo-sync/scripts/ceosync.sh pull`
 | O14 公開 GO | ✅ `bouka-taisaku` publishReady |
 | X アカ | ✅ `@seiji1192site`（フッターにリンク済み） |
 | note | 方針のみ・URL 未 |
-| **CF Pages デプロイ** | ⬜ **未**（API トークンなしで Mac からは失敗） |
+| **CF Pages デプロイ** | ✅ `kokkai-voice.pages.dev` 稼働中 |
+| **独自ドメイン** | ⚠️ DNS CNAME 未設定（Wrangler OAuth は DNS 書き込み不可） |
 
 ---
 
@@ -69,6 +70,22 @@ npx wrangler pages deploy dist --project-name=kokkai-voice --branch=main
 **C. GitHub Actions** — `.github/workflows/deploy-pages.yml` をリポに入れたうえで、Secrets に上記 2 つを設定（PAT に `workflow` 権限が必要）。
 
 詳細: `docs/deploy-cloudflare.md`
+
+### 独自ドメインが NXDOMAIN のとき（CEO 自動修復）
+
+Wrangler の OAuth ログインは **DNS レコード変更権限がない**。`pages.dev` は開くが `seiji1192.site` だけ死ぬ場合は CNAME 未設定。
+
+**オーナー作業（1回・2分）:** Cloudflare → プロフィール → API トークン → テンプレート「ゾーンの DNS を編集」→ ゾーン `seiji1192.site` のみ → 発行したトークンを CEO に渡す（チャットに貼る）。
+
+**CEO 作業:**
+
+```powershell
+cd C:\Users\bero1\Projects\kokkai-voice
+$env:CLOUDFLARE_API_TOKEN="（発行したトークン）"
+node scripts/fix-dns.mjs
+```
+
+張るレコード: `@` と `www` → `kokkai-voice.pages.dev`（プロキシ ON）。反映まで数分。
 
 ---
 

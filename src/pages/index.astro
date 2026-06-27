@@ -11,7 +11,6 @@ const articles = await loadAllArticles();
 <BaseLayout title="日本の政治なう — あの話どうなった？">
   <SiteHeader showSearch />
   <main class="container hero">
-    <span class="hero__badge">MVP v1</span>
     <h1 class="hero__title">あの話<br />どうなった？</h1>
     <p class="hero__lead">
       国会の発言と政治家の X を<strong>案件ごと</strong>に追いかける。
@@ -19,12 +18,9 @@ const articles = await loadAllArticles();
         >スクショで残す</strong
       >。
     </p>
-    <ul class="hero__points">
-      <li>📋 案件タイムライン</li>
-      <li>💬 平易語サマリ</li>
-      <li>📸 X スクショ保存</li>
-      <li>😊😐😠 みんなのキモチ</li>
-    </ul>
+    <p class="hero__features">
+      📋 案件タイムライン &nbsp;·&nbsp; 💬 平易語サマリ &nbsp;·&nbsp; 📸 X スクショ保存 &nbsp;·&nbsp; 😊😐😠 みんなのキモチ
+    </p>
   </main>
 
   <section class="container case-grid" aria-label="注目の案件">

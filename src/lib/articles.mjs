@@ -1,15 +1,32 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { checkCasePageWithFiles } from "./page-ready.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 export const root = path.join(__dirname, "../..");
+
+/** @deprecated 同期判定は使わない。filterPublishable を使う */
+export function isPublishable(article) {
+  return article.publishReady === true && article.pageReady === true;
+}
+
+export async function filterPublishable(articles) {
+  const checked = await Promise.all(
+    articles.map(async (article) => ({
+      article,
+      result: await checkCasePageWithFiles(article),
+    })),
+  );
+  return checked.filter(({ result }) => result.ok).map(({ article }) => article);
+}
 
 export async function getArticleSlugs() {
   const index = JSON.parse(
     await readFile(path.join(root, "data/articles/index.json"), "utf8")
   );
-  return index.slugs;
+  const articles = await Promise.all(index.slugs.map((slug) => loadArticle(slug)));
+  return (await filterPublishable(articles)).map((a) => a.slug);
 }
 
 export async function loadArticle(slug) {
@@ -21,8 +38,11 @@ export async function loadArticle(slug) {
 }
 
 export async function loadAllArticles() {
-  const slugs = await getArticleSlugs();
-  return Promise.all(slugs.map((slug) => loadArticle(slug)));
+  const index = JSON.parse(
+    await readFile(path.join(root, "data/articles/index.json"), "utf8")
+  );
+  const articles = await Promise.all(index.slugs.map((slug) => loadArticle(slug)));
+  return filterPublishable(articles);
 }
 
 export async function loadStanceData(article) {

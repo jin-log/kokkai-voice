@@ -12,6 +12,8 @@ const { note } = Astro.props;
   <nav class="site-footer__links" aria-label="フッター">
     <a href={SITE.domain}>トップ</a>
     <a href="/search">案件一覧</a>
+    <a href="/status/">完成度</a>
+    <a href="/privacy-policy/">プライバシーポリシー</a>
     <a href={SITE.xUrl} target="_blank" rel="noopener noreferrer">X {SITE.xHandle}</a>
     {
       SITE.noteUrl && (
@@ -23,6 +25,6 @@ const { note } = Astro.props;
   </nav>
   <p class="site-footer__note">
     {note ??
-      "国会議事録 API + スクショアーカイブ。AI要約は解釈を含みます。党の宣伝・投票の呼びかけはしません。"}
+      "政府・国会の公式サイトではありません。個人運営の解説メディアです。国会議事録 API + スクショアーカイブ。AI要約は解釈を含みます。党の宣伝・投票の呼びかけはしません。"}
   </p>
 </footer>

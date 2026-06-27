@@ -1,0 +1,62 @@
+---
+import { loadProjectStatus } from "../lib/project-status.mjs";
+
+const status = await loadProjectStatus().catch(() => null);
+
+function formatJa(iso) {
+  if (!iso) return "—";
+  const d = new Date(iso);
+  return d.toLocaleString("ja-JP", {
+    month: "numeric",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
+---
+
+{
+  status && (
+    <aside class="progress-strip" aria-label="サイト完成度">
+      <div class="progress-strip__inner container">
+        <a class="progress-strip__main" href="/status/">
+          <span class="progress-strip__pct" aria-hidden="true">
+            {status.overallGoldPct}%
+          </span>
+          <span class="progress-strip__copy">
+            <span class="progress-strip__label">完成度 · 最終デプロイ</span>
+            <span
+              class="progress-strip__track"
+              role="progressbar"
+              aria-valuenow={status.overallGoldPct}
+              aria-valuemin={0}
+              aria-valuemax={100}
+              aria-label={`完成度 ${status.overallGoldPct}パーセント`}
+            >
+              <span
+                class="progress-strip__fill"
+                style={`width: ${status.overallGoldPct}%`}
+              />
+            </span>
+          </span>
+        </a>
+        <span class="progress-strip__meta">
+          公開 {status.publishedCount}/{status.activeCount}
+          {status.deltaGoldPct != null && status.deltaGoldPct !== 0 && (
+            <span
+              class:list={[
+                "progress-strip__delta",
+                status.deltaGoldPct > 0 && "is-up",
+                status.deltaGoldPct < 0 && "is-down",
+              ]}
+            >
+              {status.deltaGoldPct > 0 ? "+" : ""}
+              {status.deltaGoldPct}%
+            </span>
+          )}
+          · {formatJa(status.deployedAt ?? status.generatedAt)}
+        </span>
+      </div>
+    </aside>
+  )
+}

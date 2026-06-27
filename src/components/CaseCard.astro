@@ -1,9 +1,12 @@
 ---
 import { articleShortTitle, caseCardMeta } from "../lib/case-helpers.mjs";
+import { getTimelineEvents } from "../lib/timeline.mjs";
 
 const { article } = Astro.props;
-const { eventCount, goodPct, updated, tagLine, summary } = caseCardMeta(article);
-const xCount = (article.xPosts || []).filter((p) => p.post_url).length;
+const { goodPct, updated, tagLine, summary } = caseCardMeta(article);
+const events = getTimelineEvents(article);
+const eventCount = events.length;
+const xCount = events.filter((e) => e.type === "x_post").length;
 ---
 
 <a class="case-card" href={`/case/${article.slug}`}>

@@ -1,0 +1,37 @@
+---
+import {
+  formatArcDate,
+  normalizeArcSummary,
+  sortArcSummary,
+} from "../../lib/arc-summary.mjs";
+
+const { article } = Astro.props;
+const items = sortArcSummary(normalizeArcSummary(article.arcSummary));
+if (!items.length) return null;
+---
+
+<section class="arc-summary" id="sec-arc" aria-labelledby="arc-summary-title">
+  <h2 id="arc-summary-title">経緯をざっくり</h2>
+  <ul class="arc-summary__list">
+    {
+      items.map((item, i) => (
+        <li class:list={["arc-summary__item", i === 0 && "arc-summary__item--now"]}>
+          {i === 0 && (
+            <span class="arc-summary__now-badge" aria-label="いまここ">
+              いまここ▶
+            </span>
+          )}
+          <p class="arc-summary__text">
+            {item.date && (
+              <time class="arc-summary__date" datetime={item.date}>
+                {formatArcDate(item.date)}
+              </time>
+            )}
+            {item.date && " — "}
+            {item.text}
+          </p>
+        </li>
+      ))
+    }
+  </ul>
+</section>

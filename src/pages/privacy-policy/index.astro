@@ -1,0 +1,105 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import SiteHeader from "../../components/SiteHeader.astro";
+import SiteFooter from "../../components/SiteFooter.astro";
+import { SITE } from "../../lib/site-config.mjs";
+---
+
+<BaseLayout
+  title="プライバシーポリシー｜日本の政治なう"
+  description="日本の政治なうのプライバシーポリシー。アクセス解析・広告配信・外部リンクについて。"
+>
+  <SiteHeader showSearch />
+  <main class="container legal-page">
+    <h1>プライバシーポリシー</h1>
+    <p class="legal-page__updated">最終更新: 2026年6月27日</p>
+
+    <p>
+      「{SITE.name}」（{SITE.domain}、以下「当サイト」）は、政府・国会の公式サイトではなく、個人運営の解説メディアです。当サイトにおける個人情報の取扱いは以下のとおりです。
+    </p>
+
+    <h2>1. 収集する情報</h2>
+    <ul>
+      <li>
+        <strong>アクセスログ</strong> — ホスティング事業者（Cloudflare）およびアクセス解析により、IPアドレス・ブラウザ種類・閲覧ページ等が自動取得される場合があります。
+      </li>
+      <li>
+        <strong>コメント機能（デモ）</strong> — 現時点のコメント投稿はブラウザ内デモであり、サーバーへ送信・保存されません。
+      </li>
+      <li>
+        <strong>お問い合わせ</strong> — フォーム導入時は、送信内容を返信目的のみに利用します（未導入の場合は該当しません）。
+      </li>
+    </ul>
+
+    <h2>2. 利用目的</h2>
+    <ul>
+      <li>サイトの提供・改善・不正アクセス防止</li>
+      <li>アクセス状況の統計分析</li>
+      <li>広告配信（Google AdSense 等を導入する場合）</li>
+    </ul>
+
+    <h2>3. 第三者サービス</h2>
+    <p>当サイトでは次の第三者サービスを利用する、または利用予定です。</p>
+    <ul>
+      <li>
+        <strong>Cloudflare</strong> — ホスティング・CDN・Web Analytics（<a
+          href="https://www.cloudflare.com/privacypolicy/"
+          target="_blank"
+          rel="noopener noreferrer">プライバシーポリシー ↗</a>）
+      </li>
+      <li>
+        <strong>Google AdSense</strong> — 広告配信（導入時。Cookie を用いる場合があります。<a
+          href="https://policies.google.com/privacy"
+          target="_blank"
+          rel="noopener noreferrer">Google プライバシーポリシー ↗</a>）
+      </li>
+      <li>
+        <strong>国会議事録 API</strong> — 国立国会図書館の公開 API から発言情報を取得（訪問者の個人情報は送信しません）
+      </li>
+      <li>
+        <strong>外部リンク</strong> — X（旧 Twitter）、国会議事録サイト等へリンクします。各サービスのポリシーが適用されます。
+      </li>
+    </ul>
+
+    <h2>4. Cookie</h2>
+    <p>
+      当サイトおよび上記第三者サービスは、利便性向上・広告配信・アクセス解析のため Cookie 等を使用する場合があります。ブラウザ設定で Cookie を無効にできます。
+    </p>
+
+    <h2>5. 個人情報の第三者提供</h2>
+    <p>法令に基づく場合を除き、本人の同意なく第三者に個人情報を提供しません。</p>
+
+    <h2>6. お問い合わせ</h2>
+    <p>
+      本ポリシーに関するお問い合わせは、当サイトのお問い合わせフォーム（準備中）または運営 X アカウント（{SITE.xHandle}）よりご連絡ください。
+    </p>
+  </main>
+  <SiteFooter />
+</BaseLayout>
+
+<style>
+  .legal-page {
+    max-width: 42rem;
+    padding: 2rem 0 3rem;
+    line-height: 1.75;
+  }
+  .legal-page h1 {
+    font-size: 1.35rem;
+    margin: 0 0 0.5rem;
+  }
+  .legal-page__updated {
+    color: var(--color-text-muted);
+    font-size: 0.85rem;
+    margin: 0 0 1.5rem;
+  }
+  .legal-page h2 {
+    font-size: 1rem;
+    margin: 1.75rem 0 0.5rem;
+  }
+  .legal-page ul {
+    padding-left: 1.25rem;
+  }
+  .legal-page li + li {
+    margin-top: 0.35rem;
+  }
+</style>

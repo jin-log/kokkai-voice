@@ -6,7 +6,7 @@ const updatedNote = ns.updatedAt ? ` · 要約更新: ${ns.updatedAt.slice(0, 10
 ---
 
 <div class="now-box" id="sec-now">
-  <p class="now-box__label">{ns.label}</p>
+  <p class="now-box__label">{ns.label || "いまどうなってる？"}</p>
   {
     bullets.length > 0 ? (
       <ul class="now-box__bullets">

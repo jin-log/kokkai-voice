@@ -16,7 +16,7 @@ const articlesDir = path.join(root, "data/articles");
 /** @type {Record<string, { handles: string[], keywords: string[], seed?: Array<{url:string, label?:string, text?:string}> }>} */
 const TOPIC_CONFIG = {
   物価: {
-    handles: ["takaichi_sanae", "renho_sha", "tamakiyuichiro", "izumi_kenta", "FurukawaMot", "inadatomomi"],
+    handles: ["takaichi_sanae", "renho_sha", "tamakiyuichiro", "izmkenta", "FurukawaMot", "inadatomomi"],
     keywords: ["物価", "消費税", "インフレ", "値上", "ガソリン", "食料", "給付", "価格", "ナフサ", "補助"],
     seed: [
       {
@@ -27,11 +27,36 @@ const TOPIC_CONFIG = {
     ],
   },
   "食料品 消費税": {
-    handles: ["takaichi_sanae", "tamakiyuichiro", "FurukawaMot", "izumi_kenta", "inadatomomi"],
-    keywords: ["消費税", "食料", "食品", "減税", "給付", "1%", "ゼロ", "実質"],
+    handles: [
+      "takaichi_sanae",
+      "tamakiyuichiro",
+      "satsukikatayama",
+      "FurukawaMot",
+      "izmkenta",
+      "inadatomomi",
+    ],
+    keywords: [
+      "消費税",
+      "食料",
+      "食品",
+      "食料品",
+      "減税",
+      "給付",
+      "税額控除",
+      "ゼロ",
+      "軽減税率",
+      "実質",
+    ],
+    seed: [
+      {
+        url: "https://x.com/tamakiyuichiro/status/2069942382020485487",
+        label: "玉木雄一郎 @tamakiyuichiro",
+        text: "国民会議の中間取りまとめ（案）を改めて見ましたが、内容がひどい。「つなぎ」としての飲食料品消費税減税の問題点は縷々記述しているものの…",
+      },
+    ],
   },
   外国人: {
-    handles: ["shindo_y", "sakurauchikoshi", "sasagawah", "Jimihana", "matsushima_midori", "izumi_kenta", "cdp_japan"],
+    handles: ["shindo_y", "sakurauchikoshi", "sasagawah", "Jimihana", "matsushima_midori", "izmkenta", "cdp_japan"],
     keywords: ["外国人", "入管", "在留", "移民", "共生", "ビザ", "不法", "永住", "難民"],
     seed: [
       {
@@ -45,71 +70,78 @@ const TOPIC_CONFIG = {
     ],
   },
   防衛費: {
-    handles: ["takaichi_sanae", "NakataniGen", "izumi_kenta", "koike_akira", "renho_sha"],
-    keywords: ["防衛", "安保", "自衛", "軍事", "国防", "抑止"],
+    handles: [
+      "takaichi_sanae",
+      "NakataniGen",
+      "izmkenta",
+      "koike_akira",
+      "renho_sha",
+      "cdp_japan",
+    ],
+    keywords: ["防衛", "安保", "自衛", "軍事", "国防", "抑止", "三文書", "防衛費", "改定"],
   },
   年金: {
-    handles: ["takaichi_sanae", "izumi_kenta", "tamakiyuichiro", "cdp_japan", "NodaSeiko"],
+    handles: ["takaichi_sanae", "izmkenta", "tamakiyuichiro", "cdp_japan", "NodaSeiko"],
     keywords: ["年金", "老後", "社会保障", "受給", "支給"],
   },
   少子化: {
-    handles: ["takaichi_sanae", "izumi_kenta", "tamakiyuichiro", "NodaSeiko", "cdp_japan"],
+    handles: ["takaichi_sanae", "izmkenta", "tamakiyuichiro", "NodaSeiko", "cdp_japan"],
     keywords: ["少子", "子育", "出生", "育児", "人口"],
   },
   "大学 無償": {
-    handles: ["izumi_kenta", "tamakiyuichiro", "NodaSeiko", "takaichi_sanae", "cdp_japan"],
+    handles: ["izmkenta", "tamakiyuichiro", "NodaSeiko", "takaichi_sanae", "cdp_japan"],
     keywords: ["大学", "無償", "学費", "教育", "奨学"],
   },
   賃上げ: {
-    handles: ["takaichi_sanae", "tamakiyuichiro", "izumi_kenta", "cdp_japan", "NodaSeiko"],
+    handles: ["takaichi_sanae", "tamakiyuichiro", "izmkenta", "cdp_japan", "NodaSeiko"],
     keywords: ["賃上", "最低賃金", "賃金", "給与", "労働"],
   },
   エネルギー: {
-    handles: ["takaichi_sanae", "renho_sha", "izumi_kenta", "koike_akira", "NakataniGen"],
+    handles: ["takaichi_sanae", "renho_sha", "izmkenta", "koike_akira", "NakataniGen"],
     keywords: ["エネルギー", "原発", "電力", "再生可能", "石油", "ガソリン", "ナフサ", "脱炭素"],
   },
   政治資金: {
-    handles: ["izumi_kenta", "cdp_japan", "tamakiyuichiro", "NodaSeiko", "renho_sha"],
+    handles: ["izmkenta", "cdp_japan", "tamakiyuichiro", "NodaSeiko", "renho_sha"],
     keywords: ["政治資金", "政党助成", "裏金", "献金", "パーティ"],
   },
   選挙制度: {
-    handles: ["izumi_kenta", "cdp_japan", "tamakiyuichiro", "NodaSeiko", "renho_sha"],
+    handles: ["izmkenta", "cdp_japan", "tamakiyuichiro", "NodaSeiko", "renho_sha"],
     keywords: ["選挙", "比例", "小選挙区", "投票", "選挙制度"],
   },
   介護: {
-    handles: ["takaichi_sanae", "izumi_kenta", "tamakiyuichiro", "cdp_japan", "NodaSeiko"],
+    handles: ["takaichi_sanae", "izmkenta", "tamakiyuichiro", "cdp_japan", "NodaSeiko"],
     keywords: ["介護", "医療", "高齢", "福祉", "看護"],
   },
   地方創生: {
-    handles: ["takaichi_sanae", "izumi_kenta", "NodaSeiko", "tamakiyuichiro", "cdp_japan"],
+    handles: ["takaichi_sanae", "izmkenta", "NodaSeiko", "tamakiyuichiro", "cdp_japan"],
     keywords: ["地方創生", "地方", "移住", "地域", "過疎"],
   },
   補正予算: {
-    handles: ["takaichi_sanae", "renho_sha", "izumi_kenta", "tamakiyuichiro", "cdp_japan"],
+    handles: ["takaichi_sanae", "renho_sha", "izmkenta", "tamakiyuichiro", "cdp_japan"],
     keywords: ["補正予算", "予備費", "予算", "財政", "歳出"],
   },
   裏金: {
-    handles: ["izumi_kenta", "cdp_japan", "NodaSeiko", "renho_sha", "tamakiyuichiro", "matsumotojoji"],
+    handles: ["izmkenta", "cdp_japan", "NodaSeiko", "renho_sha", "tamakiyuichiro", "matsumotojoji"],
     keywords: ["裏金", "政治資金", "派閥", "収支", "パーティ", "政治とカネ", "資金"],
   },
   カジノ: {
-    handles: ["izumi_kenta", "tamakiyuichiro", "NodaSeiko", "cdp_japan", "renho_sha"],
+    handles: ["izmkenta", "tamakiyuichiro", "NodaSeiko", "cdp_japan", "renho_sha"],
     keywords: ["カジノ", "IR", "統合型", "ギャンブル"],
   },
   憲法改正: {
-    handles: ["takaichi_sanae", "izumi_kenta", "NodaSeiko", "shindo_y", "cdp_japan"],
+    handles: ["takaichi_sanae", "izmkenta", "NodaSeiko", "shindo_y", "cdp_japan"],
     keywords: ["憲法", "改憲", "九条", "護憲", "緊急事態"],
   },
   関税: {
-    handles: ["takaichi_sanae", "izumi_kenta", "tamakiyuichiro", "NodaSeiko", "cdp_japan"],
+    handles: ["takaichi_sanae", "izmkenta", "tamakiyuichiro", "NodaSeiko", "cdp_japan"],
     keywords: ["関税", "貿易", "トランプ", "米国", "輸出", "輸入"],
   },
   内閣: {
-    handles: ["takaichi_sanae", "izumi_kenta", "NodaSeiko", "cdp_japan", "tamakiyuichiro"],
+    handles: ["takaichi_sanae", "izmkenta", "NodaSeiko", "cdp_japan", "tamakiyuichiro"],
     keywords: ["内閣", "総理", "政権", "閣僚", "首相"],
   },
   国民民主党: {
-    handles: ["tamakiyuichiro", "FurukawaMot", "izumi_kenta", "NodaSeiko", "cdp_japan"],
+    handles: ["tamakiyuichiro", "FurukawaMot", "izmkenta", "NodaSeiko", "cdp_japan"],
     keywords: ["国民民主", "公明", "野党", "中道", "与野党"],
   },
 };
@@ -125,6 +157,33 @@ function parseStatus(url) {
 function scoreText(text, keywords) {
   const t = text.toLowerCase();
   return keywords.reduce((n, k) => (t.includes(k.toLowerCase()) ? n + 1 : n), 0);
+}
+
+function scoreEngagement(tw) {
+  const likes    = tw.likes    || 0;
+  const replies  = tw.replies  || 0;
+  const retweets = tw.retweets || 0;
+  const views    = tw.views    || 0;
+  // log scale: prevent viral tweets always overriding relevance
+  return Math.log10(likes + replies * 2 + retweets * 3 + views * 0.005 + 1) * 0.5;
+}
+
+/** article の arcSummary + timeline の日付範囲を返す。バッファ7日前〜今日まで */
+function getArticleDateRange(article) {
+  const dates = [];
+  for (const e of article.arcSummary || []) { if (e.date) dates.push(new Date(e.date)); }
+  for (const e of article.timeline   || []) { if (e.date) dates.push(new Date(e.date)); }
+  if (!dates.length) return null;
+  const min = new Date(Math.min(...dates.map(d => d.getTime())));
+  min.setDate(min.getDate() - 7);
+  return { min, max: new Date() };
+}
+
+function tweetInRange(createdAt, range) {
+  if (!range || !createdAt) return true;
+  const d = new Date(createdAt);
+  if (isNaN(d.getTime())) return true;
+  return d >= range.min && d <= range.max;
 }
 
 async function fetchProfileStatuses(handle) {
@@ -152,11 +211,16 @@ async function fetchTweetMeta(handle, id) {
     account_label: `${author.name ?? screen} @${screen}`,
     post_text: (tw.text ?? "").replace(/\s+/g, " ").slice(0, 220),
     handle: screen,
+    created_at: tw.created_at ?? null,
+    likes: tw.likes ?? 0,
+    replies: tw.replies ?? 0,
+    retweets: tw.retweets ?? 0,
+    views: tw.views ?? 0,
     score: 0,
   };
 }
 
-async function collectForTopic(keyword, config) {
+async function collectForTopic(keyword, config, dateRange) {
   const candidates = new Map();
   const add = (item, score) => {
     const key = item.post_url;
@@ -171,7 +235,9 @@ async function collectForTopic(keyword, config) {
     if (meta) {
       meta.account_label = seed.label ?? meta.account_label;
       meta.post_text = seed.text ?? meta.post_text;
-      meta.score = Math.max(scoreText(meta.post_text, config.keywords), 2);
+      const kwScore = Math.max(scoreText(meta.post_text, config.keywords), 2);
+      const engScore = scoreEngagement(meta);
+      meta.score = kwScore + engScore;
       add(meta, meta.score);
     } else if (seed.label) {
       add(
@@ -180,6 +246,7 @@ async function collectForTopic(keyword, config) {
           account_label: seed.label,
           post_text: seed.text ?? "",
           handle: parsed.handle,
+          created_at: null, likes: 0, replies: 0, retweets: 0, views: 0,
           score: 2,
         },
         2,
@@ -202,8 +269,13 @@ async function collectForTopic(keyword, config) {
       try {
         const meta = await fetchTweetMeta(parsed.handle, parsed.id);
         if (!meta) continue;
-        const sc = scoreText(meta.post_text, config.keywords);
-        if (sc > 0) add(meta, sc);
+        // 日付フィルター: 案件のtimeline範囲外は除外
+        if (!tweetInRange(meta.created_at, dateRange)) continue;
+        const kwScore = scoreText(meta.post_text, config.keywords);
+        // キーワード最低スコア2以上のみ採用
+        if (kwScore < 2) continue;
+        const engScore = scoreEngagement(meta);
+        add(meta, kwScore + engScore);
       } catch {
         /* ignore */
       }
@@ -238,6 +310,14 @@ function buildSlots(found) {
         screenshot: null,
         note: "URLのみ登録（x-archive.md Phase2でスクショ）",
         researched_at: new Date().toISOString(),
+        // エンゲージメント（参考値。スクショ時点と差が出る場合あり）
+        engagement: {
+          likes:    item.likes    ?? 0,
+          replies:  item.replies  ?? 0,
+          retweets: item.retweets ?? 0,
+          views:    item.views    ?? 0,
+          score:    Math.round((item.score ?? 0) * 100) / 100,
+        },
       };
     }
     return {
@@ -275,8 +355,13 @@ async function main() {
       continue;
     }
 
-    console.log(`Researching ${slug} (${kw})...`);
-    const found = await collectForTopic(kw, config);
+    const dateRange = getArticleDateRange(article);
+    if (dateRange) {
+      console.log(`Researching ${slug} (${kw}) | 日付範囲: ${dateRange.min.toISOString().slice(0,10)} ~ ${dateRange.max.toISOString().slice(0,10)}...`);
+    } else {
+      console.log(`Researching ${slug} (${kw}) | 日付範囲: なし...`);
+    }
+    const found = await collectForTopic(kw, config, dateRange);
     const urlCount = found.filter((f) => f.post_url).length;
     totalFound += Math.min(urlCount, 5);
     article.xPosts = buildSlots(found);
@@ -284,6 +369,10 @@ async function main() {
       researched_at: new Date().toISOString(),
       urls_found: urlCount,
       method: "jina_reader+fxtwitter_public",
+      date_range: dateRange ? {
+        from: dateRange.min.toISOString().slice(0, 10),
+        to:   dateRange.max.toISOString().slice(0, 10),
+      } : null,
     };
     await writeFile(articlePath, JSON.stringify(article, null, 2) + "\n", "utf8");
     report.push({ slug, urls_found: urlCount });
