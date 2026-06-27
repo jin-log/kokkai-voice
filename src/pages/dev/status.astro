@@ -36,7 +36,7 @@ function formatJa(iso) {
       <!-- 新規記事作成UI -->
       <section class="dev-new-article" id="new-article">
         <h2>🆕 新規記事を作成</h2>
-        <p class="dev-new-article__note">キーワードを入れて「生成」。国会＝議事録API／それ以外＝ソースURL＋X調査（2〜3分）</p>
+        <p class="dev-new-article__note">キーワードを入れて「生成」。①〜④まで自動（3〜5分）。完成後は<strong>非公開プレビュー</strong>で確認 →「公開する」。</p>
         <div class="dev-new-article__form">
           <input id="new-keyword" type="text" placeholder="キーワード（例: 東京リコール、防衛増税）" class="dev-new-article__input" />
           <input id="new-title" type="text" placeholder="タイトル（空欄なら自動）" class="dev-new-article__input" />
@@ -62,7 +62,7 @@ function formatJa(iso) {
                 <span class="status-hero__sub">100%完成</span>
               </div>
               <dl class="status-hero__stats">
-                <div><dt>本番公開</dt><dd>{status.publishedCount} / {status.activeCount} 件</dd></div>
+                <div><dt>一般公開</dt><dd>{status.publishedCount} / {status.activeCount} 件</dd></div>
                 <div><dt>保留（parked）</dt><dd>{status.parkedCount} 件</dd></div>
                 <div><dt>ゲート達成率</dt><dd>{status.overallGatePct}%</dd></div>
                 <div><dt>最終更新</dt><dd>{formatJa(status.generatedAt)}</dd></div>
@@ -83,9 +83,9 @@ function formatJa(iso) {
               <ul id="workflow-list" class="dev-workflow-panel__list"></ul>
             </section>
 
-            <section class="dev-deploy" aria-label="本番反映">
-              <h2>🚀 本番に反映</h2>
-              <p class="dev-deploy__note">GitHub main の最新を Cloudflare にデプロイします（1〜2分）。Cursor で直しただけの変更は、先に main へ push されている必要があります。</p>
+            <section class="dev-deploy" aria-label="サイト反映">
+              <h2>🚀 サイトを反映</h2>
+              <p class="dev-deploy__note">main の最新（プレビューページ含む）を Cloudflare にデプロイします。記事完成直後のプレビュー表示にも使います。</p>
               <button type="button" id="deploy-all" class="dev-deploy__btn dev-deploy__btn--primary">全体を本番に反映</button>
               <div id="deploy-all-status" class="dev-deploy__status" style="display:none"></div>
             </section>
@@ -93,14 +93,23 @@ function formatJa(iso) {
             <section class="status-slugs" aria-label="案件別">
               <h2>案件別</h2>
               {status.slugs.map((s) => (
-                <article class:list={["status-card", s.adminHidden && "status-card--hidden"]} data-slug={s.slug}>
+                <article class:list={[
+                  "status-card",
+                  s.adminHidden && "status-card--hidden",
+                  s.publishState === "draft" && "status-card--draft",
+                  s.publishState === "live" && "status-card--live",
+                ]} data-slug={s.slug} data-publish-state={s.publishState}>
                   <header class="status-card__head">
                     <h3 class="status-card__title">
-                      {s.published && !s.adminHidden ? (
+                      {s.publishState === "live" && !s.adminHidden ? (
                         <a href={`/case/${s.slug}/`}>{s.shortTitle}</a>
+                      ) : s.previewUrl ? (
+                        <a href={s.previewUrl}>{s.shortTitle}</a>
                       ) : (
                         s.shortTitle
                       )}
+                      {s.publishState === "draft" && <span class="status-card__badge status-card__badge--draft">完成・非公開</span>}
+                      {s.publishState === "live" && <span class="status-card__badge status-card__badge--live">公開中</span>}
                       {s.adminHidden && <span class="status-card__badge">非表示</span>}
                     </h3>
                     <span class="status-card__pct">{s.goldPct}%</span>
@@ -135,15 +144,22 @@ function formatJa(iso) {
                     </div>
                   )}
                   <div class="status-card__deploy">
-                    {s.publishGateOk ? (
+                    {s.publishState === "draft" && s.previewUrl && (
+                      <a href={s.previewUrl} class="dev-deploy__btn dev-deploy__btn--preview" target="_blank" rel="noopener">
+                        👁️ プレビューで中身を確認
+                      </a>
+                    )}
+                    {s.publishGateOk && !s.pageReady ? (
                       <>
-                        <button type="button" class="dev-deploy__btn dev-deploy__btn--slug deploy-slug-btn" data-slug={s.slug}>
-                          📤 この記事を本番に反映
+                        <button type="button" class="dev-deploy__btn dev-deploy__btn--slug dev-deploy__btn--publish publish-slug-btn" data-slug={s.slug}>
+                          🌍 公開する
                         </button>
                         <span class="deploy-slug-status" data-slug={s.slug} hidden></span>
                       </>
+                    ) : s.publishState === "live" ? (
+                      <p class="status-card__deploy-hint">✅ 一般公開中 — <a href={`/case/${s.slug}/`}>/case/{s.slug}/</a></p>
                     ) : (
-                      <p class="status-card__deploy-hint">①〜④が全部OKになると反映ボタンが使えます（現在 {s.gatePct}%）</p>
+                      <p class="status-card__deploy-hint">①〜④が全部OKになるとプレビューと公開ボタンが使えます（現在 {s.gatePct}%）</p>
                     )}
                   </div>
                   <div class="status-card__admin">
@@ -163,9 +179,9 @@ function formatJa(iso) {
               <h2>状態の見方</h2>
               <ul class="status-legend__states">
                 <li><strong>🔄 処理中</strong> — GitHub が記事生成・デプロイ中（1〜3分）</li>
-                <li><strong>⏸️ 待機中</strong> — 自動処理は動いていない。下の「あと N 項目」をCEOが埋める</li>
-                <li><strong>🚀 デプロイ待ち</strong> — 中身OK。青い「本番に反映」ボタンを押す</li>
-                <li><strong>✅ 公開済み</strong> — 本番ページあり</li>
+                <li><strong>⏸️ 制作中</strong> — ①〜④のどこかが未完了</li>
+                <li><strong>📋 完成・非公開</strong> — 中身OK。プレビューで確認 →「公開する」</li>
+                <li><strong>✅ 公開中</strong> — 一般ユーザーに /case/ で表示</li>
               </ul>
               <h2>パイプライン（順番固定）</h2>
               <ol>
@@ -303,16 +319,16 @@ document.getElementById("deploy-all")?.addEventListener("click", async () => {
   }
 });
 
-document.querySelectorAll(".deploy-slug-btn").forEach((btn) => {
+document.querySelectorAll(".publish-slug-btn").forEach((btn) => {
   btn.addEventListener("click", async () => {
     const slug = btn.dataset.slug;
     const statusEl = document.querySelector(`.deploy-slug-status[data-slug="${slug}"]`);
-    if (!confirm(`「${slug}」を本番に反映します。\nゲートチェック後デプロイします。よろしいですか？`)) return;
+    if (!confirm(`「${slug}」を一般公開します。\n/case/${slug}/ が誰でも見られるようになります。よろしいですか？`)) return;
 
     btn.disabled = true;
     statusEl.hidden = false;
     statusEl.className = "deploy-slug-status is-loading";
-    statusEl.textContent = "⏳ 起動中…";
+    statusEl.textContent = "⏳ 公開処理中…";
 
     try {
       const data = await callDispatch("deploy_article", { slug });
@@ -444,13 +460,14 @@ async function refreshWorkflows() {
         const card = el.closest(".status-card");
         const pct = card?.querySelector(".status-card__pct")?.textContent || "";
         const gateHint = card?.querySelector(".status-card__deploy-hint");
-        const deployBtn = card?.querySelector(".deploy-slug-btn");
-        if (deployBtn) {
-          setRunState(slug, "🚀 中身OK — 「本番に反映」を押してください", "ready");
+        const deployBtn = card?.querySelector(".publish-slug-btn");
+        const draft = card?.dataset.publishState === "draft";
+        if (deployBtn || draft) {
+          setRunState(slug, "📋 完成・非公開 — プレビュー確認後「公開する」", "ready");
         } else if (gateHint) {
           setRunState(slug, "⏸️ 待機中 — 下の「あと N 項目」を埋める（自動では動かない）", "idle");
-        } else if (pct === "100%") {
-          setRunState(slug, "✅ 公開ゲートOK", "done");
+        } else if (pct === "100%" && card?.dataset.publishState === "live") {
+          setRunState(slug, "✅ 公開中", "done");
         } else {
           setRunState(slug, "⏸️ 待機中 — 中身の作成待ち", "idle");
         }

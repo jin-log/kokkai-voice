@@ -138,6 +138,7 @@ const article = {
     date_range: null,
   },
   publishReady: false,
+  pageReady: false,
 };
 
 await mkdir(path.join(root, "data/articles"), { recursive: true });

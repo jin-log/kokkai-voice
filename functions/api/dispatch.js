@@ -8,7 +8,7 @@
  *
  * POST body:
  *   { pin, action?, slug?, keyword?, title?, category?, sources? }
- *   action: "create" | "deploy" | "deploy_article" | "update_title" | "hide" | "unhide" | "delete_article"
+ *   action: "create" | "deploy" | "deploy_article" | "publish" | "update_title" | "hide" | "unhide" | "delete_article"
  */
 export async function onRequestPost(context) {
   const { GH_TOKEN, ADMIN_PIN } = context.env;
@@ -50,9 +50,9 @@ export async function onRequestPost(context) {
     }
     return dispatchWorkflow(
       GH_TOKEN,
-      "publish-article.yml",
-      { slug },
-      `「${slug}」の本番反映を起動しました。ゲートチェック後、1〜2分で反映されます。`,
+      "admin-article.yml",
+      { action: "publish", slug, title: "" },
+      `「${slug}」を公開しました。1〜2分で /case/${slug}/ に表示されます。`,
     );
   }
 
@@ -113,7 +113,7 @@ export async function onRequestPost(context) {
     GH_TOKEN,
     "create-article.yml",
     { slug, keyword: keywordClean, title, category, tags, sources },
-    `記事生成ワークフロー起動（/${slug}/）。2〜3分でデプロイ完了します。`,
+    `記事生成→①〜④自動完成。プレビュー確認後「公開する」。`,
   );
 }
 

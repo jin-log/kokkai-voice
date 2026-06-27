@@ -60,7 +60,7 @@ export function pipelineChecks(article, gate, policyMatrix) {
             : item.id === "legal"
               ? legal
               : item.id === "deployed"
-                ? gate.ok
+                ? article.pageReady === true && gate.ok
                 : item.id === "debug"
                   ? article.qaReview?.status === "ok"
                   : false,
@@ -79,11 +79,17 @@ export function computeNextAction(article, gate, pipeline) {
 
   const preDeploy = pipeline.filter((p) => p.preDeploy);
   const preOk = preDeploy.filter((p) => p.ok).length;
-  if (preOk === preDeploy.length && !gate.ok) {
-    return "🚀 ①〜④完了 — 「本番に反映」ボタンを押してください";
+  if (preOk === preDeploy.length && !article.pageReady) {
+    return "📋 完成・非公開 — プレビューで確認して「公開する」を押してください";
   }
-  if (gate.ok) {
-    return "✅ 公開ゲートOK — 本番ページあり";
+  if (preOk === preDeploy.length && article.pageReady && gate.ok) {
+    return "✅ 公開中 — /case/ に表示されています";
+  }
+  if (preOk === preDeploy.length && !gate.ok) {
+    return "🚀 ①〜④完了 — デプロイ後にプレビューを確認";
+  }
+  if (article.pageReady && gate.ok) {
+    return "✅ 公開中";
   }
 
   const hints = {
@@ -152,13 +158,22 @@ export async function computeProjectStatus() {
 
     const pipeline = pipelineChecks(article, gate, policyMatrix);
     const publishGateOk = isPublishGate(pipeline);
+    const pageReady = article.pageReady === true;
     const nextAction = computeNextAction(article, gate, pipeline);
+
+    let publishState = "wip";
+    if (article.adminHidden) publishState = "hidden";
+    else if (pageReady && gate.ok) publishState = "live";
+    else if (publishGateOk) publishState = "draft";
 
     slugs.push({
       slug,
       title: article.title ?? slug,
       shortTitle: article.title?.replace(/ — あの話どうなった？$/, "") ?? slug,
       adminHidden: article.adminHidden === true,
+      pageReady,
+      publishState,
+      previewUrl: publishGateOk ? `/dev/preview/${slug}/` : null,
       gatePct: pct(
         pipeline.filter((p) => p.preDeploy && p.ok).length,
         pipeline.filter((p) => p.preDeploy).length,
@@ -167,7 +182,7 @@ export async function computeProjectStatus() {
         pipeline.filter((p) => p.ok).length,
         pipeline.length,
       ),
-      published: gate.ok,
+      published: pageReady && gate.ok,
       publishGateOk,
       pipeline,
       gold: pipeline,

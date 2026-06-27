@@ -140,6 +140,22 @@ const TOPIC_CONFIG = {
     handles: ["takaichi_sanae", "izmkenta", "NodaSeiko", "cdp_japan", "tamakiyuichiro"],
     keywords: ["内閣", "総理", "政権", "閣僚", "首相"],
   },
+  "小池百合子 刑事告発 学歴": {
+    handles: ["nobuogohara", "sputnik_jp", "izmkenta", "cdp_japan", "JBpress_tweet"],
+    keywords: ["小池", "刑事", "告発", "学歴", "詐称", "カイロ", "公選法"],
+    seed: [
+      {
+        url: "https://x.com/sputnik_jp/status/1802942068999770179",
+        label: "Sputnik 日本 @sputnik_jp",
+        text: "小池都知事を刑事告発 元側近で弁護士の小島敏郎氏。",
+      },
+      {
+        url: "https://x.com/nobuogohara/status/1824287518801711422",
+        label: "郷原信郎 @nobuogohara",
+        text: "私と上脇教授の連名で小池百合子氏の公選法違反について告発状を提出した。",
+      },
+    ],
+  },
   国民民主党: {
     handles: ["tamakiyuichiro", "FurukawaMot", "izmkenta", "NodaSeiko", "cdp_japan"],
     keywords: ["国民民主", "公明", "野党", "中道", "与野党"],
@@ -310,13 +326,12 @@ function buildSlots(found) {
         screenshot: null,
         note: "URLのみ登録（x-archive.md Phase2でスクショ）",
         researched_at: new Date().toISOString(),
-        // エンゲージメント（参考値。スクショ時点と差が出る場合あり）
         engagement: {
-          likes:    item.likes    ?? 0,
-          replies:  item.replies  ?? 0,
+          likes: item.likes ?? 0,
+          replies: item.replies ?? 0,
           retweets: item.retweets ?? 0,
-          views:    item.views    ?? 0,
-          score:    Math.round((item.score ?? 0) * 100) / 100,
+          views: item.views ?? 0,
+          score: Math.round((item.score ?? 0) * 100) / 100,
         },
       };
     }
@@ -333,6 +348,31 @@ function buildSlots(found) {
       researched_at: new Date().toISOString(),
     };
   });
+}
+
+/** 新規0件でも既存の検証済みXは消さない */
+function mergeXPosts(existing, found) {
+  const newSlots = buildSlots(found);
+  const newCount = newSlots.filter((s) => s.post_url).length;
+  const verified = (existing ?? []).filter(
+    (p) => p.post_url && p.post_text && p.status === "url_found",
+  );
+  if (newCount === 0 && verified.length > 0) {
+    return existing;
+  }
+  if (newCount === 0) return newSlots;
+
+  const used = new Set(newSlots.filter((s) => s.post_url).map((s) => s.post_url));
+  let vi = 0;
+  for (let i = 0; i < newSlots.length && vi < verified.length; i++) {
+    if (newSlots[i].post_url) continue;
+    while (vi < verified.length && used.has(verified[vi].post_url)) vi++;
+    if (vi >= verified.length) break;
+    newSlots[i] = { ...verified[vi], slot: i + 1 };
+    used.add(verified[vi].post_url);
+    vi++;
+  }
+  return newSlots;
 }
 
 async function main() {
@@ -352,9 +392,12 @@ async function main() {
     const config = TOPIC_CONFIG[kw] ?? {
       handles: [],
       keywords: kw.split(/[\s　]+/).filter(Boolean),
-      seed: (article.sourceUrls ?? [])
-        .filter((u) => /x\.com|twitter\.com/i.test(u))
-        .map((url) => ({ url })),
+      seed: [
+        ...(article.xPostSeeds ?? []),
+        ...(article.sourceUrls ?? [])
+          .filter((u) => /x\.com|twitter\.com/i.test(u))
+          .map((url) => ({ url })),
+      ],
     };
     if (!TOPIC_CONFIG[kw]) {
       console.log(`  fallback config for "${kw}" (handles=0, seed=${config.seed.length})`);
@@ -369,10 +412,12 @@ async function main() {
     const found = await collectForTopic(kw, config, dateRange);
     const urlCount = found.filter((f) => f.post_url).length;
     totalFound += Math.min(urlCount, 5);
-    article.xPosts = buildSlots(found);
+    const merged = mergeXPosts(article.xPosts, found);
+    const mergedCount = merged.filter((p) => p.post_url).length;
+    article.xPosts = merged;
     article.xResearch = {
       researched_at: new Date().toISOString(),
-      urls_found: urlCount,
+      urls_found: mergedCount,
       method: "jina_reader+fxtwitter_public",
       date_range: dateRange ? {
         from: dateRange.min.toISOString().slice(0, 10),
@@ -380,8 +425,8 @@ async function main() {
       } : null,
     };
     await writeFile(articlePath, JSON.stringify(article, null, 2) + "\n", "utf8");
-    report.push({ slug, urls_found: urlCount });
-    console.log(`  -> ${urlCount}/5 URLs`);
+    report.push({ slug, urls_found: mergedCount });
+    console.log(`  -> ${mergedCount}/5 URLs${mergedCount > urlCount ? " (既存維持含む)" : ""}`);
   }
 
   console.log("\n=== CEO REPORT ===");

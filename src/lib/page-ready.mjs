@@ -73,9 +73,22 @@ export function checkCasePage(article, opts = {}) {
 
   // E. タイムライン
   const tl = article.timeline ?? [];
-  const speeches = tl.filter((e) => e.type === "speech" && e.speech?.speechURL);
+  const isKokkai = article.category === "国会";
+  const speeches = isKokkai
+    ? tl.filter((e) => e.type === "speech" && e.speech?.speechURL)
+    : tl.filter(
+        (e) =>
+          (e.type === "speech" || e.type === "source") &&
+          (e.speech?.speechURL || e.sourceUrl),
+      );
   add("E1_timeline_count", tl.length >= 3, `${tl.length}/3 件`);
-  add("E2_timeline_speeches", speeches.length >= 2, `${speeches.length}/2 国会発言`);
+  add(
+    "E2_timeline_speeches",
+    speeches.length >= 2,
+    isKokkai
+      ? `${speeches.length}/2 国会発言`
+      : `${speeches.length}/2 出典リンク`,
+  );
 
   // F. 用語
   const gloss = article.glossary ?? article.nowSummary?.glossary ?? [];

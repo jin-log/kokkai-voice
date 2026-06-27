@@ -41,7 +41,7 @@ jobs:
 
       - run: npm install
 
-      - name: 記事生成
+      - name: 骨組み生成
         run: |
           if [ "${{ github.event.inputs.category }}" = "国会" ]; then
             node scripts/init-article.mjs \
@@ -65,16 +65,21 @@ jobs:
       - name: index登録
         run: node scripts/register-article-index.mjs --slug "${{ github.event.inputs.slug }}"
 
-      - name: X調査
-        run: node scripts/x-research-batch.mjs "${{ github.event.inputs.slug }}" || true
-
-      - name: 法務チェック
-        run: node scripts/legal-check.mjs --slug "${{ github.event.inputs.slug }}" || true
+      - name: 記事完成（①〜④ 自動）
+        id: complete
+        continue-on-error: true
+        run: node scripts/complete-article.mjs --slug "${{ github.event.inputs.slug }}"
 
       - name: コミット & プッシュ
         run: |
           git config user.email "bot@seiji1192.site"
           git config user.name "kokkai-bot"
-          git add data/articles/
-          git diff --staged --quiet || git commit -m "article: ${{ github.event.inputs.slug }} 自動生成"
+          git add data/
+          git diff --staged --quiet || git commit -m "article: ${{ github.event.inputs.slug }} 自動完成"
           git push
+
+      - name: 公開ゲート確認
+        if: steps.complete.outcome != 'success'
+        run: |
+          echo "①〜④のいずれかが未達です。管理画面 /dev/status/ で未了項目を確認してください。"
+          exit 1

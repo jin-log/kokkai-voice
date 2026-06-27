@@ -1,0 +1,60 @@
+---
+/**
+ * 案件ページ本体（公開・プレビュー共通）
+ */
+import ArcSummary from "./case/ArcSummary.astro";
+import NowBox from "./case/NowBox.astro";
+import ReactionSummary from "./case/ReactionSummary.astro";
+import SummaryLayers from "./case/SummaryLayers.astro";
+import StanceMatrix from "./case/StanceMatrix.astro";
+import Glossary from "./case/Glossary.astro";
+import Timeline from "./case/Timeline.astro";
+import Comments from "./case/Comments.astro";
+import FloatToc from "./case/FloatToc.astro";
+import FloatReact from "./case/FloatReact.astro";
+import { articleShortTitle, shouldPublishParty } from "../lib/case-helpers.mjs";
+
+const { article, stance, preview = false } = Astro.props;
+const hasStance =
+  stance &&
+  (stance.matrix.parties ?? []).filter(shouldPublishParty).length > 0;
+const shortTitle = articleShortTitle(article);
+const sourceTag =
+  article.category === "国会" ? "国会議事録 API" : `${article.category || "報道"}・公開ソース`;
+---
+
+{preview && (
+  <div class="preview-banner" role="status">
+    <p class="preview-banner__text">
+      <strong>プレビュー（非公開）</strong>
+      — 一般公開前の確認用。内容を確認して管理画面から「公開する」を押してください。
+    </p>
+    <a href="/dev/status/" class="preview-banner__link">← 管理画面に戻る</a>
+  </div>
+)}
+
+<main class="container">
+  <header class="case-hero">
+    <div class="case-hero__tags">
+      {article.tags.map((t) => (
+        <span class="tag">{t}</span>
+      ))}
+      <span class="tag tag--source">{sourceTag}</span>
+      {preview && <span class="tag tag--preview">非公開プレビュー</span>}
+    </div>
+    <h1 class="case-hero__title">{shortTitle}</h1>
+
+    <NowBox article={article} />
+    <ArcSummary article={article} />
+    <ReactionSummary article={article} />
+    <SummaryLayers article={article} />
+  </header>
+
+  {hasStance && <StanceMatrix article={article} stance={stance} />}
+  <Glossary article={article} />
+  <Timeline article={article} />
+  <Comments slug={article.slug} />
+</main>
+
+<FloatToc article={article} hasStance={hasStance} />
+<FloatReact article={article} />

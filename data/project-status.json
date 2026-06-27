@@ -1,49 +1,52 @@
 {
-  "generatedAt": "2026-06-27T13:58:45.823Z",
+  "generatedAt": "2026-06-27T16:38:16.164Z",
   "strategy": "quality-first",
   "activeCount": 21,
   "parkedCount": 0,
   "publishedCount": 20,
-  "overallGoldPct": 95,
-  "overallGatePct": 95,
+  "overallGoldPct": 98,
+  "overallGatePct": 100,
   "slugs": [
     {
       "slug": "case-mqwdrley",
-      "title": "都知事　小池百合子　刑事告発 — あの話どうなった？",
-      "shortTitle": "都知事　小池百合子　刑事告発",
+      "title": "【東京都知事】小池百合子氏、学歴巡る刑事告発 — あの話どうなった？",
+      "shortTitle": "【東京都知事】小池百合子氏、学歴巡る刑事告発",
       "adminHidden": false,
-      "gatePct": 0,
-      "goldPct": 0,
+      "pageReady": false,
+      "publishState": "draft",
+      "previewUrl": "/dev/preview/case-mqwdrley/",
+      "gatePct": 100,
+      "goldPct": 67,
       "published": false,
-      "publishGateOk": false,
+      "publishGateOk": true,
       "pipeline": [
         {
           "id": "content",
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "matrix",
           "label": "②〇×2党確定",
           "phase": 2,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "x",
           "label": "③X検証1件+",
           "phase": 3,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "legal",
           "label": "④法務OK",
           "phase": 4,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "deployed",
@@ -66,28 +69,28 @@
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "matrix",
           "label": "②〇×2党確定",
           "phase": 2,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "x",
           "label": "③X検証1件+",
           "phase": 3,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "legal",
           "label": "④法務OK",
           "phase": 4,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "deployed",
@@ -104,95 +107,19 @@
           "ok": false
         }
       ],
-      "blockers": [
-        {
-          "id": "A2_primarySpeech",
-          "label": "一次ソース",
-          "todo": "報道URL・国会リンクを追加",
-          "detail": "speechURL なし"
-        },
-        {
-          "id": "B1_nowSummary",
-          "label": "いまの結論",
-          "todo": "3行の要約を書く",
-          "detail": "2/3 行"
-        },
-        {
-          "id": "C1_summaryBullets",
-          "label": "要点",
-          "todo": "summaryBullets を3点以上",
-          "detail": "0/3 点"
-        },
-        {
-          "id": "D1_arcSummary",
-          "label": "経緯",
-          "todo": "日付付き経緯を3行以上",
-          "detail": "0/3 行（日付付き）"
-        },
-        {
-          "id": "E1_timeline_count",
-          "label": "タイムライン",
-          "todo": "出来事を3件以上",
-          "detail": "0/3 件"
-        },
-        {
-          "id": "E2_timeline_speeches",
-          "label": "国会発言リンク",
-          "todo": "タイムラインに国会URLを2件",
-          "detail": "0/2 国会発言"
-        },
-        {
-          "id": "F1_glossary",
-          "label": "用語解説",
-          "todo": "用語を2語以上",
-          "detail": "0/2 語"
-        },
-        {
-          "id": "G2_policy_matrix_file",
-          "label": "公言と行動ファイル",
-          "todo": "policy-matrix JSON を作成",
-          "detail": "ファイルなし: C:\\Users\\bero1\\Projects\\kokkai-voice\\data\\policy-matrix\\case-mqwdrley.json"
-        },
-        {
-          "id": "G3_parties_min",
-          "label": "政党数",
-          "todo": "2党以上を登録",
-          "detail": "0/2 党以上"
-        },
-        {
-          "id": "G4_parties_source",
-          "label": "党の出典URL",
-          "todo": "各党に sourceUrl",
-          "detail": "出典URL付き 0/2 党以上"
-        },
-        {
-          "id": "G5_parties_symbol",
-          "label": "◎▲❌",
-          "todo": "各党の記号を確定",
-          "detail": "◎▲❌ 確定 0/2 党以上"
-        },
-        {
-          "id": "H1_xPosts",
-          "label": "X投稿",
-          "todo": "検証済みX URLを1件以上",
-          "detail": "検証済み 0/1 件（公開前必須）"
-        },
-        {
-          "id": "I1_legal",
-          "label": "法務",
-          "todo": "legal-check を実行",
-          "detail": "pending"
-        }
-      ],
-      "blockerCount": 13,
+      "blockers": [],
+      "blockerCount": 0,
       "runState": "idle",
-      "nextAction": "📰 ソースURL（報道・会見）を管理画面で追加して再生成 → 国会発言 or ソースURLを追加 → いまの結論（3行）を入力 → 要点リストを追加 → X調査: 5枠が未特定 — キーワード見直し or 手動URL"
+      "nextAction": "📋 完成・非公開 — プレビューで確認して「公開する」を押してください"
     },
     {
       "slug": "bouka-taisaku",
       "title": "物価高対策 — あの話どうなった？",
       "shortTitle": "物価高対策",
       "adminHidden": false,
+      "pageReady": true,
+      "publishState": "live",
+      "previewUrl": "/dev/preview/bouka-taisaku/",
       "gatePct": 100,
       "goldPct": 100,
       "published": true,
@@ -288,13 +215,16 @@
       "blockers": [],
       "blockerCount": 0,
       "runState": "idle",
-      "nextAction": "✅ 公開ゲートOK — 本番ページあり"
+      "nextAction": "✅ 公開中 — /case/ に表示されています"
     },
     {
       "slug": "shohizei-genmen",
       "title": "食料品の消費税 — あの話どうなった？",
       "shortTitle": "食料品の消費税",
       "adminHidden": false,
+      "pageReady": true,
+      "publishState": "live",
+      "previewUrl": "/dev/preview/shohizei-genmen/",
       "gatePct": 100,
       "goldPct": 100,
       "published": true,
@@ -390,13 +320,16 @@
       "blockers": [],
       "blockerCount": 0,
       "runState": "idle",
-      "nextAction": "✅ 公開ゲートOK — 本番ページあり"
+      "nextAction": "✅ 公開中 — /case/ に表示されています"
     },
     {
       "slug": "boeeihi",
       "title": "防衛費・安保 — あの話どうなった？",
       "shortTitle": "防衛費・安保",
       "adminHidden": false,
+      "pageReady": true,
+      "publishState": "live",
+      "previewUrl": "/dev/preview/boeeihi/",
       "gatePct": 100,
       "goldPct": 100,
       "published": true,
@@ -492,13 +425,16 @@
       "blockers": [],
       "blockerCount": 0,
       "runState": "idle",
-      "nextAction": "✅ 公開ゲートOK — 本番ページあり"
+      "nextAction": "✅ 公開中 — /case/ に表示されています"
     },
     {
       "slug": "chingin",
       "title": "賃上げ・最低賃金 — あの話どうなった？",
       "shortTitle": "賃上げ・最低賃金",
       "adminHidden": false,
+      "pageReady": true,
+      "publishState": "live",
+      "previewUrl": "/dev/preview/chingin/",
       "gatePct": 100,
       "goldPct": 100,
       "published": true,
@@ -594,13 +530,16 @@
       "blockers": [],
       "blockerCount": 0,
       "runState": "idle",
-      "nextAction": "✅ 公開ゲートOK — 本番ページあり"
+      "nextAction": "✅ 公開中 — /case/ に表示されています"
     },
     {
       "slug": "nenkin",
       "title": "年金制度改革 — あの話どうなった？",
       "shortTitle": "年金制度改革",
       "adminHidden": false,
+      "pageReady": true,
+      "publishState": "live",
+      "previewUrl": "/dev/preview/nenkin/",
       "gatePct": 100,
       "goldPct": 100,
       "published": true,
@@ -696,13 +635,16 @@
       "blockers": [],
       "blockerCount": 0,
       "runState": "idle",
-      "nextAction": "✅ 公開ゲートOK — 本番ページあり"
+      "nextAction": "✅ 公開中 — /case/ に表示されています"
     },
     {
       "slug": "gaikokujin-seisaku",
       "title": "外国人政策 — あの話どうなった？",
       "shortTitle": "外国人政策",
       "adminHidden": false,
+      "pageReady": true,
+      "publishState": "live",
+      "previewUrl": "/dev/preview/gaikokujin-seisaku/",
       "gatePct": 100,
       "goldPct": 100,
       "published": true,
@@ -798,13 +740,16 @@
       "blockers": [],
       "blockerCount": 0,
       "runState": "idle",
-      "nextAction": "✅ 公開ゲートOK — 本番ページあり"
+      "nextAction": "✅ 公開中 — /case/ に表示されています"
     },
     {
       "slug": "shoshika",
       "title": "少子化対策 — あの話どうなった？",
       "shortTitle": "少子化対策",
       "adminHidden": false,
+      "pageReady": true,
+      "publishState": "live",
+      "previewUrl": "/dev/preview/shoshika/",
       "gatePct": 100,
       "goldPct": 100,
       "published": true,
@@ -900,13 +845,16 @@
       "blockers": [],
       "blockerCount": 0,
       "runState": "idle",
-      "nextAction": "✅ 公開ゲートOK — 本番ページあり"
+      "nextAction": "✅ 公開中 — /case/ に表示されています"
     },
     {
       "slug": "kyoiku-mushoka",
       "title": "大学無償化 — あの話どうなった？",
       "shortTitle": "大学無償化",
       "adminHidden": false,
+      "pageReady": true,
+      "publishState": "live",
+      "previewUrl": "/dev/preview/kyoiku-mushoka/",
       "gatePct": 100,
       "goldPct": 100,
       "published": true,
@@ -1002,13 +950,16 @@
       "blockers": [],
       "blockerCount": 0,
       "runState": "idle",
-      "nextAction": "✅ 公開ゲートOK — 本番ページあり"
+      "nextAction": "✅ 公開中 — /case/ に表示されています"
     },
     {
       "slug": "energy-policy",
       "title": "エネルギー政策 — あの話どうなった？",
       "shortTitle": "エネルギー政策",
       "adminHidden": false,
+      "pageReady": true,
+      "publishState": "live",
+      "previewUrl": "/dev/preview/energy-policy/",
       "gatePct": 100,
       "goldPct": 100,
       "published": true,
@@ -1104,13 +1055,16 @@
       "blockers": [],
       "blockerCount": 0,
       "runState": "idle",
-      "nextAction": "✅ 公開ゲートOK — 本番ページあり"
+      "nextAction": "✅ 公開中 — /case/ に表示されています"
     },
     {
       "slug": "seiji-shikin",
       "title": "政治資金・政党助成 — あの話どうなった？",
       "shortTitle": "政治資金・政党助成",
       "adminHidden": false,
+      "pageReady": true,
+      "publishState": "live",
+      "previewUrl": "/dev/preview/seiji-shikin/",
       "gatePct": 100,
       "goldPct": 100,
       "published": true,
@@ -1206,13 +1160,16 @@
       "blockers": [],
       "blockerCount": 0,
       "runState": "idle",
-      "nextAction": "✅ 公開ゲートOK — 本番ページあり"
+      "nextAction": "✅ 公開中 — /case/ に表示されています"
     },
     {
       "slug": "senkyo-kaikaku",
       "title": "選挙制度改革 — あの話どうなった？",
       "shortTitle": "選挙制度改革",
       "adminHidden": false,
+      "pageReady": true,
+      "publishState": "live",
+      "previewUrl": "/dev/preview/senkyo-kaikaku/",
       "gatePct": 100,
       "goldPct": 100,
       "published": true,
@@ -1308,13 +1265,16 @@
       "blockers": [],
       "blockerCount": 0,
       "runState": "idle",
-      "nextAction": "✅ 公開ゲートOK — 本番ページあり"
+      "nextAction": "✅ 公開中 — /case/ に表示されています"
     },
     {
       "slug": "kaigo-iryo",
       "title": "介護・医療費 — あの話どうなった？",
       "shortTitle": "介護・医療費",
       "adminHidden": false,
+      "pageReady": true,
+      "publishState": "live",
+      "previewUrl": "/dev/preview/kaigo-iryo/",
       "gatePct": 100,
       "goldPct": 100,
       "published": true,
@@ -1410,13 +1370,16 @@
       "blockers": [],
       "blockerCount": 0,
       "runState": "idle",
-      "nextAction": "✅ 公開ゲートOK — 本番ページあり"
+      "nextAction": "✅ 公開中 — /case/ に表示されています"
     },
     {
       "slug": "chiho-sosei",
       "title": "地方創生 — あの話どうなった？",
       "shortTitle": "地方創生",
       "adminHidden": false,
+      "pageReady": true,
+      "publishState": "live",
+      "previewUrl": "/dev/preview/chiho-sosei/",
       "gatePct": 100,
       "goldPct": 100,
       "published": true,
@@ -1512,13 +1475,16 @@
       "blockers": [],
       "blockerCount": 0,
       "runState": "idle",
-      "nextAction": "✅ 公開ゲートOK — 本番ページあり"
+      "nextAction": "✅ 公開中 — /case/ に表示されています"
     },
     {
       "slug": "hosei-yosan",
       "title": "補正予算 — あの話どうなった？",
       "shortTitle": "補正予算",
       "adminHidden": false,
+      "pageReady": true,
+      "publishState": "live",
+      "previewUrl": "/dev/preview/hosei-yosan/",
       "gatePct": 100,
       "goldPct": 100,
       "published": true,
@@ -1614,13 +1580,16 @@
       "blockers": [],
       "blockerCount": 0,
       "runState": "idle",
-      "nextAction": "✅ 公開ゲートOK — 本番ページあり"
+      "nextAction": "✅ 公開中 — /case/ に表示されています"
     },
     {
       "slug": "nichigyo",
       "title": "政治とカネ — あの話どうなった？",
       "shortTitle": "政治とカネ",
       "adminHidden": false,
+      "pageReady": true,
+      "publishState": "live",
+      "previewUrl": "/dev/preview/nichigyo/",
       "gatePct": 100,
       "goldPct": 100,
       "published": true,
@@ -1716,13 +1685,16 @@
       "blockers": [],
       "blockerCount": 0,
       "runState": "idle",
-      "nextAction": "✅ 公開ゲートOK — 本番ページあり"
+      "nextAction": "✅ 公開中 — /case/ に表示されています"
     },
     {
       "slug": "casino-ir",
       "title": "カジノIR — あの話どうなった？",
       "shortTitle": "カジノIR",
       "adminHidden": false,
+      "pageReady": true,
+      "publishState": "live",
+      "previewUrl": "/dev/preview/casino-ir/",
       "gatePct": 100,
       "goldPct": 100,
       "published": true,
@@ -1818,13 +1790,16 @@
       "blockers": [],
       "blockerCount": 0,
       "runState": "idle",
-      "nextAction": "✅ 公開ゲートOK — 本番ページあり"
+      "nextAction": "✅ 公開中 — /case/ に表示されています"
     },
     {
       "slug": "kenpo",
       "title": "憲法改正論 — あの話どうなった？",
       "shortTitle": "憲法改正論",
       "adminHidden": false,
+      "pageReady": true,
+      "publishState": "live",
+      "previewUrl": "/dev/preview/kenpo/",
       "gatePct": 100,
       "goldPct": 100,
       "published": true,
@@ -1920,13 +1895,16 @@
       "blockers": [],
       "blockerCount": 0,
       "runState": "idle",
-      "nextAction": "✅ 公開ゲートOK — 本番ページあり"
+      "nextAction": "✅ 公開中 — /case/ に表示されています"
     },
     {
       "slug": "tariff-us",
       "title": "米国関税・貿易 — あの話どうなった？",
       "shortTitle": "米国関税・貿易",
       "adminHidden": false,
+      "pageReady": true,
+      "publishState": "live",
+      "previewUrl": "/dev/preview/tariff-us/",
       "gatePct": 100,
       "goldPct": 100,
       "published": true,
@@ -2022,13 +2000,16 @@
       "blockers": [],
       "blockerCount": 0,
       "runState": "idle",
-      "nextAction": "✅ 公開ゲートOK — 本番ページあり"
+      "nextAction": "✅ 公開中 — /case/ に表示されています"
     },
     {
       "slug": "kishida-resign",
       "title": "政権・内閣人事 — あの話どうなった？",
       "shortTitle": "政権・内閣人事",
       "adminHidden": false,
+      "pageReady": true,
+      "publishState": "live",
+      "previewUrl": "/dev/preview/kishida-resign/",
       "gatePct": 100,
       "goldPct": 100,
       "published": true,
@@ -2124,13 +2105,16 @@
       "blockers": [],
       "blockerCount": 0,
       "runState": "idle",
-      "nextAction": "✅ 公開ゲートOK — 本番ページあり"
+      "nextAction": "✅ 公開中 — /case/ に表示されています"
     },
     {
       "slug": "komei-kokumin",
       "title": "超党派・教育法改正 — あの話どうなった？",
       "shortTitle": "超党派・教育法改正",
       "adminHidden": false,
+      "pageReady": true,
+      "publishState": "live",
+      "previewUrl": "/dev/preview/komei-kokumin/",
       "gatePct": 100,
       "goldPct": 100,
       "published": true,
@@ -2226,10 +2210,10 @@
       "blockers": [],
       "blockerCount": 0,
       "runState": "idle",
-      "nextAction": "✅ 公開ゲートOK — 本番ページあり"
+      "nextAction": "✅ 公開中 — /case/ に表示されています"
     }
   ],
   "deltaGoldPct": 0,
-  "previousGoldPct": 95,
+  "previousGoldPct": 98,
   "deployedAt": "2026-06-27T05:45:35.982Z"
 }

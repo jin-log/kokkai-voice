@@ -12,6 +12,8 @@
 import { readFile, writeFile, unlink } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { checkCasePageWithFiles } from "../src/lib/page-ready.mjs";
+import { refreshProjectStatus } from "../src/lib/project-status.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(__dirname, "..");
@@ -27,10 +29,10 @@ const action = arg("--action");
 const slug = arg("--slug")?.trim();
 const title = arg("--title")?.trim();
 
-const ALLOWED = new Set(["update_title", "hide", "unhide", "delete"]);
+const ALLOWED = new Set(["update_title", "hide", "unhide", "delete", "publish"]);
 
 if (!action || !ALLOWED.has(action)) {
-  console.error("必須: --action update_title|hide|unhide|delete --slug SLUG");
+  console.error("必須: --action update_title|hide|unhide|delete|publish --slug SLUG");
   process.exit(1);
 }
 if (!slug) {
@@ -93,6 +95,23 @@ if (action === "unhide") {
   delete article.adminHiddenAt;
   await saveArticle(article);
   console.log(`OK: ${slug} を表示に戻しました`);
+  process.exit(0);
+}
+
+if (action === "publish") {
+  const article = await loadArticle();
+  const gate = await checkCasePageWithFiles(article);
+  if (!gate.ok) {
+    console.error(`ゲート未達のため公開できません: ${slug}`);
+    for (const b of gate.blockers) console.error(`  - ${b.id}: ${b.detail}`);
+    process.exit(1);
+  }
+  article.publishReady = true;
+  article.pageReady = true;
+  article.publishedAt = new Date().toISOString();
+  await saveArticle(article);
+  await refreshProjectStatus();
+  console.log(`OK: ${slug} を公開しました（/case/${slug}/）`);
   process.exit(0);
 }
 

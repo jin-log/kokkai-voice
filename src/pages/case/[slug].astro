@@ -1,25 +1,13 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import SiteHeader from "../../components/SiteHeader.astro";
-import ArcSummary from "../../components/case/ArcSummary.astro";
-import NowBox from "../../components/case/NowBox.astro";
-import ReactionSummary from "../../components/case/ReactionSummary.astro";
-import SummaryLayers from "../../components/case/SummaryLayers.astro";
-import StanceMatrix from "../../components/case/StanceMatrix.astro";
-import Glossary from "../../components/case/Glossary.astro";
-import Timeline from "../../components/case/Timeline.astro";
-import Comments from "../../components/case/Comments.astro";
-import FloatToc from "../../components/case/FloatToc.astro";
-import FloatReact from "../../components/case/FloatReact.astro";
+import CasePageContent from "../../components/CasePageContent.astro";
 import {
   getArticleSlugs,
   loadArticle,
   loadStanceData,
 } from "../../lib/articles.mjs";
-import {
-  articleShortTitle,
-  shouldPublishParty,
-} from "../../lib/case-helpers.mjs";
+import { articleShortTitle } from "../../lib/case-helpers.mjs";
 
 export async function getStaticPaths() {
   const slugs = await getArticleSlugs();
@@ -29,11 +17,9 @@ export async function getStaticPaths() {
 const { slug } = Astro.params;
 const article = await loadArticle(slug);
 const stance = await loadStanceData(article);
-const hasStance =
-  stance &&
-  (stance.matrix.parties ?? []).filter(shouldPublishParty).length > 0;
 const shortTitle = articleShortTitle(article);
-const description = article.primarySpeech?.excerpt?.slice(0, 120) ||
+const description =
+  article.primarySpeech?.excerpt?.slice(0, 120) ||
   article.nowSummary?.bullets?.[0]?.slice(0, 120) ||
   "";
 ---
@@ -45,28 +31,5 @@ const description = article.primarySpeech?.excerpt?.slice(0, 120) ||
   includeAppJs
 >
   <SiteHeader showSearch />
-  <main class="container">
-    <header class="case-hero">
-      <div class="case-hero__tags">
-        {article.tags.map((t) => (
-          <span class="tag">{t}</span>
-        ))}
-        <span class="tag tag--source">国会議事録 API</span>
-      </div>
-      <h1 class="case-hero__title">{shortTitle}</h1>
-
-      <NowBox article={article} />
-      <ArcSummary article={article} />
-      <ReactionSummary article={article} />
-      <SummaryLayers article={article} />
-    </header>
-
-    {hasStance && <StanceMatrix article={article} stance={stance} />}
-    <Glossary article={article} />
-    <Timeline article={article} />
-    <Comments slug={article.slug} />
-  </main>
-
-  <FloatToc article={article} hasStance={hasStance} />
-  <FloatReact article={article} />
+  <CasePageContent article={article} stance={stance} />
 </BaseLayout>

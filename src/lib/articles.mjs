@@ -6,13 +6,26 @@ import { checkCasePageWithFiles } from "./page-ready.mjs";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 export const root = path.join(__dirname, "../..");
 
+/** 一般公開済みか */
+export function isPagePublic(article) {
+  return article.pageReady === true;
+}
+
+/** プレビュー可能（①〜④完成）か */
+export async function isPreviewable(article) {
+  if (article.adminHidden) return false;
+  if (article.publishReady === true) return true;
+  const gate = await checkCasePageWithFiles(article);
+  return gate.ok;
+}
+
 /** @deprecated 同期判定は使わない。filterPublishable を使う */
 export function isPublishable(article) {
   return article.publishReady === true && article.pageReady === true;
 }
 
 export async function filterPublishable(articles) {
-  const visible = articles.filter((a) => !a.adminHidden);
+  const visible = articles.filter((a) => !a.adminHidden && a.pageReady === true);
   const checked = await Promise.all(
     visible.map(async (article) => ({
       article,
@@ -22,9 +35,22 @@ export async function filterPublishable(articles) {
   return checked.filter(({ result }) => result.ok).map(({ article }) => article);
 }
 
+/** プレビューページ用スラグ（完成・非公開含む） */
+export async function getPreviewSlugs() {
+  const index = JSON.parse(
+    await readFile(path.join(root, "data/articles/index.json"), "utf8"),
+  );
+  const slugs = [];
+  for (const slug of index.slugs ?? []) {
+    const article = await loadArticle(slug);
+    if (await isPreviewable(article)) slugs.push(slug);
+  }
+  return slugs;
+}
+
 export async function getArticleSlugs() {
   const index = JSON.parse(
-    await readFile(path.join(root, "data/articles/index.json"), "utf8")
+    await readFile(path.join(root, "data/articles/index.json"), "utf8"),
   );
   const articles = await Promise.all(index.slugs.map((slug) => loadArticle(slug)));
   return (await filterPublishable(articles)).map((a) => a.slug);
@@ -33,14 +59,14 @@ export async function getArticleSlugs() {
 export async function loadArticle(slug) {
   const raw = await readFile(
     path.join(root, `data/articles/${slug}.json`),
-    "utf8"
+    "utf8",
   );
   return JSON.parse(raw);
 }
 
 export async function loadAllArticles() {
   const index = JSON.parse(
-    await readFile(path.join(root, "data/articles/index.json"), "utf8")
+    await readFile(path.join(root, "data/articles/index.json"), "utf8"),
   );
   const articles = await Promise.all(index.slugs.map((slug) => loadArticle(slug)));
   return filterPublishable(articles);
@@ -59,8 +85,8 @@ export async function loadStanceData(article) {
       try {
         politicians.push(
           JSON.parse(
-            await readFile(path.join(root, `data/politicians/${slug}.json`), "utf8")
-          )
+            await readFile(path.join(root, `data/politicians/${slug}.json`), "utf8"),
+          ),
         );
       } catch {
         /* optional */
