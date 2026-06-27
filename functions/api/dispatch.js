@@ -16,15 +16,19 @@ export async function onRequestPost(context) {
     return json({ error: "invalid JSON" }, 400);
   }
 
-  const { pin, slug, keyword, title, category = "国会", tags = "" } = body;
+  const { pin, slug: slugIn, keyword, title: titleIn, category = "国会", tags = "" } = body;
 
   if (!ADMIN_PIN || pin !== ADMIN_PIN) {
     return json({ error: "unauthorized" }, 401);
   }
 
-  if (!slug || !keyword || !title) {
-    return json({ error: "slug, keyword, title は必須です" }, 400);
+  if (!keyword?.trim()) {
+    return json({ error: "keyword は必須です" }, 400);
   }
+
+  const keywordClean = keyword.trim();
+  const title = titleIn?.trim() || `${keywordClean} — あの話どうなった？`;
+  const slug = slugIn?.trim() || makeSlug(keywordClean);
 
   const res = await fetch(
     "https://api.github.com/repos/jin-log/kokkai-voice/actions/workflows/create-article.yml/dispatches",
@@ -56,4 +60,17 @@ function json(data, status = 200) {
     status,
     headers: { "Content-Type": "application/json" },
   });
+}
+
+function makeSlug(keyword) {
+  const ascii = keyword
+    .trim()
+    .toLowerCase()
+    .normalize("NFKC")
+    .replace(/[\s　]+/g, "-")
+    .replace(/[^a-z0-9-]/g, "")
+    .replace(/-+/g, "-")
+    .replace(/^-|-$/g, "");
+  if (ascii.length >= 3) return ascii.substring(0, 40);
+  return `case-${Date.now().toString(36)}`;
 }

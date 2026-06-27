@@ -32,11 +32,9 @@ function formatJa(iso) {
       <!-- 新規記事作成UI -->
       <section class="dev-new-article" id="new-article">
         <h2>🆕 新規記事を作成</h2>
-        <p class="dev-new-article__note">入力して「生成」を押すと自動で記事生成→デプロイまで完走します（2〜3分）</p>
+        <p class="dev-new-article__note">キーワードを入れて「生成」を押すだけ。タイトル・URL・記事生成→デプロイまで自動（2〜3分）</p>
         <div class="dev-new-article__form">
-          <input id="new-keyword" type="text" placeholder="キーワード（例: 防衛増税）" class="dev-new-article__input" />
-          <input id="new-title" type="text" placeholder="タイトル（例: 防衛増税 — あの話どうなった？）" class="dev-new-article__input" />
-          <input id="new-slug" type="text" placeholder="スラグ（例: boei-zei）" class="dev-new-article__input dev-new-article__input--slug" />
+          <input id="new-keyword" type="text" placeholder="キーワード（例: 小池百合子リコール、防衛増税）" class="dev-new-article__input" />
           <select id="new-category" class="dev-new-article__select">
             <option value="国会">国会</option>
             <option value="地方">地方</option>
@@ -161,37 +159,32 @@ if (localStorage.getItem(KEY) === PIN) {
   });
 }
 
-// スラグ自動生成
-document.getElementById("new-keyword").addEventListener("input", () => {
-  const kw = document.getElementById("new-keyword").value.trim();
-  if (!document.getElementById("new-slug").dataset.manual) {
-    const slug = kw.toLowerCase()
-      .replace(/[\s　]+/g, "-")
-      .replace(/[^\w-]/g, "")
-      .replace(/-+/g, "-").replace(/^-|-$/g, "")
-      .substring(0, 40) || "new-article";
-    document.getElementById("new-slug").value = slug;
-  }
-  if (!document.getElementById("new-title").dataset.manual) {
-    document.getElementById("new-title").value = kw ? `${kw} — あの話どうなった？` : "";
-  }
-});
-document.getElementById("new-slug").addEventListener("input", () => {
-  document.getElementById("new-slug").dataset.manual = "1";
-});
-document.getElementById("new-title").addEventListener("input", () => {
-  document.getElementById("new-title").dataset.manual = "1";
-});
+function makeSlug(keyword) {
+  const ascii = keyword
+    .trim()
+    .toLowerCase()
+    .normalize("NFKC")
+    .replace(/[\s　]+/g, "-")
+    .replace(/[^a-z0-9-]/g, "")
+    .replace(/-+/g, "-")
+    .replace(/^-|-$/g, "");
+  if (ascii.length >= 3) return ascii.substring(0, 40);
+  return `case-${Date.now().toString(36)}`;
+}
+
+function makeTitle(keyword) {
+  return `${keyword.trim()} — あの話どうなった？`;
+}
 
 // 記事生成
 document.getElementById("new-generate").addEventListener("click", async () => {
   const keyword  = document.getElementById("new-keyword").value.trim();
-  const title    = document.getElementById("new-title").value.trim();
-  const slug     = document.getElementById("new-slug").value.trim();
   const category = document.getElementById("new-category").value;
   const pin      = localStorage.getItem("dev_auth") || "";
+  const title    = makeTitle(keyword);
+  const slug     = makeSlug(keyword);
 
-  if (!keyword || !title || !slug) { alert("キーワード・タイトル・スラグを入力してください"); return; }
+  if (!keyword) { alert("キーワードを入力してください"); return; }
 
   const statusEl = document.getElementById("new-status");
   statusEl.style.display = "block";
@@ -208,7 +201,7 @@ document.getElementById("new-generate").addEventListener("click", async () => {
     const data = await res.json();
     if (data.ok) {
       statusEl.className = "dev-new-article__status is-ok";
-      statusEl.textContent = "✅ " + data.message;
+      statusEl.textContent = `✅ ${data.message}（/${slug}/）`;
     } else {
       statusEl.className = "dev-new-article__status is-error";
       statusEl.textContent = "❌ " + (data.error || "エラーが発生しました");
