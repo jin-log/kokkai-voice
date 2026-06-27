@@ -1,6 +1,6 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import SiteHeader from "../../components/SiteHeader.astro";
+import DevHeader from "../../components/DevHeader.astro";
 import SiteFooter from "../../components/SiteFooter.astro";
 import { loadProjectStatus } from "../../lib/project-status.mjs";
 
@@ -17,16 +17,10 @@ function formatJa(iso) {
   description="開発者用ページ"
   noindex={true}
 >
-  <SiteHeader showSearch />
+  <DevHeader current="status" />
   <div id="dev-gate" style="display:none">
     <main class="container status-page">
-      <nav class="dev-nav" aria-label="管理メニュー">
-        <a href="/dev/status/" aria-current="page">完成度・記事</a>
-        <a href="/dev/comments/">コメント</a>
-      </nav>
-      <p class="status-page__lead" style="color:var(--color-text-muted);font-size:0.8rem;margin-bottom:0.5rem">
-        🔒 開発者専用ページ
-      </p>
+      <p class="status-page__lead status-page__lead--dev">🔒 開発者専用（PIN 1192）</p>
       <h1 class="status-page__title">サイト完成度</h1>
       <p class="status-page__lead">
         active {status?.activeCount ?? 0} 件を <strong>100%完成</strong> まで仕上げてから次を増やす方針です。

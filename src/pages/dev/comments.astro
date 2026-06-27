@@ -1,17 +1,13 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import SiteHeader from "../../components/SiteHeader.astro";
+import DevHeader from "../../components/DevHeader.astro";
 import SiteFooter from "../../components/SiteFooter.astro";
 ---
 
 <BaseLayout title="[開発] コメント管理 — 日本の政治なう" description="開発者用" noindex={true}>
-  <SiteHeader showSearch />
+  <DevHeader current="comments" />
   <div id="dev-gate" style="display:none">
     <main class="container status-page">
-      <nav class="dev-nav" aria-label="管理メニュー">
-        <a href="/dev/status/">完成度・記事</a>
-        <a href="/dev/comments/" aria-current="page">コメント</a>
-      </nav>
       <h1 class="status-page__title">コメント管理</h1>
       <p class="status-page__lead">
         案件ページのコメント（デモ）。本番は承認キュー導入予定（D1 / reCAPTCHA）。

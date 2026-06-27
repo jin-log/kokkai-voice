@@ -1,0 +1,34 @@
+---
+interface Props {
+  current?: "status" | "comments" | "preview";
+}
+
+const { current = "status" } = Astro.props;
+---
+
+<header class="dev-header">
+  <div class="container dev-header__inner">
+    <a class="dev-header__brand" href="/dev/status/">
+      <img
+        class="dev-header__logo"
+        src="/assets/logo-header-nihon-seiji-naw.png"
+        alt="日本の政治なう"
+        width="520"
+        height="130"
+      />
+      <span class="dev-header__badge">管理</span>
+    </a>
+    <nav class="dev-header__nav" aria-label="管理メニュー">
+      <a href="/dev/status/" aria-current={current === "status" ? "page" : undefined}>
+        完成度・記事
+      </a>
+      <a href="/dev/comments/" aria-current={current === "comments" ? "page" : undefined}>
+        コメント
+      </a>
+      {current === "preview" && (
+        <span class="dev-header__nav-hint" aria-current="page">プレビュー</span>
+      )}
+    </nav>
+    <a href="/" class="dev-header__public">公開サイト →</a>
+  </div>
+</header>

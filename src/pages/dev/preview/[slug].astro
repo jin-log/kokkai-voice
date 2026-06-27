@@ -1,6 +1,6 @@
 ---
 import BaseLayout from "../../../layouts/BaseLayout.astro";
-import SiteHeader from "../../../components/SiteHeader.astro";
+import DevHeader from "../../../components/DevHeader.astro";
 import SiteFooter from "../../../components/SiteFooter.astro";
 import CasePageContent from "../../../components/CasePageContent.astro";
 import {
@@ -32,7 +32,7 @@ const description =
   bodyDataCase={article.slug}
   includeAppJs
 >
-  <SiteHeader showSearch />
+  <DevHeader current="preview" />
   <div id="preview-gate" style="display:none">
     <CasePageContent article={article} stance={stance} preview={true} />
   </div>
