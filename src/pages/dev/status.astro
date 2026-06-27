@@ -32,27 +32,19 @@ function formatJa(iso) {
       <!-- 新規記事作成UI -->
       <section class="dev-new-article" id="new-article">
         <h2>🆕 新規記事を作成</h2>
-        <p class="dev-new-article__note">キーワードを入力するとターミナルで実行するコマンドが生成されます</p>
+        <p class="dev-new-article__note">入力して「生成」を押すと自動で記事生成→デプロイまで完走します（2〜3分）</p>
         <div class="dev-new-article__form">
-          <input
-            id="new-keyword"
-            type="text"
-            placeholder="例: 防衛増税、給付金、原発再稼働…"
-            class="dev-new-article__input"
-          />
+          <input id="new-keyword" type="text" placeholder="キーワード（例: 防衛増税）" class="dev-new-article__input" />
+          <input id="new-title" type="text" placeholder="タイトル（例: 防衛増税 — あの話どうなった？）" class="dev-new-article__input" />
+          <input id="new-slug" type="text" placeholder="スラグ（例: boei-zei）" class="dev-new-article__input dev-new-article__input--slug" />
           <select id="new-category" class="dev-new-article__select">
             <option value="国会">国会</option>
             <option value="地方">地方</option>
             <option value="行政">行政</option>
           </select>
-          <button id="new-generate" class="dev-new-article__btn">コマンド生成</button>
         </div>
-        <div id="new-result" class="dev-new-article__result" style="display:none">
-          <p class="dev-new-article__result-label">ターミナルで実行：</p>
-          <code id="new-command" class="dev-new-article__command"></code>
-          <button id="new-copy" class="dev-new-article__copy">📋 コピー</button>
-          <p id="new-copy-ok" style="display:none;color:green;font-size:0.85rem;margin-top:0.3rem">コピーしました</p>
-        </div>
+        <button id="new-generate" class="dev-new-article__btn">▶ 生成スタート</button>
+        <div id="new-status" class="dev-new-article__status" style="display:none"></div>
       </section>
 
       {
@@ -169,28 +161,63 @@ if (localStorage.getItem(KEY) === PIN) {
   });
 }
 
-// 新規記事コマンド生成
-document.getElementById("new-generate").addEventListener("click", () => {
-  const keyword = document.getElementById("new-keyword").value.trim();
-  const category = document.getElementById("new-category").value;
-  if (!keyword) { alert("キーワードを入力してください"); return; }
-  const slug = keyword
-    .toLowerCase()
-    .replace(/[^\w\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FFF]/g, "-")
-    .replace(/-+/g, "-")
-    .replace(/^-|-$/g, "")
-    .substring(0, 30);
-  const cmd = `node scripts/init-article.mjs --keyword "${keyword}" --category "${category}" --slug "${slug}"`;
-  document.getElementById("new-command").textContent = cmd;
-  document.getElementById("new-result").style.display = "block";
-  document.getElementById("new-copy-ok").style.display = "none";
+// スラグ自動生成
+document.getElementById("new-keyword").addEventListener("input", () => {
+  const kw = document.getElementById("new-keyword").value.trim();
+  if (!document.getElementById("new-slug").dataset.manual) {
+    const slug = kw.toLowerCase()
+      .replace(/[\s　]+/g, "-")
+      .replace(/[^\w-]/g, "")
+      .replace(/-+/g, "-").replace(/^-|-$/g, "")
+      .substring(0, 40) || "new-article";
+    document.getElementById("new-slug").value = slug;
+  }
+  if (!document.getElementById("new-title").dataset.manual) {
+    document.getElementById("new-title").value = kw ? `${kw} — あの話どうなった？` : "";
+  }
+});
+document.getElementById("new-slug").addEventListener("input", () => {
+  document.getElementById("new-slug").dataset.manual = "1";
+});
+document.getElementById("new-title").addEventListener("input", () => {
+  document.getElementById("new-title").dataset.manual = "1";
 });
 
-document.getElementById("new-copy").addEventListener("click", () => {
-  const cmd = document.getElementById("new-command").textContent;
-  navigator.clipboard.writeText(cmd).then(() => {
-    document.getElementById("new-copy-ok").style.display = "block";
-    setTimeout(() => { document.getElementById("new-copy-ok").style.display = "none"; }, 2000);
-  });
+// 記事生成
+document.getElementById("new-generate").addEventListener("click", async () => {
+  const keyword  = document.getElementById("new-keyword").value.trim();
+  const title    = document.getElementById("new-title").value.trim();
+  const slug     = document.getElementById("new-slug").value.trim();
+  const category = document.getElementById("new-category").value;
+  const pin      = localStorage.getItem("dev_auth") || "";
+
+  if (!keyword || !title || !slug) { alert("キーワード・タイトル・スラグを入力してください"); return; }
+
+  const statusEl = document.getElementById("new-status");
+  statusEl.style.display = "block";
+  statusEl.className = "dev-new-article__status is-loading";
+  statusEl.textContent = "⏳ ワークフロー起動中...";
+  document.getElementById("new-generate").disabled = true;
+
+  try {
+    const res = await fetch("/api/dispatch", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ pin, slug, keyword, title, category }),
+    });
+    const data = await res.json();
+    if (data.ok) {
+      statusEl.className = "dev-new-article__status is-ok";
+      statusEl.textContent = "✅ " + data.message;
+    } else {
+      statusEl.className = "dev-new-article__status is-error";
+      statusEl.textContent = "❌ " + (data.error || "エラーが発生しました");
+    }
+  } catch (e) {
+    statusEl.className = "dev-new-article__status is-error";
+    statusEl.textContent = "❌ 通信エラー: " + e.message;
+  } finally {
+    document.getElementById("new-generate").disabled = false;
+  }
 });
 </script>

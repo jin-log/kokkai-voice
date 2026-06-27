@@ -1949,6 +1949,18 @@ body.has-progress-strip {
   cursor: pointer;
   font-size: 0.85rem;
 }
+.dev-new-article__input--slug { flex-basis: 160px; flex-grow: 0; }
+.dev-new-article__btn { margin-top: 0.75rem; width: 100%; font-size: 1rem; padding: 0.75rem; }
+.dev-new-article__btn:disabled { opacity: 0.6; cursor: not-allowed; }
+.dev-new-article__status {
+  margin-top: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.95rem;
+}
+.dev-new-article__status.is-loading { background: #fef9c3; color: #713f12; }
+.dev-new-article__status.is-ok      { background: #dcfce7; color: #14532d; }
+.dev-new-article__status.is-error   { background: #fee2e2; color: #7f1d1d; }
 
 @media (max-width: 640px) {
   .status-hero {

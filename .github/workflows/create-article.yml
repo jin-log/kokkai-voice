@@ -1,0 +1,56 @@
+name: 新規記事作成
+
+on:
+  workflow_dispatch:
+    inputs:
+      slug:
+        description: "スラグ (例: boei-zei)"
+        required: true
+      keyword:
+        description: "検索キーワード (例: 防衛増税)"
+        required: true
+      title:
+        description: "記事タイトル (例: 防衛増税 — あの話どうなった？)"
+        required: true
+      category:
+        description: "カテゴリ"
+        required: false
+        default: "国会"
+      tags:
+        description: "タグ (カンマ区切り)"
+        required: false
+        default: ""
+
+permissions:
+  contents: write
+
+jobs:
+  create:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - run: npm install
+
+      - name: 記事生成
+        run: |
+          node scripts/init-article.mjs \
+            --slug "${{ github.event.inputs.slug }}" \
+            --keyword "${{ github.event.inputs.keyword }}" \
+            --title "${{ github.event.inputs.title }}" \
+            --category "${{ github.event.inputs.category }}" \
+            --tags "${{ github.event.inputs.tags }}" \
+            --force
+
+      - name: コミット & プッシュ
+        run: |
+          git config user.email "bot@seiji1192.site"
+          git config user.name "kokkai-bot"
+          git add data/articles/
+          git diff --staged --quiet || git commit -m "article: ${{ github.event.inputs.slug }} 自動生成"
+          git push
