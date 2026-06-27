@@ -1,0 +1,48 @@
+---
+import { SITE } from "../lib/site-config.mjs";
+
+interface Props {
+  /** 案件 slug（計測用） */
+  context?: string;
+}
+
+const { context = "site" } = Astro.props;
+const noteUrl = SITE.noteMembershipUrl || SITE.noteUrl;
+const variant = SITE.supportAbVariant ?? "a";
+---
+
+<section class="support-cta" aria-labelledby="support-cta-title" data-support-cta data-ab={variant}>
+  <h2 id="support-cta-title" class="support-cta__title">
+    {variant === "a" ? "この整理、続けたい？" : "追いかけ続けるには"}
+  </h2>
+  <p class="support-cta__body">
+    {
+      variant === "a"
+        ? "無料の記事は広告と X で運営しています。役に立ったと思ったら、note メンバーで更新の継続をサポートできます。"
+        : "公言と行動のギャップは、時間が経つほど見えにくくなります。メンバー向けに週次ダイジェストと深掘りを配信予定です。"
+    }
+  </p>
+  {
+    noteUrl ? (
+      <a
+        href={`${noteUrl}?utm_source=seiji1192&utm_medium=support_cta&utm_campaign=ab_${variant}&utm_content=${context}`}
+        class="support-cta__btn"
+        target="_blank"
+        rel="noopener noreferrer"
+        data-track="support-note"
+        data-ab={variant}
+      >
+        note メンバーになる
+      </a>
+    ) : (
+      <p class="support-cta__soon">
+        note メンバーシップ準備中 — 公開まで
+        <a href={SITE.xUrl} target="_blank" rel="noopener noreferrer">
+          {SITE.xHandle}
+        </a>
+        をフォロー
+      </p>
+    )
+  }
+  <p class="support-cta__note">サイト本体は引き続き無料。個人名は出しません。</p>
+</section>

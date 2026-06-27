@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import SiteHeader from "../components/SiteHeader.astro";
+import PreReleaseBanner from "../components/PreReleaseBanner.astro";
 import SiteFooter from "../components/SiteFooter.astro";
 import { loadAllArticles, articleToSearchEntry } from "../lib/articles.mjs";
 
@@ -12,6 +13,7 @@ const categories = [
 ---
 
 <BaseLayout title="検索｜日本の政治なう">
+  <PreReleaseBanner />
   <SiteHeader showSearch />
   <main class="container search-page">
     <h1 class="search-page__title">案件を探す</h1>

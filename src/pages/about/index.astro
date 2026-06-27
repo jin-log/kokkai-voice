@@ -1,0 +1,87 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import SiteHeader from "../../components/SiteHeader.astro";
+import SiteFooter from "../../components/SiteFooter.astro";
+import PreReleaseBanner from "../../components/PreReleaseBanner.astro";
+import { SITE } from "../../lib/site-config.mjs";
+---
+
+<BaseLayout
+  title="このサイトについて｜日本の政治なう"
+  description="日本の政治なうの目的・編集方針・データソース。政府公式サイトではない個人運営の政治解説メディアです。"
+>
+  <PreReleaseBanner />
+  <SiteHeader showSearch />
+  <main class="container legal-page">
+    <h1>このサイトについて</h1>
+    <p class="legal-page__updated">最終更新: 2026年6月28日</p>
+
+    <p>
+      「{SITE.name}」（{SITE.domain}）は、<strong>政府・国会の公式サイトではありません</strong>。
+      個人運営の解説メディアです。
+    </p>
+
+    <h2>何をしているか</h2>
+    <p>
+      物価・税金・社会保障など、政治の「あの話、どうなった？」を案件ごとに整理します。
+      国会議事録 API と報道・公開情報をもとに、<strong>公言</strong>と<strong>その後に起きたこと</strong>（起きていなければ経過時間）を並べます。
+    </p>
+
+    <h2>編集方針</h2>
+    <ul>
+      <li>党や政治家の「評価」はしません。出典付きの事実整理です。</li>
+      <li>AI による平易語要約には「解釈を含む」注記を付けます。数字・引用の正本は国会議事録・各出典リンクです。</li>
+      <li>「検討中」だけで終わらせず、約束・期限・経過日数を可能な範囲で明示します。</li>
+      <li>投票の呼びかけ・特定候補への支持はしません。</li>
+    </ul>
+
+    <h2>データソース</h2>
+    <ul>
+      <li>国立国会図書館 国会議事録 API（無料・公開）</li>
+      <li>報道・公的機関の公開 URL</li>
+      <li>X（旧 Twitter）投稿 — 元 URL を掲載（改変しません）</li>
+    </ul>
+
+    <h2>プレリリースについて</h2>
+    <p>
+      現在<strong>プレリリース</strong>です。記事数・機能は増やしています。
+      コメント機能は準備中（本番公開前）です。
+      ご意見は <a href={SITE.xUrl} target="_blank" rel="noopener noreferrer">{SITE.xHandle}</a> まで。
+    </p>
+
+    <h2>お問い合わせ</h2>
+    <p>
+      運営者個人名はサイト上では公開しません。
+      お問い合わせは <a href={SITE.xUrl} target="_blank" rel="noopener noreferrer">X {SITE.xHandle}</a> または
+      <a href="/privacy-policy/">プライバシーポリシー</a> をご覧ください。
+    </p>
+  </main>
+  <SiteFooter />
+</BaseLayout>
+
+<style>
+  .legal-page {
+    max-width: 42rem;
+    padding: 2rem 0 3rem;
+    line-height: 1.75;
+  }
+  .legal-page h1 {
+    font-size: 1.35rem;
+    margin: 0 0 0.5rem;
+  }
+  .legal-page__updated {
+    color: var(--color-text-muted);
+    font-size: 0.85rem;
+    margin: 0 0 1.5rem;
+  }
+  .legal-page h2 {
+    font-size: 1rem;
+    margin: 1.75rem 0 0.5rem;
+  }
+  .legal-page ul {
+    padding-left: 1.25rem;
+  }
+  .legal-page li + li {
+    margin-top: 0.35rem;
+  }
+</style>

@@ -10,6 +10,8 @@ import StanceMatrix from "./case/StanceMatrix.astro";
 import Glossary from "./case/Glossary.astro";
 import Timeline from "./case/Timeline.astro";
 import Comments from "./case/Comments.astro";
+import ShareBar from "./case/ShareBar.astro";
+import SupportCta from "./SupportCta.astro";
 import FloatToc from "./case/FloatToc.astro";
 import FloatReact from "./case/FloatReact.astro";
 import { articleShortTitle, shouldPublishParty } from "../lib/case-helpers.mjs";
@@ -44,6 +46,8 @@ const sourceTag =
     </div>
     <h1 class="case-hero__title">{shortTitle}</h1>
 
+    {!preview && <ShareBar article={article} />}
+
     <NowBox article={article} />
     <ArcSummary article={article} />
     <ReactionSummary article={article} />
@@ -53,6 +57,7 @@ const sourceTag =
   {hasStance && <StanceMatrix article={article} stance={stance} />}
   <Glossary article={article} />
   <Timeline article={article} />
+  {!preview && <SupportCta context={article.slug} />}
   <Comments slug={article.slug} />
 </main>
 

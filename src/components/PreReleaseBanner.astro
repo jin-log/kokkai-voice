@@ -1,0 +1,31 @@
+---
+import { SITE } from "../lib/site-config.mjs";
+
+if (!SITE.preRelease) return null;
+---
+
+<div class="pre-release-banner" role="status">
+  <p class="pre-release-banner__text">
+    <strong>プレリリース中</strong> — 内容は随時更新しています。誤り・見づらい点・追ってほしい案件は
+    <a href={SITE.xUrl} target="_blank" rel="noopener noreferrer">{SITE.xHandle}</a> へ。
+  </p>
+</div>
+
+<style>
+  .pre-release-banner {
+    background: #fff8e6;
+    border-bottom: 1px solid #f0d78c;
+    padding: 0.65rem 1rem;
+    text-align: center;
+  }
+  .pre-release-banner__text {
+    margin: 0;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: #5c4a1a;
+  }
+  .pre-release-banner a {
+    color: #8b6914;
+    font-weight: 600;
+  }
+</style>

@@ -1,0 +1,62 @@
+---
+import { buildSharePayload } from "../../lib/share.mjs";
+import { SITE } from "../../lib/site-config.mjs";
+
+const { article } = Astro.props;
+const { xUrl, pageUrl } = buildSharePayload(article);
+---
+
+<div class="share-bar" data-share-bar>
+  <p class="share-bar__label">この案件を広める</p>
+  <div class="share-bar__actions">
+    <a
+      href={xUrl}
+      class="share-bar__btn share-bar__btn--x"
+      target="_blank"
+      rel="noopener noreferrer"
+      data-track="share-x"
+      data-case={article.slug}
+    >
+      <span class="share-bar__icon" aria-hidden="true">𝕏</span>
+      Xで紹介する
+    </a>
+    <button
+      type="button"
+      class="share-bar__btn share-bar__btn--copy"
+      data-share-copy
+      data-url={pageUrl}
+      data-track="share-copy"
+      data-case={article.slug}
+    >
+      リンクをコピー
+    </button>
+    <a
+      href={SITE.xUrl}
+      class="share-bar__follow"
+      target="_blank"
+      rel="noopener noreferrer"
+      data-track="share-follow-x"
+    >
+      更新は {SITE.xHandle}
+    </a>
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll("[data-share-copy]").forEach((btn) => {
+    btn.addEventListener("click", async () => {
+      const url = btn.getAttribute("data-url");
+      if (!url) return;
+      try {
+        await navigator.clipboard.writeText(url);
+        const prev = btn.textContent;
+        btn.textContent = "コピーしました";
+        setTimeout(() => {
+          btn.textContent = prev;
+        }, 2000);
+      } catch {
+        prompt("リンクをコピーしてください", url);
+      }
+    });
+  });
+</script>

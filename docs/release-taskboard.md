@@ -35,11 +35,11 @@
 | O7 | **ドメイン取得** `seiji1192.site`（ムームー） | ✅ | 2026-06-26 |
 | O8 | **法務チェック**（公選法・リコール・名誉） | ✅ | AI法務スキャン 20/20 問題なし（2026-06-27） |
 | O9 | **専用 X アカウント開設** | ✅ | @seiji1192site 開設済み |
-| O10 | **AdSense / ASP アカウント** | ⬜ | 記事数が揃ってから申請 |
+| O10 | **AdSense 申請** | 🟡 | `docs/adsense-application.md` — オーナー作業 |
 | O11 | **AI API 予算上限** | ✅ | 無料枠内で自動化（予算設定なし） |
 | O12 | コメント方針（匿名 OK / X ログイン） | ✅ | 匿名OK・Xログイン不要に決定 |
 | O13 | PR 名義（アイビス vs 個人）・商工会 PR TIMES 無料枠 | ⬜ | `marketing-report-ceo.md` |
-| O14 | **公開 GO**（実データ 1 案件 OK） | ⬜ | 最終承認 |
+| O14 | **プレリリース GO** | ✅ | 2026-06-28 — 触ってもらう段階。正式ローンチは別 |
 
 ---
 
@@ -70,7 +70,7 @@
 | C21 | ceo-sync 連携 | ✅ | Mac/Win |
 | C22 | **release-taskboard.md** | ✅ | 本ファイル |
 | C23 | 半自動: キーワード監視→下書き | ⬜ | Phase 4 |
-| C24 | AdSense 申請手順準備 | 🟡 | monetization.md のみ |
+| C24 | AdSense 申請手順 | ✅ | `docs/adsense-application.md` |
 | C25 | 公選法チェックリスト草案 | ⬜ | O8 と連携 |
 | C26 | meta / OGP / JSON-LD 本番実装 | ⬜ | SEO 必須 |
 | C27 | 案件 RSS | ⬜ | design-proposal 優先 A |

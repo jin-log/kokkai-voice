@@ -1,4 +1,6 @@
 ---
+import { SITE } from "../lib/site-config.mjs";
+
 interface Props {
   showSearch?: boolean;
   searchQuery?: string;
@@ -35,6 +37,16 @@ const { showSearch = false, searchQuery = "" } = Astro.props;
       )
     }
     <nav class="nav" aria-label="メイン">
+      <a
+        href={SITE.xUrl}
+        class="nav__x-link"
+        target="_blank"
+        rel="noopener noreferrer"
+        data-track="header-x"
+      >
+        <span class="nav__x-icon" aria-hidden="true">𝕏</span>
+        <span class="nav__x-label">{SITE.xHandle}</span>
+      </a>
       <a href="/search" class="nav__all-btn">すべての案件</a>
     </nav>
   </div>

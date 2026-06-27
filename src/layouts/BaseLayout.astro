@@ -1,5 +1,6 @@
 ---
 import { ASSET_V } from "../lib/case-helpers.mjs";
+import { SITE } from "../lib/site-config.mjs";
 import "../styles/tokens.css";
 import "../styles/main.css";
 
@@ -11,6 +12,7 @@ interface Props {
   bodyClass?: string;
   bodyDataCase?: string;
   includeAppJs?: boolean;
+  enableAds?: boolean;
 }
 
 const {
@@ -21,9 +23,12 @@ const {
   bodyClass,
   bodyDataCase,
   includeAppJs = false,
+  enableAds = !noindex,
 } = Astro.props;
 
 const canonicalUrl = new URL(Astro.url.pathname, "https://seiji1192.site").href;
+const adsClient = SITE.adsensePubId;
+const showAds = enableAds && adsClient;
 ---
 
 <!DOCTYPE html>
@@ -50,6 +55,18 @@ const canonicalUrl = new URL(Astro.url.pathname, "https://seiji1192.site").href;
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={`https://seiji1192.site${ogImage}`} />
     <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
+    {
+      showAds && (
+        <>
+          <meta name="google-adsense-account" content={adsClient} />
+          <script
+            async
+            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adsClient}`}
+            crossorigin="anonymous"
+          />
+        </>
+      )
+    }
   </head>
   <body class:list={[bodyClass]} data-case={bodyDataCase}>
     <slot />

@@ -105,6 +105,108 @@ a { color: var(--color-primary); }
 }
 .nav__all-btn:hover { opacity: 0.85; color: #fff !important; }
 
+.nav__x-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--color-text) !important;
+  padding: 0.35rem 0.65rem;
+  border: 1px solid var(--color-border);
+  border-radius: 2rem;
+  white-space: nowrap;
+}
+.nav__x-link:hover { border-color: var(--color-primary); color: var(--color-primary) !important; }
+.nav__x-icon { font-weight: 700; line-height: 1; }
+
+/* Share bar */
+.share-bar {
+  margin: 1rem 0 1.25rem;
+  padding: 0.85rem 1rem;
+  background: var(--color-surface-alt, #f6f8fb);
+  border: 1px solid var(--color-border);
+  border-radius: 0.65rem;
+}
+.share-bar__label {
+  margin: 0 0 0.5rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--color-text-muted);
+}
+.share-bar__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+.share-bar__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.45rem 0.85rem;
+  border-radius: 2rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+}
+.share-bar__btn--x {
+  background: #0f1419;
+  color: #fff !important;
+}
+.share-bar__btn--x:hover { opacity: 0.9; color: #fff !important; }
+.share-bar__btn--copy {
+  background: #fff;
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+}
+.share-bar__follow {
+  font-size: 0.78rem;
+  color: var(--color-text-muted);
+  margin-left: auto;
+}
+.share-bar__follow:hover { color: var(--color-primary); }
+
+/* Support CTA */
+.support-cta {
+  margin: 2rem 0 1.5rem;
+  padding: 1.25rem 1.35rem;
+  border-radius: 0.75rem;
+  border: 1px solid #c7d9f5;
+  background: linear-gradient(135deg, #f0f6ff 0%, #fafcff 100%);
+}
+.support-cta__title {
+  margin: 0 0 0.5rem;
+  font-size: 1.05rem;
+}
+.support-cta__body {
+  margin: 0 0 1rem;
+  font-size: 0.92rem;
+  line-height: 1.65;
+  color: var(--color-text-muted);
+}
+.support-cta__btn {
+  display: inline-block;
+  padding: 0.55rem 1.1rem;
+  background: var(--color-primary);
+  color: #fff !important;
+  font-weight: 700;
+  border-radius: 2rem;
+  font-size: 0.9rem;
+}
+.support-cta__btn:hover { opacity: 0.9; color: #fff !important; }
+.support-cta__soon {
+  margin: 0 0 0.5rem;
+  font-size: 0.9rem;
+}
+.support-cta__note {
+  margin: 0.75rem 0 0;
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
+
 /* Hero landing */
 .hero {
   padding: 3rem 0 2.5rem;

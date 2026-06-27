@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import SiteHeader from "../../components/SiteHeader.astro";
+import PreReleaseBanner from "../../components/PreReleaseBanner.astro";
 import CasePageContent from "../../components/CasePageContent.astro";
 import {
   getArticleSlugs,
@@ -30,6 +31,7 @@ const description =
   bodyDataCase={article.slug}
   includeAppJs
 >
+  <PreReleaseBanner />
   <SiteHeader showSearch />
   <CasePageContent article={article} stance={stance} />
 </BaseLayout>
