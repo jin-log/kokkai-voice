@@ -39,6 +39,7 @@ export async function onRequestPost(context) {
         Accept: "application/vnd.github+json",
         "Content-Type": "application/json",
         "X-GitHub-Api-Version": "2022-11-28",
+        "User-Agent": "kokkai-voice-pages/1.0",
       },
       body: JSON.stringify({
         ref: "main",
