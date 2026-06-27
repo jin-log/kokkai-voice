@@ -4,8 +4,8 @@
 
 html {
   scroll-behavior: smooth;
-  /* sticky header offset: mobile ~11rem (logo 7.5rem + search row), desktop ~12rem (logo 10.5rem) */
-  scroll-padding-top: 11rem;
+  /* sticky header: logo 5.7rem + padding 0.6rem ≈ 6.3rem → 7rem に余白込み */
+  scroll-padding-top: 7rem;
 }
 
 body {
@@ -93,6 +93,18 @@ a { color: var(--color-primary); }
 }
 
 .nav a:hover { color: var(--color-primary); }
+
+.nav__all-btn {
+  background: var(--color-primary);
+  color: #fff !important;
+  padding: 0.4rem 0.9rem;
+  border-radius: 2rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  white-space: nowrap;
+  transition: opacity 0.15s;
+}
+.nav__all-btn:hover { opacity: 0.85; color: #fff !important; }
 
 /* Hero landing */
 .hero {

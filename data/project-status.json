@@ -1,11 +1,11 @@
 {
-  "generatedAt": "2026-06-27T05:45:35.980Z",
+  "generatedAt": "2026-06-27T07:08:40.786Z",
   "strategy": "quality-first",
   "activeCount": 20,
   "parkedCount": 0,
-  "publishedCount": 20,
-  "overallGoldPct": 100,
-  "overallGatePct": 100,
+  "publishedCount": 19,
+  "overallGoldPct": 98,
+  "overallGatePct": 99,
   "slugs": [
     {
       "slug": "bouka-taisaku",
@@ -107,10 +107,10 @@
     {
       "slug": "shohizei-genmen",
       "shortTitle": "食料品の消費税",
-      "gatePct": 100,
-      "goldPct": 100,
-      "published": true,
-      "publishGateOk": true,
+      "gatePct": 75,
+      "goldPct": 67,
+      "published": false,
+      "publishGateOk": false,
       "pipeline": [
         {
           "id": "content",
@@ -131,7 +131,7 @@
           "label": "③X検証2件+",
           "phase": 3,
           "preDeploy": true,
-          "ok": true
+          "ok": false
         },
         {
           "id": "legal",
@@ -145,7 +145,7 @@
           "label": "⑤本番デプロイ",
           "phase": 5,
           "preDeploy": false,
-          "ok": true
+          "ok": false
         },
         {
           "id": "debug",
@@ -175,7 +175,7 @@
           "label": "③X検証2件+",
           "phase": 3,
           "preDeploy": true,
-          "ok": true
+          "ok": false
         },
         {
           "id": "legal",
@@ -189,7 +189,7 @@
           "label": "⑤本番デプロイ",
           "phase": 5,
           "preDeploy": false,
-          "ok": true
+          "ok": false
         },
         {
           "id": "debug",
@@ -199,7 +199,12 @@
           "ok": true
         }
       ],
-      "blockers": []
+      "blockers": [
+        {
+          "id": "H1_xPosts",
+          "detail": "検証済み 1/2 件（公開前必須）"
+        }
+      ]
     },
     {
       "slug": "boeeihi",
@@ -1948,7 +1953,7 @@
       "blockers": []
     }
   ],
-  "deltaGoldPct": 0,
+  "deltaGoldPct": -2,
   "previousGoldPct": 100,
   "deployedAt": "2026-06-27T05:45:35.982Z"
 }

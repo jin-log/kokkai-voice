@@ -1,6 +1,5 @@
 ---
 import { ASSET_V } from "../lib/case-helpers.mjs";
-import ProjectProgressStrip from "../components/ProjectProgressStrip.astro";
 import "../styles/tokens.css";
 import "../styles/main.css";
 
@@ -30,9 +29,8 @@ const {
     <meta name="description" content={description} />
     <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
   </head>
-  <body class:list={[bodyClass, "has-progress-strip"]} data-case={bodyDataCase}>
+  <body class:list={[bodyClass]} data-case={bodyDataCase}>
     <slot />
-    <ProjectProgressStrip />
     {includeAppJs && <script is:inline src={`/js/app.js?v=${ASSET_V}`}></script>}
     <!-- Cloudflare Web Analytics -->
     <script
