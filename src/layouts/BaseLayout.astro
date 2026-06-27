@@ -6,6 +6,8 @@ import "../styles/main.css";
 interface Props {
   title: string;
   description?: string;
+  ogImage?: string;
+  noindex?: boolean;
   bodyClass?: string;
   bodyDataCase?: string;
   includeAppJs?: boolean;
@@ -13,11 +15,15 @@ interface Props {
 
 const {
   title,
-  description = "国会の発言と政治家の X を案件ごとに追いかける。日本の政治なう",
+  description = "政治家の発言と行動を追いかける。あの話どうなった？ 国会議事録＋X投稿を案件ごとに整理した政治解説メディア。",
+  ogImage = "/assets/logo-nihon-seiji-naw.png",
+  noindex = false,
   bodyClass,
   bodyDataCase,
   includeAppJs = false,
 } = Astro.props;
+
+const canonicalUrl = new URL(Astro.url.pathname, "https://seiji1192.site").href;
 ---
 
 <!DOCTYPE html>
@@ -27,6 +33,22 @@ const {
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalUrl} />
+    {noindex && <meta name="robots" content="noindex,nofollow" />}
+    <!-- OGP -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={`https://seiji1192.site${ogImage}`} />
+    <meta property="og:site_name" content="日本の政治なう" />
+    <meta property="og:locale" content="ja_JP" />
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@seiji1192site" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={`https://seiji1192.site${ogImage}`} />
     <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
   </head>
   <body class:list={[bodyClass]} data-case={bodyDataCase}>
