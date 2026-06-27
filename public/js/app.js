@@ -88,15 +88,31 @@
     });
   }
 
-  function getScrollOffset() {
+  function syncHeaderOffset() {
     const header = document.querySelector('.site-header');
-    if (header) return Math.ceil(header.getBoundingClientRect().height) + 16;
-    const root = getComputedStyle(document.documentElement);
-    const v = parseFloat(root.getPropertyValue('--header-offset'));
-    return Number.isFinite(v) ? v + 16 : 120;
+    if (!header) return;
+    document.documentElement.style.setProperty('--header-offset', `${header.offsetHeight}px`);
+  }
+
+  function getScrollOffset() {
+    const gap = parseInt(
+      getComputedStyle(document.documentElement).getPropertyValue('--header-scroll-gap'),
+      10,
+    );
+    const header = document.querySelector('.site-header');
+    const headerH = header ? header.offsetHeight : 183;
+    return headerH + (Number.isFinite(gap) ? gap : 12);
+  }
+
+  function scrollToAnchor(el, behavior = 'smooth') {
+    if (!el) return;
+    const top = el.getBoundingClientRect().top + window.scrollY - getScrollOffset();
+    window.scrollTo({ top: Math.max(0, top), behavior });
   }
 
   function initToc() {
+    syncHeaderOffset();
+    window.addEventListener('resize', syncHeaderOffset, { passive: true });
     const toc = document.querySelector('[data-float-toc]');
     const tocToggle = document.querySelector('[data-float-toc-toggle]');
     const tocPanel = document.getElementById('float-toc-panel');
@@ -127,7 +143,14 @@
       });
 
       tocLinks.forEach((link) => {
-        link.addEventListener('click', () => {
+        link.addEventListener('click', (e) => {
+          const href = link.getAttribute('href');
+          if (!href?.startsWith('#')) return;
+          const target = document.querySelector(href);
+          if (!target) return;
+          e.preventDefault();
+          scrollToAnchor(target);
+          history.pushState(null, '', href);
           if (isDesktopToc()) return;
           toc.classList.remove('is-open');
           tocPanel.hidden = true;
@@ -158,6 +181,16 @@
 
       window.addEventListener('scroll', onScroll, { passive: true });
       onScroll();
+
+      if (location.hash) {
+        const hashTarget = document.querySelector(location.hash);
+        if (hashTarget) {
+          requestAnimationFrame(() => {
+            scrollToAnchor(hashTarget, 'instant');
+            onScroll();
+          });
+        }
+      }
     }
   }
 

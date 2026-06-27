@@ -4,7 +4,7 @@
 
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: calc(var(--header-offset) + 0.75rem);
+  scroll-padding-top: calc(var(--header-offset) + var(--header-scroll-gap));
 }
 
 body {
@@ -1150,18 +1150,6 @@ a { color: var(--color-primary); }
   line-height: 1.55;
 }
 
-/* 目次アンカー — ヘッダー被り防止 */
-#sec-now,
-#sec-arc,
-#sec-mood,
-#sec-detail,
-#stance-matrix-title,
-#glossary-title,
-#sec-timeline,
-#comments-title {
-  scroll-margin-top: calc(var(--header-offset) + 0.75rem);
-}
-
 /* Floating table of contents */
 .float-toc {
   position: fixed;
@@ -1254,7 +1242,7 @@ a { color: var(--color-primary); }
 /* PC: 右上に常時表示（開きっぱなし） */
 @media (min-width: 900px) {
   .float-toc {
-    top: calc(var(--header-offset) + 0.75rem);
+    top: calc(var(--header-offset) + var(--header-scroll-gap));
     right: 1.25rem;
     left: auto;
     bottom: auto;
@@ -1611,10 +1599,6 @@ a { color: var(--color-primary); }
 }
 
 @media (min-width: 641px) {
-  :root {
-    --header-offset: calc(10.5rem + 0.86rem);
-  }
-
   .logo__img {
     height: 10.5rem;
     max-width: 56rem;
