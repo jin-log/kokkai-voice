@@ -272,8 +272,8 @@ async function collectForTopic(keyword, config, dateRange) {
         // 日付フィルター: 案件のtimeline範囲外は除外
         if (!tweetInRange(meta.created_at, dateRange)) continue;
         const kwScore = scoreText(meta.post_text, config.keywords);
-        // キーワード最低スコア2以上のみ採用
-        if (kwScore < 2) continue;
+        // キーワード最低スコア1以上のみ採用
+        if (kwScore < 1) continue;
         const engScore = scoreEngagement(meta);
         add(meta, kwScore + engScore);
       } catch {

@@ -12,7 +12,7 @@ import { filterPublishable, loadArticle } from "./articles.mjs";
 export const PIPELINE_ITEMS = [
   { id: "content", label: "①コンテンツ", phase: 1, preDeploy: true },
   { id: "matrix", label: "②〇×2党確定", phase: 2, preDeploy: true },
-  { id: "x", label: "③X検証2件+", phase: 3, preDeploy: true },
+  { id: "x", label: "③X検証1件+", phase: 3, preDeploy: true },
   { id: "legal", label: "④法務OK", phase: 4, preDeploy: true },
   { id: "deployed", label: "⑤本番デプロイ", phase: 5, preDeploy: false },
   { id: "debug", label: "⑥デバッグOK", phase: 6, preDeploy: false },
@@ -41,7 +41,8 @@ export function pipelineChecks(article, gate, policyMatrix) {
 
   const content = contentOk(gate);
   const matrix = symbolsOk >= 2;
-  const x = xOk >= 2;
+  const xMin = article.xPostsMinRequired ?? 1;
+  const x = xOk >= xMin;
   const legal = article.legalReview?.status === "ok";
 
   return PIPELINE_ITEMS.map((item) => ({
