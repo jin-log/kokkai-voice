@@ -1,0 +1,97 @@
+import { json, jsonError } from "../lib/http.js";
+
+/** @param {import("@cloudflare/workers-types").EventContext<any, any, any>} context */
+export async function onRequestGet(context) {
+  if (!authorize(context)) return jsonError("unauthorized", 401);
+
+  const db = context.env.DB;
+  if (!db) return jsonError("コメントDB未設定（D1バインディング）", 503);
+
+  const url = new URL(context.request.url);
+  const status = url.searchParams.get("status") || "pending";
+  const slug = url.searchParams.get("slug")?.trim();
+
+  let stmt;
+  if (slug) {
+    stmt = db
+      .prepare(
+        `SELECT id, case_slug, author_name, body, status, created_at
+         FROM comments
+         WHERE status = ? AND case_slug = ?
+         ORDER BY created_at DESC
+         LIMIT 100`,
+      )
+      .bind(status, slug);
+  } else {
+    stmt = db
+      .prepare(
+        `SELECT id, case_slug, author_name, body, status, created_at
+         FROM comments
+         WHERE status = ?
+         ORDER BY created_at DESC
+         LIMIT 200`,
+      )
+      .bind(status);
+  }
+
+  const { results } = await stmt.all();
+  const rows = results ?? [];
+
+  return json({
+    ok: true,
+    status,
+    count: rows.length,
+    items: rows.map((row) => ({
+      id: row.id,
+      slug: row.case_slug,
+      name: row.author_name,
+      body: row.body,
+      status: row.status,
+      at: row.created_at,
+    })),
+  });
+}
+
+/** @param {import("@cloudflare/workers-types").EventContext<any, any, any>} context */
+export async function onRequestPost(context) {
+  if (!authorize(context)) return jsonError("unauthorized", 401);
+
+  const db = context.env.DB;
+  if (!db) return jsonError("コメントDB未設定（D1バインディング）", 503);
+
+  let payload;
+  try {
+    payload = await context.request.json();
+  } catch {
+    return jsonError("JSON が不正です", 400);
+  }
+
+  const id = String(payload.id ?? "").trim();
+  const action = String(payload.action ?? "").trim();
+
+  if (!id) return jsonError("id が必要です", 400);
+  if (!["approve", "reject"].includes(action)) return jsonError("action が不正です", 400);
+
+  const status = action === "approve" ? "approved" : "rejected";
+  const moderatedAt = new Date().toISOString();
+
+  const result = await db
+    .prepare(
+      `UPDATE comments SET status = ?, moderated_at = ?
+       WHERE id = ? AND status = 'pending'`,
+    )
+    .bind(status, moderatedAt, id)
+    .run();
+
+  if (!result.meta.changes) return jsonError("対象が見つからないか、処理済みです", 404);
+
+  return json({ ok: true, id, status });
+}
+
+/** @param {import("@cloudflare/workers-types").EventContext<any, any, any>} context */
+function authorize(context) {
+  const { ADMIN_PIN } = context.env;
+  const url = new URL(context.request.url);
+  const pin = url.searchParams.get("pin") || context.request.headers.get("x-admin-pin");
+  return Boolean(ADMIN_PIN && pin === ADMIN_PIN);
+}

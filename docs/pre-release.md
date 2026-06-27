@@ -28,7 +28,7 @@
 
 | 機能 | 状態 |
 |------|------|
-| コメント | **準備中**（デモは localStorage のみ。サーバー保存なし） |
+| コメント | **実装済・非公開**（`commentsLive: false`。D1 接続後に公開 — `docs/comments-setup.md`） |
 | 月額・note 応援 | note URL 確定後 |
 | プッシュ通知 / メール | 未 |
 
@@ -76,7 +76,7 @@
 ## 正式ローンチの条件（目安）
 
 - [ ] AdSense 承認 or 見送り決定
-- [ ] コメント方針 O12 確定（匿名＋reCAPTCHA 案）
+- [ ] コメント: D1 バインディング + `commentsLive: true`（`docs/comments-setup.md`）
 - [ ] 公開案件 **25本以上** or 月間更新が安定
 - [ ] デバッガー B4 本番フルチェック 1 回
 

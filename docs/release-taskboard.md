@@ -1,6 +1,6 @@
 # リリースまでタスクボード
 
-最終更新: 2026-06-26  
+最終更新: 2026-06-28  
 **公開条件:** 話題案件の実データが 1 本揃い次第（オーナー OK）
 
 凡例: ✅ 完了 · 🟡 一部 · ⬜ 未着手 · 🔒 オーナー必須
@@ -57,7 +57,11 @@
 | C8 | **話題案件 1 本・実データ投入** | ⬜ | 公開の最低ライン |
 | C9 | **Astro 本番初期化** | ⬜ | Phase 2 |
 | C10 | **D1 + Workers（😊😠 国内 IP）** | ⬜ | |
-| C11 | **コメント pending → 承認フロー** | ⬜ | |
+| C11 | **コメント pending → 承認フロー** | 🟡 | API/UI 実装済。D1 バインド + `commentsLive` で公開 |
+| C11a | D1 スキーマ + `/api/comments` | ✅ | `migrations/0001_comments.sql` |
+| C11b | 承認 API + `/dev/comments/` | ✅ | `functions/api/comments-admin.js` |
+| C11c | Turnstile + `commentsLive` フラグ | 🟡 | コード済。CF Turnstile キーはオーナー |
+| C11d | **D1 本番バインディング** | 🔒 | Pages → Functions → `DB` |
 | C12 | **X スクショ R2 保存** | ⬜ | x-archive.md |
 | C13 | **利用規約・プライバシー** | ⬜ | テンプレから |
 | C14 | **Cloudflare Pages デプロイ** | ✅ | `seiji1192.site` + pages.dev 稼働中 |
@@ -75,6 +79,16 @@
 | C26 | meta / OGP / JSON-LD 本番実装 | ⬜ | SEO 必須 |
 | C27 | 案件 RSS | ⬜ | design-proposal 優先 A |
 | C28 | 管理画面（最小） | ⬜ | Phase 4 |
+
+---
+
+## CEO 夜間キュー（2026-06-28〜）
+
+| 優先 | タスク | 状態 |
+|------|--------|------|
+| 1 | C11 コメント API + UI | 🟡 D1 接続待ち |
+| 2 | C11c Turnstile キー設定 | 🔒 オーナー |
+| 3 | `commentsLive: true` で公開 | 🔒 オーナー GO |
 
 ---
 
