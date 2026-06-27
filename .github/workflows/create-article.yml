@@ -68,6 +68,8 @@ jobs:
       - name: 記事完成（①〜④ 自動）
         id: complete
         continue-on-error: true
+        env:
+          TAVILY_API_KEY: ${{ secrets.TAVILY_API_KEY }}
         run: node scripts/complete-article.mjs --slug "${{ github.event.inputs.slug }}"
 
       - name: コミット & プッシュ

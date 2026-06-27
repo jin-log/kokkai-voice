@@ -3,15 +3,18 @@
  * 開発者用 — 記事生成・本番反映ワークフローをトリガーする
  *
  * 必要な Cloudflare Pages 環境変数:
- *   GH_TOKEN   : GitHub PAT (workflow 権限)
- *   ADMIN_PIN  : 管理者PIN (例: 1192)
+ *   GH_TOKEN        : GitHub PAT (workflow 権限)
+ *   ADMIN_PIN       : 管理者PIN (例: 1192)
+ *   TAVILY_API_KEY  : 任意（ソースURL自動取得の精度向上）
  *
  * POST body:
- *   { pin, action?, slug?, keyword?, title?, category?, sources? }
+ *   { pin, action?, slug?, keyword?, title? }
  *   action: "create" | "deploy" | "deploy_article" | "publish" | "update_title" | "hide" | "unhide" | "delete_article"
  */
+import { prepareArticleCreate } from "../lib/article-prepare.js";
+
 export async function onRequestPost(context) {
-  const { GH_TOKEN, ADMIN_PIN } = context.env;
+  const { GH_TOKEN, ADMIN_PIN, TAVILY_API_KEY } = context.env;
 
   let body;
   try {
@@ -26,9 +29,6 @@ export async function onRequestPost(context) {
     slug: slugIn,
     keyword,
     title: titleIn,
-    category = "国会",
-    tags = "",
-    sources = "",
   } = body;
 
   if (!ADMIN_PIN || pin !== ADMIN_PIN) {
@@ -102,22 +102,32 @@ export async function onRequestPost(context) {
   }
 
   if (!keyword?.trim()) {
-    return json({ error: "keyword は必須です" }, 400);
+    return json({ error: "キーワードを入力してください。" }, 400);
   }
 
-  const keywordClean = keyword.trim();
-  const title = titleIn?.trim() || `${keywordClean} — あの話どうなった？`;
-  const slug = slugIn?.trim() || makeSlug(keywordClean);
+  const prepared = await prepareArticleCreate({
+    keyword: keyword.trim(),
+    title: titleIn,
+    slug: slugIn,
+    env: { TAVILY_API_KEY },
+  });
+
+  if (!prepared.ok) {
+    return json({ ok: false, error: prepared.error, category: prepared.category ?? null }, 422);
+  }
+
+  const { slug, title, keyword: keywordClean, category, tags, sources, plan } = prepared;
 
   return dispatchWorkflow(
     GH_TOKEN,
     "create-article.yml",
     { slug, keyword: keywordClean, title, category, tags, sources },
-    `記事生成→①〜④自動完成。プレビュー確認後「公開する」。`,
+    `記事生成を開始しました（${plan}）。3〜5分後にプレビューを確認してください。`,
+    { slug, category, plan },
   );
 }
 
-async function dispatchWorkflow(token, workflowFile, inputs, successMessage) {
+async function dispatchWorkflow(token, workflowFile, inputs, successMessage, extra = {}) {
   const res = await fetch(
     `https://api.github.com/repos/jin-log/kokkai-voice/actions/workflows/${workflowFile}/dispatches`,
     {
@@ -128,7 +138,7 @@ async function dispatchWorkflow(token, workflowFile, inputs, successMessage) {
   );
 
   if (res.status === 204) {
-    return json({ ok: true, message: successMessage });
+    return json({ ok: true, message: successMessage, ...extra });
   }
 
   const errText = await res.text();
@@ -152,15 +162,3 @@ function json(data, status = 200) {
   });
 }
 
-function makeSlug(keyword) {
-  const ascii = keyword
-    .trim()
-    .toLowerCase()
-    .normalize("NFKC")
-    .replace(/[\s　]+/g, "-")
-    .replace(/[^a-z0-9-]/g, "")
-    .replace(/-+/g, "-")
-    .replace(/^-|-$/g, "");
-  if (ascii.length >= 3) return ascii.substring(0, 40);
-  return `case-${Date.now().toString(36)}`;
-}

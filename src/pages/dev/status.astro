@@ -30,18 +30,10 @@ function formatJa(iso) {
       <!-- 新規記事作成UI -->
       <section class="dev-new-article" id="new-article">
         <h2>🆕 新規記事を作成</h2>
-        <p class="dev-new-article__note">キーワードを入れて「生成」。①〜④まで自動（3〜5分）。完成後は<strong>非公開プレビュー</strong>で確認 →「公開する」。</p>
+        <p class="dev-new-article__note">キーワード（＋タイトル任意）だけ入力。カテゴリ・ソースURLは自動。生成前に可否チェックし、無理なら<strong>アラートで止めます</strong>。</p>
         <div class="dev-new-article__form">
-          <input id="new-keyword" type="text" placeholder="キーワード（例: 東京リコール、防衛増税）" class="dev-new-article__input" />
+          <input id="new-keyword" type="text" placeholder="キーワード（例: 防衛増税、東京リコール）" class="dev-new-article__input" />
           <input id="new-title" type="text" placeholder="タイトル（空欄なら自動）" class="dev-new-article__input" />
-          <input id="new-sources" type="text" placeholder="ソースURL（カンマ区切り・任意）" class="dev-new-article__input" />
-          <select id="new-category" class="dev-new-article__select">
-            <option value="国会">国会</option>
-            <option value="地方">地方</option>
-            <option value="行政">行政</option>
-            <option value="選挙">選挙</option>
-            <option value="リコール">リコール</option>
-          </select>
         </div>
         <button id="new-generate" class="dev-new-article__btn">▶ 生成スタート</button>
         <div id="new-status" class="dev-new-article__status" style="display:none"></div>
@@ -241,23 +233,6 @@ if (localStorage.getItem(KEY) === PIN) {
   });
 }
 
-function makeSlug(keyword) {
-  const ascii = keyword
-    .trim()
-    .toLowerCase()
-    .normalize("NFKC")
-    .replace(/[\s　]+/g, "-")
-    .replace(/[^a-z0-9-]/g, "")
-    .replace(/-+/g, "-")
-    .replace(/^-|-$/g, "");
-  if (ascii.length >= 3) return ascii.substring(0, 40);
-  return `case-${Date.now().toString(36)}`;
-}
-
-function makeTitle(keyword) {
-  return `${keyword.trim()} — あの話どうなった？`;
-}
-
 document.getElementById("new-keyword").addEventListener("input", () => {
   const kw = document.getElementById("new-keyword").value.trim();
   if (!document.getElementById("new-title").dataset.manual) {
@@ -339,43 +314,47 @@ document.querySelectorAll(".publish-slug-btn").forEach((btn) => {
 
 // 記事生成
 document.getElementById("new-generate").addEventListener("click", async () => {
-  const keyword  = document.getElementById("new-keyword").value.trim();
-  const titleIn  = document.getElementById("new-title").value.trim();
-  const sources  = document.getElementById("new-sources").value.trim();
-  const category = document.getElementById("new-category").value;
-  const pin      = getPin();
-  const title    = titleIn || makeTitle(keyword);
-  const slug     = makeSlug(keyword);
+  const keyword = document.getElementById("new-keyword").value.trim();
+  const titleIn = document.getElementById("new-title").value.trim();
+  const pin = getPin();
 
-  if (!keyword) { alert("キーワードを入力してください"); return; }
+  if (!keyword) {
+    alert("キーワードを入力してください");
+    return;
+  }
 
   const statusEl = document.getElementById("new-status");
+  const btn = document.getElementById("new-generate");
   statusEl.style.display = "block";
   statusEl.className = "dev-new-article__status is-loading";
-  statusEl.textContent = "⏳ ワークフロー起動中...";
-  document.getElementById("new-generate").disabled = true;
+  statusEl.textContent = "⏳ 生成可否を確認中（ソース・国会API）…";
+  btn.disabled = true;
 
   try {
     const res = await fetch("/api/dispatch", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ pin, slug, keyword, title, category, sources }),
+      body: JSON.stringify({ pin, keyword, title: titleIn }),
     });
     const data = await res.json();
     if (data.ok) {
       statusEl.className = "dev-new-article__status is-ok";
-      statusEl.textContent = `✅ ${data.message}（/${slug}/）`;
-      markPendingSlug(slug, "新規記事生成");
+      statusEl.textContent = `✅ ${data.message}`;
+      if (data.slug) {
+        markPendingSlug(data.slug, "新規記事生成");
+      }
       refreshWorkflows();
     } else {
       statusEl.className = "dev-new-article__status is-error";
-      statusEl.textContent = "❌ " + (data.error || "エラーが発生しました");
+      statusEl.textContent = "❌ " + (data.error || "生成できません");
+      alert("生成できませんでした。\n\n" + (data.error || "条件を満たせませんでした。"));
     }
   } catch (e) {
     statusEl.className = "dev-new-article__status is-error";
     statusEl.textContent = "❌ 通信エラー: " + e.message;
+    alert("通信エラー: " + e.message);
   } finally {
-    document.getElementById("new-generate").disabled = false;
+    btn.disabled = false;
   }
 });
 

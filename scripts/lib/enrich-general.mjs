@@ -4,6 +4,10 @@
 import { writeFile } from "node:fs/promises";
 import path from "node:path";
 import { AI_DISCLAIMER } from "./article-summary.mjs";
+import {
+  discoverSourceUrls as discoverUrls,
+  pickReadableSources,
+} from "../../functions/lib/article-prepare.js";
 
 const JINA_HEADERS = {
   Accept: "text/plain",
@@ -19,19 +23,8 @@ export async function fetchReadable(url) {
 
 /** @returns {Promise<string[]>} */
 export async function discoverSourceUrls(keyword, limit = 4) {
-  try {
-    const res = await fetch(`https://s.jina.ai/${encodeURIComponent(keyword)}`, {
-      headers: { ...JINA_HEADERS, Accept: "application/json" },
-    });
-    if (!res.ok) return [];
-    const data = await res.json();
-    const urls = (data.data ?? [])
-      .map((item) => item.url)
-      .filter((u) => u && /^https?:\/\//.test(u) && !/x\.com|twitter\.com/i.test(u));
-    return [...new Set(urls)].slice(0, limit);
-  } catch {
-    return [];
-  }
+  const tavilyApiKey = process.env.TAVILY_API_KEY;
+  return discoverUrls(keyword, { tavilyApiKey, limit });
 }
 
 function firstParagraph(md) {
@@ -72,8 +65,15 @@ export async function enrichGeneralArticle(article, root) {
   let sourceUrls = [...(article.sourceUrls ?? [])];
 
   if (sourceUrls.length < 2) {
-    const found = await discoverSourceUrls(keyword, 4);
-    sourceUrls = [...new Set([...sourceUrls, ...found])].slice(0, 5);
+    const found = await discoverSourceUrls(keyword, 8);
+    sourceUrls = [...new Set([...sourceUrls, ...found])].slice(0, 8);
+  }
+
+  if (sourceUrls.length >= 2) {
+    const readable = await pickReadableSources(sourceUrls, 2);
+    if (readable.length >= 2) {
+      sourceUrls = readable;
+    }
   }
 
   /** @type {{ url: string, md: string, date: string, snippet: string, title: string }[]} */
@@ -92,7 +92,9 @@ export async function enrichGeneralArticle(article, root) {
   }
 
   if (sources.length === 0) {
-    throw new Error("ソースURLを取得できませんでした。管理画面でURLを追加してください。");
+    throw new Error(
+      "報道ソースを自動取得できませんでした。しばらく待ってから管理画面で再生成してください。",
+    );
   }
 
   sources.sort((a, b) => b.date.localeCompare(a.date));
