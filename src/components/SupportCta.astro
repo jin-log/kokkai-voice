@@ -8,6 +8,7 @@ interface Props {
 
 const { context = "site" } = Astro.props;
 const noteUrl = SITE.noteMembershipUrl || SITE.noteUrl;
+const noteIsMembership = Boolean(SITE.noteMembershipUrl);
 const variant = SITE.supportAbVariant ?? "a";
 ---
 
@@ -32,7 +33,7 @@ const variant = SITE.supportAbVariant ?? "a";
         data-track="support-note"
         data-ab={variant}
       >
-        note メンバーになる
+        noteIsMembership ? "note メンバーになる" : "note をフォロー"
       </a>
     ) : (
       <p class="support-cta__soon">

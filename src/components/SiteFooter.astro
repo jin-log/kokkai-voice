@@ -16,9 +16,13 @@ const { note } = Astro.props;
     <a href="/privacy-policy/">プライバシーポリシー</a>
     <a href={SITE.xUrl} target="_blank" rel="noopener noreferrer">X {SITE.xHandle}</a>
     {
-      SITE.noteMembershipUrl && (
-        <a href={SITE.noteMembershipUrl} target="_blank" rel="noopener noreferrer">
-          noteメンバー
+      (SITE.noteMembershipUrl || SITE.noteUrl) && (
+        <a
+          href={(SITE.noteMembershipUrl || SITE.noteUrl)!}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {SITE.noteMembershipUrl ? "noteメンバー" : "note"}
         </a>
       )
     }
