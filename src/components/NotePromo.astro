@@ -1,0 +1,50 @@
+---
+import { noteMembershipLink, hasNoteMembership } from "../lib/note-link.mjs";
+
+interface Props {
+  /** UTM medium */
+  medium?: string;
+  content?: string;
+  /** compact = 1行バナー / full = 記事下CTA風 */
+  variant?: "compact" | "full";
+}
+
+const { medium = "banner", content, variant = "compact" } = Astro.props;
+const href = noteMembershipLink(medium, content);
+if (!href || !hasNoteMembership()) return null;
+---
+
+{
+  variant === "compact" ? (
+    <aside class="note-promo note-promo--compact" aria-label="noteメンバー">
+      <p class="note-promo__text">
+        <strong>週次で追いかける</strong> — ダイジェスト＋深掘りを note メンバー（¥500/月）で配信中。
+        <a
+          href={href}
+          class="note-promo__link"
+          target="_blank"
+          rel="noopener noreferrer"
+          data-track="support-note"
+        >
+          メンバーになる →
+        </a>
+      </p>
+    </aside>
+  ) : (
+    <section class="note-promo note-promo--full" aria-labelledby="note-promo-title">
+      <h2 id="note-promo-title" class="note-promo__title">週次で追いかける</h2>
+      <p class="note-promo__body">
+        サイトの案件整理は無料のまま。メンバー向けに週次ダイジェスト・深掘り1本・更新先行案内を note で配信します。
+      </p>
+      <a
+        href={href}
+        class="note-promo__btn"
+        target="_blank"
+        rel="noopener noreferrer"
+        data-track="support-note"
+      >
+        note メンバーになる（¥500/月）
+      </a>
+    </section>
+  )
+}

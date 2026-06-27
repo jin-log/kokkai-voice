@@ -3,6 +3,8 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import SiteHeader from "../components/SiteHeader.astro";
 import SiteFooter from "../components/SiteFooter.astro";
 import PreReleaseBanner from "../components/PreReleaseBanner.astro";
+import NotePromo from "../components/NotePromo.astro";
+import NoteStickyBar from "../components/NoteStickyBar.astro";
 import CaseCard from "../components/CaseCard.astro";
 import { loadAllArticles } from "../lib/articles.mjs";
 
@@ -40,6 +42,7 @@ const rest = articles.filter(
       政治家の発言と行動を追いかける。<br />
       みんなの気持ちが分かる「日本の政治なう」
     </p>
+    <NotePromo medium="hero" variant="full" />
   </main>
 
   <section class="container case-section" aria-label="注目の案件">
@@ -71,5 +74,6 @@ const rest = articles.filter(
     </section>
   )}
 
+  <NoteStickyBar />
   <SiteFooter note="国会議事録 API + スクショアーカイブ。AI要約は解釈を含みます。" />
 </BaseLayout>

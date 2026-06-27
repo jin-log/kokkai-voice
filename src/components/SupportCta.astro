@@ -1,5 +1,6 @@
 ---
 import { SITE } from "../lib/site-config.mjs";
+import { noteMembershipLink } from "../lib/note-link.mjs";
 
 interface Props {
   /** 案件 slug（計測用） */
@@ -7,9 +8,12 @@ interface Props {
 }
 
 const { context = "site" } = Astro.props;
-const noteUrl = SITE.noteMembershipUrl || SITE.noteUrl;
-const noteIsMembership = Boolean(SITE.noteMembershipUrl);
 const variant = SITE.supportAbVariant ?? "a";
+const noteBase = noteMembershipLink("support_cta", context);
+const noteUrl = noteBase
+  ? `${noteBase}&utm_campaign=ab_${variant}`
+  : null;
+const noteIsMembership = Boolean(SITE.noteMembershipUrl);
 ---
 
 <section class="support-cta" aria-labelledby="support-cta-title" data-support-cta data-ab={variant}>
@@ -26,7 +30,7 @@ const variant = SITE.supportAbVariant ?? "a";
   {
     noteUrl ? (
       <a
-        href={`${noteUrl}?utm_source=seiji1192&utm_medium=support_cta&utm_campaign=ab_${variant}&utm_content=${context}`}
+        href={noteUrl}
         class="support-cta__btn"
         target="_blank"
         rel="noopener noreferrer"

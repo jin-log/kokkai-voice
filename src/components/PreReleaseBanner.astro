@@ -1,13 +1,27 @@
 ---
 import { SITE } from "../lib/site-config.mjs";
+import { noteMembershipLink } from "../lib/note-link.mjs";
 
 if (!SITE.preRelease) return null;
+
+const noteHref = noteMembershipLink("pre_banner");
 ---
 
 <div class="pre-release-banner" role="status">
   <p class="pre-release-banner__text">
     <strong>プレリリース中</strong> — 内容は随時更新しています。誤り・見づらい点・追ってほしい案件は
     <a href={SITE.xUrl} target="_blank" rel="noopener noreferrer">{SITE.xHandle}</a> へ。
+    {
+      noteHref && (
+        <>
+          {" "}
+          / 継続更新は
+          <a href={noteHref} target="_blank" rel="noopener noreferrer" data-track="support-note">
+            noteメンバー（¥500/月）
+          </a>
+        </>
+      )
+    }
   </p>
 </div>
 

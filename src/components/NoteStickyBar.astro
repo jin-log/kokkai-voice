@@ -1,0 +1,47 @@
+---
+import { noteMembershipLink, hasNoteMembership } from "../lib/note-link.mjs";
+
+interface Props {
+  content?: string;
+}
+
+const { content } = Astro.props;
+const href = noteMembershipLink("sticky", content);
+if (!href || !hasNoteMembership()) return null;
+---
+
+<div class="note-sticky" data-note-sticky hidden>
+  <p class="note-sticky__text">週次ダイジェスト — ¥500/月</p>
+  <a
+    href={href}
+    class="note-sticky__btn"
+    target="_blank"
+    rel="noopener noreferrer"
+    data-track="support-note"
+  >
+    noteメンバー
+  </a>
+  <button type="button" class="note-sticky__close" data-note-sticky-close aria-label="閉じる">
+    ×
+  </button>
+</div>
+
+<script>
+  (function () {
+    const KEY = "note-sticky-dismiss";
+    const bar = document.querySelector("[data-note-sticky]");
+    if (!bar || sessionStorage.getItem(KEY)) return;
+
+    const mq = window.matchMedia("(max-width: 768px)");
+    function sync() {
+      bar.hidden = !mq.matches;
+    }
+    sync();
+    mq.addEventListener("change", sync);
+
+    bar.querySelector("[data-note-sticky-close]")?.addEventListener("click", () => {
+      sessionStorage.setItem(KEY, "1");
+      bar.hidden = true;
+    });
+  })();
+</script>

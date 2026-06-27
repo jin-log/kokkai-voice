@@ -1,5 +1,6 @@
 ---
 import { SITE } from "../lib/site-config.mjs";
+import { noteMembershipLink } from "../lib/note-link.mjs";
 
 interface Props {
   showSearch?: boolean;
@@ -7,6 +8,7 @@ interface Props {
 }
 
 const { showSearch = false, searchQuery = "" } = Astro.props;
+const noteHref = noteMembershipLink("header");
 ---
 
 <header class="site-header">
@@ -37,6 +39,19 @@ const { showSearch = false, searchQuery = "" } = Astro.props;
       )
     }
     <nav class="nav" aria-label="メイン">
+      {
+        noteHref && (
+          <a
+            href={noteHref}
+            class="nav__note-link"
+            target="_blank"
+            rel="noopener noreferrer"
+            data-track="support-note"
+          >
+            note ¥500
+          </a>
+        )
+      }
       <a
         href={SITE.xUrl}
         class="nav__x-link"
