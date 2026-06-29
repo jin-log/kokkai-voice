@@ -220,6 +220,31 @@ export async function computeProjectStatus() {
   };
 }
 
+/** 管理画面: 要対応→公開待ち→非表示→公開済み（公開済みは末尾） */
+export function sortSlugsForAdminPanel(slugs) {
+  const rank = (s) => {
+    if (s.publishState === "live" && !s.adminHidden) return 40;
+    if (s.adminHidden) return 30;
+    if (s.publishState === "draft") return 20;
+    return 10;
+  };
+  return [...slugs].sort((a, b) => {
+    const ra = rank(a);
+    const rb = rank(b);
+    if (ra !== rb) return ra - rb;
+    if (ra === 40) return (b.goldPct ?? 0) - (a.goldPct ?? 0);
+    if (ra === 20) return (b.gatePct ?? 0) - (a.gatePct ?? 0);
+    return (a.gatePct ?? 0) - (b.gatePct ?? 0);
+  });
+}
+
+/** @param {ReturnType<typeof sortSlugsForAdminPanel>[number]} s */
+export function adminSlugFilter(s) {
+  if (s.publishState === "live" && !s.adminHidden) return "live";
+  if (s.publishState === "draft") return "draft";
+  return "action";
+}
+
 export async function loadProjectStatus() {
   const raw = await readFile(path.join(root, "data/project-status.json"), "utf8");
   return JSON.parse(raw);

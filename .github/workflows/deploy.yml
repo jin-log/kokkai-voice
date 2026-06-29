@@ -37,7 +37,7 @@ jobs:
         run: npm run build
 
       - name: Copy functions into dist
-        run: cp -r functions dist/
+        run: node scripts/copy-functions.mjs
 
       - name: Deploy to Cloudflare Pages
         uses: cloudflare/wrangler-action@v3
@@ -47,15 +47,17 @@ jobs:
           command: pages deploy dist --project-name=kokkai-voice --commit-dirty=true
 
       - name: Purge Cloudflare Cache
+        continue-on-error: true
         run: |
           curl -s -X POST \
             "https://api.cloudflare.com/client/v4/zones/${{ secrets.CLOUDFLARE_ZONE_ID }}/purge_cache" \
             -H "Authorization: Bearer ${{ secrets.CLOUDFLARE_API_TOKEN }}" \
             -H "Content-Type: application/json" \
             --data '{"purge_everything":true}' \
-            | grep -o '"success":[a-z]*'
+            | grep -o '"success":[a-z]*' || true
 
       - name: 検索エンジン更新通知（IndexNow + Google）
+        continue-on-error: true
         env:
           GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
         run: node scripts/notify-search-engines.mjs --live

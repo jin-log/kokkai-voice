@@ -2,9 +2,18 @@
 import BaseLayout from "../../layouts/DevLayout.astro";
 import DevHeader from "../../components/DevHeader.astro";
 import SiteFooter from "../../components/SiteFooter.astro";
-import { loadProjectStatus } from "../../lib/project-status.mjs";
+import { loadProjectStatus, sortSlugsForAdminPanel, adminSlugFilter } from "../../lib/project-status.mjs";
 
 const status = await loadProjectStatus().catch(() => null);
+const adminSlugs = status ? sortSlugsForAdminPanel(status.slugs) : [];
+const adminCounts = status
+  ? {
+      action: status.slugs.filter((s) => adminSlugFilter(s) === "action").length,
+      draft: status.slugs.filter((s) => adminSlugFilter(s) === "draft").length,
+      live: status.slugs.filter((s) => adminSlugFilter(s) === "live").length,
+      all: status.slugs.length,
+    }
+  : null;
 
 function formatJa(iso) {
   if (!iso) return "—";
@@ -83,14 +92,39 @@ function formatJa(iso) {
             </section>
 
             <section class="status-slugs" aria-label="案件別">
-              <h2>案件別</h2>
-              {status.slugs.map((s) => (
+              <div class="status-slugs__head">
+                <h2>案件別</h2>
+                <nav class="status-slugs__tabs" id="admin-tabs" aria-label="表示フィルタ">
+                  <button type="button" class="status-slugs__tab is-active" data-filter="action">
+                    要対応 <span class="status-slugs__count">{adminCounts?.action ?? 0}</span>
+                  </button>
+                  <button type="button" class="status-slugs__tab" data-filter="draft">
+                    公開待ち <span class="status-slugs__count">{adminCounts?.draft ?? 0}</span>
+                  </button>
+                  <button type="button" class="status-slugs__tab" data-filter="live">
+                    公開済み <span class="status-slugs__count">{adminCounts?.live ?? 0}</span>
+                  </button>
+                  <button type="button" class="status-slugs__tab" data-filter="all">
+                    すべて <span class="status-slugs__count">{adminCounts?.all ?? 0}</span>
+                  </button>
+                </nav>
+              </div>
+              <p class="status-slugs__hint" id="admin-filter-hint">
+                デフォルトは「要対応」のみ。公開済みは薄く表示・末尾に並びます。
+              </p>
+              <div class="status-slugs__pager" id="admin-pager" hidden>
+                <button type="button" class="status-slugs__page-btn" id="admin-prev" disabled>← 前</button>
+                <span id="admin-page-label">1 / 1</span>
+                <button type="button" class="status-slugs__page-btn" id="admin-next" disabled>次 →</button>
+              </div>
+              <div id="admin-cards">
+              {adminSlugs.map((s) => (
                 <article class:list={[
                   "status-card",
                   s.adminHidden && "status-card--hidden",
                   s.publishState === "draft" && "status-card--draft",
-                  s.publishState === "live" && "status-card--live",
-                ]} data-slug={s.slug} data-publish-state={s.publishState}>
+                  s.publishState === "live" && !s.adminHidden && "status-card--live",
+                ]} data-slug={s.slug} data-publish-state={s.publishState} data-admin-filter={adminSlugFilter(s)}>
                   <header class="status-card__head">
                     <h3 class="status-card__title">
                       {s.publishState === "live" && !s.adminHidden ? (
@@ -170,6 +204,8 @@ function formatJa(iso) {
                   </div>
                 </article>
               ))}
+              </div>
+              <p class="status-slugs__empty" id="admin-empty" hidden>このタブに該当する案件はありません。</p>
             </section>
 
             <section class="status-legend">
@@ -567,8 +603,86 @@ async function refreshWorkflows() {
 if (localStorage.getItem(KEY) === PIN) {
   refreshBufferStatus();
   refreshWorkflows();
+  initAdminPager();
   setInterval(refreshBufferStatus, 15000);
   setInterval(refreshWorkflows, 15000);
+}
+
+const ADMIN_PAGE_SIZE = 8;
+let adminFilter = "action";
+let adminPage = 1;
+
+function initAdminPager() {
+  const tabs = document.getElementById("admin-tabs");
+  const prev = document.getElementById("admin-prev");
+  const next = document.getElementById("admin-next");
+  if (!tabs) return;
+
+  tabs.querySelectorAll("[data-filter]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      adminFilter = btn.getAttribute("data-filter") || "action";
+      adminPage = 1;
+      tabs.querySelectorAll(".status-slugs__tab").forEach((t) => t.classList.remove("is-active"));
+      btn.classList.add("is-active");
+      renderAdminPage();
+    });
+  });
+  prev?.addEventListener("click", () => {
+    if (adminPage > 1) {
+      adminPage -= 1;
+      renderAdminPage();
+    }
+  });
+  next?.addEventListener("click", () => {
+    adminPage += 1;
+    renderAdminPage();
+  });
+  renderAdminPage();
+}
+
+function renderAdminPage() {
+  const cards = [...document.querySelectorAll("#admin-cards .status-card")];
+  const matched = cards.filter((c) => {
+    const f = c.getAttribute("data-admin-filter");
+    return adminFilter === "all" || f === adminFilter;
+  });
+  const totalPages = Math.max(1, Math.ceil(matched.length / ADMIN_PAGE_SIZE));
+  if (adminPage > totalPages) adminPage = totalPages;
+
+  cards.forEach((c) => {
+    c.style.display = "none";
+  });
+
+  const start = (adminPage - 1) * ADMIN_PAGE_SIZE;
+  matched.slice(start, start + ADMIN_PAGE_SIZE).forEach((c) => {
+    c.style.display = "";
+  });
+
+  const pager = document.getElementById("admin-pager");
+  const label = document.getElementById("admin-page-label");
+  const empty = document.getElementById("admin-empty");
+  const hint = document.getElementById("admin-filter-hint");
+
+  if (empty) empty.hidden = matched.length > 0;
+  if (pager) pager.hidden = matched.length <= ADMIN_PAGE_SIZE;
+  if (label) label.textContent = `${adminPage} / ${totalPages}（${matched.length}件）`;
+  if (document.getElementById("admin-prev")) {
+    document.getElementById("admin-prev").disabled = adminPage <= 1;
+  }
+  if (document.getElementById("admin-next")) {
+    document.getElementById("admin-next").disabled = adminPage >= totalPages;
+  }
+  if (hint) {
+    const hints = {
+      action: "制作中・非表示 — いま手を入れる案件",
+      draft: "完成・非公開 — プレビュー確認後に公開",
+      live: "公開済み — 薄く表示（終わった案件）",
+      all: "全案件 — 公開済みは末尾",
+    };
+    hint.textContent = hints[adminFilter] || "";
+  }
+  const wrap = document.getElementById("admin-cards");
+  if (wrap) wrap.dataset.filterMode = adminFilter;
 }
 
 document.querySelectorAll(".save-title-btn").forEach((btn) => {

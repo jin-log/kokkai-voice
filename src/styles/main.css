@@ -2105,7 +2105,78 @@ body.has-progress-strip {
 .status-slugs h2,
 .status-legend h2 {
   font-size: 1.1rem;
-  margin: 0 0 1rem;
+  margin: 0;
+}
+
+.status-slugs__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.status-slugs__tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.status-slugs__tab {
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  border-radius: 999px;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.82rem;
+  cursor: pointer;
+}
+
+.status-slugs__tab.is-active {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: #fff;
+  font-weight: 700;
+}
+
+.status-slugs__count {
+  font-variant-numeric: tabular-nums;
+  opacity: 0.85;
+}
+
+.status-slugs__hint {
+  margin: 0 0 0.75rem;
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
+.status-slugs__pager {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin: 0 0 0.75rem;
+  font-size: 0.85rem;
+}
+
+.status-slugs__page-btn {
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  border-radius: 0.5rem;
+  padding: 0.35rem 0.75rem;
+  cursor: pointer;
+}
+
+.status-slugs__page-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.status-slugs__empty {
+  text-align: center;
+  color: var(--color-text-muted);
+  padding: 2rem 1rem;
+  margin: 0;
 }
 
 .status-card {
@@ -2436,7 +2507,22 @@ body.has-progress-strip {
   border-color: #93c5fd;
   background: linear-gradient(to bottom, rgb(219 234 254 / 0.25), transparent);
 }
-.status-card--live { border-color: #86efac; }
+.status-card--live {
+  border-color: #86efac;
+  opacity: 0.58;
+  background: rgb(248 250 252 / 0.55);
+  filter: saturate(0.85);
+}
+.status-card--live:hover,
+.status-card--live:focus-within {
+  opacity: 0.92;
+  filter: none;
+}
+#admin-cards[data-filter-mode="live"] .status-card--live {
+  opacity: 1;
+  filter: none;
+  background: var(--color-surface);
+}
 .status-card__badge {
   font-size: 0.65rem;
   background: #fef3c7;

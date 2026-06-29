@@ -108,6 +108,8 @@ if (action === "publish") {
   }
   article.publishReady = true;
   article.pageReady = true;
+  article.adminHidden = false;
+  delete article.adminHiddenAt;
   article.publishedAt = new Date().toISOString();
   await saveArticle(article);
   await refreshProjectStatus();
