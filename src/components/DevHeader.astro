@@ -1,4 +1,6 @@
 ---
+import { ASSET_V } from "../lib/case-helpers.mjs";
+
 interface Props {
   current?: "status" | "comments" | "preview" | "tasks" | "hatena" | "promo";
 }
@@ -11,10 +13,10 @@ const { current = "status" } = Astro.props;
     <a class="dev-header__brand" href="/dev/status/">
       <img
         class="dev-header__logo"
-        src="/assets/logo-header-nihon-seiji-naw.png"
-        alt="日本の政治なう"
-        width="520"
-        height="130"
+        src={`/assets/logo-header-nihon-seiji-naw.png?v=${ASSET_V}`}
+        alt="日本の政治 now."
+        width="1024"
+        height="576"
       />
       <span class="dev-header__badge">管理</span>
     </a>

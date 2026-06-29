@@ -18,7 +18,7 @@ interface Props {
 const {
   title,
   description = "政治家の発言と行動を追いかける。あの話どうなった？ 国会議事録＋X投稿を案件ごとに整理した政治解説メディア。",
-  ogImage = "/assets/logo-nihon-seiji-naw.png",
+  ogImage = `/assets/logo-nihon-seiji-naw.png?v=${ASSET_V}`,
   noindex = false,
   bodyClass,
   bodyDataCase,
@@ -54,7 +54,8 @@ const showAds = enableAds && adsClient;
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={`https://seiji1192.site${ogImage}`} />
-    <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/assets/favicon.png" type="image/png" />
+    <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png" />
     {
       showAds && (
         <>

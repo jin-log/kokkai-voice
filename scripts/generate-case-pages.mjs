@@ -429,7 +429,7 @@ function renderArticle(a, stanceHtml = "", hasStance = false) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>${esc(a.title)}｜日本の政治なう</title>
   <meta name="description" content="${esc(s.excerpt.slice(0, 120))}">
-  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="../assets/favicon.png" type="image/png">
   <link rel="stylesheet" href="../css/tokens.css?v=${ASSET_V}">
   <link rel="stylesheet" href="../css/main.css?v=${ASSET_V}">
 </head>
@@ -437,7 +437,7 @@ function renderArticle(a, stanceHtml = "", hasStance = false) {
   <header class="site-header">
     <div class="container site-header__inner site-header__inner--search">
       <a class="logo" href="../index.html">
-        <img class="logo__img" src="../assets/logo-header-nihon-seiji-naw.png" alt="日本の政治なう" width="520" height="130">
+        <img class="logo__img" src="../assets/logo-header-nihon-seiji-naw.png" alt="日本の政治 now. あの話どうなった？" width="1024" height="576">
       </a>
       <nav class="nav" aria-label="メイン">
         <a href="../search.html">一覧</a>

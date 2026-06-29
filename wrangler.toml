@@ -2,10 +2,9 @@ name = "kokkai-voice"
 compatibility_date = "2024-09-23"
 pages_build_output_dir = "dist"
 
-# X マーケ cron（GitHub Actions workflow 権限が無い間の本番スケジュール）
-# 12:00 JST = 03:00 UTC / 19:00 JST = 10:00 UTC
-[triggers]
-crons = ["0 3 * * *", "0 10 * * *"]
+# X マーケ cron — Pages deploy では triggers 非対応。Mac launchd / GitHub Actions で運用
+# [triggers]
+# crons = ["0 3 * * *", "0 10 * * *"]
 
 # D1（Pages ダッシュボードでも可）— docs/comments-setup.md
 # [[d1_databases]]

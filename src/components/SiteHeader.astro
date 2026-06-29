@@ -1,6 +1,7 @@
 ---
 import { SITE } from "../lib/site-config.mjs";
 import { noteMembershipLink } from "../lib/note-link.mjs";
+import { ASSET_V } from "../lib/case-helpers.mjs";
 
 interface Props {
   showSearch?: boolean;
@@ -16,10 +17,10 @@ const noteHref = noteMembershipLink("header");
     <a class="logo" href="/">
       <img
         class="logo__img"
-        src="/assets/logo-header-nihon-seiji-naw.png"
-        alt="日本の政治なう — あの話どうなった？"
-        width="520"
-        height="130"
+        src={`/assets/logo-header-nihon-seiji-naw.png?v=${ASSET_V}`}
+        alt="日本の政治 now. あの話どうなった？"
+        width="1024"
+        height="576"
       />
     </a>
     {
