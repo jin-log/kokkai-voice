@@ -42,10 +42,10 @@ function renderReactionSummary(a) {
   return `
       <div class="reaction-summary" id="sec-mood" aria-label="みんなのキモチ">
         <span class="reaction-summary__label">みんなのキモチ</span>
-        <div class="reaction-bar" aria-hidden="true">
-          <div class="reaction-bar__good" data-good-bar style="width: ${goodPct}%"></div>
-          <div class="reaction-bar__neutral" data-neutral-bar style="width: ${neutralPct}%"></div>
-          <div class="reaction-bar__bad" data-bad-bar style="width: ${badPct}%"></div>
+        <div class="reaction-bar" role="img" aria-label="賛成${goodPct}%・中立${neutralPct}%・反対${badPct}%">
+          <div class="reaction-bar__good" data-good-bar style="width: ${goodPct}%">${goodPct > 0 ? `<span class="reaction-bar__pct">${goodPct}%</span>` : ""}</div>
+          <div class="reaction-bar__neutral" data-neutral-bar style="width: ${neutralPct}%">${neutralPct > 0 ? `<span class="reaction-bar__pct">${neutralPct}%</span>` : ""}</div>
+          <div class="reaction-bar__bad" data-bad-bar style="width: ${badPct}%">${badPct > 0 ? `<span class="reaction-bar__pct">${badPct}%</span>` : ""}</div>
         </div>
         <span class="reaction-summary__nums">
           <span class="good"><span class="reaction-emoji" aria-hidden="true">😊</span> <span data-good-num>${good}</span></span>

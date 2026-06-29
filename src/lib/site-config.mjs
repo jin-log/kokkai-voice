@@ -15,7 +15,7 @@ export const SITE = {
   /** プレリリースバナー表示。正式ローンチ時 false */
   preRelease: true,
   /** コメント投稿・表示（D1接続後に true。preRelease と独立） */
-  commentsLive: false,
+  commentsLive: true,
   /** Cloudflare Turnstile サイトキー（公開可）。未設定時はウィジェット非表示 */
   turnstileSiteKey: null,
   adsensePubId: "ca-pub-7197431000530819",

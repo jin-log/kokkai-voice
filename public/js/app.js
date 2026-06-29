@@ -23,14 +23,38 @@
     let bad = parseInt(badNum?.textContent || '0', 10);
     let voted = null;
 
+    function setSegment(bar, pct) {
+      if (!bar) return;
+      bar.style.width = pct + '%';
+      let el = bar.querySelector('.reaction-bar__pct');
+      if (pct > 0) {
+        if (!el) {
+          el = document.createElement('span');
+          el.className = 'reaction-bar__pct';
+          bar.appendChild(el);
+        }
+        el.textContent = pct + '%';
+        el.hidden = pct < 8;
+      } else if (el) {
+        el.remove();
+      }
+    }
+
     function render() {
       const total = good + neutral + bad || 1;
       const goodPct = Math.round((good / total) * 100);
       const neutralPct = Math.round((neutral / total) * 100);
       const badPct = Math.round((bad / total) * 100);
-      if (goodBar) goodBar.style.width = goodPct + '%';
-      if (neutralBar) neutralBar.style.width = neutralPct + '%';
-      if (badBar) badBar.style.width = badPct + '%';
+      setSegment(goodBar, goodPct);
+      setSegment(neutralBar, neutralPct);
+      setSegment(badBar, badPct);
+      const bar = document.querySelector('.reaction-bar');
+      if (bar) {
+        bar.setAttribute(
+          'aria-label',
+          `賛成${goodPct}%・中立${neutralPct}%・反対${badPct}%`,
+        );
+      }
       if (goodNum) goodNum.textContent = String(good);
       if (neutralNum) neutralNum.textContent = String(neutral);
       if (badNum) badNum.textContent = String(bad);
