@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "dev": "astro dev",
-    "build": "node scripts/update-project-status.mjs --quiet && astro build",
+    "build": "node scripts/update-project-status.mjs --quiet && node scripts/sync-marketing-data.mjs && astro build",
     "preview": "astro preview",
     "deploy:site": "node scripts/deploy-site.mjs",
     "deploy:extras": "node scripts/notify-search-engines.mjs --live && node scripts/post-to-buffer.mjs --recent 1 && node scripts/check-buffer.mjs",
