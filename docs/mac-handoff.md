@@ -21,22 +21,23 @@ git pull --ff-only
 npm ci
 ```
 
-## 3. シークレット（Git に載らない・手動）
+## 3. シークレット（Git に載らない）
+
+**`ceosync pull` で自動復号**（Win で `ceosync push` 済みなら Mac にも来る）。
 
 | ファイル | 用途 |
 |---------|------|
 | `secrets/buffer.env` | Buffer API（X 自動投稿） |
 | `secrets/google-service-account.json` | Google Indexing API |
 
-例からコピー:
+正本: `ceo-sync/secrets-vault/*.enc`（暗号化）  
+鍵: `CEO_SYNC_SECRETS_KEY` または `~/.config/ceosync/secrets.key`（**Mac/Win 同じ**）
 
-```bash
-cp secrets/buffer.env.example secrets/buffer.env
-cp secrets/google-service-account.example.json secrets/google-service-account.json
-# 中身を Win と同じキーで埋める（1Password / メモから）
-```
+**ローカルに無くてもよい操作:**
+- X プレリリース告知 → `node scripts/call-post-prerelease.mjs`（本番 CF の BUFFER キー使用）
+- デプロイ → GitHub Actions（`deploy.yml`）
 
-Win にしか無い場合: `secrets/buffer.env` と `google-service-account.json` を USB / 暗号化共有で Mac にコピー。
+Win にしか無い場合（初回のみ）: Win で `CEO_SYNC_SECRETS_KEY` を設定 → `ceosync push` → Mac で `ceosync pull`
 
 ## 4. 動作確認
 

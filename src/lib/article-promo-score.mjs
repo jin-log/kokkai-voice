@@ -71,3 +71,29 @@ export function pickTopForDigest(articles, recentlyFeatured, count = 3, now = Da
 
   return picked.slice(0, count);
 }
+
+/** 夜の単体投稿 — スコアが閾値以上のときだけ */
+export const HOT_SCORE_THRESHOLD = 120;
+
+/**
+ * @param {import('./articles.mjs').Article[]} articles
+ * @param {{ excludeSlugs?: Set<string>; minScore?: number; now?: number }} opts
+ */
+export function pickHotSingle(articles, opts = {}) {
+  const { excludeSlugs = new Set(), minScore = HOT_SCORE_THRESHOLD, now = Date.now() } = opts;
+
+  const ranked = articles
+    .filter((a) => !excludeSlugs.has(a.slug))
+    .map((a) => ({
+      article: a,
+      score: promoScore(a, now) + (a.promoHot === true ? 40 : 0),
+    }))
+    .sort((x, y) => y.score - x.score);
+
+  const top = ranked[0];
+  if (!top || top.score < minScore) {
+    return { article: null, score: top?.score ?? 0, reason: "below_threshold" };
+  }
+
+  return { article: top.article, score: top.score, reason: "ok" };
+}

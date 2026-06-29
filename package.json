@@ -31,7 +31,12 @@
     "buffer:check": "node scripts/check-buffer.mjs",
     "buffer:post": "node scripts/post-to-buffer.mjs --recent 1",
     "buffer:digest": "node scripts/post-daily-digest.mjs",
-    "buffer:digest:dry": "node scripts/post-daily-digest.mjs --dry-run"
+    "buffer:digest:dry": "node scripts/post-daily-digest.mjs --dry-run",
+    "buffer:hot": "node scripts/post-hot-single.mjs",
+    "buffer:hot:dry": "node scripts/post-hot-single.mjs --dry-run",
+    "buffer:launch": "node scripts/post-x-launch.mjs --slot both",
+    "buffer:launch:noon": "node scripts/post-x-launch.mjs --slot noon",
+    "buffer:launch:evening": "node scripts/post-x-launch.mjs --slot evening"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.3",

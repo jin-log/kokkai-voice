@@ -1,12 +1,13 @@
 /**
- * POST /api/post-daily-digest?pin=1192
- * 昼の3選を Buffer 経由で投稿（1日1回・slot=noon）
+ * POST /api/post-hot-single?pin=1192
+ * 夜の単体 — スコア閾値以上のときだけ（1日最大2本のうち2本目）
  */
 import { readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 
 const API_URL = "https://api.buffer.com";
 const LOG_PATH = path.join("data", "x-post-log.json");
+const HOT_THRESHOLD = 120;
 
 function todayJst() {
   return new Date(Date.now() + 9 * 3600000).toISOString().slice(0, 10);
@@ -20,8 +21,15 @@ async function loadLog() {
   }
 }
 
-function digestPostedToday(log, day) {
-  return log.digest?.some((p) => p.date === day) ?? false;
+function hotPostedToday(log, day) {
+  return log.hot?.some((p) => p.date === day) ?? false;
+}
+
+function postsTodayCount(log, day) {
+  let n = 0;
+  if (log.digest?.some((p) => p.date === day)) n += 1;
+  if (hotPostedToday(log, day)) n += 1;
+  return n;
 }
 
 async function loadArticles() {
@@ -45,31 +53,30 @@ function score(article, now) {
     else if (h <= 48) s += 70;
     else if (h <= 168) s += 40;
   }
+  const updated = article.nowSummary?.updatedAt ? new Date(article.nowSummary.updatedAt).getTime() : 0;
+  if (updated && now - updated <= 48 * 3600000) s += 25;
   for (const t of article.tags || []) if (INTEREST.has(t)) s += 12;
   if (INTEREST.has(article.category)) s += 8;
+  if (article.promoHot === true) s += 40;
   return s;
 }
 
 function shortTitle(article) {
   const t = article.title || article.slug;
-  return t.replace(/^【/, "").replace(/】.*$/, "】").replace(/】$/, "") || t;
+  const s = t.replace(/^【/, "").replace(/】.*$/, "】").replace(/】$/, "") || t;
+  return /^【/.test(s) ? s : `【${s}】`;
 }
 
 function caseUrl(slug) {
   return `https://seiji1192.site/case/${slug}/`;
 }
 
-function formatDigest(picks) {
-  const lines = ["【政治なう 今日の3選】", ""];
-  const marks = ["①", "②", "③"];
-  picks.forEach((a, i) => {
-    const hook = (a.nowSummary?.bullets?.[0] || "").slice(0, 36);
-    lines.push(`${marks[i]} ${shortTitle(a)}`);
-    if (hook) lines.push(hook);
-    lines.push(caseUrl(a.slug));
-    lines.push("");
-  });
-  lines.push("出典付きで「あの話どうなった？」を追います");
+function formatSingle(article) {
+  const headline = shortTitle(article);
+  const hook = (article.nowSummary?.bullets?.[0] || article.summaryBullets?.[0] || "").slice(0, 80);
+  const lines = [headline, ""];
+  if (hook) lines.push(hook);
+  lines.push("", caseUrl(article.slug));
   return lines.join("\n").trim();
 }
 
@@ -119,23 +126,34 @@ export async function onRequestPost(context) {
   const day = todayJst();
   const log = await loadLog();
 
-  if (!force && digestPostedToday(log, day)) {
-    return json({ ok: true, skipped: true, reason: `noon digest already posted ${day}` });
+  if (!force && hotPostedToday(log, day)) {
+    return json({ ok: true, skipped: true, reason: `evening hot already posted ${day}` });
+  }
+  if (!force && postsTodayCount(log, day) >= 2) {
+    return json({ ok: true, skipped: true, reason: "daily cap (2) reached" });
   }
 
   const articles = await loadArticles();
   const now = Date.now();
-  const picks = [...articles]
+  const digestSlugs = new Set(log.digest?.find((p) => p.date === day)?.slugs ?? []);
+  const ranked = articles
+    .filter((a) => !digestSlugs.has(a.slug))
     .map((a) => ({ a, s: score(a, now) }))
-    .sort((x, y) => y.s - x.s)
-    .slice(0, 3)
-    .map((x) => x.a);
+    .sort((x, y) => y.s - x.s);
+  const top = ranked[0];
 
-  if (picks.length < 1) {
-    return json({ error: "no live articles" }, 404);
+  if (!top || top.s < HOT_THRESHOLD) {
+    return json({
+      ok: true,
+      skipped: true,
+      reason: "below_threshold",
+      topScore: top?.s ?? 0,
+      threshold: HOT_THRESHOLD,
+    });
   }
 
-  const text = formatDigest(picks);
+  const article = top.a;
+  const text = formatSingle(article);
   const channelId = await resolveChannel(BUFFER_API_KEY, BUFFER_CHANNEL_ID || null);
   const data = await gql(
     BUFFER_API_KEY,
@@ -150,15 +168,16 @@ export async function onRequestPost(context) {
   const result = data?.createPost;
   if (result?.message) throw new Error(result.message);
 
-  log.digest = [
+  log.hot = [
     {
       date: day,
-      slot: "noon",
+      slot: "evening",
       postedAt: new Date().toISOString(),
-      slugs: picks.map((a) => a.slug),
+      slug: article.slug,
+      score: top.s,
       postId: result?.post?.id,
     },
-    ...(log.digest || []).slice(0, 30),
+    ...(log.hot || []).slice(0, 30),
   ];
   try {
     await writeFile(LOG_PATH, `${JSON.stringify(log, null, 2)}\n`);
@@ -168,9 +187,10 @@ export async function onRequestPost(context) {
 
   return json({
     ok: true,
-    slot: "noon",
+    slot: "evening",
     day,
-    slugs: picks.map((a) => a.slug),
+    slug: article.slug,
+    score: top.s,
     post: result?.post,
   });
 }
