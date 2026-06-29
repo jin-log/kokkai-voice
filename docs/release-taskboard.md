@@ -14,9 +14,9 @@
 | **オーナー** | 7 / 14 | **50%** |
 | **CEO** | 12 / 28 | **43%** |
 | **デザイナー** | 9 / 12 | **75%** |
-| **マーケター** | 2 / 10 | **20%** |
+| **マーケター** | 3 / 35 | **9%** |
 | **デバッガー** | 0 / 4 | **0%** |
-| **全体（ブロッカー除く）** | 30 / 68 | **約 44%** |
+| **全体（ブロッカー除く）** | 31 / 90 | **約 34%** |
 
 ※ 本番 Astro・実データ・ドメインが揃うまで **β 公開は 0%**。
 
@@ -92,6 +92,22 @@
 
 ---
 
+## プレリリース告知（オーナー手動・文案ローカル）
+
+文案は **git 未コミット**。作業PC: `C:\Users\bero1\Projects\kokkai-voice\` 配下。
+
+| 順 | タスク | ファイル | セクション |
+|----|--------|----------|------------|
+| 1 | X スレッド 1/7〜7/7 | `docs/pr/pre-release-announce.md` | X スレッド（7投稿） |
+| 2 | X 固定ツイ | 同上 | X 固定ツイ用（1本） |
+| 3 | PR-FREE → PRESSNOW → ぷれりり | 同上 | プレスリリース + 投稿順 |
+| 4 | はてブ | 同上 | はてブ用 |
+| 5 | note 初回（無料公開） | `content/note/01-site-intro.md` | オーナー作業メモ |
+
+索引・オーナーTODO一覧: `docs/pre-release.md`
+
+---
+
 ## デザイナー（UI/UX）
 
 | # | タスク | 達成 | 備考 |
@@ -114,18 +130,78 @@
 
 ## マーケター（集客・PR）
 
+**正本:** `docs/traffic-zero-cost-playbook.md`（0円・インデックス・PNG・全チャネル）
+
+### 告知・文案
+
 | # | タスク | 達成 | 備考 |
 |---|--------|------|------|
-| M1 | 0 円マーケ一覧 | ✅ | marketing-report-ceo.md |
-| M2 | SNS 方針文書 | ✅ | sns-strategy.md |
-| M3 | **公開日 PR 原稿** | ⬜ | 実データ後 |
-| M4 | **無料 PR 3 サイト投稿** | ⬜ | 公開 W0 |
-| M5 | **X 初回告知文・テンプレ** | ⬜ | O9 後 |
-| M6 | **案件別シェア文案 5 本** | ⬜ | |
-| M7 | **はてブ / Reddit 向け導線案** | ⬜ | |
-| M8 | **競合・キーワード調査** | ⬜ | GSC 前でも可 |
-| M9 | **月次 KPI レポート雛形** | ⬜ | kpi.md 連動 |
-| M10 | Shorts 拡散チェックリスト | 🟡 | shorts-pipeline 参照のみ |
+| M1 | 0 円マーケ一覧 | ✅ | `marketing-report-ceo.md` |
+| M2 | SNS 方針文書 | ✅ | `sns-strategy.md` |
+| M3 | **公開日 PR 原稿** | 🟡 | 文案準備済・**ローカルのみ** → `docs/pr/pre-release-announce.md` § プレスリリース |
+| M4 | **無料 PR 3 サイト投稿** | ⬜ | PR-FREE / PRESSNOW / ぷれりり。順序 → 同ファイル § 投稿順 |
+| M5 | **X 初回告知（スレッド7本＋固定）** | 🟡 | 同上 → § X スレッド / § X 固定ツイ用 |
+| M6 | **note 初回投稿** | 🟡 | 文案準備済・**ローカルのみ** → `content/note/01-site-intro.md` |
+| M7 | **はてブ（代表案件3本）** | ⬜ | `docs/pr/pre-release-announce.md` § はてブ用 |
+| M12 | **0円集客プレイブック整備** | ✅ | `docs/traffic-zero-cost-playbook.md` |
+
+### インデックス・SEO（playbook §A）
+
+| # | タスク | 達成 | 備考 |
+|---|--------|------|------|
+| M13 | **GSC サイトマップ + 代表案件10 URL インデックスリクエスト** | ⬜ | playbook A1。🔒 オーナー GSC ログイン |
+| M14 | **Bing Webmaster + サイトマップ同送** | ⬜ | playbook A2。GSC からインポート可 |
+| M15 | **IndexNow（案件更新時 ping）** | ⬜ | playbook A3。CEO 実装 or 手動 ping 手順 |
+| M16 | **Google ビジネスプロフィール（オンラインのみ）** | ⬜ | playbook A4。🔒 オーナー |
+| M17 | **週次 GSC レポート**（クリック・インデックス・クエリ） | ⬜ | playbook §H。`docs/kpi.md` 連動 |
+
+### PNG・画像拡散（playbook §B）
+
+| # | タスク | 達成 | 備考 |
+|---|--------|------|------|
+| M18 | **プレリリース X 用 PNG 3枚**（全体/仕組み/代表案件） | ⬜ | playbook B2/B3。Canva 無料 |
+| M19 | **案件サマリカード PNG テンプレ + 代表3案件** | ⬜ | playbook B4 |
+| M20 | **案件 OGP 1200×630 全公開記事確認** | ⬜ | playbook B1。デザイナー D11 と連携 |
+| M21 | **Pinterest アカ開設 + 初回10ピン** | ⬜ | playbook B7。各ピンに案件 URL |
+| M22 | **note・はてブ用サムネ PNG**（1280×670） | ⬜ | playbook B8 |
+| M23 | **「約束から○日」カウンター画像**（更新案件用） | ⬜ | playbook B6。案件追記のたび |
+
+### 追加チャネル・PR（playbook §C・§D）
+
+| # | タスク | 達成 | 備考 |
+|---|--------|------|------|
+| M24 | **リンクプレス / PressGrid 投稿** | ⬜ | playbook C4/C5 |
+| M25 | **PRONE 記者向けネタ1枚** | ⬜ | playbook C6。月1 |
+| M26 | **Threads / Bluesky 初回投稿 + 週次** | ⬜ | playbook D2/D3 |
+| M27 | **Shorts / TikTok 週1**（1案件30秒） | ⬜ | playbook D10/D11。`shorts-pipeline.md` |
+| M28 | **Instagram カルーセル初回** | ⬜ | playbook D12 |
+| M29 | **実績 PR 2本目**（案件数・更新数） | ⬜ | playbook C1 再投稿。2週目以降 |
+
+### 被リンク・コンテンツ（playbook §E・§F）
+
+| # | タスク | 達成 | 備考 |
+|---|--------|------|------|
+| M30 | **プレスキット URL 1枚**（ロゴ・スクショ3・案件3） | ⬜ | playbook E10。Notion or Google Doc |
+| M31 | **Qiita or Zenn 構築記1本** | ⬜ | playbook E3。末尾にサービス URL |
+| M32 | **Podcast pitch 3件** | ⬜ | playbook E7 / `marketing-report-ceo.md` §1-C |
+| M8 | **案件別シェア文案 5 本** | ⬜ | playbook §F。X+PNG セット |
+| M33 | **新規案件ごと「1案件→10露出」チェック** | ⬜ | playbook §F 表。案件公開のたび |
+| M9 | **競合・キーワード調査** | ⬜ | playbook §G。GSC 開始後に本格化 |
+| M10 | **月次 KPI レポート** | ⬜ | `kpi.md` 連動 |
+| M11 | Shorts 拡散チェックリスト | 🟡 | `shorts-pipeline.md` 参照のみ |
+| M34 | **Astro showcase 掲載申請**（任意） | ⬜ | playbook C8 |
+| M35 | **全案件タイトル・冒頭を具体疑問形に統一** | 🟡 | `scripts/apply-curiosity-titles.mjs` 実行済。`plainExplanation` 冒頭は主要2本修正、残りは執筆時に順次 |
+
+**告知文案（git未コミット）:** `docs/pre-release.md` §「告知・note 文案（ローカルファイル索引）」  
+**初月実行順:** playbook §I「初月おすすめ実行順」
+
+### 運用ルーティン（実装済）
+
+| ドキュメント | 内容 | スクリプト |
+|--------------|------|------------|
+| `docs/publish-routine.md` | 1案件公開〜プロモ30分 | `npm run promo:pack -- --slug {slug}` |
+| `docs/weekly-routine.md` | 月曜週次45分 | `npm run promo:weekly` |
+| GitHub Actions | プロモ artifact / 週次 cron | `marketing-promo-pack.yml` · `marketing-weekly.yml` |
 
 ---
 

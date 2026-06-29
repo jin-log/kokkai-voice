@@ -223,12 +223,22 @@ const SLUG_CONFIG = {
     ],
   },
   "shussho-budget-seika": {
-    ...TOPIC_CONFIG["出生率 子育て支援 予算"],
+    ...TOPIC_CONFIG["少子化"],
     seed: [
       {
         url: "https://x.com/takaichi_sanae/status/2070096912234238329",
         label: "高市早苗 @takaichi_sanae",
         text: "経済財政諮問会議で予算編成改革・財政運営について意見交換。",
+      },
+      {
+        url: "https://x.com/tamakiyuichiro/status/1567315242740502529",
+        label: "玉木雄一郎 @tamakiyuichiro",
+        text: "物価高・需要不足下での所得連動給付・インフレ手当の必要性。",
+      },
+      {
+        url: "https://x.com/izmkenta/status/2065378501486858685",
+        label: "泉健太 @izmkenta",
+        text: "社会保障・子育て支援に関する与野党の論点。",
       },
     ],
   },
@@ -236,13 +246,14 @@ const SLUG_CONFIG = {
 
 function resolveTopicConfig(kw, slug) {
   if (SLUG_CONFIG[slug]) return SLUG_CONFIG[slug];
-  if (TOPIC_CONFIG[kw]) return TOPIC_CONFIG[kw];
+  const k = kw || "";
+  if (TOPIC_CONFIG[k]) return TOPIC_CONFIG[k];
   for (const [key, cfg] of Object.entries(TOPIC_CONFIG)) {
-    if (kw.includes(key)) return cfg;
+    if (k.includes(key)) return cfg;
   }
   for (const [key, cfg] of Object.entries(TOPIC_CONFIG)) {
     const parts = key.split(/[\s　]+/).filter((p) => p.length >= 2);
-    if (parts.some((p) => kw.includes(p))) return cfg;
+    if (parts.some((p) => k.includes(p))) return cfg;
   }
   return null;
 }
@@ -272,11 +283,22 @@ function scoreEngagement(tw) {
 /** article の arcSummary + timeline の日付範囲を返す。バッファ7日前〜今日まで */
 function getArticleDateRange(article) {
   const dates = [];
-  for (const e of article.arcSummary || []) { if (e.date) dates.push(new Date(e.date)); }
-  for (const e of article.timeline   || []) { if (e.date) dates.push(new Date(e.date)); }
+  for (const e of article.arcSummary || []) {
+    if (e.date) {
+      const d = new Date(e.date);
+      if (!isNaN(d.getTime())) dates.push(d);
+    }
+  }
+  for (const e of article.timeline || []) {
+    if (e.date) {
+      const d = new Date(e.date);
+      if (!isNaN(d.getTime())) dates.push(d);
+    }
+  }
   if (!dates.length) return null;
-  const min = new Date(Math.min(...dates.map(d => d.getTime())));
-  const max = new Date(Math.max(...dates.map(d => d.getTime())));
+  const min = new Date(Math.min(...dates.map((d) => d.getTime())));
+  const max = new Date(Math.max(...dates.map((d) => d.getTime())));
+  if (isNaN(min.getTime()) || isNaN(max.getTime())) return null;
   const spanDays = (max.getTime() - min.getTime()) / 86400000;
   // 骨組みのみ（同日・直近だけ）の場合は日付フィルタしない
   if (spanDays < 14) return null;

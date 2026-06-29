@@ -1,0 +1,81 @@
+---
+import { formatDate } from "../../lib/case-helpers.mjs";
+
+const { article } = Astro.props;
+const pc = article.prosCons;
+if (!pc?.merits?.length && !pc?.demerits?.length) return null;
+
+const merits = pc.merits ?? [];
+const demerits = pc.demerits ?? [];
+---
+
+<section class="pros-cons" id="sec-proscons" aria-labelledby="pros-cons-title">
+  <h2 id="pros-cons-title">メリット・デメリット（公表数値）</h2>
+  {pc.disclaimer && <p class="pros-cons__note">{pc.disclaimer}</p>}
+
+  <div class="pros-cons__grid">
+    <div class="pros-cons__col pros-cons__col--merit">
+      <h3 class="pros-cons__col-title">メリット</h3>
+      <ul class="pros-cons__list">
+        {
+          merits.map((item) => (
+            <li class="pros-cons-card pros-cons-card--merit">
+              {item.figure && (
+                <p class="pros-cons-card__figure">{item.figure}</p>
+              )}
+              {item.headline && (
+                <p class="pros-cons-card__headline">{item.headline}</p>
+              )}
+              <p class="pros-cons-card__text">{item.text}</p>
+              {item.sourceUrl && (
+                <p class="pros-cons-card__source">
+                  <a href={item.sourceUrl} target="_blank" rel="noopener">
+                    {item.sourceLabel || "出典"} ↗
+                  </a>
+                  {item.sourceDate && (
+                    <time datetime={item.sourceDate}>
+                      {" "}
+                      · {formatDate(item.sourceDate)}
+                    </time>
+                  )}
+                </p>
+              )}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    <div class="pros-cons__col pros-cons__col--demerit">
+      <h3 class="pros-cons__col-title">デメリット</h3>
+      <ul class="pros-cons__list">
+        {
+          demerits.map((item) => (
+            <li class="pros-cons-card pros-cons-card--demerit">
+              {item.figure && (
+                <p class="pros-cons-card__figure">{item.figure}</p>
+              )}
+              {item.headline && (
+                <p class="pros-cons-card__headline">{item.headline}</p>
+              )}
+              <p class="pros-cons-card__text">{item.text}</p>
+              {item.sourceUrl && (
+                <p class="pros-cons-card__source">
+                  <a href={item.sourceUrl} target="_blank" rel="noopener">
+                    {item.sourceLabel || "出典"} ↗
+                  </a>
+                  {item.sourceDate && (
+                    <time datetime={item.sourceDate}>
+                      {" "}
+                      · {formatDate(item.sourceDate)}
+                    </time>
+                  )}
+                </p>
+              )}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+</section>

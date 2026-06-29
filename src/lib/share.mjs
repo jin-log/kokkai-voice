@@ -12,9 +12,7 @@ export function buildSharePayload(article) {
     article.nowSummary?.bullets?.[0]?.replace(/\s+/g, " ").trim().slice(0, 80) ||
     article.primarySpeech?.excerpt?.slice(0, 80) ||
     "";
-  const tweetText = hook
-    ? `${shortTitle} — あの話どうなった？\n${hook}\n`
-    : `${shortTitle} — あの話どうなった？\n`;
+  const tweetText = hook ? `${shortTitle}\n${hook}\n` : `${shortTitle}\n`;
   const params = new URLSearchParams({
     text: tweetText,
     url: pageUrl,

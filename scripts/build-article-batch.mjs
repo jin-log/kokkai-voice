@@ -75,7 +75,7 @@ for (const topic of topics) {
   const layers = buildArticleLayers(speech.speech, [topic.keyword], speechMeta);
   const article = {
     slug: topic.slug,
-    title: `${topic.title} — あの話どうなった？`,
+    title: topic.title,
     tags: topic.tags,
     category: "国会",
     searchKeyword: topic.keyword,

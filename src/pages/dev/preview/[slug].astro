@@ -1,5 +1,5 @@
 ---
-import BaseLayout from "../../../layouts/BaseLayout.astro";
+import DevLayout from "../../../layouts/DevLayout.astro";
 import DevHeader from "../../../components/DevHeader.astro";
 import SiteFooter from "../../../components/SiteFooter.astro";
 import CasePageContent from "../../../components/CasePageContent.astro";
@@ -8,7 +8,7 @@ import {
   loadArticle,
   loadStanceData,
 } from "../../../lib/articles.mjs";
-import { articleShortTitle } from "../../../lib/case-helpers.mjs";
+import { adminNavScript } from "../../../lib/dev-nav.mjs";
 
 export async function getStaticPaths() {
   const slugs = await getPreviewSlugs();
@@ -18,20 +18,9 @@ export async function getStaticPaths() {
 const { slug } = Astro.params;
 const article = await loadArticle(slug);
 const stance = await loadStanceData(article);
-const shortTitle = articleShortTitle(article);
-const description =
-  article.primarySpeech?.excerpt?.slice(0, 120) ||
-  article.nowSummary?.bullets?.[0]?.slice(0, 120) ||
-  "";
 ---
 
-<BaseLayout
-  title={`[プレビュー] ${shortTitle} — 日本の政治なう`}
-  description={description}
-  noindex={true}
-  bodyDataCase={article.slug}
-  includeAppJs
->
+<DevLayout tabTitle="·" bodyDataCase={article.slug} includeAppJs>
   <DevHeader current="preview" />
   <div id="preview-gate" style="display:none">
     <CasePageContent article={article} stance={stance} preview={true} />
@@ -40,16 +29,14 @@ const description =
   <div id="preview-lock" style="display:none">
     <div style="min-height:60vh;display:flex;align-items:center;justify-content:center">
       <div style="text-align:center;padding:2rem">
-        <p style="font-size:1.1rem;margin-bottom:0.5rem">🔒 管理者PINを入力</p>
-        <p style="font-size:0.85rem;color:var(--color-text-muted);margin-bottom:1rem">
-          非公開記事のプレビューです（/dev/status/ と同じPIN）
-        </p>
+        <p style="font-size:1.1rem;margin-bottom:1rem">🔒 認証が必要です</p>
         <input
           id="preview-pin-input"
           type="password"
           maxlength="8"
           style="font-size:1.5rem;text-align:center;width:8rem;padding:0.5rem;border:2px solid var(--color-border);border-radius:0.5rem"
           placeholder="••••"
+          autocomplete="off"
         />
         <br /><br />
         <button
@@ -58,18 +45,20 @@ const description =
         >
           入力
         </button>
-        <p id="preview-pin-error" style="color:red;margin-top:0.5rem;display:none">PINが違います</p>
+        <p id="preview-pin-error" style="color:red;margin-top:0.5rem;display:none">認証に失敗しました</p>
         <p style="margin-top:1.5rem;font-size:0.85rem">
-          <a href="/dev/status/">管理画面へ</a>
+          <button type="button" data-admin-nav style="background:none;border:none;color:var(--color-primary);cursor:pointer;text-decoration:underline">
+            戻る
+          </button>
         </p>
       </div>
     </div>
   </div>
 
-  <SiteFooter note="非公開プレビュー（管理者用）" />
-</BaseLayout>
+  <SiteFooter note="" />
+</DevLayout>
 
-<script>
+<script define:vars={{ adminNavScript }}>
 const PIN = "1192";
 const KEY = "dev_auth";
 
@@ -79,6 +68,8 @@ function show(id) {
 function hide(id) {
   document.getElementById(id).style.display = "none";
 }
+
+eval(adminNavScript);
 
 if (localStorage.getItem(KEY) === PIN) {
   show("preview-gate");

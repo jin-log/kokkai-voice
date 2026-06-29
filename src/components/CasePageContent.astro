@@ -2,6 +2,7 @@
 /**
  * 案件ページ本体（公開・プレビュー共通）
  */
+import ProsCons from "./case/ProsCons.astro";
 import ArcSummary from "./case/ArcSummary.astro";
 import NowBox from "./case/NowBox.astro";
 import ReactionSummary from "./case/ReactionSummary.astro";
@@ -32,7 +33,7 @@ const sourceTag =
       <strong>プレビュー（非公開）</strong>
       — 一般公開前の確認用。内容を確認して管理画面から「公開する」を押してください。
     </p>
-    <a href="/dev/status/" class="preview-banner__link">← 管理画面に戻る</a>
+    <button type="button" class="preview-banner__link" data-admin-nav>← 戻る</button>
   </div>
 )}
 
@@ -50,6 +51,7 @@ const sourceTag =
     {!preview && <ShareBar article={article} />}
 
     <NowBox article={article} />
+    <ProsCons article={article} />
     <ArcSummary article={article} />
     <ReactionSummary article={article} />
     <SummaryLayers article={article} />

@@ -19,8 +19,10 @@ export const CHECK_LABELS = {
   B2_disclaimer: { label: "AI注記", todo: "disclaimer を追加" },
   C1_summaryBullets: { label: "要点", todo: "summaryBullets を3点以上" },
   D1_arcSummary: { label: "経緯", todo: "日付付き経緯を3行以上" },
-  E1_timeline_count: { label: "タイムライン", todo: "出来事を3件以上" },
-  E2_timeline_speeches: { label: "国会発言リンク", todo: "タイムラインに国会URLを2件" },
+  E1_timeline_count: { label: "タイムライン", todo: "出来事を6件以上（X3+国会3）" },
+  E2_timeline_x: { label: "タイムラインX", todo: "X投稿を3件以上タイムラインに" },
+  E3_timeline_diet: { label: "タイムライン国会", todo: "国会発言を3件以上タイムラインに" },
+  J1_prosCons: { label: "メリデメ", todo: "公表数値付きメリット2・デメリット2" },
   F1_glossary: { label: "用語解説", todo: "用語を2語以上" },
   G1_stanceMatrix_ref: { label: "〇×表リンク", todo: "stanceMatrix を設定" },
   G2_policy_matrix_file: { label: "公言と行動ファイル", todo: "policy-matrix JSON を作成" },
@@ -71,28 +73,39 @@ export function checkCasePage(article, opts = {}) {
   const arcDated = arc.filter((x) => typeof x === "object" && x.date && x.text);
   add("D1_arcSummary", arcDated.length >= 3, `${arcDated.length}/3 行（日付付き）`);
 
-  // E. タイムライン
+  // E. タイムライン — X3 + 国会3 = 計6以上
   const tl = article.timeline ?? [];
-  const isKokkai = article.category === "国会";
-  const speeches = isKokkai
-    ? tl.filter((e) => e.type === "speech" && e.speech?.speechURL)
-    : tl.filter(
-        (e) =>
-          (e.type === "speech" || e.type === "source") &&
-          (e.speech?.speechURL || e.sourceUrl),
-      );
-  add("E1_timeline_count", tl.length >= 3, `${tl.length}/3 件`);
-  add(
-    "E2_timeline_speeches",
-    speeches.length >= 2,
-    isKokkai
-      ? `${speeches.length}/2 国会発言`
-      : `${speeches.length}/2 出典リンク`,
+  const xInTl = tl.filter((e) => e.type === "x_post" && e.xPost?.post_url);
+  const dietInTl = tl.filter(
+    (e) =>
+      e.type === "speech" &&
+      e.speech?.speechURL?.includes("kokkai.ndl.go.jp"),
   );
+  add("E1_timeline_count", tl.length >= 6, `${tl.length}/6 件`);
+  add("E2_timeline_x", xInTl.length >= 3, `${xInTl.length}/3 X`);
+  add("E3_timeline_diet", dietInTl.length >= 3, `${dietInTl.length}/3 国会`);
 
   // F. 用語
   const gloss = article.glossary ?? article.nowSummary?.glossary ?? [];
   add("F1_glossary", gloss.length >= 2, `${gloss.length}/2 語`);
+
+  // J. メリット・デメリット（公表数値必須）
+  const pc = article.prosCons;
+  const merits = pc?.merits ?? [];
+  const demerits = pc?.demerits ?? [];
+  const meritOk =
+    merits.length >= 2 &&
+    merits.every((m) => m.text && m.figure && m.sourceUrl);
+  const demeritOk =
+    demerits.length >= 2 &&
+    demerits.every((m) => m.text && m.figure && m.sourceUrl);
+  add(
+    "J1_prosCons",
+    meritOk && demeritOk,
+    meritOk && demeritOk
+      ? `メリ${merits.length}・デメ${demerits.length}`
+      : `メリ${merits.length}/2・デメ${demerits.length}/2（各 figure+sourceUrl 必須）`,
+  );
 
   // G. 公言と行動（〇×）— 必須
   const sm = article.stanceMatrix;
@@ -140,7 +153,7 @@ export function checkCasePage(article, opts = {}) {
   } else if (xBad.length > 0) {
     add("H1_xPosts", false, `未検証URL ${xBad.length} 件 — reset-xposts または post_text 補完`);
   } else {
-    const xMin = article.xPostsMinRequired ?? 1;
+    const xMin = article.xPostsMinRequired ?? 3;
     add(
       "H1_xPosts",
       xVerified.length >= xMin,

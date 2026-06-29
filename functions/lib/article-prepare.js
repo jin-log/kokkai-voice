@@ -28,9 +28,9 @@ export function makeSlug(keyword) {
   return `case-${Date.now().toString(36)}`;
 }
 
-/** @param {string} keyword */
+/** @param {string} keyword — 暫定。ライターSkillで具体疑問タイトルに差し替え必須 */
 export function defaultTitle(keyword) {
-  return `${keyword.trim()} — あの話どうなった？`;
+  return keyword.trim();
 }
 
 /** @param {string} keyword @param {string} [title] */

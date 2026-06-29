@@ -131,6 +131,21 @@ const events = sortTimelineEvents(getTimelineEvents(article), defaultOrder);
                       </div>
                     </>
                   )}
+                  {ev.type === "source" && (
+                    <>
+                      <p class="timeline-item__type">出典 · 公式</p>
+                      <div class="event-card">
+                        {ev.summaryPlain && <p>{ev.summaryPlain}</p>}
+                        {ev.sourceUrl && (
+                          <blockquote class="quote-block">
+                            <a href={ev.sourceUrl} target="_blank" rel="noopener">
+                              出典を見る ↗
+                            </a>
+                          </blockquote>
+                        )}
+                      </div>
+                    </>
+                  )}
                   {ev.type === "x_post" && ev.xPost && (
                     <>
                       <p class="timeline-item__type">X</p>

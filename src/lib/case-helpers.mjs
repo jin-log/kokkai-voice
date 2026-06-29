@@ -42,7 +42,7 @@ export function articlePolicyTitle(article, matrix) {
 }
 
 export function articleShortTitle(article) {
-  return article.title.replace(" — あの話どうなった？", "");
+  return (article.title || "").replace(/\s*—\s*あの話どうなった？\s*$/, "").trim();
 }
 
 /** Exclude parties with sourceUrl null + 要出典 (legal L3). */
@@ -58,6 +58,9 @@ export function getGlossary(article) {
 
 export function getFloatTocItems(article, hasStance) {
   const items = [{ href: "#sec-now", label: "いまの結論" }];
+  if (article.prosCons?.merits?.length || article.prosCons?.demerits?.length) {
+    items.push({ href: "#sec-proscons", label: "メリデメ" });
+  }
   if (article.arcSummary?.length) {
     items.push({ href: "#sec-arc", label: "経緯" });
   }

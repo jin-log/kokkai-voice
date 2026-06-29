@@ -1,5 +1,5 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
+import BaseLayout from "../../layouts/DevLayout.astro";
 import DevHeader from "../../components/DevHeader.astro";
 import SiteFooter from "../../components/SiteFooter.astro";
 import { loadProjectStatus } from "../../lib/project-status.mjs";
@@ -12,15 +12,11 @@ function formatJa(iso) {
 }
 ---
 
-<BaseLayout
-  title="[開発] 完成度 — 日本の政治なう"
-  description="開発者用ページ"
-  noindex={true}
->
+<BaseLayout tabTitle="·">
   <DevHeader current="status" />
   <div id="dev-gate" style="display:none">
     <main class="container status-page">
-      <p class="status-page__lead status-page__lead--dev">🔒 開発者専用（PIN 1192）</p>
+      <p class="status-page__lead status-page__lead--dev">🔒 認証が必要です</p>
       <h1 class="status-page__title">サイト完成度</h1>
       <p class="status-page__lead">
         active {status?.activeCount ?? 0} 件を <strong>100%完成</strong> まで仕上げてから次を増やす方針です。
@@ -143,7 +139,12 @@ function formatJa(iso) {
                         <span class="deploy-slug-status" data-slug={s.slug} hidden></span>
                       </>
                     ) : s.publishState === "live" ? (
-                      <p class="status-card__deploy-hint">✅ 一般公開中 — <a href={`/case/${s.slug}/`}>/case/{s.slug}/</a></p>
+                      <>
+                        <p class="status-card__deploy-hint">✅ 一般公開中 — <a href={`/case/${s.slug}/`}>/case/{s.slug}/</a></p>
+                        <a href={`/dev/hatena/#${s.slug}`} class="dev-deploy__btn dev-deploy__btn--preview">
+                          📑 はてブ投稿
+                        </a>
+                      </>
                     ) : (
                       <p class="status-card__deploy-hint">①〜④が全部OKになるとプレビューと公開ボタンが使えます（現在 {s.gatePct}%）</p>
                     )}
@@ -204,7 +205,7 @@ function formatJa(iso) {
     </div>
   </div>
 
-  <SiteFooter note="開発者専用ページ" />
+  <SiteFooter note="" />
 </BaseLayout>
 
 <script>
@@ -236,7 +237,7 @@ if (localStorage.getItem(KEY) === PIN) {
 document.getElementById("new-keyword").addEventListener("input", () => {
   const kw = document.getElementById("new-keyword").value.trim();
   if (!document.getElementById("new-title").dataset.manual) {
-    document.getElementById("new-title").value = kw ? `${kw} — あの話どうなった？` : "";
+    document.getElementById("new-title").value = kw ? `${kw}（具体疑問タイトルに編集）` : "";
   }
 });
 document.getElementById("new-title").addEventListener("input", () => {
