@@ -18,7 +18,9 @@ description: >-
 
 1. `docs/writer-editorial.md` — 編集方針
 2. `docs/policy-matrix.md` — 〇×・公約優先
-3. `.cursor/rules/仕事/kokkai-voice/writer.mdc` — データ規約・API
+3. **ルール（正本）:** `ceo-sync/cursor/rules/仕事/kokkai-voice/writer.mdc`  
+   Mac: `~/Projects/ceo-sync/cursor/rules/仕事/kokkai-voice/writer.mdc`  
+   Win: `C:\Users\bero1\Projects\ceo-sync\cursor\rules\仕事\kokkai-voice\writer.mdc`
 
 ## オーナー方針（Skill内固定・verbatim）
 
