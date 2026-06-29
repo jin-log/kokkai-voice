@@ -10,6 +10,7 @@ import { loadAllArticles } from "../src/lib/articles.mjs";
 import { pickTopForDigest } from "../src/lib/article-promo-score.mjs";
 import { buildHatena } from "../src/lib/promo-generate.mjs";
 import { launchLoggedIn } from "../src/lib/browser-session.mjs";
+import { recordPromoIntro } from "../src/lib/promo-intro-status.mjs";
 
 const dryRun = process.argv.includes("--dry-run");
 const slugArg = process.argv.find((a, i) => process.argv[i - 1] === "--slug");
@@ -64,6 +65,7 @@ async function main() {
     const hatena = buildHatena(article);
     console.log(`\n→ ${article.slug}`);
     await postOne(page, hatena);
+    await recordPromoIntro(article.slug, "hatena");
     console.log(`OK ${article.slug}`);
   }
 

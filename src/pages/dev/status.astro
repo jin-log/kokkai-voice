@@ -3,6 +3,7 @@ import BaseLayout from "../../layouts/DevLayout.astro";
 import DevHeader from "../../components/DevHeader.astro";
 import SiteFooter from "../../components/SiteFooter.astro";
 import { loadProjectStatus, sortSlugsForAdminPanel, adminSlugFilter } from "../../lib/project-status.mjs";
+import { promoDateShort } from "../../lib/promo-intro-status.mjs";
 
 const status = await loadProjectStatus().catch(() => null);
 const adminSlugs = status ? sortSlugsForAdminPanel(status.slugs) : [];
@@ -78,12 +79,6 @@ function formatJa(iso) {
               </p>
             </section>
 
-            <section class="dev-workflow-panel" id="workflow-panel" aria-live="polite">
-              <h2>⚙️ GitHub Actions（デプロイ・生成の状況）</h2>
-              <p id="workflow-summary" class="dev-workflow-panel__summary">読み込み中…</p>
-              <ul id="workflow-list" class="dev-workflow-panel__list"></ul>
-            </section>
-
             <section class="dev-deploy" aria-label="サイト反映">
               <h2>🚀 サイトを反映</h2>
               <p class="dev-deploy__note">main の最新（プレビューページ含む）を Cloudflare にデプロイします。記事完成直後のプレビュー表示にも使います。</p>
@@ -141,7 +136,17 @@ function formatJa(iso) {
                     <span class="status-card__pct">{s.goldPct}%</span>
                   </header>
                   <p class="status-card__slug"><code>{s.slug}</code></p>
-                  <p class="status-card__run-state" data-run-state={s.slug}>⏸️ 待機中（自動処理なし）</p>
+                  <ul class="status-card__promo" aria-label="外部紹介">
+                    <li class:list={["status-card__promo-item", s.promo?.x && "is-done"]}>
+                      X {s.promo?.x ? `✓ ${promoDateShort(s.promo.x)}` : "—"}
+                    </li>
+                    <li class:list={["status-card__promo-item", s.promo?.hatena && "is-done"]}>
+                      はてブ {s.promo?.hatena ? `✓ ${promoDateShort(s.promo.hatena)}` : "—"}
+                    </li>
+                    <li class:list={["status-card__promo-item", s.promo?.note && "is-done"]}>
+                      note {s.promo?.note ? `✓ ${promoDateShort(s.promo.note)}` : "—"}
+                    </li>
+                  </ul>
                   <p class="status-card__next">{s.nextAction ?? "npm run status で次アクションを更新"}</p>
                   <div class="status-card__title-edit">
                     <input type="text" class="status-card__title-input" value={s.title} data-slug={s.slug} aria-label="タイトル編集" />
@@ -211,10 +216,10 @@ function formatJa(iso) {
             <section class="status-legend">
               <h2>状態の見方</h2>
               <ul class="status-legend__states">
-                <li><strong>🔄 処理中</strong> — GitHub が記事生成・デプロイ中（1〜3分）</li>
-                <li><strong>⏸️ 制作中</strong> — ①〜④のどこかが未完了</li>
-                <li><strong>📋 完成・非公開</strong> — 中身OK。プレビューで確認 →「公開する」</li>
+                <li><strong>要対応タブ</strong> — 制作中・非表示（公開済みは別タブ）</li>
+                <li><strong>📋 完成・非公開</strong> — プレビューで確認 →「公開する」</li>
                 <li><strong>✅ 公開中</strong> — 一般ユーザーに /case/ で表示</li>
+                <li><strong>X / はてブ / note</strong> — 紹介済みは緑✓＋日付、未は —</li>
               </ul>
               <h2>パイプライン（順番固定）</h2>
               <ol>
@@ -388,9 +393,8 @@ document.getElementById("new-generate").addEventListener("click", async () => {
       statusEl.className = "dev-new-article__status is-ok";
       statusEl.textContent = `✅ ${data.message}`;
       if (data.slug) {
-        markPendingSlug(data.slug, "新規記事生成");
+        statusEl.textContent += ` — slug: ${data.slug}`;
       }
-      refreshWorkflows();
     } else {
       statusEl.className = "dev-new-article__status is-error";
       statusEl.textContent = "❌ " + (data.error || "生成できません");
@@ -404,45 +408,6 @@ document.getElementById("new-generate").addEventListener("click", async () => {
     btn.disabled = false;
   }
 });
-
-function workflowLabel(run) {
-  if (run.inProgress) return "⏳ 実行中";
-  if (run.conclusion === "success") return "✅ 完了";
-  if (run.conclusion === "failure") return "❌ 失敗";
-  if (run.conclusion === "cancelled") return "— キャンセル";
-  return run.status;
-}
-
-function setRunState(slug, text, kind = "idle") {
-  const el = document.querySelector(`[data-run-state="${slug}"]`);
-  if (!el) return;
-  el.textContent = text;
-  el.className = "status-card__run-state";
-  if (kind === "active") el.classList.add("is-active");
-  if (kind === "ready") el.classList.add("is-ready");
-  if (kind === "done") el.classList.add("is-done");
-}
-
-function markPendingSlug(slug, label) {
-  try {
-    sessionStorage.setItem("kv_pending_slug", JSON.stringify({ slug, label, at: Date.now() }));
-  } catch { /* ignore */ }
-}
-
-function readPendingSlug() {
-  try {
-    const raw = sessionStorage.getItem("kv_pending_slug");
-    if (!raw) return null;
-    const p = JSON.parse(raw);
-    if (Date.now() - p.at > 15 * 60 * 1000) {
-      sessionStorage.removeItem("kv_pending_slug");
-      return null;
-    }
-    return p;
-  } catch {
-    return null;
-  }
-}
 
 async function refreshBufferStatus() {
   const pin = getPin();
@@ -522,92 +487,6 @@ async function refreshBufferStatus() {
   }
 }
 
-async function refreshWorkflows() {
-  const pin = getPin();
-  if (!pin) return;
-  const summary = document.getElementById("workflow-summary");
-  const list = document.getElementById("workflow-list");
-  const panel = document.getElementById("workflow-panel");
-  if (!summary || !list) return;
-
-  try {
-    const res = await fetch(`/api/admin-status?pin=${encodeURIComponent(pin)}`);
-    const data = await res.json();
-    if (!data.ok) throw new Error(data.error || "取得失敗");
-
-    const activeBySlug = data.activeBySlug || {};
-    const pending = readPendingSlug();
-
-    if (data.activeCount > 0) {
-      summary.className = "dev-workflow-panel__summary is-active";
-      summary.textContent = `🔄 いま ${data.activeCount} 件が GitHub 上で動いています（1〜3分）— 完了すると自動でデプロイ`;
-      panel?.classList.add("is-live");
-    } else {
-      summary.className = "dev-workflow-panel__summary";
-      summary.textContent = "⏸️ いま動いている自動処理はなし — 記事が進まないのは「待機中」= CEO/ライター手作業待ち";
-      panel?.classList.remove("is-live");
-    }
-
-    document.querySelectorAll("[data-run-state]").forEach((el) => {
-      const slug = el.getAttribute("data-run-state");
-      if (activeBySlug[slug]) {
-        setRunState(slug, `🔄 処理中: ${activeBySlug[slug]}`, "active");
-      } else if (pending?.slug === slug && data.activeCount > 0) {
-        setRunState(slug, "🔄 起動直後 — GitHub 反映待ち", "active");
-      } else {
-        const card = el.closest(".status-card");
-        const pct = card?.querySelector(".status-card__pct")?.textContent || "";
-        const gateHint = card?.querySelector(".status-card__deploy-hint");
-        const deployBtn = card?.querySelector(".publish-slug-btn");
-        const draft = card?.dataset.publishState === "draft";
-        if (deployBtn || draft) {
-          setRunState(slug, "📋 完成・非公開 — プレビュー確認後「公開する」", "ready");
-        } else if (gateHint) {
-          setRunState(slug, "⏸️ 待機中 — 下の「あと N 項目」を埋める（自動では動かない）", "idle");
-        } else if (pct === "100%" && card?.dataset.publishState === "live") {
-          setRunState(slug, "✅ 公開中", "done");
-        } else {
-          setRunState(slug, "⏸️ 待機中 — 中身の作成待ち", "idle");
-        }
-      }
-    });
-
-    if (data.activeCount === 0 && pending) {
-      sessionStorage.removeItem("kv_pending_slug");
-    }
-
-    list.innerHTML = "";
-    for (const run of data.runs.slice(0, 8)) {
-      const li = document.createElement("li");
-      li.className = "dev-workflow-panel__item";
-      if (run.inProgress) li.classList.add("is-active");
-      const when = new Date(run.createdAt).toLocaleString("ja-JP", { month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" });
-      const slugNote = run.slugHint ? ` [${run.slugHint}]` : "";
-      li.innerHTML = `<span class="dev-workflow-panel__state"></span><span class="dev-workflow-panel__name"></span><time></time>`;
-      li.querySelector(".dev-workflow-panel__state").textContent = workflowLabel(run);
-      li.querySelector(".dev-workflow-panel__name").textContent = run.name + slugNote;
-      li.querySelector("time").textContent = when;
-      if (run.url) {
-        li.style.cursor = "pointer";
-        li.title = "GitHub で詳細";
-        li.addEventListener("click", () => window.open(run.url, "_blank"));
-      }
-      list.appendChild(li);
-    }
-  } catch (e) {
-    summary.className = "dev-workflow-panel__summary is-error";
-    summary.textContent = "⚠️ 状況取得失敗（GH_TOKEN に Actions:Read が必要）: " + e.message;
-  }
-}
-
-if (localStorage.getItem(KEY) === PIN) {
-  refreshBufferStatus();
-  refreshWorkflows();
-  initAdminPager();
-  setInterval(refreshBufferStatus, 15000);
-  setInterval(refreshWorkflows, 15000);
-}
-
 const ADMIN_PAGE_SIZE = 8;
 let adminFilter = "action";
 let adminPage = 1;
@@ -685,6 +564,12 @@ function renderAdminPage() {
   if (wrap) wrap.dataset.filterMode = adminFilter;
 }
 
+if (localStorage.getItem(KEY) === PIN) {
+  refreshBufferStatus();
+  initAdminPager();
+  setInterval(refreshBufferStatus, 15000);
+}
+
 document.querySelectorAll(".save-title-btn").forEach((btn) => {
   btn.addEventListener("click", async () => {
     const slug = btn.dataset.slug;
@@ -732,7 +617,6 @@ async function adminAction(btn, action, confirmMsg) {
     statusEl.className = "admin-action-status is-ok";
     statusEl.textContent = "✅ " + data.message + " — 15秒後に再読込";
     setTimeout(() => location.reload(), 15000);
-    refreshWorkflows();
   } catch (e) {
     statusEl.className = "admin-action-status is-error";
     statusEl.textContent = "❌ " + e.message;
