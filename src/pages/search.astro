@@ -3,6 +3,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import SiteHeader from "../components/SiteHeader.astro";
 import PreReleaseBanner from "../components/PreReleaseBanner.astro";
 import SiteFooter from "../components/SiteFooter.astro";
+import { SITE } from "../lib/site-config.mjs";
 import { loadAllArticles, articleToSearchEntry } from "../lib/articles.mjs";
 
 const articles = await loadAllArticles();
@@ -12,7 +13,7 @@ const categories = [
 ].sort();
 ---
 
-<BaseLayout title="検索｜日本の政治なう">
+<BaseLayout title={`検索｜${SITE.name}`}>
   <PreReleaseBanner />
   <SiteHeader showSearch />
   <main class="container search-page">

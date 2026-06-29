@@ -6,6 +6,7 @@ import PreReleaseBanner from "../components/PreReleaseBanner.astro";
 import NotePromo from "../components/NotePromo.astro";
 import NoteStickyBar from "../components/NoteStickyBar.astro";
 import CaseCard from "../components/CaseCard.astro";
+import { SITE } from "../lib/site-config.mjs";
 import { loadAllArticles } from "../lib/articles.mjs";
 
 const articles = await loadAllArticles();
@@ -33,14 +34,14 @@ const rest = articles.filter(
 );
 ---
 
-<BaseLayout title="日本の政治なう — あの話どうなった？">
+<BaseLayout title={`${SITE.name} — あの話どうなった？`}>
   <PreReleaseBanner />
   <SiteHeader showSearch />
   <main class="container hero">
     <h1 class="hero__title">あの話<br />どうなった？</h1>
     <p class="hero__lead">
       政治家の発言と行動を追いかける。<br />
-      みんなの気持ちが分かる「日本の政治なう」
+      みんなの気持ちが分かる「{SITE.name}」
     </p>
     <NotePromo medium="hero" variant="full" />
   </main>

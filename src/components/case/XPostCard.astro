@@ -1,0 +1,66 @@
+---
+import { formatDate } from "../../lib/case-helpers.mjs";
+import { excerptXPostText, xScreenshotThumb } from "../../lib/x-post-ui.mjs";
+
+const { xPost } = Astro.props;
+const text = xPost.post_text || "";
+const { excerpt, isLong, full } = excerptXPostText(text);
+const thumb = xScreenshotThumb(xPost.screenshot, xPost.screenshot_thumb);
+const meta = xPost.captured_at
+  ? `取得: ${formatDate(xPost.captured_at.slice(0, 10))} · 公人の公式投稿の記録`
+  : "URL登録済み · スクショ取得待ち";
+---
+
+<div class="event-card event-card--x">
+  <p class="event-card__who">{xPost.account_label || xPost.speaker_hint}</p>
+  <p class="event-card__meta">{meta}</p>
+
+  {text && (
+    <div class:list={["x-post-text", isLong && "x-post-text--collapsible"]} data-x-post-text={isLong ? full : undefined}>
+      {isLong ? (
+        <>
+          <p class="x-post-text__excerpt">{excerpt}</p>
+          <p class="x-post-text__full">{full}</p>
+          <button type="button" class="x-post-text__toggle x-post-text__toggle--more" aria-expanded="false">
+            全文を見る ↓
+          </button>
+          <button type="button" class="x-post-text__toggle x-post-text__toggle--less" aria-expanded="true">
+            閉じる ↑
+          </button>
+        </>
+      ) : (
+        <p class="x-post-text__excerpt">{excerpt}</p>
+      )}
+    </div>
+  )}
+
+  {thumb && xPost.screenshot && (
+    <figure class="x-thumb">
+      <button
+        type="button"
+        class="x-thumb__btn"
+        data-x-lightbox
+        data-x-lightbox-full={xPost.screenshot}
+        aria-label="X投稿スクリーンショットを拡大表示"
+      >
+        <img
+          src={thumb}
+          alt="X投稿のスクリーンショット（改変なし・取得時点）"
+          loading="lazy"
+          width="220"
+          height="124"
+        />
+        <span class="x-thumb__hint">タップで拡大</span>
+      </button>
+      <figcaption class="x-thumb__caption">
+        <a href={xPost.post_url} target="_blank" rel="noopener">元投稿を見る ↗</a>
+      </figcaption>
+    </figure>
+  )}
+
+  {!xPost.screenshot && xPost.post_url && (
+    <blockquote class="quote-block">
+      <a href={xPost.post_url} target="_blank" rel="noopener">元投稿を見る ↗</a>
+    </blockquote>
+  )}
+</div>

@@ -4,13 +4,14 @@
  *
  *   npm run browser:login -- note
  *   npm run browser:login -- hatena
+ *   npm run browser:login -- x
  *
  * Chromium が開く → ログイン完了を自動検知して保存
  */
 import { mkdir } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { chromium } from "playwright";
+import { launchBrowserContext } from "./lib/playwright-browser.mjs";
 
 const root = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
 const PROFILES = {
@@ -28,11 +29,22 @@ const PROFILES = {
       /^https:\/\/(www\.hatena\.ne\.jp\/(?!login)|b\.hatena\.ne\.jp\/)/.test(url) &&
       !url.includes("/login"),
   },
+  x: {
+    dir: path.join(root, "secrets/browser/profile-x"),
+    startUrl: "https://x.com/login",
+    isLoggedIn: (url) => {
+      if (!/^https:\/\/(x\.com|twitter\.com)\//.test(url)) return false;
+      if (/login|flow|onboarding|jf\/|signin|oauth|accounts\.google/i.test(url)) return false;
+      return /^https:\/\/(x\.com|twitter\.com)\/(home|search|notifications|messages|settings|compose)/.test(
+        url,
+      );
+    },
+  },
 };
 
 const service = process.argv[2];
 if (!service || !PROFILES[service]) {
-  console.error("使い方: npm run browser:login -- note|hatena");
+  console.error("使い方: npm run browser:login -- note|hatena|x");
   process.exit(1);
 }
 
@@ -51,21 +63,30 @@ async function waitForLogin(page, timeoutMs = 600_000) {
 async function main() {
   await mkdir(cfg.dir, { recursive: true });
 
-  console.log(`\n[${service}] Chromium を開きます（このウィンドウでログインしてください）`);
+  console.log(`\n[${service}] Chrome を開きます（このウィンドウでログインしてください）`);
   console.log(cfg.startUrl);
+  if (service === "x") {
+    console.log("");
+    console.log("【重要】「Googleでログイン」は使わないでください（ブロックされます）");
+    console.log("  → Xのメールアドレス or ユーザー名 ＋ パスワード でログイン");
+    console.log("  → パスワード未設定なら、普段のChromeで x.com → 設定 → パスワード を先に作成");
+    console.log("");
+  }
   console.log("ログインが終わると自動でセッションを保存して閉じます。\n");
 
-  const context = await chromium.launchPersistentContext(cfg.dir, {
-    headless: false,
-    viewport: { width: 1280, height: 900 },
-    locale: "ja-JP",
-  });
+  const context = await launchBrowserContext(cfg.dir, { headless: false });
 
   const page = context.pages()[0] || (await context.newPage());
   await page.goto(cfg.startUrl, { waitUntil: "domcontentloaded" });
 
   const doneUrl = await waitForLogin(page);
   console.log(`ログイン検知: ${doneUrl}`);
+  if (service === "x" && !/^https:\/\/(x\.com|twitter\.com)\/(home|search)/.test(doneUrl)) {
+    console.warn(
+      "\n⚠ ホーム画面ではないURLで保存されました。ログイン完了後 x.com/home が開いているか確認してください。",
+    );
+    console.warn("確認: npm run x:verify-login\n");
+  }
   console.log(`セッション保存先: ${cfg.dir}`);
   await context.close();
   console.log(`OK [${service}] 次回からログイン不要です。`);

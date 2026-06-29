@@ -8,6 +8,7 @@ interface Props {
   title: string;
   description?: string;
   ogImage?: string;
+  ogImageAlt?: string;
   noindex?: boolean;
   bodyClass?: string;
   bodyDataCase?: string;
@@ -18,7 +19,8 @@ interface Props {
 const {
   title,
   description = "政治家の発言と行動を追いかける。あの話どうなった？ 国会議事録＋X投稿を案件ごとに整理した政治解説メディア。",
-  ogImage = `/assets/logo-nihon-seiji-naw.png?v=${ASSET_V}`,
+  ogImage = `/assets/og-default.png?v=${ASSET_V}`,
+  ogImageAlt = `${SITE.name} — あの話どうなった？`,
   noindex = false,
   bodyClass,
   bodyDataCase,
@@ -27,6 +29,7 @@ const {
 } = Astro.props;
 
 const canonicalUrl = new URL(Astro.url.pathname, "https://seiji1192.site").href;
+const ogImageUrl = new URL(ogImage, "https://seiji1192.site").href;
 const adsClient = SITE.adsensePubId;
 const showAds = enableAds && adsClient;
 ---
@@ -45,15 +48,19 @@ const showAds = enableAds && adsClient;
     <meta property="og:url" content={canonicalUrl} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:image" content={`https://seiji1192.site${ogImage}`} />
-    <meta property="og:site_name" content="日本の政治なう" />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={ogImageAlt} />
+    <meta property="og:site_name" content={SITE.name} />
     <meta property="og:locale" content="ja_JP" />
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@seiji1192site" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={`https://seiji1192.site${ogImage}`} />
+    <meta name="twitter:image" content={ogImageUrl} />
+    <meta name="twitter:image:alt" content={ogImageAlt} />
     <link rel="icon" href="/assets/favicon.png" type="image/png" />
     <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png" />
     {

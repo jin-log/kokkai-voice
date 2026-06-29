@@ -1,0 +1,68 @@
+{
+  "updatedAt": "2026-06-29T17:00:00.000Z",
+  "status": "research_phase",
+  "note": "前回の報道切り抜き10本は削除。docs/shorts-consult-research.md のチェックリスト通過分のみ追加する。",
+  "selection_checklist": [
+    "顔出し喋りが画面の80%未満",
+    "TTS or テロップで内容が伝わる",
+    "30〜60秒",
+    "ストック/静止画/モーション中心",
+    "煽りタイトルではない",
+    "Remotionテンプレで再現可能",
+    "政治now.への転用理由を1行で説明できる"
+  ],
+  "formats": {
+    "F1_number_telop": {
+      "label": "F1 数字フック＋テロップ",
+      "description": "ストック背景＋大テロップ＋TTS 3文",
+      "examples": []
+    },
+    "F2_ranking_3": {
+      "label": "F2 ランキング3点",
+      "description": "量産主力。同一構造で案件差し替え",
+      "examples": []
+    },
+    "F3_x_screenshot": {
+      "label": "F3 Xスクショ＋解説",
+      "description": "自社スクショ Ken Burns＋出典",
+      "examples": []
+    },
+    "F4_term_explainer": {
+      "label": "F4 用語サクッと",
+      "description": "「〇〇とは」30秒",
+      "examples": []
+    },
+    "F5_weekly_digest": {
+      "label": "F5 週次ダイジェスト",
+      "description": "CTA弱め。チャンネル育成",
+      "examples": []
+    }
+  },
+  "material_stack": [
+    { "id": "ogp", "auto": true, "risk": "low", "use": "フック・数字カード" },
+    { "id": "x_screenshot", "auto": true, "risk": "low", "use": "F3主役・証拠" },
+    { "id": "pexels_stock", "auto": true, "risk": "low", "use": "議事堂外観・都市B-roll" },
+    { "id": "voicevox_tts", "auto": true, "risk": "low", "use": "固定ナレーション" },
+    { "id": "remotion_template", "auto": true, "risk": "low", "use": "テロップ・下帯" },
+    { "id": "diet_broadcast_clip", "auto": false, "risk": "high", "use": "原則使わない（衆参映像著作権）" },
+    { "id": "news_broadcast_clip", "auto": false, "risk": "high", "use": "使わない" }
+  ],
+  "channels_for_structure_only": [
+    {
+      "name": "（未選定）雑学・ランキング系",
+      "url": null,
+      "learn": "F2の秒数配分・テロップ切替のみ参考。中身は政治now.独自"
+    }
+  ],
+  "rejected_previous_benchmarks": {
+    "reason": "報道切り抜き・顔出し喋り中心。自動量産フォーマットと不一致",
+    "removed_at": "2026-06-29"
+  },
+  "reject": [
+    "報道・中継の顔出し切り抜き",
+    "アンチ政党・人格攻撃",
+    "国会中継映像の無断切り抜き",
+    "ゆっくりキャラ",
+    "禁断・爆笑系タイトル"
+  ]
+}

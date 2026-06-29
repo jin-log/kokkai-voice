@@ -3,8 +3,29 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const root = path.join(__dirname, "../..");
+const rootFromModule = path.join(__dirname, "../..");
 
+function opsQueuePaths() {
+  const cwd = process.cwd();
+  return [
+    path.join(cwd, "data/ops-queue.json"),
+    path.join(cwd, "public/data/ops-queue.json"),
+    path.join(rootFromModule, "data/ops-queue.json"),
+  ];
+}
+
+export async function loadOpsQueue() {
+  let lastErr;
+  for (const p of opsQueuePaths()) {
+    try {
+      const raw = await readFile(p, "utf8");
+      return JSON.parse(raw);
+    } catch (e) {
+      lastErr = e;
+    }
+  }
+  throw lastErr ?? new Error("ops-queue.json not found");
+}
 /** @typedef {{ label: string; weight: number; color: string }} OpsProjectMeta */
 /** @typedef {{ id: string; project: string; title: string; assignee: 'owner'|'ceo'; horizon: string; priority: number; score: number; etaMin?: number; blocker?: boolean; slug?: string; tags?: string[]; content?: object; links?: { label: string; href: string }[]; done?: boolean }} OpsTask */
 
@@ -29,11 +50,6 @@ function byHorizon(tasks, horizon) {
 /** @param {OpsTask[]} tasks */
 function sortTasks(tasks) {
   return [...tasks].sort((a, b) => b.score - a.score || a.priority - b.priority);
-}
-
-export async function loadOpsQueue() {
-  const raw = await readFile(path.join(root, "data/ops-queue.json"), "utf8");
-  return JSON.parse(raw);
 }
 
 /**

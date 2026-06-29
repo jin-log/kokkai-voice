@@ -37,4 +37,20 @@ try {
   await writeFile(logDest, '{"digest":[],"hot":[]}\n');
 }
 
+const queueSrc = path.join(root, "data/ops-queue.json");
+const queueDest = path.join(outDir, "ops-queue.json");
+try {
+  await copyFile(queueSrc, queueDest);
+} catch {
+  /* optional */
+}
+
+const shortsSrc = path.join(root, "data/shorts-benchmarks.json");
+const shortsDest = path.join(outDir, "shorts-benchmarks.json");
+try {
+  await copyFile(shortsSrc, shortsDest);
+} catch {
+  /* optional */
+}
+
 console.log(`OK marketing-data → public/data (${marketing.length} articles)`);

@@ -181,7 +181,7 @@ export function pickWeeklyRotation(articles, weekStart = getWeekStart()) {
 export function buildSiteFollowPost(poolSize = 21) {
   const domain = SITE.domain.replace(/\/$/, "");
   return [
-    "【日本の政治なう】",
+    `【${SITE.name}】`,
     "",
     "国会・政府の出典付きで",
     "「あの話どうなった？」を追います。",

@@ -1,6 +1,9 @@
 /** Site-wide links (no operator personal name). */
 export const SITE = {
-  name: "日本の政治なう",
+  name: "日本の政治now.",
+  /** 略称・SNSハッシュタグ用 */
+  shortLabel: "政治now",
+  hashtag: "#政治now",
   domain: "https://seiji1192.site",
   xUrl: "https://x.com/seiji1192site",
   xHandle: "@seiji1192site",

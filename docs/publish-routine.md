@@ -3,7 +3,7 @@
 最終更新: 2026-06-28  
 対象: 日本の政治なう — **1案件を本番公開するとき**の手順
 
-関連: `docs/weekly-routine.md` · `docs/traffic-zero-cost-playbook.md` §F · `docs/pre-release.md`
+関連: `docs/weekly-routine.md` · `docs/traffic-zero-cost-playbook.md` §F · `docs/pre-release.md` · `docs/article-update-routine.md` · `docs/content-visual-strategy.md`
 
 ---
 

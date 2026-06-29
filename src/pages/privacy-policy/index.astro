@@ -6,13 +6,13 @@ import { SITE } from "../../lib/site-config.mjs";
 ---
 
 <BaseLayout
-  title="プライバシーポリシー｜日本の政治なう"
-  description="日本の政治なうのプライバシーポリシー。アクセス解析・広告配信・外部リンクについて。"
+  title={`プライバシーポリシー｜${SITE.name}`}
+  description={`${SITE.name}のプライバシーポリシー。アクセス解析・広告配信・外部リンクについて。`}
 >
   <SiteHeader showSearch />
   <main class="container legal-page">
     <h1>プライバシーポリシー</h1>
-    <p class="legal-page__updated">最終更新: 2026年6月27日</p>
+    <p class="legal-page__updated">最終更新: 2026年6月29日</p>
 
     <p>
       「{SITE.name}」（{SITE.domain}、以下「当サイト」）は、政府・国会の公式サイトではなく、個人運営の解説メディアです。当サイトにおける個人情報の取扱いは以下のとおりです。
@@ -58,6 +58,9 @@ import { SITE } from "../../lib/site-config.mjs";
       </li>
       <li>
         <strong>外部リンク</strong> — X（旧 Twitter）、国会議事録サイト等へリンクします。各サービスのポリシーが適用されます。
+      </li>
+      <li>
+        <strong>X 投稿の記録</strong> — 公人の公式投稿について、解説・事実確認のため URL と取得時点のスクリーンショットを掲載することがあります（改変なし）。掲載内容の訂正・削除のご連絡は {SITE.xHandle} の DM で受け付けます。
       </li>
     </ul>
 

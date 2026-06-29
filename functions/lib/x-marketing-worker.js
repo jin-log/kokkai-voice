@@ -1,6 +1,7 @@
 /**
  * X マーケ用 — Cloudflare Workers 互換（node:fs 不使用）
  */
+const SITE_SHORT = "政治now";
 const API_URL = "https://api.buffer.com";
 const INTEREST = new Set(["政局", "経済", "物価", "防衛", "社会保障", "税制", "労働", "外交", "選挙", "行政"]);
 export const HOT_THRESHOLD = 120;
@@ -78,7 +79,7 @@ export function caseUrl(slug) {
 }
 
 export function formatDigest(picks) {
-  const lines = ["【政治なう 今日の3選】", ""];
+  const lines = [`【${SITE_SHORT} 今日の3選】`, ""];
   const marks = ["①", "②", "③"];
   picks.forEach((a, i) => {
     const hook = (a.nowSummary?.bullets?.[0] || "").slice(0, 36);

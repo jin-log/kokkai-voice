@@ -1,6 +1,7 @@
 import { SITE } from "./site-config.mjs";
-import { articleShortTitle, formatDate } from "./case-helpers.mjs";
+import { articleShortTitle, formatDate, ASSET_V } from "./case-helpers.mjs";
 import { buildSharePayload } from "./share.mjs";
+import { buildOgAssetBrief } from "./og-image.mjs";
 
 const DOMAIN = SITE.domain.replace(/\/$/, "");
 
@@ -125,7 +126,7 @@ export function buildHatena(article) {
   return {
     pageUrl,
     addUrl: buildHatenaAddUrl(pageUrl),
-    title: `${shortTitle}｜日本の政治なう`,
+    title: `${shortTitle}｜${SITE.name}`,
     comment: [
       "国会・政府出典付きで「あの話どうなった？」を整理したページです。",
       lines[0],
@@ -154,7 +155,7 @@ export function buildNoteExcerpt(article) {
       pageUrl,
       "",
       "—",
-      "日本の政治なう（https://seiji1192.site）",
+      `${SITE.name}（${DOMAIN}）`,
     ].join("\n"),
   };
 }
@@ -186,13 +187,20 @@ export function buildSeoChecklist(article, relatedSlugs = []) {
 
 /** @param {import('./articles.mjs').Article} article */
 export function buildPngBrief(article) {
+  const og = buildOgAssetBrief(article, ASSET_V);
   const shortTitle = articleShortTitle(article);
   const bullets = (article.summaryBullets || article.nowSummary?.bullets || []).slice(0, 3);
   return {
-    size: "1200×630（X/note） / 1080×1080（Instagram）",
+    size: "1200×630（自動生成済み）",
+    primaryPattern: og.primaryPattern,
+    recommendedForX: `https://seiji1192.site${og.recommendedForX}`,
+    files: og.files.map((f) => ({
+      ...f,
+      url: `https://seiji1192.site${f.path}`,
+    })),
     headline: clip(shortTitle, 40),
     bullets: bullets.map((b) => clip(b, 50)),
-    footer: "日本の政治なう · 出典付き",
+    footer: `${SITE.name} · 出典付き`,
     qrUrl: `${DOMAIN}/case/${article.slug}/`,
   };
 }
@@ -211,7 +219,7 @@ export function buildPromoPack(article, opts = {}) {
     png: buildPngBrief(article),
     ownerChecklist: [
       "X 本投稿（thread 1/3 最低）",
-      "PNG サマリカード添付（Canva 10分）",
+      `PNG 添付: ${buildOgAssetBrief(article, ASSET_V).primaryPattern} パターン（自動生成・Canva不要）`,
       "はてブ（コメント3行付き）",
       "GSC インデックスリクエスト",
       "note 抜粋は週次ダイジェストに回しても可",
@@ -292,12 +300,17 @@ ${pack.seo.tasks.map((t, i) => `| ${i + 1} | ${t.text} |`).join("\n")}
 
 ---
 
-## 5. PNG 制作メモ（Canva）
+## 5. PNG（自動生成済み・X添付用）
 
-- サイズ: ${pack.png.size}
+- **推奨（本投稿）:** ${pack.png.recommendedForX}
+- **og:image パターン:** ${pack.png.primaryPattern}
+
+| パターン | URL | 用途 |
+|----------|-----|------|
+${pack.png.files.map((f) => `| ${f.pattern} | ${f.url} | ${f.use} |`).join("\n")}
+
 - 見出し: ${pack.png.headline}
 ${pack.png.bullets.map((b, i) => `- bullet${i + 1}: ${b}`).join("\n")}
-- フッター: ${pack.png.footer}
 
 ---
 
@@ -353,7 +366,7 @@ export function formatWeeklyDigestMarkdown(articles, weekLabel) {
     lines.push("");
     const titles = visible.slice(0, 3).map((a) => articleShortTitle(a)).join(" / ");
     lines.push(
-      `\`\`\`\n【週次】${titles}${visible.length > 3 ? " ほか" : ""}\n${DOMAIN}/\n#政治なう\n\`\`\``,
+      `\`\`\`\n【週次】${titles}${visible.length > 3 ? " ほか" : ""}\n${DOMAIN}/\n${SITE.hashtag}\n\`\`\``,
     );
   }
 

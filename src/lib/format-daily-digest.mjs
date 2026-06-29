@@ -1,10 +1,11 @@
 import { articleShortTitle } from "./case-helpers.mjs";
 import { buildSharePayload } from "./share.mjs";
 import { clip, oneLine } from "./promo-generate.mjs";
+import { SITE } from "./site-config.mjs";
 
 /** @param {import('./articles.mjs').Article[]} articles */
 export function formatDailyDigestPost(articles) {
-  const lines = ["【政治なう 今日の3選】", ""];
+  const lines = [`【${SITE.shortLabel} 今日の3選】`, ""];
 
   articles.forEach((article, i) => {
     const title = articleShortTitle(article);

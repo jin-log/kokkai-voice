@@ -11,7 +11,7 @@ import { createXPost, loadBufferApiKeyAsync, resolveTwitterChannel } from "../sr
 const root = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
 const dryRun = process.argv.includes("--dry-run");
 
-const TEXT = `【プレリリース】サイト「日本の政治なう」を公開しました。
+const TEXT = `【プレリリース】サイト「日本の政治now.」を公開しました。
 
 「あの話、どうなった？」を案件ごとに追います。
 国会議事録・政府資料・報道を出典付きで整理。

@@ -3,6 +3,7 @@
 import { readFile, readdir, writeFile, mkdir } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { SITE } from "../src/lib/site-config.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(__dirname, "..");
@@ -427,7 +428,7 @@ function renderArticle(a, stanceHtml = "", hasStance = false) {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>${esc(a.title)}｜日本の政治なう</title>
+  <title>${esc(a.title)}｜${esc(SITE.name)}</title>
   <meta name="description" content="${esc(s.excerpt.slice(0, 120))}">
   <link rel="icon" href="../assets/favicon.png" type="image/png">
   <link rel="stylesheet" href="../css/tokens.css?v=${ASSET_V}">

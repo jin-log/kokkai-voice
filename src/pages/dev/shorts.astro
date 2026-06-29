@@ -1,0 +1,398 @@
+---
+import BaseLayout from "../../layouts/DevLayout.astro";
+import DevHeader from "../../components/DevHeader.astro";
+import DevChromeOpen from "../../components/DevChromeOpen.astro";
+import SiteFooter from "../../components/SiteFooter.astro";
+import { loadShortsBenchmarks, listFormats } from "../../lib/shorts-benchmarks.mjs";
+
+const data = await loadShortsBenchmarks().catch(() => null);
+const formats = data ? listFormats(data) : [];
+---
+
+<BaseLayout tabTitle="·">
+  <DevHeader current="shorts" />
+  <div id="dev-gate" style="display:none">
+    <main class="container shorts-page">
+      <p class="status-page__lead status-page__lead--dev">🔒 認証が必要です</p>
+      <h1 class="status-page__title">ショート動画ベンチマーク</h1>
+      <p class="shorts-page__lead">
+        <strong>調査フェーズ。</strong>顔なし・TTS・テロップ・ストック素材で再現できる型（F1〜F5）だけを載せます。
+        前回の報道切り抜きは<strong>誤りで削除済み</strong>。詳細はリポ内 <code>docs/shorts-consult-research.md</code>。
+      </p>
+
+      {
+        data?.status === "research_phase" ? (
+          <aside class="shorts-research-banner" role="note">
+            <strong>いま:</strong> チェックリスト通過の参考URLを調査中。素材は OGP・Xスクショ・Pexels・VOICEVOX・Remotion。
+            国会中継映像の切り抜きは<strong>使わない</strong>。
+          </aside>
+        ) : null
+      }
+
+      <aside class="dev-chrome-banner" role="note">
+        <strong>YouTubeは Chrome で開く。</strong>
+        「Chromeで開く」→ URLコピー → Chromeの Ctrl+L → Ctrl+V。
+      </aside>
+
+      <nav class="promo-quick" aria-label="関連">
+        <a href="/dev/tasks/">今日のタスク →</a>
+        <a href="/dev/promo/">プロモ →</a>
+      </nav>
+
+      <section class="shorts-summary" aria-labelledby="shorts-summary-title">
+        <h2 id="shorts-summary-title" class="promo-section__title">収益の考え方（要約）</h2>
+        <ul class="shorts-summary__list">
+          <li><strong>主戦場はサイト</strong>（Ad・アフィ・将来月額）。Shorts広告はおまけ。</li>
+          <li>投稿の <strong>7割はサイト誘導</strong>、3割はチャンネル育成（CTA弱め）。</li>
+          <li>煽り切り抜き・アンチ系は<strong>真似しない</strong>（伸びてもブランドと法務NG）。</li>
+        </ul>
+      </section>
+
+      {
+        data?.selection_checklist?.length ? (
+          <section class="shorts-checklist" aria-labelledby="shorts-checklist-title">
+            <h2 id="shorts-checklist-title" class="promo-section__title">ベンチマーク採用チェックリスト</h2>
+            <ul class="shorts-summary__list">
+              {data.selection_checklist.map((c) => <li>{c}</li>)}
+            </ul>
+          </section>
+        ) : null
+      }
+
+      {
+        data?.material_stack?.length ? (
+          <section class="shorts-materials" aria-labelledby="shorts-materials-title">
+            <h2 id="shorts-materials-title" class="promo-section__title">使う素材（自動化向け）</h2>
+            <ul class="shorts-material-list">
+              {
+                data.material_stack.map((m) => (
+                  <li class="shorts-material-card">
+                    <strong>{m.id}</strong>
+                    <span class={m.auto ? "shorts-tag--ok" : "shorts-tag--ng"}>
+                      {m.auto ? "自動OK" : "使わない"}
+                    </span>
+                    <p>{m.use}</p>
+                    <p class="shorts-material-card__risk">リスク: {m.risk}</p>
+                  </li>
+                ))
+              }
+            </ul>
+          </section>
+        ) : null
+      }
+
+      {
+        formats.map((p) => (
+          <section class="shorts-pattern" id={p.id} aria-labelledby={`${p.id}-title`}>
+            <h2 id={`${p.id}-title`} class="promo-section__title">{p.label}</h2>
+            {p.description && <p class="shorts-format-desc">{p.description}</p>}
+            {
+              p.items.length === 0 ? (
+                <p class="shorts-empty">調査中 — チェックリスト通過の顔なしShortsを2本ずつ追加予定。</p>
+              ) : (
+                <ul class="shorts-list">
+                  {
+                    p.items.map((item) => (
+                      <li class="shorts-card">
+                        <h3 class="shorts-card__title">{item.title ?? item.url}</h3>
+                        {item.hook && <p class="shorts-card__hook">フック: {item.hook}</p>}
+                        {item.why && <p class="shorts-card__why">{item.why}</p>}
+                        <div class="shorts-card__meta">
+                          {item.durationSec != null && <span>{item.durationSec}秒</span>}
+                          {item.cta && <span>CTA: {item.cta}</span>}
+                          {item.channel && <span>出典: {item.channel}</span>}
+                        </div>
+                        <div class="shorts-card__actions">
+                          <DevChromeOpen url={item.url} label="Chromeで動画を開く" />
+                          <button type="button" class="ops-copy-btn" data-copy={item.url}>
+                            URLコピー
+                          </button>
+                        </div>
+                      </li>
+                    ))
+                  }
+                </ul>
+              )
+            }
+          </section>
+        ))
+      }
+
+      {
+        data?.channels_for_structure_only?.length ? (
+          <section class="shorts-channels" aria-labelledby="shorts-channels-title">
+            <h2 id="shorts-channels-title" class="promo-section__title">構造参考（チャンネル丸ごと真似しない）</h2>
+            <ul class="shorts-channel-list">
+              {
+                data.channels_for_structure_only.map((ch) => (
+                  <li class="shorts-channel-card">
+                    <h3 class="shorts-channel-card__name">{ch.name}</h3>
+                    <p class="shorts-channel-card__learn">{ch.learn}</p>
+                    {ch.url ? (
+                      <DevChromeOpen url={ch.url} label="Chromeでチャンネルを開く" compact />
+                    ) : (
+                      <p class="shorts-empty">未選定</p>
+                    )}
+                  </li>
+                ))
+              }
+            </ul>
+          </section>
+        ) : null
+      }
+
+      {
+        data?.reject?.length ? (
+          <section class="shorts-reject" aria-labelledby="shorts-reject-title">
+            <h2 id="shorts-reject-title" class="promo-section__title">真似しない型</h2>
+            <ul class="shorts-reject__list">
+              {data.reject.map((r) => <li>{r}</li>)}
+            </ul>
+          </section>
+        ) : null
+      }
+
+      <section class="ops-legend shorts-legend">
+        <h2>使い方</h2>
+        <ol>
+          <li>F1〜F5 は<strong>顔なし・テロップ中心</strong>の型。参考URLは調査後に追加。</li>
+          <li><strong>素材</strong>は上の一覧（OGP・スクショ・ストック・TTS）。国会中継切り抜きは不可。</li>
+          <li>型が決まったら「F1でいこう」等と伝える → Remotion試作。</li>
+        </ol>
+        <p class="shorts-legend__note">
+          コンサル調査正本: <code>docs/shorts-consult-research.md</code>
+        </p>
+      </section>
+    </main>
+  </div>
+
+  <div id="dev-lock" style="display:none">
+    <div style="min-height:60vh;display:flex;align-items:center;justify-content:center">
+      <div style="text-align:center;padding:2rem">
+        <p style="font-size:1.1rem;margin-bottom:1rem">🔒 PINを入力してください</p>
+        <input
+          id="pin-input"
+          type="password"
+          maxlength="8"
+          style="font-size:1.5rem;text-align:center;width:8rem;padding:0.5rem;border:2px solid var(--color-border);border-radius:0.5rem"
+          placeholder="••••"
+        />
+        <br /><br />
+        <button
+          id="pin-submit"
+          style="background:var(--color-primary);color:#fff;border:none;padding:0.6rem 1.5rem;border-radius:2rem;font-size:1rem;cursor:pointer"
+        >
+          入力
+        </button>
+        <p id="pin-error" style="color:red;margin-top:0.5rem;display:none">PINが違います</p>
+      </div>
+    </div>
+  </div>
+
+  <SiteFooter note="" />
+</BaseLayout>
+
+<script>
+  const PIN = "1192";
+  const KEY = "dev_auth";
+
+  function show(id) {
+    document.getElementById(id).style.display = "block";
+  }
+  function hide(id) {
+    document.getElementById(id).style.display = "none";
+  }
+
+  if (localStorage.getItem(KEY) === PIN) {
+    show("dev-gate");
+  } else {
+    show("dev-lock");
+    document.getElementById("pin-submit").addEventListener("click", () => {
+      const val = document.getElementById("pin-input").value;
+      if (val === PIN) {
+        localStorage.setItem(KEY, PIN);
+        hide("dev-lock");
+        show("dev-gate");
+      } else {
+        document.getElementById("pin-error").style.display = "block";
+      }
+    });
+    document.getElementById("pin-input").addEventListener("keydown", (e) => {
+      if (e.key === "Enter") document.getElementById("pin-submit").click();
+    });
+  }
+
+  document.querySelectorAll("[data-copy]").forEach((btn) => {
+    btn.addEventListener("click", async () => {
+      const text = btn.getAttribute("data-copy") || "";
+      try {
+        await navigator.clipboard.writeText(text);
+        const prev = btn.textContent;
+        btn.textContent = "コピー済";
+        setTimeout(() => {
+          btn.textContent = prev;
+        }, 1200);
+      } catch {
+        btn.textContent = "失敗";
+      }
+    });
+  });
+</script>
+
+<style>
+  .shorts-page {
+    padding-bottom: 3rem;
+  }
+  .shorts-page__lead {
+    color: var(--color-text-muted);
+    margin-bottom: 0.75rem;
+  }
+  .shorts-research-banner {
+    margin: 1rem 0;
+    padding: 1rem 1.25rem;
+    background: #fff7ed;
+    border: 1px solid #fdba74;
+    border-radius: 0.75rem;
+    line-height: 1.6;
+  }
+  .shorts-format-desc {
+    color: var(--color-text-muted);
+    font-size: 0.92rem;
+    margin: 0 0 0.75rem;
+  }
+  .shorts-material-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.75rem;
+  }
+  @media (min-width: 640px) {
+    .shorts-material-list {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  .shorts-material-card {
+    border: 1px solid var(--color-border);
+    border-radius: 0.75rem;
+    padding: 0.75rem 1rem;
+    background: #fff;
+  }
+  .shorts-material-card p {
+    margin: 0.35rem 0 0;
+    font-size: 0.9rem;
+  }
+  .shorts-material-card__risk {
+    color: var(--color-text-muted);
+    font-size: 0.85rem !important;
+  }
+  .shorts-tag--ok,
+  .shorts-tag--ng {
+    display: inline-block;
+    margin-left: 0.5rem;
+    font-size: 0.75rem;
+    padding: 0.1rem 0.45rem;
+    border-radius: 0.25rem;
+  }
+  .shorts-tag--ok {
+    background: #dcfce7;
+    color: #166534;
+  }
+  .shorts-tag--ng {
+    background: #fee2e2;
+    color: #991b1b;
+  }
+    margin: 1.5rem 0;
+    padding: 1rem 1.25rem;
+    background: var(--color-surface-alt, #f8fafc);
+    border-radius: 0.75rem;
+    border: 1px solid var(--color-border);
+  }
+  .shorts-summary__list {
+    margin: 0.5rem 0 0;
+    padding-left: 1.25rem;
+    line-height: 1.6;
+  }
+  .shorts-pattern {
+    margin-top: 2rem;
+  }
+  .shorts-empty {
+    color: var(--color-text-muted);
+    font-size: 0.95rem;
+  }
+  .shorts-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .shorts-card {
+    border: 1px solid var(--color-border);
+    border-radius: 0.75rem;
+    padding: 1rem 1.25rem;
+    background: #fff;
+  }
+  .shorts-card__title {
+    font-size: 1.05rem;
+    margin: 0 0 0.35rem;
+  }
+  .shorts-card__hook,
+  .shorts-card__why {
+    margin: 0.25rem 0;
+    font-size: 0.92rem;
+    color: var(--color-text-muted);
+  }
+  .shorts-card__meta {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    margin: 0.5rem 0;
+  }
+  .shorts-card__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+    margin-top: 0.75rem;
+  }
+  .shorts-channel-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.75rem;
+  }
+  @media (min-width: 640px) {
+    .shorts-channel-list {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  .shorts-channel-card {
+    border: 1px solid var(--color-border);
+    border-radius: 0.75rem;
+    padding: 1rem;
+    background: #fff;
+  }
+  .shorts-channel-card__name {
+    margin: 0 0 0.25rem;
+    font-size: 1rem;
+  }
+  .shorts-channel-card__learn {
+    margin: 0 0 0.75rem;
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+  }
+  .shorts-reject__list {
+    margin: 0.5rem 0 0;
+    padding-left: 1.25rem;
+    color: var(--color-text-muted);
+  }
+  .shorts-legend__note {
+    font-size: 0.88rem;
+    color: var(--color-text-muted);
+    margin-top: 0.75rem;
+  }
+</style>

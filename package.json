@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "dev": "astro dev",
-    "build": "node scripts/update-project-status.mjs --quiet && node scripts/sync-marketing-data.mjs && astro build",
+    "build": "node scripts/generate-og-images.mjs && node scripts/update-project-status.mjs --quiet && node scripts/sync-marketing-data.mjs && astro build",
     "preview": "astro preview",
     "deploy:site": "node scripts/deploy-site.mjs",
     "deploy:extras": "node scripts/notify-search-engines.mjs --live && node scripts/post-to-buffer.mjs --recent 1 && node scripts/check-buffer.mjs",
@@ -21,6 +21,8 @@
     "init:article": "node scripts/init-article.mjs",
     "complete:article": "node scripts/complete-article.mjs",
     "x:research": "node scripts/x-research-batch.mjs",
+    "x:capture": "node scripts/capture-x-screenshots.mjs",
+    "x:verify-login": "node scripts/verify-x-login.mjs",
     "legal:check": "node scripts/legal-check.mjs --all",
     "legal:fix": "node scripts/legal-check.mjs --all --fix",
     "promo:pack": "node scripts/generate-promo-pack.mjs",
@@ -43,14 +45,34 @@
     "buffer:launch:evening": "node scripts/post-x-launch.mjs --slot evening",
     "browser:login": "node scripts/browser-login.mjs",
     "post:hatena": "node scripts/post-hatena-bookmarks.mjs",
-    "post:note:intro": "node scripts/post-note-intro.mjs"
+    "post:note:intro": "node scripts/post-note-intro.mjs",
+    "short:generate": "node scripts/generate-short-pilot.mjs",
+    "short:upload-pack": "node scripts/prepare-youtube-upload.mjs",
+    "short:upload": "node scripts/upload-youtube-short.mjs",
+    "youtube:auth": "node scripts/youtube-auth.mjs",
+    "x:thumbs": "node scripts/generate-x-thumbs.mjs",
+    "x:audit": "node scripts/audit-x-screenshots.mjs",
+    "x:recapture-bad": "node scripts/recapture-bad-x-screenshots.mjs",
+    "short:studio": "npx remotion studio remotion/index.ts"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.3",
+    "@remotion/google-fonts": "^4.0.484",
     "astro": "^5.7.0"
   },
   "devDependencies": {
+    "@ffmpeg-installer/ffmpeg": "^1.1.0",
+    "@remotion/cli": "^4.0.484",
+    "@remotion/renderer": "^4.0.484",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "edge-tts": "^1.0.1",
+    "edge-tts-universal": "^1.4.0",
     "playwright": "^1.52.0",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "remotion": "^4.0.484",
+    "typescript": "^5.9.3",
     "wrangler": "^4.105.0"
   }
 }

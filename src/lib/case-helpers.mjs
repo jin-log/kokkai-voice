@@ -1,7 +1,7 @@
 /** Shared helpers — patterns from scripts/generate-case-pages.mjs */
 import { citizenTitle } from "./title-format.mjs";
 
-export const ASSET_V = "20260629a";
+export const ASSET_V = "20260629d";
 
 export const SYMBOL_LEGEND = [
   { sym: "○", label: "公言通り実施済み（完了）" },
