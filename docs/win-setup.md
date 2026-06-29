@@ -129,7 +129,7 @@ Buffer 秘密情報: `secrets/buffer.env`（ceo-sync vault または Win から 
 | やりたいこと | コマンド |
 |--------------|----------|
 | **全部取り込む（これだけ）** | `ceo-sync\scripts\ceosync.ps1 pull`（Win） / `ceo-sync/scripts/ceosync.sh pull`（Mac） |
-| workflow を push する | PAT に **`workflow` スコープ** が必要（Mac から push 失敗したら Win で push） |
+| workflow を push する | `.\scripts\install-gh-workflows.ps1` → `git add .github/workflows` → push（PAT に **`workflow` スコープ**） |
 | ルールを上げる | オーナーが **ceosync push** → CEO が push |
 
 `ceosync pull` = ceo-sync + jin-log + ff14 + **kokkai-voice** の clone/pull + npm ci。
