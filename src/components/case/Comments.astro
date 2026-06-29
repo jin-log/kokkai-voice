@@ -59,7 +59,7 @@ const turnstileKey = SITE.turnstileSiteKey;
           </button>
         </form>
         <p class="comment-form__note" style="font-size:0.8rem;color:var(--color-text-muted)">
-          投稿後すぐ公開されます。個人情報・選挙誘導・暴力的脅迫のみ自動で拒否します。それ以外は通報で対応します。
+          投稿後すぐ公開されます。投票の呼びかけ・個人情報・暴力的脅迫のみ自動で拒否します。それ以外は通報で対応します。
         </p>
         <ul class="comment-list" data-comment-list aria-live="polite"></ul>
       </>
@@ -99,7 +99,7 @@ const turnstileKey = SITE.turnstileSiteKey;
           } else {
             legalEl.hidden = false;
             legalEl.textContent =
-              "投稿できません（個人情報・選挙誘導・暴力的脅迫などが含まれています）";
+              "投稿できません（投票の呼びかけ・個人情報・暴力的脅迫などが含まれています）";
             legalEl.className = "comment-legal comment-legal--ng";
           }
           updateSubmitState();

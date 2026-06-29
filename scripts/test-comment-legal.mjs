@@ -2,15 +2,14 @@
 import { scanCommentLegal } from "../functions/lib/comment-legal.mjs";
 
 const cases = [
+  { text: "小池百合子は逮捕だろ", ok: true },
+  { text: "不倫して揉み消したらしい", ok: true },
+  { text: "ドシモネタだけど裏金があるらしい", ok: true },
+  { text: "この法案には反対です", ok: true },
   {
     text: "〇〇候補は過去に不倫して金を揉み消したらしい。絶対に投票するな！",
     ok: false,
   },
-  { text: "小池百合子は逮捕だろ", ok: false },
-  { text: "ドシモネタだけど裏金があるらしい", ok: false },
-  { text: "この法案には反対です。説明が足りない。", ok: true },
-  { text: "高市首相の説明は納得できない。", ok: true },
-  { text: "逮捕要件の議論は国会でもある。", ok: true },
   { text: "投票してください", ok: false },
   { text: "090-1234-5678", ok: false },
   { text: "死ね", ok: false },
