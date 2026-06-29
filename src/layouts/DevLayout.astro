@@ -1,0 +1,39 @@
+---
+/**
+ * 管理系ページ専用 — SEO・OGP・canonical を一切出さない
+ */
+import { ASSET_V } from "../lib/case-helpers.mjs";
+import "../styles/tokens.css";
+import "../styles/main.css";
+
+interface Props {
+  /** ブラウザタブ用（短く・説明的にしない） */
+  tabTitle?: string;
+  bodyClass?: string;
+  bodyDataCase?: string;
+  includeAppJs?: boolean;
+}
+
+const { tabTitle = "·", bodyClass, bodyDataCase, includeAppJs = false } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{tabTitle}</title>
+    <meta
+      name="robots"
+      content="noindex, nofollow, noarchive, nosnippet, noimageindex, notranslate"
+    />
+    <meta name="googlebot" content="noindex, nofollow, noarchive, nosnippet, noimageindex" />
+    <meta name="bingbot" content="noindex, nofollow, noarchive, nosnippet" />
+    <meta name="referrer" content="no-referrer" />
+    <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
+  </head>
+  <body class:list={[bodyClass, "dev-shell"]} data-case={bodyDataCase}>
+    <slot />
+    {includeAppJs && <script is:inline src={`/js/app.js?v=${ASSET_V}`}></script>}
+  </body>
+</html>
