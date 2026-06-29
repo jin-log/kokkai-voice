@@ -2776,9 +2776,56 @@ body.has-progress-strip {
 .title-save-status.is-error,
 .admin-action-status.is-error { color: #991b1b; }
 
-.dev-comments-admin__stats { margin-bottom: 1rem; font-weight: 600; }
+.dev-comments-admin__stats { margin-bottom: 0; font-weight: 600; }
+.dev-comments-admin__toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+.dev-comments-admin__tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+.dev-comments-admin__filter {
+  font-family: inherit;
+  font-size: 0.85rem;
+  padding: 0.45rem 0.65rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  min-width: 12rem;
+}
+.dev-comments-admin__tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-bottom: 1rem;
+}
+.dev-comments-admin__tab {
+  font-family: inherit;
+  font-size: 0.82rem;
+  font-weight: 700;
+  padding: 0.45rem 0.85rem;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  background: var(--color-surface);
+  cursor: pointer;
+}
+.dev-comments-admin__tab.is-active {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: #fff;
+}
+.dev-comments-admin__tab-count { font-weight: 800; }
+.dev-comments-admin__error { color: var(--color-danger, #b42318); }
 .dev-comments-admin__heading { font-size: 1rem; margin: 1.25rem 0 0.75rem; }
 .dev-comments-admin__reports { color: #b42318; font-weight: 700; }
+.dev-comments-admin__report-time { color: #b42318; font-size: 0.75rem; }
+.dev-comments-admin__case { font-weight: 600; }
 .dev-comments-admin__list { list-style: none; margin: 0; padding: 0; }
 .dev-comments-admin__item {
   border: 1px solid var(--color-border);

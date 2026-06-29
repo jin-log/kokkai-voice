@@ -15,13 +15,14 @@ export async function onRequestGet(context) {
     const { results } = await db
       .prepare(
         `SELECT c.id, c.case_slug, c.author_name, c.body, c.status, c.created_at,
-                COUNT(r.id) AS report_count
+                COUNT(r.id) AS report_count,
+                MAX(r.created_at) AS last_report_at
          FROM comments c
          INNER JOIN comment_reports r ON r.comment_id = c.id
          WHERE c.status = 'approved'
          GROUP BY c.id
-         ORDER BY report_count DESC, c.created_at DESC
-         LIMIT 100`,
+         ORDER BY report_count DESC, last_report_at DESC
+         LIMIT 200`,
       )
       .all();
     const rows = results ?? [];
@@ -37,7 +38,35 @@ export async function onRequestGet(context) {
         status: row.status,
         at: row.created_at,
         reportCount: Number(row.report_count ?? 0),
+        lastReportAt: row.last_report_at,
       })),
+    });
+  }
+
+  if (status === "summary") {
+    const reported = await db
+      .prepare(
+        `SELECT COUNT(DISTINCT c.id) AS n
+         FROM comments c
+         INNER JOIN comment_reports r ON r.comment_id = c.id
+         WHERE c.status = 'approved'`,
+      )
+      .first();
+    const approved = await db
+      .prepare(`SELECT COUNT(*) AS n FROM comments WHERE status = 'approved'`)
+      .first();
+    const rejected = await db
+      .prepare(`SELECT COUNT(*) AS n FROM comments WHERE status = 'rejected'`)
+      .first();
+    const reportsTotal = await db
+      .prepare(`SELECT COUNT(*) AS n FROM comment_reports`)
+      .first();
+    return json({
+      ok: true,
+      reported: Number(reported?.n ?? 0),
+      approved: Number(approved?.n ?? 0),
+      rejected: Number(rejected?.n ?? 0),
+      reportsTotal: Number(reportsTotal?.n ?? 0),
     });
   }
 
