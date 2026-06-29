@@ -59,7 +59,7 @@ export async function onRequestPost(context) {
   }
 
   if (!scanCommentLegal(`${name}\n${body}`).ok) {
-    return jsonError("投稿できない内容が含まれています（投票の呼びかけ・個人情報・暴力的脅迫など）。", 403);
+    return jsonError("投稿できない内容が含まれています。", 403);
   }
 
   const ip = context.request.headers.get("CF-Connecting-IP");

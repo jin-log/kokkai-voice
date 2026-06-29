@@ -4,15 +4,14 @@ import { scanCommentLegal } from "../functions/lib/comment-legal.mjs";
 const cases = [
   { text: "小池百合子は逮捕だろ", ok: true },
   { text: "不倫して揉み消したらしい", ok: true },
-  { text: "ドシモネタだけど裏金があるらしい", ok: true },
-  { text: "この法案には反対です", ok: true },
-  {
-    text: "〇〇候補は過去に不倫して金を揉み消したらしい。絶対に投票するな！",
-    ok: false,
-  },
-  { text: "投票してください", ok: false },
-  { text: "090-1234-5678", ok: false },
+  { text: "絶対に投票するな", ok: true },
+  { text: "090-1234-5678", ok: true },
+  { text: "この法案には反対", ok: true },
   { text: "死ね", ok: false },
+  { text: "殺してやる", ok: false },
+  { text: "ぶっ殺す", ok: false },
+  { text: "ちんこ", ok: false },
+  { text: "fuck you", ok: false },
 ];
 
 let failed = 0;
