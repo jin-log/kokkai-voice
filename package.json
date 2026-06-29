@@ -7,7 +7,9 @@
     "dev": "astro dev",
     "build": "node scripts/update-project-status.mjs --quiet && astro build",
     "preview": "astro preview",
-    "deploy": "node scripts/update-project-status.mjs --quiet && astro build && wrangler pages deploy dist --project-name=kokkai-voice --branch=main && node scripts/update-project-status.mjs --deployed && node scripts/notify-search-engines.mjs --live && node scripts/post-to-buffer.mjs --recent 1 && node scripts/check-buffer.mjs",
+    "deploy": "node scripts/update-project-status.mjs --quiet && astro build && node scripts/copy-functions.mjs && wrangler pages deploy dist --project-name=kokkai-voice --branch=main && node scripts/update-project-status.mjs --deployed && node scripts/notify-search-engines.mjs --live && node scripts/post-to-buffer.mjs --recent 1 && node scripts/check-buffer.mjs",
+    "deploy:win": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/deploy.ps1",
+    "browser:setup": "playwright install chromium",
     "status": "node scripts/update-project-status.mjs --print",
     "check:case": "node scripts/check-case-page.mjs",
     "check:case:all": "node scripts/check-case-page.mjs --all",
@@ -36,13 +38,17 @@
     "buffer:hot:dry": "node scripts/post-hot-single.mjs --dry-run",
     "buffer:launch": "node scripts/post-x-launch.mjs --slot both",
     "buffer:launch:noon": "node scripts/post-x-launch.mjs --slot noon",
-    "buffer:launch:evening": "node scripts/post-x-launch.mjs --slot evening"
+    "buffer:launch:evening": "node scripts/post-x-launch.mjs --slot evening",
+    "browser:login": "node scripts/browser-login.mjs",
+    "post:hatena": "node scripts/post-hatena-bookmarks.mjs",
+    "post:note:intro": "node scripts/post-note-intro.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.3",
     "astro": "^5.7.0"
   },
   "devDependencies": {
+    "playwright": "^1.52.0",
     "wrangler": "^4.105.0"
   }
 }

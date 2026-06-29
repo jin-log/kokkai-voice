@@ -1,6 +1,19 @@
 # Windows での作業（Mac と同じこと）
 
-最終更新: 2026-06-26（Mac 作業分の引き継ぎ）
+最終更新: 2026-06-29
+
+---
+
+## いま Win でやること（3行）
+
+```powershell
+cd C:\Users\bero1\Projects\ceo-sync
+.\scripts\ceosync.ps1 pull
+cd ..\kokkai-voice
+npm run deploy:win
+```
+
+`ceosync pull` で **main 最新 + npm ci** まで終わる。デプロイは **Wrangler ログイン済み** なら `deploy:win` だけ（OAuth 利用時は API トークン env を自動で外す）。
 
 ---
 
@@ -14,7 +27,7 @@
 | **CF Pages** | GitHub の `kokkai-voice` をビルドして `seiji1192.site` で配信する機能 |
 | **jin-log との関係** | 同じ CF アカウントを使える。リポ・ドメインは別 |
 
-**いま:** コードは GitHub にある。**本番公開（Pages 接続）は未完了** — Win でも Mac でも同じ手順でできる。
+**いま:** 本番 `seiji1192.site` 稼働中。Win から `npm run deploy:win` で即反映可能。
 
 ---
 
@@ -33,41 +46,38 @@ Mac も同様: `~/Projects/ceo-sync/scripts/ceosync.sh pull`
 
 ---
 
-## Mac で終わっていること（2026-06-26）
+## 2026-06-29 時点の状態
 
 | 項目 | 状態 |
 |------|------|
-| Astro 本番 | ✅ `src/` · 22 ページ |
-| 実データ | ✅ 20 案件 + X URL 95/100 |
-| GitHub | ✅ `main` @ `c0adf08` 以降 |
-| O8 法務方針 | ✅ `docs/owner-policy.md` |
-| O14 公開 GO | ✅ `bouka-taisaku` publishReady |
-| X アカ | ✅ `@seiji1192site`（フッターにリンク済み） |
-| note | 方針のみ・URL 未 |
-| **CF Pages デプロイ** | ✅ `kokkai-voice.pages.dev` 稼働中 |
-| **独自ドメイン** | ⚠️ DNS CNAME 未設定（Wrangler OAuth は DNS 書き込み不可） |
+| 本番サイト | ✅ https://seiji1192.site |
+| ロゴ | ✅ 新ブランド PNG（ヘッダー・OGP・favicon） |
+| X 自動投稿 | ✅ 昼3選 / 夜単体（`marketing-*.yml` または手動 `npm run buffer:digest`） |
+| note・はてブ | Playwright スクリプトあり（`npm run browser:login` → `post:hatena` 等） |
+| **Win デプロイ** | ✅ `npm run deploy:win`（functions コピー込み） |
 
 ---
 
-## 本番公開（Win でも Mac でも同じ）
+## 本番デプロイ（Win）
 
-**A. CF ダッシュボード（おすすめ・トークン不要）**
+**おすすめ — Wrangler OAuth 済みの場合**
 
-1. https://dash.cloudflare.com → **Workers & Pages** → **Create** → **Connect to Git**
-2. リポ `jin-log/kokkai-voice`
-3. Framework **Astro** · Build `npm run build` · Output `dist` · `NODE_VERSION=20`
-4. **Custom domains** → `seiji1192.site`
+```powershell
+cd C:\Users\bero1\Projects\kokkai-voice
+npm run deploy:win
+```
 
-**B. wrangler（jin-log と同じトークンが使える場合）**
+中身: `CLOUDFLARE_API_TOKEN` を外す → `npm run deploy`（build + functions コピー + Pages + 検索通知 + Buffer）。
+
+**API トークンを使う場合**
 
 ```powershell
 $env:CLOUDFLARE_API_TOKEN="（トークン）"
-$env:CLOUDFLARE_ACCOUNT_ID="（アカウントID）"
-npm run build
-npx wrangler pages deploy dist --project-name=kokkai-voice --branch=main
+$env:CLOUDFLARE_ACCOUNT_ID="f2e88512cd4a09f315291bf2406015d7"
+npm run deploy
 ```
 
-**C. GitHub Actions** — `.github/workflows/deploy-pages.yml` をリポに入れたうえで、Secrets に上記 2 つを設定（PAT に `workflow` 権限が必要）。
+**GitHub Actions** — `main` push で `.github/workflows/deploy.yml` が自動デプロイ（Secrets: `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`, `CLOUDFLARE_ZONE_ID`, Buffer, GSC）。
 
 詳細: `docs/deploy-cloudflare.md`
 
@@ -75,7 +85,7 @@ npx wrangler pages deploy dist --project-name=kokkai-voice --branch=main
 
 Wrangler の OAuth ログインは **DNS レコード変更権限がない**。`pages.dev` は開くが `seiji1192.site` だけ死ぬ場合は CNAME 未設定。
 
-**オーナー作業（1回・2分）:** Cloudflare → プロフィール → API トークン → テンプレート「ゾーンの DNS を編集」→ ゾーン `seiji1192.site` のみ → 発行したトークンを CEO に渡す（チャットに貼る）。
+**オーナー作業（1回・2分）:** Cloudflare → API トークン →「ゾーンの DNS を編集」→ `seiji1192.site` のみ。
 
 **CEO 作業:**
 
@@ -85,7 +95,20 @@ $env:CLOUDFLARE_API_TOKEN="（発行したトークン）"
 node scripts/fix-dns.mjs
 ```
 
-張るレコード: `@` と `www` → `kokkai-voice.pages.dev`（プロキシ ON）。反映まで数分。
+---
+
+## マーケ・ブラウザ自動化（Win）
+
+| 作業 | コマンド |
+|------|----------|
+| Playwright 初回セットアップ | `npm run browser:setup` |
+| note / はてな ログイン保存（1回） | `npm run browser:login -- note` / `hatena` |
+| はてブ登録 | `npm run post:hatena` |
+| note 初回（要 `content/note/01-site-intro.md`） | `npm run post:note:intro` |
+| X 昼3選（手動） | `npm run buffer:digest` |
+| X 夜単体（手動） | `npm run buffer:hot` |
+
+Buffer 秘密情報: `secrets/buffer.env`（ceo-sync vault または Win から Mac へ `import-buffer-env.sh`）。
 
 ---
 
@@ -95,9 +118,9 @@ node scripts/fix-dns.mjs
 |------|----------|
 | 開発サーバー | `npm run dev` → :4321 |
 | 本番ビルド | `npm run build` → `dist/` |
-| サンプル UI | `cd samples` → `.\preview.ps1` → :8770 |
-| 法務チェック | `node scripts/check-publish-ready.mjs --slug bouka-taisaku` |
-| 記事再生成 | `node scripts/generate-case-pages.mjs` |
+| 本番反映 | `npm run deploy:win` |
+| 法務チェック | `node scripts/check-publish-ready.mjs --slug <slug>` |
+| パイプライン + デプロイ | `node scripts/pipeline-autorun.mjs --deploy` |
 
 ---
 
@@ -106,6 +129,7 @@ node scripts/fix-dns.mjs
 | やりたいこと | コマンド |
 |--------------|----------|
 | **全部取り込む（これだけ）** | `ceo-sync\scripts\ceosync.ps1 pull`（Win） / `ceo-sync/scripts/ceosync.sh pull`（Mac） |
+| workflow を push する | PAT に **`workflow` スコープ** が必要（Mac から push 失敗したら Win で push） |
 | ルールを上げる | オーナーが **ceosync push** → CEO が push |
 
 `ceosync pull` = ceo-sync + jin-log + ff14 + **kokkai-voice** の clone/pull + npm ci。
