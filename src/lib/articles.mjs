@@ -2,6 +2,7 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { checkCasePageWithFiles } from "./page-ready.mjs";
+import { pipelineChecks, isPublishGate } from "./project-status.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 export const root = path.join(__dirname, "../..");
@@ -11,12 +12,27 @@ export function isPagePublic(article) {
   return article.pageReady === true;
 }
 
-/** プレビュー可能（①〜④完成）か */
+/** プレビュー可能（①〜④完成）— adminHidden でも管理画面からプレビュー可 */
 export async function isPreviewable(article) {
-  if (article.adminHidden) return false;
   if (article.publishReady === true) return true;
+  return isPublishGateOk(article);
+}
+
+/** ①〜④パイプライン完了（project-status の previewUrl と同じ基準） */
+export async function isPublishGateOk(article) {
   const gate = await checkCasePageWithFiles(article);
-  return gate.ok;
+  let policyMatrix = null;
+  try {
+    const sm = article.stanceMatrix;
+    const matrixPath = sm?.dataPath
+      ? path.join(root, sm.dataPath)
+      : path.join(root, `data/policy-matrix/${sm?.policySlug || article.slug}.json`);
+    policyMatrix = JSON.parse(await readFile(matrixPath, "utf8"));
+  } catch {
+    /* optional */
+  }
+  const pipeline = pipelineChecks(article, gate, policyMatrix);
+  return isPublishGate(pipeline);
 }
 
 /** @deprecated 同期判定は使わない。filterPublishable を使う */

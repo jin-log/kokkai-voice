@@ -1,6 +1,6 @@
 ---
 interface Props {
-  current?: "status" | "comments" | "preview";
+  current?: "status" | "comments" | "preview" | "tasks" | "hatena" | "promo";
 }
 
 const { current = "status" } = Astro.props;
@@ -21,6 +21,15 @@ const { current = "status" } = Astro.props;
     <nav class="dev-header__nav" aria-label="管理メニュー">
       <a href="/dev/status/" aria-current={current === "status" ? "page" : undefined}>
         完成度・記事
+      </a>
+      <a href="/dev/tasks/" aria-current={current === "tasks" ? "page" : undefined}>
+        今日のタスク
+      </a>
+      <a href="/dev/promo/" aria-current={current === "promo" ? "page" : undefined}>
+        プロモ
+      </a>
+      <a href="/dev/hatena/" aria-current={current === "hatena" ? "page" : undefined}>
+        はてブ
       </a>
       <a href="/dev/comments/" aria-current={current === "comments" ? "page" : undefined}>
         コメント

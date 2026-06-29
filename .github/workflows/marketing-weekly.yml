@@ -1,0 +1,38 @@
+name: マーケ・週次パック
+
+on:
+  schedule:
+    # 月曜 9:00 JST = 月曜 00:00 UTC
+    - cron: "0 0 * * 1"
+  workflow_dispatch:
+
+jobs:
+  weekly-pack:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - run: npm install
+
+      - name: 週次ダイジェスト
+        run: node scripts/generate-weekly-digest.mjs
+
+      - name: プロモスプリント
+        run: node scripts/generate-promo-sprint.mjs
+
+      - name: 直近7日プロモ
+        run: node scripts/generate-promo-pack.mjs --recent 7
+        continue-on-error: true
+
+      - name: Artifact 保存
+        uses: actions/upload-artifact@v4
+        with:
+          name: weekly-marketing-${{ github.run_number }}
+          path: content/promo/
+          if-no-files-found: warn
+          retention-days: 90

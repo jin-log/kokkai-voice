@@ -1,5 +1,36 @@
+# 管理・API — クロール禁止（/_headers と併用）
 User-agent: *
-Allow: /
 Disallow: /dev/
+Disallow: /api/
+Disallow: /status/
+
+User-agent: Googlebot
+Disallow: /dev/
+Disallow: /api/
+Disallow: /status/
+
+User-agent: Bingbot
+Disallow: /dev/
+Disallow: /api/
+Disallow: /status/
+
+User-agent: Slurp
+Disallow: /dev/
+Disallow: /api/
+Disallow: /status/
+
+User-agent: DuckDuckBot
+Disallow: /dev/
+Disallow: /api/
+Disallow: /status/
+
+User-agent: GPTBot
+Disallow: /
+
+User-agent: ChatGPT-User
+Disallow: /
+
+User-agent: Google-Extended
+Disallow: /
 
 Sitemap: https://seiji1192.site/sitemap-index.xml

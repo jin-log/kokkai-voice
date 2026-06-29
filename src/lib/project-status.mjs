@@ -6,6 +6,7 @@ import { readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { checkCasePageWithFiles, root, blockerToHuman } from "./page-ready.mjs";
 import { filterPublishable, loadArticle } from "./articles.mjs";
+import { citizenTitle } from "./title-format.mjs";
 
 /** @typedef {{ id: string, label: string, phase: number, preDeploy: boolean }} PipelineItemDef */
 
@@ -97,8 +98,10 @@ export function computeNextAction(article, gate, pipeline) {
     B1_nowSummary: "いまの結論（3行）を入力",
     C1_summaryBullets: "要点リストを追加",
     D1_arcSummary: "経緯サマリ（日付付き）を追加",
-    E1_timeline_count: "タイムラインを3件以上",
-    E2_timeline_speeches: "国会発言リンクを追加",
+    E1_timeline_count: "タイムライン6件以上（X3+国会3）",
+    E2_timeline_x: "タイムラインにX3件",
+    E3_timeline_diet: "タイムラインに国会3件",
+    J1_prosCons: "メリデメ（公表数値付き各2）",
     F1_glossary: "用語解説を追加",
     G2_policy_matrix_file: "公言と行動表（policy-matrix）を作成",
     G3_parties_min: "2党以上のスタンスを入力",
@@ -169,7 +172,7 @@ export async function computeProjectStatus() {
     slugs.push({
       slug,
       title: article.title ?? slug,
-      shortTitle: article.title?.replace(/ — あの話どうなった？$/, "") ?? slug,
+      shortTitle: citizenTitle(article),
       adminHidden: article.adminHidden === true,
       pageReady,
       publishState,

@@ -7,7 +7,7 @@
     "dev": "astro dev",
     "build": "node scripts/update-project-status.mjs --quiet && astro build",
     "preview": "astro preview",
-    "deploy": "node scripts/update-project-status.mjs --quiet && astro build && wrangler pages deploy dist --project-name=kokkai-voice --branch=main && node scripts/update-project-status.mjs --deployed",
+    "deploy": "node scripts/update-project-status.mjs --quiet && astro build && wrangler pages deploy dist --project-name=kokkai-voice --branch=main && node scripts/update-project-status.mjs --deployed && node scripts/notify-search-engines.mjs --live && node scripts/post-to-buffer.mjs --recent 1 && node scripts/check-buffer.mjs",
     "status": "node scripts/update-project-status.mjs --print",
     "check:case": "node scripts/check-case-page.mjs",
     "check:case:all": "node scripts/check-case-page.mjs --all",
@@ -18,7 +18,18 @@
     "complete:article": "node scripts/complete-article.mjs",
     "x:research": "node scripts/x-research-batch.mjs",
     "legal:check": "node scripts/legal-check.mjs --all",
-    "legal:fix": "node scripts/legal-check.mjs --all --fix"
+    "legal:fix": "node scripts/legal-check.mjs --all --fix",
+    "promo:pack": "node scripts/generate-promo-pack.mjs",
+    "promo:all": "node scripts/generate-promo-pack.mjs --live",
+    "promo:sprint": "node scripts/generate-promo-sprint.mjs",
+    "titles:brushup": "node scripts/brushup-titles.mjs",
+    "promo:recent": "node scripts/generate-promo-pack.mjs --recent 7",
+    "promo:weekly": "node scripts/generate-weekly-digest.mjs",
+    "notify:search": "node scripts/notify-search-engines.mjs --live",
+    "notify:recent": "node scripts/notify-search-engines.mjs --recent 7",
+    "notify:slug": "node scripts/notify-search-engines.mjs --slug",
+    "buffer:check": "node scripts/check-buffer.mjs",
+    "buffer:post": "node scripts/post-to-buffer.mjs --recent 1"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.3",

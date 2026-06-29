@@ -1,0 +1,49 @@
+name: マーケ・プロモパック生成
+
+on:
+  workflow_dispatch:
+    inputs:
+      slug:
+        description: "記事スラグ（例: teigaku-kyufu-2024）"
+        required: true
+  workflow_run:
+    workflows: ["記事管理"]
+    types: [completed]
+    branches: [main]
+
+jobs:
+  promo-pack:
+    runs-on: ubuntu-latest
+    if: >-
+      github.event_name == 'workflow_dispatch'
+      || (
+        github.event.workflow_run.conclusion == 'success'
+        && github.event.workflow_run.event == 'workflow_dispatch'
+      )
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - run: npm install
+
+      - name: プロモパック生成
+        run: |
+          SLUG="${{ github.event.inputs.slug }}"
+          if [ -z "$SLUG" ]; then
+            echo "workflow_run 連動: 直近7日分を生成"
+            node scripts/generate-promo-pack.mjs --recent 7
+          else
+            node scripts/generate-promo-pack.mjs --slug "$SLUG"
+          fi
+
+      - name: Artifact 保存
+        uses: actions/upload-artifact@v4
+        with:
+          name: promo-pack
+          path: content/promo/
+          if-no-files-found: warn
+          retention-days: 30

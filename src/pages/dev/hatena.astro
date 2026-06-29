@@ -1,0 +1,191 @@
+---
+import BaseLayout from "../../layouts/DevLayout.astro";
+import DevHeader from "../../components/DevHeader.astro";
+import DevChromeOpen from "../../components/DevChromeOpen.astro";
+import SiteFooter from "../../components/SiteFooter.astro";
+import { loadAllArticles } from "../../lib/articles.mjs";
+import { articleShortTitle } from "../../lib/case-helpers.mjs";
+import { buildHatena, formatXMainPost } from "../../lib/promo-generate.mjs";
+import { buildSharePayload } from "../../lib/share.mjs";
+import { SITE } from "../../lib/site-config.mjs";
+
+const all = await loadAllArticles();
+const articles = all
+  .filter((a) => !a.adminHidden && a.pageReady)
+  .map((a) => ({
+    slug: a.slug,
+    shortTitle: articleShortTitle(a),
+    publishedAt: a.publishedAt?.slice(0, 10) || "",
+    hatena: buildHatena(a),
+    xMain: formatXMainPost(a),
+    xUrl: buildSharePayload(a).xUrl,
+  }))
+  .sort((a, b) => (b.publishedAt || "").localeCompare(a.publishedAt || ""));
+---
+
+<BaseLayout tabTitle="·">
+  <DevHeader current="hatena" />
+  <div id="dev-gate" style="display:none">
+    <main class="container hatena-page">
+      <p class="status-page__lead status-page__lead--dev">🔒 認証が必要です</p>
+      <h1 class="status-page__title">はてブ投稿</h1>
+      <p class="hatena-page__lead">
+        新記事公開時だけ。Chromeではてブ登録 → コメントをコピペ（2ステップ）。
+      </p>
+
+      <aside class="dev-chrome-banner" role="note">
+        <strong>はてブ・Xは Chrome で開く。</strong>
+        「Chromeで開く」→ URLコピー → Chromeの Ctrl+L → Ctrl+V。
+        Cursor内プレビューではログインできません。
+      </aside>
+
+      <section class="hatena-hub" aria-label="はてブ管理">
+        <DevChromeOpen url={SITE.hatenaHotentryUrl} label="Chromeでマイページを開く" />
+        <code class="hatena-hub__url">{SITE.hatenaHotentryUrl}</code>
+      </section>
+
+      {
+        articles.length === 0 ? (
+          <p class="hatena-empty">公開済み案件がありません。</p>
+        ) : (
+          <ul class="hatena-list">
+            {
+              articles.map((item) => (
+                <li class="hatena-card" id={item.slug}>
+                  <header class="hatena-card__head">
+                    <h2 class="hatena-card__title">{item.shortTitle}</h2>
+                    {item.publishedAt && (
+                      <time class="hatena-card__date" datetime={item.publishedAt}>
+                        {item.publishedAt}
+                      </time>
+                    )}
+                  </header>
+
+                  <div class="hatena-row">
+                    <span class="hatena-row__label">① はてブ登録（Chrome）</span>
+                    <DevChromeOpen url={item.hatena.addUrl} label="Chromeではてブ登録を開く" />
+                    <code class="hatena-row__url">{item.hatena.addUrl}</code>
+                    <button type="button" class="ops-copy-btn hatena-copy" data-copy={item.hatena.addUrl}>
+                      URLコピー
+                    </button>
+                  </div>
+
+                  <div class="hatena-row">
+                    <span class="hatena-row__label">記事URL（Chrome）</span>
+                    <DevChromeOpen url={item.hatena.pageUrl} label="Chromeで記事を開く" compact />
+                    <code class="hatena-row__url">{item.hatena.pageUrl}</code>
+                    <button type="button" class="ops-copy-btn hatena-copy" data-copy={item.hatena.pageUrl}>
+                      コピー
+                    </button>
+                  </div>
+
+                  <div class="ops-copy-block hatena-x">
+                    <div class="ops-copy-block__head">
+                      <span class="ops-copy-block__label">X 本投稿（そのまま貼付）</span>
+                      <div class="ops-copy-block__actions">
+                        <DevChromeOpen url={item.xUrl} label="Chromeで X投稿を開く" compact />
+                        <button type="button" class="ops-copy-btn hatena-copy" data-copy={item.xMain}>
+                          文案コピー
+                        </button>
+                      </div>
+                    </div>
+                    <pre class="ops-copy-block__text">{item.xMain}</pre>
+                  </div>
+
+                  <div class="ops-copy-block hatena-comment">
+                    <div class="ops-copy-block__head">
+                      <span class="ops-copy-block__label">② コメント（そのまま貼付）</span>
+                      <button type="button" class="ops-copy-btn" data-copy={item.hatena.comment}>
+                        コピー
+                      </button>
+                    </div>
+                    <pre class="ops-copy-block__text">{item.hatena.comment}</pre>
+                    <p class="hatena-comment__title">
+                      タイトル欄がある場合: <strong>{item.hatena.title}</strong>
+                    </p>
+                  </div>
+                </li>
+              ))
+            }
+          </ul>
+        )
+      }
+
+      <section class="ops-legend hatena-legend">
+        <h2>使い方</h2>
+        <ol>
+          <li><strong>Chromeではてブ登録を開く</strong> — URLコピー → Chromeに貼付</li>
+          <li><strong>コメントを貼付</strong> — 下の文案をコピー（X用とは別）</li>
+          <li>登録後、<strong>Chromeでマイページ</strong>を開いて確認</li>
+        </ol>
+      </section>
+    </main>
+  </div>
+
+  <div id="dev-lock" style="display:none">
+    <div style="min-height:60vh;display:flex;align-items:center;justify-content:center">
+      <div style="text-align:center;padding:2rem">
+        <p style="font-size:1.1rem;margin-bottom:1rem">🔒 PINを入力してください</p>
+        <input id="pin-input" type="password" maxlength="8"
+          style="font-size:1.5rem;text-align:center;width:8rem;padding:0.5rem;border:2px solid var(--color-border);border-radius:0.5rem"
+          placeholder="••••" />
+        <br><br>
+        <button id="pin-submit"
+          style="background:var(--color-primary);color:#fff;border:none;padding:0.6rem 1.5rem;border-radius:2rem;font-size:1rem;cursor:pointer">
+          入力
+        </button>
+        <p id="pin-error" style="color:red;margin-top:0.5rem;display:none">PINが違います</p>
+      </div>
+    </div>
+  </div>
+
+  <SiteFooter note="" />
+</BaseLayout>
+
+<script>
+const PIN = "1192";
+const KEY = "dev_auth";
+
+function show(id) { document.getElementById(id).style.display = "block"; }
+function hide(id) { document.getElementById(id).style.display = "none"; }
+
+if (localStorage.getItem(KEY) === PIN) {
+  show("dev-gate");
+} else {
+  show("dev-lock");
+  document.getElementById("pin-submit").addEventListener("click", () => {
+    const val = document.getElementById("pin-input").value;
+    if (val === PIN) {
+      localStorage.setItem(KEY, PIN);
+      hide("dev-lock");
+      show("dev-gate");
+    } else {
+      document.getElementById("pin-error").style.display = "block";
+    }
+  });
+  document.getElementById("pin-input").addEventListener("keydown", (e) => {
+    if (e.key === "Enter") document.getElementById("pin-submit").click();
+  });
+}
+
+document.querySelectorAll("[data-copy]").forEach((btn) => {
+  btn.addEventListener("click", async () => {
+    const text = btn.getAttribute("data-copy") || "";
+    try {
+      await navigator.clipboard.writeText(text);
+      const prev = btn.textContent;
+      btn.textContent = "コピー済";
+      setTimeout(() => { btn.textContent = prev; }, 1200);
+    } catch {
+      btn.textContent = "失敗";
+    }
+  });
+});
+
+const hash = location.hash.slice(1);
+if (hash) {
+  requestAnimationFrame(() => {
+    document.getElementById(hash)?.scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+}
+</script>

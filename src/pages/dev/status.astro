@@ -59,6 +59,16 @@ function formatJa(iso) {
               </dl>
             </section>
 
+            <section class="dev-buffer-panel" id="buffer-panel" aria-live="polite">
+              <h2>📣 Buffer × X 自動投稿</h2>
+              <p id="buffer-summary" class="dev-buffer-panel__summary">読み込み中…</p>
+              <dl class="dev-buffer-panel__meta" id="buffer-meta"></dl>
+              <ul id="buffer-fix-steps" class="dev-buffer-panel__fixes" hidden></ul>
+              <p class="dev-buffer-panel__hint">
+                deploy 時に新規公開1件を自動投稿（日上限3本）。設定: <code>docs/buffer-setup.md</code>
+              </p>
+            </section>
+
             <section class="dev-workflow-panel" id="workflow-panel" aria-live="polite">
               <h2>⚙️ GitHub Actions（デプロイ・生成の状況）</h2>
               <p id="workflow-summary" class="dev-workflow-panel__summary">読み込み中…</p>
@@ -398,6 +408,84 @@ function readPendingSlug() {
   }
 }
 
+async function refreshBufferStatus() {
+  const pin = getPin();
+  const summary = document.getElementById("buffer-summary");
+  const meta = document.getElementById("buffer-meta");
+  const fixes = document.getElementById("buffer-fix-steps");
+  const panel = document.getElementById("buffer-panel");
+  if (!summary || !meta) return;
+
+  /** @type {object|null} */
+  let live = null;
+  /** @type {object|null} */
+  let file = null;
+
+  if (pin) {
+    try {
+      const res = await fetch(`/api/buffer-status?pin=${encodeURIComponent(pin)}`);
+      live = await res.json();
+    } catch { /* local dev fallback */ }
+  }
+  try {
+    const res = await fetch(`/buffer-status.json?t=${Date.now()}`);
+    if (res.ok) file = await res.json();
+  } catch { /* ignore */ }
+
+  const s = live && !live.error ? live : file;
+  if (!s) {
+    summary.className = "dev-buffer-panel__summary is-error";
+    summary.textContent = "⚠️ 状態取得失敗";
+    return;
+  }
+
+  const ok = s.ok === true;
+  const failed = s.status === "post_failed" || s.lastPostOk === false;
+  panel?.classList.toggle("is-error", !ok || failed);
+  panel?.classList.toggle("is-ok", ok && !failed);
+
+  if (!s.configured) {
+    summary.className = "dev-buffer-panel__summary";
+    summary.textContent = "⏸️ 未設定 — Buffer API キーを Secret に登録すると deploy 時に X 自動投稿";
+  } else if (!ok) {
+    summary.className = "dev-buffer-panel__summary is-error";
+    summary.textContent = `🔴 ${s.statusLabel} — ${s.message}`;
+  } else if (failed) {
+    summary.className = "dev-buffer-panel__summary is-error";
+    summary.textContent = `🟠 連携OKだが直近投稿失敗 — ${s.lastPostError || s.message}`;
+  } else {
+    summary.className = "dev-buffer-panel__summary is-ok";
+    summary.textContent = `🟢 ${s.statusLabel} — ${s.message}`;
+  }
+
+  const rows = [];
+  if (s.channelName) rows.push(["X チャンネル", s.channelName]);
+  if (s.lastPostAt) {
+    rows.push([
+      "最終投稿",
+      `${s.lastPostSlug || "—"} · ${new Date(s.lastPostAt).toLocaleString("ja-JP")} · ${s.lastPostOk ? "OK" : "NG"}`,
+    ]);
+  }
+  if (s.postsToday != null) rows.push(["本日", `${s.postsToday}/${s.dailyCap ?? 3} 本`]);
+  if (s.lastCheckAt || s.fetchedAt) {
+    rows.push(["確認", new Date(s.fetchedAt || s.lastCheckAt).toLocaleString("ja-JP")]);
+  }
+  meta.innerHTML = rows
+    .map(([dt, dd]) => `<div><dt>${dt}</dt><dd>${dd}</dd></div>`)
+    .join("");
+
+  const steps = s.fixSteps ?? [];
+  if (fixes) {
+    if (steps.length && (!ok || failed)) {
+      fixes.hidden = false;
+      fixes.innerHTML = steps.map((x) => `<li>${x}</li>`).join("");
+    } else {
+      fixes.hidden = true;
+      fixes.innerHTML = "";
+    }
+  }
+}
+
 async function refreshWorkflows() {
   const pin = getPin();
   if (!pin) return;
@@ -477,7 +565,9 @@ async function refreshWorkflows() {
 }
 
 if (localStorage.getItem(KEY) === PIN) {
+  refreshBufferStatus();
   refreshWorkflows();
+  setInterval(refreshBufferStatus, 15000);
   setInterval(refreshWorkflows, 15000);
 }
 

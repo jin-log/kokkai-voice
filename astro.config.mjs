@@ -7,7 +7,10 @@ export default defineConfig({
   output: "static",
   integrations: [
     sitemap({
-      filter: (page) => !page.includes("/dev/"),
+      filter: (page) =>
+        !page.includes("/dev/") &&
+        !page.includes("/api/") &&
+        !page.includes("/status"),
     }),
   ],
 });

@@ -1,0 +1,337 @@
+{
+  "generatedAt": "2026-06-29T14:00:00.000Z",
+  "generatedBy": "ceo",
+  "dayLabel": "2026-06-29（日）",
+  "ownerDailyCap": 7,
+  "projects": {
+    "jin-log": { "label": "jin-log", "weight": 100, "color": "#2d6a4f" },
+    "kokkai-voice": { "label": "政治なう", "weight": 90, "color": "#1d4ed8" },
+    "manabitime": { "label": "マナビタイム", "weight": 50, "color": "#b45309" },
+    "dj-totobaby": { "label": "DJ TotoBaby", "weight": 40, "color": "#7c3aed" },
+    "sushi-sonic": { "label": "SUSHI SONIC", "weight": 30, "color": "#db2777" },
+    "personal": { "label": "個人", "weight": 10, "color": "#64748b" }
+  },
+  "tasks": [
+    {
+      "id": "ceo-kv-promo-automation",
+      "project": "kokkai-voice",
+      "title": "投稿自動化 — OGP・deploy時プロモ・GSCメール",
+      "assignee": "ceo",
+      "horizon": "weekly",
+      "priority": 0,
+      "score": 900,
+      "etaMin": 120,
+      "tags": ["オーナー作業ゼロ"],
+      "content": {
+        "summary": "手動X/はてブ週次は廃止。GSC同様にCEO側で自動化。有料は docs/promo-automation-options.md でオーナー相談。",
+        "steps": [
+          "OGP 1200×630 自動生成（deploy時）",
+          "deploy 後 promo-pack 自動生成",
+          "GSC 週次サマリメール（任意）"
+        ]
+      },
+      "links": [
+        { "label": "自動化一覧", "href": "/docs/promo-automation-options.md" },
+        { "label": "文案ハブ", "href": "/dev/promo/" }
+      ],
+      "done": false
+    },
+    {
+      "id": "kv-batch10-go-review",
+      "project": "kokkai-voice",
+      "title": "batch10 — 10本をプレビュー → 公開GO",
+      "assignee": "owner",
+      "horizon": "weekly",
+      "priority": 0,
+      "score": 850,
+      "etaMin": 45,
+      "tags": ["非表示10本", "ゲート100%"],
+      "content": {
+        "summary": "定額給付3万・インボイス2割特例 等。完成度で「表示に戻す」→ プレビュー → 公開する。",
+        "steps": [
+          "/dev/status/ で adminHidden の batch10 カードを開く",
+          "「表示に戻す」→ プレビュー確認 → 「公開する」",
+          "公開直後はプロモタスクが今日に昇格"
+        ]
+      },
+      "links": [
+        { "label": "完成度", "href": "/dev/status/" },
+        { "label": "定額給付プレビュー", "href": "/dev/preview/teigaku-kyufu-2024/" }
+      ],
+      "done": false
+    },
+    {
+      "id": "kv-gsc-weekly",
+      "project": "kokkai-voice",
+      "title": "✅ GSC — deploy時 Indexing API 自動通知",
+      "assignee": "ceo",
+      "horizon": "backlog",
+      "priority": 9,
+      "score": 0,
+      "etaMin": 0,
+      "tags": ["完了", "自動化"],
+      "content": {
+        "summary": "手動 URL 検査不要。週次メール化は ceo-kv-promo-automation で検討。"
+      },
+      "done": true
+    },
+    {
+      "id": "kv-batch11-start",
+      "project": "kokkai-voice",
+      "title": "batch11 — 新記事10本（CEO着手）",
+      "assignee": "ceo",
+      "horizon": "weekly",
+      "priority": 1,
+      "score": 880,
+      "etaMin": 360,
+      "tags": ["メリデメ基盤デプロイ済"],
+      "content": {
+        "summary": "全36件ゲート通過・UI反映済。次の10本（コメ価格・高校無償・NISA 等）。",
+        "steps": [
+          "node scripts/batch-create-articles-batch11.mjs",
+          "enrich-timeline-all + apply-proscons-all + legal-check",
+          "オーナーに /dev/status/ でプレビューURL共有"
+        ]
+      },
+      "links": [
+        { "label": "完成度", "href": "/dev/status/" }
+      ],
+      "done": false
+    },
+    {
+      "id": "ceo-kv-shussho-internal-links",
+      "project": "kokkai-voice",
+      "title": "出生率ページ → 関連3本の内部リンク",
+      "assignee": "ceo",
+      "horizon": "weekly",
+      "priority": 1,
+      "score": 520,
+      "etaMin": 20,
+      "content": {
+        "summary": "SEO。shoshika / kyoiku-mushoka / teigaku-kyufu へ相互導線。",
+        "steps": [
+          "summaryBullets 内リンク追加",
+          "逆方向1本ずつ",
+          "deploy"
+        ]
+      },
+      "links": [
+        { "label": "本番", "href": "https://seiji1192.site/case/shussho-budget-seika/" }
+      ],
+      "done": false
+    },
+    {
+      "id": "ceo-kv-gh-deploy-check",
+      "project": "kokkai-voice",
+      "title": "GitHub Actions 自動デプロイの確認",
+      "assignee": "ceo",
+      "horizon": "weekly",
+      "priority": 2,
+      "score": 480,
+      "etaMin": 15,
+      "content": {
+        "summary": "push 後に Actions が走らず、今回は手動 npm run deploy。次回以降自動化を確認。",
+        "steps": [
+          "Actions で 4b060e1 の Deploy workflow 成否確認",
+          "失敗なら secrets / ログ修正",
+          "空コミット or workflow_dispatch で再テスト"
+        ]
+      },
+      "links": [
+        { "label": "Actions", "href": "https://github.com/jin-log/kokkai-voice/actions" }
+      ],
+      "done": false
+    },
+    {
+      "id": "kv-note-weekly",
+      "project": "kokkai-voice",
+      "title": "note — 文案自動生成のみ（投稿は自動化検討中）",
+      "assignee": "ceo",
+      "horizon": "backlog",
+      "priority": 2,
+      "score": 400,
+      "etaMin": 0,
+      "tags": ["CEO自動化"],
+      "content": {
+        "summary": "npm run promo:weekly で本文生成。投稿APIなしのため手動タスクは出さない。"
+      },
+      "done": true
+    },
+    {
+      "id": "promo-teigaku-kyufu-2024",
+      "project": "kokkai-voice",
+      "title": "定額給付3万 — 公開GO後（プロモは自動）",
+      "assignee": "ceo",
+      "horizon": "weekly",
+      "priority": 2,
+      "score": 600,
+      "etaMin": 25,
+      "slug": "teigaku-kyufu-2024",
+      "tags": ["batch10", "GO待ち"],
+      "content": {
+        "summary": "batch10 の次候補。完成度で表示→公開してから文案使用。",
+        "copy": {
+          "xMain": "2024年定額給付3万円、もらえなかった人は？\nhttps://seiji1192.site/case/teigaku-kyufu-2024/",
+          "hatenaComment": "続き・タイムライン → https://seiji1192.site/case/teigaku-kyufu-2024/"
+        }
+      },
+      "links": [
+        { "label": "プレビュー", "href": "/dev/preview/teigaku-kyufu-2024/" }
+      ],
+      "done": false
+    },
+    {
+      "id": "jin-log-aff-repair",
+      "project": "jin-log",
+      "title": "アフィリンク修復（yyi-rinker → 新タグ差替）",
+      "assignee": "ceo",
+      "horizon": "weekly",
+      "priority": 1,
+      "score": 720,
+      "etaMin": 120,
+      "tags": ["本番稼働中"],
+      "content": {
+        "summary": "jin92.net 復活済。Amazon/Moshimo タグ一括差替待ち。"
+      },
+      "links": [
+        { "label": "jin92.net", "href": "https://jin92.net" }
+      ],
+      "done": false
+    },
+    {
+      "id": "jin-log-asp-login",
+      "project": "jin-log",
+      "title": "Amazon / Moshimo ASP 再ログイン・タグ確認",
+      "assignee": "owner",
+      "horizon": "weekly",
+      "priority": 0,
+      "score": 750,
+      "etaMin": 20,
+      "blocker": true,
+      "tags": ["🔒オーナー必須", "アフィ修復"],
+      "content": {
+        "summary": "CEO の一括差替は新タグ ID 待ち。",
+        "steps": [
+          "Moshimo a_id=3032074 有効確認",
+          "Amazon アソシエイト再開 or 新規",
+          "新トラッキング ID を CEO に共有"
+        ]
+      },
+      "done": false
+    },
+    {
+      "id": "jin-log-articles-20",
+      "project": "jin-log",
+      "title": "新規記事執筆（20本案）",
+      "assignee": "ceo",
+      "horizon": "weekly",
+      "priority": 1,
+      "score": 680,
+      "etaMin": 180,
+      "content": {
+        "summary": "旗艦2本公開済。20本案の承認待ち→執筆。"
+      },
+      "links": [
+        { "label": "jin92.net", "href": "https://jin92.net" }
+      ],
+      "done": false
+    },
+    {
+      "id": "ceo-jin-log-aff-audit",
+      "project": "jin-log",
+      "title": "全73ページ アフィリンク監査レポート",
+      "assignee": "ceo",
+      "horizon": "weekly",
+      "priority": 2,
+      "score": 540,
+      "etaMin": 120,
+      "done": false
+    },
+    {
+      "id": "dj-shorts-1",
+      "project": "dj-totobaby",
+      "title": "今週 Shorts 1本（30秒台本）",
+      "assignee": "ceo",
+      "horizon": "weekly",
+      "priority": 2,
+      "score": 380,
+      "etaMin": 45,
+      "done": false
+    },
+    {
+      "id": "sushi-july-theme",
+      "project": "sushi-sonic",
+      "title": "7月イベント — テーマ・締切・告知下書き",
+      "assignee": "ceo",
+      "horizon": "weekly",
+      "priority": 2,
+      "score": 350,
+      "etaMin": 60,
+      "done": false
+    },
+    {
+      "id": "jin-log-adsense-bank",
+      "project": "jin-log",
+      "title": "AdSense 銀行口座確認",
+      "assignee": "owner",
+      "horizon": "backlog",
+      "priority": 2,
+      "score": 400,
+      "etaMin": 15,
+      "tags": ["🔒オーナー必須"],
+      "done": false
+    },
+    {
+      "id": "kv-adsense",
+      "project": "kokkai-voice",
+      "title": "AdSense 申請",
+      "assignee": "owner",
+      "horizon": "backlog",
+      "priority": 1,
+      "score": 500,
+      "etaMin": 20,
+      "tags": ["🔒オーナー必須"],
+      "done": false
+    },
+    {
+      "id": "manabitime-jinji-license",
+      "project": "manabitime",
+      "title": "人材紹介許可 — 進捗確認",
+      "assignee": "owner",
+      "horizon": "backlog",
+      "priority": 2,
+      "score": 280,
+      "etaMin": 15,
+      "done": false
+    },
+    {
+      "id": "personal-english-log",
+      "project": "personal",
+      "title": "英語学習 — 今週の記録",
+      "assignee": "owner",
+      "horizon": "weekly",
+      "priority": 3,
+      "score": 120,
+      "etaMin": 10,
+      "done": false
+    },
+    {
+      "id": "done-shussho-deploy",
+      "project": "kokkai-voice",
+      "title": "✅ 出生率ページ — 公開＋メリデメUI本番反映",
+      "assignee": "ceo",
+      "horizon": "daily",
+      "priority": 9,
+      "score": 0,
+      "etaMin": 0,
+      "tags": ["完了"],
+      "content": {
+        "summary": "2026-06-29。管理画面公開 + npm run deploy。本番にメリデメ・タイムライン9件確認済。"
+      },
+      "links": [
+        { "label": "本番", "href": "https://seiji1192.site/case/shussho-budget-seika/" }
+      ],
+      "done": true
+    }
+  ]
+}

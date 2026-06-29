@@ -1,10 +1,10 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
+import DevLayout from "../../layouts/DevLayout.astro";
 import DevHeader from "../../components/DevHeader.astro";
 import SiteFooter from "../../components/SiteFooter.astro";
 ---
 
-<BaseLayout title="[開発] コメント管理 — 日本の政治なう" description="開発者用" noindex={true}>
+<DevLayout tabTitle="·">
   <DevHeader current="comments" />
   <div id="dev-gate" style="display:none">
     <main class="container status-page">
@@ -39,8 +39,8 @@ import SiteFooter from "../../components/SiteFooter.astro";
       </div>
     </div>
   </div>
-  <SiteFooter note="開発者専用ページ" />
-</BaseLayout>
+  <SiteFooter note="" />
+</DevLayout>
 
 <script>
 const PIN = "1192";

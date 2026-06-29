@@ -1,4 +1,5 @@
 /** Shared helpers — patterns from scripts/generate-case-pages.mjs */
+import { citizenTitle } from "./title-format.mjs";
 
 export const ASSET_V = "20260627d";
 
@@ -41,8 +42,9 @@ export function articlePolicyTitle(article, matrix) {
   return (article.title || "").replace(/\s*—\s*あの話どうなった？\s*$/, "").trim();
 }
 
+/** 表示用短タイトル（【】形式） */
 export function articleShortTitle(article) {
-  return (article.title || "").replace(/\s*—\s*あの話どうなった？\s*$/, "").trim();
+  return citizenTitle(article);
 }
 
 /** Exclude parties with sourceUrl null + 要出典 (legal L3). */

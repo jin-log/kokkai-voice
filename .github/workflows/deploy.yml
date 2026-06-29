@@ -54,3 +54,22 @@ jobs:
             -H "Content-Type: application/json" \
             --data '{"purge_everything":true}' \
             | grep -o '"success":[a-z]*'
+
+      - name: 検索エンジン更新通知（IndexNow + Google）
+        env:
+          GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
+        run: node scripts/notify-search-engines.mjs --live
+
+      - name: Buffer X 自動投稿
+        env:
+          BUFFER_API_KEY: ${{ secrets.BUFFER_API_KEY }}
+          BUFFER_CHANNEL_ID: ${{ secrets.BUFFER_CHANNEL_ID }}
+        run: node scripts/post-to-buffer.mjs --recent 1
+        continue-on-error: true
+
+      - name: Buffer 連携状態更新
+        env:
+          BUFFER_API_KEY: ${{ secrets.BUFFER_API_KEY }}
+          BUFFER_CHANNEL_ID: ${{ secrets.BUFFER_CHANNEL_ID }}
+        run: node scripts/check-buffer.mjs
+        continue-on-error: true

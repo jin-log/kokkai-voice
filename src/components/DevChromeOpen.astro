@@ -1,0 +1,22 @@
+---
+/** Cursor Glass 内では外部ログイン不可 → Chrome 用 URL コピー */
+interface Props {
+  url: string;
+  label?: string;
+  compact?: boolean;
+}
+
+const { url, label = "Chromeで開く", compact = false } = Astro.props;
+---
+
+<button
+  type="button"
+  class:list={["dev-chrome-open", compact && "dev-chrome-open--compact"]}
+  data-chrome-url={url}
+  data-chrome-label={label}
+>
+  {label}
+</button>
+{!compact && (
+  <span class="dev-chrome-open__hint">URLをコピー → Chromeで Ctrl+L → Ctrl+V</span>
+)}

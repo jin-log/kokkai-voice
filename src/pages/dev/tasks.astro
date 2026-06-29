@@ -1,0 +1,480 @@
+---
+import BaseLayout from "../../layouts/DevLayout.astro";
+import DevHeader from "../../components/DevHeader.astro";
+import DevChromeOpen from "../../components/DevChromeOpen.astro";
+import SiteFooter from "../../components/SiteFooter.astro";
+import {
+  loadOpsQueue,
+  sliceQueue,
+  countByTab,
+  assigneeLabel,
+  priorityLabel,
+} from "../../lib/ops-queue.mjs";
+import { loadArticle } from "../../lib/articles.mjs";
+import { buildPromoPack } from "../../lib/promo-generate.mjs";
+import { buildXVariants } from "../../lib/promo-sprint.mjs";
+import { buildSharePayload } from "../../lib/share.mjs";
+
+const COPY_LABELS = {
+  xMain: "X 本投稿",
+  xData: "X 数字フック",
+  xProsCons: "X メリデメ",
+  xThread2: "X スレッド 2/3",
+  hatenaAddUrl: "はてブ登録URL",
+  hatenaComment: "はてブ コメント",
+  noteBody: "note 本文",
+  pageUrl: "記事URL",
+};
+
+const queue = await loadOpsQueue().catch(() => null);
+const counts = queue ? countByTab(queue) : null;
+
+/** @param {import('../../lib/ops-queue.mjs').OpsTask} task */
+async function resolveCopyBlocks(task) {
+  if (task.slug) {
+    try {
+      const article = await loadArticle(task.slug);
+      const pack = buildPromoPack(article);
+      const variants = buildXVariants(article);
+      const { xUrl } = buildSharePayload(article);
+      const dataVariant = variants.variants.find((v) => v.id === "data");
+      const pcVariant = variants.variants.find((v) => v.id === "proscons");
+      const blocks = [
+        {
+          key: "xMain",
+          label: COPY_LABELS.xMain,
+          text: pack.x.mainFormatted,
+          openHref: xUrl,
+          openLabel: "Chromeで X投稿を開く",
+        },
+      ];
+      if (dataVariant) {
+        blocks.push({ key: "xData", label: COPY_LABELS.xData, text: dataVariant.text });
+      }
+      if (pcVariant) {
+        blocks.push({ key: "xProsCons", label: COPY_LABELS.xProsCons, text: pcVariant.text });
+      }
+      if (pack.x.thread[1]?.text) {
+        blocks.push({ key: "xThread2", label: COPY_LABELS.xThread2, text: pack.x.thread[1].text });
+      }
+      blocks.push(
+        {
+          key: "hatenaAddUrl",
+          label: COPY_LABELS.hatenaAddUrl,
+          text: pack.hatena.addUrl,
+          openHref: pack.hatena.addUrl,
+          openLabel: "Chromeではてブ登録を開く",
+        },
+        {
+          key: "hatenaComment",
+          label: COPY_LABELS.hatenaComment,
+          text: pack.hatena.comment,
+        },
+        {
+          key: "pageUrl",
+          label: COPY_LABELS.pageUrl,
+          text: pack.hatena.pageUrl,
+          openHref: pack.hatena.pageUrl,
+          openLabel: "Chromeで記事を開く",
+        },
+      );
+      return blocks;
+    } catch {
+      /* fall through to static copy */
+    }
+  }
+  const copy = task.content?.copy;
+  if (!copy) return [];
+  return Object.entries(copy).map(([key, text]) => ({
+    key,
+    label: COPY_LABELS[key] || key,
+    text,
+    openHref:
+      key === "hatenaAddUrl" || (typeof text === "string" && /^https?:\/\//.test(text.trim()))
+        ? text
+        : null,
+    openLabel:
+      key === "hatenaAddUrl"
+        ? "はてブ登録を開く"
+        : key === "xMain"
+          ? null
+          : typeof text === "string" && /^https?:\/\//.test(text.trim())
+            ? "Chromeで開く"
+            : null,
+  }));
+}
+
+/** @type {Map<string, Awaited<ReturnType<typeof resolveCopyBlocks>>>} */
+const copyByTaskId = new Map();
+if (queue) {
+  for (const task of queue.tasks) {
+    copyByTaskId.set(task.id, await resolveCopyBlocks(task));
+  }
+}
+
+const tabs = [
+  { id: "today", label: "今日", count: counts?.today ?? 0 },
+  { id: "week", label: "今週", count: counts?.week ?? 0 },
+  { id: "all", label: "全部", count: counts?.all ?? 0 },
+];
+
+function tasksForTab(tabId) {
+  if (!queue) return [];
+  return sliceQueue(queue, { tab: tabId });
+}
+
+function projectMeta(slug) {
+  return queue?.projects?.[slug] ?? { label: slug, color: "#64748b" };
+}
+---
+
+<BaseLayout tabTitle="·">
+  <DevHeader current="tasks" />
+  <div id="dev-gate" style="display:none">
+    <main class="container ops-page">
+      <p class="status-page__lead status-page__lead--dev">🔒 認証が必要です</p>
+      <h1 class="status-page__title">今日やること</h1>
+      <p class="ops-page__lead">
+        政治なう · jin-log · DJ · 事業 — 横断キュー。CEO が優先度（score）順に並べ替え。
+        {queue && (
+          <>
+            {" "}
+            <span class="ops-page__meta">{queue.dayLabel} · 更新 {new Date(queue.generatedAt).toLocaleString("ja-JP")}</span>
+          </>
+        )}
+      </p>
+
+      <aside class="dev-chrome-banner" role="note">
+        <strong>外部サイト（X・はてブ・GSC）は Chrome で開く。</strong>
+        「Chromeで開く」ボタン → URLコピー → Chromeのアドレスバー（Ctrl+L）に貼付。
+        Cursor内プレビューではログインできません。
+      </aside>
+
+      {
+        queue ? (
+          <>
+            <section class="ops-summary" aria-label="サマリ">
+              <div class="ops-summary__chip">
+                <span class="ops-summary__num">{counts?.ownerToday ?? 0}</span>
+                <span class="ops-summary__lbl">オーナー（今日）</span>
+              </div>
+              <div class="ops-summary__chip">
+                <span class="ops-summary__num">{counts?.ceoToday ?? 0}</span>
+                <span class="ops-summary__lbl">CEO（今日）</span>
+              </div>
+              <div class="ops-summary__chip ops-summary__chip--muted">
+                <span class="ops-summary__num">{counts?.all ?? 0}</span>
+                <span class="ops-summary__lbl">未完了 全体</span>
+              </div>
+            </section>
+
+            <div class="ops-tabs" role="tablist">
+              {
+                tabs.map((t) => (
+                  <button
+                    type="button"
+                    class="ops-tabs__btn"
+                    role="tab"
+                    data-tab={t.id}
+                    aria-selected={t.id === "today"}
+                  >
+                    {t.label}
+                    <span class="ops-tabs__count">{t.count}</span>
+                  </button>
+                ))
+              }
+            </div>
+
+            <div class="ops-filter">
+              <label>
+                担当
+                <select id="assignee-filter">
+                  <option value="">すべて</option>
+                  <option value="owner">オーナー</option>
+                  <option value="ceo">CEO</option>
+                </select>
+              </label>
+            </div>
+
+            {
+              tabs.map((t) => (
+                <section class="ops-panel" data-panel={t.id} hidden={t.id !== "today"}>
+                  <ul class="ops-list">
+                    {
+                      tasksForTab(t.id).map((task) => {
+                        const proj = projectMeta(task.project);
+                        return (
+                          <li class="ops-card" data-assignee={task.assignee} data-task-id={task.id}>
+                            <header class="ops-card__head">
+                              <span
+                                class="ops-card__project"
+                                style={`--proj-color: ${proj.color}`}
+                              >
+                                {proj.label}
+                              </span>
+                              <span class={`ops-card__p ops-card__p--p${task.priority}`}>
+                                {priorityLabel(task.priority)}
+                              </span>
+                              <span class="ops-card__assignee">{assigneeLabel(task.assignee)}</span>
+                              {task.blocker && <span class="ops-card__blocker">ブロッカー</span>}
+                              {task.etaMin != null && (
+                                <span class="ops-card__eta">約{task.etaMin}分</span>
+                              )}
+                            </header>
+                            <h2 class="ops-card__title">{task.title}</h2>
+                            {
+                              task.tags?.length ? (
+                                <p class="ops-card__tags">
+                                  {task.tags.map((tag) => (
+                                    <span class="ops-card__tag">{tag}</span>
+                                  ))}
+                                </p>
+                              ) : null
+                            }
+                            {
+                              task.content?.summary ? (
+                                <p class="ops-card__summary">{task.content.summary}</p>
+                              ) : null
+                            }
+
+                            {
+                              (copyByTaskId.get(task.id)?.length ?? 0) > 0 ? (
+                                <details class="ops-card__details" open={task.horizon === "daily" && task.assignee === "owner"}>
+                                  <summary>投稿文案 · コピー</summary>
+                                  {
+                                    copyByTaskId.get(task.id)?.map((block) => (
+                                      <div class="ops-copy-block">
+                                        <div class="ops-copy-block__head">
+                                          <span class="ops-copy-block__label">{block.label}</span>
+                                          <div class="ops-copy-block__actions">
+                                            {
+                                              block.openHref ? (
+                                                <DevChromeOpen
+                                                  url={block.openHref}
+                                                  label={block.openLabel || "Chromeで開く"}
+                                                  compact
+                                                />
+                                              ) : null
+                                            }
+                                            <button type="button" class="ops-copy-btn" data-copy={block.text}>
+                                              文案コピー
+                                            </button>
+                                          </div>
+                                        </div>
+                                        <pre class="ops-copy-block__text">{block.text}</pre>
+                                      </div>
+                                    ))
+                                  }
+                                </details>
+                              ) : null
+                            }
+
+                            {
+                              task.content?.steps?.length ? (
+                                <details class="ops-card__details">
+                                  <summary>手順</summary>
+                                  <ol class="ops-card__steps">
+                                    {task.content.steps.map((s) => (
+                                      <li>{s}</li>
+                                    ))}
+                                  </ol>
+                                </details>
+                              ) : null
+                            }
+
+                            {
+                              task.content?.checklist?.length ? (
+                                <details class="ops-card__details" open={task.horizon === "daily"}>
+                                  <summary>チェックリスト</summary>
+                                  <ul class="ops-card__checklist">
+                                    {task.content.checklist.map((c) => (
+                                      <li>
+                                        <label>
+                                          <input type="checkbox" data-task-check={task.id} />
+                                          {c}
+                                        </label>
+                                      </li>
+                                    ))}
+                                  </ul>
+                                </details>
+                              ) : null
+                            }
+
+                            {
+                              task.links?.length ? (
+                                <p class="ops-card__links">
+                                  {task.links.map((l) =>
+                                    l.href.startsWith("http") ? (
+                                      <DevChromeOpen url={l.href} label={`${l.label}（Chrome）`} compact />
+                                    ) : (
+                                      <a href={l.href}>{l.label} →</a>
+                                    ),
+                                  )}
+                                </p>
+                              ) : null
+                            }
+
+                            <footer class="ops-card__foot">
+                              <label class="ops-done">
+                                <input type="checkbox" class="ops-done__input" data-task-done={task.id} />
+                                完了（サンプル: ブラウザに保存）
+                              </label>
+                              <span class="ops-card__score" title="CEO優先度スコア">score {task.score}</span>
+                            </footer>
+                          </li>
+                        );
+                      })
+                    }
+                  </ul>
+                  {
+                    tasksForTab(t.id).length === 0 && (
+                      <p class="ops-empty">該当タスクなし 🎉</p>
+                    )
+                  }
+                </section>
+              ))
+            }
+
+            <section class="ops-legend">
+              <h2>サンプルの見方</h2>
+              <ul>
+                <li><strong>今日</strong> — デイリー（daily）を score 順。オーナーは最大7件想定</li>
+                <li><strong>今週</strong> — weekly + daily</li>
+                <li><strong>プロジェクト色</strong> — jin-log（緑）· 政治なう（青）· DJ · SUSHI 等</li>
+                <li>正本は将来 <code>ceo-sync/ops/queue.json</code> → ここに同期</li>
+              </ul>
+            </section>
+          </>
+        ) : (
+          <p><code>data/ops-queue.json</code> がありません。</p>
+        )
+      }
+    </main>
+  </div>
+
+  <div id="dev-lock" style="display:none">
+    <div style="min-height:60vh;display:flex;align-items:center;justify-content:center">
+      <div style="text-align:center;padding:2rem">
+        <p style="font-size:1.1rem;margin-bottom:1rem">🔒 PINを入力してください</p>
+        <input id="pin-input" type="password" maxlength="8"
+          style="font-size:1.5rem;text-align:center;width:8rem;padding:0.5rem;border:2px solid var(--color-border);border-radius:0.5rem"
+          placeholder="••••" />
+        <br><br>
+        <button id="pin-submit"
+          style="background:var(--color-primary);color:#fff;border:none;padding:0.6rem 1.5rem;border-radius:2rem;font-size:1rem;cursor:pointer">
+          入力
+        </button>
+        <p id="pin-error" style="color:red;margin-top:0.5rem;display:none">PINが違います</p>
+      </div>
+    </div>
+  </div>
+
+  <SiteFooter note="" />
+</BaseLayout>
+
+<script>
+const PIN = "1192";
+const KEY = "dev_auth";
+const DONE_KEY = "ops_done_sample";
+
+function show(id) { document.getElementById(id).style.display = "block"; }
+function hide(id) { document.getElementById(id).style.display = "none"; }
+
+if (localStorage.getItem(KEY) === PIN) {
+  show("dev-gate");
+} else {
+  show("dev-lock");
+  document.getElementById("pin-submit").addEventListener("click", () => {
+    const val = document.getElementById("pin-input").value;
+    if (val === PIN) {
+      localStorage.setItem(KEY, PIN);
+      hide("dev-lock");
+      show("dev-gate");
+    } else {
+      document.getElementById("pin-error").style.display = "block";
+    }
+  });
+  document.getElementById("pin-input").addEventListener("keydown", (e) => {
+    if (e.key === "Enter") document.getElementById("pin-submit").click();
+  });
+}
+
+function loadDone() {
+  try {
+    return JSON.parse(localStorage.getItem(DONE_KEY) || "[]");
+  } catch {
+    return [];
+  }
+}
+
+function saveDone(ids) {
+  localStorage.setItem(DONE_KEY, JSON.stringify(ids));
+}
+
+function applyDoneState() {
+  const done = loadDone();
+  document.querySelectorAll("[data-task-done]").forEach((el) => {
+    const id = el.getAttribute("data-task-done");
+    if (done.includes(id)) {
+      el.checked = true;
+      el.closest(".ops-card")?.classList.add("is-done");
+    }
+  });
+}
+
+document.querySelectorAll(".ops-tabs__btn").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    const tab = btn.getAttribute("data-tab");
+    document.querySelectorAll(".ops-tabs__btn").forEach((b) => {
+      b.setAttribute("aria-selected", b === btn ? "true" : "false");
+    });
+    document.querySelectorAll(".ops-panel").forEach((p) => {
+      p.hidden = p.getAttribute("data-panel") !== tab;
+    });
+    applyAssigneeFilter();
+  });
+});
+
+function applyAssigneeFilter() {
+  const val = document.getElementById("assignee-filter")?.value || "";
+  const panel = document.querySelector(".ops-panel:not([hidden])");
+  if (!panel) return;
+  panel.querySelectorAll(".ops-card").forEach((card) => {
+    const a = card.getAttribute("data-assignee");
+    card.style.display = !val || a === val ? "" : "none";
+  });
+}
+
+document.getElementById("assignee-filter")?.addEventListener("change", applyAssigneeFilter);
+
+document.querySelectorAll(".ops-copy-btn").forEach((btn) => {
+  btn.addEventListener("click", async () => {
+    const text = btn.getAttribute("data-copy") || "";
+    try {
+      await navigator.clipboard.writeText(text);
+      btn.textContent = "コピー済";
+      setTimeout(() => { btn.textContent = "コピー"; }, 1500);
+    } catch {
+      btn.textContent = "失敗";
+    }
+  });
+});
+
+document.querySelectorAll(".ops-done__input").forEach((el) => {
+  el.addEventListener("change", () => {
+    const id = el.getAttribute("data-task-done");
+    let done = loadDone();
+    if (el.checked) {
+      if (!done.includes(id)) done.push(id);
+      el.closest(".ops-card")?.classList.add("is-done");
+    } else {
+      done = done.filter((x) => x !== id);
+      el.closest(".ops-card")?.classList.remove("is-done");
+    }
+    saveDone(done);
+  });
+});
+
+applyDoneState();
+applyAssigneeFilter();
+</script>

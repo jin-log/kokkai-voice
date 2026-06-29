@@ -19,7 +19,7 @@ function formatJa(iso) {
   status && (
     <aside class="progress-strip" aria-label="サイト完成度">
       <div class="progress-strip__inner container">
-        <a class="progress-strip__main" href="/status/">
+        <div class="progress-strip__main">
           <span class="progress-strip__pct" aria-hidden="true">
             {status.overallGoldPct}%
           </span>
@@ -39,7 +39,7 @@ function formatJa(iso) {
               />
             </span>
           </span>
-        </a>
+        </div>
         <span class="progress-strip__meta">
           公開 {status.publishedCount}/{status.activeCount}
           {status.deltaGoldPct != null && status.deltaGoldPct !== 0 && (
