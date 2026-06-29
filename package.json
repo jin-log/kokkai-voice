@@ -29,7 +29,9 @@
     "notify:recent": "node scripts/notify-search-engines.mjs --recent 7",
     "notify:slug": "node scripts/notify-search-engines.mjs --slug",
     "buffer:check": "node scripts/check-buffer.mjs",
-    "buffer:post": "node scripts/post-to-buffer.mjs --recent 1"
+    "buffer:post": "node scripts/post-to-buffer.mjs --recent 1",
+    "buffer:digest": "node scripts/post-daily-digest.mjs",
+    "buffer:digest:dry": "node scripts/post-daily-digest.mjs --dry-run"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.3",
