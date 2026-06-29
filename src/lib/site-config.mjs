@@ -13,7 +13,7 @@ export const SITE = {
   /** note メンバー公開済みなら true。未公開時はプロフィールへ誘導（/membership は404） */
   noteMembershipLive: false,
   /** プレリリースバナー表示。正式ローンチ時 false */
-  preRelease: true,
+  preRelease: false,
   /** コメント投稿・表示（D1接続後に true。preRelease と独立） */
   commentsLive: true,
   /** Cloudflare Turnstile サイトキー（公開可）。未設定時はウィジェット非表示 */
