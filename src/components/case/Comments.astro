@@ -24,6 +24,10 @@ const turnstileKey = SITE.turnstileSiteKey;
     ) : (
       <>
         <h2 id="comments-title">コメント</h2>
+        <p class="comment-disclaimer">
+          コメントは<strong>投稿者個人の意見</strong>です。当サイトは内容について<strong>一切の責任を負いません</strong>。
+          詳細は<a href="/comment-policy/">コメント投稿規約</a>をご確認ください。
+        </p>
         <form class="comment-form" data-comment-form>
           <input
             type="text"
@@ -42,10 +46,20 @@ const turnstileKey = SITE.turnstileSiteKey;
           {turnstileKey && (
             <div class="comment-form__turnstile" data-turnstile-host></div>
           )}
-          <button type="submit" class="btn btn--primary">投稿（承認後に公開）</button>
+          <p class="comment-legal" data-comment-legal hidden aria-live="polite"></p>
+          <label class="comment-terms">
+            <input type="checkbox" name="terms" data-comment-terms required />
+            <span>
+              <a href="/comment-policy/" target="_blank" rel="noopener">コメント投稿規約</a>
+              に同意し、投稿内容の責任は自分が負うことを確認しました
+            </span>
+          </label>
+          <button type="submit" class="btn btn--primary" data-comment-submit disabled>
+            投稿する
+          </button>
         </form>
         <p class="comment-form__note" style="font-size:0.8rem;color:var(--color-text-muted)">
-          投稿は管理者が確認してから公開されます。誹謗中傷・個人情報は削除対象です。
+          投稿後すぐ公開されます。個人情報・選挙誘導・暴力的脅迫のみ自動で拒否します。それ以外は通報で対応します。
         </p>
         <ul class="comment-list" data-comment-list aria-live="polite"></ul>
       </>
@@ -61,25 +75,98 @@ const turnstileKey = SITE.turnstileSiteKey;
       )}
       <script define:vars={{ slug, turnstileKey }}>
         let turnstileToken = "";
+        let hardBlocked = false;
+        let scanTimer = null;
+
+        const form = document.querySelector("[data-comment-form]");
+        const legalEl = document.querySelector("[data-comment-legal]");
+        const submitBtn = document.querySelector("[data-comment-submit]");
+        const termsBox = document.querySelector("[data-comment-terms]");
+
+        function updateSubmitState() {
+          const body = form?.body?.value?.trim() ?? "";
+          const termsOk = Boolean(termsBox?.checked);
+          if (submitBtn) submitBtn.disabled = !body || hardBlocked || !termsOk;
+        }
+
+        function setHardBlock(blocked, hasText) {
+          hardBlocked = blocked;
+          if (!legalEl) return;
+          if (!hasText || !blocked) {
+            legalEl.hidden = true;
+            legalEl.textContent = "";
+            legalEl.className = "comment-legal";
+          } else {
+            legalEl.hidden = false;
+            legalEl.textContent =
+              "投稿できません（個人情報・選挙誘導・暴力的脅迫などが含まれています）";
+            legalEl.className = "comment-legal comment-legal--ng";
+          }
+          updateSubmitState();
+        }
+
+        async function scanLegal() {
+          const name = form?.name?.value?.trim() ?? "";
+          const body = form?.body?.value?.trim() ?? "";
+          if (!body) {
+            setHardBlock(false, false);
+            return;
+          }
+          const res = await fetch("/api/comments-scan", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ name, body }),
+          });
+          if (!res.ok) {
+            setHardBlock(true, true);
+            return;
+          }
+          const data = await res.json();
+          setHardBlock(!data.ok, true);
+        }
+
+        function scheduleScan() {
+          clearTimeout(scanTimer);
+          scanTimer = setTimeout(scanLegal, 350);
+        }
 
         function renderApproved(comments) {
           const list = document.querySelector("[data-comment-list]");
           if (!list) return;
           if (!comments.length) {
-            list.innerHTML = `<li class="comment"><div class="comment__author">—</div><p class="comment__body">承認済みコメントはまだありません。</p></li>`;
+            list.innerHTML = `<li class="comment"><div class="comment__author">—</div><p class="comment__body">まだコメントはありません。</p></li>`;
             return;
           }
           list.innerHTML = "";
           for (const c of comments) {
             const li = document.createElement("li");
             li.className = "comment";
-            li.innerHTML = `<div class="comment__author"></div><p class="comment__body"></p><div class="comment__time"></div>`;
+            li.innerHTML = `<div class="comment__author"></div><p class="comment__body"></p><div class="comment__meta"><span class="comment__time"></span><button type="button" class="comment__report" data-comment-id="">通報</button></div>`;
             li.querySelector(".comment__author").textContent = c.name || "匿名";
             li.querySelector(".comment__body").textContent = c.body;
             li.querySelector(".comment__time").textContent = c.at
               ? new Date(c.at).toLocaleString("ja-JP")
               : "";
+            const reportBtn = li.querySelector(".comment__report");
+            reportBtn.dataset.commentId = c.id;
+            reportBtn.addEventListener("click", () => reportComment(c.id, reportBtn));
             list.appendChild(li);
+          }
+        }
+
+        async function reportComment(commentId, btn) {
+          if (!confirm("このコメントを通報しますか？")) return;
+          btn.disabled = true;
+          const res = await fetch("/api/comments-report", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ commentId, slug }),
+          });
+          if (res.ok) {
+            btn.textContent = "通報済み";
+          } else {
+            btn.disabled = false;
+            alert("通報に失敗しました。");
           }
         }
 
@@ -106,12 +193,17 @@ const turnstileKey = SITE.turnstileSiteKey;
           });
         }
 
-        document.querySelector("[data-comment-form]")?.addEventListener("submit", async (e) => {
+        form?.addEventListener("input", () => {
+          scheduleScan();
+          updateSubmitState();
+        });
+        termsBox?.addEventListener("change", updateSubmitState);
+        form?.addEventListener("submit", async (e) => {
           e.preventDefault();
-          const form = e.target;
           const name = form.name.value.trim();
           const body = form.body.value.trim();
-          if (!body) return;
+          const acceptedTerms = Boolean(termsBox?.checked);
+          if (!body || hardBlocked || !acceptedTerms) return;
           if (turnstileKey && !turnstileToken) {
             alert("認証を完了してください。");
             return;
@@ -119,7 +211,7 @@ const turnstileKey = SITE.turnstileSiteKey;
           const res = await fetch("/api/comments", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ slug, name, body, turnstileToken }),
+            body: JSON.stringify({ slug, name, body, turnstileToken, acceptedTerms }),
           });
           const data = await res.json().catch(() => ({}));
           if (!res.ok) {
@@ -127,9 +219,10 @@ const turnstileKey = SITE.turnstileSiteKey;
             return;
           }
           form.reset();
+          setHardBlock(false, false);
           turnstileToken = "";
           if (window.turnstile) window.turnstile.reset();
-          alert("投稿しました。承認後に公開されます。");
+          await loadComments();
         });
 
         loadComments();

@@ -10,15 +10,18 @@ import SiteFooter from "../../components/SiteFooter.astro";
     <main class="container status-page">
       <h1 class="status-page__title">コメント管理</h1>
       <p class="status-page__lead">
-        D1 承認キュー。公開は <code>site-config.mjs</code> の <code>commentsLive: true</code>。
-        セットアップ手順: リポ内 <code>docs/comments-setup.md</code>
+        通報されたコメントの確認・非表示。投稿は規約同意後に即公開（人手承認なし）。
       </p>
 
       <section class="dev-comments-admin">
         <div id="comments-stats" class="dev-comments-admin__stats"></div>
         <p id="comments-error" class="dev-comments-admin__empty" style="color:var(--color-danger)" hidden></p>
-        <ul id="comments-queue" class="dev-comments-admin__list"></ul>
-        <p id="comments-empty" class="dev-comments-admin__empty" hidden>承認待ちコメントはありません。</p>
+        <h2 class="dev-comments-admin__heading">通報あり</h2>
+        <ul id="comments-reported" class="dev-comments-admin__list"></ul>
+        <p id="comments-reported-empty" class="dev-comments-admin__empty" hidden>通報はありません。</p>
+        <h2 class="dev-comments-admin__heading">公開中（直近）</h2>
+        <ul id="comments-live" class="dev-comments-admin__list"></ul>
+        <p id="comments-live-empty" class="dev-comments-admin__empty" hidden>公開コメントはありません。</p>
       </section>
     </main>
   </div>
@@ -90,44 +93,60 @@ async function renderQueue() {
   const errEl = document.getElementById("comments-error");
   errEl.hidden = true;
 
-  const res = await api("/api/comments-admin?status=pending");
-  const data = await res.json().catch(() => ({}));
+  const [reportedRes, liveRes] = await Promise.all([
+    api("/api/comments-admin?status=reported"),
+    api("/api/comments-admin?status=approved"),
+  ]);
+  const reportedData = await reportedRes.json().catch(() => ({}));
+  const liveData = await liveRes.json().catch(() => ({}));
 
-  if (!res.ok) {
-    errEl.textContent = data.error || `API エラー (${res.status})。D1 バインディングを確認してください。`;
+  if (!reportedRes.ok && !liveRes.ok) {
+    errEl.textContent =
+      reportedData.error || liveData.error || `API エラー。D1 バインディングを確認してください。`;
     errEl.hidden = false;
     document.getElementById("comments-stats").textContent = "—";
-    document.getElementById("comments-queue").innerHTML = "";
-    document.getElementById("comments-empty").hidden = true;
+    document.getElementById("comments-reported").innerHTML = "";
+    document.getElementById("comments-live").innerHTML = "";
     return;
   }
 
-  const pending = data.items || [];
+  const reported = reportedData.items || [];
+  const live = (liveData.items || []).slice(0, 20);
 
   document.getElementById("comments-stats").textContent =
-    `承認待ち ${pending.length} 件（D1）`;
+    `通報あり ${reported.length} 件 / 公開中 ${liveData.items?.length ?? 0} 件`;
 
-  const list = document.getElementById("comments-queue");
+  renderList("comments-reported", "comments-reported-empty", reported, "hide", "非表示", true);
+  renderList("comments-live", "comments-live-empty", live, "hide", "非表示");
+}
+
+function renderList(listId, emptyId, items, primaryAct, primaryLabel, showReportCount = false) {
+  const list = document.getElementById(listId);
   list.innerHTML = "";
-  document.getElementById("comments-empty").hidden = pending.length > 0;
+  document.getElementById(emptyId).hidden = items.length > 0;
 
-  for (const c of pending) {
+  for (const c of items) {
     const li = document.createElement("li");
     li.className = "dev-comments-admin__item";
+    const reportBadge =
+      showReportCount && c.reportCount
+        ? `<span class="dev-comments-admin__reports">通報 ${c.reportCount} 件</span>`
+        : "";
     li.innerHTML = `
       <div class="dev-comments-admin__meta">
         <strong>${escapeHtml(c.name || "匿名")}</strong>
+        ${reportBadge}
         <span><a href="/case/${c.slug}/">/case/${c.slug}/</a></span>
         <time>${c.at ? new Date(c.at).toLocaleString("ja-JP") : ""}</time>
       </div>
       <p class="dev-comments-admin__body"></p>
       <div class="dev-comments-admin__actions">
-        <button type="button" class="dev-deploy__btn" data-act="approve">承認</button>
-        <button type="button" class="dev-deploy__btn dev-admin-btn--danger" data-act="reject">却下</button>
+        <button type="button" class="dev-deploy__btn" data-act="${primaryAct}">${primaryLabel}</button>
       </div>`;
     li.querySelector(".dev-comments-admin__body").textContent = c.body;
-    li.querySelector('[data-act="approve"]').addEventListener("click", () => moderate(c.id, "approve"));
-    li.querySelector('[data-act="reject"]').addEventListener("click", () => moderate(c.id, "reject"));
+    li.querySelector(`[data-act="${primaryAct}"]`).addEventListener("click", () =>
+      moderate(c.id, primaryAct),
+    );
     list.appendChild(li);
   }
 }

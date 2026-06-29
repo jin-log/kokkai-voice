@@ -1375,6 +1375,63 @@ a { color: var(--color-primary); }
 
 .comment-form textarea { min-height: 80px; resize: vertical; }
 
+.comment-disclaimer {
+  font-size: 0.85rem;
+  line-height: 1.55;
+  margin: 0 0 1rem;
+  padding: 0.75rem 0.9rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+}
+
+.comment-terms {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  font-size: 0.82rem;
+  line-height: 1.45;
+  cursor: pointer;
+}
+
+.comment-terms input {
+  margin-top: 0.2rem;
+  flex-shrink: 0;
+}
+
+.comment-legal {
+  font-size: 0.85rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.comment-legal--ng { color: #b42318; }
+
+.comment__meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-top: 0.35rem;
+}
+
+.comment__report {
+  font-family: inherit;
+  font-size: 0.72rem;
+  color: var(--color-text-muted);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.comment__report:disabled {
+  cursor: default;
+  text-decoration: none;
+  opacity: 0.6;
+}
+
 .btn {
   font-family: inherit;
   font-weight: 700;
@@ -2683,6 +2740,8 @@ body.has-progress-strip {
 .admin-action-status.is-error { color: #991b1b; }
 
 .dev-comments-admin__stats { margin-bottom: 1rem; font-weight: 600; }
+.dev-comments-admin__heading { font-size: 1rem; margin: 1.25rem 0 0.75rem; }
+.dev-comments-admin__reports { color: #b42318; font-weight: 700; }
 .dev-comments-admin__list { list-style: none; margin: 0; padding: 0; }
 .dev-comments-admin__item {
   border: 1px solid var(--color-border);

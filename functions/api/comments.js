@@ -1,6 +1,7 @@
 import { json, jsonError } from "../lib/http.js";
 import { visitorHash } from "../lib/visitor-hash.js";
 import { verifyTurnstile } from "../lib/turnstile.js";
+import { scanCommentLegal } from "../lib/comment-legal.mjs";
 
 const SLUG_RE = /^[a-z0-9][a-z0-9-]{0,79}$/i;
 const MAX_BODY = 500;
@@ -53,6 +54,14 @@ export async function onRequestPost(context) {
   if (!slug || !SLUG_RE.test(slug)) return jsonError("slug が不正です", 400);
   if (!body || body.length > MAX_BODY) return jsonError("コメントは1〜500文字", 400);
 
+  if (payload.acceptedTerms !== true) {
+    return jsonError("コメント投稿規約への同意が必要です。", 403);
+  }
+
+  if (!scanCommentLegal(`${name}\n${body}`).ok) {
+    return jsonError("投稿できない内容が含まれています（個人情報・選挙誘導・暴力的脅迫など）。", 403);
+  }
+
   const ip = context.request.headers.get("CF-Connecting-IP");
   const turnstileOk = await verifyTurnstile({
     secret: context.env.TURNSTILE_SECRET_KEY,
@@ -81,12 +90,12 @@ export async function onRequestPost(context) {
   await db
     .prepare(
       `INSERT INTO comments (id, case_slug, author_name, body, status, visitor_hash, created_at)
-       VALUES (?, ?, ?, ?, 'pending', ?, ?)`,
+       VALUES (?, ?, ?, ?, 'approved', ?, ?)`,
     )
     .bind(id, slug, name, body, hash, createdAt)
     .run();
 
-  return json({ ok: true, id, status: "pending" }, 201);
+  return json({ ok: true, id, status: "approved" }, 201);
 }
 
 /** @param {Record<string, unknown>} row */

@@ -1,0 +1,81 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import SiteHeader from "../../components/SiteHeader.astro";
+import SiteFooter from "../../components/SiteFooter.astro";
+import { SITE } from "../../lib/site-config.mjs";
+---
+
+<BaseLayout
+  title="コメント投稿規約｜日本の政治なう"
+  description="日本の政治なうのコメント機能に関する投稿者責任・免責・通報について。"
+>
+  <SiteHeader showSearch />
+  <main class="container legal-page">
+    <h1>コメント投稿規約</h1>
+    <p class="legal-page__updated">最終更新: 2026年6月28日</p>
+
+    <p>
+      「{SITE.name}」（{SITE.domain}、以下「当サイト」）のコメント欄をご利用いただく前に、以下を必ずお読みください。
+      投稿には、本規約への同意が必要です。
+    </p>
+
+    <h2>1. 投稿者の責任</h2>
+    <p>
+      コメント欄に投稿される<strong>すべての内容は、投稿者本人の責任</strong>において公開されます。
+      当サイトは、コメントの正確性・適法性・道徳性について<strong>一切の責任を負いません</strong>。
+      投稿内容が第三者の権利を侵害した場合、当該投稿者がその責任を負うものとします。
+    </p>
+
+    <h2>2. 当サイトの立場</h2>
+    <p>
+      コメントは投稿者個人の意見・感想であり、<strong>当サイトの見解・支持・推奨を示すものではありません</strong>。
+      記事本文（国会議事録等に基づく整理）とコメント欄は別物です。
+    </p>
+
+    <h2>3. 投稿の公開</h2>
+    <p>
+      コメントは、明らかな違反（個人情報の掲載・選挙の投票誘導・暴力的脅迫など）を除き、<strong>投稿後すぐに公開</strong>されます。
+      事前の人手による承認は行いません。境界が曖昧な表現は通過する場合があり、通報を受けたものは当サイトが確認のうえ非表示にすることがあります。
+    </p>
+
+    <h2>4. 禁止事項（投稿できないもの）</h2>
+    <ul>
+      <li>電話番号・メールアドレス・住所など、第三者の個人を特定しうる連絡先</li>
+      <li>投票・当選を明確に呼びかける表現（公職選挙法に抵触しうるもの）</li>
+      <li>他者への暴力的脅迫（「死ね」「殺せ」等）</li>
+      <li>法令に違反する内容、または違法行為を助長する内容</li>
+    </ul>
+    <p>上記以外でも、通報・運営判断により非表示にすることがあります。</p>
+
+    <h2>5. 通報とモデレーション</h2>
+    <p>
+      各コメントに通報ボタンがあります。不適切と思われる場合はご利用ください。
+      当サイトは、通報内容・法令・本規約に照らし、コメントの非表示・削除を行うことができます。
+      通報への個別返信は行いません。
+    </p>
+
+    <h2>6. データの取扱い</h2>
+    <p>
+      投稿内容・ニックネーム・投稿日時は当サイトのデータベースに保存されます。
+      スパム防止のため、投稿元のハッシュ化された識別子を短期間保持する場合があります。
+      詳細は<a href="/privacy-policy/">プライバシーポリシー</a>を参照してください。
+    </p>
+
+    <h2>7. 規約の変更</h2>
+    <p>本規約は予告なく変更することがあります。変更後の投稿から新しい規約が適用されます。</p>
+  </main>
+  <SiteFooter />
+</BaseLayout>
+
+<style>
+  .legal-page {
+    max-width: 42rem;
+    padding: 2rem 1rem 3rem;
+    line-height: 1.75;
+  }
+  .legal-page h1 { font-size: 1.5rem; margin: 0 0 0.5rem; }
+  .legal-page__updated { font-size: 0.85rem; color: var(--color-text-muted); margin: 0 0 1.5rem; }
+  .legal-page h2 { font-size: 1.05rem; margin: 1.75rem 0 0.65rem; }
+  .legal-page p, .legal-page ul { margin: 0 0 1rem; }
+  .legal-page ul { padding-left: 1.25rem; }
+</style>

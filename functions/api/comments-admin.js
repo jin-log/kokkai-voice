@@ -11,6 +11,36 @@ export async function onRequestGet(context) {
   const status = url.searchParams.get("status") || "pending";
   const slug = url.searchParams.get("slug")?.trim();
 
+  if (status === "reported") {
+    const { results } = await db
+      .prepare(
+        `SELECT c.id, c.case_slug, c.author_name, c.body, c.status, c.created_at,
+                COUNT(r.id) AS report_count
+         FROM comments c
+         INNER JOIN comment_reports r ON r.comment_id = c.id
+         WHERE c.status = 'approved'
+         GROUP BY c.id
+         ORDER BY report_count DESC, c.created_at DESC
+         LIMIT 100`,
+      )
+      .all();
+    const rows = results ?? [];
+    return json({
+      ok: true,
+      status: "reported",
+      count: rows.length,
+      items: rows.map((row) => ({
+        id: row.id,
+        slug: row.case_slug,
+        name: row.author_name,
+        body: row.body,
+        status: row.status,
+        at: row.created_at,
+        reportCount: Number(row.report_count ?? 0),
+      })),
+    });
+  }
+
   let stmt;
   if (slug) {
     stmt = db
@@ -70,17 +100,18 @@ export async function onRequestPost(context) {
   const action = String(payload.action ?? "").trim();
 
   if (!id) return jsonError("id が必要です", 400);
-  if (!["approve", "reject"].includes(action)) return jsonError("action が不正です", 400);
+  if (!["approve", "reject", "hide"].includes(action)) return jsonError("action が不正です", 400);
 
   const status = action === "approve" ? "approved" : "rejected";
   const moderatedAt = new Date().toISOString();
+  const fromStatus = action === "hide" ? "approved" : "pending";
 
   const result = await db
     .prepare(
       `UPDATE comments SET status = ?, moderated_at = ?
-       WHERE id = ? AND status = 'pending'`,
+       WHERE id = ? AND status = ?`,
     )
-    .bind(status, moderatedAt, id)
+    .bind(status, moderatedAt, id, fromStatus)
     .run();
 
   if (!result.meta.changes) return jsonError("対象が見つからないか、処理済みです", 404);
