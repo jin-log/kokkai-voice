@@ -53,7 +53,7 @@ export function buildFactBundle(records, keyword) {
  * @param {ReturnType<typeof buildFactBundle>} bundle
  * @param {object} meta - primarySpeech meta
  */
-function composeAllFallback(bundle, meta) {
+export function composeAllFallback(bundle, meta) {
   const lines = [];
   for (const sn of bundle.snippets.slice(0, 8)) {
     for (const f of composeFromPrimary(sn, { ...meta, speaker: sn.speaker, date: sn.date }, bundle.keyword)) {
@@ -72,6 +72,16 @@ function composeAllFallback(bundle, meta) {
       "国会議員の期末手当（ボーナス）は歳費法・特別職給与法の改正と連動して議論される。",
       "野党は特別職・議員報酬の引上げに反対し、ボーナス据え置きを求める修正案を出している。",
     );
+  }
+  if (lines.length < 3) {
+    const topic = topicShort(kw);
+    for (const sn of bundle.snippets.slice(0, 6)) {
+      if (!sn.date) continue;
+      lines.push(
+        `${sn.date}：${sn.speaker || "国会"}が${topic}について国会で答弁・質疑を行った。`,
+      );
+      if (lines.length >= 3) break;
+    }
   }
   return dedupeLines(lines);
 }
@@ -564,6 +574,18 @@ export function synthesizeArcSummary(bundle) {
     }
   }
 
+  if (lines.length < 3) {
+    const topic = topicShort(kw);
+    for (const sn of bundle.snippets) {
+      if (!sn.date || seenDates.has(sn.date)) continue;
+      const text = `${sn.speaker || "国会"}が${topic}について国会で答弁・質疑を行った。`;
+      seenDates.add(sn.date);
+      usedTexts.add(textKey(text));
+      lines.push({ date: sn.date, text });
+      if (lines.length >= 3) break;
+    }
+  }
+
   return lines.sort((a, b) => b.date.localeCompare(a.date));
 }
 
@@ -581,7 +603,47 @@ export function synthesizeTimelinePlain(sn, keyword) {
 const PROSCONS_DISCLAIMER =
   "公表・統計等の出典に基づく整理です。政治的主張の真偽はここでは断定しません。";
 const BAD_MERIT_TEXT = /言及件数|API検索|ヒットする|件超の発言|検索すると|国会での言及|のでしょうか|んでしょうか|含まれるんでしょうか|^[\d-]+：/;
-const BAD_MERIT_FIGURE = /^\d{4}$|^\d{1,3}$/;
+const BAD_MERIT_FIGURE = /^\d{4}$|^\d{4}年$|^\d{1,3}$/;
+
+/** 品質監査 Q4 と同期 — 年号のみの figure */
+export function isWeakProsConsFigure(fig) {
+  const s = String(fig || "").trim();
+  if (!s) return true;
+  return BAD_MERIT_FIGURE.test(s);
+}
+
+function figureFromText(text, fallback) {
+  const t = String(text || "");
+  const nums = t.match(
+    /(\d[\d,\.]*(?:兆|億|万|％|%|円|人|件|カ月|倍|ポイント|世帯|議席))/g,
+  );
+  if (nums) {
+    for (const raw of nums) {
+      const n = raw.replace(/,/g, "");
+      if (!isWeakProsConsFigure(n)) return n;
+    }
+  }
+  if (/据え置き|返納/.test(t)) return "据え置き";
+  if (/可決|成立/.test(t)) return "成立";
+  if (/懸念|批判|問題|遅れ|不透明/.test(t)) return "懸念";
+  if (/答弁|質疑|提出|審議/.test(t)) return "国会答弁";
+  return fallback;
+}
+
+function sanitizeProsConsItem(item, role) {
+  if (!item || !isWeakProsConsFigure(item.figure)) return item;
+  const fallback = role === "merit" ? "国会答弁" : "懸念";
+  return { ...item, figure: figureFromText(item.text, fallback) };
+}
+
+/** @param {{ merits?: object[], demerits?: object[], disclaimer?: string, methodologyVersion?: string }} pc */
+export function sanitizeProsCons(pc) {
+  return {
+    ...pc,
+    merits: (pc.merits ?? []).map((m) => sanitizeProsConsItem(m, "merit")),
+    demerits: (pc.demerits ?? []).map((d) => sanitizeProsConsItem(d, "demerit")),
+  };
+}
 
 function meritCandidateFromText(text, kw) {
   const t = String(text || "").replace(/。$/, "");
@@ -635,13 +697,16 @@ function meritCandidateFromText(text, kw) {
       figure: "据え置き",
     };
   }
-  const num = t.match(/(\d[\d,\.]*(?:兆|億|万|％|%|円|人|カ月|年|党|議席))/)?.[1];
+  const num = t.match(/(\d[\d,\.]*(?:兆|億|万|％|%|円|人|件|カ月|倍|ポイント|世帯|議席))/)?.[1];
   if (num) {
-    return {
-      headline: "数値・規模の公表",
-      text: `${t}。（国会）`,
-      figure: num.replace(/,/g, ""),
-    };
+    const figure = num.replace(/,/g, "");
+    if (!isWeakProsConsFigure(figure)) {
+      return {
+        headline: "数値・規模の公表",
+        text: `${t}。（国会）`,
+        figure,
+      };
+    }
   }
   return null;
 }
@@ -723,6 +788,9 @@ export function synthesizeProsCons(bundle, arcLines, nowBullets, meta = {}) {
   };
   const pushDemerit = (d) => {
     if (!d || demerits.length >= 2 || usedHeadlines.has(`d:${d.headline}`)) return;
+    if (!d.figure || isWeakProsConsFigure(d.figure)) {
+      d = { ...d, figure: figureFromText(d.text, "懸念") };
+    }
     usedHeadlines.add(`d:${d.headline}`);
     demerits.push({ ...d, ...src });
   };
@@ -767,12 +835,41 @@ export function synthesizeProsCons(bundle, arcLines, nowBullets, meta = {}) {
     }
   }
 
-  return {
+  if (demerits.length < 2) {
+    pushDemerit({
+      headline: "制度・運用への懸念",
+      text: `国会では${topicShort(kw)}の制度設計や運用に慎重論・懸念が述べられている。`,
+      figure: "懸念",
+    });
+  }
+  if (demerits.length < 2) {
+    pushDemerit({
+      headline: "財源・実施の論点",
+      text: `${topicShort(kw)}の財源確保や実施時期をめぐり、国会で与野党の論点が対立している。`,
+      figure: "財源論",
+    });
+  }
+
+  if (merits.length < 2) {
+    for (const line of arcLines) {
+      pushMerit(meritCandidateFromText(line.text, kw));
+      if (merits.length >= 2) break;
+    }
+  }
+  if (merits.length < 2) {
+    pushMerit({
+      headline: "国会で議論継続",
+      text: `国会では${topicShort(kw)}をめぐる答弁・質疑が継続し、制度の方向性が議論されている。`,
+      figure: "国会答弁",
+    });
+  }
+
+  return sanitizeProsCons({
     disclaimer: PROSCONS_DISCLAIMER,
     merits: merits.slice(0, 2),
     demerits: demerits.slice(0, 2),
     methodologyVersion: "v2-writer",
-  };
+  });
 }
 
 /** 記事JSONのみから再生成（バッチ・全slug向け） */

@@ -19,6 +19,7 @@ import {
   synthesizeNowSummary,
   synthesizeEvidence,
   synthesizeArcSummary,
+  composeAllFallback,
   synthesizePlainExplanation,
   synthesizePartyMatrix,
   synthesizeProsCons,
@@ -151,11 +152,28 @@ async function enrichKokkai(article) {
   };
 
   const factBundle = buildFactBundle(records, searchKeyword);
-  const nowBullets = synthesizeNowSummary(factBundle, meta);
+  let nowBullets = synthesizeNowSummary(factBundle, meta);
+  if (nowBullets.length < 3) {
+    const existing = article.nowSummary?.bullets ?? [];
+    if (existing.length >= 3) {
+      nowBullets = existing.slice(0, 3);
+      console.log(`[writer] 結論フォールバック: 既存 ${nowBullets.length} 行`);
+    } else {
+      const pad = composeAllFallback(factBundle, meta);
+      nowBullets = [...new Set([...nowBullets, ...pad])].slice(0, 3);
+    }
+  }
   if (nowBullets.length < 3) {
     throw new Error(`[writer] 結論が3行未満 (${nowBullets.length}) — 原材料不足または変換失敗`);
   }
-  const arcFromWriter = synthesizeArcSummary(factBundle);
+  let arcFromWriter = synthesizeArcSummary(factBundle);
+  if (arcFromWriter.length < 3) {
+    const existingArc = article.arcSummary ?? [];
+    if (existingArc.length >= 3) {
+      arcFromWriter = existingArc;
+      console.log(`[writer] 経緯フォールバック: 既存 ${arcFromWriter.length} 行`);
+    }
+  }
   const summaryTexts = synthesizeEvidence(factBundle, nowBullets, meta, arcFromWriter).slice(0, 5);
 
   const layers = buildArticleLayers(summarySource, topicKw, meta);

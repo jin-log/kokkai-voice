@@ -27,8 +27,21 @@ export function agentForCheckId(id) {
   return "ceo";
 }
 
+/** チェックID → 実行スクリプト（null なら agent デフォルト） */
+export function scriptForCheckId(checkId, slug) {
+  const id = String(checkId || "");
+  if (id === "Q4_proscons_year_only") {
+    return { script: "generate-proscons-auto.mjs", args: ["--slug", slug] };
+  }
+  return null;
+}
+
 /** @param {string} agent */
-export function commandForAgent(agent, slug) {
+export function commandForAgent(agent, slug, checkId) {
+  const targeted = checkId ? scriptForCheckId(checkId, slug) : null;
+  if (targeted) {
+    return `node scripts/${targeted.script} ${targeted.args.join(" ")}`;
+  }
   switch (agent) {
     case "writer":
       return `npm run complete:article -- --slug ${slug} --force`;
@@ -63,7 +76,7 @@ export function buildAgentTasksForArticle(article, gate) {
       checkId: b.id,
       title: `[品質] ${b.message}`,
       todo: b.todo,
-      command: commandForAgent(agent, slug),
+      command: commandForAgent(agent, slug, b.id),
       priority: 10,
     });
   }
@@ -79,7 +92,7 @@ export function buildAgentTasksForArticle(article, gate) {
       checkId: b.id,
       title: `[ゲート] ${meta?.label ?? b.id}`,
       todo: meta?.todo ?? b.detail ?? "",
-      command: commandForAgent(agent, slug),
+      command: commandForAgent(agent, slug, b.id),
       priority: b.id.startsWith("H") ? 20 : 30,
     });
   }

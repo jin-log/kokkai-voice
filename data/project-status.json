@@ -1,12 +1,12 @@
 {
-  "generatedAt": "2026-06-30T22:24:06.942Z",
+  "generatedAt": "2026-06-30T22:42:32.061Z",
   "strategy": "quality-first",
   "activeCount": 39,
   "parkedCount": 0,
   "publishedCount": 26,
   "overallGoldPct": 26,
-  "overallGatePct": 39,
-  "qualityFailed": 12,
+  "overallGatePct": 40,
+  "qualityFailed": 4,
   "slugs": [
     {
       "slug": "case-mr0jbdpc",
@@ -803,28 +803,21 @@
       "pageReady": true,
       "publishState": "hidden",
       "previewUrl": null,
-      "qualityOk": false,
-      "needsQualityFix": true,
-      "qualityBlockerCount": 1,
-      "qualityBlockers": [
-        {
-          "id": "Q4_proscons_year_only",
-          "message": "メリデメの figure が年号のみ（2件）— 実績数値になっていない",
-          "todo": "万円・%・件数など公表数値を figure に入れる（年号だけは不可）",
-          "agent": "writer"
-        }
-      ],
+      "qualityOk": true,
+      "needsQualityFix": false,
+      "qualityBlockerCount": 0,
+      "qualityBlockers": [],
       "agentTasks": [
         {
-          "id": "expo2025-kessan:Q4_proscons_year_only",
+          "id": "expo2025-kessan:H1_xPosts",
           "slug": "expo2025-kessan",
-          "agent": "writer",
-          "agentLabel": "ライター",
-          "checkId": "Q4_proscons_year_only",
-          "title": "[品質] メリデメの figure が年号のみ（2件）— 実績数値になっていない",
-          "todo": "万円・%・件数など公表数値を figure に入れる（年号だけは不可）",
-          "command": "npm run complete:article -- --slug expo2025-kessan --force",
-          "priority": 10
+          "agent": "x-researcher",
+          "agentLabel": "X調査",
+          "checkId": "H1_xPosts",
+          "title": "[ゲート] X投稿",
+          "todo": "検証済みX URLを3件以上（x-researcher）",
+          "command": "npm run x:research -- --slug expo2025-kessan",
+          "priority": 20
         },
         {
           "id": "expo2025-kessan:H2_x_topic",
@@ -835,6 +828,17 @@
           "title": "[ゲート] Xの話題",
           "todo": "X投稿本文が案件キーワードと一致（x-researcher）",
           "command": "npm run x:research -- --slug expo2025-kessan",
+          "priority": 20
+        },
+        {
+          "id": "expo2025-kessan:H3_x_screenshot",
+          "slug": "expo2025-kessan",
+          "agent": "debugger",
+          "agentLabel": "デバッガー",
+          "checkId": "H3_x_screenshot",
+          "title": "[ゲート] Xスクショ",
+          "todo": "npm run x:capture -- --slug <slug>（デバッガー）",
+          "command": "npm run x:capture -- --slug expo2025-kessan",
           "priority": 20
         },
         {
@@ -1017,13 +1021,25 @@
           "detail": "公言テキストが案件と無関係"
         },
         {
+          "id": "H1_xPosts",
+          "label": "X投稿",
+          "todo": "検証済みX URLを3件以上（x-researcher）",
+          "detail": "検証済み 0/3 件（公開前必須）"
+        },
+        {
           "id": "H2_x_topic",
           "label": "Xの話題",
           "todo": "X投稿本文が案件キーワードと一致（x-researcher）",
           "detail": "0/3 件が話題一致"
+        },
+        {
+          "id": "H3_x_screenshot",
+          "label": "Xスクショ",
+          "todo": "npm run x:capture -- --slug <slug>（デバッガー）",
+          "detail": "スクショ 0/3 件 — x:capture 未実行"
         }
       ],
-      "blockerCount": 6,
+      "blockerCount": 8,
       "runState": "idle",
       "nextAction": "👁️ 非表示中 — 「表示に戻す」でトップに出せます",
       "promo": {
@@ -1409,29 +1425,11 @@
       "pageReady": false,
       "publishState": "hidden",
       "previewUrl": null,
-      "qualityOk": false,
-      "needsQualityFix": true,
-      "qualityBlockerCount": 1,
-      "qualityBlockers": [
-        {
-          "id": "Q4_proscons_year_only",
-          "message": "メリデメの figure が年号のみ（3件）— 実績数値になっていない",
-          "todo": "万円・%・件数など公表数値を figure に入れる（年号だけは不可）",
-          "agent": "writer"
-        }
-      ],
+      "qualityOk": true,
+      "needsQualityFix": false,
+      "qualityBlockerCount": 0,
+      "qualityBlockers": [],
       "agentTasks": [
-        {
-          "id": "denki-gas-genmen:Q4_proscons_year_only",
-          "slug": "denki-gas-genmen",
-          "agent": "writer",
-          "agentLabel": "ライター",
-          "checkId": "Q4_proscons_year_only",
-          "title": "[品質] メリデメの figure が年号のみ（3件）— 実績数値になっていない",
-          "todo": "万円・%・件数など公表数値を figure に入れる（年号だけは不可）",
-          "command": "npm run complete:article -- --slug denki-gas-genmen --force",
-          "priority": 10
-        },
         {
           "id": "denki-gas-genmen:H2_x_topic",
           "slug": "denki-gas-genmen",
@@ -2952,14 +2950,14 @@
       },
       "short": {
         "slug": "shussho-budget-seika",
-        "generated": false,
-        "uploaded": false,
-        "visibility": null,
-        "videoId": null,
-        "url": null,
-        "studioUrl": null,
-        "uploadedAt": null,
-        "label": "未生成"
+        "generated": true,
+        "uploaded": true,
+        "visibility": "private",
+        "videoId": "8HPZ4sC7uck",
+        "url": "https://www.youtube.com/shorts/8HPZ4sC7uck",
+        "studioUrl": "https://studio.youtube.com/video/8HPZ4sC7uck/edit",
+        "uploadedAt": "2026-06-29T22:11:20.857Z",
+        "label": "YT非公開"
       }
     },
     {
@@ -4603,28 +4601,21 @@
       "pageReady": true,
       "publishState": "live",
       "previewUrl": "/dev/preview/boeeihi/",
-      "qualityOk": false,
-      "needsQualityFix": true,
-      "qualityBlockerCount": 1,
-      "qualityBlockers": [
-        {
-          "id": "Q4_proscons_year_only",
-          "message": "メリデメの figure が年号のみ（3件）— 実績数値になっていない",
-          "todo": "万円・%・件数など公表数値を figure に入れる（年号だけは不可）",
-          "agent": "writer"
-        }
-      ],
+      "qualityOk": true,
+      "needsQualityFix": false,
+      "qualityBlockerCount": 0,
+      "qualityBlockers": [],
       "agentTasks": [
         {
-          "id": "boeeihi:Q4_proscons_year_only",
+          "id": "boeeihi:H1_xPosts",
           "slug": "boeeihi",
-          "agent": "writer",
-          "agentLabel": "ライター",
-          "checkId": "Q4_proscons_year_only",
-          "title": "[品質] メリデメの figure が年号のみ（3件）— 実績数値になっていない",
-          "todo": "万円・%・件数など公表数値を figure に入れる（年号だけは不可）",
-          "command": "npm run complete:article -- --slug boeeihi --force",
-          "priority": 10
+          "agent": "x-researcher",
+          "agentLabel": "X調査",
+          "checkId": "H1_xPosts",
+          "title": "[ゲート] X投稿",
+          "todo": "検証済みX URLを3件以上（x-researcher）",
+          "command": "npm run x:research -- --slug boeeihi",
+          "priority": 20
         },
         {
           "id": "boeeihi:H2_x_topic",
@@ -4638,52 +4629,30 @@
           "priority": 20
         },
         {
-          "id": "boeeihi:C2_evidence_distinct",
+          "id": "boeeihi:H3_x_screenshot",
           "slug": "boeeihi",
-          "agent": "writer",
-          "agentLabel": "ライター",
-          "checkId": "C2_evidence_distinct",
-          "title": "[ゲート] 根拠の独自性",
-          "todo": "根拠は結論と同文禁止",
-          "command": "npm run complete:article -- --slug boeeihi --force",
-          "priority": 30
+          "agent": "debugger",
+          "agentLabel": "デバッガー",
+          "checkId": "H3_x_screenshot",
+          "title": "[ゲート] Xスクショ",
+          "todo": "npm run x:capture -- --slug <slug>（デバッガー）",
+          "command": "npm run x:capture -- --slug boeeihi",
+          "priority": 20
         },
         {
-          "id": "boeeihi:D2_arc_topic",
+          "id": "boeeihi:E2_timeline_x",
           "slug": "boeeihi",
           "agent": "writer",
           "agentLabel": "ライター",
-          "checkId": "D2_arc_topic",
-          "title": "[ゲート] 経緯の話題",
-          "todo": "経緯3行以上が案件キーワードと一致",
-          "command": "npm run complete:article -- --slug boeeihi --force",
-          "priority": 30
-        },
-        {
-          "id": "boeeihi:E4_timeline_diet_topic",
-          "slug": "boeeihi",
-          "agent": "writer",
-          "agentLabel": "ライター",
-          "checkId": "E4_timeline_diet_topic",
-          "title": "[ゲート] TL国会の話題",
-          "todo": "タイムライン国会3件が案件と一致",
-          "command": "npm run complete:article -- --slug boeeihi --force",
-          "priority": 30
-        },
-        {
-          "id": "boeeihi:G5_parties_symbol",
-          "slug": "boeeihi",
-          "agent": "writer",
-          "agentLabel": "ライター",
-          "checkId": "G5_parties_symbol",
-          "title": "[ゲート] ◎〇▲×",
-          "todo": "各党の記号を確定（v2）",
+          "checkId": "E2_timeline_x",
+          "title": "[ゲート] タイムラインX",
+          "todo": "X投稿を3件以上タイムラインに",
           "command": "npm run complete:article -- --slug boeeihi --force",
           "priority": 30
         }
       ],
-      "gatePct": 25,
-      "goldPct": 17,
+      "gatePct": 50,
+      "goldPct": 33,
       "published": true,
       "publishGateOk": false,
       "pipeline": [
@@ -4699,7 +4668,7 @@
           "label": "②〇×2党確定",
           "phase": 2,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "x",
@@ -4743,7 +4712,7 @@
           "label": "②〇×2党確定",
           "phase": 2,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "x",
@@ -4776,39 +4745,33 @@
       ],
       "blockers": [
         {
-          "id": "C2_evidence_distinct",
-          "label": "根拠の独自性",
-          "todo": "根拠は結論と同文禁止",
-          "detail": "根拠が結論のコピー"
+          "id": "E2_timeline_x",
+          "label": "タイムラインX",
+          "todo": "X投稿を3件以上タイムラインに",
+          "detail": "0/3 X"
         },
         {
-          "id": "D2_arc_topic",
-          "label": "経緯の話題",
-          "todo": "経緯3行以上が案件キーワードと一致",
-          "detail": "2/3 行が話題一致"
-        },
-        {
-          "id": "E4_timeline_diet_topic",
-          "label": "TL国会の話題",
-          "todo": "タイムライン国会3件が案件と一致",
-          "detail": "1/3 国会が話題一致"
-        },
-        {
-          "id": "G5_parties_symbol",
-          "label": "◎〇▲×",
-          "todo": "各党の記号を確定（v2）",
-          "detail": "◎▲❌ 確定 1/2 党以上"
+          "id": "H1_xPosts",
+          "label": "X投稿",
+          "todo": "検証済みX URLを3件以上（x-researcher）",
+          "detail": "検証済み 0/3 件（公開前必須）"
         },
         {
           "id": "H2_x_topic",
           "label": "Xの話題",
           "todo": "X投稿本文が案件キーワードと一致（x-researcher）",
           "detail": "0/3 件が話題一致"
+        },
+        {
+          "id": "H3_x_screenshot",
+          "label": "Xスクショ",
+          "todo": "npm run x:capture -- --slug <slug>（デバッガー）",
+          "detail": "スクショ 0/3 件 — x:capture 未実行"
         }
       ],
-      "blockerCount": 5,
+      "blockerCount": 4,
       "runState": "idle",
-      "nextAction": "品質: メリデメの figure が年号のみ（3件）— 実績数値になっていない — 万円・%・件数など公表数値を figure に入れる（年号だけは不可） → 根拠が結論のコピー → 2/3 行が話題一致 → 1/3 国会が話題一致",
+      "nextAction": "タイムラインにX3件 → X URL検索・post_text 補完（x-researcher） → X本文を案件キーワードに合わせて差し替え → X調査: 5枠が未特定 — キーワード見直し or 手動URL",
       "promo": {
         "x": null,
         "hatena": null,
@@ -4834,29 +4797,11 @@
       "pageReady": true,
       "publishState": "live",
       "previewUrl": "/dev/preview/chingin/",
-      "qualityOk": false,
-      "needsQualityFix": true,
-      "qualityBlockerCount": 1,
-      "qualityBlockers": [
-        {
-          "id": "Q4_proscons_year_only",
-          "message": "メリデメの figure が年号のみ（2件）— 実績数値になっていない",
-          "todo": "万円・%・件数など公表数値を figure に入れる（年号だけは不可）",
-          "agent": "writer"
-        }
-      ],
+      "qualityOk": true,
+      "needsQualityFix": false,
+      "qualityBlockerCount": 0,
+      "qualityBlockers": [],
       "agentTasks": [
-        {
-          "id": "chingin:Q4_proscons_year_only",
-          "slug": "chingin",
-          "agent": "writer",
-          "agentLabel": "ライター",
-          "checkId": "Q4_proscons_year_only",
-          "title": "[品質] メリデメの figure が年号のみ（2件）— 実績数値になっていない",
-          "todo": "万円・%・件数など公表数値を figure に入れる（年号だけは不可）",
-          "command": "npm run complete:article -- --slug chingin --force",
-          "priority": 10
-        },
         {
           "id": "chingin:H2_x_topic",
           "slug": "chingin",
@@ -4988,7 +4933,7 @@
       ],
       "blockerCount": 2,
       "runState": "idle",
-      "nextAction": "品質: メリデメの figure が年号のみ（2件）— 実績数値になっていない — 万円・%・件数など公表数値を figure に入れる（年号だけは不可） → 2/3 行が話題一致 → X本文を案件キーワードに合わせて差し替え",
+      "nextAction": "2/3 行が話題一致 → X本文を案件キーワードに合わせて差し替え",
       "promo": {
         "x": null,
         "hatena": null,
@@ -5210,29 +5155,11 @@
       "pageReady": true,
       "publishState": "live",
       "previewUrl": "/dev/preview/gaikokujin-seisaku/",
-      "qualityOk": false,
-      "needsQualityFix": true,
-      "qualityBlockerCount": 1,
-      "qualityBlockers": [
-        {
-          "id": "Q4_proscons_year_only",
-          "message": "メリデメの figure が年号のみ（2件）— 実績数値になっていない",
-          "todo": "万円・%・件数など公表数値を figure に入れる（年号だけは不可）",
-          "agent": "writer"
-        }
-      ],
+      "qualityOk": true,
+      "needsQualityFix": false,
+      "qualityBlockerCount": 0,
+      "qualityBlockers": [],
       "agentTasks": [
-        {
-          "id": "gaikokujin-seisaku:Q4_proscons_year_only",
-          "slug": "gaikokujin-seisaku",
-          "agent": "writer",
-          "agentLabel": "ライター",
-          "checkId": "Q4_proscons_year_only",
-          "title": "[品質] メリデメの figure が年号のみ（2件）— 実績数値になっていない",
-          "todo": "万円・%・件数など公表数値を figure に入れる（年号だけは不可）",
-          "command": "npm run complete:article -- --slug gaikokujin-seisaku --force",
-          "priority": 10
-        },
         {
           "id": "gaikokujin-seisaku:H2_x_topic",
           "slug": "gaikokujin-seisaku",
@@ -5364,7 +5291,7 @@
       ],
       "blockerCount": 2,
       "runState": "idle",
-      "nextAction": "品質: メリデメの figure が年号のみ（2件）— 実績数値になっていない — 万円・%・件数など公表数値を figure に入れる（年号だけは不可） → 1/2 行がキーワード一致（外国人） → X本文を案件キーワードに合わせて差し替え",
+      "nextAction": "1/2 行がキーワード一致（外国人） → X本文を案件キーワードに合わせて差し替え",
       "promo": {
         "x": null,
         "hatena": null,
@@ -5585,14 +5512,14 @@
       },
       "short": {
         "slug": "shoshika",
-        "generated": false,
+        "generated": true,
         "uploaded": false,
         "visibility": null,
         "videoId": null,
         "url": null,
         "studioUrl": null,
         "uploadedAt": null,
-        "label": "未生成"
+        "label": "生成済・未アップ"
       }
     },
     {
@@ -5782,29 +5709,11 @@
       "pageReady": true,
       "publishState": "live",
       "previewUrl": "/dev/preview/energy-policy/",
-      "qualityOk": false,
-      "needsQualityFix": true,
-      "qualityBlockerCount": 1,
-      "qualityBlockers": [
-        {
-          "id": "Q4_proscons_year_only",
-          "message": "メリデメの figure が年号のみ（2件）— 実績数値になっていない",
-          "todo": "万円・%・件数など公表数値を figure に入れる（年号だけは不可）",
-          "agent": "writer"
-        }
-      ],
+      "qualityOk": true,
+      "needsQualityFix": false,
+      "qualityBlockerCount": 0,
+      "qualityBlockers": [],
       "agentTasks": [
-        {
-          "id": "energy-policy:Q4_proscons_year_only",
-          "slug": "energy-policy",
-          "agent": "writer",
-          "agentLabel": "ライター",
-          "checkId": "Q4_proscons_year_only",
-          "title": "[品質] メリデメの figure が年号のみ（2件）— 実績数値になっていない",
-          "todo": "万円・%・件数など公表数値を figure に入れる（年号だけは不可）",
-          "command": "npm run complete:article -- --slug energy-policy --force",
-          "priority": 10
-        },
         {
           "id": "energy-policy:H2_x_topic",
           "slug": "energy-policy",
@@ -5953,7 +5862,7 @@
       ],
       "blockerCount": 3,
       "runState": "idle",
-      "nextAction": "品質: メリデメの figure が年号のみ（2件）— 実績数値になっていない — 万円・%・件数など公表数値を figure に入れる（年号だけは不可） → 1/3 行が話題一致 → 公言テキストが案件と無関係 → X本文を案件キーワードに合わせて差し替え",
+      "nextAction": "1/3 行が話題一致 → 公言テキストが案件と無関係 → X本文を案件キーワードに合わせて差し替え",
       "promo": {
         "x": null,
         "hatena": null,
@@ -6439,29 +6348,11 @@
       "pageReady": true,
       "publishState": "live",
       "previewUrl": "/dev/preview/kaigo-iryo/",
-      "qualityOk": false,
-      "needsQualityFix": true,
-      "qualityBlockerCount": 1,
-      "qualityBlockers": [
-        {
-          "id": "Q4_proscons_year_only",
-          "message": "メリデメの figure が年号のみ（3件）— 実績数値になっていない",
-          "todo": "万円・%・件数など公表数値を figure に入れる（年号だけは不可）",
-          "agent": "writer"
-        }
-      ],
+      "qualityOk": true,
+      "needsQualityFix": false,
+      "qualityBlockerCount": 0,
+      "qualityBlockers": [],
       "agentTasks": [
-        {
-          "id": "kaigo-iryo:Q4_proscons_year_only",
-          "slug": "kaigo-iryo",
-          "agent": "writer",
-          "agentLabel": "ライター",
-          "checkId": "Q4_proscons_year_only",
-          "title": "[品質] メリデメの figure が年号のみ（3件）— 実績数値になっていない",
-          "todo": "万円・%・件数など公表数値を figure に入れる（年号だけは不可）",
-          "command": "npm run complete:article -- --slug kaigo-iryo --force",
-          "priority": 10
-        },
         {
           "id": "kaigo-iryo:H2_x_topic",
           "slug": "kaigo-iryo",
@@ -6593,7 +6484,7 @@
       ],
       "blockerCount": 2,
       "runState": "idle",
-      "nextAction": "品質: メリデメの figure が年号のみ（3件）— 実績数値になっていない — 万円・%・件数など公表数値を figure に入れる（年号だけは不可） → 1/2 行がキーワード一致（介護） → X本文を案件キーワードに合わせて差し替え",
+      "nextAction": "1/2 行がキーワード一致（介護） → X本文を案件キーワードに合わせて差し替え",
       "promo": {
         "x": null,
         "hatena": null,
@@ -7190,29 +7081,11 @@
       "pageReady": true,
       "publishState": "live",
       "previewUrl": "/dev/preview/casino-ir/",
-      "qualityOk": false,
-      "needsQualityFix": true,
-      "qualityBlockerCount": 1,
-      "qualityBlockers": [
-        {
-          "id": "Q4_proscons_year_only",
-          "message": "メリデメの figure が年号のみ（3件）— 実績数値になっていない",
-          "todo": "万円・%・件数など公表数値を figure に入れる（年号だけは不可）",
-          "agent": "writer"
-        }
-      ],
+      "qualityOk": true,
+      "needsQualityFix": false,
+      "qualityBlockerCount": 0,
+      "qualityBlockers": [],
       "agentTasks": [
-        {
-          "id": "casino-ir:Q4_proscons_year_only",
-          "slug": "casino-ir",
-          "agent": "writer",
-          "agentLabel": "ライター",
-          "checkId": "Q4_proscons_year_only",
-          "title": "[品質] メリデメの figure が年号のみ（3件）— 実績数値になっていない",
-          "todo": "万円・%・件数など公表数値を figure に入れる（年号だけは不可）",
-          "command": "npm run complete:article -- --slug casino-ir --force",
-          "priority": 10
-        },
         {
           "id": "casino-ir:H2_x_topic",
           "slug": "casino-ir",
@@ -7344,7 +7217,7 @@
       ],
       "blockerCount": 2,
       "runState": "idle",
-      "nextAction": "品質: メリデメの figure が年号のみ（3件）— 実績数値になっていない — 万円・%・件数など公表数値を figure に入れる（年号だけは不可） → 2/3 国会が話題一致 → X本文を案件キーワードに合わせて差し替え",
+      "nextAction": "2/3 国会が話題一致 → X本文を案件キーワードに合わせて差し替え",
       "promo": {
         "x": null,
         "hatena": null,
@@ -8147,7 +8020,7 @@
       }
     }
   ],
-  "deltaGoldPct": 0,
-  "previousGoldPct": 26,
+  "deltaGoldPct": -1,
+  "previousGoldPct": 27,
   "deployedAt": null
 }

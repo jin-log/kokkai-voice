@@ -11,7 +11,11 @@ import { readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { OVERRIDES } from "./data/proscons-overrides.mjs";
-import { synthesizeProsConsFromArticle } from "./lib/writer-synthesize.mjs";
+import {
+  isWeakProsConsFigure,
+  sanitizeProsCons,
+  synthesizeProsConsFromArticle,
+} from "./lib/writer-synthesize.mjs";
 
 const root = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
 const articlesDir = path.join(root, "data/articles");
@@ -37,7 +41,7 @@ function extractFigures(text) {
   let m;
   while ((m = re.exec(text))) {
     const f = m[1].replace(/,/g, "");
-    if (f.length >= 2 && !found.includes(f)) found.push(f);
+    if (f.length >= 2 && !found.includes(f) && !isWeakProsConsFigure(f)) found.push(f);
   }
   return found;
 }
@@ -143,11 +147,11 @@ function autoProsCons(article) {
     }
   }
 
-  return {
+  return sanitizeProsCons({
     disclaimer: DISCLAIMER,
     merits: merits.slice(0, 3),
     demerits: demerits.slice(0, 3),
-  };
+  });
 }
 
 async function main() {
@@ -162,7 +166,19 @@ async function main() {
   for (const slug of slugs) {
     const fp = path.join(articlesDir, `${slug}.json`);
     const article = JSON.parse(await readFile(fp, "utf8"));
-    const pc = buildProsCons(article);
+
+    const existing = article.prosCons;
+    if (existing?.merits?.length >= 2 && existing?.demerits?.length >= 2) {
+      article.prosCons = sanitizeProsCons(existing);
+      if (!dryRun) {
+        await writeFile(fp, JSON.stringify(article, null, 2) + "\n", "utf8");
+      }
+      ok++;
+      console.log(`OK ${slug}: sanitize メリ${article.prosCons.merits.length} デメ${article.prosCons.demerits.length}`);
+      continue;
+    }
+
+    const pc = sanitizeProsCons(buildProsCons(article));
     const valid =
       pc.merits.length >= 2 &&
       pc.demerits.length >= 2 &&

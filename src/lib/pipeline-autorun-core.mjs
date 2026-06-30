@@ -8,7 +8,7 @@ import { fileURLToPath } from "node:url";
 import { assessSlug } from "../../scripts/run-case-pipeline.mjs";
 import { refreshProjectStatus } from "./project-status.mjs";
 import { auditArticleQuality } from "./article-quality.mjs";
-import { agentForCheckId, commandForAgent } from "./agent-tasks.mjs";
+import { agentForCheckId, commandForAgent, scriptForCheckId } from "./agent-tasks.mjs";
 import { loadArticle } from "./articles.mjs";
 
 const root = path.join(path.dirname(fileURLToPath(import.meta.url)), "../..");
@@ -35,8 +35,12 @@ export function runNodeScript(script, scriptArgs = []) {
   });
 }
 
-/** @param {string} agent @param {string} slug */
-export async function runAgentScript(agent, slug) {
+/** @param {string} agent @param {string} slug @param {string} [checkId] */
+export async function runAgentScript(agent, slug, checkId) {
+  const targeted = checkId ? scriptForCheckId(checkId, slug) : null;
+  if (targeted) {
+    return runNodeScript(targeted.script, targeted.args);
+  }
   switch (agent) {
     case "writer":
       return runNodeScript("complete-article.mjs", ["--slug", slug, "--force"]);
@@ -142,9 +146,9 @@ export async function processSlugAutorun(opts) {
     }
 
     await log(
-      `${slug}: round ${round} — ${next.agent} (${next.reason}) → ${commandForAgent(next.agent, slug)}`,
+      `${slug}: round ${round} — ${next.agent} (${next.reason}) → ${commandForAgent(next.agent, slug, next.reason)}`,
     );
-    const code = await runAgentScript(next.agent, slug);
+    const code = await runAgentScript(next.agent, slug, next.reason);
     await refreshProjectStatus();
     if (code !== 0) {
       await log(`${slug}: ${next.agent} exited ${code}`);

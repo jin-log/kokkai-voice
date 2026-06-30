@@ -1,23 +1,23 @@
 {
-  "generatedAt": "2026-06-30T22:24:07.015Z",
-  "total": 161,
+  "generatedAt": "2026-06-30T22:42:32.131Z",
+  "total": 154,
   "byAgent": {
-    "writer": 107,
-    "x-researcher": 37,
-    "debugger": 16,
+    "x-researcher": 38,
+    "debugger": 17,
+    "writer": 98,
     "legal-check": 1
   },
   "tasks": [
     {
-      "id": "boeeihi:Q4_proscons_year_only",
+      "id": "boeeihi:H1_xPosts",
       "slug": "boeeihi",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "Q4_proscons_year_only",
-      "title": "[品質] メリデメの figure が年号のみ（3件）— 実績数値になっていない",
-      "todo": "万円・%・件数など公表数値を figure に入れる（年号だけは不可）",
-      "command": "npm run complete:article -- --slug boeeihi --force",
-      "priority": 10
+      "agent": "x-researcher",
+      "agentLabel": "X調査",
+      "checkId": "H1_xPosts",
+      "title": "[ゲート] X投稿",
+      "todo": "検証済みX URLを3件以上（x-researcher）",
+      "command": "npm run x:research -- --slug boeeihi",
+      "priority": 20
     },
     {
       "id": "boeeihi:H2_x_topic",
@@ -31,46 +31,24 @@
       "priority": 20
     },
     {
-      "id": "boeeihi:C2_evidence_distinct",
+      "id": "boeeihi:H3_x_screenshot",
       "slug": "boeeihi",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "C2_evidence_distinct",
-      "title": "[ゲート] 根拠の独自性",
-      "todo": "根拠は結論と同文禁止",
-      "command": "npm run complete:article -- --slug boeeihi --force",
-      "priority": 30
+      "agent": "debugger",
+      "agentLabel": "デバッガー",
+      "checkId": "H3_x_screenshot",
+      "title": "[ゲート] Xスクショ",
+      "todo": "npm run x:capture -- --slug <slug>（デバッガー）",
+      "command": "npm run x:capture -- --slug boeeihi",
+      "priority": 20
     },
     {
-      "id": "boeeihi:D2_arc_topic",
+      "id": "boeeihi:E2_timeline_x",
       "slug": "boeeihi",
       "agent": "writer",
       "agentLabel": "ライター",
-      "checkId": "D2_arc_topic",
-      "title": "[ゲート] 経緯の話題",
-      "todo": "経緯3行以上が案件キーワードと一致",
-      "command": "npm run complete:article -- --slug boeeihi --force",
-      "priority": 30
-    },
-    {
-      "id": "boeeihi:E4_timeline_diet_topic",
-      "slug": "boeeihi",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "E4_timeline_diet_topic",
-      "title": "[ゲート] TL国会の話題",
-      "todo": "タイムライン国会3件が案件と一致",
-      "command": "npm run complete:article -- --slug boeeihi --force",
-      "priority": 30
-    },
-    {
-      "id": "boeeihi:G5_parties_symbol",
-      "slug": "boeeihi",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "G5_parties_symbol",
-      "title": "[ゲート] ◎〇▲×",
-      "todo": "各党の記号を確定（v2）",
+      "checkId": "E2_timeline_x",
+      "title": "[ゲート] タイムラインX",
+      "todo": "X投稿を3件以上タイムラインに",
       "command": "npm run complete:article -- --slug boeeihi --force",
       "priority": 30
     },
@@ -317,17 +295,6 @@
       "priority": 20
     },
     {
-      "id": "casino-ir:Q4_proscons_year_only",
-      "slug": "casino-ir",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "Q4_proscons_year_only",
-      "title": "[品質] メリデメの figure が年号のみ（3件）— 実績数値になっていない",
-      "todo": "万円・%・件数など公表数値を figure に入れる（年号だけは不可）",
-      "command": "npm run complete:article -- --slug casino-ir --force",
-      "priority": 10
-    },
-    {
       "id": "casino-ir:H2_x_topic",
       "slug": "casino-ir",
       "agent": "x-researcher",
@@ -416,17 +383,6 @@
       "priority": 30
     },
     {
-      "id": "chingin:Q4_proscons_year_only",
-      "slug": "chingin",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "Q4_proscons_year_only",
-      "title": "[品質] メリデメの figure が年号のみ（2件）— 実績数値になっていない",
-      "todo": "万円・%・件数など公表数値を figure に入れる（年号だけは不可）",
-      "command": "npm run complete:article -- --slug chingin --force",
-      "priority": 10
-    },
-    {
       "id": "chingin:H2_x_topic",
       "slug": "chingin",
       "agent": "x-researcher",
@@ -447,17 +403,6 @@
       "todo": "経緯3行以上が案件キーワードと一致",
       "command": "npm run complete:article -- --slug chingin --force",
       "priority": 30
-    },
-    {
-      "id": "energy-policy:Q4_proscons_year_only",
-      "slug": "energy-policy",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "Q4_proscons_year_only",
-      "title": "[品質] メリデメの figure が年号のみ（2件）— 実績数値になっていない",
-      "todo": "万円・%・件数など公表数値を figure に入れる（年号だけは不可）",
-      "command": "npm run complete:article -- --slug energy-policy --force",
-      "priority": 10
     },
     {
       "id": "energy-policy:H2_x_topic",
@@ -680,17 +625,6 @@
       "priority": 30
     },
     {
-      "id": "gaikokujin-seisaku:Q4_proscons_year_only",
-      "slug": "gaikokujin-seisaku",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "Q4_proscons_year_only",
-      "title": "[品質] メリデメの figure が年号のみ（2件）— 実績数値になっていない",
-      "todo": "万円・%・件数など公表数値を figure に入れる（年号だけは不可）",
-      "command": "npm run complete:article -- --slug gaikokujin-seisaku --force",
-      "priority": 10
-    },
-    {
       "id": "gaikokujin-seisaku:H2_x_topic",
       "slug": "gaikokujin-seisaku",
       "agent": "x-researcher",
@@ -733,17 +667,6 @@
       "todo": "各党の記号を確定（v2）",
       "command": "npm run complete:article -- --slug hosei-yosan --force",
       "priority": 30
-    },
-    {
-      "id": "kaigo-iryo:Q4_proscons_year_only",
-      "slug": "kaigo-iryo",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "Q4_proscons_year_only",
-      "title": "[品質] メリデメの figure が年号のみ（3件）— 実績数値になっていない",
-      "todo": "万円・%・件数など公表数値を figure に入れる（年号だけは不可）",
-      "command": "npm run complete:article -- --slug kaigo-iryo --force",
-      "priority": 10
     },
     {
       "id": "kaigo-iryo:H2_x_topic",
