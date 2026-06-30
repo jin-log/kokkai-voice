@@ -12,6 +12,7 @@ const data = await fetchTrendingTopics({
 
 await saveTrendingTopics(data);
 
+console.log(`トレンドカード: ${data.trendCards.length} 件`);
 console.log(`政治系: ${data.political.length} 件`);
 console.log(`急上昇: ${data.rising.length} 件`);
 console.log(`常連候補: ${data.evergreen.length} 件`);

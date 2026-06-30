@@ -25,7 +25,13 @@ export const TRENDING_PATH = path.join(root, "data/trending-topics.json");
 const TOPICS_PATH = path.join(root, "data/topics.json");
 
 const GOOGLE_TRENDS_RSS = "https://trends.google.com/trending/rss?geo=JP";
-const NHK_MAIN_RSS = "https://www3.nhk.or.jp/rss/news/cat0.xml";
+const NHK_FEEDS = [
+  { url: "https://www3.nhk.or.jp/rss/news/cat4.xml", label: "nhk-politics" },
+  { url: "https://www3.nhk.or.jp/rss/news/cat1.xml", label: "nhk-society" },
+  { url: "https://www3.nhk.or.jp/rss/news/cat0.xml", label: "nhk" },
+];
+
+export const TREND_CARD_COUNT = 12;
 
 /** @type {string[]} */
 const POLITICAL_HINTS = [
@@ -54,6 +60,19 @@ export function isPoliticalTopic(text) {
 }
 
 /**
+ * @param {string} headline
+ * @returns {string}
+ */
+function keywordFromHeadline(headline) {
+  const t = (headline || "")
+    .replace(/【[^】]+】/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+  if (t.length <= 36) return t;
+  return `${t.slice(0, 35)}…`;
+}
+
+/**
  * @param {string} xml
  * @returns {{ keyword: string, traffic?: string, headline?: string, url?: string, source: string }[]}
  */
@@ -62,21 +81,40 @@ export function parseGoogleTrendsRss(xml) {
   const out = [];
   const blocks = xml.match(/<item>[\s\S]*?<\/item>/g) ?? [];
   for (const block of blocks) {
-    const keyword = block.match(/<title>([^<]*)<\/title>/)?.[1]?.trim();
-    if (!keyword || keyword === "Daily Search Trends") continue;
+    const trendKw = block.match(/<title>([^<]*)<\/title>/)?.[1]?.trim();
+    if (!trendKw || trendKw === "Daily Search Trends") continue;
     const traffic = block.match(/<ht:approx_traffic>([^<]*)<\/ht:approx_traffic>/)?.[1]?.trim();
-    const headline = block.match(/<ht:news_item_title>([^<]*)<\/ht:news_item_title>/)?.[1]?.trim();
-    const url = block.match(/<ht:news_item_url>([^<]*)<\/ht:news_item_url>/)?.[1]?.trim();
-    out.push({ keyword, traffic, headline, url, source: "google-trends" });
+    out.push({
+      keyword: trendKw,
+      traffic,
+      headline: trendKw,
+      url: undefined,
+      source: "google-trends",
+    });
+
+    const newsBlocks = block.match(/<ht:news_item>[\s\S]*?<\/ht:news_item>/g) ?? [];
+    for (const nb of newsBlocks) {
+      const headline = nb.match(/<ht:news_item_title>([^<]*)<\/ht:news_item_title>/)?.[1]?.trim();
+      const url = nb.match(/<ht:news_item_url>([^<]*)<\/ht:news_item_url>/)?.[1]?.trim();
+      if (!headline) continue;
+      out.push({
+        keyword: keywordFromHeadline(headline),
+        traffic,
+        headline,
+        url,
+        source: "google-trends",
+      });
+    }
   }
   return out;
 }
 
 /**
  * @param {string} xml
+ * @param {string} [sourceLabel]
  * @returns {{ keyword: string, headline?: string, url?: string, source: string }[]}
  */
-export function parseNhkRss(xml) {
+export function parseNhkRss(xml, sourceLabel = "nhk") {
   /** @type {{ keyword: string, headline?: string, url?: string, source: string }[]} */
   const out = [];
   const blocks = xml.match(/<item>[\s\S]*?<\/item>/g) ?? [];
@@ -84,13 +122,42 @@ export function parseNhkRss(xml) {
     const headline = block.match(/<title>(?:<!\[CDATA\[)?([\s\S]*?)(?:\]\]>)?<\/title>/)?.[1]?.trim();
     const url = block.match(/<link>(?:<!\[CDATA\[)?([\s\S]*?)(?:\]\]>)?<\/link>/)?.[1]?.trim();
     if (!headline) continue;
-    const keyword = headline.replace(/【[^】]+】/g, "").slice(0, 40).trim();
-    out.push({ keyword, headline, url, source: "nhk" });
+    const keyword = keywordFromHeadline(headline);
+    out.push({ keyword, headline, url, source: sourceLabel });
   }
   return out;
 }
 
-/** @param {number} trafficStr */
+/**
+ * @param {ReturnType<typeof enrichTrendItems>} enriched
+ * @param {number} [count]
+ */
+export function pickTrendCards(enriched, count = TREND_CARD_COUNT) {
+  const eligible = enriched
+    .filter((t) => {
+      const text = `${t.keyword} ${t.headline ?? ""}`;
+      return !EXCLUDE_HINTS.some((w) => text.includes(w));
+    })
+    .sort((a, b) => {
+      const pol = Number(b.political) - Number(a.political);
+      if (pol !== 0) return pol;
+      return b.score - a.score;
+    });
+
+  /** @type {typeof enriched} */
+  const out = [];
+  const seen = new Set();
+  for (const item of eligible) {
+    const key = item.keyword.replace(/\s+/g, "").slice(0, 18);
+    if (!key || seen.has(key)) continue;
+    seen.add(key);
+    out.push(item);
+    if (out.length >= count) break;
+  }
+  return out;
+}
+
+/** @param {number | string | undefined} trafficStr */
 function trafficScore(trafficStr) {
   if (!trafficStr) return 0;
   const n = Number(String(trafficStr).replace(/[^0-9]/g, ""));
@@ -144,7 +211,11 @@ export function enrichTrendItems(items, articles) {
       political,
       articleSlug: match?.slug ?? null,
       articleTitle: match?.title ?? null,
-      score: trafficScore(item.traffic) + (political ? 500 : 0),
+      score:
+        trafficScore(item.traffic)
+        + (political ? 500 : 0)
+        + (item.source === "nhk-politics" ? 400 : 0)
+        + (item.source === "nhk-society" ? 200 : 0),
     };
   });
 }
@@ -179,10 +250,14 @@ export async function fetchTrendingTopics(opts = {}) {
   }
 
   try {
-    const res = await fetch(NHK_MAIN_RSS, {
-      headers: { "User-Agent": "kokkai-voice-trends/1.0" },
-    });
-    if (res.ok) raw.push(...parseNhkRss(await res.text()).slice(0, 20));
+    for (const feed of NHK_FEEDS) {
+      const res = await fetch(feed.url, {
+        headers: { "User-Agent": "kokkai-voice-trends/1.0" },
+      });
+      if (res.ok) {
+        raw.push(...parseNhkRss(await res.text(), feed.label).slice(0, 25));
+      }
+    }
   } catch (e) {
     console.warn("[trends] NHK RSS:", e instanceof Error ? e.message : e);
   }
@@ -196,7 +271,7 @@ export async function fetchTrendingTopics(opts = {}) {
           api_key: opts.tavilyApiKey,
           query: "日本 政治 注目 ニュース 今日",
           search_depth: "basic",
-          max_results: 8,
+          max_results: 12,
           include_domains: ["nhk.or.jp", "yahoo.co.jp", "asahi.com", "mainichi.jp"],
         }),
       });
@@ -218,6 +293,8 @@ export async function fetchTrendingTopics(opts = {}) {
 
   raw = dedupeTrends(raw);
   const enriched = enrichTrendItems(raw, articles);
+
+  const trendCards = pickTrendCards(enriched, TREND_CARD_COUNT);
 
   const political = enriched
     .filter((t) => t.political)
@@ -245,6 +322,7 @@ export async function fetchTrendingTopics(opts = {}) {
 
   return {
     fetchedAt: new Date().toISOString(),
+    trendCards,
     political,
     rising: rising.slice(0, 15),
     all: enriched.slice(0, 40),

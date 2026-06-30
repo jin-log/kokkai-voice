@@ -10,9 +10,7 @@ const fetchedAt = data?.fetchedAt
   ? new Date(data.fetchedAt).toLocaleString("ja-JP", { timeZone: "Asia/Tokyo" })
   : "未取得";
 
-const political = data?.political ?? [];
-const rising = (data?.rising ?? []).filter((t) => t.political);
-const risingOther = (data?.rising ?? []).filter((t) => !t.political).slice(0, 5);
+const trendCards = data?.trendCards ?? data?.political?.slice(0, 12) ?? [];
 const evergreen = data?.evergreen ?? [];
 ---
 
@@ -53,28 +51,27 @@ const evergreen = data?.evergreen ?? [];
     {data && (
       <>
         <section class="dev-trends__section">
-          <h2>政治・社会（いま注目）</h2>
-          {political.length === 0 ? (
-            <p class="dev-trends__hint">直近の急上昇に政治ワードが少ない日があります。下の「常連テーマ」も参照。</p>
+          <h2>いまのトレンド（{trendCards.length}件）</h2>
+          <p class="dev-trends__hint">Google急上昇・NHK政治/社会から自動取得。スポーツ・芸能は除外。</p>
+          {trendCards.length === 0 ? (
+            <p class="dev-trends__hint">取得データなし。次回デプロイで更新されます。</p>
           ) : (
-            <ul class="dev-trends__list">
-              {political.map((item) => (
-                <li class="dev-trends__card">
+            <ul class="dev-trends__list dev-trends__list--compact">
+              {trendCards.map((item) => (
+                <li class="dev-trends__card dev-trends__card--compact">
                   <div class="dev-trends__card-top">
                     <span class="dev-trends__badge dev-trends__badge--pol">{item.source}</span>
                     {item.traffic && <span class="dev-trends__traffic">{item.traffic}</span>}
                   </div>
-                  <h3 class="dev-trends__kw">{item.keyword}</h3>
-                  {item.headline && item.headline !== item.keyword && (
-                    <p class="dev-trends__headline">{item.headline}</p>
-                  )}
+                  <h3 class="dev-trends__kw">{item.headline || item.keyword}</h3>
+                  <p class="dev-trends__sub">検索: {item.keyword}</p>
                   <div class="dev-trends__actions">
                     <button
                       type="button"
                       class="dev-trends__btn dev-trends__btn--primary use-keyword"
                       data-keyword={item.keyword}
                     >
-                      キーワードを記事作成へ
+                      記事作成へ
                     </button>
                     {item.url && (
                       <a class="dev-trends__btn" href={item.url} target="_blank" rel="noopener noreferrer">
@@ -83,7 +80,7 @@ const evergreen = data?.evergreen ?? [];
                     )}
                     {item.articleSlug && (
                       <a class="dev-trends__btn" href={`/dev/preview/${item.articleSlug}/`}>
-                        既存: {item.articleSlug}
+                        プレビュー
                       </a>
                     )}
                   </div>
@@ -127,23 +124,6 @@ const evergreen = data?.evergreen ?? [];
             ))}
           </ul>
         </section>
-
-        {rising.length > 0 && (
-          <section class="dev-trends__section">
-            <h2>急上昇（政治フィルタ）</h2>
-            <ul class="dev-trends__list">
-              {rising.map((item) => (
-                <li class="dev-trends__card dev-trends__card--compact">
-                  <span class="dev-trends__traffic">{item.traffic}</span>
-                  <h3 class="dev-trends__kw">{item.keyword}</h3>
-                  <button type="button" class="dev-trends__btn use-keyword" data-keyword={item.keyword}>
-                    記事作成へ
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </section>
-        )}
 
         <section class="dev-trends__section dev-trends__section--guide">
           <h2>タイトル・ショートの型（要約）</h2>
