@@ -44,7 +44,12 @@ function byAssignee(tasks, assignee) {
  */
 function byHorizon(tasks, horizon) {
   if (horizon === "all") return tasks.filter((t) => !t.done);
-  return tasks.filter((t) => !t.done && (t.horizon === horizon || horizon === "today" && t.horizon === "daily"));
+  if (horizon === "daily") {
+    return tasks.filter(
+      (t) => !t.done && (t.horizon === "daily" || t.horizon === "today"),
+    );
+  }
+  return tasks.filter((t) => !t.done && t.horizon === horizon);
 }
 
 /** @param {OpsTask[]} tasks */
@@ -79,7 +84,9 @@ export function countByTab(queue) {
   const active = queue.tasks.filter((t) => !t.done);
   return {
     today: byHorizon(active, "daily").length,
-    week: active.filter((t) => t.horizon === "weekly" || t.horizon === "daily").length,
+    week: active.filter(
+      (t) => t.horizon === "weekly" || t.horizon === "daily" || t.horizon === "today",
+    ).length,
     all: active.length,
     ownerToday: sortTasks(byHorizon(active, "daily").filter((t) => t.assignee === "owner")).slice(
       0,
