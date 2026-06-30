@@ -8,6 +8,7 @@ import { checkCasePageWithFiles, root, blockerToHuman } from "./page-ready.mjs";
 import { filterPublishable, loadArticle } from "./articles.mjs";
 import { citizenTitle } from "./title-format.mjs";
 import { buildPromoIntroMap } from "./promo-intro-status.mjs";
+import { loadShortStatusMap } from "./short-status.mjs";
 
 /** @typedef {{ id: string, label: string, phase: number, preDeploy: boolean }} PipelineItemDef */
 
@@ -146,6 +147,7 @@ export async function computeProjectStatus() {
   const activeSlugs = index.slugs ?? [];
   const slugs = [];
   const promoMap = await buildPromoIntroMap();
+  const shortMap = await loadShortStatusMap(activeSlugs);
 
   for (const slug of activeSlugs) {
     const article = await loadArticle(slug);
@@ -196,6 +198,7 @@ export async function computeProjectStatus() {
       runState: "idle",
       nextAction,
       promo: promoMap.get(slug) ?? { x: null, hatena: null, note: null },
+      short: shortMap.get(slug) ?? { label: "未生成", generated: false, uploaded: false },
     });
   }
 

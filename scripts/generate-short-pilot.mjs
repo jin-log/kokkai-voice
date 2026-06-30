@@ -4,11 +4,13 @@
  *
  * Usage:
  *   npm run short:generate -- --slug shoshika
+ *   npm run short:generate -- --slug shoshika --no-upload
  *
- * 前提: VOICEVOX 起動（localhost:50021）
+ * 生成後は既定で YouTube に非公開アップロード（--unlisted / --public / --no-upload で変更）
  */
 import { access, copyFile, mkdir } from "node:fs/promises";
 import { writeFile } from "node:fs/promises";
+import { spawnSync } from "node:child_process";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { loadArticle } from "../src/lib/articles.mjs";
@@ -208,6 +210,26 @@ async function main() {
   await writeFile(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`, "utf8");
 
   console.log(`[short] done → ${outputMp4}`);
+
+  if (!args.includes("--no-upload")) {
+    const uploadArgs = [
+      path.join(__dirname, "upload-youtube-short.mjs"),
+      "--slug",
+      slug,
+    ];
+    if (args.includes("--public")) {
+      /* upload-youtube-short の既定は public */
+    } else if (args.includes("--unlisted")) {
+      uploadArgs.push("--unlisted");
+    } else {
+      uploadArgs.push("--private");
+    }
+    console.log(`[short] upload (${uploadArgs.at(-1) ?? "public"})…`);
+    const r = spawnSync(process.execPath, uploadArgs, { cwd: root, stdio: "inherit" });
+    if (r.status !== 0) {
+      process.exit(r.status ?? 1);
+    }
+  }
 }
 
 main().catch((err) => {

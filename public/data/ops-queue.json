@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-30T08:30:00.000Z",
+  "generatedAt": "2026-06-30T10:00:00.000Z",
   "generatedBy": "ceo",
   "dayLabel": "2026-06-30（月）",
   "ownerDailyCap": 7,
@@ -35,6 +35,72 @@
         { "label": "noteメンバー", "href": "https://note.com/seiji1192/membership" },
         { "label": "note執筆", "href": "https://note.com/notes/new" }
       ],
+      "done": false
+    },
+    {
+      "id": "owner-browser-login-win",
+      "project": "kokkai-voice",
+      "title": "はてな・note ブラウザログイン（Windows初回）",
+      "assignee": "owner",
+      "horizon": "today",
+      "priority": 0,
+      "score": 960,
+      "etaMin": 10,
+      "tags": ["はてブ", "note", "ログイン"],
+      "content": {
+        "summary": "Mac同様、Chromeが開いたらログインするだけ。セッションは secrets/browser/ に保存され次回以降不要。",
+        "steps": [
+          "CEOが npm run browser:login -- hatena を実行 → 開いたChromeではてなログイン",
+          "続けて npm run browser:login -- note → noteログイン",
+          "完了後 npm run post:hatena -- --slug <slug> --dry-run で確認"
+        ]
+      },
+      "links": [
+        { "label": "はてブ管理", "href": "/dev/hatena/" }
+      ],
+      "done": false
+    },
+    {
+      "id": "ceo-kv-short-auto-upload",
+      "project": "kokkai-voice",
+      "title": "Shorts — 生成→非公開アップ自動化",
+      "assignee": "ceo",
+      "horizon": "today",
+      "priority": 0,
+      "score": 930,
+      "etaMin": 30,
+      "tags": ["Shorts", "自動化"],
+      "content": {
+        "summary": "short:generate 完了後に --private で YouTube アップまで連続実行。--no-upload で生成のみ。完成度カードに Shorts 状態表示。",
+        "steps": [
+          "youtube:auth 済みか確認",
+          "npm run short:generate -- --slug <slug> で生成+非公開アップ",
+          "Studioで確認→公開切替・ピン留め",
+          "公開時は short:upload -- --slug <slug> --public で差替 or Studio"
+        ]
+      },
+      "links": [
+        { "label": "ショート", "href": "/dev/shorts/" }
+      ],
+      "done": true
+    },
+    {
+      "id": "ceo-kv-video-admin-ux",
+      "project": "kokkai-voice",
+      "title": "動画管理UI — 記事カード vs 専用ページ（方針決定）",
+      "assignee": "ceo",
+      "horizon": "week",
+      "priority": 2,
+      "score": 640,
+      "etaMin": 60,
+      "tags": ["管理画面", "Shorts"],
+      "content": {
+        "summary": "推奨: 記事カードに Shorts 行を追加（1記事1本のため）。/dev/shorts/ は型・ベンチマーク専用。件数が増えたら自動化ログに動画タブ追加。",
+        "steps": [
+          "オーナー確認: 記事カード表示で足りるか",
+          "必要なら /dev/shorts/ に slug 一覧＋状態を追記"
+        ]
+      },
       "done": false
     },
     {

@@ -4,7 +4,7 @@
 import { access } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { chromium } from "playwright";
+import { launchBrowserContext } from "../../scripts/lib/playwright-browser.mjs";
 
 const root = path.join(path.dirname(fileURLToPath(import.meta.url)), "../..");
 
@@ -23,9 +23,9 @@ export async function launchLoggedIn(service, opts = {}) {
       `${service} 未ログイン — 先に: npm run browser:login -- ${service}`,
     );
   }
-  return chromium.launchPersistentContext(dir, {
+  return launchBrowserContext(dir, {
     headless: opts.headless ?? false,
-    viewport: { width: 1280, height: 900 },
-    locale: "ja-JP",
+    width: 1280,
+    height: 900,
   });
 }

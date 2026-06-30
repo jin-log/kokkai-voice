@@ -150,6 +150,15 @@ function formatJa(iso) {
                       note {s.promo?.note ? `✓ ${promoDateShort(s.promo.note)}` : "—"}
                     </li>
                   </ul>
+                  <p class:list={["status-card__short", s.short?.uploaded && "is-done", s.short?.generated && !s.short?.uploaded && "is-partial"]}>
+                    🎬 Shorts {s.short?.label ?? "未生成"}
+                    {s.short?.url ? (
+                      <>
+                        {" · "}
+                        <a href={s.short.url} target="_blank" rel="noopener noreferrer">YouTube</a>
+                      </>
+                    ) : null}
+                  </p>
                   <p class="status-card__next">{s.nextAction ?? "npm run status で次アクションを更新"}</p>
                   <div class="status-card__title-edit">
                     <input type="text" class="status-card__title-input" value={s.title} data-slug={s.slug} aria-label="タイトル編集" />
