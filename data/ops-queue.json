@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-06-30T01:00:00.000Z",
+  "generatedAt": "2026-06-30T06:00:00.000Z",
   "generatedBy": "ceo",
-  "dayLabel": "2026-06-27（土）",
+  "dayLabel": "2026-06-30（月）",
   "ownerDailyCap": 7,
   "projects": {
     "jin-log": { "label": "jin-log", "weight": 100, "color": "#2d6a4f" },
@@ -12,6 +12,109 @@
     "personal": { "label": "個人", "weight": 10, "color": "#64748b" }
   },
   "tasks": [
+    {
+      "id": "owner-note-paid-start",
+      "project": "kokkai-voice",
+      "title": "note有料化 — 申請通過・スタート",
+      "assignee": "owner",
+      "horizon": "today",
+      "priority": 0,
+      "score": 970,
+      "etaMin": 45,
+      "tags": ["note", "収益", "急務"],
+      "content": {
+        "summary": "メンバーシップ申請OK。マガジン/有料プラン公開・サイトからの導線・初回告知。",
+        "steps": [
+          "note Studio → メンバーシップ有効化・価格・特典文案",
+          "https://seiji1192.site から note メンバーへリンク確認（site-config noteMembershipUrl）",
+          "初回無料記事 or 週次ダイジェストの有料版方針をCEOと合意",
+          "Xでメンバー開始告知（文案は /dev/promo/）"
+        ]
+      },
+      "links": [
+        { "label": "noteメンバー", "href": "https://note.com/seiji1192/membership" },
+        { "label": "note執筆", "href": "https://note.com/notes/new" }
+      ],
+      "done": false
+    },
+    {
+      "id": "ceo-case-mqzxgs3f",
+      "project": "kokkai-voice",
+      "title": "スパイ防止法 — case-mqzxgs3f 仕上げ＋Shorts",
+      "assignee": "ceo",
+      "horizon": "today",
+      "priority": 0,
+      "score": 940,
+      "etaMin": 120,
+      "tags": ["記事", "Shorts"],
+      "slug": "case-mqzxgs3f",
+      "content": {
+        "summary": "生成済み骨組み（国会165件）。②〇×・X・要約仕上げ→公開→ short:upload。",
+        "steps": [
+          "管理画面要対応で case-mqzxgs3f 確認",
+          "policy-matrix・X調査・法務",
+          "公開する → npm run short:upload -- --slug case-mqzxgs3f"
+        ]
+      },
+      "links": [
+        { "label": "管理", "href": "https://seiji1192.site/dev/status/" },
+        { "label": "GitHub JSON", "href": "https://github.com/jin-log/kokkai-voice/blob/main/data/articles/case-mqzxgs3f.json" }
+      ],
+      "done": false
+    },
+    {
+      "id": "ceo-kv-promo-on-publish",
+      "project": "kokkai-voice",
+      "title": "記事公開時プロモ — X/はてな/note 連動状況",
+      "assignee": "ceo",
+      "horizon": "today",
+      "priority": 0,
+      "score": 900,
+      "etaMin": 90,
+      "tags": ["自動化", "X", "はてブ", "note"],
+      "content": {
+        "summary": "現状: Xのみ deploy 時 Buffer 自動（要 GitHub Secret）。はてな・note は脚本あるが公開連動未配線。",
+        "status": {
+          "x": "✅ deploy.yml → post-to-buffer.mjs（公開後24h以内・日3本上限）",
+          "hatena": "△ npm run post:hatena（Playwright・ローカル手動のみ）",
+          "note": "△ npm run post:note:intro / promo:weekly（投稿APIなし・手動）"
+        },
+        "steps": [
+          "BUFFER_API_KEY / BUFFER_CHANNEL_ID が Actions に入っているか確認",
+          "公開テスト1件で X 自動投稿ログ確認（data/buffer-post-log.json）",
+          "publish 後に post:hatena を deploy 連動するか CEO 実装",
+          "note有料化スタートに合わせメンバー向け週次を promo:weekly に統合"
+        ]
+      },
+      "links": [
+        { "label": "Buffer設定", "href": "/docs/buffer-setup.md" },
+        { "label": "自動化一覧", "href": "/docs/promo-automation-options.md" }
+      ],
+      "done": false
+    },
+    {
+      "id": "ceo-yt-shorts-pipeline",
+      "project": "kokkai-voice",
+      "title": "Shorts — 記事1本につき1本（APIアップ）",
+      "assignee": "ceo",
+      "horizon": "today",
+      "priority": 0,
+      "score": 880,
+      "etaMin": 30,
+      "tags": ["Shorts", "YouTube API"],
+      "content": {
+        "summary": "YouTube Data API アップロードはローカルで実装済み（npm run short:upload）。Actions自動は未。記事でき次第アップ。",
+        "steps": [
+          "short:generate → short:upload -- --slug <slug>（secrets/youtube-token.json 要）",
+          "固定コメントは API 投稿可・ピン留めは Studio 手動",
+          "少子化型テンプレ固定（1671再生・視聴率69%）"
+        ]
+      },
+      "links": [
+        { "label": "API手順", "href": "/docs/youtube-api-setup.md" }
+      ],
+      "done": false
+    },
     {
       "id": "owner-sushi-venue-today",
       "project": "sushi-sonic",
@@ -225,12 +328,12 @@
         { "label": "Studio", "href": "https://studio.youtube.com/" },
         { "label": "文案", "href": "/docs/youtube-channel-setup.md" }
       ],
-      "done": false
+      "done": true
     },
     {
       "id": "ceo-yt-shorts-shoshika",
       "project": "kokkai-voice",
-      "title": "YouTube 2本目 — shoshika 生成→アップ（3〜7日空け）",
+      "title": "YouTube 2本目 shoshika — 完了（1,671再生・69%）",
       "assignee": "ceo",
       "horizon": "weekly",
       "priority": 0,
@@ -238,17 +341,17 @@
       "etaMin": 45,
       "tags": ["Shorts", "コメントCTA込み"],
       "content": {
-        "summary": "npm run short:generate -- --slug shoshika → short:upload-pack → short:upload。末尾「あなたはどう思う？」テロップ済み。",
+        "summary": "1,671再生・視聴率69%で型確定。以降は記事作成のたびに同テンプレでShorts（SEO流入までの主経路）。",
         "steps": [
-          "1本目から3〜7日空ける",
-          "short:generate / short:upload -- --slug shoshika",
+          "完了済み。次本目以降は記事生成とセット",
+          "short:generate / short:upload -- --slug <slug>",
           "Studioで固定コメントピン留め"
         ]
       },
       "links": [
         { "label": "アップロード手順", "href": "/docs/youtube-api-setup.md" }
       ],
-      "done": false
+      "done": true
     },
     {
       "id": "ceo-kv-bundle-supai-kokki",
@@ -261,10 +364,10 @@
       "etaMin": 240,
       "tags": ["記事", "Shorts", "PR", "バンドル"],
       "content": {
-        "summary": "2本を動画・SNSの柱にする。記事を正本に short:generate → 公開と同週にX告知。争点系は1日1本・投稿は3〜7日空け。",
+        "summary": "記事＝正本。作成のたび short:generate → Studio。SEOが乗るまでShortsが唯一の流入柱。テンプレは少子化型で固定。",
         "articles": [
           {
-            "slug": "supai-boshi-ho",
+            "slug": "case-mqzxgs3f",
             "keyword": "スパイ防止法",
             "title": "【スパイ防止法】進まない理由",
             "shortsHook": "スパイ防止法、なぜ国会で止まる？"
@@ -278,9 +381,8 @@
         ],
         "steps": [
           "① supai-boshi-ho — 管理画面生成 → X調査 → policy-matrix → 法務 → publishReady → deploy",
-          "② short:generate -- --slug supai-boshi-ho → short:upload-pack → owner Studioアップ",
+          "② short:generate -- --slug case-mqzxgs3f → short:upload → 固定コメント",
           "③ X告知（記事URL＋Shorts）・固定コメントピン留め",
-          "3〜7日空け",
           "④ kokki-sonkai — 同上パイプライン（現行法→法案→見送り理由を必須構成）",
           "⑤ short:generate -- --slug kokki-sonkai → Studio → X告知"
         ]
@@ -303,10 +405,10 @@
       "etaMin": 30,
       "tags": ["Shorts", "Studio手動"],
       "content": {
-        "summary": "CEOが output/shorts/{slug}/ を出したら Studio で非公開確認→公開。各本 youtube-upload.txt の固定コメントをピン留め。",
+        "summary": "CEOが output/shorts/{slug}/ を出したら Studio で非公開確認→公開。記事1本につきShorts1本。",
         "steps": [
-          "supai-boshi-ho → 公開 → 固定コメント",
-          "3〜7日後 kokki-sonkai → 同上"
+          "記事生成完了 → 同日〜翌日 Studio",
+          "固定コメントピン留め（質問CTA＋サイトURL）"
         ]
       },
       "links": [
