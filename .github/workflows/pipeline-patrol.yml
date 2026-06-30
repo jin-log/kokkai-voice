@@ -13,6 +13,7 @@ concurrency:
 
 permissions:
   contents: write
+  actions: write
 
 jobs:
   patrol:
@@ -40,10 +41,29 @@ jobs:
             node scripts/pipeline-patrol.mjs --once --batch 8 --rounds 3 --skip debugger --batch-offset "$OFFSET"
 
       - name: 変更があればコミット
+        id: commit
         run: |
           git config user.email "bot@seiji1192.site"
           git config user.name "kokkai-bot"
           git add data/articles data/policy-matrix data/agent-tasks.json data/project-status.json
-          git diff --staged --quiet && echo "no changes" && exit 0
+          if git diff --staged --quiet; then
+            echo "committed=false" >> "$GITHUB_OUTPUT"
+            echo "no changes"
+            exit 0
+          fi
           git commit -m "patrol: server cycle ${{ github.run_number }} (gold bump)"
           git push
+          echo "committed=true" >> "$GITHUB_OUTPUT"
+
+      - name: 本番デプロイ起動（bot push は deploy 連動しないため）
+        if: steps.commit.outputs.committed == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.actions.createWorkflowDispatch({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: "deploy.yml",
+              ref: "main",
+            });
+            core.info("dispatched deploy.yml");

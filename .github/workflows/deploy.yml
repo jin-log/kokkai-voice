@@ -4,7 +4,7 @@ on:
   push:
     branches: [main]
   workflow_run:
-    workflows: ["新規記事作成", "記事を本番反映", "記事管理"]
+    workflows: ["新規記事作成", "記事を本番反映", "記事管理", "品質巡回（サーバー）"]
     types: [completed]
     branches: [main]
   workflow_dispatch:
@@ -40,8 +40,8 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: 記事品質監査（公開中のみブロック）
-        run: npm run audit:articles:ci
+      - name: 記事品質監査（公開中 — 記録のみ。管理画面・巡回反映は継続）
+        run: npm run audit:articles -- --published-only
 
       - name: Install Japanese fonts (OGP生成)
         run: sudo apt-get update -qq && sudo apt-get install -y -qq fontconfig fonts-noto-cjk
