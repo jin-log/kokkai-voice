@@ -1,0 +1,153 @@
+---
+import BaseLayout from "../../layouts/DevLayout.astro";
+import DevHeader from "../../components/DevHeader.astro";
+import SiteFooter from "../../components/SiteFooter.astro";
+import SupportCta from "../../components/SupportCta.astro";
+import { SITE } from "../../lib/site-config.mjs";
+import { getOutboundLinkGroups } from "../../lib/note-link.mjs";
+
+const groups = getOutboundLinkGroups();
+---
+
+<BaseLayout tabTitle="リンク一覧" bodyClass="dev-links-page">
+  <DevHeader current="links" />
+  <main class="container dev-links">
+    <header class="dev-links__head">
+      <h1>リンク一覧（site-config プレビュー）</h1>
+      <p class="dev-links__lead">
+        <code>src/lib/site-config.mjs</code> の外部リンクをここから開ける。フッター・支援CTAの見え方も下に確認。
+      </p>
+    </header>
+
+    {
+      groups.map((group) => (
+        <section class="dev-links__group" aria-labelledby={`links-${group.title}`}>
+          <h2 id={`links-${group.title}`} class="dev-links__group-title">
+            {group.title}
+          </h2>
+          <ul class="dev-links__list">
+            {group.links.map((link) => (
+              <li class="dev-links__item">
+                <a
+                  class="dev-links__btn"
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {link.label} ↗
+                </a>
+                {link.note && <p class="dev-links__note">{link.note}</p>}
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))
+    }
+
+    <section class="dev-links__preview" aria-labelledby="footer-preview-title">
+      <h2 id="footer-preview-title" class="dev-links__group-title">公開フッター（プレビュー）</h2>
+      <div class="dev-links__frame">
+        <SiteFooter />
+      </div>
+    </section>
+
+    <section class="dev-links__preview" aria-labelledby="cta-preview-title">
+      <h2 id="cta-preview-title" class="dev-links__group-title">記事末尾 SupportCta（プレビュー）</h2>
+      <div class="dev-links__frame dev-links__frame--cta">
+        <SupportCta context="dev-links-preview" />
+      </div>
+    </section>
+
+    <section class="dev-links__config" aria-labelledby="config-raw-title">
+      <h2 id="config-raw-title" class="dev-links__group-title">設定値（参照用）</h2>
+      <dl class="dev-links__dl">
+        <dt>noteMembershipLive</dt>
+        <dd>{String(SITE.noteMembershipLive)}</dd>
+        <dt>supportAbVariant</dt>
+        <dd>{SITE.supportAbVariant}</dd>
+      </dl>
+    </section>
+  </main>
+  <SiteFooter note="" />
+</BaseLayout>
+
+<style>
+  .dev-links {
+    padding: 1.5rem 0 3rem;
+    max-width: 52rem;
+  }
+  .dev-links__head h1 {
+    font-size: 1.35rem;
+    margin: 0 0 0.5rem;
+  }
+  .dev-links__lead {
+    color: var(--color-text-muted);
+    font-size: 0.92rem;
+    line-height: 1.55;
+    margin: 0 0 1.5rem;
+  }
+  .dev-links__group {
+    margin-bottom: 1.75rem;
+  }
+  .dev-links__group-title {
+    font-size: 1rem;
+    margin: 0 0 0.75rem;
+    padding-bottom: 0.35rem;
+    border-bottom: 2px solid var(--color-border);
+  }
+  .dev-links__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+  }
+  .dev-links__item {
+    margin: 0;
+  }
+  .dev-links__btn {
+    display: inline-block;
+    font-weight: 700;
+    font-size: 0.95rem;
+    padding: 0.55rem 1rem;
+    border-radius: var(--radius-md);
+    background: var(--color-primary);
+    color: #fff;
+    text-decoration: none;
+  }
+  .dev-links__btn:hover {
+    filter: brightness(1.08);
+  }
+  .dev-links__note {
+    margin: 0.25rem 0 0;
+    font-size: 0.78rem;
+    color: var(--color-text-muted);
+  }
+  .dev-links__preview {
+    margin-bottom: 1.75rem;
+  }
+  .dev-links__frame {
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 1rem;
+    background: var(--color-surface);
+  }
+  .dev-links__frame--cta {
+    padding: 1.25rem;
+  }
+  .dev-links__dl {
+    display: grid;
+    grid-template-columns: 10rem 1fr;
+    gap: 0.35rem 1rem;
+    font-size: 0.88rem;
+    margin: 0;
+  }
+  .dev-links__dl dt {
+    font-weight: 700;
+    color: var(--color-text-muted);
+  }
+  .dev-links__dl dd {
+    margin: 0;
+  }
+</style>

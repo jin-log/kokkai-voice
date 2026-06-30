@@ -1,6 +1,10 @@
 ---
 import { SITE } from "../lib/site-config.mjs";
-import { noteMembershipLink, noteMembershipButtonLabel } from "../lib/note-link.mjs";
+import {
+  noteMembershipButtonLabel,
+  noteMembershipLink,
+  noteTipLink,
+} from "../lib/note-link.mjs";
 
 interface Props {
   /** 案件 slug（計測用） */
@@ -9,11 +13,12 @@ interface Props {
 
 const { context = "site" } = Astro.props;
 const variant = SITE.supportAbVariant ?? "a";
-const noteBase = noteMembershipLink("support_cta", context);
-const noteUrl = noteBase
-  ? `${noteBase}&utm_campaign=ab_${variant}`
+const memberUrl = noteMembershipLink("support_cta", context);
+const memberUrlWithAb = memberUrl
+  ? `${memberUrl}&utm_campaign=ab_${variant}`
   : null;
-const noteBtnLabel = noteMembershipButtonLabel();
+const tipUrl = noteTipLink("support_cta", context);
+const memberBtnLabel = noteMembershipButtonLabel();
 ---
 
 <section class="support-cta" aria-labelledby="support-cta-title" data-support-cta data-ab={variant}>
@@ -23,29 +28,44 @@ const noteBtnLabel = noteMembershipButtonLabel();
   <p class="support-cta__body">
     {
       variant === "a"
-        ? "無料の記事は広告と X で運営しています。役に立ったと思ったら、note メンバーで更新の継続をサポートできます。"
+        ? "無料の記事は広告と X で運営しています。週次ダイジェストは note メンバー、今回だけの応援はチップ（任意）から。"
         : "公言と行動のギャップは、時間が経つほど見えにくくなります。メンバー向けに週次ダイジェストと深掘りを配信予定です。"
     }
   </p>
   {
-    noteUrl ? (
+    memberUrlWithAb ? (
       <a
-        href={noteUrl}
+        href={memberUrlWithAb}
         class="support-cta__btn"
         target="_blank"
         rel="noopener noreferrer"
-        data-track="support-note"
+        data-track="support-note-member"
         data-ab={variant}
       >
-        {noteBtnLabel}
+        {memberBtnLabel}
       </a>
     ) : (
       <p class="support-cta__soon">
-        note メンバーシップ準備中 — 公開まで
+        note 準備中 —
         <a href={SITE.xUrl} target="_blank" rel="noopener noreferrer">
           {SITE.xHandle}
         </a>
         をフォロー
+      </p>
+    )
+  }
+  {
+    tipUrl && (
+      <p class="support-cta__tip">
+        今回だけ応援する →
+        <a
+          href={tipUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          data-track="support-note-tip"
+        >
+          チップ（任意）
+        </a>
       </p>
     )
   }

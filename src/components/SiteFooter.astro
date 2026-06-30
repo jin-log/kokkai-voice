@@ -1,11 +1,18 @@
 ---
 import { SITE } from "../lib/site-config.mjs";
+import {
+  noteMembershipFooterLabel,
+  noteMembershipLink,
+  noteTipLink,
+} from "../lib/note-link.mjs";
 
 interface Props {
   note?: string;
 }
 
 const { note } = Astro.props;
+const memberHref = noteMembershipLink("footer", "membership");
+const tipHref = noteTipLink("footer", "tip");
 ---
 
 <footer class="site-footer">
@@ -17,13 +24,16 @@ const { note } = Astro.props;
     <a href="/comment-policy/">コメント規約</a>
     <a href={SITE.xUrl} target="_blank" rel="noopener noreferrer">X {SITE.xHandle}</a>
     {
-      (SITE.noteMembershipUrl || SITE.noteUrl) && (
-        <a
-          href={(SITE.noteMembershipUrl || SITE.noteUrl)!}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          {SITE.noteMembershipUrl ? "noteメンバー" : "note"}
+      memberHref && (
+        <a href={memberHref} target="_blank" rel="noopener noreferrer">
+          {noteMembershipFooterLabel()}
+        </a>
+      )
+    }
+    {
+      tipHref && (
+        <a href={tipHref} target="_blank" rel="noopener noreferrer">
+          チップで応援
         </a>
       )
     }
