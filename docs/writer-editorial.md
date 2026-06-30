@@ -127,7 +127,13 @@
 **Phase A（国会待ち先行公開）:** JSON に `"dietPending": true` → **X3 + タイムライン3件** で公開可。国会は載ったら追記して `dietPending: false`。
 
 チェック: `node scripts/check-case-page.mjs --slug {slug}` の E1/E2/E3。  
-一括強化: `node scripts/enrich-timeline-all.mjs`
+一括強化: `node scripts/enrich-timeline-all.mjs`（**追記・同期のみ。既存行の書き換えはしない**）
+
+### タイムライン追記ルール（2026-06-30）
+
+- 新イベントは `timeline[]` **末尾に追加**（`id` は一意）
+- **既存行の文言は変えない**（誤字・法務・削除済み注記のみ例外）
+- X スクショ再取得は同一 `id` の `xPost` 更新のみ可
 
 ### メリット・デメリット（2026-06-28 必須）
 

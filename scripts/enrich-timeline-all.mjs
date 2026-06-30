@@ -3,6 +3,7 @@
  * タイムライン強化 — X3 + 国会3（計6以上）
  * - xPosts（url_found）→ timeline の x_post へ同期
  * - 不足分は国会APIから speech を追加
+ * - 既存 timeline 行の文言は書き換えない（追記・xPosts 同期のみ）
  *
  * 用法:
  *   node scripts/enrich-timeline-all.mjs

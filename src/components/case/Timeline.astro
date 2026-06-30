@@ -22,7 +22,19 @@ function sourceOf(type) {
 
 <section class="timeline-section" id="sec-timeline" aria-label="案件タイムライン">
   <div class="timeline-section__head">
-    <h2 class="timeline-section__title">経緯タイムライン</h2>
+    <div class="timeline-section__head-main">
+      <h2 class="timeline-section__title">経緯タイムライン</h2>
+      {
+        events.length > 0 && (
+          <p class="timeline-section__lead">
+            出来事は追記のみ（過去の記録は原則改変しません）。
+            {events.length > TIMELINE_INITIAL_VISIBLE
+              ? ` 全${events.length}件 · 直近${TIMELINE_INITIAL_VISIBLE}件を表示`
+              : ` 全${events.length}件`}
+          </p>
+        )
+      }
+    </div>
     <div class="timeline-controls" data-timeline-controls>
       <button
         type="button"
