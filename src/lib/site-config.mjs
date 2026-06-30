@@ -22,6 +22,8 @@ export const SITE = {
   /** Cloudflare Turnstile サイトキー（公開可）。未設定時はウィジェット非表示 */
   turnstileSiteKey: "0x4AAAAAADs2uqvcjXJRBjAz",
   adsensePubId: "ca-pub-7197431000530819",
+  /** GA4 測定ID（公開ページのみ BaseLayout で読み込み。/dev は除外） */
+  gaMeasurementId: "G-N8JV8MKMNJ",
   /** 支援CTA A/B: "a" 感情 / "b" 価値 — docs/note-monetization-pdca.md */
   supportAbVariant: "a",
   /** IndexNow 検証キー — public/{key}.txt と一致 */

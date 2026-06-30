@@ -32,6 +32,7 @@ const canonicalUrl = new URL(Astro.url.pathname, "https://seiji1192.site").href;
 const ogImageUrl = new URL(ogImage, "https://seiji1192.site").href;
 const adsClient = SITE.adsensePubId;
 const showAds = enableAds && adsClient;
+const gaId = SITE.gaMeasurementId;
 ---
 
 <!DOCTYPE html>
@@ -63,6 +64,21 @@ const showAds = enableAds && adsClient;
     <meta name="twitter:image:alt" content={ogImageAlt} />
     <link rel="icon" href="/assets/favicon.png" type="image/png" />
     <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png" />
+    {
+      gaId && (
+        <>
+          <script async src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`} />
+          <script is:inline define:vars={{ gaId }}>
+            window.dataLayer = window.dataLayer || [];
+            function gtag() {
+              dataLayer.push(arguments);
+            }
+            gtag("js", new Date());
+            gtag("config", gaId, { anonymize_ip: true });
+          </script>
+        </>
+      )
+    }
     {
       showAds && (
         <>
