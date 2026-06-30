@@ -28,6 +28,7 @@ Start-Sleep -Seconds 2
 
 if (Test-DaemonAlive) {
   Write-Host "X screenshot patrol started (debugger only, 5min interval)"
+  Write-Host "Paused automatically while OBS is running (obs64.exe etc.)"
   Write-Host "Article/X/legal patrol runs on GitHub Actions every 30min"
   Write-Host "Log: $LogFile"
   Write-Host "Stop: Ctrl+C in the daemon PowerShell window"

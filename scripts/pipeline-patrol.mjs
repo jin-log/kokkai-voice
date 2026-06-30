@@ -11,6 +11,7 @@ import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { autorunLog, runAutorunCycle, parseAgentFilter } from "../src/lib/pipeline-autorun-core.mjs";
+import { getPatrolPauseState } from "../src/lib/patrol-pause.mjs";
 
 const root = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
 const statePath = path.join(root, "data/pipeline-patrol.json");
@@ -22,6 +23,7 @@ const intervalSec = Number(
   args.includes("--interval") ? args[args.indexOf("--interval") + 1] : 120,
 );
 const intervalMs = Math.max(30, intervalSec) * 1000;
+const pausePollMs = Math.max(15, Number(args.includes("--pause-poll") ? args[args.indexOf("--pause-poll") + 1] : 60)) * 1000;
 const maxRounds = Number(args.includes("--rounds") ? args[args.indexOf("--rounds") + 1] : 5);
 const batchSize = Number(args.includes("--batch") ? args[args.indexOf("--batch") + 1] : 5);
 const batchOffsetArg = args.includes("--batch-offset")
@@ -94,6 +96,22 @@ async function main() {
   });
 
   do {
+    const pause = await getPatrolPauseState();
+    if (pause.paused) {
+      await autorunLog(
+        `patrol paused (${pause.reason}${pause.detail ? `: ${pause.detail}` : ""}) — retry in ${pausePollMs / 1000}s`,
+      );
+      await writeState({
+        startedAt,
+        paused: true,
+        pausedReason: pause.reason,
+        pausedDetail: pause.detail ?? null,
+      });
+      if (once || stopping) break;
+      await sleep(pausePollMs);
+      continue;
+    }
+
     await runCycle(startedAt);
     if (once || stopping) break;
     await autorunLog(`patrol sleep ${intervalMs / 1000}s`);

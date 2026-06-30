@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-06-30T21:05:56.273Z",
-  "total": 161,
+  "generatedAt": "2026-06-30T21:10:19.517Z",
+  "total": 158,
   "byAgent": {
-    "writer": 115,
-    "x-researcher": 33,
-    "debugger": 12,
+    "writer": 108,
+    "x-researcher": 35,
+    "debugger": 14,
     "legal-check": 1
   },
   "tasks": [
@@ -251,39 +251,6 @@
       "priority": 10
     },
     {
-      "id": "case-mqzxj4ro:Q4_proscons_year_only",
-      "slug": "case-mqzxj4ro",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "Q4_proscons_year_only",
-      "title": "[品質] メリデメの figure が年号のみ（5件）— 実績数値になっていない",
-      "todo": "万円・%・件数など公表数値を figure に入れる（年号だけは不可）",
-      "command": "npm run complete:article -- --slug case-mqzxj4ro --force",
-      "priority": 10
-    },
-    {
-      "id": "case-mqzxj4ro:Q6_procedural_arc",
-      "slug": "case-mqzxj4ro",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "Q6_procedural_arc",
-      "title": "[品質] 経緯に採決手続き・委員長報告など中身のない行が混ざっている",
-      "todo": "可決内容・支給額・法案名など事実行に差し替え",
-      "command": "npm run complete:article -- --slug case-mqzxj4ro --force",
-      "priority": 10
-    },
-    {
-      "id": "case-mqzxj4ro:Q7_procedural_evidence",
-      "slug": "case-mqzxj4ro",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "Q7_procedural_evidence",
-      "title": "[品質] 要点が議事手続き・発言断片の羅列",
-      "todo": "論点・数値・可決結果が分かる第三者要約に差し替え",
-      "command": "npm run complete:article -- --slug case-mqzxj4ro --force",
-      "priority": 10
-    },
-    {
       "id": "case-mqzxj4ro:Q8_x_numbers_not_in_summary",
       "slug": "case-mqzxj4ro",
       "agent": "writer",
@@ -315,6 +282,17 @@
       "todo": "npm run x:capture -- --slug <slug>（デバッガー）",
       "command": "npm run x:capture -- --slug case-mqzxj4ro",
       "priority": 20
+    },
+    {
+      "id": "case-mqzxj4ro:G5_parties_symbol",
+      "slug": "case-mqzxj4ro",
+      "agent": "writer",
+      "agentLabel": "ライター",
+      "checkId": "G5_parties_symbol",
+      "title": "[ゲート] ◎〇▲×",
+      "todo": "各党の記号を確定（v2）",
+      "command": "npm run complete:article -- --slug case-mqzxj4ro --force",
+      "priority": 30
     },
     {
       "id": "case-mr0jbdpc:Q9_x_screenshot",
@@ -790,15 +768,15 @@
       "priority": 30
     },
     {
-      "id": "kenpo:Q4_proscons_year_only",
+      "id": "kenpo:H1_xPosts",
       "slug": "kenpo",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "Q4_proscons_year_only",
-      "title": "[品質] メリデメの figure が年号のみ（2件）— 実績数値になっていない",
-      "todo": "万円・%・件数など公表数値を figure に入れる（年号だけは不可）",
-      "command": "npm run complete:article -- --slug kenpo --force",
-      "priority": 10
+      "agent": "x-researcher",
+      "agentLabel": "X調査",
+      "checkId": "H1_xPosts",
+      "title": "[ゲート] X投稿",
+      "todo": "検証済みX URLを3件以上（x-researcher）",
+      "command": "npm run x:research -- --slug kenpo",
+      "priority": 20
     },
     {
       "id": "kenpo:H2_x_topic",
@@ -812,57 +790,24 @@
       "priority": 20
     },
     {
-      "id": "kenpo:B3_topic",
+      "id": "kenpo:H3_x_screenshot",
       "slug": "kenpo",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "B3_topic",
-      "title": "[ゲート] 話題一致",
-      "todo": "要約が searchKeyword と一致（2行以上）",
-      "command": "npm run complete:article -- --slug kenpo --force",
-      "priority": 30
+      "agent": "debugger",
+      "agentLabel": "デバッガー",
+      "checkId": "H3_x_screenshot",
+      "title": "[ゲート] Xスクショ",
+      "todo": "npm run x:capture -- --slug <slug>（デバッガー）",
+      "command": "npm run x:capture -- --slug kenpo",
+      "priority": 20
     },
     {
-      "id": "kenpo:D2_arc_topic",
+      "id": "kenpo:E2_timeline_x",
       "slug": "kenpo",
       "agent": "writer",
       "agentLabel": "ライター",
-      "checkId": "D2_arc_topic",
-      "title": "[ゲート] 経緯の話題",
-      "todo": "経緯3行以上が案件キーワードと一致",
-      "command": "npm run complete:article -- --slug kenpo --force",
-      "priority": 30
-    },
-    {
-      "id": "kenpo:E4_timeline_diet_topic",
-      "slug": "kenpo",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "E4_timeline_diet_topic",
-      "title": "[ゲート] TL国会の話題",
-      "todo": "タイムライン国会3件が案件と一致",
-      "command": "npm run complete:article -- --slug kenpo --force",
-      "priority": 30
-    },
-    {
-      "id": "kenpo:G5_parties_symbol",
-      "slug": "kenpo",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "G5_parties_symbol",
-      "title": "[ゲート] ◎〇▲×",
-      "todo": "各党の記号を確定（v2）",
-      "command": "npm run complete:article -- --slug kenpo --force",
-      "priority": 30
-    },
-    {
-      "id": "kenpo:G6_matrix_topic",
-      "slug": "kenpo",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "G6_matrix_topic",
-      "title": "[ゲート] 〇×の話題",
-      "todo": "公言と行動が案件キーワードと一致（2党）",
+      "checkId": "E2_timeline_x",
+      "title": "[ゲート] タイムラインX",
+      "todo": "X投稿を3件以上タイムラインに",
       "command": "npm run complete:article -- --slug kenpo --force",
       "priority": 30
     },
@@ -1065,6 +1010,17 @@
       "priority": 30
     },
     {
+      "id": "osaka-to-metropolis:H1_xPosts",
+      "slug": "osaka-to-metropolis",
+      "agent": "x-researcher",
+      "agentLabel": "X調査",
+      "checkId": "H1_xPosts",
+      "title": "[ゲート] X投稿",
+      "todo": "検証済みX URLを3件以上（x-researcher）",
+      "command": "npm run x:research -- --slug osaka-to-metropolis",
+      "priority": 20
+    },
+    {
       "id": "osaka-to-metropolis:H2_x_topic",
       "slug": "osaka-to-metropolis",
       "agent": "x-researcher",
@@ -1073,6 +1029,17 @@
       "title": "[ゲート] Xの話題",
       "todo": "X投稿本文が案件キーワードと一致（x-researcher）",
       "command": "npm run x:research -- --slug osaka-to-metropolis",
+      "priority": 20
+    },
+    {
+      "id": "osaka-to-metropolis:H3_x_screenshot",
+      "slug": "osaka-to-metropolis",
+      "agent": "debugger",
+      "agentLabel": "デバッガー",
+      "checkId": "H3_x_screenshot",
+      "title": "[ゲート] Xスクショ",
+      "todo": "npm run x:capture -- --slug <slug>（デバッガー）",
+      "command": "npm run x:capture -- --slug osaka-to-metropolis",
       "priority": 20
     },
     {

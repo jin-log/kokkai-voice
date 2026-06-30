@@ -1,12 +1,12 @@
 {
-  "generatedAt": "2026-06-30T21:05:56.312Z",
+  "generatedAt": "2026-06-30T21:12:06.391Z",
   "strategy": "quality-first",
   "activeCount": 39,
   "parkedCount": 0,
   "publishedCount": 26,
   "overallGoldPct": 26,
   "overallGatePct": 39,
-  "qualityFailed": 13,
+  "qualityFailed": 12,
   "slugs": [
     {
       "slug": "case-mr0jbdpc",
@@ -181,7 +181,7 @@
       "previewUrl": "/dev/preview/case-mqzxj4ro/",
       "qualityOk": false,
       "needsQualityFix": true,
-      "qualityBlockerCount": 8,
+      "qualityBlockerCount": 5,
       "qualityBlockers": [
         {
           "id": "Q1_conclusion_numbers",
@@ -202,22 +202,16 @@
           "agent": "writer"
         },
         {
-          "id": "Q4_proscons_year_only",
-          "message": "メリデメの figure が年号のみ（5件）— 実績数値になっていない",
-          "todo": "万円・%・件数など公表数値を figure に入れる（年号だけは不可）",
+          "id": "Q8_x_numbers_not_in_summary",
+          "message": "X枠に金額等の数字があるのに、いまの結論に反映されていない",
+          "todo": "Xの公表数値（例: 319万円）を結論1行目へ",
           "agent": "writer"
         },
         {
-          "id": "Q6_procedural_arc",
-          "message": "経緯に採決手続き・委員長報告など中身のない行が混ざっている",
-          "todo": "可決内容・支給額・法案名など事実行に差し替え",
-          "agent": "writer"
-        },
-        {
-          "id": "Q7_procedural_evidence",
-          "message": "要点が議事手続き・発言断片の羅列",
-          "todo": "論点・数値・可決結果が分かる第三者要約に差し替え",
-          "agent": "writer"
+          "id": "Q9_x_screenshot",
+          "message": "X URLは3件あるがスクショは0/3件（仕様違反）",
+          "todo": "npm run x:capture -- --slug <slug>（デバッガー担当）",
+          "agent": "debugger"
         }
       ],
       "agentTasks": [
@@ -255,39 +249,6 @@
           "priority": 10
         },
         {
-          "id": "case-mqzxj4ro:Q4_proscons_year_only",
-          "slug": "case-mqzxj4ro",
-          "agent": "writer",
-          "agentLabel": "ライター",
-          "checkId": "Q4_proscons_year_only",
-          "title": "[品質] メリデメの figure が年号のみ（5件）— 実績数値になっていない",
-          "todo": "万円・%・件数など公表数値を figure に入れる（年号だけは不可）",
-          "command": "npm run complete:article -- --slug case-mqzxj4ro --force",
-          "priority": 10
-        },
-        {
-          "id": "case-mqzxj4ro:Q6_procedural_arc",
-          "slug": "case-mqzxj4ro",
-          "agent": "writer",
-          "agentLabel": "ライター",
-          "checkId": "Q6_procedural_arc",
-          "title": "[品質] 経緯に採決手続き・委員長報告など中身のない行が混ざっている",
-          "todo": "可決内容・支給額・法案名など事実行に差し替え",
-          "command": "npm run complete:article -- --slug case-mqzxj4ro --force",
-          "priority": 10
-        },
-        {
-          "id": "case-mqzxj4ro:Q7_procedural_evidence",
-          "slug": "case-mqzxj4ro",
-          "agent": "writer",
-          "agentLabel": "ライター",
-          "checkId": "Q7_procedural_evidence",
-          "title": "[品質] 要点が議事手続き・発言断片の羅列",
-          "todo": "論点・数値・可決結果が分かる第三者要約に差し替え",
-          "command": "npm run complete:article -- --slug case-mqzxj4ro --force",
-          "priority": 10
-        },
-        {
           "id": "case-mqzxj4ro:Q8_x_numbers_not_in_summary",
           "slug": "case-mqzxj4ro",
           "agent": "writer",
@@ -308,10 +269,32 @@
           "todo": "npm run x:capture -- --slug <slug>（デバッガー担当）",
           "command": "npm run x:capture -- --slug case-mqzxj4ro",
           "priority": 10
+        },
+        {
+          "id": "case-mqzxj4ro:H3_x_screenshot",
+          "slug": "case-mqzxj4ro",
+          "agent": "debugger",
+          "agentLabel": "デバッガー",
+          "checkId": "H3_x_screenshot",
+          "title": "[ゲート] Xスクショ",
+          "todo": "npm run x:capture -- --slug <slug>（デバッガー）",
+          "command": "npm run x:capture -- --slug case-mqzxj4ro",
+          "priority": 20
+        },
+        {
+          "id": "case-mqzxj4ro:G5_parties_symbol",
+          "slug": "case-mqzxj4ro",
+          "agent": "writer",
+          "agentLabel": "ライター",
+          "checkId": "G5_parties_symbol",
+          "title": "[ゲート] ◎〇▲×",
+          "todo": "各党の記号を確定（v2）",
+          "command": "npm run complete:article -- --slug case-mqzxj4ro --force",
+          "priority": 30
         }
       ],
-      "gatePct": 50,
-      "goldPct": 33,
+      "gatePct": 25,
+      "goldPct": 17,
       "published": false,
       "publishGateOk": false,
       "pipeline": [
@@ -327,7 +310,7 @@
           "label": "②〇×2党確定",
           "phase": 2,
           "preDeploy": true,
-          "ok": true
+          "ok": false
         },
         {
           "id": "x",
@@ -371,7 +354,7 @@
           "label": "②〇×2党確定",
           "phase": 2,
           "preDeploy": true,
-          "ok": true
+          "ok": false
         },
         {
           "id": "x",
@@ -404,15 +387,21 @@
       ],
       "blockers": [
         {
+          "id": "G5_parties_symbol",
+          "label": "◎〇▲×",
+          "todo": "各党の記号を確定（v2）",
+          "detail": "◎▲❌ 確定 1/2 党以上"
+        },
+        {
           "id": "H3_x_screenshot",
           "label": "Xスクショ",
           "todo": "npm run x:capture -- --slug <slug>（デバッガー）",
           "detail": "スクショ 0/3 件 — x:capture 未実行"
         }
       ],
-      "blockerCount": 1,
+      "blockerCount": 2,
       "runState": "idle",
-      "nextAction": "品質: タイトルが金額・実績を問うのに、いまの結論に公表数値がない — 1行目に円・%・万人などタイトルへの直接回答を入れる（X・報道の数字を要約に反映） → npm run x:capture -- --slug <slug>（デバッガー）",
+      "nextAction": "品質: タイトルが金額・実績を問うのに、いまの結論に公表数値がない — 1行目に円・%・万人などタイトルへの直接回答を入れる（X・報道の数字を要約に反映） → ◎▲❌ を確定 → npm run x:capture -- --slug <slug>（デバッガー）",
       "promo": {
         "x": null,
         "hatena": null,
@@ -3251,6 +3240,17 @@
       "qualityBlockers": [],
       "agentTasks": [
         {
+          "id": "osaka-to-metropolis:H1_xPosts",
+          "slug": "osaka-to-metropolis",
+          "agent": "x-researcher",
+          "agentLabel": "X調査",
+          "checkId": "H1_xPosts",
+          "title": "[ゲート] X投稿",
+          "todo": "検証済みX URLを3件以上（x-researcher）",
+          "command": "npm run x:research -- --slug osaka-to-metropolis",
+          "priority": 20
+        },
+        {
           "id": "osaka-to-metropolis:H2_x_topic",
           "slug": "osaka-to-metropolis",
           "agent": "x-researcher",
@@ -3259,6 +3259,17 @@
           "title": "[ゲート] Xの話題",
           "todo": "X投稿本文が案件キーワードと一致（x-researcher）",
           "command": "npm run x:research -- --slug osaka-to-metropolis",
+          "priority": 20
+        },
+        {
+          "id": "osaka-to-metropolis:H3_x_screenshot",
+          "slug": "osaka-to-metropolis",
+          "agent": "debugger",
+          "agentLabel": "デバッガー",
+          "checkId": "H3_x_screenshot",
+          "title": "[ゲート] Xスクショ",
+          "todo": "npm run x:capture -- --slug <slug>（デバッガー）",
+          "command": "npm run x:capture -- --slug osaka-to-metropolis",
           "priority": 20
         },
         {
@@ -3407,15 +3418,27 @@
           "detail": "公言テキストが案件と無関係"
         },
         {
+          "id": "H1_xPosts",
+          "label": "X投稿",
+          "todo": "検証済みX URLを3件以上（x-researcher）",
+          "detail": "検証済み 0/3 件（公開前必須）"
+        },
+        {
           "id": "H2_x_topic",
           "label": "Xの話題",
           "todo": "X投稿本文が案件キーワードと一致（x-researcher）",
           "detail": "0/3 件が話題一致"
+        },
+        {
+          "id": "H3_x_screenshot",
+          "label": "Xスクショ",
+          "todo": "npm run x:capture -- --slug <slug>（デバッガー）",
+          "detail": "スクショ 0/3 件 — x:capture 未実行"
         }
       ],
-      "blockerCount": 4,
+      "blockerCount": 6,
       "runState": "idle",
-      "nextAction": "1/2 行がキーワード一致（大阪都構想） → 0/3 行が話題一致 → 公言テキストが案件と無関係",
+      "nextAction": "1/2 行がキーワード一致（大阪都構想） → 0/3 行が話題一致 → 公言テキストが案件と無関係 → X調査: 5枠が未特定 — キーワード見直し or 手動URL",
       "promo": {
         "x": null,
         "hatena": null,
@@ -7330,28 +7353,21 @@
       "pageReady": true,
       "publishState": "live",
       "previewUrl": "/dev/preview/kenpo/",
-      "qualityOk": false,
-      "needsQualityFix": true,
-      "qualityBlockerCount": 1,
-      "qualityBlockers": [
-        {
-          "id": "Q4_proscons_year_only",
-          "message": "メリデメの figure が年号のみ（2件）— 実績数値になっていない",
-          "todo": "万円・%・件数など公表数値を figure に入れる（年号だけは不可）",
-          "agent": "writer"
-        }
-      ],
+      "qualityOk": true,
+      "needsQualityFix": false,
+      "qualityBlockerCount": 0,
+      "qualityBlockers": [],
       "agentTasks": [
         {
-          "id": "kenpo:Q4_proscons_year_only",
+          "id": "kenpo:H1_xPosts",
           "slug": "kenpo",
-          "agent": "writer",
-          "agentLabel": "ライター",
-          "checkId": "Q4_proscons_year_only",
-          "title": "[品質] メリデメの figure が年号のみ（2件）— 実績数値になっていない",
-          "todo": "万円・%・件数など公表数値を figure に入れる（年号だけは不可）",
-          "command": "npm run complete:article -- --slug kenpo --force",
-          "priority": 10
+          "agent": "x-researcher",
+          "agentLabel": "X調査",
+          "checkId": "H1_xPosts",
+          "title": "[ゲート] X投稿",
+          "todo": "検証済みX URLを3件以上（x-researcher）",
+          "command": "npm run x:research -- --slug kenpo",
+          "priority": 20
         },
         {
           "id": "kenpo:H2_x_topic",
@@ -7365,63 +7381,30 @@
           "priority": 20
         },
         {
-          "id": "kenpo:B3_topic",
+          "id": "kenpo:H3_x_screenshot",
           "slug": "kenpo",
-          "agent": "writer",
-          "agentLabel": "ライター",
-          "checkId": "B3_topic",
-          "title": "[ゲート] 話題一致",
-          "todo": "要約が searchKeyword と一致（2行以上）",
-          "command": "npm run complete:article -- --slug kenpo --force",
-          "priority": 30
+          "agent": "debugger",
+          "agentLabel": "デバッガー",
+          "checkId": "H3_x_screenshot",
+          "title": "[ゲート] Xスクショ",
+          "todo": "npm run x:capture -- --slug <slug>（デバッガー）",
+          "command": "npm run x:capture -- --slug kenpo",
+          "priority": 20
         },
         {
-          "id": "kenpo:D2_arc_topic",
+          "id": "kenpo:E2_timeline_x",
           "slug": "kenpo",
           "agent": "writer",
           "agentLabel": "ライター",
-          "checkId": "D2_arc_topic",
-          "title": "[ゲート] 経緯の話題",
-          "todo": "経緯3行以上が案件キーワードと一致",
-          "command": "npm run complete:article -- --slug kenpo --force",
-          "priority": 30
-        },
-        {
-          "id": "kenpo:E4_timeline_diet_topic",
-          "slug": "kenpo",
-          "agent": "writer",
-          "agentLabel": "ライター",
-          "checkId": "E4_timeline_diet_topic",
-          "title": "[ゲート] TL国会の話題",
-          "todo": "タイムライン国会3件が案件と一致",
-          "command": "npm run complete:article -- --slug kenpo --force",
-          "priority": 30
-        },
-        {
-          "id": "kenpo:G5_parties_symbol",
-          "slug": "kenpo",
-          "agent": "writer",
-          "agentLabel": "ライター",
-          "checkId": "G5_parties_symbol",
-          "title": "[ゲート] ◎〇▲×",
-          "todo": "各党の記号を確定（v2）",
-          "command": "npm run complete:article -- --slug kenpo --force",
-          "priority": 30
-        },
-        {
-          "id": "kenpo:G6_matrix_topic",
-          "slug": "kenpo",
-          "agent": "writer",
-          "agentLabel": "ライター",
-          "checkId": "G6_matrix_topic",
-          "title": "[ゲート] 〇×の話題",
-          "todo": "公言と行動が案件キーワードと一致（2党）",
+          "checkId": "E2_timeline_x",
+          "title": "[ゲート] タイムラインX",
+          "todo": "X投稿を3件以上タイムラインに",
           "command": "npm run complete:article -- --slug kenpo --force",
           "priority": 30
         }
       ],
-      "gatePct": 25,
-      "goldPct": 17,
+      "gatePct": 50,
+      "goldPct": 33,
       "published": true,
       "publishGateOk": false,
       "pipeline": [
@@ -7437,7 +7420,7 @@
           "label": "②〇×2党確定",
           "phase": 2,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "x",
@@ -7481,7 +7464,7 @@
           "label": "②〇×2党確定",
           "phase": 2,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "x",
@@ -7514,45 +7497,33 @@
       ],
       "blockers": [
         {
-          "id": "B3_topic",
-          "label": "話題一致",
-          "todo": "要約が searchKeyword と一致（2行以上）",
-          "detail": "1/2 行がキーワード一致（憲法改正）"
+          "id": "E2_timeline_x",
+          "label": "タイムラインX",
+          "todo": "X投稿を3件以上タイムラインに",
+          "detail": "0/3 X"
         },
         {
-          "id": "D2_arc_topic",
-          "label": "経緯の話題",
-          "todo": "経緯3行以上が案件キーワードと一致",
-          "detail": "1/3 行が話題一致"
-        },
-        {
-          "id": "E4_timeline_diet_topic",
-          "label": "TL国会の話題",
-          "todo": "タイムライン国会3件が案件と一致",
-          "detail": "1/3 国会が話題一致"
-        },
-        {
-          "id": "G5_parties_symbol",
-          "label": "◎〇▲×",
-          "todo": "各党の記号を確定（v2）",
-          "detail": "◎▲❌ 確定 1/2 党以上"
-        },
-        {
-          "id": "G6_matrix_topic",
-          "label": "〇×の話題",
-          "todo": "公言と行動が案件キーワードと一致（2党）",
-          "detail": "公言テキストが案件と無関係"
+          "id": "H1_xPosts",
+          "label": "X投稿",
+          "todo": "検証済みX URLを3件以上（x-researcher）",
+          "detail": "検証済み 0/3 件（公開前必須）"
         },
         {
           "id": "H2_x_topic",
           "label": "Xの話題",
           "todo": "X投稿本文が案件キーワードと一致（x-researcher）",
           "detail": "0/3 件が話題一致"
+        },
+        {
+          "id": "H3_x_screenshot",
+          "label": "Xスクショ",
+          "todo": "npm run x:capture -- --slug <slug>（デバッガー）",
+          "detail": "スクショ 0/3 件 — x:capture 未実行"
         }
       ],
-      "blockerCount": 6,
+      "blockerCount": 4,
       "runState": "idle",
-      "nextAction": "品質: メリデメの figure が年号のみ（2件）— 実績数値になっていない — 万円・%・件数など公表数値を figure に入れる（年号だけは不可） → 1/2 行がキーワード一致（憲法改正） → 1/3 行が話題一致 → 1/3 国会が話題一致",
+      "nextAction": "タイムラインにX3件 → X URL検索・post_text 補完（x-researcher） → X本文を案件キーワードに合わせて差し替え → X調査: 5枠が未特定 — キーワード見直し or 手動URL",
       "promo": {
         "x": null,
         "hatena": null,
