@@ -12,12 +12,13 @@ export const SITE = {
   hatenaProfileUrl: "https://b.hatena.ne.jp/seiji1192/",
   /** note トップ or メンバー加入ページ（オーナー設定後） */
   noteUrl: "https://note.com/seiji1192",
-  noteMembershipUrl: "https://note.com/seiji1192/membership",
+  /** メンバー説明・加入ページ（応援導線の正） */
+  noteMembershipUrl: "https://note.com/seiji1192/membership/info",
   /** note チップ（単発応援）— 管理プレビュー: /dev/links/ */
   noteTipUrl:
     "https://note.com/a/purchase/support?k=n4d92d9d86b96&at=support",
-  /** note メンバー公開済みなら true。未公開時はプロフィールへ誘導（/membership は404） */
-  noteMembershipLive: false,
+  /** メンバーシップ公開済み */
+  noteMembershipLive: true,
   /** プレリリースバナー表示。正式ローンチ時 false */
   preRelease: false,
   /** コメント投稿・表示（D1接続後に true。preRelease と独立） */

@@ -13,7 +13,6 @@ import Timeline from "./case/Timeline.astro";
 import Comments from "./case/Comments.astro";
 import ShareBar from "./case/ShareBar.astro";
 import SupportCta from "./SupportCta.astro";
-import NoteStickyBar from "./NoteStickyBar.astro";
 import FloatToc from "./case/FloatToc.astro";
 import FloatReact from "./case/FloatReact.astro";
 import { articleShortTitle, shouldPublishParty } from "../lib/case-helpers.mjs";
@@ -69,4 +68,3 @@ const dietBadge = dietPendingBadgeLabel(article);
 
 <FloatToc article={article} hasStance={hasStance} />
 <FloatReact article={article} />
-{!preview && <NoteStickyBar content={article.slug} />}

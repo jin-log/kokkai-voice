@@ -1,45 +1,42 @@
----
-import { SITE } from "../lib/site-config.mjs";
-import {
-  noteMembershipFooterLabel,
-  noteMembershipLink,
-  noteTipLink,
-} from "../lib/note-link.mjs";
-
-interface Props {
-  note?: string;
-}
-
-const { note } = Astro.props;
-const memberHref = noteMembershipLink("footer", "membership");
-const tipHref = noteTipLink("footer", "tip");
----
-
-<footer class="site-footer">
-  <nav class="site-footer__links" aria-label="フッター">
-    <a href={SITE.domain}>トップ</a>
-    <a href="/search">案件一覧</a>
-    <a href="/about/">このサイトについて</a>
-    <a href="/privacy-policy/">プライバシーポリシー</a>
-    <a href="/comment-policy/">コメント規約</a>
-    <a href={SITE.xUrl} target="_blank" rel="noopener noreferrer">X {SITE.xHandle}</a>
-    {
-      memberHref && (
-        <a href={memberHref} target="_blank" rel="noopener noreferrer">
-          {noteMembershipFooterLabel()}
-        </a>
-      )
-    }
-    {
-      tipHref && (
-        <a href={tipHref} target="_blank" rel="noopener noreferrer">
-          チップで応援
-        </a>
-      )
-    }
-  </nav>
-  <p class="site-footer__note">
-    {note ??
-      "政府・国会の公式サイトではありません。個人運営の解説メディアです。国会議事録 API + スクショアーカイブ。AI要約は解釈を含みます。党の宣伝・投票の呼びかけはしません。"}
-  </p>
-</footer>
+---
+import { SITE } from "../lib/site-config.mjs";
+import { SUPPORT } from "../lib/support-copy.mjs";
+import { noteMembershipLink, noteTipLink } from "../lib/note-link.mjs";
+
+interface Props {
+  note?: string;
+}
+
+const { note } = Astro.props;
+const memberHref = noteMembershipLink("footer", "membership");
+const tipHref = noteTipLink("footer", "tip");
+---
+
+<footer class="site-footer">
+  <nav class="site-footer__links" aria-label="フッター">
+    <a href={SITE.domain}>トップ</a>
+    <a href="/search">案件一覧</a>
+    <a href="/about/">このサイトについて</a>
+    <a href="/privacy-policy/">プライバシーポリシー</a>
+    <a href="/comment-policy/">コメント規約</a>
+    <a href={SITE.xUrl} target="_blank" rel="noopener noreferrer">X {SITE.xHandle}</a>
+    {
+      memberHref && (
+        <a href={memberHref} target="_blank" rel="noopener noreferrer">
+          サブスク {SUPPORT.memberBtn}
+        </a>
+      )
+    }
+    {
+      tipHref && (
+        <a href={tipHref} target="_blank" rel="noopener noreferrer">
+          {SUPPORT.tipBtn}
+        </a>
+      )
+    }
+  </nav>
+  <p class="site-footer__note">
+    {note ??
+      "政府・国会の公式サイトではありません。個人運営の解説メディアです。国会議事録 API + スクショアーカイブ。AI要約は解釈を含みます。党の宣伝・投票の呼びかけはしません。"}
+  </p>
+</footer>

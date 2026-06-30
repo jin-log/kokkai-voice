@@ -1,11 +1,9 @@
 ---
 import { buildSharePayload } from "../../lib/share.mjs";
 import { SITE } from "../../lib/site-config.mjs";
-import { noteMembershipLink } from "../../lib/note-link.mjs";
 
 const { article } = Astro.props;
 const { xUrl, pageUrl } = buildSharePayload(article);
-const noteHref = noteMembershipLink("share_bar", article.slug);
 ---
 
 <div class="share-bar" data-share-bar>
@@ -22,20 +20,6 @@ const noteHref = noteMembershipLink("share_bar", article.slug);
       <span class="share-bar__icon" aria-hidden="true">𝕏</span>
       Xで紹介する
     </a>
-    {
-      noteHref && (
-        <a
-          href={noteHref}
-          class="share-bar__btn share-bar__btn--note"
-          target="_blank"
-          rel="noopener noreferrer"
-          data-track="support-note"
-          data-case={article.slug}
-        >
-          週次で追う（note）
-        </a>
-      )
-    }
     <button
       type="button"
       class="share-bar__btn share-bar__btn--copy"

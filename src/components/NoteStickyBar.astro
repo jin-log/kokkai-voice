@@ -1,26 +1,47 @@
 ---
-import { noteMembershipLink, hasNoteMembership } from "../lib/note-link.mjs";
+import { SUPPORT } from "../lib/support-copy.mjs";
+import { noteMembershipLink, noteTipLink, hasNoteMembership } from "../lib/note-link.mjs";
 
 interface Props {
   content?: string;
 }
 
 const { content } = Astro.props;
-const href = noteMembershipLink("sticky", content);
-if (!href || !hasNoteMembership()) return null;
+const memberHref = noteMembershipLink("sticky", content);
+const tipHref = noteTipLink("sticky", content);
+if (!hasNoteMembership() || (!memberHref && !tipHref)) return null;
 ---
 
 <div class="note-sticky" data-note-sticky hidden>
-  <p class="note-sticky__text">週次ダイジェスト — ¥500/月</p>
-  <a
-    href={href}
-    class="note-sticky__btn"
-    target="_blank"
-    rel="noopener noreferrer"
-    data-track="support-note"
-  >
-    noteメンバー
-  </a>
+  <p class="note-sticky__text">{SUPPORT.stickyText}</p>
+  <div class="note-sticky__actions">
+    {
+      memberHref && (
+        <a
+          href={memberHref}
+          class="note-sticky__btn note-sticky__btn--member"
+          target="_blank"
+          rel="noopener noreferrer"
+          data-track="support-note-member"
+        >
+          メンバー
+        </a>
+      )
+    }
+    {
+      tipHref && (
+        <a
+          href={tipHref}
+          class="note-sticky__btn note-sticky__btn--tip"
+          target="_blank"
+          rel="noopener noreferrer"
+          data-track="support-note-tip"
+        >
+          チップ
+        </a>
+      )
+    }
+  </div>
   <button type="button" class="note-sticky__close" data-note-sticky-close aria-label="閉じる">
     ×
   </button>

@@ -1,6 +1,5 @@
 ---
 import { SITE } from "../lib/site-config.mjs";
-import { noteMembershipLink } from "../lib/note-link.mjs";
 import { ASSET_V } from "../lib/case-helpers.mjs";
 
 interface Props {
@@ -10,7 +9,6 @@ interface Props {
 }
 
 const { showSearch = false, searchQuery = "", caseTitle = "" } = Astro.props;
-const noteHref = noteMembershipLink("header");
 ---
 
 <header class="site-header" data-site-header>
@@ -41,19 +39,6 @@ const noteHref = noteMembershipLink("header");
       )
     }
     <nav class="nav" aria-label="メイン">
-      {
-        noteHref && (
-          <a
-            href={noteHref}
-            class="nav__note-link"
-            target="_blank"
-            rel="noopener noreferrer"
-            data-track="support-note"
-          >
-            note ¥500
-          </a>
-        )
-      }
       <a
         href={SITE.xUrl}
         class="nav__x-link"

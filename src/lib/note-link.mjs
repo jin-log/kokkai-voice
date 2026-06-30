@@ -19,10 +19,7 @@ function withUtm(url, opts = {}) {
  * @param {string} [content] slug or page id
  */
 export function noteMembershipLink(medium, content) {
-  const base =
-    SITE.noteMembershipLive && SITE.noteMembershipUrl
-      ? SITE.noteMembershipUrl
-      : SITE.noteUrl;
+  const base = SITE.noteMembershipUrl || SITE.noteUrl;
   if (!base) return null;
   return withUtm(base, { medium, content });
 }
@@ -45,13 +42,11 @@ export function hasNoteTip() {
 }
 
 export function noteMembershipButtonLabel() {
-  if (SITE.noteMembershipLive) return "note メンバーになる";
-  return "note をフォロー";
+  return "¥500/月";
 }
 
 export function noteMembershipFooterLabel() {
-  if (SITE.noteMembershipLive) return "noteメンバー";
-  return "note";
+  return "¥500/月";
 }
 
 /** 管理画面 /dev/links/ 用 — クリック可能な一覧 */
@@ -63,11 +58,9 @@ export function getOutboundLinkGroups() {
   const memberHref = noteMembershipLink("dev_links", "membership");
   if (memberHref) {
     noteLinks.push({
-      label: SITE.noteMembershipLive ? "noteメンバー（月額）" : "note（メンバー準備中）",
+      label: SITE.noteMembershipLive ? "noteメンバー（月額）" : "noteメンバー",
       href: memberHref,
-      note: SITE.noteMembershipLive
-        ? SITE.noteMembershipUrl
-        : `未公開のため ${SITE.noteUrl} へ誘導`,
+      note: SITE.noteMembershipUrl,
     });
   }
   const tipHref = noteTipLink("dev_links", "tip");

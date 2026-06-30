@@ -1,49 +1,37 @@
 ---
-import { noteMembershipLink, hasNoteMembership } from "../lib/note-link.mjs";
+import { SUPPORT } from "../lib/support-copy.mjs";
+import { noteMembershipLink, noteTipLink } from "../lib/note-link.mjs";
 
 interface Props {
-  /** UTM medium */
   medium?: string;
   content?: string;
-  /** compact = 1行バナー / full = 記事下CTA風 */
-  variant?: "compact" | "full";
+  /** hero = トップのメンバー訴求カード */
+  variant?: "hero";
 }
 
-const { medium = "banner", content, variant = "compact" } = Astro.props;
-const href = noteMembershipLink(medium, content);
-if (!href || !hasNoteMembership()) return null;
+const { medium = "banner", content, variant } = Astro.props;
+const memberHref = noteMembershipLink(medium, content);
+const tipHref = noteTipLink(medium, content);
+
+if (variant === "hero") {
+  if (!memberHref) return null;
+}
+if (!variant && !memberHref && !tipHref) return null;
 ---
 
 {
-  variant === "compact" ? (
-    <aside class="note-promo note-promo--compact" aria-label="noteメンバー">
-      <p class="note-promo__text">
-        <strong>週次で追いかける</strong> — ダイジェスト＋深掘りを note メンバー（¥500/月）で配信中。
-        <a
-          href={href}
-          class="note-promo__link"
-          target="_blank"
-          rel="noopener noreferrer"
-          data-track="support-note"
-        >
-          メンバーになる →
-        </a>
-      </p>
-    </aside>
-  ) : (
-    <section class="note-promo note-promo--full" aria-labelledby="note-promo-title">
-      <h2 id="note-promo-title" class="note-promo__title">週次で追いかける</h2>
-      <p class="note-promo__body">
-        サイトの案件整理は無料のまま。メンバー向けに週次ダイジェスト・深掘り1本・更新先行案内を note で配信します。
-      </p>
+  variant === "hero" && memberHref && (
+    <section class="note-promo note-promo--hero" aria-labelledby="note-promo-title">
+      <h2 id="note-promo-title" class="note-promo__title">{SUPPORT.heroTitle}</h2>
+      <p class="note-promo__body">{SUPPORT.heroBody}</p>
       <a
-        href={href}
-        class="note-promo__btn"
+        href={memberHref}
+        class="note-promo__btn note-promo__btn--member"
         target="_blank"
         rel="noopener noreferrer"
-        data-track="support-note"
+        data-track="support-note-member"
       >
-        note メンバーになる（¥500/月）
+        {SUPPORT.heroMemberBtn}
       </a>
     </section>
   )
