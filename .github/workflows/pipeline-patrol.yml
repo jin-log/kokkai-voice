@@ -5,6 +5,8 @@ on:
     # 30分ごと（JST基準でずれるが十分）
     - cron: "*/30 * * * *"
   workflow_dispatch:
+  push:
+    branches: [main]
 
 permissions:
   contents: write
