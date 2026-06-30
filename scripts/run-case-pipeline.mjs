@@ -25,8 +25,9 @@ const BATCH_SIZE = 5;
 const STEP_ORDER = [
   { id: "content", action: "writer", cmd: "記事レイヤー（A-F）投入" },
   { id: "matrix", action: "writer", cmd: "policy-matrix + stanceMatrix" },
-  { id: "x", action: "x-researcher", cmd: "node scripts/x-research-batch.mjs {slug}" },
-  { id: "legal", action: "legal-check", cmd: "L1-L9 → legalReview.status: ok" },
+  { id: "x", action: "x-researcher", cmd: "npm run x:research -- --slug {slug}" },
+  { id: "x_capture", action: "debugger", cmd: "npm run x:capture -- --slug {slug}" },
+  { id: "legal", action: "legal-check", cmd: "npm run legal:check -- --slug {slug}" },
   { id: "deployed", action: "ceo", cmd: "npm run deploy" },
   { id: "debug", action: "debugger", cmd: "本番確認 → qaReview.status: ok" },
 ];

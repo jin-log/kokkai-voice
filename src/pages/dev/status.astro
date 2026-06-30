@@ -69,6 +69,32 @@ function formatJa(iso) {
               </dl>
             </section>
 
+            {status.qualityFailed > 0 && (
+              <section class="status-quality" aria-label="品質NG">
+                <h2>⚠ 品質NG {status.qualityFailed} 件（ゲート100%でも中身ダメ）</h2>
+                <p class="status-quality__lead">
+                  オーナー目視なしで検出。担当エージェントへ自動タスク化（<code>data/agent-tasks.json</code>）。
+                  修正は <code>npm run pipeline:autorun</code> または各コマンド。
+                </p>
+                <ul class="status-quality__list">
+                  {status.slugs
+                    .filter((s) => !s.qualityOk)
+                    .slice(0, 12)
+                    .map((s) => (
+                      <li class="status-quality__item">
+                        <a href={s.previewUrl ?? `#`}>{s.shortTitle}</a>
+                        <span class="status-quality__meta">
+                          {s.qualityBlockerCount} 件 — {s.agentTasks?.[0]?.agentLabel ?? "ライター"}
+                        </span>
+                        {s.qualityBlockers?.[0] && (
+                          <p class="status-quality__msg">{s.qualityBlockers[0].message}</p>
+                        )}
+                      </li>
+                    ))}
+                </ul>
+              </section>
+            )}
+
             <section class="dev-buffer-panel" id="buffer-panel" aria-live="polite">
               <h2>📣 Buffer × X 自動投稿</h2>
               <p id="buffer-summary" class="dev-buffer-panel__summary">読み込み中…</p>
@@ -175,7 +201,7 @@ function formatJa(iso) {
                   </ul>
                   {!s.published && s.blockers.length > 0 && (
                     <div class="status-card__blockers">
-                      <p class="status-card__blockers-title">あと {s.blockerCount ?? s.blockers.length} 項目（CEO/ライター作業）</p>
+                      <p class="status-card__blockers-title">ゲート未達 {s.blockerCount ?? s.blockers.length} 項目</p>
                       <ol class="status-card__blockers-list">
                         {s.blockers.map((b) => (
                           <li>
@@ -184,6 +210,22 @@ function formatJa(iso) {
                           </li>
                         ))}
                       </ol>
+                    </div>
+                  )}
+                  {!s.qualityOk && (s.qualityBlockers?.length ?? 0) > 0 && (
+                    <div class="status-card__blockers status-card__blockers--quality">
+                      <p class="status-card__blockers-title">品質NG {s.qualityBlockerCount} 件（{s.agentTasks?.[0]?.agentLabel ?? "ライター"}）</p>
+                      <ol class="status-card__blockers-list">
+                        {s.qualityBlockers.map((q) => (
+                          <li>
+                            <strong>{q.id}</strong>
+                            <span>{q.message}</span>
+                          </li>
+                        ))}
+                      </ol>
+                      {s.agentTasks?.[0]?.command && (
+                        <p class="status-card__cmd"><code>{s.agentTasks[0].command}</code></p>
+                      )}
                     </div>
                   )}
                   <div class="status-card__deploy">

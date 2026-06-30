@@ -42,8 +42,9 @@ export const CHECK_LABELS = {
   G4_parties_source: { label: "党の出典URL", todo: "各党に sourceUrl" },
   G5_parties_symbol: { label: "◎〇▲×", todo: "各党の記号を確定（v2）" },
   G6_matrix_topic: { label: "〇×の話題", todo: "公言と行動が案件キーワードと一致（2党）" },
-  H1_xPosts: { label: "X投稿", todo: "検証済みX URLを1件以上" },
-  H2_x_topic: { label: "Xの話題", todo: "X投稿本文が案件キーワードと一致" },
+  H1_xPosts: { label: "X投稿", todo: "検証済みX URLを3件以上（x-researcher）" },
+  H2_x_topic: { label: "Xの話題", todo: "X投稿本文が案件キーワードと一致（x-researcher）" },
+  H3_x_screenshot: { label: "Xスクショ", todo: "npm run x:capture -- --slug <slug>（デバッガー）" },
   I1_legal: { label: "法務", todo: "legal-check を実行" },
 };
 
@@ -240,6 +241,14 @@ export function checkCasePage(article, opts = {}) {
       "H2_x_topic",
       xTopicOk >= Math.min(3, xMin),
       `${xTopicOk}/${Math.min(3, xMin)} 件が話題一致`,
+    );
+    const xWithShot = xVerified.filter((p) => p.screenshot && p.captured_at);
+    add(
+      "H3_x_screenshot",
+      xWithShot.length >= xMin,
+      xWithShot.length >= xMin
+        ? `スクショ ${xWithShot.length}/${xMin} 件`
+        : `スクショ ${xWithShot.length}/${xMin} 件 — x:capture 未実行`,
     );
   }
 

@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "dev": "astro dev",
-    "build": "node scripts/generate-og-images.mjs && node scripts/update-project-status.mjs --quiet && node scripts/sync-marketing-data.mjs && astro build",
+    "build": "node scripts/generate-og-images.mjs && node scripts/update-project-status.mjs --quiet && node scripts/sync-agent-tasks.mjs && node scripts/sync-marketing-data.mjs && astro build",
     "preview": "astro preview",
     "deploy:site": "node scripts/deploy-site.mjs",
     "deploy:extras": "node scripts/notify-search-engines.mjs --live && node scripts/post-article-promo.mjs --from-queue",
@@ -15,6 +15,9 @@
     "status": "node scripts/update-project-status.mjs --print",
     "rescore:symbols": "node scripts/rescore-stance-symbols.mjs",
     "check:case:all": "node scripts/check-case-page.mjs --all",
+    "audit:articles": "node scripts/audit-article-quality.mjs",
+    "audit:articles:ci": "node scripts/audit-article-quality.mjs --published-only --fail-on-blocker",
+    "sync:agent-tasks": "node scripts/sync-agent-tasks.mjs",
     "pipeline": "node scripts/run-case-pipeline.mjs",
     "pipeline:promote": "node scripts/run-case-pipeline.mjs --promote",
     "pipeline:autorun": "node scripts/pipeline-autorun.mjs",

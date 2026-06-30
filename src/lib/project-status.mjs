@@ -4,6 +4,8 @@
  */
 import { readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
+import { auditArticleQuality, isArticleFullyReady } from "./article-quality.mjs";
+import { buildAgentTasksForArticle, agentForCheckId } from "./agent-tasks.mjs";
 import { checkCasePageWithFiles, root, blockerToHuman } from "./page-ready.mjs";
 import { filterPublishable, loadArticle } from "./articles.mjs";
 import { citizenTitle } from "./title-format.mjs";
@@ -26,10 +28,12 @@ export function isPublishGate(gold) {
   return PIPELINE_ITEMS.filter((p) => p.preDeploy).every((p) => gold.find((g) => g.id === p.id)?.ok);
 }
 
-function contentOk(gate) {
-  const ids = /^[A-F]/;
+function contentOk(gate, article) {
+  const ids = /^[A-FJ]/;
   const subset = gate.checks.filter((c) => ids.test(c.id));
-  return subset.length > 0 && subset.every((c) => c.ok);
+  const formOk = subset.length > 0 && subset.every((c) => c.ok);
+  const qualityOk = auditArticleQuality(article).ok;
+  return formOk && qualityOk;
 }
 
 /** @param {unknown} article @param {Awaited<ReturnType<typeof checkCasePageWithFiles>>} gate @param {unknown} policyMatrix */
@@ -41,11 +45,11 @@ export function pipelineChecks(article, gate, policyMatrix) {
   const xOk = (article.xPosts ?? []).filter(
     (p) => p.post_url && p.post_text && p.status === "url_found",
   ).length;
-
-  const content = contentOk(gate);
+  const xMin = article.xPostsMinRequired ?? 3;
+  const xGateOk = !gate.blockers.some((b) => String(b.id).startsWith("H"));
+  const x = xOk >= xMin && xGateOk;
+  const content = contentOk(gate, article);
   const matrix = symbolsOk >= 2;
-  const xMin = article.xPostsMinRequired ?? 1;
-  const x = xOk >= xMin;
   const legal = article.legalReview?.status === "ok";
 
   return PIPELINE_ITEMS.map((item) => ({
@@ -63,9 +67,9 @@ export function pipelineChecks(article, gate, policyMatrix) {
             : item.id === "legal"
               ? legal
               : item.id === "deployed"
-                ? article.pageReady === true && gate.ok
+                ? article.pageReady === true && isArticleFullyReady(article, gate)
                 : item.id === "debug"
-                  ? article.qaReview?.status === "ok"
+                  ? article.qaReview?.status === "ok" && isArticleFullyReady(article, gate)
                   : false,
   }));
 }
@@ -110,11 +114,19 @@ export function computeNextAction(article, gate, pipeline) {
     G3_parties_min: "2党以上のスタンスを入力",
     G4_parties_source: "各党に出典URL",
     G5_parties_symbol: "◎▲❌ を確定",
-    H1_xPosts: "X投稿URLを検索・登録",
+    H1_xPosts: "X URL検索・post_text 補完（x-researcher）",
+    H2_x_topic: "X本文を案件キーワードに合わせて差し替え",
+    H3_x_screenshot: "npm run x:capture -- --slug <slug>（デバッガー）",
     I1_legal: "法務チェックを実行",
   };
 
   const parts = gate.blockers.slice(0, 3).map((b) => hints[b.id] || b.detail || b.id);
+
+  const quality = auditArticleQuality(article);
+  if (!quality.ok && quality.blockers[0]) {
+    const q = quality.blockers[0];
+    parts.unshift(`品質: ${q.message} — ${q.todo}`);
+  }
 
   if (article.category && article.category !== "国会" && !article.sourceUrls?.length) {
     parts.unshift("📰 ソースURL（報道・会見）を管理画面で追加して再生成");
@@ -169,9 +181,13 @@ export async function computeProjectStatus() {
     const pageReady = article.pageReady === true;
     const nextAction = computeNextAction(article, gate, pipeline);
 
+    const quality = auditArticleQuality(article);
+    const agentTasks = buildAgentTasksForArticle(article, gate);
+    const fullyReady = isArticleFullyReady(article, gate);
+
     let publishState = "wip";
     if (article.adminHidden) publishState = "hidden";
-    else if (pageReady && gate.ok) publishState = "live";
+    else if (pageReady && fullyReady) publishState = "live";
     else if (publishGateOk) publishState = "draft";
 
     slugs.push({
@@ -181,7 +197,16 @@ export async function computeProjectStatus() {
       adminHidden: article.adminHidden === true,
       pageReady,
       publishState,
-      previewUrl: publishGateOk ? `/dev/preview/${slug}/` : null,
+      previewUrl: !article.adminHidden ? `/dev/preview/${slug}/` : null,
+      qualityOk: quality.ok,
+      qualityBlockerCount: quality.blockers.length,
+      qualityBlockers: quality.blockers.slice(0, 6).map((q) => ({
+        id: q.id,
+        message: q.message,
+        todo: q.todo,
+        agent: agentForCheckId(q.id),
+      })),
+      agentTasks: agentTasks.slice(0, 8),
       gatePct: pct(
         pipeline.filter((p) => p.preDeploy && p.ok).length,
         pipeline.filter((p) => p.preDeploy).length,
@@ -190,7 +215,7 @@ export async function computeProjectStatus() {
         pipeline.filter((p) => p.ok).length,
         pipeline.length,
       ),
-      published: pageReady && gate.ok,
+      published: pageReady && fullyReady,
       publishGateOk,
       pipeline,
       gold: pipeline,
@@ -215,6 +240,8 @@ export async function computeProjectStatus() {
     slugs.length * 100,
   );
 
+  const qualityFailed = slugs.filter((s) => !s.qualityOk).length;
+
   return {
     generatedAt: new Date().toISOString(),
     strategy: index.strategy ?? "quality-first",
@@ -223,13 +250,15 @@ export async function computeProjectStatus() {
     publishedCount: published,
     overallGoldPct,
     overallGatePct,
+    qualityFailed,
     slugs,
   };
 }
 
-/** 管理画面: 要対応→公開待ち→非表示→公開済み（公開済みは末尾） */
+/** 管理画面: 品質NGを最優先で要対応に */
 export function sortSlugsForAdminPanel(slugs) {
   const rank = (s) => {
+    if (!s.qualityOk && s.publishState !== "live") return 5;
     if (s.publishState === "live" && !s.adminHidden) return 40;
     if (s.adminHidden) return 30;
     if (s.publishState === "draft") return 20;
@@ -247,6 +276,7 @@ export function sortSlugsForAdminPanel(slugs) {
 
 /** @param {ReturnType<typeof sortSlugsForAdminPanel>[number]} s */
 export function adminSlugFilter(s) {
+  if (!s.qualityOk || (s.qualityBlockerCount ?? 0) > 0) return "action";
   if (s.publishState === "live" && !s.adminHidden) return "live";
   if (s.publishState === "draft") return "draft";
   return "action";
