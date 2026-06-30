@@ -57,6 +57,11 @@ const GLOSSARY = {
   晩婚化: "結婚や出産の年齢が遅くなること",
   国際収支: "国と外国との間のお金のやり取りの総計",
   貿易赤字: "輸入が輸出を上回り、貿易で赤字になる状態",
+  スパイ防止法: "国家の安全や機密を守るため、諜報活動などを罰する法律の議論",
+  国旗損壊罪: "国旗や国歌を損壊・汚損した行為を罰する罪（創設をめぐる法案）",
+  特別職: "内閣総理大臣や大臣など、一般公務員とは別枠の公務員",
+  歳費: "国会議員の報酬として支払われる手当",
+  国家情報: "外交・防衛・経済安保などに関わる機密情報",
 };
 
 /** キーワード → 用語集候補（本文に無くても最低2語を確保） */
@@ -83,6 +88,9 @@ const KEYWORD_GLOSSARY_HINTS = {
   関税: ["関税", "国際収支"],
   内閣: ["内閣", "補正予算"],
   国民民主党: ["国民民主党", "公明党"],
+  スパイ防止法: ["スパイ防止法", "国家情報"],
+  国旗: ["国旗", "国旗損壊罪"],
+  ボーナス: ["ボーナス", "特別職"],
 };
 
 const PROCEDURAL = [
@@ -491,6 +499,16 @@ export function buildNowSummaryBullets(speech, keywords, min = 3, max = 5) {
     else break;
   }
 
+  if (bullets.length < min) {
+    for (const { s } of ranked) {
+      const raw = s.replace(/\s+/g, " ").trim();
+      const line = truncateAt(raw, MAX_NOW_BULLET);
+      if (line.length < 12 || bullets.includes(line)) continue;
+      bullets.push(line.endsWith("。") ? line : `${line}。`);
+      if (bullets.length >= min) break;
+    }
+  }
+
   return bullets.slice(0, max);
 }
 
@@ -527,6 +545,18 @@ export function buildSummaryBullets(speech, keywords, min = 3, max = 7) {
 
     for (const clause of clauses) {
       if (tryAdd(clause) && bullets.length >= max) break;
+    }
+  }
+
+  if (bullets.length < min) {
+    for (const { s } of ranked) {
+      const raw = s.replace(/\s+/g, " ").trim();
+      const line = truncateAt(raw, MAX_SUMMARY_BULLET);
+      const plain = line.endsWith("。") ? line : `${line}。`;
+      if (plain.length < 14 || nowKeys.has(bulletKey(line)) || bullets.includes(plain))
+        continue;
+      bullets.push(plain);
+      if (bullets.length >= min) break;
     }
   }
 
@@ -608,6 +638,12 @@ export function buildArticleLayers(speech, keywords, meta = {}) {
   const updatedAt = new Date().toISOString();
   const nowBullets = buildNowSummaryBullets(speech, keywords);
   const bullets = buildSummaryBullets(speech, keywords);
+  let summaryTexts = bullets.map((b) => b.text);
+  for (const nb of nowBullets) {
+    if (summaryTexts.length >= 3) break;
+    const text = nb.endsWith("。") ? nb : `${nb}。`;
+    if (!summaryTexts.includes(text)) summaryTexts.push(text);
+  }
   const glossary = buildGlossary(speech, keywords);
 
   return {
@@ -617,7 +653,7 @@ export function buildArticleLayers(speech, keywords, meta = {}) {
       disclaimer: AI_DISCLAIMER,
       updatedAt,
     },
-    summaryBullets: bullets.map((b) => b.text),
+    summaryBullets: summaryTexts,
     plainExplanation: buildPlainExplanation(speech, keywords, meta),
     glossary: glossary.slice(0, 4),
   };

@@ -46,9 +46,22 @@ function countVerifiedX(article) {
 }
 
 function isKokkaiContentReady(article) {
+  const bullets = article.nowSummary?.bullets ?? [];
+  const placeholder =
+    bullets.length === 1 && String(bullets[0]).includes("下記の議事録");
+  if (placeholder) return false;
+  const tl = article.timeline ?? [];
+  const dietInTl = tl.filter(
+    (e) =>
+      e.type === "speech" &&
+      e.speech?.speechURL?.includes("kokkai.ndl.go.jp"),
+  );
   return Boolean(
-    article.primarySpeech?.speechFull ||
-      (article.arcSummary?.length >= 2 && article.primarySpeech?.speechURL),
+    article.primarySpeech?.speechFull &&
+    bullets.length >= 3 &&
+    (article.summaryBullets?.length ?? 0) >= 3 &&
+    (article.glossary?.length ?? 0) >= 2 &&
+    dietInTl.length >= 3,
   );
 }
 
@@ -118,7 +131,7 @@ async function enrichKokkai(article) {
 
   article.timeline = [...byDate.entries()]
     .sort(([a], [b]) => b.localeCompare(a))
-    .slice(0, 5)
+    .slice(0, 6)
     .map(([date, { record }], i) => ({
       id: `${slug}-tl-${i}`,
       type: "speech",
@@ -230,14 +243,20 @@ async function main() {
   await writeFile(articlePath, `${JSON.stringify(article, null, 2)}\n`, "utf8");
   console.log("[①] コンテンツ投入完了");
 
+  console.log("[②] メリデメ自動生成");
+  await runNode("generate-proscons-auto.mjs", ["--slug", slug]);
+
   // ③ X
-  const xMin = article.xPostsMinRequired ?? 1;
+  const xMin = article.xPostsMinRequired ?? 3;
   if (countVerifiedX(article) >= xMin) {
     console.log(`[③] X調査スキップ（検証済み ${countVerifiedX(article)} 件）`);
   } else {
     console.log("[③] X調査");
     await runNode("x-research-batch.mjs", [slug]);
   }
+
+  console.log("[③b] タイムライン統合（X3+国会3）");
+  await runNode("enrich-timeline-all.mjs", ["--slug", slug]);
 
   // ④ 法務
   console.log("[④] 法務");

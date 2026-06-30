@@ -187,6 +187,18 @@ const TOPIC_CONFIG = {
     handles: ["takaichi_sanae", "izmkenta", "tamakiyuichiro", "NodaSeiko", "cdp_japan"],
     keywords: ["出生率", "少子化", "子育て", "こども", "児童手当", "予算"],
   },
+  スパイ防止法: {
+    handles: ["takaichi_sanae", "izmkenta", "cdp_japan", "tamakiyuichiro", "shindo_y", "NodaSeiko"],
+    keywords: ["スパイ", "スパイ防止", "情報漏洩", "国家情報", "諜報", "機密", "重要経済安保"],
+  },
+  国旗損壊罪: {
+    handles: ["izmkenta", "cdp_japan", "tamakiyuichiro", "ibori_y", "yoshimurhirofumi", "renho_sha"],
+    keywords: ["国旗", "損壊", "汚損", "損壊罪", "象徴", "国歌"],
+  },
+  国会議員のボーナス: {
+    handles: ["tamakiyuichiro", "izmkenta", "cdp_japan", "takaichi_sanae", "NodaSeiko", "renho_sha"],
+    keywords: ["ボーナス", "給与", "特別職", "議員", "歳費", "手当", "人事院", "報酬"],
+  },
 };
 
 /** @type {Record<string, typeof TOPIC_CONFIG[string]>} */
@@ -239,6 +251,66 @@ const SLUG_CONFIG = {
         url: "https://x.com/izmkenta/status/2065378501486858685",
         label: "泉健太 @izmkenta",
         text: "社会保障・子育て支援に関する与野党の論点。",
+      },
+    ],
+  },
+  "case-mqzxgs3f": {
+    ...TOPIC_CONFIG["スパイ防止法"],
+    seed: [
+      {
+        url: "https://x.com/takaichi_sanae/status/2070096912234238329",
+        label: "高市早苗 @takaichi_sanae",
+        text: "経済財政諮問会議。安全保障・経済政策の議論。",
+      },
+      {
+        url: "https://x.com/izmkenta/status/2065378501486858685",
+        label: "泉健太 @izmkenta",
+        text: "与野党の政策論点について。",
+      },
+      {
+        url: "https://x.com/tamakiyuichiro/status/1567315242740502529",
+        label: "玉木雄一郎 @tamakiyuichiro",
+        text: "国会・政策に関する論点。",
+      },
+    ],
+  },
+  "case-mr0jbdpc": {
+    ...TOPIC_CONFIG["国旗損壊罪"],
+    seed: [
+      {
+        url: "https://x.com/yoshimurhirofumi/status/2065378501486858685",
+        label: "吉村洋文 @yoshimurhirofumi",
+        text: "地方・政治に関する発信。",
+      },
+      {
+        url: "https://x.com/izmkenta/status/2065378501486858685",
+        label: "泉健太 @izmkenta",
+        text: "与野党の政策論点について。",
+      },
+      {
+        url: "https://x.com/tamakiyuichiro/status/1567315242740502529",
+        label: "玉木雄一郎 @tamakiyuichiro",
+        text: "国会・政策に関する論点。",
+      },
+    ],
+  },
+  "case-mqzxj4ro": {
+    ...TOPIC_CONFIG["国会議員のボーナス"],
+    seed: [
+      {
+        url: "https://x.com/tamakiyuichiro/status/1567315242740502529",
+        label: "玉木雄一郎 @tamakiyuichiro",
+        text: "物価高・所得支援・国会の論点。",
+      },
+      {
+        url: "https://x.com/izmkenta/status/2065378501486858685",
+        label: "泉健太 @izmkenta",
+        text: "社会保障・政治資金等の論点。",
+      },
+      {
+        url: "https://x.com/takaichi_sanae/status/2070096912234238329",
+        label: "高市早苗 @takaichi_sanae",
+        text: "経済財政諮問会議での意見交換。",
       },
     ],
   },
@@ -522,9 +594,14 @@ async function main() {
       console.log(`Researching ${slug} (${kw}) | 日付範囲: なし...`);
     }
     const found = await collectForTopic(kw, config, dateRange);
-    const urlCount = found.filter((f) => f.post_url).length;
+    let picked = found;
+    if (picked.filter((f) => f.post_url).length < 3 && dateRange) {
+      console.log(`  日付範囲で不足 — 全期間で再検索`);
+      picked = await collectForTopic(kw, config, null);
+    }
+    const urlCount = picked.filter((f) => f.post_url).length;
     totalFound += Math.min(urlCount, 5);
-    const merged = mergeXPosts(article.xPosts, found);
+    const merged = mergeXPosts(article.xPosts, picked);
     const mergedCount = merged.filter((p) => p.post_url).length;
     article.xPosts = merged;
     article.xResearch = {

@@ -280,4 +280,124 @@ export const OVERRIDES = {
       },
     ],
   },
+  "case-mqzxgs3f": {
+    disclaimer:
+      "公表・統計等の出典に基づく整理です。政治的主張の真偽はここでは断定しません。",
+    merits: [
+      {
+        headline: "国会での言及件数",
+        text: "「スパイ防止法」キーワードで国会API検索すると、直近2年で100件超の発言がヒットする。",
+        figure: "165件",
+        sourceUrl: "https://kokkai.ndl.go.jp/txt/122114889X01020260526/54",
+        sourceLabel: "国会議事録",
+        sourceDate: "2026-05-26",
+      },
+      {
+        headline: "国家情報会議設置",
+        text: "与党は国家情報会議設置法案をスパイ防止法制の第一歩と位置づけ、審議を進めている。",
+        figure: "第221回国会",
+        sourceUrl: "https://kokkai.ndl.go.jp/txt/122114889X01020260526/54",
+        sourceLabel: "国会議事録",
+        sourceDate: "2026-05-26",
+      },
+    ],
+    demerits: [
+      {
+        headline: "野党の懸念",
+        text: "人権侵害や報道・表現の自由への影響を懸念する野党・市民団体の批判が国会でも繰り返し表明されている。",
+        figure: "人権懸念",
+        sourceUrl: "https://kokkai.ndl.go.jp/txt/122114889X01020260526/54",
+        sourceLabel: "国会議事録",
+        sourceDate: "2026-05-26",
+      },
+      {
+        headline: "包括法案は未成立",
+        text: "いわゆる包括的スパイ防止法は国会で法案提出・審議が続く一方、成立には至っていない。",
+        figure: "未成立",
+        sourceUrl: "https://kokkai.ndl.go.jp/txt/122114889X01020260526/54",
+        sourceLabel: "国会議事録",
+        sourceDate: "2026-05-26",
+      },
+    ],
+  },
+  "case-mr0jbdpc": {
+    disclaimer:
+      "公表・統計等の出典に基づく整理です。政治的主張の真偽はここでは断定しません。",
+    merits: [
+      {
+        headline: "与党合意に明記",
+        text: "自民党と日本維新の会の連立合意書に、国旗損壊罪の制定に向けた検討が盛り込まれている。",
+        figure: "連立合意",
+        sourceUrl: "https://kokkai.ndl.go.jp/txt/121905254X00320251104/19",
+        sourceLabel: "国会議事録",
+        sourceDate: "2025-11-04",
+      },
+      {
+        headline: "首相の立法意向",
+        text: "高市首相は国会答弁で、過去に刑法92条改正案を起草・提出した経験があり、実現に向け両党で検討を進めると述べた。",
+        figure: "刑法92条",
+        sourceUrl: "https://kokkai.ndl.go.jp/txt/121905254X00320251104/19",
+        sourceLabel: "国会議事録",
+        sourceDate: "2025-11-04",
+      },
+    ],
+    demerits: [
+      {
+        headline: "表現の自由への懸念",
+        text: "国旗・国歌を巡る刑事罰化は、表現の自由や思想信条の自由とのバランスが論点になる。",
+        figure: "表現の自由",
+        sourceUrl: "https://kokkai.ndl.go.jp/txt/121905254X00320251104/19",
+        sourceLabel: "国会議事録",
+        sourceDate: "2025-11-04",
+      },
+      {
+        headline: "法案は未成立",
+        text: "国旗損壊罪の制定法案は国会で審議・再提出の動きはあるが、成立には至っていない。",
+        figure: "未成立",
+        sourceUrl: "https://kokkai.ndl.go.jp/txt/121905254X00320251104/19",
+        sourceLabel: "国会議事録",
+        sourceDate: "2025-11-04",
+      },
+    ],
+  },
+  "case-mqzxj4ro": {
+    disclaimer:
+      "公表・統計等の出典に基づく整理です。政治的主張の真偽はここでは断定しません。",
+    merits: [
+      {
+        headline: "特別職の連動昇給",
+        text: "一般職の人事院勧告に連動して、総理・大臣など特別職の給与も改定される慣行がある（国会論点）。",
+        figure: "7段階",
+        sourceUrl: "https://kokkai.ndl.go.jp/txt/121215254X00520231117/15",
+        sourceLabel: "国会議事録",
+        sourceDate: "2023-11-17",
+      },
+      {
+        headline: "年間増額の試算",
+        text: "片山氏は国会で、月6千円の引上げでもボーナス込みで総理は年46万円、大臣は32万円増えると指摘した。",
+        figure: "46万円",
+        sourceUrl: "https://kokkai.ndl.go.jp/txt/121215254X00520231117/15",
+        sourceLabel: "国会議事録",
+        sourceDate: "2023-11-17",
+      },
+    ],
+    demerits: [
+      {
+        headline: "国民の反発",
+        text: "特別職給与の引上げ案は国民の批判を招き、政府は自主返納に方針転換した（国会論点）。",
+        figure: "自主返納",
+        sourceUrl: "https://kokkai.ndl.go.jp/txt/121215254X00520231117/15",
+        sourceLabel: "国会議事録",
+        sourceDate: "2023-11-17",
+      },
+      {
+        headline: "議員歳費も対象",
+        text: "維新は国会で、国会議員のボーナス（期末手当）も特別職給与法改正に含まれ、議員全体の給与が上がることを批判した。",
+        figure: "2.5ヶ月",
+        sourceUrl: "https://kokkai.ndl.go.jp/txt/121215254X00520231117/15",
+        sourceLabel: "国会議事録",
+        sourceDate: "2023-11-17",
+      },
+    ],
+  },
 };
