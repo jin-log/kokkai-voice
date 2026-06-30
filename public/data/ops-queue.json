@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-27T14:00:00.000Z",
+  "generatedAt": "2026-06-30T01:00:00.000Z",
   "generatedBy": "ceo",
   "dayLabel": "2026-06-27（土）",
   "ownerDailyCap": 7,
@@ -247,6 +247,70 @@
       },
       "links": [
         { "label": "アップロード手順", "href": "/docs/youtube-api-setup.md" }
+      ],
+      "done": false
+    },
+    {
+      "id": "ceo-kv-bundle-supai-kokki",
+      "project": "kokkai-voice",
+      "title": "発信パック — スパイ防止法＋国旗損壊罪（記事→Shorts→SNS）",
+      "assignee": "ceo",
+      "horizon": "weekly",
+      "priority": 0,
+      "score": 880,
+      "etaMin": 240,
+      "tags": ["記事", "Shorts", "PR", "バンドル"],
+      "content": {
+        "summary": "2本を動画・SNSの柱にする。記事を正本に short:generate → 公開と同週にX告知。争点系は1日1本・投稿は3〜7日空け。",
+        "articles": [
+          {
+            "slug": "supai-boshi-ho",
+            "keyword": "スパイ防止法",
+            "title": "【スパイ防止法】進まない理由",
+            "shortsHook": "スパイ防止法、なぜ国会で止まる？"
+          },
+          {
+            "slug": "kokki-sonkai",
+            "keyword": "国旗損壊罪",
+            "title": "【国旗損壊罪】見送りが続く背景",
+            "shortsHook": "国旗損壊罪、なぜ法案が通らない？"
+          }
+        ],
+        "steps": [
+          "① supai-boshi-ho — 管理画面生成 → X調査 → policy-matrix → 法務 → publishReady → deploy",
+          "② short:generate -- --slug supai-boshi-ho → short:upload-pack → owner Studioアップ",
+          "③ X告知（記事URL＋Shorts）・固定コメントピン留め",
+          "3〜7日空け",
+          "④ kokki-sonkai — 同上パイプライン（現行法→法案→見送り理由を必須構成）",
+          "⑤ short:generate -- --slug kokki-sonkai → Studio → X告知"
+        ]
+      },
+      "links": [
+        { "label": "管理・生成", "href": "https://seiji1192.site/dev/status/" },
+        { "label": "Shorts手順", "href": "/docs/shorts-pipeline.md" },
+        { "label": "1本目文案", "href": "/output/shorts/shussho-budget-seika/youtube-upload.txt" }
+      ],
+      "done": false
+    },
+    {
+      "id": "owner-kv-supai-kokki-shorts",
+      "project": "kokkai-voice",
+      "title": "YouTube 3〜4本目 — スパイ防止法・国旗損壊罪 Shorts",
+      "assignee": "owner",
+      "horizon": "weekly",
+      "priority": 1,
+      "score": 750,
+      "etaMin": 30,
+      "tags": ["Shorts", "Studio手動"],
+      "content": {
+        "summary": "CEOが output/shorts/{slug}/ を出したら Studio で非公開確認→公開。各本 youtube-upload.txt の固定コメントをピン留め。",
+        "steps": [
+          "supai-boshi-ho → 公開 → 固定コメント",
+          "3〜7日後 kokki-sonkai → 同上"
+        ]
+      },
+      "links": [
+        { "label": "Studio", "href": "https://studio.youtube.com/" }
       ],
       "done": false
     },

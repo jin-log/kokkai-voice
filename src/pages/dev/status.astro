@@ -80,8 +80,11 @@ function formatJa(iso) {
             </section>
 
             <section class="dev-deploy" aria-label="サイト反映">
-              <h2>🚀 サイトを反映</h2>
-              <p class="dev-deploy__note">main の最新（プレビューページ含む）を Cloudflare にデプロイします。記事完成直後のプレビュー表示にも使います。</p>
+              <h2>🚀 サイトを反映（管理画面の同期）</h2>
+              <p class="dev-deploy__note">
+                記事JSONの変更を管理画面・プレビューに反映します。<strong>一般ユーザーへの公開ではありません</strong>（公開は各案件の「🌍 公開する」）。
+                生成スタート後は通常、自動でここまで走ります（手動は取りこぼし用）。
+              </p>
               <button type="button" id="deploy-all" class="dev-deploy__btn dev-deploy__btn--primary">全体を本番に反映</button>
               <div id="deploy-all-status" class="dev-deploy__status" style="display:none"></div>
             </section>

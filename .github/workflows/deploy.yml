@@ -17,7 +17,14 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    if: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+    # push: 人間のコミット用。bot の git push は GITHUB_TOKEN 制限で push 連動しない。
+    # workflow_run: 記事作成はゲート未達でも data/ は push 済み → 管理画面更新のため deploy する。
+    if: >-
+      ${{ github.event_name == 'push'
+      || github.event_name == 'workflow_dispatch'
+      || github.event.workflow_run.conclusion == 'success'
+      || (github.event.workflow_run.conclusion == 'failure'
+          && github.event.workflow_run.name == '新規記事作成') }}
     permissions:
       contents: read
       deployments: write
