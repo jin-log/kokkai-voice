@@ -32,12 +32,21 @@ export function kokkaiKeywordCandidates(keyword) {
     push(stripDecor(m[1]));
   }
 
-  for (const suf of ["法案", "法", "の状況", "について", "問題"]) {
+  for (const suf of ["改正案", "法案", "の状況", "について", "問題", "法", "案"]) {
     const snapshot = [...out];
     for (const base of snapshot) {
       if (base.endsWith(suf) && base.length > suf.length + 2) {
         push(base.slice(0, -suf.length));
       }
+    }
+  }
+
+  // 「国会議員のボーナス」→「国会議員」「ボーナス」
+  for (const base of [...out]) {
+    const m = base.match(/^(.+?)の([^の]{2,})$/);
+    if (m) {
+      push(m[1].trim());
+      push(m[2].trim());
     }
   }
 

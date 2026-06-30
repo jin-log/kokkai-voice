@@ -287,14 +287,32 @@ function isUsableSpeech(r) {
   return true;
 }
 
-/** @param {string} keyword */
-export async function probeKokkai(keyword) {
+/** @param {string} keyword @param {string} [title] */
+function collectKokkaiKeywordCandidates(keyword, title = "") {
+  /** @type {string[]} */
+  const out = [];
+  const seen = new Set();
+  const push = (k) => {
+    const t = String(k ?? "").trim();
+    if (!t || t.length < 2 || seen.has(t)) return;
+    seen.add(t);
+    out.push(t);
+  };
+  for (const src of [keyword, title]) {
+    if (!src?.trim()) continue;
+    for (const c of kokkaiKeywordCandidates(src)) push(c);
+  }
+  return out;
+}
+
+/** @param {string} keyword @param {string} [title] */
+export async function probeKokkai(keyword, title = "") {
   const from = "2023-01-01";
   const until = new Date().toISOString().slice(0, 10);
   /** @type {{ ok: false, hits: number, reason: string } | null} */
   let lastFail = null;
 
-  for (const kw of kokkaiKeywordCandidates(keyword)) {
+  for (const kw of collectKokkaiKeywordCandidates(keyword, title)) {
     const q = new URLSearchParams({
       recordPacking: "json",
       any: kw,
@@ -354,7 +372,7 @@ export async function prepareArticleCreate(input) {
   const preferGeneral = shouldPreferGeneral(keyword, title);
 
   if (!preferGeneral) {
-    const kokkai = await probeKokkai(keyword);
+    const kokkai = await probeKokkai(keyword, title);
     if (kokkai.ok) {
       return {
         ok: true,
@@ -377,7 +395,7 @@ export async function prepareArticleCreate(input) {
   });
 
   if (candidates.length === 0 && !preferGeneral) {
-    const kokkai = await probeKokkai(keyword);
+    const kokkai = await probeKokkai(keyword, title);
     if (kokkai.ok) {
       return {
         ok: true,
@@ -393,10 +411,11 @@ export async function prepareArticleCreate(input) {
   }
 
   if (candidates.length === 0) {
+    const tried = collectKokkaiKeywordCandidates(keyword, title).slice(0, 4).join("」「");
     return {
       ok: false,
       error:
-        "報道・公開ソースを自動で見つけられませんでした。\nキーワードを短くするか、しばらく待ってから再試行してください。",
+        `報道・公開ソースを自動で見つけられませんでした。\n国会議事録もヒットしませんでした（試行: 「${tried}」など）。\nキーワードを短くするか、しばらく待ってから再試行してください。`,
       category,
     };
   }

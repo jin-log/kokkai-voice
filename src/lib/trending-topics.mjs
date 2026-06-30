@@ -25,6 +25,11 @@ export const TRENDING_PATH = path.join(root, "data/trending-topics.json");
 const TOPICS_PATH = path.join(root, "data/topics.json");
 
 const GOOGLE_TRENDS_RSS = "https://trends.google.com/trending/rss?geo=JP";
+const YAHOO_FEEDS = [
+  { url: "https://news.yahoo.co.jp/rss/topics/domestic.xml", label: "yahoo-domestic" },
+  { url: "https://news.yahoo.co.jp/rss/topics/top-picks.xml", label: "yahoo-top" },
+];
+/** NHKは政治・社会・総合の3本で十分 */
 const NHK_FEEDS = [
   { url: "https://www3.nhk.or.jp/rss/news/cat4.xml", label: "nhk-politics" },
   { url: "https://www3.nhk.or.jp/rss/news/cat1.xml", label: "nhk-society" },
@@ -39,6 +44,7 @@ const POLITICAL_HINTS = [
   "年金", "防衛", "憲法", "外交", "選挙", "知事", "都知事", "リコール", "政治",
   "議員", "党", "自民", "立憲", "維新", "公明", "共産", "参政", "国民民主",
   "物価", "賃金", "少子化", "移民", "外国人", "補正", "解散", "閣議", "会見",
+  "皇室", "典範", "スパイ", "ボーナス", "給与", "閣議決定",
   "判決", "告発", "献金", "裏金", "万博", "IR", "カジノ", "関税", "トランプ",
 ];
 
@@ -214,6 +220,8 @@ export function enrichTrendItems(items, articles) {
       score:
         trafficScore(item.traffic)
         + (political ? 500 : 0)
+        + (item.source === "yahoo-domestic" ? 480 : 0)
+        + (item.source === "yahoo-top" ? 420 : 0)
         + (item.source === "nhk-politics" ? 400 : 0)
         + (item.source === "nhk-society" ? 200 : 0),
     };
@@ -247,6 +255,19 @@ export async function fetchTrendingTopics(opts = {}) {
     if (res.ok) raw.push(...parseGoogleTrendsRss(await res.text()));
   } catch (e) {
     console.warn("[trends] Google Trends:", e instanceof Error ? e.message : e);
+  }
+
+  try {
+    for (const feed of YAHOO_FEEDS) {
+      const res = await fetch(feed.url, {
+        headers: { "User-Agent": "kokkai-voice-trends/1.0" },
+      });
+      if (res.ok) {
+        raw.push(...parseNhkRss(await res.text(), feed.label).slice(0, 30));
+      }
+    }
+  } catch (e) {
+    console.warn("[trends] Yahoo:", e instanceof Error ? e.message : e);
   }
 
   try {
@@ -301,8 +322,13 @@ export async function fetchTrendingTopics(opts = {}) {
     .sort((a, b) => b.score - a.score);
 
   const rising = enriched
-    .filter((t) => t.source === "google-trends" && trafficScore(t.traffic) >= 500)
-    .sort((a, b) => trafficScore(b.traffic) - trafficScore(a.traffic));
+    .filter(
+      (t) =>
+        (t.source === "google-trends" && trafficScore(t.traffic) >= 500)
+        || t.source === "yahoo-domestic"
+        || t.source === "yahoo-top",
+    )
+    .sort((a, b) => b.score - a.score);
 
   const evergreen = seeds.map((s) => {
     const article = articles.find((a) => a.slug === s.slug);
