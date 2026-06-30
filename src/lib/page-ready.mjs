@@ -8,6 +8,7 @@ import { fileURLToPath } from "node:url";
 import { isPhaseAPublish } from "./diet-pending.mjs";
 import { countTopicBullets, isTitleReady, countTopicArcLines, countTopicDietTimeline, isMatrixTopicRelevant, isConclusionQuality, textStronglyMatchesTopic } from "./topic-relevance.mjs";
 import { isDietVoice, bulletsDistinctFrom, isSpeechFragment } from "./diet-voice.mjs";
+import { isValidSymbol } from "./symbol-rules.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 export const root = path.join(__dirname, "../..");
@@ -39,7 +40,7 @@ export const CHECK_LABELS = {
   G2_policy_matrix_file: { label: "公言と行動ファイル", todo: "policy-matrix JSON を作成" },
   G3_parties_min: { label: "政党数", todo: "2党以上を登録" },
   G4_parties_source: { label: "党の出典URL", todo: "各党に sourceUrl" },
-  G5_parties_symbol: { label: "◎▲❌", todo: "各党の記号を確定" },
+  G5_parties_symbol: { label: "◎〇▲×", todo: "各党の記号を確定（v2）" },
   G6_matrix_topic: { label: "〇×の話題", todo: "公言と行動が案件キーワードと一致（2党）" },
   H1_xPosts: { label: "X投稿", todo: "検証済みX URLを1件以上" },
   H2_x_topic: { label: "Xの話題", todo: "X投稿本文が案件キーワードと一致" },
@@ -182,7 +183,7 @@ export function checkCasePage(article, opts = {}) {
   let parties = policyMatrix?.parties ?? [];
   const hasMatrixRef = Boolean(sm);
   const withSource = parties.filter((p) => p.stance?.sourceUrl);
-  const withSymbol = parties.filter((p) => p.symbol && p.symbol !== "？");
+  const withSymbol = parties.filter((p) => p.symbol && isValidSymbol(p.symbol) && p.symbol !== "？");
 
   add("G1_stanceMatrix_ref", hasMatrixRef, hasMatrixRef ? "stanceMatrix あり" : "stanceMatrix なし");
   add(

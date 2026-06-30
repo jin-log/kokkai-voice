@@ -1,13 +1,10 @@
 /** Shared helpers — patterns from scripts/generate-case-pages.mjs */
 import { citizenTitle } from "./title-format.mjs";
+import { SYMBOL_LEGEND, symbolTone, isValidSymbol, normalizeSymbol } from "./symbol-rules.mjs";
+
+export { SYMBOL_LEGEND, symbolTone, isValidSymbol, normalizeSymbol };
 
 export const ASSET_V = "20260630b";
-
-export const SYMBOL_LEGEND = [
-  { sym: "○", label: "公言通り実施済み（完了）" },
-  { sym: "▲", label: "方向一致で動いている（進行中）" },
-  { sym: "×", label: "方向が違う、または動きがない" },
-];
 
 export function formatDate(iso) {
   if (!iso) return "";
@@ -28,13 +25,6 @@ export function reactionNums(article) {
     neutralPct: Math.round((neutral / total) * 100),
     badPct: Math.round((bad / total) * 100),
   };
-}
-
-export function symbolTone(sym) {
-  if (sym === "○") return "match";
-  if (sym === "▲") return "partial";
-  if (sym === "×") return "mismatch";
-  return "mismatch";
 }
 
 export function articlePolicyTitle(article, matrix) {
