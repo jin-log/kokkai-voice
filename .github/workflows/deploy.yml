@@ -3,6 +3,8 @@ name: Deploy to Cloudflare Pages
 on:
   push:
     branches: [main]
+  schedule:
+    - cron: "*/30 * * * *"
   workflow_run:
     workflows: ["新規記事作成", "記事を本番反映", "記事管理", "品質巡回（サーバー）"]
     types: [completed]
@@ -22,6 +24,7 @@ jobs:
     if: >-
       ${{ github.event_name == 'push'
       || github.event_name == 'workflow_dispatch'
+      || github.event_name == 'schedule'
       || github.event.workflow_run.conclusion == 'success'
       || (github.event.workflow_run.conclusion == 'failure'
           && github.event.workflow_run.name == '新規記事作成') }}

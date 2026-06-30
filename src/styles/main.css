@@ -2713,6 +2713,25 @@ body.has-progress-strip {
 .status-hero__stats .is-up { color: #15803d; }
 .status-hero__stats .is-down { color: #b91c1c; }
 
+.status-hero__live {
+  grid-column: 1 / -1;
+  margin: -0.5rem 0 0;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #15803d;
+  letter-spacing: 0.02em;
+}
+
+.status-hero__num.is-bump {
+  animation: status-pct-bump 0.55s ease;
+}
+
+@keyframes status-pct-bump {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.12); color: var(--color-primary); }
+  100% { transform: scale(1); }
+}
+
 .status-slugs h2,
 .status-legend h2 {
   font-size: 1.1rem;

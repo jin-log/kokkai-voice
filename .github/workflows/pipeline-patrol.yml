@@ -40,9 +40,11 @@ jobs:
             OFFSET=$(( ${{ github.run_number }} * 8 % 40 ))
             node scripts/pipeline-patrol.mjs --once --batch 8 --rounds 3 --skip debugger --batch-offset "$OFFSET"
 
-      - name: 変更があればコミット
+      - name: 完成度を更新してpush
         id: commit
         run: |
+          node scripts/update-project-status.mjs --quiet
+          node scripts/sync-agent-tasks.mjs
           git config user.email "bot@seiji1192.site"
           git config user.name "kokkai-bot"
           git add data/articles data/policy-matrix data/agent-tasks.json data/project-status.json
@@ -55,7 +57,7 @@ jobs:
           git push
           echo "committed=true" >> "$GITHUB_OUTPUT"
 
-      - name: 本番デプロイ起動（bot push は deploy 連動しないため）
+      - name: 本番デプロイ起動（記事HTML同期）
         if: steps.commit.outputs.committed == 'true'
         uses: actions/github-script@v7
         with:

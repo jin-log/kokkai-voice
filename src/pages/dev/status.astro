@@ -32,7 +32,7 @@ function formatJa(iso) {
       <h1 class="status-page__title">サイト完成度</h1>
       <p class="status-page__lead">
         active {status?.activeCount ?? 0} 件を <strong>100%完成</strong> まで仕上げてから次を増やす方針です。
-        数値はビルド・デプロイの直前に自動更新されます。
+        完成度は <strong>30秒ごとにライブ更新</strong>（巡回の進捗をそのまま反映。デプロイ待ち不要）。
       </p>
 
       <!-- 新規記事作成UI -->
@@ -51,23 +51,24 @@ function formatJa(iso) {
         status ? (
           <>
             <section class="status-hero" aria-label="全体">
-              <div class="status-hero__ring" style={`--pct: ${status.overallGoldPct}`}>
-                <span class="status-hero__num">{status.overallGoldPct}%</span>
+              <div class="status-hero__ring" id="status-hero-ring" style={`--pct: ${status.overallGoldPct}`}>
+                <span class="status-hero__num" id="status-hero-pct">{status.overallGoldPct}%</span>
                 <span class="status-hero__sub">100%完成</span>
               </div>
+              <p class="status-hero__live" id="status-live-badge" hidden aria-live="polite">● ライブ更新中</p>
               <dl class="status-hero__stats">
-                <div><dt>一般公開</dt><dd>{status.publishedCount} / {status.activeCount} 件</dd></div>
-                <div><dt>保留（parked）</dt><dd>{status.parkedCount} 件</dd></div>
-                <div><dt>ゲート達成率</dt><dd>{status.overallGatePct}%</dd></div>
-                <div><dt>最終更新</dt><dd>{formatJa(status.generatedAt)}</dd></div>
-                {status.deltaGoldPct != null && status.deltaGoldPct !== 0 && (
-                  <div>
-                    <dt>前回比</dt>
-                    <dd class={status.deltaGoldPct > 0 ? "is-up" : "is-down"}>
-                      {status.deltaGoldPct > 0 ? "+" : ""}{status.deltaGoldPct}%
-                    </dd>
-                  </div>
-                )}
+                <div><dt>一般公開</dt><dd id="stat-published">{status.publishedCount} / {status.activeCount} 件</dd></div>
+                <div><dt>保留（parked）</dt><dd id="stat-parked">{status.parkedCount} 件</dd></div>
+                <div><dt>ゲート達成率</dt><dd id="stat-gate">{status.overallGatePct}%</dd></div>
+                <div><dt>最終更新</dt><dd id="stat-updated">{formatJa(status.generatedAt)}</dd></div>
+                <div id="stat-delta-wrap" hidden={status.deltaGoldPct == null || status.deltaGoldPct === 0}>
+                  <dt>前回比</dt>
+                  <dd id="stat-delta" class={status.deltaGoldPct > 0 ? "is-up" : "is-down"}>
+                    {status.deltaGoldPct != null && status.deltaGoldPct !== 0
+                      ? `${status.deltaGoldPct > 0 ? "+" : ""}${status.deltaGoldPct}%`
+                      : "—"}
+                  </dd>
+                </div>
               </dl>
             </section>
 
@@ -326,6 +327,7 @@ function hide(id) { document.getElementById(id).style.display = "none"; }
 
 if (localStorage.getItem(KEY) === PIN) {
   show("dev-gate");
+  startLiveStatusPoll();
 } else {
   show("dev-lock");
   document.getElementById("pin-submit").addEventListener("click", () => {
@@ -334,6 +336,7 @@ if (localStorage.getItem(KEY) === PIN) {
       localStorage.setItem(KEY, PIN);
       hide("dev-lock");
       show("dev-gate");
+      startLiveStatusPoll();
     } else {
       document.getElementById("pin-error").style.display = "block";
     }
@@ -476,6 +479,75 @@ document.getElementById("new-generate").addEventListener("click", async () => {
     btn.disabled = false;
   }
 });
+
+async function refreshLiveStatus() {
+  const pin = getPin();
+  if (!pin) return;
+  const badge = document.getElementById("status-live-badge");
+  try {
+    const res = await fetch(`/api/project-status?pin=${encodeURIComponent(pin)}&t=${Date.now()}`);
+    const data = await res.json();
+    if (!res.ok || !data.ok || !data.status) return;
+    applyLiveStatus(data.status);
+    if (badge) badge.hidden = false;
+  } catch {
+    /* 次回リトライ */
+  }
+}
+
+function applyLiveStatus(st) {
+  const ring = document.getElementById("status-hero-ring");
+  const pctEl = document.getElementById("status-hero-pct");
+  const prev = pctEl ? Number.parseInt(pctEl.textContent, 10) : null;
+  const next = st.overallGoldPct ?? 0;
+
+  if (ring) ring.style.setProperty("--pct", String(next));
+  if (pctEl) pctEl.textContent = `${next}%`;
+  if (pctEl && prev !== null && prev !== next) {
+    pctEl.classList.add("is-bump");
+    setTimeout(() => pctEl.classList.remove("is-bump"), 600);
+  }
+
+  const pub = document.getElementById("stat-published");
+  if (pub) pub.textContent = `${st.publishedCount} / ${st.activeCount} 件`;
+  const parked = document.getElementById("stat-parked");
+  if (parked) parked.textContent = `${st.parkedCount} 件`;
+  const gate = document.getElementById("stat-gate");
+  if (gate) gate.textContent = `${st.overallGatePct}%`;
+  const updated = document.getElementById("stat-updated");
+  if (updated && st.generatedAt) {
+    updated.textContent = new Date(st.generatedAt).toLocaleString("ja-JP");
+  }
+
+  const deltaWrap = document.getElementById("stat-delta-wrap");
+  const deltaEl = document.getElementById("stat-delta");
+  if (deltaWrap && deltaEl && st.deltaGoldPct != null && st.deltaGoldPct !== 0) {
+    deltaWrap.hidden = false;
+    deltaEl.className = st.deltaGoldPct > 0 ? "is-up" : "is-down";
+    deltaEl.textContent = `${st.deltaGoldPct > 0 ? "+" : ""}${st.deltaGoldPct}%`;
+  }
+
+  for (const s of st.slugs ?? []) {
+    const card = document.querySelector(`.status-card[data-slug="${s.slug}"]`);
+    if (!card) continue;
+    const cardPct = card.querySelector(".status-card__pct");
+    if (cardPct) cardPct.textContent = `${s.goldPct}%`;
+    const fill = card.querySelector(".status-card__bar > span");
+    if (fill) fill.style.width = `${s.goldPct}%`;
+    const bar = card.querySelector(".status-card__bar");
+    if (bar) bar.setAttribute("aria-valuenow", String(s.goldPct));
+  }
+}
+
+let liveStatusTimer = null;
+function startLiveStatusPoll() {
+  if (liveStatusTimer) return;
+  refreshLiveStatus();
+  refreshBufferStatus();
+  initAdminPager();
+  liveStatusTimer = setInterval(refreshLiveStatus, 30000);
+  setInterval(refreshBufferStatus, 15000);
+}
 
 async function refreshBufferStatus() {
   const pin = getPin();
@@ -630,12 +702,6 @@ function renderAdminPage() {
   }
   const wrap = document.getElementById("admin-cards");
   if (wrap) wrap.dataset.filterMode = adminFilter;
-}
-
-if (localStorage.getItem(KEY) === PIN) {
-  refreshBufferStatus();
-  initAdminPager();
-  setInterval(refreshBufferStatus, 15000);
 }
 
 document.querySelectorAll(".save-title-btn").forEach((btn) => {

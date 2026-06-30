@@ -36,3 +36,9 @@ alwaysApply: true
 ## CEO の責務
 
 巡回停止を検知したら **人間に聞かず** 再起動・原因ログを残す。オーナーに「止まってました」と報告して終わりにしない。
+
+## 管理画面の完成度
+
+- **デプロイ待ちで％を止めない**
+- `/dev/status/` は **30秒ごと** `/api/project-status` で GitHub main の `data/project-status.json` を取得してライブ反映
+- 巡回は毎サイクル `project-status.json` を更新して push する
