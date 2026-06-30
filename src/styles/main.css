@@ -3099,6 +3099,118 @@ body.has-progress-strip {
   font-size: 0.78rem;
   color: var(--color-text-muted);
 }
+
+/* 自動化ログ（提案UI） */
+.automation-page__lead { margin: 0 0 1rem; font-size: 0.92rem; line-height: 1.6; max-width: 42rem; }
+.automation-proposal-banner {
+  margin-bottom: 1.25rem;
+  padding: 0.85rem 1rem;
+  border: 1px dashed var(--color-primary);
+  border-radius: 0.65rem;
+  background: #eff6ff;
+  font-size: 0.88rem;
+}
+.automation-proposal-banner ul { margin: 0.5rem 0 0; padding-left: 1.2rem; }
+.automation-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(7rem, 1fr));
+  gap: 0.65rem;
+  margin-bottom: 1.25rem;
+}
+.automation-stat {
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--color-border);
+  text-align: center;
+}
+.automation-stat.is-ok { background: #f0fdf4; border-color: #86efac; }
+.automation-stat.is-warn { background: #fffbeb; border-color: #fcd34d; }
+.automation-stat.is-fail { background: #fef2f2; border-color: #fca5a5; }
+.automation-stat__n { display: block; font-size: 1.5rem; font-weight: 800; }
+.automation-stat__n--sm { font-size: 0.78rem; font-weight: 600; }
+.automation-stat__l { font-size: 0.75rem; color: var(--color-text-muted); }
+.automation-filter { display: flex; gap: 0.35rem; margin-bottom: 0.75rem; flex-wrap: wrap; }
+.automation-filter__btn {
+  padding: 0.35rem 0.75rem;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  background: var(--color-surface);
+  font-size: 0.82rem;
+  cursor: pointer;
+}
+.automation-filter__btn.is-active { background: var(--color-primary); color: #fff; border-color: var(--color-primary); }
+.automation-job-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.75rem; }
+.automation-job {
+  border: 1px solid var(--color-border);
+  border-radius: 0.65rem;
+  padding: 0.85rem 1rem;
+  background: var(--color-surface);
+}
+.automation-job.is-ok { border-left: 4px solid #22c55e; }
+.automation-job.is-warn { border-left: 4px solid #f59e0b; }
+.automation-job.is-fail { border-left: 4px solid #ef4444; }
+.automation-job.is-skip { border-left: 4px solid #9ca3af; }
+.automation-job__head { display: flex; gap: 0.65rem; align-items: flex-start; }
+.automation-job__icon {
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.35rem;
+  background: #f3f4f6;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.automation-job__title { margin: 0; font-size: 1rem; }
+.automation-job__trigger { margin: 0.15rem 0 0; font-size: 0.8rem; color: var(--color-text-muted); }
+.automation-job__badge {
+  margin-left: auto;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.2rem 0.5rem;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.automation-job__badge.is-ok { background: #dcfce7; color: #166534; }
+.automation-job__badge.is-warn { background: #fef3c7; color: #92400e; }
+.automation-job__badge.is-fail { background: #fee2e2; color: #991b1b; }
+.automation-job__badge.is-skip { background: #f3f4f6; color: #4b5563; }
+.automation-job__meta {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
+  gap: 0.35rem 1rem;
+  margin: 0.65rem 0 0;
+  font-size: 0.82rem;
+}
+.automation-job__meta dt { color: var(--color-text-muted); font-weight: 600; }
+.automation-job__meta dd { margin: 0; }
+.automation-job__fixes { margin: 0.5rem 0 0; padding-left: 1.2rem; font-size: 0.82rem; color: #991b1b; }
+.automation-job__links { margin: 0.5rem 0 0; font-size: 0.85rem; }
+.automation-timeline__table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+.automation-timeline__table th,
+.automation-timeline__table td {
+  border: 1px solid var(--color-border);
+  padding: 0.45rem 0.6rem;
+  text-align: left;
+}
+.automation-timeline__table th { background: #f9fafb; }
+.automation-ia__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+@media (max-width: 640px) { .automation-ia__grid { grid-template-columns: 1fr; } }
+.automation-ia__col {
+  padding: 0.85rem;
+  border: 1px solid var(--color-border);
+  border-radius: 0.5rem;
+  font-size: 0.88rem;
+}
+.automation-ia__col--proposed { border-color: var(--color-primary); background: #f8fafc; }
+.automation-ia__col h3 { margin: 0 0 0.5rem; font-size: 0.95rem; }
+.automation-ia__col ul { margin: 0; padding-left: 1.2rem; }
+
 .status-legend__states { font-size: 0.88rem; line-height: 1.7; padding-left: 1.2rem; }
 .status-card__title-edit {
   display: flex;

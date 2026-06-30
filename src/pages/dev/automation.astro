@@ -1,0 +1,268 @@
+---
+/**
+ * 自動化ログ — UI提案サンプル（静的モック）
+ * 本番実装時: data/automation-log.json + GitHub Actions / deploy 連携
+ */
+import BaseLayout from "../../layouts/DevLayout.astro";
+import DevHeader from "../../components/DevHeader.astro";
+import SiteFooter from "../../components/SiteFooter.astro";
+
+const generatedAt = "2026-06-30T08:00:00+09:00";
+
+/** @type {const} */
+const SAMPLE = {
+  summary: { ok: 2, warn: 3, fail: 1, skip: 0 },
+  jobs: [
+    {
+      id: "bing-indexnow",
+      label: "Bing / IndexNow",
+      icon: "🔍",
+      trigger: "deploy 完了時",
+      status: "ok",
+      statusLabel: "正常",
+      lastRun: "2026-06-30 07:12",
+      lastDetail: "IndexNow 26 URL · Bing sitemap ping OK",
+      target: "直近 deploy 全公開URL",
+      script: "notify-search-engines.mjs --live",
+      logHref: "https://github.com/jin-log/kokkai-voice/actions",
+    },
+    {
+      id: "google-indexing",
+      label: "Google Indexing API",
+      icon: "🔍",
+      trigger: "deploy 完了時",
+      status: "ok",
+      statusLabel: "正常",
+      lastRun: "2026-06-30 07:12",
+      lastDetail: "26/26 件 submitted",
+      target: "公開中 /case/*",
+      script: "notify-search-engines.mjs --live",
+      logHref: "https://github.com/jin-log/kokkai-voice/actions",
+    },
+    {
+      id: "x-buffer",
+      label: "X 投稿（Buffer）",
+      icon: "𝕏",
+      trigger: "deploy 完了時（新規公開24h以内）",
+      status: "fail",
+      statusLabel: "未設定",
+      lastRun: "—",
+      lastDetail: "BUFFER_API_KEY 未設定 → スキップ",
+      target: "記事公開ごと",
+      script: "post-to-buffer.mjs --recent 1",
+      logHref: "/dev/status/#buffer-panel",
+      fixSteps: ["GitHub Secret: BUFFER_API_KEY", "docs/buffer-setup.md"],
+    },
+    {
+      id: "hatena",
+      label: "はてなブックマーク",
+      icon: "は",
+      trigger: "記事公開時（未連動）",
+      status: "warn",
+      statusLabel: "手動のみ",
+      lastRun: "—",
+      lastDetail: "Playwright 脚本あり・deploy 未配線",
+      target: "公開案件ごと",
+      script: "post-hatena-bookmarks.mjs",
+      logHref: "/dev/hatena/",
+      fixSteps: ["publish 後に deploy 連動 or 管理画面から実行"],
+    },
+    {
+      id: "note",
+      label: "note 投稿",
+      icon: "n",
+      trigger: "週次 / 公開時（未連動）",
+      status: "warn",
+      statusLabel: "手動のみ",
+      lastRun: "—",
+      lastDetail: "promo:weekly 文案生成のみ・投稿APIなし",
+      target: "週次ダイジェスト・メンバー向け",
+      script: "post-note-intro.mjs / promo:weekly",
+      logHref: "/dev/promo/",
+      fixSteps: ["有料化スタート後メンバー記事フロー確定"],
+    },
+    {
+      id: "short-generate",
+      label: "ショート動画生成",
+      icon: "🎬",
+      trigger: "CEO 手動（記事連動予定）",
+      status: "warn",
+      statusLabel: "ローカル",
+      lastRun: "2026-06-30 06:xx",
+      lastDetail: "shoshika 生成済 · Actions 未連動",
+      target: "記事1本→Shorts1本",
+      script: "short:generate -- --slug",
+      logHref: "/dev/shorts/",
+    },
+    {
+      id: "youtube-upload",
+      label: "YouTube アップロード",
+      icon: "▶",
+      trigger: "CEO 手動（API）",
+      status: "warn",
+      statusLabel: "ローカルAPI",
+      lastRun: "2026-06-30 06:xx",
+      lastDetail: "short:upload 実装済 · CI未連動 · ピン留めはStudio",
+      target: "output/shorts/{slug}/",
+      script: "short:upload -- --slug",
+      logHref: "/docs/youtube-api-setup.md",
+    },
+  ],
+  recentRuns: [
+    { at: "2026-06-30 07:12", job: "deploy", status: "ok", note: "f62263f · 26 files" },
+    { at: "2026-06-30 07:12", job: "bing-indexnow", status: "ok", note: "26 URL" },
+    { at: "2026-06-30 07:12", job: "x-buffer", status: "skip", note: "API key なし" },
+    { at: "2026-06-30 00:50", job: "記事作成", status: "warn", note: "case-mqzxj4ro · ゲート未達" },
+    { at: "2026-06-30 00:48", job: "記事作成", status: "warn", note: "case-mqzxgs3f · ゲート未達" },
+  ],
+};
+
+function statusClass(s) {
+  if (s === "ok") return "is-ok";
+  if (s === "fail") return "is-fail";
+  if (s === "skip") return "is-skip";
+  return "is-warn";
+}
+---
+
+<BaseLayout tabTitle="·">
+  <DevHeader current="automation" />
+  <div id="dev-gate" style="display:none">
+    <main class="container automation-page">
+      <p class="status-page__lead status-page__lead--dev">🔒 認証が必要です · <strong>UI提案サンプル</strong></p>
+      <h1 class="status-page__title">自動化ログ</h1>
+      <p class="automation-page__lead">
+        依頼中の自動化（X・note・動画生成・動画投稿・はてな・Bing）の<strong>実行結果を1画面で確認</strong>する案。
+        下記は<strong>静的モック</strong>。本実装では GitHub Actions・deploy・各 script の結果を JSON 化。
+      </p>
+
+      <aside class="automation-proposal-banner" role="note">
+        <strong>提案の要点</strong>
+        <ul>
+          <li>緑/黄/赤で「動いてるか」が一目で分かる</li>
+          <li>各ジョブ → 最終実行・対象・ログリンク・直し方</li>
+          <li>下に時系列（deploy・記事生成・投稿）を並べる</li>
+          <li>記事slugでフィルタ（「この記事、Xは出た？Bingは？」）</li>
+        </ul>
+      </aside>
+
+      <section class="automation-summary" aria-label="サマリー">
+        <div class={`automation-stat ${statusClass("ok")}`}>
+          <span class="automation-stat__n">{SAMPLE.summary.ok}</span>
+          <span class="automation-stat__l">正常</span>
+        </div>
+        <div class={`automation-stat ${statusClass("warn")}`}>
+          <span class="automation-stat__n">{SAMPLE.summary.warn}</span>
+          <span class="automation-stat__l">要確認</span>
+        </div>
+        <div class={`automation-stat ${statusClass("fail")}`}>
+          <span class="automation-stat__n">{SAMPLE.summary.fail}</span>
+          <span class="automation-stat__l">停止/未設定</span>
+        </div>
+        <div class="automation-stat automation-stat--meta">
+          <span class="automation-stat__l">更新</span>
+          <span class="automation-stat__n automation-stat__n--sm">
+            {new Date(generatedAt).toLocaleString("ja-JP")}
+          </span>
+        </div>
+      </section>
+
+      <section class="automation-jobs" aria-labelledby="automation-jobs-title">
+        <h2 id="automation-jobs-title" class="promo-section__title">ジョブ一覧</h2>
+        <div class="automation-filter" role="group" aria-label="フィルタ（モック）">
+          <button type="button" class="automation-filter__btn is-active">すべて</button>
+          <button type="button" class="automation-filter__btn">異常のみ</button>
+          <button type="button" class="automation-filter__btn">未連動</button>
+        </div>
+        <ul class="automation-job-list">
+          {
+            SAMPLE.jobs.map((j) => (
+              <li class={`automation-job ${statusClass(j.status)}`}>
+                <div class="automation-job__head">
+                  <span class="automation-job__icon" aria-hidden="true">{j.icon}</span>
+                  <div>
+                    <h3 class="automation-job__title">{j.label}</h3>
+                    <p class="automation-job__trigger">{j.trigger}</p>
+                  </div>
+                  <span class={`automation-job__badge ${statusClass(j.status)}`}>{j.statusLabel}</span>
+                </div>
+                <dl class="automation-job__meta">
+                  <div><dt>最終実行</dt><dd>{j.lastRun}</dd></div>
+                  <div><dt>結果</dt><dd>{j.lastDetail}</dd></div>
+                  <div><dt>対象</dt><dd>{j.target}</dd></div>
+                  <div><dt>脚本</dt><dd><code>{j.script}</code></dd></div>
+                </dl>
+                {
+                  j.fixSteps?.length ? (
+                    <ul class="automation-job__fixes">
+                      {j.fixSteps.map((s) => <li>{s}</li>)}
+                    </ul>
+                  ) : null
+                }
+                <p class="automation-job__links">
+                  <a href={j.logHref} target={j.logHref.startsWith("http") ? "_blank" : undefined} rel="noopener">
+                    ログ / 詳細 →
+                  </a>
+                </p>
+              </li>
+            ))
+          }
+        </ul>
+      </section>
+
+      <section class="automation-timeline" aria-labelledby="automation-tl-title">
+        <h2 id="automation-tl-title" class="promo-section__title">直近の実行履歴（時系列）</h2>
+        <table class="automation-timeline__table">
+          <thead>
+            <tr>
+              <th>日時</th>
+              <th>ジョブ</th>
+              <th>状態</th>
+              <th>メモ</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              SAMPLE.recentRuns.map((r) => (
+                <tr>
+                  <td>{r.at}</td>
+                  <td>{r.job}</td>
+                  <td><span class={`automation-job__badge ${statusClass(r.status)}`}>{r.status}</span></td>
+                  <td>{r.note}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </section>
+
+      <section class="automation-ia" aria-labelledby="automation-ia-title">
+        <h2 id="automation-ia-title" class="promo-section__title">管理画面 IA 案（全体）</h2>
+        <div class="automation-ia__grid">
+          <div class="automation-ia__col">
+            <h3>現状（分散）</h3>
+            <ul>
+              <li>完成度・記事 / タスク / プロモ / ショート / はてブ / コメント</li>
+              <li>Buffer状態は完成度ページの一部</li>
+            </ul>
+          </div>
+          <div class="automation-ia__col automation-ia__col--proposed">
+            <h3>案（3ハブ + ログ）</h3>
+            <ul>
+              <li><strong>運用</strong> — 完成度・記事 + <strong>自動化ログ</strong></li>
+              <li><strong>発信</strong> — プロモ・はてブ・note（将来）</li>
+              <li><strong>制作</strong> — タスク・ショート</li>
+              <li><strong>モデレーション</strong> — コメント</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+    </main>
+    <SiteFooter />
+  </div>
+</BaseLayout>
+
+<script>
+  import { initDevGate } from "../../scripts/dev-gate.mjs";
+  initDevGate();
+</script>

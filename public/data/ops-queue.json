@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-30T07:00:00.000Z",
+  "generatedAt": "2026-06-30T08:30:00.000Z",
   "generatedBy": "ceo",
   "dayLabel": "2026-06-30（月）",
   "ownerDailyCap": 7,
@@ -34,6 +34,102 @@
       "links": [
         { "label": "noteメンバー", "href": "https://note.com/seiji1192/membership" },
         { "label": "note執筆", "href": "https://note.com/notes/new" }
+      ],
+      "done": false
+    },
+    {
+      "id": "ceo-kv-automation-log-build",
+      "project": "kokkai-voice",
+      "title": "自動化ログ — 本実装（実データ連携）",
+      "assignee": "ceo",
+      "horizon": "today",
+      "priority": 0,
+      "score": 950,
+      "etaMin": 180,
+      "tags": ["自動化", "管理画面"],
+      "content": {
+        "summary": "サンプル /dev/automation/ を実データ化。deploy・Buffer・IndexNow・記事WF・Shorts の実行結果を JSON 集約。",
+        "steps": [
+          "data/automation-log.json スキーマ確定",
+          "deploy.yml / 各 script から append",
+          "記事slugフィルタ・異常のみ表示",
+          "Buffer パネルを自動化ログへ統合検討"
+        ]
+      },
+      "links": [
+        { "label": "サンプルUI", "href": "/dev/automation/" }
+      ],
+      "done": false
+    },
+    {
+      "id": "ceo-kv-article-rewrite",
+      "project": "kokkai-voice",
+      "title": "既存記事リライト — パイプライン設計",
+      "assignee": "ceo",
+      "horizon": "week",
+      "priority": 1,
+      "score": 720,
+      "etaMin": 240,
+      "tags": ["記事", "SEO"],
+      "content": {
+        "summary": "公開済み案件の更新フロー。国会API再取得・X追加・要約差替・再deploy・検索通知・Shorts差替の手順を決める。",
+        "steps": [
+          "リライト対象の選定基準（PV低・ゲート未達・法改正・新X）",
+          "article-workflow に rewrite モード追加 or 手動チェックリスト",
+          "再公開時の Bing/Google 再通知・Buffer 二重投稿防止",
+          "Shorts は差替 or 新規1本のルール"
+        ]
+      },
+      "links": [
+        { "label": "完成度", "href": "/dev/status/" }
+      ],
+      "done": false
+    },
+    {
+      "id": "ceo-kv-admin-ia-review",
+      "project": "kokkai-voice",
+      "title": "管理画面 IA 見直し（3ハブ案）",
+      "assignee": "ceo",
+      "horizon": "week",
+      "priority": 2,
+      "score": 650,
+      "etaMin": 120,
+      "tags": ["管理画面", "UX"],
+      "content": {
+        "summary": "タブ増加に対し運用/発信/制作/モデレーションの4ハブに再編するか判断。自動化ログを運用ハブの中心に。",
+        "steps": [
+          "オーナー確認: 現6タブ維持 vs 3ハブ",
+          "DevHeader ナビ再設計",
+          "各ページから相互リンク整理"
+        ]
+      },
+      "links": [
+        { "label": "IA案", "href": "/dev/automation/#automation-ia-title" }
+      ],
+      "done": false
+    },
+    {
+      "id": "ceo-kv-free-pr-submit",
+      "project": "kokkai-voice",
+      "title": "無料PR配信 — PR-FREE/PRESSNOW/ぷれりり等",
+      "assignee": "ceo",
+      "horizon": "week",
+      "priority": 1,
+      "score": 700,
+      "etaMin": 90,
+      "tags": ["PR", "集客", "0円"],
+      "content": {
+        "summary": "docs/marketing-report-ceo.md §1 に5サイト＋無料枠あり3件記載済み。未投稿なら β公開告知文案で3〜4本併用。",
+        "steps": [
+          "文案1本確定（「あの話どうなった？ × 削除済みXスクショ」）",
+          "PR-FREE → PRESSNOW → ぷれりり（別日でも可）",
+          "リンクプレス・PressGrid は予備",
+          "release-taskboard M4 と突合"
+        ]
+      },
+      "links": [
+        { "label": "無料PR一覧", "href": "/docs/marketing-report-ceo.md" },
+        { "label": "0円プレイブック", "href": "/docs/traffic-zero-cost-playbook.md" }
       ],
       "done": false
     },
