@@ -3,7 +3,7 @@ import { ASSET_V } from "../lib/case-helpers.mjs";
 import { SITE } from "../lib/site-config.mjs";
 
 interface Props {
-  current?: "status" | "comments" | "preview" | "tasks" | "hatena" | "promo" | "shorts" | "automation" | "trends" | "links";
+  current?: "status" | "comments" | "preview" | "tasks" | "hatena" | "promo" | "shorts" | "automation" | "trends" | "links" | "agents";
 }
 
 const { current = "status" } = Astro.props;
@@ -33,6 +33,9 @@ const { current = "status" } = Astro.props;
       </a>
       <a href="/dev/tasks/" aria-current={current === "tasks" ? "page" : undefined}>
         今日のタスク
+      </a>
+      <a href="/dev/agents/" aria-current={current === "agents" ? "page" : undefined}>
+        エージェント
       </a>
       <a href="/dev/automation/" aria-current={current === "automation" ? "page" : undefined}>
         自動化ログ

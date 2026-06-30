@@ -8,4 +8,4 @@ if (-not $listening) {
   Start-Process powershell -ArgumentList "-NoExit", "-Command", "Set-Location '$Root'; npm run dev -- --port $Port --host"
   Start-Sleep -Seconds 4
 }
-Write-Host "http://localhost:$Port/dev/links/"
+Write-Host "http://localhost:$Port/dev/agents/"

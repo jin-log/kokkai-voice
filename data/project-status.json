@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-30T20:24:18.272Z",
+  "generatedAt": "2026-06-30T21:05:56.312Z",
   "strategy": "quality-first",
   "activeCount": 39,
   "parkedCount": 0,
@@ -24,19 +24,19 @@
           "id": "Q9_x_screenshot",
           "message": "X URLは4件あるがスクショは0/3件（仕様違反）",
           "todo": "npm run x:capture -- --slug <slug>（デバッガー担当）",
-          "agent": "writer"
+          "agent": "debugger"
         }
       ],
       "agentTasks": [
         {
           "id": "case-mr0jbdpc:Q9_x_screenshot",
           "slug": "case-mr0jbdpc",
-          "agent": "writer",
-          "agentLabel": "ライター",
+          "agent": "debugger",
+          "agentLabel": "デバッガー",
           "checkId": "Q9_x_screenshot",
           "title": "[品質] X URLは4件あるがスクショは0/3件（仕様違反）",
           "todo": "npm run x:capture -- --slug <slug>（デバッガー担当）",
-          "command": "npm run complete:article -- --slug case-mr0jbdpc --force",
+          "command": "npm run x:capture -- --slug case-mr0jbdpc",
           "priority": 10
         },
         {
@@ -301,12 +301,12 @@
         {
           "id": "case-mqzxj4ro:Q9_x_screenshot",
           "slug": "case-mqzxj4ro",
-          "agent": "writer",
-          "agentLabel": "ライター",
+          "agent": "debugger",
+          "agentLabel": "デバッガー",
           "checkId": "Q9_x_screenshot",
           "title": "[品質] X URLは3件あるがスクショは0/3件（仕様違反）",
           "todo": "npm run x:capture -- --slug <slug>（デバッガー担当）",
-          "command": "npm run complete:article -- --slug case-mqzxj4ro --force",
+          "command": "npm run x:capture -- --slug case-mqzxj4ro",
           "priority": 10
         }
       ],
@@ -446,19 +446,19 @@
           "id": "Q9_x_screenshot",
           "message": "X URLは3件あるがスクショは0/3件（仕様違反）",
           "todo": "npm run x:capture -- --slug <slug>（デバッガー担当）",
-          "agent": "writer"
+          "agent": "debugger"
         }
       ],
       "agentTasks": [
         {
           "id": "case-mqzxgs3f:Q9_x_screenshot",
           "slug": "case-mqzxgs3f",
-          "agent": "writer",
-          "agentLabel": "ライター",
+          "agent": "debugger",
+          "agentLabel": "デバッガー",
           "checkId": "Q9_x_screenshot",
           "title": "[品質] X URLは3件あるがスクショは0/3件（仕様違反）",
           "todo": "npm run x:capture -- --slug <slug>（デバッガー担当）",
-          "command": "npm run complete:article -- --slug case-mqzxgs3f --force",
+          "command": "npm run x:capture -- --slug case-mqzxgs3f",
           "priority": 10
         },
         {
@@ -2757,6 +2757,17 @@
       "qualityBlockers": [],
       "agentTasks": [
         {
+          "id": "shussho-budget-seika:H1_xPosts",
+          "slug": "shussho-budget-seika",
+          "agent": "x-researcher",
+          "agentLabel": "X調査",
+          "checkId": "H1_xPosts",
+          "title": "[ゲート] X投稿",
+          "todo": "検証済みX URLを3件以上（x-researcher）",
+          "command": "npm run x:research -- --slug shussho-budget-seika",
+          "priority": 20
+        },
+        {
           "id": "shussho-budget-seika:H2_x_topic",
           "slug": "shussho-budget-seika",
           "agent": "x-researcher",
@@ -2765,6 +2776,17 @@
           "title": "[ゲート] Xの話題",
           "todo": "X投稿本文が案件キーワードと一致（x-researcher）",
           "command": "npm run x:research -- --slug shussho-budget-seika",
+          "priority": 20
+        },
+        {
+          "id": "shussho-budget-seika:H3_x_screenshot",
+          "slug": "shussho-budget-seika",
+          "agent": "debugger",
+          "agentLabel": "デバッガー",
+          "checkId": "H3_x_screenshot",
+          "title": "[ゲート] Xスクショ",
+          "todo": "npm run x:capture -- --slug <slug>（デバッガー）",
+          "command": "npm run x:capture -- --slug shussho-budget-seika",
           "priority": 20
         },
         {
@@ -2913,15 +2935,27 @@
           "detail": "公言テキストが案件と無関係"
         },
         {
+          "id": "H1_xPosts",
+          "label": "X投稿",
+          "todo": "検証済みX URLを3件以上（x-researcher）",
+          "detail": "検証済み 0/3 件（公開前必須）"
+        },
+        {
           "id": "H2_x_topic",
           "label": "Xの話題",
           "todo": "X投稿本文が案件キーワードと一致（x-researcher）",
-          "detail": "2/3 件が話題一致"
+          "detail": "0/3 件が話題一致"
+        },
+        {
+          "id": "H3_x_screenshot",
+          "label": "Xスクショ",
+          "todo": "npm run x:capture -- --slug <slug>（デバッガー）",
+          "detail": "スクショ 0/3 件 — x:capture 未実行"
         }
       ],
-      "blockerCount": 4,
+      "blockerCount": 6,
       "runState": "idle",
-      "nextAction": "2/3 国会が話題一致 → ◎▲❌ を確定 → 公言テキストが案件と無関係",
+      "nextAction": "2/3 国会が話題一致 → ◎▲❌ を確定 → 公言テキストが案件と無関係 → X調査: 5枠が未特定 — キーワード見直し or 手動URL",
       "promo": {
         "x": null,
         "hatena": null,
@@ -2953,6 +2987,17 @@
       "qualityBlockers": [],
       "agentTasks": [
         {
+          "id": "fukushuto-koso:H1_xPosts",
+          "slug": "fukushuto-koso",
+          "agent": "x-researcher",
+          "agentLabel": "X調査",
+          "checkId": "H1_xPosts",
+          "title": "[ゲート] X投稿",
+          "todo": "検証済みX URLを3件以上（x-researcher）",
+          "command": "npm run x:research -- --slug fukushuto-koso",
+          "priority": 20
+        },
+        {
           "id": "fukushuto-koso:H2_x_topic",
           "slug": "fukushuto-koso",
           "agent": "x-researcher",
@@ -2961,6 +3006,17 @@
           "title": "[ゲート] Xの話題",
           "todo": "X投稿本文が案件キーワードと一致（x-researcher）",
           "command": "npm run x:research -- --slug fukushuto-koso",
+          "priority": 20
+        },
+        {
+          "id": "fukushuto-koso:H3_x_screenshot",
+          "slug": "fukushuto-koso",
+          "agent": "debugger",
+          "agentLabel": "デバッガー",
+          "checkId": "H3_x_screenshot",
+          "title": "[ゲート] Xスクショ",
+          "todo": "npm run x:capture -- --slug <slug>（デバッガー）",
+          "command": "npm run x:capture -- --slug fukushuto-koso",
           "priority": 20
         },
         {
@@ -3143,15 +3199,27 @@
           "detail": "公言テキストが案件と無関係"
         },
         {
+          "id": "H1_xPosts",
+          "label": "X投稿",
+          "todo": "検証済みX URLを3件以上（x-researcher）",
+          "detail": "検証済み 0/3 件（公開前必須）"
+        },
+        {
           "id": "H2_x_topic",
           "label": "Xの話題",
           "todo": "X投稿本文が案件キーワードと一致（x-researcher）",
-          "detail": "1/3 件が話題一致"
+          "detail": "0/3 件が話題一致"
+        },
+        {
+          "id": "H3_x_screenshot",
+          "label": "Xスクショ",
+          "todo": "npm run x:capture -- --slug <slug>（デバッガー）",
+          "detail": "スクショ 0/3 件 — x:capture 未実行"
         }
       ],
-      "blockerCount": 6,
+      "blockerCount": 8,
       "runState": "idle",
-      "nextAction": "1/2 行がキーワード一致（副首都構想） → 1/3 行が話題一致 → 2/3 国会が話題一致",
+      "nextAction": "1/2 行がキーワード一致（副首都構想） → 1/3 行が話題一致 → 2/3 国会が話題一致 → X調査: 5枠が未特定 — キーワード見直し or 手動URL",
       "promo": {
         "x": null,
         "hatena": null,
@@ -3379,6 +3447,17 @@
       "qualityBlockers": [],
       "agentTasks": [
         {
+          "id": "fuhou-immin-trend:H1_xPosts",
+          "slug": "fuhou-immin-trend",
+          "agent": "x-researcher",
+          "agentLabel": "X調査",
+          "checkId": "H1_xPosts",
+          "title": "[ゲート] X投稿",
+          "todo": "検証済みX URLを3件以上（x-researcher）",
+          "command": "npm run x:research -- --slug fuhou-immin-trend",
+          "priority": 20
+        },
+        {
           "id": "fuhou-immin-trend:H2_x_topic",
           "slug": "fuhou-immin-trend",
           "agent": "x-researcher",
@@ -3387,6 +3466,17 @@
           "title": "[ゲート] Xの話題",
           "todo": "X投稿本文が案件キーワードと一致（x-researcher）",
           "command": "npm run x:research -- --slug fuhou-immin-trend",
+          "priority": 20
+        },
+        {
+          "id": "fuhou-immin-trend:H3_x_screenshot",
+          "slug": "fuhou-immin-trend",
+          "agent": "debugger",
+          "agentLabel": "デバッガー",
+          "checkId": "H3_x_screenshot",
+          "title": "[ゲート] Xスクショ",
+          "todo": "npm run x:capture -- --slug <slug>（デバッガー）",
+          "command": "npm run x:capture -- --slug fuhou-immin-trend",
           "priority": 20
         },
         {
@@ -3441,17 +3531,6 @@
           "checkId": "G5_parties_symbol",
           "title": "[ゲート] ◎〇▲×",
           "todo": "各党の記号を確定（v2）",
-          "command": "npm run complete:article -- --slug fuhou-immin-trend --force",
-          "priority": 30
-        },
-        {
-          "id": "fuhou-immin-trend:G6_matrix_topic",
-          "slug": "fuhou-immin-trend",
-          "agent": "writer",
-          "agentLabel": "ライター",
-          "checkId": "G6_matrix_topic",
-          "title": "[ゲート] 〇×の話題",
-          "todo": "公言と行動が案件キーワードと一致（2党）",
           "command": "npm run complete:article -- --slug fuhou-immin-trend --force",
           "priority": 30
         }
@@ -3586,15 +3665,27 @@
           "detail": "公言テキストが案件と無関係"
         },
         {
+          "id": "H1_xPosts",
+          "label": "X投稿",
+          "todo": "検証済みX URLを3件以上（x-researcher）",
+          "detail": "検証済み 0/3 件（公開前必須）"
+        },
+        {
           "id": "H2_x_topic",
           "label": "Xの話題",
           "todo": "X投稿本文が案件キーワードと一致（x-researcher）",
           "detail": "0/3 件が話題一致"
+        },
+        {
+          "id": "H3_x_screenshot",
+          "label": "Xスクショ",
+          "todo": "npm run x:capture -- --slug <slug>（デバッガー）",
+          "detail": "スクショ 0/3 件 — x:capture 未実行"
         }
       ],
-      "blockerCount": 7,
+      "blockerCount": 9,
       "runState": "idle",
-      "nextAction": "1/2 行がキーワード一致（不法移民 在留外国人数） → 議事録口調が残っている → 0/3 行が話題一致",
+      "nextAction": "1/2 行がキーワード一致（不法移民 在留外国人数） → 議事録口調が残っている → 0/3 行が話題一致 → X調査: 5枠が未特定 — キーワード見直し or 手動URL",
       "promo": {
         "x": null,
         "hatena": null,
@@ -3626,6 +3717,17 @@
       "qualityBlockers": [],
       "agentTasks": [
         {
+          "id": "tokyo-solar-panel:H1_xPosts",
+          "slug": "tokyo-solar-panel",
+          "agent": "x-researcher",
+          "agentLabel": "X調査",
+          "checkId": "H1_xPosts",
+          "title": "[ゲート] X投稿",
+          "todo": "検証済みX URLを3件以上（x-researcher）",
+          "command": "npm run x:research -- --slug tokyo-solar-panel",
+          "priority": 20
+        },
+        {
           "id": "tokyo-solar-panel:H2_x_topic",
           "slug": "tokyo-solar-panel",
           "agent": "x-researcher",
@@ -3634,6 +3736,17 @@
           "title": "[ゲート] Xの話題",
           "todo": "X投稿本文が案件キーワードと一致（x-researcher）",
           "command": "npm run x:research -- --slug tokyo-solar-panel",
+          "priority": 20
+        },
+        {
+          "id": "tokyo-solar-panel:H3_x_screenshot",
+          "slug": "tokyo-solar-panel",
+          "agent": "debugger",
+          "agentLabel": "デバッガー",
+          "checkId": "H3_x_screenshot",
+          "title": "[ゲート] Xスクショ",
+          "todo": "npm run x:capture -- --slug <slug>（デバッガー）",
+          "command": "npm run x:capture -- --slug tokyo-solar-panel",
           "priority": 20
         },
         {
@@ -3816,15 +3929,27 @@
           "detail": "公言テキストが案件と無関係"
         },
         {
+          "id": "H1_xPosts",
+          "label": "X投稿",
+          "todo": "検証済みX URLを3件以上（x-researcher）",
+          "detail": "検証済み 0/3 件（公開前必須）"
+        },
+        {
           "id": "H2_x_topic",
           "label": "Xの話題",
           "todo": "X投稿本文が案件キーワードと一致（x-researcher）",
           "detail": "0/3 件が話題一致"
+        },
+        {
+          "id": "H3_x_screenshot",
+          "label": "Xスクショ",
+          "todo": "npm run x:capture -- --slug <slug>（デバッガー）",
+          "detail": "スクショ 0/3 件 — x:capture 未実行"
         }
       ],
-      "blockerCount": 6,
+      "blockerCount": 8,
       "runState": "idle",
-      "nextAction": "1/2 行がキーワード一致（太陽光パネル 設置義務 東京都） → 1/3 行が話題一致 → 1/3 国会が話題一致",
+      "nextAction": "1/2 行がキーワード一致（太陽光パネル 設置義務 東京都） → 1/3 行が話題一致 → 1/3 国会が話題一致 → X調査: 5枠が未特定 — キーワード見直し or 手動URL",
       "promo": {
         "x": null,
         "hatena": null,
@@ -3856,6 +3981,17 @@
       "qualityBlockers": [],
       "agentTasks": [
         {
+          "id": "case-mqwdrley:H1_xPosts",
+          "slug": "case-mqwdrley",
+          "agent": "x-researcher",
+          "agentLabel": "X調査",
+          "checkId": "H1_xPosts",
+          "title": "[ゲート] X投稿",
+          "todo": "検証済みX URLを3件以上（x-researcher）",
+          "command": "npm run x:research -- --slug case-mqwdrley",
+          "priority": 20
+        },
+        {
           "id": "case-mqwdrley:H2_x_topic",
           "slug": "case-mqwdrley",
           "agent": "x-researcher",
@@ -3864,6 +4000,17 @@
           "title": "[ゲート] Xの話題",
           "todo": "X投稿本文が案件キーワードと一致（x-researcher）",
           "command": "npm run x:research -- --slug case-mqwdrley",
+          "priority": 20
+        },
+        {
+          "id": "case-mqwdrley:H3_x_screenshot",
+          "slug": "case-mqwdrley",
+          "agent": "debugger",
+          "agentLabel": "デバッガー",
+          "checkId": "H3_x_screenshot",
+          "title": "[ゲート] Xスクショ",
+          "todo": "npm run x:capture -- --slug <slug>（デバッガー）",
+          "command": "npm run x:capture -- --slug case-mqwdrley",
           "priority": 20
         },
         {
@@ -4012,15 +4159,27 @@
           "detail": "◎▲❌ 確定 0/2 党以上"
         },
         {
+          "id": "H1_xPosts",
+          "label": "X投稿",
+          "todo": "検証済みX URLを3件以上（x-researcher）",
+          "detail": "検証済み 2/3 件（公開前必須）"
+        },
+        {
           "id": "H2_x_topic",
           "label": "Xの話題",
           "todo": "X投稿本文が案件キーワードと一致（x-researcher）",
           "detail": "2/3 件が話題一致"
+        },
+        {
+          "id": "H3_x_screenshot",
+          "label": "Xスクショ",
+          "todo": "npm run x:capture -- --slug <slug>（デバッガー）",
+          "detail": "スクショ 0/3 件 — x:capture 未実行"
         }
       ],
-      "blockerCount": 4,
+      "blockerCount": 6,
       "runState": "idle",
-      "nextAction": "1/3 行が話題一致 → 0/3 国会が話題一致 → ◎▲❌ を確定",
+      "nextAction": "1/3 行が話題一致 → 0/3 国会が話題一致 → ◎▲❌ を確定 → X調査: 3枠が未特定 — キーワード見直し or 手動URL",
       "promo": {
         "x": null,
         "hatena": null,

@@ -17,6 +17,7 @@ export const AGENT_LABELS = {
 /** チェックID → 担当エージェント */
 export function agentForCheckId(id) {
   const k = String(id || "");
+  if (k === "Q9_x_screenshot" || k.startsWith("Q9_")) return "debugger";
   if (k.startsWith("Q")) return "writer";
   if (k.startsWith("H1") || k.startsWith("H2")) return "x-researcher";
   if (k.startsWith("H3")) return "debugger";

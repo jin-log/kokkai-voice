@@ -1,0 +1,192 @@
+---
+import BaseLayout from "../../layouts/DevLayout.astro";
+import DevHeader from "../../components/DevHeader.astro";
+import SiteFooter from "../../components/SiteFooter.astro";
+import { loadAgentsReference } from "../../lib/agents-reference.mjs";
+
+const ref = await loadAgentsReference();
+const agentMap = Object.fromEntries(ref.agents.map((a) => [a.id, a]));
+
+const AGENT_THEME: Record<string, { accent: string; bg: string; icon: string }> = {
+  ceo: { accent: "#d97706", bg: "#fffbeb", icon: "指" },
+  writer: { accent: "#2563eb", bg: "#eff6ff", icon: "筆" },
+  "x-researcher": { accent: "#334155", bg: "#f1f5f9", icon: "X" },
+  debugger: { accent: "#059669", bg: "#ecfdf5", icon: "検" },
+  "legal-check": { accent: "#7c3aed", bg: "#f5f3ff", icon: "法" },
+  designer: { accent: "#db2777", bg: "#fdf2f8", icon: "色" },
+  marketer: { accent: "#ea580c", bg: "#fff7ed", icon: "宣" },
+};
+
+const defaultTheme = { accent: "#64748b", bg: "#f8fafc", icon: "·" };
+---
+
+<BaseLayout tabTitle="· エージェント">
+  <DevHeader current="agents" />
+  <main class="container agents-page">
+    <header class="agents-hero">
+      <div class="agents-hero__text">
+        <p class="agents-hero__eyebrow">kokkai-voice 制作体制</p>
+        <h1>エージェント体制</h1>
+        <p class="agents-hero__lead">
+          記事制作の役割分担とチェック項目。各エージェントが何を担当し、どの順で動くかを一覧できます。
+        </p>
+        <p class="agents-hero__updated">最終更新 {ref.updatedAt}</p>
+      </div>
+      <dl class="agents-hero__stats">
+        <div>
+          <dt>エージェント</dt>
+          <dd>{ref.agents.length}</dd>
+        </div>
+        <div>
+          <dt>ワークフロー</dt>
+          <dd>{ref.workflow.length} 段階</dd>
+        </div>
+        <div>
+          <dt>チェック項目</dt>
+          <dd>{ref.gateAgents.length}</dd>
+        </div>
+      </dl>
+    </header>
+
+    <nav class="agents-jump" aria-label="エージェントへジャンプ">
+      {ref.agents.map((agent) => {
+        const theme = AGENT_THEME[agent.id] ?? defaultTheme;
+        return (
+          <a
+            class="agents-jump__chip"
+            href={`#agent-${agent.id}`}
+            style={`--chip-accent: ${theme.accent}; --chip-bg: ${theme.bg}`}
+          >
+            <span class="agents-jump__icon" aria-hidden="true">{theme.icon}</span>
+            {agent.name}
+          </a>
+        );
+      })}
+    </nav>
+
+    <section class="agents-workflow" aria-labelledby="workflow-title">
+      <div class="agents-section-head">
+        <h2 id="workflow-title">ワークフロー順序</h2>
+        <p>記事1本が公開可能になるまでの流れ</p>
+      </div>
+      <ol class="agents-workflow__track">
+        {ref.workflow.map((w, i) => {
+          const theme = AGENT_THEME[w.agentId] ?? defaultTheme;
+          const agent = agentMap[w.agentId];
+          return (
+            <li class="agents-workflow__step" style={`--step-accent: ${theme.accent}`}>
+              <div class="agents-workflow__node">
+                <span class="agents-workflow__num">{i + 1}</span>
+              </div>
+              <div class="agents-workflow__card">
+                <div class="agents-workflow__card-head">
+                  <span class="agents-workflow__label">{w.label}</span>
+                  <a class="agents-workflow__agent" href={`#agent-${w.agentId}`}>
+                    {agent?.name ?? w.agentId}
+                  </a>
+                </div>
+                <p class="agents-workflow__summary">{w.summary}</p>
+              </div>
+            </li>
+          );
+        })}
+      </ol>
+    </section>
+
+    <section class="agents-list" aria-labelledby="agents-title">
+      <div class="agents-section-head">
+        <h2 id="agents-title">エージェント一覧</h2>
+        <p>担当タスク・スキル・ルールの詳細</p>
+      </div>
+      <div class="agents-list__grid">
+        {ref.agents.map((agent) => {
+          const theme = AGENT_THEME[agent.id] ?? defaultTheme;
+          return (
+            <article
+              class="agents-card"
+              id={`agent-${agent.id}`}
+              style={`--card-accent: ${theme.accent}; --card-bg: ${theme.bg}`}
+            >
+              <header class="agents-card__head">
+                <span class="agents-card__avatar" aria-hidden="true">{theme.icon}</span>
+                <div class="agents-card__titles">
+                  <h3>{agent.name}</h3>
+                  <p class="agents-card__chat">{agent.chatName}</p>
+                </div>
+              </header>
+
+              <div class="agents-card__panel agents-card__panel--tasks">
+                <h4>タスク</h4>
+                <ul class="agents-checklist">
+                  {agent.tasks.map((t) => (
+                    <li>{t}</li>
+                  ))}
+                </ul>
+              </div>
+
+              <details class="agents-tree agents-tree--rules" open>
+                <summary class="agents-tree__summary">
+                  <span class="agents-tree__badge">ルール</span>
+                  <span class="agents-tree__count">{agent.rules.length} 項目</span>
+                </summary>
+                <div class="agents-tree__body">
+                  {agent.rules.map((rule) => (
+                    <details class="agents-tree__group" open>
+                      <summary>{rule.title}</summary>
+                      <ul>
+                        {rule.items.map((item) => <li>{item}</li>)}
+                      </ul>
+                    </details>
+                  ))}
+                </div>
+              </details>
+
+              {agent.skills.length > 0 && (
+                <details class="agents-tree agents-tree--skills" open>
+                  <summary class="agents-tree__summary">
+                    <span class="agents-tree__badge">スキル</span>
+                    <span class="agents-tree__count">{agent.skills.length} 項目</span>
+                  </summary>
+                  <div class="agents-tree__body">
+                    {agent.skills.map((skill) => (
+                      <details class="agents-tree__group" open>
+                        <summary>{skill.title}</summary>
+                        <ul>
+                          {skill.items.map((item) => <li>{item}</li>)}
+                        </ul>
+                      </details>
+                    ))}
+                  </div>
+                </details>
+              )}
+            </article>
+          );
+        })}
+      </div>
+    </section>
+
+    <section class="agents-gates" aria-labelledby="gates-title">
+      <div class="agents-section-head">
+        <h2 id="gates-title">チェック項目 → 担当</h2>
+        <p>公開前ゲートと品質監査の担当マッピング</p>
+      </div>
+      <ul class="agents-gates__grid">
+        {ref.gateAgents.map((g) => {
+          const theme = AGENT_THEME[g.agentId] ?? defaultTheme;
+          return (
+            <li
+              class="agents-gates__card"
+              style={`--gate-accent: ${theme.accent}; --gate-bg: ${theme.bg}`}
+            >
+              <span class="agents-gates__label">{g.label}</span>
+              <a class="agents-gates__agent" href={`#agent-${g.agentId}`}>
+                {agentMap[g.agentId]?.name ?? g.agentId}
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+    </section>
+  </main>
+  <SiteFooter />
+</BaseLayout>

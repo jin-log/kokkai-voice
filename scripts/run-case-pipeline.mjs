@@ -138,24 +138,30 @@ function printResult(r) {
   }
 }
 
+const isMain =
+  process.argv[1] &&
+  path.resolve(process.argv[1]) === path.join(__dirname, "run-case-pipeline.mjs");
+
 const args = process.argv.slice(2);
 const slugArg = args.includes("--slug") ? args[args.indexOf("--slug") + 1] : null;
 
-if (args.includes("--promote")) {
+if (isMain && args.includes("--promote")) {
   const ok = await promoteIfReady();
   process.exit(ok ? 0 : 1);
 }
 
-const index = await loadIndex();
-const targets = slugArg ? [slugArg] : index.slugs;
-const results = await reportBatch(targets);
+if (isMain) {
+  const index = await loadIndex();
+  const targets = slugArg ? [slugArg] : index.slugs;
+  const results = await reportBatch(targets);
 
-for (const r of results) printResult(r);
+  for (const r of results) printResult(r);
 
-const status = await refreshProjectStatus();
-console.log(`\n--- バッチ ---`);
-console.log(`active: ${index.slugs.length} · 平均完成度: ${status.overallGoldPct}%`);
-console.log(`公開: ${status.publishedCount}/${status.activeCount}`);
+  const status = await refreshProjectStatus();
+  console.log(`\n--- バッチ ---`);
+  console.log(`active: ${index.slugs.length} · 平均完成度: ${status.overallGoldPct}%`);
+  console.log(`公開: ${status.publishedCount}/${status.activeCount}`);
 
-const anyIncomplete = results.some((r) => r.goldPct < 100);
-if (anyIncomplete && !args.includes("--ok-if-partial")) process.exit(2);
+  const anyIncomplete = results.some((r) => r.goldPct < 100);
+  if (anyIncomplete && !args.includes("--ok-if-partial")) process.exit(2);
+}

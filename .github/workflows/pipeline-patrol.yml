@@ -1,0 +1,39 @@
+name: 品質巡回（サーバー）
+
+on:
+  schedule:
+    # 30分ごと（JST基準でずれるが十分）
+    - cron: "*/30 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  patrol:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - run: npm ci
+
+      - name: 品質巡回（ライター・X調査・法務 — スクショ除く）
+        env:
+          TAVILY_API_KEY: ${{ secrets.TAVILY_API_KEY }}
+        run: |
+          OFFSET=$(( ${{ github.run_number }} * 8 % 40 ))
+          node scripts/pipeline-patrol.mjs --once --batch 8 --rounds 3 --skip debugger --batch-offset "$OFFSET"
+
+      - name: 変更があればコミット
+        run: |
+          git config user.email "bot@seiji1192.site"
+          git config user.name "kokkai-bot"
+          git add data/articles data/policy-matrix data/agent-tasks.json data/project-status.json
+          git diff --staged --quiet && echo "no changes" && exit 0
+          git commit -m "patrol: server cycle ${{ github.run_number }} (gold bump)"
+          git push
