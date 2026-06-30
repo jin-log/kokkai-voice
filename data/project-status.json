@@ -1,11 +1,11 @@
 {
-  "generatedAt": "2026-06-30T22:42:32.061Z",
+  "generatedAt": "2026-06-30T22:47:36.587Z",
   "strategy": "quality-first",
   "activeCount": 39,
   "parkedCount": 0,
   "publishedCount": 26,
   "overallGoldPct": 26,
-  "overallGatePct": 40,
+  "overallGatePct": 39,
   "qualityFailed": 4,
   "slugs": [
     {
@@ -2950,14 +2950,14 @@
       },
       "short": {
         "slug": "shussho-budget-seika",
-        "generated": true,
-        "uploaded": true,
-        "visibility": "private",
-        "videoId": "8HPZ4sC7uck",
-        "url": "https://www.youtube.com/shorts/8HPZ4sC7uck",
-        "studioUrl": "https://studio.youtube.com/video/8HPZ4sC7uck/edit",
-        "uploadedAt": "2026-06-29T22:11:20.857Z",
-        "label": "YT非公開"
+        "generated": false,
+        "uploaded": false,
+        "visibility": null,
+        "videoId": null,
+        "url": null,
+        "studioUrl": null,
+        "uploadedAt": null,
+        "label": "未生成"
       }
     },
     {
@@ -5512,14 +5512,14 @@
       },
       "short": {
         "slug": "shoshika",
-        "generated": true,
+        "generated": false,
         "uploaded": false,
         "visibility": null,
         "videoId": null,
         "url": null,
         "studioUrl": null,
         "uploadedAt": null,
-        "label": "生成済・未アップ"
+        "label": "未生成"
       }
     },
     {
@@ -7087,6 +7087,17 @@
       "qualityBlockers": [],
       "agentTasks": [
         {
+          "id": "casino-ir:H1_xPosts",
+          "slug": "casino-ir",
+          "agent": "x-researcher",
+          "agentLabel": "X調査",
+          "checkId": "H1_xPosts",
+          "title": "[ゲート] X投稿",
+          "todo": "検証済みX URLを3件以上（x-researcher）",
+          "command": "npm run x:research -- --slug casino-ir",
+          "priority": 20
+        },
+        {
           "id": "casino-ir:H2_x_topic",
           "slug": "casino-ir",
           "agent": "x-researcher",
@@ -7098,19 +7109,41 @@
           "priority": 20
         },
         {
-          "id": "casino-ir:E4_timeline_diet_topic",
+          "id": "casino-ir:H3_x_screenshot",
+          "slug": "casino-ir",
+          "agent": "debugger",
+          "agentLabel": "デバッガー",
+          "checkId": "H3_x_screenshot",
+          "title": "[ゲート] Xスクショ",
+          "todo": "npm run x:capture -- --slug <slug>（デバッガー）",
+          "command": "npm run x:capture -- --slug casino-ir",
+          "priority": 20
+        },
+        {
+          "id": "casino-ir:E2_timeline_x",
           "slug": "casino-ir",
           "agent": "writer",
           "agentLabel": "ライター",
-          "checkId": "E4_timeline_diet_topic",
-          "title": "[ゲート] TL国会の話題",
-          "todo": "タイムライン国会3件が案件と一致",
+          "checkId": "E2_timeline_x",
+          "title": "[ゲート] タイムラインX",
+          "todo": "X投稿を3件以上タイムラインに",
+          "command": "npm run complete:article -- --slug casino-ir --force",
+          "priority": 30
+        },
+        {
+          "id": "casino-ir:G5_parties_symbol",
+          "slug": "casino-ir",
+          "agent": "writer",
+          "agentLabel": "ライター",
+          "checkId": "G5_parties_symbol",
+          "title": "[ゲート] ◎〇▲×",
+          "todo": "各党の記号を確定（v2）",
           "command": "npm run complete:article -- --slug casino-ir --force",
           "priority": 30
         }
       ],
-      "gatePct": 50,
-      "goldPct": 33,
+      "gatePct": 25,
+      "goldPct": 17,
       "published": true,
       "publishGateOk": false,
       "pipeline": [
@@ -7126,7 +7159,7 @@
           "label": "②〇×2党確定",
           "phase": 2,
           "preDeploy": true,
-          "ok": true
+          "ok": false
         },
         {
           "id": "x",
@@ -7170,7 +7203,7 @@
           "label": "②〇×2党確定",
           "phase": 2,
           "preDeploy": true,
-          "ok": true
+          "ok": false
         },
         {
           "id": "x",
@@ -7203,21 +7236,39 @@
       ],
       "blockers": [
         {
-          "id": "E4_timeline_diet_topic",
-          "label": "TL国会の話題",
-          "todo": "タイムライン国会3件が案件と一致",
-          "detail": "2/3 国会が話題一致"
+          "id": "E2_timeline_x",
+          "label": "タイムラインX",
+          "todo": "X投稿を3件以上タイムラインに",
+          "detail": "0/3 X"
+        },
+        {
+          "id": "G5_parties_symbol",
+          "label": "◎〇▲×",
+          "todo": "各党の記号を確定（v2）",
+          "detail": "◎▲❌ 確定 1/2 党以上"
+        },
+        {
+          "id": "H1_xPosts",
+          "label": "X投稿",
+          "todo": "検証済みX URLを3件以上（x-researcher）",
+          "detail": "検証済み 0/3 件（公開前必須）"
         },
         {
           "id": "H2_x_topic",
           "label": "Xの話題",
           "todo": "X投稿本文が案件キーワードと一致（x-researcher）",
           "detail": "0/3 件が話題一致"
+        },
+        {
+          "id": "H3_x_screenshot",
+          "label": "Xスクショ",
+          "todo": "npm run x:capture -- --slug <slug>（デバッガー）",
+          "detail": "スクショ 0/3 件 — x:capture 未実行"
         }
       ],
-      "blockerCount": 2,
+      "blockerCount": 5,
       "runState": "idle",
-      "nextAction": "2/3 国会が話題一致 → X本文を案件キーワードに合わせて差し替え",
+      "nextAction": "タイムラインにX3件 → ◎▲❌ を確定 → X URL検索・post_text 補完（x-researcher） → X調査: 5枠が未特定 — キーワード見直し or 手動URL",
       "promo": {
         "x": null,
         "hatena": null,
@@ -7280,6 +7331,17 @@
           "todo": "npm run x:capture -- --slug <slug>（デバッガー）",
           "command": "npm run x:capture -- --slug kenpo",
           "priority": 20
+        },
+        {
+          "id": "kenpo:C2_evidence_distinct",
+          "slug": "kenpo",
+          "agent": "writer",
+          "agentLabel": "ライター",
+          "checkId": "C2_evidence_distinct",
+          "title": "[ゲート] 根拠の独自性",
+          "todo": "根拠は結論と同文禁止",
+          "command": "npm run complete:article -- --slug kenpo --force",
+          "priority": 30
         },
         {
           "id": "kenpo:E2_timeline_x",
@@ -7387,6 +7449,12 @@
       ],
       "blockers": [
         {
+          "id": "C2_evidence_distinct",
+          "label": "根拠の独自性",
+          "todo": "根拠は結論と同文禁止",
+          "detail": "根拠が結論のコピー"
+        },
+        {
           "id": "E2_timeline_x",
           "label": "タイムラインX",
           "todo": "X投稿を3件以上タイムラインに",
@@ -7411,9 +7479,9 @@
           "detail": "スクショ 0/3 件 — x:capture 未実行"
         }
       ],
-      "blockerCount": 4,
+      "blockerCount": 5,
       "runState": "idle",
-      "nextAction": "タイムラインにX3件 → X URL検索・post_text 補完（x-researcher） → X本文を案件キーワードに合わせて差し替え → X調査: 5枠が未特定 — キーワード見直し or 手動URL",
+      "nextAction": "根拠が結論のコピー → タイムラインにX3件 → X URL検索・post_text 補完（x-researcher） → X調査: 5枠が未特定 — キーワード見直し or 手動URL",
       "promo": {
         "x": null,
         "hatena": null,
@@ -7624,6 +7692,17 @@
       "qualityBlockers": [],
       "agentTasks": [
         {
+          "id": "kishida-resign:H1_xPosts",
+          "slug": "kishida-resign",
+          "agent": "x-researcher",
+          "agentLabel": "X調査",
+          "checkId": "H1_xPosts",
+          "title": "[ゲート] X投稿",
+          "todo": "検証済みX URLを3件以上（x-researcher）",
+          "command": "npm run x:research -- --slug kishida-resign",
+          "priority": 20
+        },
+        {
           "id": "kishida-resign:H2_x_topic",
           "slug": "kishida-resign",
           "agent": "x-researcher",
@@ -7635,35 +7714,35 @@
           "priority": 20
         },
         {
-          "id": "kishida-resign:D2_arc_topic",
+          "id": "kishida-resign:H3_x_screenshot",
+          "slug": "kishida-resign",
+          "agent": "debugger",
+          "agentLabel": "デバッガー",
+          "checkId": "H3_x_screenshot",
+          "title": "[ゲート] Xスクショ",
+          "todo": "npm run x:capture -- --slug <slug>（デバッガー）",
+          "command": "npm run x:capture -- --slug kishida-resign",
+          "priority": 20
+        },
+        {
+          "id": "kishida-resign:C2_evidence_distinct",
           "slug": "kishida-resign",
           "agent": "writer",
           "agentLabel": "ライター",
-          "checkId": "D2_arc_topic",
-          "title": "[ゲート] 経緯の話題",
-          "todo": "経緯3行以上が案件キーワードと一致",
+          "checkId": "C2_evidence_distinct",
+          "title": "[ゲート] 根拠の独自性",
+          "todo": "根拠は結論と同文禁止",
           "command": "npm run complete:article -- --slug kishida-resign --force",
           "priority": 30
         },
         {
-          "id": "kishida-resign:E4_timeline_diet_topic",
+          "id": "kishida-resign:E2_timeline_x",
           "slug": "kishida-resign",
           "agent": "writer",
           "agentLabel": "ライター",
-          "checkId": "E4_timeline_diet_topic",
-          "title": "[ゲート] TL国会の話題",
-          "todo": "タイムライン国会3件が案件と一致",
-          "command": "npm run complete:article -- --slug kishida-resign --force",
-          "priority": 30
-        },
-        {
-          "id": "kishida-resign:G6_matrix_topic",
-          "slug": "kishida-resign",
-          "agent": "writer",
-          "agentLabel": "ライター",
-          "checkId": "G6_matrix_topic",
-          "title": "[ゲート] 〇×の話題",
-          "todo": "公言と行動が案件キーワードと一致（2党）",
+          "checkId": "E2_timeline_x",
+          "title": "[ゲート] タイムラインX",
+          "todo": "X投稿を3件以上タイムラインに",
           "command": "npm run complete:article -- --slug kishida-resign --force",
           "priority": 30
         }
@@ -7762,33 +7841,39 @@
       ],
       "blockers": [
         {
-          "id": "D2_arc_topic",
-          "label": "経緯の話題",
-          "todo": "経緯3行以上が案件キーワードと一致",
-          "detail": "1/3 行が話題一致"
+          "id": "C2_evidence_distinct",
+          "label": "根拠の独自性",
+          "todo": "根拠は結論と同文禁止",
+          "detail": "根拠が結論のコピー"
         },
         {
-          "id": "E4_timeline_diet_topic",
-          "label": "TL国会の話題",
-          "todo": "タイムライン国会3件が案件と一致",
-          "detail": "2/3 国会が話題一致"
+          "id": "E2_timeline_x",
+          "label": "タイムラインX",
+          "todo": "X投稿を3件以上タイムラインに",
+          "detail": "0/3 X"
         },
         {
-          "id": "G6_matrix_topic",
-          "label": "〇×の話題",
-          "todo": "公言と行動が案件キーワードと一致（2党）",
-          "detail": "公言テキストが案件と無関係"
+          "id": "H1_xPosts",
+          "label": "X投稿",
+          "todo": "検証済みX URLを3件以上（x-researcher）",
+          "detail": "検証済み 0/3 件（公開前必須）"
         },
         {
           "id": "H2_x_topic",
           "label": "Xの話題",
           "todo": "X投稿本文が案件キーワードと一致（x-researcher）",
-          "detail": "1/3 件が話題一致"
+          "detail": "0/3 件が話題一致"
+        },
+        {
+          "id": "H3_x_screenshot",
+          "label": "Xスクショ",
+          "todo": "npm run x:capture -- --slug <slug>（デバッガー）",
+          "detail": "スクショ 0/3 件 — x:capture 未実行"
         }
       ],
-      "blockerCount": 4,
+      "blockerCount": 5,
       "runState": "idle",
-      "nextAction": "1/3 行が話題一致 → 2/3 国会が話題一致 → 公言テキストが案件と無関係",
+      "nextAction": "根拠が結論のコピー → タイムラインにX3件 → X URL検索・post_text 補完（x-researcher） → X調査: 5枠が未特定 — キーワード見直し or 手動URL",
       "promo": {
         "x": null,
         "hatena": null,
@@ -7820,6 +7905,17 @@
       "qualityBlockers": [],
       "agentTasks": [
         {
+          "id": "komei-kokumin:H1_xPosts",
+          "slug": "komei-kokumin",
+          "agent": "x-researcher",
+          "agentLabel": "X調査",
+          "checkId": "H1_xPosts",
+          "title": "[ゲート] X投稿",
+          "todo": "検証済みX URLを3件以上（x-researcher）",
+          "command": "npm run x:research -- --slug komei-kokumin",
+          "priority": 20
+        },
+        {
           "id": "komei-kokumin:H2_x_topic",
           "slug": "komei-kokumin",
           "agent": "x-researcher",
@@ -7831,46 +7927,24 @@
           "priority": 20
         },
         {
-          "id": "komei-kokumin:B3_topic",
+          "id": "komei-kokumin:H3_x_screenshot",
           "slug": "komei-kokumin",
-          "agent": "writer",
-          "agentLabel": "ライター",
-          "checkId": "B3_topic",
-          "title": "[ゲート] 話題一致",
-          "todo": "要約が searchKeyword と一致（2行以上）",
-          "command": "npm run complete:article -- --slug komei-kokumin --force",
-          "priority": 30
+          "agent": "debugger",
+          "agentLabel": "デバッガー",
+          "checkId": "H3_x_screenshot",
+          "title": "[ゲート] Xスクショ",
+          "todo": "npm run x:capture -- --slug <slug>（デバッガー）",
+          "command": "npm run x:capture -- --slug komei-kokumin",
+          "priority": 20
         },
         {
-          "id": "komei-kokumin:D2_arc_topic",
+          "id": "komei-kokumin:E2_timeline_x",
           "slug": "komei-kokumin",
           "agent": "writer",
           "agentLabel": "ライター",
-          "checkId": "D2_arc_topic",
-          "title": "[ゲート] 経緯の話題",
-          "todo": "経緯3行以上が案件キーワードと一致",
-          "command": "npm run complete:article -- --slug komei-kokumin --force",
-          "priority": 30
-        },
-        {
-          "id": "komei-kokumin:E4_timeline_diet_topic",
-          "slug": "komei-kokumin",
-          "agent": "writer",
-          "agentLabel": "ライター",
-          "checkId": "E4_timeline_diet_topic",
-          "title": "[ゲート] TL国会の話題",
-          "todo": "タイムライン国会3件が案件と一致",
-          "command": "npm run complete:article -- --slug komei-kokumin --force",
-          "priority": 30
-        },
-        {
-          "id": "komei-kokumin:G6_matrix_topic",
-          "slug": "komei-kokumin",
-          "agent": "writer",
-          "agentLabel": "ライター",
-          "checkId": "G6_matrix_topic",
-          "title": "[ゲート] 〇×の話題",
-          "todo": "公言と行動が案件キーワードと一致（2党）",
+          "checkId": "E2_timeline_x",
+          "title": "[ゲート] タイムラインX",
+          "todo": "X投稿を3件以上タイムラインに",
           "command": "npm run complete:article -- --slug komei-kokumin --force",
           "priority": 30
         }
@@ -7969,39 +8043,33 @@
       ],
       "blockers": [
         {
-          "id": "B3_topic",
-          "label": "話題一致",
-          "todo": "要約が searchKeyword と一致（2行以上）",
-          "detail": "0/2 行がキーワード一致（国民民主党）"
+          "id": "E2_timeline_x",
+          "label": "タイムラインX",
+          "todo": "X投稿を3件以上タイムラインに",
+          "detail": "0/3 X"
         },
         {
-          "id": "D2_arc_topic",
-          "label": "経緯の話題",
-          "todo": "経緯3行以上が案件キーワードと一致",
-          "detail": "0/3 行が話題一致"
-        },
-        {
-          "id": "E4_timeline_diet_topic",
-          "label": "TL国会の話題",
-          "todo": "タイムライン国会3件が案件と一致",
-          "detail": "0/3 国会が話題一致"
-        },
-        {
-          "id": "G6_matrix_topic",
-          "label": "〇×の話題",
-          "todo": "公言と行動が案件キーワードと一致（2党）",
-          "detail": "公言テキストが案件と無関係"
+          "id": "H1_xPosts",
+          "label": "X投稿",
+          "todo": "検証済みX URLを3件以上（x-researcher）",
+          "detail": "検証済み 0/3 件（公開前必須）"
         },
         {
           "id": "H2_x_topic",
           "label": "Xの話題",
           "todo": "X投稿本文が案件キーワードと一致（x-researcher）",
-          "detail": "2/3 件が話題一致"
+          "detail": "0/3 件が話題一致"
+        },
+        {
+          "id": "H3_x_screenshot",
+          "label": "Xスクショ",
+          "todo": "npm run x:capture -- --slug <slug>（デバッガー）",
+          "detail": "スクショ 0/3 件 — x:capture 未実行"
         }
       ],
-      "blockerCount": 5,
+      "blockerCount": 4,
       "runState": "idle",
-      "nextAction": "0/2 行がキーワード一致（国民民主党） → 0/3 行が話題一致 → 0/3 国会が話題一致",
+      "nextAction": "タイムラインにX3件 → X URL検索・post_text 補完（x-researcher） → X本文を案件キーワードに合わせて差し替え → X調査: 5枠が未特定 — キーワード見直し or 手動URL",
       "promo": {
         "x": null,
         "hatena": null,
@@ -8020,7 +8088,7 @@
       }
     }
   ],
-  "deltaGoldPct": -1,
-  "previousGoldPct": 27,
+  "deltaGoldPct": 0,
+  "previousGoldPct": 26,
   "deployedAt": null
 }
