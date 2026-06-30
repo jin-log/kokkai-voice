@@ -7,6 +7,7 @@ import {
   commentQuestion,
   commentTelopLines,
 } from "./short-comment-cta.mjs";
+import { buildShortHook } from "../../src/lib/headline-hooks.mjs";
 
 /** @param {string} slug @param {string} [category] */
 function ctaBeat(slug, category) {
@@ -84,21 +85,20 @@ export const F1_BEATS = {
 export function beatsForArticle(article) {
   if (F1_BEATS[article.slug]) return F1_BEATS[article.slug];
 
-  const kw = article.searchKeyword || article.slug;
   const bullets = article.nowSummary?.bullets ?? [];
   if (bullets.length < 2) {
     throw new Error(`${article.slug}: F1用のビートが足りません`);
   }
 
-  const b0 = String(bullets[0]).replace(/（[^）]+）/g, "").trim();
+  const hook = buildShortHook(article);
   const b1 = String(bullets[1]).replace(/（[^）]+）/g, "").trim();
 
   return [
     {
       id: "hook",
       style: "hook",
-      telop: splitTelop(b0, 12),
-      narr: `${kw}、あの話どうなった？`,
+      telop: hook.telop,
+      narr: hook.narr,
     },
     {
       id: "q1",

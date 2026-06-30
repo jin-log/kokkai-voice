@@ -18,7 +18,9 @@ description: >-
 
 1. `docs/writer-editorial.md` — 編集方針
 2. `docs/policy-matrix.md` — 〇×・公約優先
-3. **ルール（正本）:** `ceo-sync/cursor/rules/仕事/kokkai-voice/writer.mdc`  
+3. **タイトル:** `.cursor/skills/kokkai-headlines/SKILL.md`
+4. **ショート冒頭2秒:** `.cursor/skills/kokkai-short-hook/SKILL.md`
+5. **ルール（正本）:** `ceo-sync/cursor/rules/仕事/kokkai-voice/writer.mdc`  
    Mac: `~/Projects/ceo-sync/cursor/rules/仕事/kokkai-voice/writer.mdc`  
    Win: `C:\Users\bero1\Projects\ceo-sync\cursor\rules\仕事\kokkai-voice\writer.mdc`
 
@@ -116,6 +118,8 @@ description: >-
 ---
 
 ### 6. 読者の疑問スキル（タイトル・冒頭）
+
+**詳細は `kokkai-headlines` スキル。** ここは要約のみ。
 
 **国民がクリックするのは「政策名」ではなく「自分の具体的な疑問」。**
 

@@ -307,6 +307,16 @@ document.getElementById("new-title").addEventListener("input", () => {
   document.getElementById("new-title").dataset.manual = "1";
 });
 
+const urlKw = new URLSearchParams(window.location.search).get("keyword");
+if (urlKw) {
+  const kwEl = document.getElementById("new-keyword");
+  if (kwEl) {
+    kwEl.value = urlKw;
+    kwEl.dispatchEvent(new Event("input"));
+    kwEl.scrollIntoView({ behavior: "smooth", block: "center" });
+  }
+}
+
 function getPin() {
   return localStorage.getItem(KEY) || "";
 }

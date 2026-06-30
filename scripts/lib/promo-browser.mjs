@@ -5,7 +5,6 @@ import { access } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { chromium } from "playwright";
-import { loadChromeProfileConfig } from "./chrome-profile.mjs";
 import { launchBrowserContext } from "./playwright-browser.mjs";
 
 const root = path.join(path.dirname(fileURLToPath(import.meta.url)), "../..");
@@ -27,17 +26,6 @@ export async function launchPromoBrowser(service, opts = {}) {
   const headless = opts.headless ?? false;
   const isolatedDir = path.join(root, "secrets/browser", `profile-${service}`);
   const statePath = path.join(root, "secrets/browser", `state-${service}.json`);
-
-  const shared = await loadChromeProfileConfig();
-  if (shared) {
-    return {
-      mode: "profile",
-      context: await launchBrowserContext(shared.userDataDir, {
-        headless,
-        profileDirectory: shared.profileDirectory,
-      }),
-    };
-  }
 
   if (await exists(statePath)) {
     const browser = await chromium.launch({

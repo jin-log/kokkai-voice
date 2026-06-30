@@ -1,0 +1,213 @@
+---
+import BaseLayout from "../../layouts/DevLayout.astro";
+import DevHeader from "../../components/DevHeader.astro";
+import SiteFooter from "../../components/SiteFooter.astro";
+import { loadTrendingTopics } from "../../lib/trending-topics.mjs";
+
+const data = await loadTrendingTopics();
+const fetchedAt = data?.fetchedAt
+  ? new Date(data.fetchedAt).toLocaleString("ja-JP", { timeZone: "Asia/Tokyo" })
+  : "未取得";
+
+const political = data?.political ?? [];
+const rising = (data?.rising ?? []).filter((t) => t.political);
+const risingOther = (data?.rising ?? []).filter((t) => !t.political).slice(0, 5);
+const evergreen = data?.evergreen ?? [];
+---
+
+<BaseLayout tabTitle="関心ワード" bodyClass="dev-trends-page">
+  <DevHeader current="trends" />
+  <main class="container dev-trends">
+    <header class="dev-trends__head">
+      <h1>関心ワード・記事ネタ</h1>
+      <p class="dev-trends__lead">
+        政治・社会の注目キーワードから記事案を拾う。タイトルは
+        <code>kokkai-headlines</code> スキル、ショート冒頭2秒は <code>kokkai-short-hook</code> スキル。
+      </p>
+      <p class="dev-trends__meta">
+        最終取得: {fetchedAt}
+        <span class="dev-trends__meta-sep">·</span>
+        更新: <code>npm run trends:fetch</code>
+      </p>
+    </header>
+
+    {!data && (
+      <section class="dev-trends__empty">
+        <p>データがありません。まず <code>npm run trends:fetch</code> を実行してください。</p>
+      </section>
+    )}
+
+    {data && (
+      <>
+        <section class="dev-trends__section">
+          <h2>政治・社会（いま注目）</h2>
+          {political.length === 0 ? (
+            <p class="dev-trends__hint">直近の急上昇に政治ワードが少ない日があります。下の「常連テーマ」も参照。</p>
+          ) : (
+            <ul class="dev-trends__list">
+              {political.map((item) => (
+                <li class="dev-trends__card">
+                  <div class="dev-trends__card-top">
+                    <span class="dev-trends__badge dev-trends__badge--pol">{item.source}</span>
+                    {item.traffic && <span class="dev-trends__traffic">{item.traffic}</span>}
+                  </div>
+                  <h3 class="dev-trends__kw">{item.keyword}</h3>
+                  {item.headline && item.headline !== item.keyword && (
+                    <p class="dev-trends__headline">{item.headline}</p>
+                  )}
+                  <div class="dev-trends__actions">
+                    <button
+                      type="button"
+                      class="dev-trends__btn dev-trends__btn--primary use-keyword"
+                      data-keyword={item.keyword}
+                    >
+                      キーワードを記事作成へ
+                    </button>
+                    {item.url && (
+                      <a class="dev-trends__btn" href={item.url} target="_blank" rel="noopener noreferrer">
+                        ニュース
+                      </a>
+                    )}
+                    {item.articleSlug && (
+                      <a class="dev-trends__btn" href={`/dev/preview/${item.articleSlug}/`}>
+                        既存: {item.articleSlug}
+                      </a>
+                    )}
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
+        </section>
+
+        <section class="dev-trends__section">
+          <h2>常連テーマ（topics.json）</h2>
+          <p class="dev-trends__hint">サイトの柱になる争点。未公開は優先度高。</p>
+          <ul class="dev-trends__list dev-trends__list--compact">
+            {evergreen.map((item) => (
+              <li class="dev-trends__card dev-trends__card--compact">
+                <div class="dev-trends__card-top">
+                  <span class:list={[
+                    "dev-trends__badge",
+                    item.published ? "dev-trends__badge--live" : "dev-trends__badge--draft",
+                  ]}>
+                    {item.published ? "公開済" : "未公開/下書き"}
+                  </span>
+                </div>
+                <h3 class="dev-trends__kw">{item.headline}</h3>
+                <p class="dev-trends__sub">検索: {item.keyword}</p>
+                <div class="dev-trends__actions">
+                  <button
+                    type="button"
+                    class="dev-trends__btn use-keyword"
+                    data-keyword={item.keyword}
+                  >
+                    記事作成へ
+                  </button>
+                  {item.articleSlug && (
+                    <a class="dev-trends__btn" href={`/dev/preview/${item.articleSlug}/`}>
+                      プレビュー
+                    </a>
+                  )}
+                </div>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        {rising.length > 0 && (
+          <section class="dev-trends__section">
+            <h2>急上昇（政治フィルタ）</h2>
+            <ul class="dev-trends__list">
+              {rising.map((item) => (
+                <li class="dev-trends__card dev-trends__card--compact">
+                  <span class="dev-trends__traffic">{item.traffic}</span>
+                  <h3 class="dev-trends__kw">{item.keyword}</h3>
+                  <button type="button" class="dev-trends__btn use-keyword" data-keyword={item.keyword}>
+                    記事作成へ
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+
+        <section class="dev-trends__section dev-trends__section--guide">
+          <h2>タイトル・ショートの型（要約）</h2>
+          <ul class="dev-trends__guide">
+            <li><strong>タイトル</strong> — 政策名ではなく<strong>読者の疑問</strong>。数字＋「いまどうなった？」。全角42字以内。</li>
+            <li><strong>冒頭2秒</strong> — テロップ2行・1行14字以内。「数字の矛盾」か「？」で止める。</li>
+            <li><strong>禁止</strong> — 裏切り・嘘・煽り評価語。`— あの話どうなった？` はタイトルに付けない。</li>
+          </ul>
+          <p class="dev-trends__hint">詳細は <code>.cursor/skills/kokkai-headlines</code> と <code>kokkai-short-hook</code></p>
+        </section>
+      </>
+    )}
+  </main>
+  <SiteFooter />
+</BaseLayout>
+
+<style>
+  .dev-trends { padding: 1.5rem 0 3rem; max-width: 52rem; }
+  .dev-trends__head h1 { font-size: 1.35rem; margin: 0 0 0.5rem; }
+  .dev-trends__lead { color: var(--muted, #666); margin: 0 0 0.5rem; line-height: 1.6; }
+  .dev-trends__meta { font-size: 0.85rem; color: var(--muted, #888); margin: 0; }
+  .dev-trends__meta-sep { margin: 0 0.35rem; }
+  .dev-trends__section { margin-top: 2rem; }
+  .dev-trends__section h2 { font-size: 1.05rem; margin: 0 0 0.75rem; }
+  .dev-trends__hint { font-size: 0.9rem; color: var(--muted, #666); margin: 0 0 1rem; }
+  .dev-trends__list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.75rem; }
+  .dev-trends__list--compact { display: grid; grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr)); gap: 0.75rem; }
+  .dev-trends__card {
+    border: 1px solid var(--border, #e0e0e0);
+    border-radius: 8px;
+    padding: 0.85rem 1rem;
+    background: var(--surface, #fff);
+  }
+  .dev-trends__card--compact { padding: 0.75rem; }
+  .dev-trends__card-top { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.35rem; }
+  .dev-trends__badge {
+    font-size: 0.7rem;
+    padding: 0.15rem 0.45rem;
+    border-radius: 4px;
+    background: #eee;
+    text-transform: uppercase;
+  }
+  .dev-trends__badge--pol { background: #e8f0fe; color: #1a56db; }
+  .dev-trends__badge--live { background: #e6f4ea; color: #137333; }
+  .dev-trends__badge--draft { background: #fef7e0; color: #b06000; }
+  .dev-trends__traffic { font-size: 0.8rem; font-weight: 600; color: #c5221f; }
+  .dev-trends__kw { font-size: 1rem; margin: 0 0 0.35rem; line-height: 1.45; }
+  .dev-trends__headline, .dev-trends__sub { font-size: 0.85rem; color: var(--muted, #666); margin: 0 0 0.5rem; }
+  .dev-trends__actions { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.5rem; }
+  .dev-trends__btn {
+    font-size: 0.8rem;
+    padding: 0.35rem 0.65rem;
+    border-radius: 6px;
+    border: 1px solid var(--border, #ccc);
+    background: #fafafa;
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+  }
+  .dev-trends__btn--primary { background: #1a56db; color: #fff; border-color: #1a56db; }
+  .dev-trends__guide { margin: 0; padding-left: 1.2rem; line-height: 1.7; font-size: 0.92rem; }
+  .dev-trends__empty {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    border: 1px dashed #ccc;
+    border-radius: 8px;
+  }
+</style>
+
+<script>
+document.querySelectorAll(".use-keyword").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    const kw = btn.getAttribute("data-keyword") || "";
+    if (!kw) return;
+    const url = new URL("/dev/status/", window.location.origin);
+    url.searchParams.set("keyword", kw);
+    window.location.href = url.toString();
+  });
+});
+</script>
