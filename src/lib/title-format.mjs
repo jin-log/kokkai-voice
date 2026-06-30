@@ -41,6 +41,9 @@ export const TITLE_BRUSHUP = {
   "komei-kokumin": "【超党派・教育法改正】学校現場への影響",
   "case-mqwdrley": "【東京都知事】小池百合子氏・学歴巡る刑事告発の経緯",
   "tokyo-solar-panel": "【東京都】太陽光パネル設置義務とは？",
+  "case-mqzxgs3f": "【スパイ防止法】なぜ成立しない？国家情報会議法案との関係",
+  "case-mr0jbdpc": "【国旗損壊罪】連立合意で法制化へ？いま国会の動き",
+  "case-mqzxj4ro": "【国会議員のボーナス】期末手当はいくら？2023年給与法改正の争点",
 };
 
 /** @param {string} title */

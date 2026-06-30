@@ -83,6 +83,18 @@ description: >-
 **タイムライン:** X3 + 国会3 = 計6以上（`enrich-timeline-all.mjs`）  
 **prosCons:** メリ2・デメ2、各 `figure` + `sourceUrl`（経緯の上に表示）
 
+### 3c. セクション別ライター規則（2026-06-30・オーナー追記）
+
+| セクション | 役割 | 必須 | 禁止 |
+|-----------|------|------|------|
+| **経緯** `arcSummary` | 日付ごとの出来事 | 日付が違えば文も違う | 同文のコピペ |
+| **根拠** `summaryBullets` | 結論の裏付け（数値・主体・法案） | 経緯と別角度 | テンプレ「国会論点」連打 |
+| **メリデメ** | 制度の得失 | 読者メリット・デメリット | API件数・言及件数 |
+| **〇× 方針** | 会派の立場要約（1〜2文） | 第三者目線 | 議事録抜粋 |
+| **〇× 行動** | 提出・可決・質疑の**中身** | 動詞＋対象 | 「〇〇での発言」だけ |
+
+実装: `scripts/lib/writer-synthesize.mjs`（`synthesizeArcSummary` / `synthesizeEvidence` / `synthesizePartyMatrix` / `synthesizeProsCons`）— **全国会記事で `complete-article.mjs` が自動適用**
+
 ### 4. ギャップ言語化（policy-matrix）
 
 - `symbolReason` は **「公言A に対し、行動B（日付）」** 1文必須

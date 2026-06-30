@@ -1,7 +1,9 @@
 #!/usr/bin/env node
 /**
- * 記事JSONから prosCons を生成（nowSummary・sourceUrls ベース）
- * 手動上書き: scripts/data/proscons-overrides.mjs
+ * 記事JSONから prosCons を生成
+ * 国会記事: scripts/lib/writer-synthesize.mjs の synthesizeProsConsFromArticle（全記事共通）
+ * 一般記事: nowSummary ベースの autoProsCons
+ * 例外のみ: scripts/data/proscons-overrides.mjs
  *
  * node scripts/generate-proscons-auto.mjs [--slug X] [--dry-run]
  */
@@ -9,12 +11,16 @@ import { readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { OVERRIDES } from "./data/proscons-overrides.mjs";
+import { synthesizeProsConsFromArticle } from "./lib/writer-synthesize.mjs";
 
 const root = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
 const articlesDir = path.join(root, "data/articles");
 
 const DISCLAIMER =
   "公表・統計等の出典に基づく整理です。政治的主張の真偽はここでは断定しません。";
+
+/** メリットにしてはいけないパターン */
+const BAD_MERIT_TEXT = /言及件数|API検索|ヒットする|件超の発言|検索すると/;
 
 const dryRun = process.argv.includes("--dry-run");
 const slugArg = (() => {
@@ -53,9 +59,29 @@ function pickSource(urls, i = 0) {
 }
 
 /** @param {object} article */
-function autoProsCons(article) {
+function buildProsCons(article) {
   if (OVERRIDES[article.slug]) return OVERRIDES[article.slug];
 
+  if (
+    article.category === "国会" ||
+    (article.arcSummary?.length >= 3 && article.primarySpeech?.speechURL)
+  ) {
+    const writerPc = synthesizeProsConsFromArticle(article);
+    if (
+      writerPc.merits.length >= 2 &&
+      writerPc.demerits.length >= 2 &&
+      writerPc.merits.every((m) => m.figure && m.sourceUrl) &&
+      writerPc.demerits.every((m) => m.figure && m.sourceUrl)
+    ) {
+      return writerPc;
+    }
+  }
+
+  return autoProsCons(article);
+}
+
+/** @param {object} article */
+function autoProsCons(article) {
   const urls = [
     article.primarySpeech?.speechURL,
     article.primarySpeech?.meetingURL,
@@ -86,6 +112,7 @@ function autoProsCons(article) {
       ...pickSource(uniqueUrls, isNegative ? 1 : 0),
       sourceDate: article.nowSummary?.updatedAt?.slice(0, 10) || article.fetchedAt?.slice(0, 10),
     };
+    if (BAD_MERIT_TEXT.test(item.text) && !isNegative) continue;
     if (isNegative && demerits.length < 3) demerits.push(item);
     else if (!isNegative && merits.length < 3) merits.push(item);
     if (merits.length >= 2 && demerits.length >= 2) break;
@@ -137,7 +164,7 @@ async function main() {
   for (const slug of slugs) {
     const fp = path.join(articlesDir, `${slug}.json`);
     const article = JSON.parse(await readFile(fp, "utf8"));
-    const pc = autoProsCons(article);
+    const pc = buildProsCons(article);
     const valid =
       pc.merits.length >= 2 &&
       pc.demerits.length >= 2 &&

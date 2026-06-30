@@ -6,6 +6,8 @@ import { readFile, access } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { isPhaseAPublish } from "./diet-pending.mjs";
+import { countTopicBullets, isTitleReady, countTopicArcLines, countTopicDietTimeline, isMatrixTopicRelevant, isConclusionQuality, textStronglyMatchesTopic } from "./topic-relevance.mjs";
+import { isDietVoice, bulletsDistinctFrom, isSpeechFragment } from "./diet-voice.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 export const root = path.join(__dirname, "../..");
@@ -15,14 +17,21 @@ export const root = path.join(__dirname, "../..");
 /** 管理画面・オーナー向けラベル（IDは開発者用） */
 export const CHECK_LABELS = {
   A1_title: { label: "タイトル", todo: "タイトルを入力" },
+  A1b_title_placeholder: { label: "タイトル確定", todo: "仮タイトル・編集メモを除去" },
   A2_primarySpeech: { label: "一次ソース", todo: "報道URL・国会リンクを追加" },
   B1_nowSummary: { label: "いまの結論", todo: "3行の要約を書く" },
   B2_disclaimer: { label: "AI注記", todo: "disclaimer を追加" },
+  B3_topic: { label: "話題一致", todo: "要約が searchKeyword と一致（2行以上）" },
+  B4_conclusion: { label: "結論の質", todo: "いまの結論が要点3行（重複・途中切れなし）" },
+  B5_writer_voice: { label: "第三者目線", todo: "議事録口調（お尋ね・私自身・御党）を除去" },
   C1_summaryBullets: { label: "要点", todo: "summaryBullets を3点以上" },
+  C2_evidence_distinct: { label: "根拠の独自性", todo: "根拠は結論と同文禁止" },
   D1_arcSummary: { label: "経緯", todo: "日付付き経緯を3行以上" },
+  D2_arc_topic: { label: "経緯の話題", todo: "経緯3行以上が案件キーワードと一致" },
   E1_timeline_count: { label: "タイムライン", todo: "出来事を6件以上（X3+国会3）" },
   E2_timeline_x: { label: "タイムラインX", todo: "X投稿を3件以上タイムラインに" },
   E3_timeline_diet: { label: "タイムライン国会", todo: "国会発言を3件以上タイムラインに" },
+  E4_timeline_diet_topic: { label: "TL国会の話題", todo: "タイムライン国会3件が案件と一致" },
   A2_phaseA_source: { label: "一次ソース（国会待ち）", todo: "報道URLまたはタイムライン出典を追加" },
   J1_prosCons: { label: "メリデメ", todo: "公表数値付きメリット2・デメリット2" },
   F1_glossary: { label: "用語解説", todo: "用語を2語以上" },
@@ -31,7 +40,9 @@ export const CHECK_LABELS = {
   G3_parties_min: { label: "政党数", todo: "2党以上を登録" },
   G4_parties_source: { label: "党の出典URL", todo: "各党に sourceUrl" },
   G5_parties_symbol: { label: "◎▲❌", todo: "各党の記号を確定" },
+  G6_matrix_topic: { label: "〇×の話題", todo: "公言と行動が案件キーワードと一致（2党）" },
   H1_xPosts: { label: "X投稿", todo: "検証済みX URLを1件以上" },
+  H2_x_topic: { label: "Xの話題", todo: "X投稿本文が案件キーワードと一致" },
   I1_legal: { label: "法務", todo: "legal-check を実行" },
 };
 
@@ -68,6 +79,7 @@ export function checkCasePage(article, opts = {}) {
 
   // A. メタ
   add("A1_title", Boolean(article.title), article.title || "title なし");
+  add("A1b_title_placeholder", isTitleReady(article), isTitleReady(article) ? "確定済み" : "仮タイトル・編集メモあり");
   if (phaseA) {
     const milestones = tl.filter(
       (e) => e.type === "milestone" && (e.milestone?.sourceUrl || e.sourceUrl),
@@ -93,15 +105,36 @@ export function checkCasePage(article, opts = {}) {
   const bullets = article.nowSummary?.bullets ?? [];
   add("B1_nowSummary", bullets.length >= 3, `${bullets.length}/3 行`);
   add("B2_disclaimer", Boolean(article.nowSummary?.disclaimer), article.nowSummary?.disclaimer ? "あり" : "なし");
+  const topicHits = countTopicBullets(article);
+  add(
+    "B3_topic",
+    topicHits >= 2,
+    `${topicHits}/2 行がキーワード一致（${article.searchKeyword || "—"}）`,
+  );
+  add(
+    "B4_conclusion",
+    isConclusionQuality(bullets),
+    isConclusionQuality(bullets) ? "要点3行・重複なし" : "結論が途中切れ・重複・逐語抜粋",
+  );
+  const voiceOk = bullets.length >= 3 && bullets.every((b) => !isDietVoice(String(b)) && !isSpeechFragment(String(b)));
+  add("B5_writer_voice", voiceOk, voiceOk ? "第三者目線" : "議事録口調が残っている");
 
   // C. 根拠
   const sb = article.summaryBullets ?? [];
-  add("C1_summaryBullets", sb.length >= 3, `${sb.length}/3 点`);
+  const sbTexts = sb.map((b) => (typeof b === "string" ? b : b.text));
+  add("C1_summaryBullets", sbTexts.length >= 3, `${sbTexts.length}/3 点`);
+  add(
+    "C2_evidence_distinct",
+    bulletsDistinctFrom(bullets, sbTexts),
+    bulletsDistinctFrom(bullets, sbTexts) ? "結論と別文" : "根拠が結論のコピー",
+  );
 
   // D. 経緯
   const arc = article.arcSummary ?? [];
   const arcDated = arc.filter((x) => typeof x === "object" && x.date && x.text);
   add("D1_arcSummary", arcDated.length >= 3, `${arcDated.length}/3 行（日付付き）`);
+  const arcTopic = countTopicArcLines(article);
+  add("D2_arc_topic", arcTopic >= 3, `${arcTopic}/3 行が話題一致`);
 
   // E. タイムライン
   if (phaseA) {
@@ -112,6 +145,8 @@ export function checkCasePage(article, opts = {}) {
     add("E1_timeline_count", tl.length >= 6, `${tl.length}/6 件`);
     add("E2_timeline_x", xInTl.length >= 3, `${xInTl.length}/3 X`);
     add("E3_timeline_diet", dietInTl.length >= 3, `${dietInTl.length}/3 国会`);
+    const dietTopic = countTopicDietTimeline(article);
+    add("E4_timeline_diet_topic", dietTopic >= 3, `${dietTopic}/3 国会が話題一致`);
   }
 
   // F. 用語
@@ -170,6 +205,13 @@ export function checkCasePage(article, opts = {}) {
     withSymbol.length >= 2,
     `◎▲❌ 確定 ${withSymbol.length}/2 党以上`,
   );
+  add(
+    "G6_matrix_topic",
+    isMatrixTopicRelevant(policyMatrix, article.searchKeyword),
+    isMatrixTopicRelevant(policyMatrix, article.searchKeyword)
+      ? "2党とも話題一致"
+      : "公言テキストが案件と無関係",
+  );
 
   // H. X — 公開前必須（未検証URL・空枠では出さない）
   const xPosts = article.xPosts ?? [];
@@ -189,6 +231,14 @@ export function checkCasePage(article, opts = {}) {
       xVerified.length >= xMin
         ? `検証済み ${xVerified.length} 件`
         : `検証済み ${xVerified.length}/${xMin} 件（公開前必須）`,
+    );
+    const xTopicOk = xVerified.filter((p) =>
+      textStronglyMatchesTopic(String(p.post_text || ""), article.searchKeyword),
+    ).length;
+    add(
+      "H2_x_topic",
+      xTopicOk >= Math.min(3, xMin),
+      `${xTopicOk}/${Math.min(3, xMin)} 件が話題一致`,
     );
   }
 

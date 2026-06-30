@@ -8,6 +8,7 @@
 import { readFile, readdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { textStronglyMatchesTopic } from "../src/lib/topic-relevance.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(__dirname, "..");
@@ -192,8 +193,8 @@ const TOPIC_CONFIG = {
     keywords: ["スパイ", "スパイ防止", "情報漏洩", "国家情報", "諜報", "機密", "重要経済安保"],
   },
   国旗損壊罪: {
-    handles: ["izmkenta", "cdp_japan", "tamakiyuichiro", "ibori_y", "yoshimurhirofumi", "renho_sha"],
-    keywords: ["国旗", "損壊", "汚損", "損壊罪", "象徴", "国歌"],
+    handles: ["izmkenta", "tamakiyuichiro", "jinkamiya", "kobahawk", "cdp_japan", "ibori_y", "yoshimurhirofumi", "takaichi_sanae"],
+    keywords: ["国旗", "損壊", "汚損", "損壊罪", "象徴", "国歌", "日本国旗", "国章"],
   },
   国会議員のボーナス: {
     handles: ["tamakiyuichiro", "izmkenta", "cdp_japan", "takaichi_sanae", "NodaSeiko", "renho_sha"],
@@ -258,19 +259,16 @@ const SLUG_CONFIG = {
     ...TOPIC_CONFIG["スパイ防止法"],
     seed: [
       {
-        url: "https://x.com/takaichi_sanae/status/2070096912234238329",
-        label: "高市早苗 @takaichi_sanae",
-        text: "経済財政諮問会議。安全保障・経済政策の議論。",
+        url: "https://x.com/jinkamiya/status/1993237458470027403",
+        label: "神谷宗幣 @jinkamiya",
       },
       {
-        url: "https://x.com/izmkenta/status/2065378501486858685",
-        label: "泉健太 @izmkenta",
-        text: "与野党の政策論点について。",
-      },
-      {
-        url: "https://x.com/tamakiyuichiro/status/1567315242740502529",
+        url: "https://x.com/tamakiyuichiro/status/1993879658824372445",
         label: "玉木雄一郎 @tamakiyuichiro",
-        text: "国会・政策に関する論点。",
+      },
+      {
+        url: "https://x.com/somichi/status/2070848444579942654",
+        label: "染谷由美 @somichi",
       },
     ],
   },
@@ -278,19 +276,20 @@ const SLUG_CONFIG = {
     ...TOPIC_CONFIG["国旗損壊罪"],
     seed: [
       {
-        url: "https://x.com/yoshimurhirofumi/status/2065378501486858685",
-        label: "吉村洋文 @yoshimurhirofumi",
-        text: "地方・政治に関する発信。",
-      },
-      {
-        url: "https://x.com/izmkenta/status/2065378501486858685",
+        url: "https://x.com/izmkenta/status/2070412797100409107",
         label: "泉健太 @izmkenta",
-        text: "与野党の政策論点について。",
       },
       {
-        url: "https://x.com/tamakiyuichiro/status/1567315242740502529",
+        url: "https://x.com/tamakiyuichiro/status/2066789805275639941",
         label: "玉木雄一郎 @tamakiyuichiro",
-        text: "国会・政策に関する論点。",
+      },
+      {
+        url: "https://x.com/jinkamiya/status/2009630039667863563",
+        label: "神谷宗幣 @jinkamiya",
+      },
+      {
+        url: "https://x.com/kobahawk/status/2066903628544463160",
+        label: "小林鷹之 @kobahawk",
       },
     ],
   },
@@ -298,19 +297,16 @@ const SLUG_CONFIG = {
     ...TOPIC_CONFIG["国会議員のボーナス"],
     seed: [
       {
-        url: "https://x.com/tamakiyuichiro/status/1567315242740502529",
-        label: "玉木雄一郎 @tamakiyuichiro",
-        text: "物価高・所得支援・国会の論点。",
+        url: "https://x.com/Sankei_news/status/2071833186733355361",
+        label: "産経ニュース @Sankei_news",
       },
       {
-        url: "https://x.com/izmkenta/status/2065378501486858685",
+        url: "https://x.com/livedoornews/status/2059230865746735266",
+        label: "ライブドアニュース @livedoornews",
+      },
+      {
+        url: "https://x.com/izmkenta/status/1724633135554658320",
         label: "泉健太 @izmkenta",
-        text: "社会保障・政治資金等の論点。",
-      },
-      {
-        url: "https://x.com/takaichi_sanae/status/2070096912234238329",
-        label: "高市早苗 @takaichi_sanae",
-        text: "経済財政諮問会議での意見交換。",
       },
     ],
   },
@@ -433,12 +429,12 @@ async function collectForTopic(keyword, config, dateRange) {
     const meta = await fetchTweetMeta(parsed.handle, parsed.id);
     if (meta) {
       meta.account_label = seed.label ?? meta.account_label;
-      meta.post_text = seed.text ?? meta.post_text;
-      const kwScore = Math.max(scoreText(meta.post_text, config.keywords), 2);
+      const kwScore = scoreText(meta.post_text, config.keywords);
+      if (kwScore < 1) continue;
       const engScore = scoreEngagement(meta);
       meta.score = kwScore + engScore;
       add(meta, meta.score);
-    } else if (seed.label) {
+    } else if (seed.label && seed.text && scoreText(seed.text, config.keywords) >= 1) {
       add(
         {
           post_url: seed.url.replace("twitter.com", "x.com"),
@@ -482,7 +478,9 @@ async function collectForTopic(keyword, config, dateRange) {
     }
   }
 
-  const sorted = [...candidates.values()].sort((a, b) => b.score - a.score);
+  const sorted = [...candidates.values()]
+    .filter((item) => textStronglyMatchesTopic(item.post_text, keyword))
+    .sort((a, b) => b.score - a.score);
   const picked = [];
   const usedHandles = new Set();
   for (const item of sorted) {
@@ -533,12 +531,16 @@ function buildSlots(found) {
   });
 }
 
-/** 新規0件でも既存の検証済みXは消さない */
-function mergeXPosts(existing, found) {
+/** 新規0件でも既存の検証済みXは消さない（話題一致のみ維持） */
+function mergeXPosts(existing, found, keyword) {
   const newSlots = buildSlots(found);
   const newCount = newSlots.filter((s) => s.post_url).length;
   const verified = (existing ?? []).filter(
-    (p) => p.post_url && p.post_text && p.status === "url_found",
+    (p) =>
+      p.post_url &&
+      p.post_text &&
+      p.status === "url_found" &&
+      textStronglyMatchesTopic(String(p.post_text), keyword),
   );
   if (newCount === 0 && verified.length > 0) {
     return existing;
@@ -601,7 +603,7 @@ async function main() {
     }
     const urlCount = picked.filter((f) => f.post_url).length;
     totalFound += Math.min(urlCount, 5);
-    const merged = mergeXPosts(article.xPosts, picked);
+    const merged = mergeXPosts(article.xPosts, picked, kw);
     const mergedCount = merged.filter((p) => p.post_url).length;
     article.xPosts = merged;
     article.xResearch = {

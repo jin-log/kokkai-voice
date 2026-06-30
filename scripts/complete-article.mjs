@@ -5,16 +5,29 @@
  * Usage:
  *   node scripts/complete-article.mjs --slug shohizei-genmen
  */
-import { readFile, writeFile, access } from "node:fs/promises";
+import { readFile, writeFile, access, unlink } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { spawn } from "node:child_process";
 import { checkCasePageWithFiles, root } from "../src/lib/page-ready.mjs";
 import { isPublishGate, pipelineChecks, refreshProjectStatus } from "../src/lib/project-status.mjs";
 import { loadArticle } from "../src/lib/articles.mjs";
-import { fetchSpeechForKeyword, pickSpeech, excerptSpeech, scoreSpeechRelevance } from "./lib/kokkai-api.mjs";
+import { fetchSpeechForKeyword, pickSpeechForSummary, excerptSpeech, scoreSpeechRelevance, extractKeywordSpeechWindow, topicSpeechExcerpt, scoreSpeechTopicRelevance } from "./lib/kokkai-api.mjs";
 import { buildArticleLayers } from "./lib/article-summary.mjs";
+import {
+  buildFactBundle,
+  synthesizeNowSummary,
+  synthesizeEvidence,
+  synthesizeArcSummary,
+  synthesizePlainExplanation,
+  synthesizePartyMatrix,
+  synthesizeProsCons,
+  synthesizeProsConsFromArticle,
+} from "./lib/writer-synthesize.mjs";
 import { enrichGeneralArticle, writePolicyMatrixGeneral, fetchReadable, isGeneralContentReady } from "./lib/enrich-general.mjs";
+import { citizenTitle } from "../src/lib/title-format.mjs";
+import { isTopicRelevant, textMatchesTopic, topicTerms, isConclusionQuality, countTopicArcLines, countTopicDietTimeline, isMatrixTopicRelevant, textStronglyMatchesTopic } from "../src/lib/topic-relevance.mjs";
+import { normalizeFactPhrase } from "../src/lib/diet-voice.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -24,6 +37,7 @@ function arg(name) {
 }
 
 const slug = arg("slug");
+const force = process.argv.includes("--force");
 if (!slug) {
   console.error("必須: --slug");
   process.exit(1);
@@ -45,7 +59,17 @@ function countVerifiedX(article) {
   ).length;
 }
 
-function isKokkaiContentReady(article) {
+function countTopicVerifiedX(article) {
+  return (article.xPosts ?? []).filter(
+    (p) =>
+      p.post_url &&
+      p.post_text &&
+      p.status === "url_found" &&
+      textStronglyMatchesTopic(String(p.post_text), article.searchKeyword),
+  ).length;
+}
+
+function isKokkaiContentReady(article, policyMatrix = null) {
   const bullets = article.nowSummary?.bullets ?? [];
   const placeholder =
     bullets.length === 1 && String(bullets[0]).includes("下記の議事録");
@@ -59,11 +83,22 @@ function isKokkaiContentReady(article) {
   return Boolean(
     article.primarySpeech?.speechFull &&
     bullets.length >= 3 &&
+    isConclusionQuality(bullets) &&
     (article.summaryBullets?.length ?? 0) >= 3 &&
     (article.glossary?.length ?? 0) >= 2 &&
-    dietInTl.length >= 3,
+    dietInTl.length >= 3 &&
+    countTopicArcLines(article) >= 3 &&
+    countTopicDietTimeline(article) >= 3 &&
+    isTopicRelevant(article) &&
+    isMatrixTopicRelevant(policyMatrix, article.searchKeyword),
   );
 }
+
+const EXTRA_KEYWORDS = {
+  "case-mr0jbdpc": ["国旗損壊罪", "国旗"],
+  "case-mqzxj4ro": ["歳費", "期末手当", "特別職給与", "議員報酬"],
+  "case-mqzxgs3f": ["国家情報会議", "スパイ防止法制"],
+};
 
 async function enrichKokkai(article) {
   const keyword = article.searchKeyword;
@@ -71,30 +106,62 @@ async function enrichKokkai(article) {
   const until = new Date().toISOString().slice(0, 10);
   console.log(`[国会] API再取得: ${keyword}`);
   const fetched = await fetchSpeechForKeyword(keyword, { from, until, maximumRecords: 100 });
-  const records = fetched.records;
+  let records = fetched.records;
   article.apiHits = fetched.apiHits;
-  const searchKeyword = fetched.resolvedKeyword;
+  let searchKeyword = fetched.resolvedKeyword;
   if (searchKeyword !== keyword) {
     console.log(`  キーワードフォールバック: "${keyword}" → "${searchKeyword}"`);
     article.searchKeyword = searchKeyword;
   }
 
-  const best = pickSpeech(records, searchKeyword);
+  for (const extra of EXTRA_KEYWORDS[slug] || []) {
+    const more = await fetchSpeechForKeyword(extra, { from, until, maximumRecords: 50 });
+    for (const r of more.records) {
+      if (!records.some((x) => x.speechID === r.speechID)) records.push(r);
+    }
+    article.apiHits = Math.max(article.apiHits, more.apiHits);
+  }
+
+  const best = pickSpeechForSummary(records, searchKeyword);
   if (!best?.speech) throw new Error("国会発言が見つかりません");
 
+  const topicKw = topicTerms(searchKeyword);
+  const summarySource = extractKeywordSpeechWindow(best.speech, topicKw);
   const meta = {
     date: best.date,
     nameOfHouse: best.nameOfHouse,
     nameOfMeeting: best.nameOfMeeting,
     speaker: best.speaker,
     speakerGroup: best.speakerGroup,
+    speechURL: best.speechURL,
   };
-  const layers = buildArticleLayers(best.speech, searchKeyword.split(/\s+/), meta);
 
-  article.nowSummary = layers.nowSummary;
-  article.summaryBullets = layers.summaryBullets;
-  article.plainExplanation = layers.plainExplanation;
-  article.glossary = layers.glossary;
+  const factBundle = buildFactBundle(records, searchKeyword);
+  const nowBullets = synthesizeNowSummary(factBundle, meta);
+  if (nowBullets.length < 3) {
+    throw new Error(`[writer] 結論が3行未満 (${nowBullets.length}) — 原材料不足または変換失敗`);
+  }
+  const arcFromWriter = synthesizeArcSummary(factBundle);
+  const summaryTexts = synthesizeEvidence(factBundle, nowBullets, meta, arcFromWriter).slice(0, 5);
+
+  const layers = buildArticleLayers(summarySource, topicKw, meta);
+  const glossary = layers.glossary;
+
+  article.title = citizenTitle({ ...article, slug });
+  article.nowSummary = {
+    label: layers.nowSummary.label,
+    bullets: nowBullets,
+    disclaimer: layers.nowSummary.disclaimer,
+    updatedAt: new Date().toISOString(),
+  };
+  article.summaryBullets =
+    summaryTexts.length >= 3
+      ? summaryTexts.slice(0, 5)
+      : (() => {
+          throw new Error(`[writer] 根拠が3点未満 (${summaryTexts.length})`);
+        })();
+  article.plainExplanation = synthesizePlainExplanation(article.nowSummary.bullets, article.title, meta);
+  article.glossary = glossary;
   article.primarySpeech = {
     speechID: best.speechID ?? null,
     issueID: best.issueID ?? null,
@@ -108,35 +175,41 @@ async function enrichKokkai(article) {
     speakerPosition: best.speakerPosition ?? null,
     speechURL: best.speechURL ?? null,
     meetingURL: best.meetingURL ?? null,
-    excerpt: excerptSpeech(best.speech, 280),
+    excerpt: excerptSpeech(summarySource, 280),
     speechFull: best.speech ?? null,
   };
 
+  const minSpeechScore = 8;
+  const topicTermList = topicTerms(searchKeyword);
   const byDate = new Map();
   for (const r of records) {
     if (!r.date || !r.speech || !r.speechURL) continue;
-    const score = scoreSpeechRelevance(r, searchKeyword);
-    if (score < 5) continue;
+    const score = scoreSpeechTopicRelevance(r, searchKeyword);
+    if (score < minSpeechScore) continue;
+    const excerpt = topicSpeechExcerpt(r.speech, topicTermList, 100);
+    if (!textStronglyMatchesTopic(excerpt, searchKeyword)) continue;
     const prev = byDate.get(r.date);
-    if (!prev || score > prev.score) byDate.set(r.date, { record: r, score });
+    if (!prev || score > prev.score) {
+      const plain = normalizeFactPhrase(excerpt);
+      byDate.set(r.date, { record: r, score, excerpt: plain });
+    }
   }
 
-  article.arcSummary = [...byDate.entries()]
-    .sort(([a], [b]) => b.localeCompare(a))
-    .slice(0, 6)
-    .map(([date, { record }]) => ({
-      date,
-      text: excerptSpeech(record.speech, 100),
-    }));
+  article.arcSummary = arcFromWriter.length >= 3 ? arcFromWriter : [...byDate.entries()]
+          .sort(([a], [b]) => b.localeCompare(a))
+          .slice(0, 6)
+          .map(([date, { excerpt }]) => ({ date, text: excerpt }));
+
+  article.prosCons = synthesizeProsCons(factBundle, article.arcSummary, nowBullets, meta);
 
   article.timeline = [...byDate.entries()]
     .sort(([a], [b]) => b.localeCompare(a))
     .slice(0, 6)
-    .map(([date, { record }], i) => ({
+    .map(([date, { record, excerpt }], i) => ({
       id: `${slug}-tl-${i}`,
       type: "speech",
       date,
-      summaryPlain: excerptSpeech(record.speech, 120),
+      summaryPlain: excerpt,
       speech: {
         speechID: record.speechID,
         issueID: record.issueID,
@@ -152,48 +225,66 @@ async function enrichKokkai(article) {
       },
     }));
 
-  await writePolicyMatrixKokkai(article, records);
+  await writePolicyMatrixKokkai(article, records, { force });
   return article;
 }
 
-async function writePolicyMatrixKokkai(article, records) {
+async function writePolicyMatrixKokkai(article, records, { force = false } = {}) {
   const matrixPath = path.join(root, "data/policy-matrix", `${slug}.json`);
+  let existing = null;
   try {
-    await access(matrixPath);
-    console.log("[matrix] 既存ファイルあり — スキップ");
-    return;
+    existing = JSON.parse(await readFile(matrixPath, "utf8"));
+    if (!force && isMatrixTopicRelevant(existing, article.searchKeyword)) {
+      console.log("[matrix] 話題一致済み — スキップ");
+      return;
+    }
+    if (force || !isMatrixTopicRelevant(existing, article.searchKeyword)) {
+      console.log("[matrix] 話題不一致または --force — 再生成");
+      await unlink(matrixPath).catch(() => {});
+    }
   } catch {
     /* create */
   }
 
   const groups = new Map();
-  for (const r of records) {
+  const topicTermList = topicTerms(article.searchKeyword);
+  const rankedRecords = records
+    .map((r) => ({ r, score: scoreSpeechTopicRelevance(r, article.searchKeyword) }))
+    .filter((x) => x.score > 8)
+    .sort((a, b) => b.score - a.score);
+  for (const { r } of rankedRecords) {
     const g = r.speakerGroup?.trim();
+    const stanceText = normalizeFactPhrase(topicSpeechExcerpt(r.speech, topicTermList, 100));
     if (!g || groups.has(g) || !r.speechURL) continue;
-    groups.set(g, r);
+    if (!textStronglyMatchesTopic(stanceText, article.searchKeyword)) continue;
+    groups.set(g, { r, stanceText });
     if (groups.size >= 2) break;
   }
   if (groups.size < 2) {
-    console.warn("[matrix] 2党未満 — 自動生成スキップ");
+    console.warn("[matrix] 話題一致2党未満 — 自動生成スキップ");
     return;
   }
 
-  const parties = [...groups.entries()].map(([label, r]) => ({
-    partyLabel: label.split("・")[0].slice(0, 20),
-    stance: {
-      text: excerptSpeech(r.speech, 100),
-      sourceUrl: r.speechURL,
-      sourceType: "国会発言",
-      capturedAt: new Date().toISOString().slice(0, 10),
-    },
-    action: {
-      text: `${r.nameOfMeeting ?? "国会"}（${r.date}）での発言`,
-      speechUrl: r.speechURL,
-      capturedAt: new Date().toISOString().slice(0, 10),
-    },
-    symbol: "▲",
-    symbolReason: "自動生成（国会発言ベース）。手動で更新推奨",
-  }));
+  const factBundle = buildFactBundle(records, article.searchKeyword);
+  const matrixParties = synthesizePartyMatrix(factBundle);
+  const parties = matrixParties.length >= 2
+    ? matrixParties
+    : [...groups.entries()].map(([label, { r, stanceText }]) => ({
+        partyLabel: label.split("・")[0].slice(0, 20),
+        stance: {
+          text: stanceText,
+          sourceUrl: r.speechURL,
+          sourceType: "国会発言",
+          capturedAt: r.date,
+        },
+        action: {
+          text: `${r.nameOfMeeting ?? "国会"}（${r.date}）での発言`,
+          speechUrl: r.speechURL,
+          capturedAt: r.date,
+        },
+        symbol: "▲",
+        symbolReason: "自動生成（国会発言ベース）。手動で更新推奨",
+      }));
 
   const matrix = {
     policySlug: slug,
@@ -222,7 +313,15 @@ async function main() {
 
   // ① コンテンツ
   if (article.category === "国会") {
-    if (isKokkaiContentReady(article)) {
+    let policyMatrix = null;
+    try {
+      policyMatrix = JSON.parse(
+        await readFile(path.join(root, `data/policy-matrix/${slug}.json`), "utf8"),
+      );
+    } catch {
+      /* */
+    }
+    if (!force && isKokkaiContentReady(article, policyMatrix)) {
       console.log("[国会] 既にコンテンツあり — スキップ");
     } else {
       await enrichKokkai(article);
@@ -246,11 +345,20 @@ async function main() {
   console.log("[②] メリデメ自動生成");
   await runNode("generate-proscons-auto.mjs", ["--slug", slug]);
 
-  // ③ X
+  // ③ X（話題一致が足りなければ再調査）
+  article = JSON.parse(await readFile(articlePath, "utf8"));
   const xMin = article.xPostsMinRequired ?? 3;
-  if (countVerifiedX(article) >= xMin) {
-    console.log(`[③] X調査スキップ（検証済み ${countVerifiedX(article)} 件）`);
+  const topicXMin = Math.min(3, xMin);
+  const xOk = countVerifiedX(article) >= xMin && countTopicVerifiedX(article) >= topicXMin;
+  if (!force && xOk) {
+    console.log(
+      `[③] X調査スキップ（検証済み ${countVerifiedX(article)} 件・話題一致 ${countTopicVerifiedX(article)} 件）`,
+    );
   } else {
+    if (force || countTopicVerifiedX(article) < topicXMin) {
+      console.log("[③] Xリセット（話題不一致または --force）");
+      await runNode("reset-xposts.mjs", [slug]);
+    }
     console.log("[③] X調査");
     await runNode("x-research-batch.mjs", [slug]);
   }

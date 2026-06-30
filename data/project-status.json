@@ -1,16 +1,16 @@
 {
-  "generatedAt": "2026-06-30T11:40:10.594Z",
+  "generatedAt": "2026-06-30T18:13:36.284Z",
   "strategy": "quality-first",
   "activeCount": 39,
   "parkedCount": 0,
-  "publishedCount": 26,
-  "overallGoldPct": 89,
-  "overallGatePct": 100,
+  "publishedCount": 0,
+  "overallGoldPct": 64,
+  "overallGatePct": 79,
   "slugs": [
     {
       "slug": "case-mr0jbdpc",
-      "title": "【国旗損壊罪】いまどうなってる？（具体疑問タイトルに編集）",
-      "shortTitle": "【国旗損壊罪】いまどうなってる？（具体疑問タイトルに編集）",
+      "title": "【国旗損壊罪】連立合意で法制化へ？いま国会の動き",
+      "shortTitle": "【国旗損壊罪】連立合意で法制化へ？いま国会の動き",
       "adminHidden": false,
       "pageReady": false,
       "publishState": "draft",
@@ -130,8 +130,8 @@
     },
     {
       "slug": "case-mqzxj4ro",
-      "title": "【国会議員のボーナス】高い？安い？（具体疑問タイトルに編集）",
-      "shortTitle": "【国会議員のボーナス】高い？安い？（具体疑問タイトルに編集）",
+      "title": "【国会議員のボーナス】期末手当はいくら？2023年給与法改正の争点",
+      "shortTitle": "【国会議員のボーナス】期末手当はいくら？2023年給与法改正の争点",
       "adminHidden": false,
       "pageReady": false,
       "publishState": "draft",
@@ -251,8 +251,8 @@
     },
     {
       "slug": "case-mqzxgs3f",
-      "title": "【スパイ防止法】進まない理由（具体疑問タイトルに編集）",
-      "shortTitle": "【スパイ防止法】進まない理由（具体疑問タイトルに編集）",
+      "title": "【スパイ防止法】なぜ成立しない？国家情報会議法案との関係",
+      "shortTitle": "【スパイ防止法】なぜ成立しない？国家情報会議法案との関係",
       "adminHidden": false,
       "pageReady": false,
       "publishState": "draft",
@@ -377,18 +377,18 @@
       "adminHidden": true,
       "pageReady": false,
       "publishState": "hidden",
-      "previewUrl": "/dev/preview/zeihikaku-kojo/",
-      "gatePct": 100,
-      "goldPct": 67,
+      "previewUrl": null,
+      "gatePct": 75,
+      "goldPct": 50,
       "published": false,
-      "publishGateOk": true,
+      "publishGateOk": false,
       "pipeline": [
         {
           "id": "content",
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": true
+          "ok": false
         },
         {
           "id": "matrix",
@@ -432,7 +432,7 @@
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": true
+          "ok": false
         },
         {
           "id": "matrix",
@@ -470,8 +470,33 @@
           "ok": false
         }
       ],
-      "blockers": [],
-      "blockerCount": 0,
+      "blockers": [
+        {
+          "id": "D2_arc_topic",
+          "label": "経緯の話題",
+          "todo": "経緯3行以上が案件キーワードと一致",
+          "detail": "2/3 行が話題一致"
+        },
+        {
+          "id": "E4_timeline_diet_topic",
+          "label": "TL国会の話題",
+          "todo": "タイムライン国会3件が案件と一致",
+          "detail": "0/3 国会が話題一致"
+        },
+        {
+          "id": "G6_matrix_topic",
+          "label": "〇×の話題",
+          "todo": "公言と行動が案件キーワードと一致（2党）",
+          "detail": "公言テキストが案件と無関係"
+        },
+        {
+          "id": "H2_x_topic",
+          "label": "Xの話題",
+          "todo": "X投稿本文が案件キーワードと一致",
+          "detail": "2/3 件が話題一致"
+        }
+      ],
+      "blockerCount": 4,
       "runState": "idle",
       "nextAction": "👁️ 非表示中 — 「表示に戻す」でトップに出せます",
       "promo": {
@@ -498,18 +523,18 @@
       "adminHidden": true,
       "pageReady": true,
       "publishState": "hidden",
-      "previewUrl": "/dev/preview/expo2025-kessan/",
-      "gatePct": 100,
-      "goldPct": 83,
-      "published": true,
-      "publishGateOk": true,
+      "previewUrl": null,
+      "gatePct": 75,
+      "goldPct": 50,
+      "published": false,
+      "publishGateOk": false,
       "pipeline": [
         {
           "id": "content",
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": true
+          "ok": false
         },
         {
           "id": "matrix",
@@ -537,7 +562,7 @@
           "label": "⑤本番デプロイ",
           "phase": 5,
           "preDeploy": false,
-          "ok": true
+          "ok": false
         },
         {
           "id": "debug",
@@ -553,7 +578,7 @@
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": true
+          "ok": false
         },
         {
           "id": "matrix",
@@ -581,7 +606,7 @@
           "label": "⑤本番デプロイ",
           "phase": 5,
           "preDeploy": false,
-          "ok": true
+          "ok": false
         },
         {
           "id": "debug",
@@ -591,8 +616,39 @@
           "ok": false
         }
       ],
-      "blockers": [],
-      "blockerCount": 0,
+      "blockers": [
+        {
+          "id": "B3_topic",
+          "label": "話題一致",
+          "todo": "要約が searchKeyword と一致（2行以上）",
+          "detail": "1/2 行がキーワード一致（大阪万博 2025 費用）"
+        },
+        {
+          "id": "D2_arc_topic",
+          "label": "経緯の話題",
+          "todo": "経緯3行以上が案件キーワードと一致",
+          "detail": "1/3 行が話題一致"
+        },
+        {
+          "id": "E4_timeline_diet_topic",
+          "label": "TL国会の話題",
+          "todo": "タイムライン国会3件が案件と一致",
+          "detail": "2/3 国会が話題一致"
+        },
+        {
+          "id": "G6_matrix_topic",
+          "label": "〇×の話題",
+          "todo": "公言と行動が案件キーワードと一致（2党）",
+          "detail": "公言テキストが案件と無関係"
+        },
+        {
+          "id": "H2_x_topic",
+          "label": "Xの話題",
+          "todo": "X投稿本文が案件キーワードと一致",
+          "detail": "0/3 件が話題一致"
+        }
+      ],
+      "blockerCount": 5,
       "runState": "idle",
       "nextAction": "👁️ 非表示中 — 「表示に戻す」でトップに出せます",
       "promo": {
@@ -712,8 +768,21 @@
           "ok": false
         }
       ],
-      "blockers": [],
-      "blockerCount": 0,
+      "blockers": [
+        {
+          "id": "G6_matrix_topic",
+          "label": "〇×の話題",
+          "todo": "公言と行動が案件キーワードと一致（2党）",
+          "detail": "公言テキストが案件と無関係"
+        },
+        {
+          "id": "H2_x_topic",
+          "label": "Xの話題",
+          "todo": "X投稿本文が案件キーワードと一致",
+          "detail": "1/3 件が話題一致"
+        }
+      ],
+      "blockerCount": 2,
       "runState": "idle",
       "nextAction": "👁️ 非表示中 — 「表示に戻す」でトップに出せます",
       "promo": {
@@ -833,8 +902,21 @@
           "ok": false
         }
       ],
-      "blockers": [],
-      "blockerCount": 0,
+      "blockers": [
+        {
+          "id": "G6_matrix_topic",
+          "label": "〇×の話題",
+          "todo": "公言と行動が案件キーワードと一致（2党）",
+          "detail": "公言テキストが案件と無関係"
+        },
+        {
+          "id": "H2_x_topic",
+          "label": "Xの話題",
+          "todo": "X投稿本文が案件キーワードと一致",
+          "detail": "0/3 件が話題一致"
+        }
+      ],
+      "blockerCount": 2,
       "runState": "idle",
       "nextAction": "👁️ 非表示中 — 「表示に戻す」でトップに出せます",
       "promo": {
@@ -861,18 +943,18 @@
       "adminHidden": true,
       "pageReady": false,
       "publishState": "hidden",
-      "previewUrl": "/dev/preview/denki-gas-genmen/",
-      "gatePct": 100,
-      "goldPct": 67,
+      "previewUrl": null,
+      "gatePct": 75,
+      "goldPct": 50,
       "published": false,
-      "publishGateOk": true,
+      "publishGateOk": false,
       "pipeline": [
         {
           "id": "content",
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": true
+          "ok": false
         },
         {
           "id": "matrix",
@@ -916,7 +998,7 @@
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": true
+          "ok": false
         },
         {
           "id": "matrix",
@@ -954,8 +1036,33 @@
           "ok": false
         }
       ],
-      "blockers": [],
-      "blockerCount": 0,
+      "blockers": [
+        {
+          "id": "B3_topic",
+          "label": "話題一致",
+          "todo": "要約が searchKeyword と一致（2行以上）",
+          "detail": "1/2 行がキーワード一致（電気 ガス 価格激変緩和）"
+        },
+        {
+          "id": "E4_timeline_diet_topic",
+          "label": "TL国会の話題",
+          "todo": "タイムライン国会3件が案件と一致",
+          "detail": "2/3 国会が話題一致"
+        },
+        {
+          "id": "G6_matrix_topic",
+          "label": "〇×の話題",
+          "todo": "公言と行動が案件キーワードと一致（2党）",
+          "detail": "公言テキストが案件と無関係"
+        },
+        {
+          "id": "H2_x_topic",
+          "label": "Xの話題",
+          "todo": "X投稿本文が案件キーワードと一致",
+          "detail": "0/3 件が話題一致"
+        }
+      ],
+      "blockerCount": 4,
       "runState": "idle",
       "nextAction": "👁️ 非表示中 — 「表示に戻す」でトップに出せます",
       "promo": {
@@ -982,18 +1089,18 @@
       "adminHidden": true,
       "pageReady": false,
       "publishState": "hidden",
-      "previewUrl": "/dev/preview/gakushu-shien-75000/",
-      "gatePct": 100,
-      "goldPct": 67,
+      "previewUrl": null,
+      "gatePct": 75,
+      "goldPct": 50,
       "published": false,
-      "publishGateOk": true,
+      "publishGateOk": false,
       "pipeline": [
         {
           "id": "content",
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": true
+          "ok": false
         },
         {
           "id": "matrix",
@@ -1037,7 +1144,7 @@
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": true
+          "ok": false
         },
         {
           "id": "matrix",
@@ -1075,8 +1182,39 @@
           "ok": false
         }
       ],
-      "blockers": [],
-      "blockerCount": 0,
+      "blockers": [
+        {
+          "id": "B3_topic",
+          "label": "話題一致",
+          "todo": "要約が searchKeyword と一致（2行以上）",
+          "detail": "0/2 行がキーワード一致（子ども学習支援費 75000）"
+        },
+        {
+          "id": "D2_arc_topic",
+          "label": "経緯の話題",
+          "todo": "経緯3行以上が案件キーワードと一致",
+          "detail": "0/3 行が話題一致"
+        },
+        {
+          "id": "E4_timeline_diet_topic",
+          "label": "TL国会の話題",
+          "todo": "タイムライン国会3件が案件と一致",
+          "detail": "0/3 国会が話題一致"
+        },
+        {
+          "id": "G6_matrix_topic",
+          "label": "〇×の話題",
+          "todo": "公言と行動が案件キーワードと一致（2党）",
+          "detail": "公言テキストが案件と無関係"
+        },
+        {
+          "id": "H2_x_topic",
+          "label": "Xの話題",
+          "todo": "X投稿本文が案件キーワードと一致",
+          "detail": "0/3 件が話題一致"
+        }
+      ],
+      "blockerCount": 5,
       "runState": "idle",
       "nextAction": "👁️ 非表示中 — 「表示に戻す」でトップに出せます",
       "promo": {
@@ -1103,18 +1241,18 @@
       "adminHidden": true,
       "pageReady": false,
       "publishState": "hidden",
-      "previewUrl": "/dev/preview/noto-fukko-budget/",
-      "gatePct": 100,
-      "goldPct": 67,
+      "previewUrl": null,
+      "gatePct": 75,
+      "goldPct": 50,
       "published": false,
-      "publishGateOk": true,
+      "publishGateOk": false,
       "pipeline": [
         {
           "id": "content",
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": true
+          "ok": false
         },
         {
           "id": "matrix",
@@ -1158,7 +1296,7 @@
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": true
+          "ok": false
         },
         {
           "id": "matrix",
@@ -1196,8 +1334,33 @@
           "ok": false
         }
       ],
-      "blockers": [],
-      "blockerCount": 0,
+      "blockers": [
+        {
+          "id": "B3_topic",
+          "label": "話題一致",
+          "todo": "要約が searchKeyword と一致（2行以上）",
+          "detail": "1/2 行がキーワード一致（能登半島地震 復興予算）"
+        },
+        {
+          "id": "E4_timeline_diet_topic",
+          "label": "TL国会の話題",
+          "todo": "タイムライン国会3件が案件と一致",
+          "detail": "1/3 国会が話題一致"
+        },
+        {
+          "id": "G6_matrix_topic",
+          "label": "〇×の話題",
+          "todo": "公言と行動が案件キーワードと一致（2党）",
+          "detail": "公言テキストが案件と無関係"
+        },
+        {
+          "id": "H2_x_topic",
+          "label": "Xの話題",
+          "todo": "X投稿本文が案件キーワードと一致",
+          "detail": "0/3 件が話題一致"
+        }
+      ],
+      "blockerCount": 4,
       "runState": "idle",
       "nextAction": "👁️ 非表示中 — 「表示に戻す」でトップに出せます",
       "promo": {
@@ -1224,18 +1387,18 @@
       "adminHidden": true,
       "pageReady": false,
       "publishState": "hidden",
-      "previewUrl": "/dev/preview/boei-tokubetsuzei/",
-      "gatePct": 100,
-      "goldPct": 67,
+      "previewUrl": null,
+      "gatePct": 75,
+      "goldPct": 50,
       "published": false,
-      "publishGateOk": true,
+      "publishGateOk": false,
       "pipeline": [
         {
           "id": "content",
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": true
+          "ok": false
         },
         {
           "id": "matrix",
@@ -1279,7 +1442,7 @@
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": true
+          "ok": false
         },
         {
           "id": "matrix",
@@ -1317,8 +1480,39 @@
           "ok": false
         }
       ],
-      "blockers": [],
-      "blockerCount": 0,
+      "blockers": [
+        {
+          "id": "B3_topic",
+          "label": "話題一致",
+          "todo": "要約が searchKeyword と一致（2行以上）",
+          "detail": "1/2 行がキーワード一致（防衛特別所得税）"
+        },
+        {
+          "id": "D2_arc_topic",
+          "label": "経緯の話題",
+          "todo": "経緯3行以上が案件キーワードと一致",
+          "detail": "2/3 行が話題一致"
+        },
+        {
+          "id": "E4_timeline_diet_topic",
+          "label": "TL国会の話題",
+          "todo": "タイムライン国会3件が案件と一致",
+          "detail": "2/3 国会が話題一致"
+        },
+        {
+          "id": "G6_matrix_topic",
+          "label": "〇×の話題",
+          "todo": "公言と行動が案件キーワードと一致（2党）",
+          "detail": "公言テキストが案件と無関係"
+        },
+        {
+          "id": "H2_x_topic",
+          "label": "Xの話題",
+          "todo": "X投稿本文が案件キーワードと一致",
+          "detail": "0/3 件が話題一致"
+        }
+      ],
+      "blockerCount": 5,
       "runState": "idle",
       "nextAction": "👁️ 非表示中 — 「表示に戻す」でトップに出せます",
       "promo": {
@@ -1345,18 +1539,18 @@
       "adminHidden": true,
       "pageReady": false,
       "publishState": "hidden",
-      "previewUrl": "/dev/preview/invoice-menzei-2026/",
-      "gatePct": 100,
-      "goldPct": 67,
+      "previewUrl": null,
+      "gatePct": 75,
+      "goldPct": 50,
       "published": false,
-      "publishGateOk": true,
+      "publishGateOk": false,
       "pipeline": [
         {
           "id": "content",
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": true
+          "ok": false
         },
         {
           "id": "matrix",
@@ -1400,7 +1594,7 @@
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": true
+          "ok": false
         },
         {
           "id": "matrix",
@@ -1438,8 +1632,33 @@
           "ok": false
         }
       ],
-      "blockers": [],
-      "blockerCount": 0,
+      "blockers": [
+        {
+          "id": "B3_topic",
+          "label": "話題一致",
+          "todo": "要約が searchKeyword と一致（2行以上）",
+          "detail": "1/2 行がキーワード一致（インボイス 免税事業者 2割特例）"
+        },
+        {
+          "id": "E4_timeline_diet_topic",
+          "label": "TL国会の話題",
+          "todo": "タイムライン国会3件が案件と一致",
+          "detail": "2/3 国会が話題一致"
+        },
+        {
+          "id": "G6_matrix_topic",
+          "label": "〇×の話題",
+          "todo": "公言と行動が案件キーワードと一致（2党）",
+          "detail": "公言テキストが案件と無関係"
+        },
+        {
+          "id": "H2_x_topic",
+          "label": "Xの話題",
+          "todo": "X投稿本文が案件キーワードと一致",
+          "detail": "0/3 件が話題一致"
+        }
+      ],
+      "blockerCount": 4,
       "runState": "idle",
       "nextAction": "👁️ 非表示中 — 「表示に戻す」でトップに出せます",
       "promo": {
@@ -1466,9 +1685,2881 @@
       "adminHidden": true,
       "pageReady": false,
       "publishState": "hidden",
-      "previewUrl": "/dev/preview/teigaku-kyufu-2024/",
-      "gatePct": 100,
+      "previewUrl": null,
+      "gatePct": 75,
+      "goldPct": 50,
+      "published": false,
+      "publishGateOk": false,
+      "pipeline": [
+        {
+          "id": "content",
+          "label": "①コンテンツ",
+          "phase": 1,
+          "preDeploy": true,
+          "ok": false
+        },
+        {
+          "id": "matrix",
+          "label": "②〇×2党確定",
+          "phase": 2,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "x",
+          "label": "③X検証1件+",
+          "phase": 3,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "legal",
+          "label": "④法務OK",
+          "phase": 4,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "deployed",
+          "label": "⑤本番デプロイ",
+          "phase": 5,
+          "preDeploy": false,
+          "ok": false
+        },
+        {
+          "id": "debug",
+          "label": "⑥デバッグOK",
+          "phase": 6,
+          "preDeploy": false,
+          "ok": false
+        }
+      ],
+      "gold": [
+        {
+          "id": "content",
+          "label": "①コンテンツ",
+          "phase": 1,
+          "preDeploy": true,
+          "ok": false
+        },
+        {
+          "id": "matrix",
+          "label": "②〇×2党確定",
+          "phase": 2,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "x",
+          "label": "③X検証1件+",
+          "phase": 3,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "legal",
+          "label": "④法務OK",
+          "phase": 4,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "deployed",
+          "label": "⑤本番デプロイ",
+          "phase": 5,
+          "preDeploy": false,
+          "ok": false
+        },
+        {
+          "id": "debug",
+          "label": "⑥デバッグOK",
+          "phase": 6,
+          "preDeploy": false,
+          "ok": false
+        }
+      ],
+      "blockers": [
+        {
+          "id": "E4_timeline_diet_topic",
+          "label": "TL国会の話題",
+          "todo": "タイムライン国会3件が案件と一致",
+          "detail": "2/3 国会が話題一致"
+        },
+        {
+          "id": "G6_matrix_topic",
+          "label": "〇×の話題",
+          "todo": "公言と行動が案件キーワードと一致（2党）",
+          "detail": "公言テキストが案件と無関係"
+        },
+        {
+          "id": "H2_x_topic",
+          "label": "Xの話題",
+          "todo": "X投稿本文が案件キーワードと一致",
+          "detail": "0/3 件が話題一致"
+        }
+      ],
+      "blockerCount": 3,
+      "runState": "idle",
+      "nextAction": "👁️ 非表示中 — 「表示に戻す」でトップに出せます",
+      "promo": {
+        "x": null,
+        "hatena": null,
+        "note": null
+      },
+      "short": {
+        "slug": "teigaku-kyufu-2024",
+        "generated": false,
+        "uploaded": false,
+        "visibility": null,
+        "videoId": null,
+        "url": null,
+        "studioUrl": null,
+        "uploadedAt": null,
+        "label": "未生成"
+      }
+    },
+    {
+      "slug": "shussho-budget-seika",
+      "title": "【出生率・子育て支援】3.6兆円は効いた？2025年の実績",
+      "shortTitle": "【出生率・子育て支援】3.6兆円は効いた？2025年の実績",
+      "adminHidden": false,
+      "pageReady": true,
+      "publishState": "wip",
+      "previewUrl": null,
+      "gatePct": 75,
       "goldPct": 67,
+      "published": false,
+      "publishGateOk": false,
+      "pipeline": [
+        {
+          "id": "content",
+          "label": "①コンテンツ",
+          "phase": 1,
+          "preDeploy": true,
+          "ok": false
+        },
+        {
+          "id": "matrix",
+          "label": "②〇×2党確定",
+          "phase": 2,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "x",
+          "label": "③X検証1件+",
+          "phase": 3,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "legal",
+          "label": "④法務OK",
+          "phase": 4,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "deployed",
+          "label": "⑤本番デプロイ",
+          "phase": 5,
+          "preDeploy": false,
+          "ok": false
+        },
+        {
+          "id": "debug",
+          "label": "⑥デバッグOK",
+          "phase": 6,
+          "preDeploy": false,
+          "ok": true
+        }
+      ],
+      "gold": [
+        {
+          "id": "content",
+          "label": "①コンテンツ",
+          "phase": 1,
+          "preDeploy": true,
+          "ok": false
+        },
+        {
+          "id": "matrix",
+          "label": "②〇×2党確定",
+          "phase": 2,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "x",
+          "label": "③X検証1件+",
+          "phase": 3,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "legal",
+          "label": "④法務OK",
+          "phase": 4,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "deployed",
+          "label": "⑤本番デプロイ",
+          "phase": 5,
+          "preDeploy": false,
+          "ok": false
+        },
+        {
+          "id": "debug",
+          "label": "⑥デバッグOK",
+          "phase": 6,
+          "preDeploy": false,
+          "ok": true
+        }
+      ],
+      "blockers": [
+        {
+          "id": "E4_timeline_diet_topic",
+          "label": "TL国会の話題",
+          "todo": "タイムライン国会3件が案件と一致",
+          "detail": "2/3 国会が話題一致"
+        },
+        {
+          "id": "G6_matrix_topic",
+          "label": "〇×の話題",
+          "todo": "公言と行動が案件キーワードと一致（2党）",
+          "detail": "公言テキストが案件と無関係"
+        },
+        {
+          "id": "H2_x_topic",
+          "label": "Xの話題",
+          "todo": "X投稿本文が案件キーワードと一致",
+          "detail": "2/3 件が話題一致"
+        }
+      ],
+      "blockerCount": 3,
+      "runState": "idle",
+      "nextAction": "2/3 国会が話題一致 → 公言テキストが案件と無関係 → 2/3 件が話題一致",
+      "promo": {
+        "x": null,
+        "hatena": null,
+        "note": null
+      },
+      "short": {
+        "slug": "shussho-budget-seika",
+        "generated": true,
+        "uploaded": true,
+        "visibility": "private",
+        "videoId": "8HPZ4sC7uck",
+        "url": "https://www.youtube.com/shorts/8HPZ4sC7uck",
+        "studioUrl": "https://studio.youtube.com/video/8HPZ4sC7uck/edit",
+        "uploadedAt": "2026-06-29T22:11:20.857Z",
+        "label": "YT非公開"
+      }
+    },
+    {
+      "slug": "fukushuto-koso",
+      "title": "【副首都構想】第二の首都はどこ？具体案と争点",
+      "shortTitle": "【副首都構想】第二の首都はどこ？具体案と争点",
+      "adminHidden": false,
+      "pageReady": true,
+      "publishState": "wip",
+      "previewUrl": null,
+      "gatePct": 75,
+      "goldPct": 67,
+      "published": false,
+      "publishGateOk": false,
+      "pipeline": [
+        {
+          "id": "content",
+          "label": "①コンテンツ",
+          "phase": 1,
+          "preDeploy": true,
+          "ok": false
+        },
+        {
+          "id": "matrix",
+          "label": "②〇×2党確定",
+          "phase": 2,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "x",
+          "label": "③X検証1件+",
+          "phase": 3,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "legal",
+          "label": "④法務OK",
+          "phase": 4,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "deployed",
+          "label": "⑤本番デプロイ",
+          "phase": 5,
+          "preDeploy": false,
+          "ok": false
+        },
+        {
+          "id": "debug",
+          "label": "⑥デバッグOK",
+          "phase": 6,
+          "preDeploy": false,
+          "ok": true
+        }
+      ],
+      "gold": [
+        {
+          "id": "content",
+          "label": "①コンテンツ",
+          "phase": 1,
+          "preDeploy": true,
+          "ok": false
+        },
+        {
+          "id": "matrix",
+          "label": "②〇×2党確定",
+          "phase": 2,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "x",
+          "label": "③X検証1件+",
+          "phase": 3,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "legal",
+          "label": "④法務OK",
+          "phase": 4,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "deployed",
+          "label": "⑤本番デプロイ",
+          "phase": 5,
+          "preDeploy": false,
+          "ok": false
+        },
+        {
+          "id": "debug",
+          "label": "⑥デバッグOK",
+          "phase": 6,
+          "preDeploy": false,
+          "ok": true
+        }
+      ],
+      "blockers": [
+        {
+          "id": "B3_topic",
+          "label": "話題一致",
+          "todo": "要約が searchKeyword と一致（2行以上）",
+          "detail": "1/2 行がキーワード一致（副首都構想）"
+        },
+        {
+          "id": "D2_arc_topic",
+          "label": "経緯の話題",
+          "todo": "経緯3行以上が案件キーワードと一致",
+          "detail": "1/3 行が話題一致"
+        },
+        {
+          "id": "E4_timeline_diet_topic",
+          "label": "TL国会の話題",
+          "todo": "タイムライン国会3件が案件と一致",
+          "detail": "2/3 国会が話題一致"
+        },
+        {
+          "id": "G6_matrix_topic",
+          "label": "〇×の話題",
+          "todo": "公言と行動が案件キーワードと一致（2党）",
+          "detail": "公言テキストが案件と無関係"
+        },
+        {
+          "id": "H2_x_topic",
+          "label": "Xの話題",
+          "todo": "X投稿本文が案件キーワードと一致",
+          "detail": "1/3 件が話題一致"
+        }
+      ],
+      "blockerCount": 5,
+      "runState": "idle",
+      "nextAction": "1/2 行がキーワード一致（副首都構想） → 1/3 行が話題一致 → 2/3 国会が話題一致",
+      "promo": {
+        "x": null,
+        "hatena": null,
+        "note": null
+      },
+      "short": {
+        "slug": "fukushuto-koso",
+        "generated": false,
+        "uploaded": false,
+        "visibility": null,
+        "videoId": null,
+        "url": null,
+        "studioUrl": null,
+        "uploadedAt": null,
+        "label": "未生成"
+      }
+    },
+    {
+      "slug": "osaka-to-metropolis",
+      "title": "【大阪都構想】メリット・デメリットと最新の行方",
+      "shortTitle": "【大阪都構想】メリット・デメリットと最新の行方",
+      "adminHidden": false,
+      "pageReady": true,
+      "publishState": "wip",
+      "previewUrl": null,
+      "gatePct": 75,
+      "goldPct": 67,
+      "published": false,
+      "publishGateOk": false,
+      "pipeline": [
+        {
+          "id": "content",
+          "label": "①コンテンツ",
+          "phase": 1,
+          "preDeploy": true,
+          "ok": false
+        },
+        {
+          "id": "matrix",
+          "label": "②〇×2党確定",
+          "phase": 2,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "x",
+          "label": "③X検証1件+",
+          "phase": 3,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "legal",
+          "label": "④法務OK",
+          "phase": 4,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "deployed",
+          "label": "⑤本番デプロイ",
+          "phase": 5,
+          "preDeploy": false,
+          "ok": false
+        },
+        {
+          "id": "debug",
+          "label": "⑥デバッグOK",
+          "phase": 6,
+          "preDeploy": false,
+          "ok": true
+        }
+      ],
+      "gold": [
+        {
+          "id": "content",
+          "label": "①コンテンツ",
+          "phase": 1,
+          "preDeploy": true,
+          "ok": false
+        },
+        {
+          "id": "matrix",
+          "label": "②〇×2党確定",
+          "phase": 2,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "x",
+          "label": "③X検証1件+",
+          "phase": 3,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "legal",
+          "label": "④法務OK",
+          "phase": 4,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "deployed",
+          "label": "⑤本番デプロイ",
+          "phase": 5,
+          "preDeploy": false,
+          "ok": false
+        },
+        {
+          "id": "debug",
+          "label": "⑥デバッグOK",
+          "phase": 6,
+          "preDeploy": false,
+          "ok": true
+        }
+      ],
+      "blockers": [
+        {
+          "id": "B3_topic",
+          "label": "話題一致",
+          "todo": "要約が searchKeyword と一致（2行以上）",
+          "detail": "1/2 行がキーワード一致（大阪都構想）"
+        },
+        {
+          "id": "D2_arc_topic",
+          "label": "経緯の話題",
+          "todo": "経緯3行以上が案件キーワードと一致",
+          "detail": "0/3 行が話題一致"
+        },
+        {
+          "id": "G6_matrix_topic",
+          "label": "〇×の話題",
+          "todo": "公言と行動が案件キーワードと一致（2党）",
+          "detail": "公言テキストが案件と無関係"
+        },
+        {
+          "id": "H2_x_topic",
+          "label": "Xの話題",
+          "todo": "X投稿本文が案件キーワードと一致",
+          "detail": "0/3 件が話題一致"
+        }
+      ],
+      "blockerCount": 4,
+      "runState": "idle",
+      "nextAction": "1/2 行がキーワード一致（大阪都構想） → 0/3 行が話題一致 → 公言テキストが案件と無関係",
+      "promo": {
+        "x": null,
+        "hatena": null,
+        "note": null
+      },
+      "short": {
+        "slug": "osaka-to-metropolis",
+        "generated": false,
+        "uploaded": false,
+        "visibility": null,
+        "videoId": null,
+        "url": null,
+        "studioUrl": null,
+        "uploadedAt": null,
+        "label": "未生成"
+      }
+    },
+    {
+      "slug": "fuhou-immin-trend",
+      "title": "【不法滞在】国内の人数推移と政府の対応",
+      "shortTitle": "【不法滞在】国内の人数推移と政府の対応",
+      "adminHidden": false,
+      "pageReady": true,
+      "publishState": "wip",
+      "previewUrl": null,
+      "gatePct": 75,
+      "goldPct": 67,
+      "published": false,
+      "publishGateOk": false,
+      "pipeline": [
+        {
+          "id": "content",
+          "label": "①コンテンツ",
+          "phase": 1,
+          "preDeploy": true,
+          "ok": false
+        },
+        {
+          "id": "matrix",
+          "label": "②〇×2党確定",
+          "phase": 2,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "x",
+          "label": "③X検証1件+",
+          "phase": 3,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "legal",
+          "label": "④法務OK",
+          "phase": 4,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "deployed",
+          "label": "⑤本番デプロイ",
+          "phase": 5,
+          "preDeploy": false,
+          "ok": false
+        },
+        {
+          "id": "debug",
+          "label": "⑥デバッグOK",
+          "phase": 6,
+          "preDeploy": false,
+          "ok": true
+        }
+      ],
+      "gold": [
+        {
+          "id": "content",
+          "label": "①コンテンツ",
+          "phase": 1,
+          "preDeploy": true,
+          "ok": false
+        },
+        {
+          "id": "matrix",
+          "label": "②〇×2党確定",
+          "phase": 2,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "x",
+          "label": "③X検証1件+",
+          "phase": 3,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "legal",
+          "label": "④法務OK",
+          "phase": 4,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "deployed",
+          "label": "⑤本番デプロイ",
+          "phase": 5,
+          "preDeploy": false,
+          "ok": false
+        },
+        {
+          "id": "debug",
+          "label": "⑥デバッグOK",
+          "phase": 6,
+          "preDeploy": false,
+          "ok": true
+        }
+      ],
+      "blockers": [
+        {
+          "id": "B3_topic",
+          "label": "話題一致",
+          "todo": "要約が searchKeyword と一致（2行以上）",
+          "detail": "1/2 行がキーワード一致（不法移民 在留外国人数）"
+        },
+        {
+          "id": "D2_arc_topic",
+          "label": "経緯の話題",
+          "todo": "経緯3行以上が案件キーワードと一致",
+          "detail": "0/3 行が話題一致"
+        },
+        {
+          "id": "E4_timeline_diet_topic",
+          "label": "TL国会の話題",
+          "todo": "タイムライン国会3件が案件と一致",
+          "detail": "2/3 国会が話題一致"
+        },
+        {
+          "id": "G6_matrix_topic",
+          "label": "〇×の話題",
+          "todo": "公言と行動が案件キーワードと一致（2党）",
+          "detail": "公言テキストが案件と無関係"
+        },
+        {
+          "id": "H2_x_topic",
+          "label": "Xの話題",
+          "todo": "X投稿本文が案件キーワードと一致",
+          "detail": "0/3 件が話題一致"
+        }
+      ],
+      "blockerCount": 5,
+      "runState": "idle",
+      "nextAction": "1/2 行がキーワード一致（不法移民 在留外国人数） → 0/3 行が話題一致 → 2/3 国会が話題一致",
+      "promo": {
+        "x": null,
+        "hatena": null,
+        "note": null
+      },
+      "short": {
+        "slug": "fuhou-immin-trend",
+        "generated": false,
+        "uploaded": false,
+        "visibility": null,
+        "videoId": null,
+        "url": null,
+        "studioUrl": null,
+        "uploadedAt": null,
+        "label": "未生成"
+      }
+    },
+    {
+      "slug": "tokyo-solar-panel",
+      "title": "【東京都】太陽光パネル設置義務とは？",
+      "shortTitle": "【東京都】太陽光パネル設置義務とは？",
+      "adminHidden": false,
+      "pageReady": true,
+      "publishState": "wip",
+      "previewUrl": null,
+      "gatePct": 75,
+      "goldPct": 67,
+      "published": false,
+      "publishGateOk": false,
+      "pipeline": [
+        {
+          "id": "content",
+          "label": "①コンテンツ",
+          "phase": 1,
+          "preDeploy": true,
+          "ok": false
+        },
+        {
+          "id": "matrix",
+          "label": "②〇×2党確定",
+          "phase": 2,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "x",
+          "label": "③X検証1件+",
+          "phase": 3,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "legal",
+          "label": "④法務OK",
+          "phase": 4,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "deployed",
+          "label": "⑤本番デプロイ",
+          "phase": 5,
+          "preDeploy": false,
+          "ok": false
+        },
+        {
+          "id": "debug",
+          "label": "⑥デバッグOK",
+          "phase": 6,
+          "preDeploy": false,
+          "ok": true
+        }
+      ],
+      "gold": [
+        {
+          "id": "content",
+          "label": "①コンテンツ",
+          "phase": 1,
+          "preDeploy": true,
+          "ok": false
+        },
+        {
+          "id": "matrix",
+          "label": "②〇×2党確定",
+          "phase": 2,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "x",
+          "label": "③X検証1件+",
+          "phase": 3,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "legal",
+          "label": "④法務OK",
+          "phase": 4,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "deployed",
+          "label": "⑤本番デプロイ",
+          "phase": 5,
+          "preDeploy": false,
+          "ok": false
+        },
+        {
+          "id": "debug",
+          "label": "⑥デバッグOK",
+          "phase": 6,
+          "preDeploy": false,
+          "ok": true
+        }
+      ],
+      "blockers": [
+        {
+          "id": "B3_topic",
+          "label": "話題一致",
+          "todo": "要約が searchKeyword と一致（2行以上）",
+          "detail": "1/2 行がキーワード一致（太陽光パネル 設置義務 東京都）"
+        },
+        {
+          "id": "D2_arc_topic",
+          "label": "経緯の話題",
+          "todo": "経緯3行以上が案件キーワードと一致",
+          "detail": "1/3 行が話題一致"
+        },
+        {
+          "id": "E4_timeline_diet_topic",
+          "label": "TL国会の話題",
+          "todo": "タイムライン国会3件が案件と一致",
+          "detail": "1/3 国会が話題一致"
+        },
+        {
+          "id": "G6_matrix_topic",
+          "label": "〇×の話題",
+          "todo": "公言と行動が案件キーワードと一致（2党）",
+          "detail": "公言テキストが案件と無関係"
+        },
+        {
+          "id": "H2_x_topic",
+          "label": "Xの話題",
+          "todo": "X投稿本文が案件キーワードと一致",
+          "detail": "0/3 件が話題一致"
+        }
+      ],
+      "blockerCount": 5,
+      "runState": "idle",
+      "nextAction": "1/2 行がキーワード一致（太陽光パネル 設置義務 東京都） → 1/3 行が話題一致 → 1/3 国会が話題一致",
+      "promo": {
+        "x": null,
+        "hatena": null,
+        "note": null
+      },
+      "short": {
+        "slug": "tokyo-solar-panel",
+        "generated": false,
+        "uploaded": false,
+        "visibility": null,
+        "videoId": null,
+        "url": null,
+        "studioUrl": null,
+        "uploadedAt": null,
+        "label": "未生成"
+      }
+    },
+    {
+      "slug": "case-mqwdrley",
+      "title": "【東京都知事】小池百合子氏・学歴巡る刑事告発の経緯",
+      "shortTitle": "【東京都知事】小池百合子氏・学歴巡る刑事告発の経緯",
+      "adminHidden": false,
+      "pageReady": true,
+      "publishState": "wip",
+      "previewUrl": null,
+      "gatePct": 75,
+      "goldPct": 67,
+      "published": false,
+      "publishGateOk": false,
+      "pipeline": [
+        {
+          "id": "content",
+          "label": "①コンテンツ",
+          "phase": 1,
+          "preDeploy": true,
+          "ok": false
+        },
+        {
+          "id": "matrix",
+          "label": "②〇×2党確定",
+          "phase": 2,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "x",
+          "label": "③X検証1件+",
+          "phase": 3,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "legal",
+          "label": "④法務OK",
+          "phase": 4,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "deployed",
+          "label": "⑤本番デプロイ",
+          "phase": 5,
+          "preDeploy": false,
+          "ok": false
+        },
+        {
+          "id": "debug",
+          "label": "⑥デバッグOK",
+          "phase": 6,
+          "preDeploy": false,
+          "ok": true
+        }
+      ],
+      "gold": [
+        {
+          "id": "content",
+          "label": "①コンテンツ",
+          "phase": 1,
+          "preDeploy": true,
+          "ok": false
+        },
+        {
+          "id": "matrix",
+          "label": "②〇×2党確定",
+          "phase": 2,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "x",
+          "label": "③X検証1件+",
+          "phase": 3,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "legal",
+          "label": "④法務OK",
+          "phase": 4,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "deployed",
+          "label": "⑤本番デプロイ",
+          "phase": 5,
+          "preDeploy": false,
+          "ok": false
+        },
+        {
+          "id": "debug",
+          "label": "⑥デバッグOK",
+          "phase": 6,
+          "preDeploy": false,
+          "ok": true
+        }
+      ],
+      "blockers": [
+        {
+          "id": "D2_arc_topic",
+          "label": "経緯の話題",
+          "todo": "経緯3行以上が案件キーワードと一致",
+          "detail": "1/3 行が話題一致"
+        },
+        {
+          "id": "E4_timeline_diet_topic",
+          "label": "TL国会の話題",
+          "todo": "タイムライン国会3件が案件と一致",
+          "detail": "0/3 国会が話題一致"
+        },
+        {
+          "id": "H2_x_topic",
+          "label": "Xの話題",
+          "todo": "X投稿本文が案件キーワードと一致",
+          "detail": "2/3 件が話題一致"
+        }
+      ],
+      "blockerCount": 3,
+      "runState": "idle",
+      "nextAction": "1/3 行が話題一致 → 0/3 国会が話題一致 → 2/3 件が話題一致",
+      "promo": {
+        "x": null,
+        "hatena": null,
+        "note": null
+      },
+      "short": {
+        "slug": "case-mqwdrley",
+        "generated": false,
+        "uploaded": false,
+        "visibility": null,
+        "videoId": null,
+        "url": null,
+        "studioUrl": null,
+        "uploadedAt": null,
+        "label": "未生成"
+      }
+    },
+    {
+      "slug": "bouka-taisaku",
+      "title": "【物価高対策】支援策の内容といまの効果",
+      "shortTitle": "【物価高対策】支援策の内容といまの効果",
+      "adminHidden": false,
+      "pageReady": true,
+      "publishState": "wip",
+      "previewUrl": null,
+      "gatePct": 75,
+      "goldPct": 67,
+      "published": false,
+      "publishGateOk": false,
+      "pipeline": [
+        {
+          "id": "content",
+          "label": "①コンテンツ",
+          "phase": 1,
+          "preDeploy": true,
+          "ok": false
+        },
+        {
+          "id": "matrix",
+          "label": "②〇×2党確定",
+          "phase": 2,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "x",
+          "label": "③X検証1件+",
+          "phase": 3,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "legal",
+          "label": "④法務OK",
+          "phase": 4,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "deployed",
+          "label": "⑤本番デプロイ",
+          "phase": 5,
+          "preDeploy": false,
+          "ok": false
+        },
+        {
+          "id": "debug",
+          "label": "⑥デバッグOK",
+          "phase": 6,
+          "preDeploy": false,
+          "ok": true
+        }
+      ],
+      "gold": [
+        {
+          "id": "content",
+          "label": "①コンテンツ",
+          "phase": 1,
+          "preDeploy": true,
+          "ok": false
+        },
+        {
+          "id": "matrix",
+          "label": "②〇×2党確定",
+          "phase": 2,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "x",
+          "label": "③X検証1件+",
+          "phase": 3,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "legal",
+          "label": "④法務OK",
+          "phase": 4,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "deployed",
+          "label": "⑤本番デプロイ",
+          "phase": 5,
+          "preDeploy": false,
+          "ok": false
+        },
+        {
+          "id": "debug",
+          "label": "⑥デバッグOK",
+          "phase": 6,
+          "preDeploy": false,
+          "ok": true
+        }
+      ],
+      "blockers": [
+        {
+          "id": "B3_topic",
+          "label": "話題一致",
+          "todo": "要約が searchKeyword と一致（2行以上）",
+          "detail": "1/2 行がキーワード一致（物価）"
+        },
+        {
+          "id": "D2_arc_topic",
+          "label": "経緯の話題",
+          "todo": "経緯3行以上が案件キーワードと一致",
+          "detail": "2/3 行が話題一致"
+        },
+        {
+          "id": "H2_x_topic",
+          "label": "Xの話題",
+          "todo": "X投稿本文が案件キーワードと一致",
+          "detail": "2/3 件が話題一致"
+        }
+      ],
+      "blockerCount": 3,
+      "runState": "idle",
+      "nextAction": "1/2 行がキーワード一致（物価） → 2/3 行が話題一致 → 2/3 件が話題一致",
+      "promo": {
+        "x": null,
+        "hatena": null,
+        "note": null
+      },
+      "short": {
+        "slug": "bouka-taisaku",
+        "generated": false,
+        "uploaded": false,
+        "visibility": null,
+        "videoId": null,
+        "url": null,
+        "studioUrl": null,
+        "uploadedAt": null,
+        "label": "未生成"
+      }
+    },
+    {
+      "slug": "shohizei-genmen",
+      "title": "【食料品の消費税】減税・免税の議論と最新",
+      "shortTitle": "【食料品の消費税】減税・免税の議論と最新",
+      "adminHidden": false,
+      "pageReady": true,
+      "publishState": "wip",
+      "previewUrl": null,
+      "gatePct": 75,
+      "goldPct": 67,
+      "published": false,
+      "publishGateOk": false,
+      "pipeline": [
+        {
+          "id": "content",
+          "label": "①コンテンツ",
+          "phase": 1,
+          "preDeploy": true,
+          "ok": false
+        },
+        {
+          "id": "matrix",
+          "label": "②〇×2党確定",
+          "phase": 2,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "x",
+          "label": "③X検証1件+",
+          "phase": 3,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "legal",
+          "label": "④法務OK",
+          "phase": 4,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "deployed",
+          "label": "⑤本番デプロイ",
+          "phase": 5,
+          "preDeploy": false,
+          "ok": false
+        },
+        {
+          "id": "debug",
+          "label": "⑥デバッグOK",
+          "phase": 6,
+          "preDeploy": false,
+          "ok": true
+        }
+      ],
+      "gold": [
+        {
+          "id": "content",
+          "label": "①コンテンツ",
+          "phase": 1,
+          "preDeploy": true,
+          "ok": false
+        },
+        {
+          "id": "matrix",
+          "label": "②〇×2党確定",
+          "phase": 2,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "x",
+          "label": "③X検証1件+",
+          "phase": 3,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "legal",
+          "label": "④法務OK",
+          "phase": 4,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "deployed",
+          "label": "⑤本番デプロイ",
+          "phase": 5,
+          "preDeploy": false,
+          "ok": false
+        },
+        {
+          "id": "debug",
+          "label": "⑥デバッグOK",
+          "phase": 6,
+          "preDeploy": false,
+          "ok": true
+        }
+      ],
+      "blockers": [
+        {
+          "id": "B3_topic",
+          "label": "話題一致",
+          "todo": "要約が searchKeyword と一致（2行以上）",
+          "detail": "1/2 行がキーワード一致（食料品 消費税）"
+        },
+        {
+          "id": "H2_x_topic",
+          "label": "Xの話題",
+          "todo": "X投稿本文が案件キーワードと一致",
+          "detail": "2/3 件が話題一致"
+        }
+      ],
+      "blockerCount": 2,
+      "runState": "idle",
+      "nextAction": "1/2 行がキーワード一致（食料品 消費税） → 2/3 件が話題一致",
+      "promo": {
+        "x": null,
+        "hatena": null,
+        "note": null
+      },
+      "short": {
+        "slug": "shohizei-genmen",
+        "generated": false,
+        "uploaded": false,
+        "visibility": null,
+        "videoId": null,
+        "url": null,
+        "studioUrl": null,
+        "uploadedAt": null,
+        "label": "未生成"
+      }
+    },
+    {
+      "slug": "boeeihi",
+      "title": "【防衛費・安保】増額の行方と安保政策の最新",
+      "shortTitle": "【防衛費・安保】増額の行方と安保政策の最新",
+      "adminHidden": false,
+      "pageReady": true,
+      "publishState": "wip",
+      "previewUrl": null,
+      "gatePct": 75,
+      "goldPct": 67,
+      "published": false,
+      "publishGateOk": false,
+      "pipeline": [
+        {
+          "id": "content",
+          "label": "①コンテンツ",
+          "phase": 1,
+          "preDeploy": true,
+          "ok": false
+        },
+        {
+          "id": "matrix",
+          "label": "②〇×2党確定",
+          "phase": 2,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "x",
+          "label": "③X検証1件+",
+          "phase": 3,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "legal",
+          "label": "④法務OK",
+          "phase": 4,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "deployed",
+          "label": "⑤本番デプロイ",
+          "phase": 5,
+          "preDeploy": false,
+          "ok": false
+        },
+        {
+          "id": "debug",
+          "label": "⑥デバッグOK",
+          "phase": 6,
+          "preDeploy": false,
+          "ok": true
+        }
+      ],
+      "gold": [
+        {
+          "id": "content",
+          "label": "①コンテンツ",
+          "phase": 1,
+          "preDeploy": true,
+          "ok": false
+        },
+        {
+          "id": "matrix",
+          "label": "②〇×2党確定",
+          "phase": 2,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "x",
+          "label": "③X検証1件+",
+          "phase": 3,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "legal",
+          "label": "④法務OK",
+          "phase": 4,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "deployed",
+          "label": "⑤本番デプロイ",
+          "phase": 5,
+          "preDeploy": false,
+          "ok": false
+        },
+        {
+          "id": "debug",
+          "label": "⑥デバッグOK",
+          "phase": 6,
+          "preDeploy": false,
+          "ok": true
+        }
+      ],
+      "blockers": [
+        {
+          "id": "C2_evidence_distinct",
+          "label": "根拠の独自性",
+          "todo": "根拠は結論と同文禁止",
+          "detail": "根拠が結論のコピー"
+        },
+        {
+          "id": "D2_arc_topic",
+          "label": "経緯の話題",
+          "todo": "経緯3行以上が案件キーワードと一致",
+          "detail": "2/3 行が話題一致"
+        },
+        {
+          "id": "E4_timeline_diet_topic",
+          "label": "TL国会の話題",
+          "todo": "タイムライン国会3件が案件と一致",
+          "detail": "1/3 国会が話題一致"
+        },
+        {
+          "id": "H2_x_topic",
+          "label": "Xの話題",
+          "todo": "X投稿本文が案件キーワードと一致",
+          "detail": "0/3 件が話題一致"
+        }
+      ],
+      "blockerCount": 4,
+      "runState": "idle",
+      "nextAction": "根拠が結論のコピー → 2/3 行が話題一致 → 1/3 国会が話題一致",
+      "promo": {
+        "x": null,
+        "hatena": null,
+        "note": null
+      },
+      "short": {
+        "slug": "boeeihi",
+        "generated": false,
+        "uploaded": false,
+        "visibility": null,
+        "videoId": null,
+        "url": null,
+        "studioUrl": null,
+        "uploadedAt": null,
+        "label": "未生成"
+      }
+    },
+    {
+      "slug": "chingin",
+      "title": "【賃上げ・最低賃金】企業と家計への影響",
+      "shortTitle": "【賃上げ・最低賃金】企業と家計への影響",
+      "adminHidden": false,
+      "pageReady": true,
+      "publishState": "wip",
+      "previewUrl": null,
+      "gatePct": 75,
+      "goldPct": 67,
+      "published": false,
+      "publishGateOk": false,
+      "pipeline": [
+        {
+          "id": "content",
+          "label": "①コンテンツ",
+          "phase": 1,
+          "preDeploy": true,
+          "ok": false
+        },
+        {
+          "id": "matrix",
+          "label": "②〇×2党確定",
+          "phase": 2,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "x",
+          "label": "③X検証1件+",
+          "phase": 3,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "legal",
+          "label": "④法務OK",
+          "phase": 4,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "deployed",
+          "label": "⑤本番デプロイ",
+          "phase": 5,
+          "preDeploy": false,
+          "ok": false
+        },
+        {
+          "id": "debug",
+          "label": "⑥デバッグOK",
+          "phase": 6,
+          "preDeploy": false,
+          "ok": true
+        }
+      ],
+      "gold": [
+        {
+          "id": "content",
+          "label": "①コンテンツ",
+          "phase": 1,
+          "preDeploy": true,
+          "ok": false
+        },
+        {
+          "id": "matrix",
+          "label": "②〇×2党確定",
+          "phase": 2,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "x",
+          "label": "③X検証1件+",
+          "phase": 3,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "legal",
+          "label": "④法務OK",
+          "phase": 4,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "deployed",
+          "label": "⑤本番デプロイ",
+          "phase": 5,
+          "preDeploy": false,
+          "ok": false
+        },
+        {
+          "id": "debug",
+          "label": "⑥デバッグOK",
+          "phase": 6,
+          "preDeploy": false,
+          "ok": true
+        }
+      ],
+      "blockers": [
+        {
+          "id": "D2_arc_topic",
+          "label": "経緯の話題",
+          "todo": "経緯3行以上が案件キーワードと一致",
+          "detail": "2/3 行が話題一致"
+        },
+        {
+          "id": "H2_x_topic",
+          "label": "Xの話題",
+          "todo": "X投稿本文が案件キーワードと一致",
+          "detail": "1/3 件が話題一致"
+        }
+      ],
+      "blockerCount": 2,
+      "runState": "idle",
+      "nextAction": "2/3 行が話題一致 → 1/3 件が話題一致",
+      "promo": {
+        "x": null,
+        "hatena": null,
+        "note": null
+      },
+      "short": {
+        "slug": "chingin",
+        "generated": false,
+        "uploaded": false,
+        "visibility": null,
+        "videoId": null,
+        "url": null,
+        "studioUrl": null,
+        "uploadedAt": null,
+        "label": "未生成"
+      }
+    },
+    {
+      "slug": "nenkin",
+      "title": "【年金制度改革】受給年齢・支給額の変更点",
+      "shortTitle": "【年金制度改革】受給年齢・支給額の変更点",
+      "adminHidden": false,
+      "pageReady": true,
+      "publishState": "wip",
+      "previewUrl": null,
+      "gatePct": 75,
+      "goldPct": 67,
+      "published": false,
+      "publishGateOk": false,
+      "pipeline": [
+        {
+          "id": "content",
+          "label": "①コンテンツ",
+          "phase": 1,
+          "preDeploy": true,
+          "ok": false
+        },
+        {
+          "id": "matrix",
+          "label": "②〇×2党確定",
+          "phase": 2,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "x",
+          "label": "③X検証1件+",
+          "phase": 3,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "legal",
+          "label": "④法務OK",
+          "phase": 4,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "deployed",
+          "label": "⑤本番デプロイ",
+          "phase": 5,
+          "preDeploy": false,
+          "ok": false
+        },
+        {
+          "id": "debug",
+          "label": "⑥デバッグOK",
+          "phase": 6,
+          "preDeploy": false,
+          "ok": true
+        }
+      ],
+      "gold": [
+        {
+          "id": "content",
+          "label": "①コンテンツ",
+          "phase": 1,
+          "preDeploy": true,
+          "ok": false
+        },
+        {
+          "id": "matrix",
+          "label": "②〇×2党確定",
+          "phase": 2,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "x",
+          "label": "③X検証1件+",
+          "phase": 3,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "legal",
+          "label": "④法務OK",
+          "phase": 4,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "deployed",
+          "label": "⑤本番デプロイ",
+          "phase": 5,
+          "preDeploy": false,
+          "ok": false
+        },
+        {
+          "id": "debug",
+          "label": "⑥デバッグOK",
+          "phase": 6,
+          "preDeploy": false,
+          "ok": true
+        }
+      ],
+      "blockers": [
+        {
+          "id": "D2_arc_topic",
+          "label": "経緯の話題",
+          "todo": "経緯3行以上が案件キーワードと一致",
+          "detail": "1/3 行が話題一致"
+        },
+        {
+          "id": "E4_timeline_diet_topic",
+          "label": "TL国会の話題",
+          "todo": "タイムライン国会3件が案件と一致",
+          "detail": "1/3 国会が話題一致"
+        },
+        {
+          "id": "H2_x_topic",
+          "label": "Xの話題",
+          "todo": "X投稿本文が案件キーワードと一致",
+          "detail": "1/3 件が話題一致"
+        }
+      ],
+      "blockerCount": 3,
+      "runState": "idle",
+      "nextAction": "1/3 行が話題一致 → 1/3 国会が話題一致 → 1/3 件が話題一致",
+      "promo": {
+        "x": null,
+        "hatena": null,
+        "note": null
+      },
+      "short": {
+        "slug": "nenkin",
+        "generated": false,
+        "uploaded": false,
+        "visibility": null,
+        "videoId": null,
+        "url": null,
+        "studioUrl": null,
+        "uploadedAt": null,
+        "label": "未生成"
+      }
+    },
+    {
+      "slug": "gaikokujin-seisaku",
+      "title": "【外国人政策】在留・労働・共生の最新論点",
+      "shortTitle": "【外国人政策】在留・労働・共生の最新論点",
+      "adminHidden": false,
+      "pageReady": true,
+      "publishState": "wip",
+      "previewUrl": null,
+      "gatePct": 75,
+      "goldPct": 67,
+      "published": false,
+      "publishGateOk": false,
+      "pipeline": [
+        {
+          "id": "content",
+          "label": "①コンテンツ",
+          "phase": 1,
+          "preDeploy": true,
+          "ok": false
+        },
+        {
+          "id": "matrix",
+          "label": "②〇×2党確定",
+          "phase": 2,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "x",
+          "label": "③X検証1件+",
+          "phase": 3,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "legal",
+          "label": "④法務OK",
+          "phase": 4,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "deployed",
+          "label": "⑤本番デプロイ",
+          "phase": 5,
+          "preDeploy": false,
+          "ok": false
+        },
+        {
+          "id": "debug",
+          "label": "⑥デバッグOK",
+          "phase": 6,
+          "preDeploy": false,
+          "ok": true
+        }
+      ],
+      "gold": [
+        {
+          "id": "content",
+          "label": "①コンテンツ",
+          "phase": 1,
+          "preDeploy": true,
+          "ok": false
+        },
+        {
+          "id": "matrix",
+          "label": "②〇×2党確定",
+          "phase": 2,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "x",
+          "label": "③X検証1件+",
+          "phase": 3,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "legal",
+          "label": "④法務OK",
+          "phase": 4,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "deployed",
+          "label": "⑤本番デプロイ",
+          "phase": 5,
+          "preDeploy": false,
+          "ok": false
+        },
+        {
+          "id": "debug",
+          "label": "⑥デバッグOK",
+          "phase": 6,
+          "preDeploy": false,
+          "ok": true
+        }
+      ],
+      "blockers": [
+        {
+          "id": "B3_topic",
+          "label": "話題一致",
+          "todo": "要約が searchKeyword と一致（2行以上）",
+          "detail": "1/2 行がキーワード一致（外国人）"
+        },
+        {
+          "id": "H2_x_topic",
+          "label": "Xの話題",
+          "todo": "X投稿本文が案件キーワードと一致",
+          "detail": "2/3 件が話題一致"
+        }
+      ],
+      "blockerCount": 2,
+      "runState": "idle",
+      "nextAction": "1/2 行がキーワード一致（外国人） → 2/3 件が話題一致",
+      "promo": {
+        "x": null,
+        "hatena": null,
+        "note": null
+      },
+      "short": {
+        "slug": "gaikokujin-seisaku",
+        "generated": false,
+        "uploaded": false,
+        "visibility": null,
+        "videoId": null,
+        "url": null,
+        "studioUrl": null,
+        "uploadedAt": null,
+        "label": "未生成"
+      }
+    },
+    {
+      "slug": "shoshika",
+      "title": "【少子化対策】支援策の内容と出生率の動向",
+      "shortTitle": "【少子化対策】支援策の内容と出生率の動向",
+      "adminHidden": false,
+      "pageReady": true,
+      "publishState": "wip",
+      "previewUrl": null,
+      "gatePct": 75,
+      "goldPct": 67,
+      "published": false,
+      "publishGateOk": false,
+      "pipeline": [
+        {
+          "id": "content",
+          "label": "①コンテンツ",
+          "phase": 1,
+          "preDeploy": true,
+          "ok": false
+        },
+        {
+          "id": "matrix",
+          "label": "②〇×2党確定",
+          "phase": 2,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "x",
+          "label": "③X検証1件+",
+          "phase": 3,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "legal",
+          "label": "④法務OK",
+          "phase": 4,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "deployed",
+          "label": "⑤本番デプロイ",
+          "phase": 5,
+          "preDeploy": false,
+          "ok": false
+        },
+        {
+          "id": "debug",
+          "label": "⑥デバッグOK",
+          "phase": 6,
+          "preDeploy": false,
+          "ok": true
+        }
+      ],
+      "gold": [
+        {
+          "id": "content",
+          "label": "①コンテンツ",
+          "phase": 1,
+          "preDeploy": true,
+          "ok": false
+        },
+        {
+          "id": "matrix",
+          "label": "②〇×2党確定",
+          "phase": 2,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "x",
+          "label": "③X検証1件+",
+          "phase": 3,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "legal",
+          "label": "④法務OK",
+          "phase": 4,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "deployed",
+          "label": "⑤本番デプロイ",
+          "phase": 5,
+          "preDeploy": false,
+          "ok": false
+        },
+        {
+          "id": "debug",
+          "label": "⑥デバッグOK",
+          "phase": 6,
+          "preDeploy": false,
+          "ok": true
+        }
+      ],
+      "blockers": [
+        {
+          "id": "B3_topic",
+          "label": "話題一致",
+          "todo": "要約が searchKeyword と一致（2行以上）",
+          "detail": "1/2 行がキーワード一致（少子化）"
+        },
+        {
+          "id": "D2_arc_topic",
+          "label": "経緯の話題",
+          "todo": "経緯3行以上が案件キーワードと一致",
+          "detail": "1/3 行が話題一致"
+        },
+        {
+          "id": "E4_timeline_diet_topic",
+          "label": "TL国会の話題",
+          "todo": "タイムライン国会3件が案件と一致",
+          "detail": "1/3 国会が話題一致"
+        },
+        {
+          "id": "G6_matrix_topic",
+          "label": "〇×の話題",
+          "todo": "公言と行動が案件キーワードと一致（2党）",
+          "detail": "公言テキストが案件と無関係"
+        },
+        {
+          "id": "H2_x_topic",
+          "label": "Xの話題",
+          "todo": "X投稿本文が案件キーワードと一致",
+          "detail": "0/3 件が話題一致"
+        }
+      ],
+      "blockerCount": 5,
+      "runState": "idle",
+      "nextAction": "1/2 行がキーワード一致（少子化） → 1/3 行が話題一致 → 1/3 国会が話題一致",
+      "promo": {
+        "x": null,
+        "hatena": null,
+        "note": null
+      },
+      "short": {
+        "slug": "shoshika",
+        "generated": true,
+        "uploaded": false,
+        "visibility": null,
+        "videoId": null,
+        "url": null,
+        "studioUrl": null,
+        "uploadedAt": null,
+        "label": "生成済・未アップ"
+      }
+    },
+    {
+      "slug": "kyoiku-mushoka",
+      "title": "【大学無償化】対象者・条件と財源の争点",
+      "shortTitle": "【大学無償化】対象者・条件と財源の争点",
+      "adminHidden": false,
+      "pageReady": true,
+      "publishState": "wip",
+      "previewUrl": null,
+      "gatePct": 75,
+      "goldPct": 67,
+      "published": false,
+      "publishGateOk": false,
+      "pipeline": [
+        {
+          "id": "content",
+          "label": "①コンテンツ",
+          "phase": 1,
+          "preDeploy": true,
+          "ok": false
+        },
+        {
+          "id": "matrix",
+          "label": "②〇×2党確定",
+          "phase": 2,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "x",
+          "label": "③X検証1件+",
+          "phase": 3,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "legal",
+          "label": "④法務OK",
+          "phase": 4,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "deployed",
+          "label": "⑤本番デプロイ",
+          "phase": 5,
+          "preDeploy": false,
+          "ok": false
+        },
+        {
+          "id": "debug",
+          "label": "⑥デバッグOK",
+          "phase": 6,
+          "preDeploy": false,
+          "ok": true
+        }
+      ],
+      "gold": [
+        {
+          "id": "content",
+          "label": "①コンテンツ",
+          "phase": 1,
+          "preDeploy": true,
+          "ok": false
+        },
+        {
+          "id": "matrix",
+          "label": "②〇×2党確定",
+          "phase": 2,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "x",
+          "label": "③X検証1件+",
+          "phase": 3,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "legal",
+          "label": "④法務OK",
+          "phase": 4,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "deployed",
+          "label": "⑤本番デプロイ",
+          "phase": 5,
+          "preDeploy": false,
+          "ok": false
+        },
+        {
+          "id": "debug",
+          "label": "⑥デバッグOK",
+          "phase": 6,
+          "preDeploy": false,
+          "ok": true
+        }
+      ],
+      "blockers": [
+        {
+          "id": "D2_arc_topic",
+          "label": "経緯の話題",
+          "todo": "経緯3行以上が案件キーワードと一致",
+          "detail": "2/3 行が話題一致"
+        },
+        {
+          "id": "H2_x_topic",
+          "label": "Xの話題",
+          "todo": "X投稿本文が案件キーワードと一致",
+          "detail": "0/3 件が話題一致"
+        }
+      ],
+      "blockerCount": 2,
+      "runState": "idle",
+      "nextAction": "2/3 行が話題一致 → 0/3 件が話題一致",
+      "promo": {
+        "x": null,
+        "hatena": null,
+        "note": null
+      },
+      "short": {
+        "slug": "kyoiku-mushoka",
+        "generated": false,
+        "uploaded": false,
+        "visibility": null,
+        "videoId": null,
+        "url": null,
+        "studioUrl": null,
+        "uploadedAt": null,
+        "label": "未生成"
+      }
+    },
+    {
+      "slug": "energy-policy",
+      "title": "【エネルギー政策】原発・再エネ・電気代の行方",
+      "shortTitle": "【エネルギー政策】原発・再エネ・電気代の行方",
+      "adminHidden": false,
+      "pageReady": true,
+      "publishState": "wip",
+      "previewUrl": null,
+      "gatePct": 75,
+      "goldPct": 67,
+      "published": false,
+      "publishGateOk": false,
+      "pipeline": [
+        {
+          "id": "content",
+          "label": "①コンテンツ",
+          "phase": 1,
+          "preDeploy": true,
+          "ok": false
+        },
+        {
+          "id": "matrix",
+          "label": "②〇×2党確定",
+          "phase": 2,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "x",
+          "label": "③X検証1件+",
+          "phase": 3,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "legal",
+          "label": "④法務OK",
+          "phase": 4,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "deployed",
+          "label": "⑤本番デプロイ",
+          "phase": 5,
+          "preDeploy": false,
+          "ok": false
+        },
+        {
+          "id": "debug",
+          "label": "⑥デバッグOK",
+          "phase": 6,
+          "preDeploy": false,
+          "ok": true
+        }
+      ],
+      "gold": [
+        {
+          "id": "content",
+          "label": "①コンテンツ",
+          "phase": 1,
+          "preDeploy": true,
+          "ok": false
+        },
+        {
+          "id": "matrix",
+          "label": "②〇×2党確定",
+          "phase": 2,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "x",
+          "label": "③X検証1件+",
+          "phase": 3,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "legal",
+          "label": "④法務OK",
+          "phase": 4,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "deployed",
+          "label": "⑤本番デプロイ",
+          "phase": 5,
+          "preDeploy": false,
+          "ok": false
+        },
+        {
+          "id": "debug",
+          "label": "⑥デバッグOK",
+          "phase": 6,
+          "preDeploy": false,
+          "ok": true
+        }
+      ],
+      "blockers": [
+        {
+          "id": "D2_arc_topic",
+          "label": "経緯の話題",
+          "todo": "経緯3行以上が案件キーワードと一致",
+          "detail": "1/3 行が話題一致"
+        },
+        {
+          "id": "G6_matrix_topic",
+          "label": "〇×の話題",
+          "todo": "公言と行動が案件キーワードと一致（2党）",
+          "detail": "公言テキストが案件と無関係"
+        },
+        {
+          "id": "H2_x_topic",
+          "label": "Xの話題",
+          "todo": "X投稿本文が案件キーワードと一致",
+          "detail": "0/3 件が話題一致"
+        }
+      ],
+      "blockerCount": 3,
+      "runState": "idle",
+      "nextAction": "1/3 行が話題一致 → 公言テキストが案件と無関係 → 0/3 件が話題一致",
+      "promo": {
+        "x": null,
+        "hatena": null,
+        "note": null
+      },
+      "short": {
+        "slug": "energy-policy",
+        "generated": false,
+        "uploaded": false,
+        "visibility": null,
+        "videoId": null,
+        "url": null,
+        "studioUrl": null,
+        "uploadedAt": null,
+        "label": "未生成"
+      }
+    },
+    {
+      "slug": "seiji-shikin",
+      "title": "【政治資金】政党助成と献金ルールの最新",
+      "shortTitle": "【政治資金】政党助成と献金ルールの最新",
+      "adminHidden": false,
+      "pageReady": true,
+      "publishState": "wip",
+      "previewUrl": null,
+      "gatePct": 75,
+      "goldPct": 67,
+      "published": false,
+      "publishGateOk": false,
+      "pipeline": [
+        {
+          "id": "content",
+          "label": "①コンテンツ",
+          "phase": 1,
+          "preDeploy": true,
+          "ok": false
+        },
+        {
+          "id": "matrix",
+          "label": "②〇×2党確定",
+          "phase": 2,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "x",
+          "label": "③X検証1件+",
+          "phase": 3,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "legal",
+          "label": "④法務OK",
+          "phase": 4,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "deployed",
+          "label": "⑤本番デプロイ",
+          "phase": 5,
+          "preDeploy": false,
+          "ok": false
+        },
+        {
+          "id": "debug",
+          "label": "⑥デバッグOK",
+          "phase": 6,
+          "preDeploy": false,
+          "ok": true
+        }
+      ],
+      "gold": [
+        {
+          "id": "content",
+          "label": "①コンテンツ",
+          "phase": 1,
+          "preDeploy": true,
+          "ok": false
+        },
+        {
+          "id": "matrix",
+          "label": "②〇×2党確定",
+          "phase": 2,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "x",
+          "label": "③X検証1件+",
+          "phase": 3,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "legal",
+          "label": "④法務OK",
+          "phase": 4,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "deployed",
+          "label": "⑤本番デプロイ",
+          "phase": 5,
+          "preDeploy": false,
+          "ok": false
+        },
+        {
+          "id": "debug",
+          "label": "⑥デバッグOK",
+          "phase": 6,
+          "preDeploy": false,
+          "ok": true
+        }
+      ],
+      "blockers": [
+        {
+          "id": "B3_topic",
+          "label": "話題一致",
+          "todo": "要約が searchKeyword と一致（2行以上）",
+          "detail": "0/2 行がキーワード一致（政治資金）"
+        },
+        {
+          "id": "C2_evidence_distinct",
+          "label": "根拠の独自性",
+          "todo": "根拠は結論と同文禁止",
+          "detail": "根拠が結論のコピー"
+        },
+        {
+          "id": "D2_arc_topic",
+          "label": "経緯の話題",
+          "todo": "経緯3行以上が案件キーワードと一致",
+          "detail": "1/3 行が話題一致"
+        },
+        {
+          "id": "E4_timeline_diet_topic",
+          "label": "TL国会の話題",
+          "todo": "タイムライン国会3件が案件と一致",
+          "detail": "1/3 国会が話題一致"
+        },
+        {
+          "id": "G6_matrix_topic",
+          "label": "〇×の話題",
+          "todo": "公言と行動が案件キーワードと一致（2党）",
+          "detail": "公言テキストが案件と無関係"
+        },
+        {
+          "id": "H2_x_topic",
+          "label": "Xの話題",
+          "todo": "X投稿本文が案件キーワードと一致",
+          "detail": "0/3 件が話題一致"
+        }
+      ],
+      "blockerCount": 6,
+      "runState": "idle",
+      "nextAction": "0/2 行がキーワード一致（政治資金） → 根拠が結論のコピー → 1/3 行が話題一致",
+      "promo": {
+        "x": null,
+        "hatena": null,
+        "note": null
+      },
+      "short": {
+        "slug": "seiji-shikin",
+        "generated": false,
+        "uploaded": false,
+        "visibility": null,
+        "videoId": null,
+        "url": null,
+        "studioUrl": null,
+        "uploadedAt": null,
+        "label": "未生成"
+      }
+    },
+    {
+      "slug": "senkyo-kaikaku",
+      "title": "【選挙制度改革】論点と各党の主張",
+      "shortTitle": "【選挙制度改革】論点と各党の主張",
+      "adminHidden": false,
+      "pageReady": true,
+      "publishState": "wip",
+      "previewUrl": null,
+      "gatePct": 75,
+      "goldPct": 67,
+      "published": false,
+      "publishGateOk": false,
+      "pipeline": [
+        {
+          "id": "content",
+          "label": "①コンテンツ",
+          "phase": 1,
+          "preDeploy": true,
+          "ok": false
+        },
+        {
+          "id": "matrix",
+          "label": "②〇×2党確定",
+          "phase": 2,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "x",
+          "label": "③X検証1件+",
+          "phase": 3,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "legal",
+          "label": "④法務OK",
+          "phase": 4,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "deployed",
+          "label": "⑤本番デプロイ",
+          "phase": 5,
+          "preDeploy": false,
+          "ok": false
+        },
+        {
+          "id": "debug",
+          "label": "⑥デバッグOK",
+          "phase": 6,
+          "preDeploy": false,
+          "ok": true
+        }
+      ],
+      "gold": [
+        {
+          "id": "content",
+          "label": "①コンテンツ",
+          "phase": 1,
+          "preDeploy": true,
+          "ok": false
+        },
+        {
+          "id": "matrix",
+          "label": "②〇×2党確定",
+          "phase": 2,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "x",
+          "label": "③X検証1件+",
+          "phase": 3,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "legal",
+          "label": "④法務OK",
+          "phase": 4,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "deployed",
+          "label": "⑤本番デプロイ",
+          "phase": 5,
+          "preDeploy": false,
+          "ok": false
+        },
+        {
+          "id": "debug",
+          "label": "⑥デバッグOK",
+          "phase": 6,
+          "preDeploy": false,
+          "ok": true
+        }
+      ],
+      "blockers": [
+        {
+          "id": "B3_topic",
+          "label": "話題一致",
+          "todo": "要約が searchKeyword と一致（2行以上）",
+          "detail": "0/2 行がキーワード一致（選挙制度）"
+        },
+        {
+          "id": "D2_arc_topic",
+          "label": "経緯の話題",
+          "todo": "経緯3行以上が案件キーワードと一致",
+          "detail": "1/3 行が話題一致"
+        },
+        {
+          "id": "E4_timeline_diet_topic",
+          "label": "TL国会の話題",
+          "todo": "タイムライン国会3件が案件と一致",
+          "detail": "1/3 国会が話題一致"
+        },
+        {
+          "id": "G6_matrix_topic",
+          "label": "〇×の話題",
+          "todo": "公言と行動が案件キーワードと一致（2党）",
+          "detail": "公言テキストが案件と無関係"
+        },
+        {
+          "id": "H2_x_topic",
+          "label": "Xの話題",
+          "todo": "X投稿本文が案件キーワードと一致",
+          "detail": "0/3 件が話題一致"
+        }
+      ],
+      "blockerCount": 5,
+      "runState": "idle",
+      "nextAction": "0/2 行がキーワード一致（選挙制度） → 1/3 行が話題一致 → 1/3 国会が話題一致",
+      "promo": {
+        "x": null,
+        "hatena": null,
+        "note": null
+      },
+      "short": {
+        "slug": "senkyo-kaikaku",
+        "generated": false,
+        "uploaded": false,
+        "visibility": null,
+        "videoId": null,
+        "url": null,
+        "studioUrl": null,
+        "uploadedAt": null,
+        "label": "未生成"
+      }
+    },
+    {
+      "slug": "kaigo-iryo",
+      "title": "【介護・医療費】負担増の議論と支援策",
+      "shortTitle": "【介護・医療費】負担増の議論と支援策",
+      "adminHidden": false,
+      "pageReady": true,
+      "publishState": "wip",
+      "previewUrl": null,
+      "gatePct": 75,
+      "goldPct": 67,
+      "published": false,
+      "publishGateOk": false,
+      "pipeline": [
+        {
+          "id": "content",
+          "label": "①コンテンツ",
+          "phase": 1,
+          "preDeploy": true,
+          "ok": false
+        },
+        {
+          "id": "matrix",
+          "label": "②〇×2党確定",
+          "phase": 2,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "x",
+          "label": "③X検証1件+",
+          "phase": 3,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "legal",
+          "label": "④法務OK",
+          "phase": 4,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "deployed",
+          "label": "⑤本番デプロイ",
+          "phase": 5,
+          "preDeploy": false,
+          "ok": false
+        },
+        {
+          "id": "debug",
+          "label": "⑥デバッグOK",
+          "phase": 6,
+          "preDeploy": false,
+          "ok": true
+        }
+      ],
+      "gold": [
+        {
+          "id": "content",
+          "label": "①コンテンツ",
+          "phase": 1,
+          "preDeploy": true,
+          "ok": false
+        },
+        {
+          "id": "matrix",
+          "label": "②〇×2党確定",
+          "phase": 2,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "x",
+          "label": "③X検証1件+",
+          "phase": 3,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "legal",
+          "label": "④法務OK",
+          "phase": 4,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "deployed",
+          "label": "⑤本番デプロイ",
+          "phase": 5,
+          "preDeploy": false,
+          "ok": false
+        },
+        {
+          "id": "debug",
+          "label": "⑥デバッグOK",
+          "phase": 6,
+          "preDeploy": false,
+          "ok": true
+        }
+      ],
+      "blockers": [
+        {
+          "id": "B3_topic",
+          "label": "話題一致",
+          "todo": "要約が searchKeyword と一致（2行以上）",
+          "detail": "1/2 行がキーワード一致（介護）"
+        },
+        {
+          "id": "H2_x_topic",
+          "label": "Xの話題",
+          "todo": "X投稿本文が案件キーワードと一致",
+          "detail": "0/3 件が話題一致"
+        }
+      ],
+      "blockerCount": 2,
+      "runState": "idle",
+      "nextAction": "1/2 行がキーワード一致（介護） → 0/3 件が話題一致",
+      "promo": {
+        "x": null,
+        "hatena": null,
+        "note": null
+      },
+      "short": {
+        "slug": "kaigo-iryo",
+        "generated": false,
+        "uploaded": false,
+        "visibility": null,
+        "videoId": null,
+        "url": null,
+        "studioUrl": null,
+        "uploadedAt": null,
+        "label": "未生成"
+      }
+    },
+    {
+      "slug": "chiho-sosei",
+      "title": "【地方創生】交付金と地域政策の最新",
+      "shortTitle": "【地方創生】交付金と地域政策の最新",
+      "adminHidden": false,
+      "pageReady": true,
+      "publishState": "wip",
+      "previewUrl": null,
+      "gatePct": 75,
+      "goldPct": 67,
+      "published": false,
+      "publishGateOk": false,
+      "pipeline": [
+        {
+          "id": "content",
+          "label": "①コンテンツ",
+          "phase": 1,
+          "preDeploy": true,
+          "ok": false
+        },
+        {
+          "id": "matrix",
+          "label": "②〇×2党確定",
+          "phase": 2,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "x",
+          "label": "③X検証1件+",
+          "phase": 3,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "legal",
+          "label": "④法務OK",
+          "phase": 4,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "deployed",
+          "label": "⑤本番デプロイ",
+          "phase": 5,
+          "preDeploy": false,
+          "ok": false
+        },
+        {
+          "id": "debug",
+          "label": "⑥デバッグOK",
+          "phase": 6,
+          "preDeploy": false,
+          "ok": true
+        }
+      ],
+      "gold": [
+        {
+          "id": "content",
+          "label": "①コンテンツ",
+          "phase": 1,
+          "preDeploy": true,
+          "ok": false
+        },
+        {
+          "id": "matrix",
+          "label": "②〇×2党確定",
+          "phase": 2,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "x",
+          "label": "③X検証1件+",
+          "phase": 3,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "legal",
+          "label": "④法務OK",
+          "phase": 4,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "deployed",
+          "label": "⑤本番デプロイ",
+          "phase": 5,
+          "preDeploy": false,
+          "ok": false
+        },
+        {
+          "id": "debug",
+          "label": "⑥デバッグOK",
+          "phase": 6,
+          "preDeploy": false,
+          "ok": true
+        }
+      ],
+      "blockers": [
+        {
+          "id": "B3_topic",
+          "label": "話題一致",
+          "todo": "要約が searchKeyword と一致（2行以上）",
+          "detail": "1/2 行がキーワード一致（地方創生）"
+        },
+        {
+          "id": "D2_arc_topic",
+          "label": "経緯の話題",
+          "todo": "経緯3行以上が案件キーワードと一致",
+          "detail": "1/3 行が話題一致"
+        },
+        {
+          "id": "E4_timeline_diet_topic",
+          "label": "TL国会の話題",
+          "todo": "タイムライン国会3件が案件と一致",
+          "detail": "1/3 国会が話題一致"
+        },
+        {
+          "id": "G6_matrix_topic",
+          "label": "〇×の話題",
+          "todo": "公言と行動が案件キーワードと一致（2党）",
+          "detail": "公言テキストが案件と無関係"
+        },
+        {
+          "id": "H2_x_topic",
+          "label": "Xの話題",
+          "todo": "X投稿本文が案件キーワードと一致",
+          "detail": "0/3 件が話題一致"
+        }
+      ],
+      "blockerCount": 5,
+      "runState": "idle",
+      "nextAction": "1/2 行がキーワード一致（地方創生） → 1/3 行が話題一致 → 1/3 国会が話題一致",
+      "promo": {
+        "x": null,
+        "hatena": null,
+        "note": null
+      },
+      "short": {
+        "slug": "chiho-sosei",
+        "generated": false,
+        "uploaded": false,
+        "visibility": null,
+        "videoId": null,
+        "url": null,
+        "studioUrl": null,
+        "uploadedAt": null,
+        "label": "未生成"
+      }
+    },
+    {
+      "slug": "hosei-yosan",
+      "title": "【補正予算】追加支出の内容と背景",
+      "shortTitle": "【補正予算】追加支出の内容と背景",
+      "adminHidden": false,
+      "pageReady": true,
+      "publishState": "draft",
+      "previewUrl": "/dev/preview/hosei-yosan/",
+      "gatePct": 100,
+      "goldPct": 83,
       "published": false,
       "publishGateOk": true,
       "pipeline": [
@@ -1512,7 +4603,7 @@
           "label": "⑥デバッグOK",
           "phase": 6,
           "preDeploy": false,
-          "ok": false
+          "ok": true
         }
       ],
       "gold": [
@@ -1548,2441 +4639,28 @@
           "id": "deployed",
           "label": "⑤本番デプロイ",
           "phase": 5,
-          "preDeploy": false,
-          "ok": false
-        },
-        {
-          "id": "debug",
-          "label": "⑥デバッグOK",
-          "phase": 6,
           "preDeploy": false,
           "ok": false
+        },
+        {
+          "id": "debug",
+          "label": "⑥デバッグOK",
+          "phase": 6,
+          "preDeploy": false,
+          "ok": true
         }
       ],
-      "blockers": [],
-      "blockerCount": 0,
+      "blockers": [
+        {
+          "id": "H2_x_topic",
+          "label": "Xの話題",
+          "todo": "X投稿本文が案件キーワードと一致",
+          "detail": "0/3 件が話題一致"
+        }
+      ],
+      "blockerCount": 1,
       "runState": "idle",
-      "nextAction": "👁️ 非表示中 — 「表示に戻す」でトップに出せます",
-      "promo": {
-        "x": null,
-        "hatena": null,
-        "note": null
-      },
-      "short": {
-        "slug": "teigaku-kyufu-2024",
-        "generated": false,
-        "uploaded": false,
-        "visibility": null,
-        "videoId": null,
-        "url": null,
-        "studioUrl": null,
-        "uploadedAt": null,
-        "label": "未生成"
-      }
-    },
-    {
-      "slug": "shussho-budget-seika",
-      "title": "【出生率・子育て支援】3.6兆円は効いた？2025年の実績",
-      "shortTitle": "【出生率・子育て支援】3.6兆円は効いた？2025年の実績",
-      "adminHidden": false,
-      "pageReady": true,
-      "publishState": "live",
-      "previewUrl": "/dev/preview/shussho-budget-seika/",
-      "gatePct": 100,
-      "goldPct": 100,
-      "published": true,
-      "publishGateOk": true,
-      "pipeline": [
-        {
-          "id": "content",
-          "label": "①コンテンツ",
-          "phase": 1,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "matrix",
-          "label": "②〇×2党確定",
-          "phase": 2,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "x",
-          "label": "③X検証1件+",
-          "phase": 3,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "legal",
-          "label": "④法務OK",
-          "phase": 4,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "deployed",
-          "label": "⑤本番デプロイ",
-          "phase": 5,
-          "preDeploy": false,
-          "ok": true
-        },
-        {
-          "id": "debug",
-          "label": "⑥デバッグOK",
-          "phase": 6,
-          "preDeploy": false,
-          "ok": true
-        }
-      ],
-      "gold": [
-        {
-          "id": "content",
-          "label": "①コンテンツ",
-          "phase": 1,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "matrix",
-          "label": "②〇×2党確定",
-          "phase": 2,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "x",
-          "label": "③X検証1件+",
-          "phase": 3,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "legal",
-          "label": "④法務OK",
-          "phase": 4,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "deployed",
-          "label": "⑤本番デプロイ",
-          "phase": 5,
-          "preDeploy": false,
-          "ok": true
-        },
-        {
-          "id": "debug",
-          "label": "⑥デバッグOK",
-          "phase": 6,
-          "preDeploy": false,
-          "ok": true
-        }
-      ],
-      "blockers": [],
-      "blockerCount": 0,
-      "runState": "idle",
-      "nextAction": "✅ 公開中 — /case/ に表示されています",
-      "promo": {
-        "x": null,
-        "hatena": null,
-        "note": null
-      },
-      "short": {
-        "slug": "shussho-budget-seika",
-        "generated": true,
-        "uploaded": true,
-        "visibility": "private",
-        "videoId": "8HPZ4sC7uck",
-        "url": "https://www.youtube.com/shorts/8HPZ4sC7uck",
-        "studioUrl": "https://studio.youtube.com/video/8HPZ4sC7uck/edit",
-        "uploadedAt": "2026-06-29T22:11:20.857Z",
-        "label": "YT非公開"
-      }
-    },
-    {
-      "slug": "fukushuto-koso",
-      "title": "【副首都構想】第二の首都はどこ？具体案と争点",
-      "shortTitle": "【副首都構想】第二の首都はどこ？具体案と争点",
-      "adminHidden": false,
-      "pageReady": true,
-      "publishState": "live",
-      "previewUrl": "/dev/preview/fukushuto-koso/",
-      "gatePct": 100,
-      "goldPct": 100,
-      "published": true,
-      "publishGateOk": true,
-      "pipeline": [
-        {
-          "id": "content",
-          "label": "①コンテンツ",
-          "phase": 1,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "matrix",
-          "label": "②〇×2党確定",
-          "phase": 2,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "x",
-          "label": "③X検証1件+",
-          "phase": 3,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "legal",
-          "label": "④法務OK",
-          "phase": 4,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "deployed",
-          "label": "⑤本番デプロイ",
-          "phase": 5,
-          "preDeploy": false,
-          "ok": true
-        },
-        {
-          "id": "debug",
-          "label": "⑥デバッグOK",
-          "phase": 6,
-          "preDeploy": false,
-          "ok": true
-        }
-      ],
-      "gold": [
-        {
-          "id": "content",
-          "label": "①コンテンツ",
-          "phase": 1,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "matrix",
-          "label": "②〇×2党確定",
-          "phase": 2,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "x",
-          "label": "③X検証1件+",
-          "phase": 3,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "legal",
-          "label": "④法務OK",
-          "phase": 4,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "deployed",
-          "label": "⑤本番デプロイ",
-          "phase": 5,
-          "preDeploy": false,
-          "ok": true
-        },
-        {
-          "id": "debug",
-          "label": "⑥デバッグOK",
-          "phase": 6,
-          "preDeploy": false,
-          "ok": true
-        }
-      ],
-      "blockers": [],
-      "blockerCount": 0,
-      "runState": "idle",
-      "nextAction": "✅ 公開中 — /case/ に表示されています",
-      "promo": {
-        "x": null,
-        "hatena": null,
-        "note": null
-      },
-      "short": {
-        "slug": "fukushuto-koso",
-        "generated": false,
-        "uploaded": false,
-        "visibility": null,
-        "videoId": null,
-        "url": null,
-        "studioUrl": null,
-        "uploadedAt": null,
-        "label": "未生成"
-      }
-    },
-    {
-      "slug": "osaka-to-metropolis",
-      "title": "【大阪都構想】メリット・デメリットと最新の行方",
-      "shortTitle": "【大阪都構想】メリット・デメリットと最新の行方",
-      "adminHidden": false,
-      "pageReady": true,
-      "publishState": "live",
-      "previewUrl": "/dev/preview/osaka-to-metropolis/",
-      "gatePct": 100,
-      "goldPct": 100,
-      "published": true,
-      "publishGateOk": true,
-      "pipeline": [
-        {
-          "id": "content",
-          "label": "①コンテンツ",
-          "phase": 1,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "matrix",
-          "label": "②〇×2党確定",
-          "phase": 2,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "x",
-          "label": "③X検証1件+",
-          "phase": 3,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "legal",
-          "label": "④法務OK",
-          "phase": 4,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "deployed",
-          "label": "⑤本番デプロイ",
-          "phase": 5,
-          "preDeploy": false,
-          "ok": true
-        },
-        {
-          "id": "debug",
-          "label": "⑥デバッグOK",
-          "phase": 6,
-          "preDeploy": false,
-          "ok": true
-        }
-      ],
-      "gold": [
-        {
-          "id": "content",
-          "label": "①コンテンツ",
-          "phase": 1,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "matrix",
-          "label": "②〇×2党確定",
-          "phase": 2,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "x",
-          "label": "③X検証1件+",
-          "phase": 3,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "legal",
-          "label": "④法務OK",
-          "phase": 4,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "deployed",
-          "label": "⑤本番デプロイ",
-          "phase": 5,
-          "preDeploy": false,
-          "ok": true
-        },
-        {
-          "id": "debug",
-          "label": "⑥デバッグOK",
-          "phase": 6,
-          "preDeploy": false,
-          "ok": true
-        }
-      ],
-      "blockers": [],
-      "blockerCount": 0,
-      "runState": "idle",
-      "nextAction": "✅ 公開中 — /case/ に表示されています",
-      "promo": {
-        "x": null,
-        "hatena": null,
-        "note": null
-      },
-      "short": {
-        "slug": "osaka-to-metropolis",
-        "generated": false,
-        "uploaded": false,
-        "visibility": null,
-        "videoId": null,
-        "url": null,
-        "studioUrl": null,
-        "uploadedAt": null,
-        "label": "未生成"
-      }
-    },
-    {
-      "slug": "fuhou-immin-trend",
-      "title": "【不法滞在】国内の人数推移と政府の対応",
-      "shortTitle": "【不法滞在】国内の人数推移と政府の対応",
-      "adminHidden": false,
-      "pageReady": true,
-      "publishState": "live",
-      "previewUrl": "/dev/preview/fuhou-immin-trend/",
-      "gatePct": 100,
-      "goldPct": 100,
-      "published": true,
-      "publishGateOk": true,
-      "pipeline": [
-        {
-          "id": "content",
-          "label": "①コンテンツ",
-          "phase": 1,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "matrix",
-          "label": "②〇×2党確定",
-          "phase": 2,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "x",
-          "label": "③X検証1件+",
-          "phase": 3,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "legal",
-          "label": "④法務OK",
-          "phase": 4,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "deployed",
-          "label": "⑤本番デプロイ",
-          "phase": 5,
-          "preDeploy": false,
-          "ok": true
-        },
-        {
-          "id": "debug",
-          "label": "⑥デバッグOK",
-          "phase": 6,
-          "preDeploy": false,
-          "ok": true
-        }
-      ],
-      "gold": [
-        {
-          "id": "content",
-          "label": "①コンテンツ",
-          "phase": 1,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "matrix",
-          "label": "②〇×2党確定",
-          "phase": 2,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "x",
-          "label": "③X検証1件+",
-          "phase": 3,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "legal",
-          "label": "④法務OK",
-          "phase": 4,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "deployed",
-          "label": "⑤本番デプロイ",
-          "phase": 5,
-          "preDeploy": false,
-          "ok": true
-        },
-        {
-          "id": "debug",
-          "label": "⑥デバッグOK",
-          "phase": 6,
-          "preDeploy": false,
-          "ok": true
-        }
-      ],
-      "blockers": [],
-      "blockerCount": 0,
-      "runState": "idle",
-      "nextAction": "✅ 公開中 — /case/ に表示されています",
-      "promo": {
-        "x": null,
-        "hatena": null,
-        "note": null
-      },
-      "short": {
-        "slug": "fuhou-immin-trend",
-        "generated": false,
-        "uploaded": false,
-        "visibility": null,
-        "videoId": null,
-        "url": null,
-        "studioUrl": null,
-        "uploadedAt": null,
-        "label": "未生成"
-      }
-    },
-    {
-      "slug": "tokyo-solar-panel",
-      "title": "【東京都】太陽光パネル設置義務とは？",
-      "shortTitle": "【東京都】太陽光パネル設置義務とは？",
-      "adminHidden": false,
-      "pageReady": true,
-      "publishState": "live",
-      "previewUrl": "/dev/preview/tokyo-solar-panel/",
-      "gatePct": 100,
-      "goldPct": 100,
-      "published": true,
-      "publishGateOk": true,
-      "pipeline": [
-        {
-          "id": "content",
-          "label": "①コンテンツ",
-          "phase": 1,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "matrix",
-          "label": "②〇×2党確定",
-          "phase": 2,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "x",
-          "label": "③X検証1件+",
-          "phase": 3,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "legal",
-          "label": "④法務OK",
-          "phase": 4,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "deployed",
-          "label": "⑤本番デプロイ",
-          "phase": 5,
-          "preDeploy": false,
-          "ok": true
-        },
-        {
-          "id": "debug",
-          "label": "⑥デバッグOK",
-          "phase": 6,
-          "preDeploy": false,
-          "ok": true
-        }
-      ],
-      "gold": [
-        {
-          "id": "content",
-          "label": "①コンテンツ",
-          "phase": 1,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "matrix",
-          "label": "②〇×2党確定",
-          "phase": 2,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "x",
-          "label": "③X検証1件+",
-          "phase": 3,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "legal",
-          "label": "④法務OK",
-          "phase": 4,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "deployed",
-          "label": "⑤本番デプロイ",
-          "phase": 5,
-          "preDeploy": false,
-          "ok": true
-        },
-        {
-          "id": "debug",
-          "label": "⑥デバッグOK",
-          "phase": 6,
-          "preDeploy": false,
-          "ok": true
-        }
-      ],
-      "blockers": [],
-      "blockerCount": 0,
-      "runState": "idle",
-      "nextAction": "✅ 公開中 — /case/ に表示されています",
-      "promo": {
-        "x": null,
-        "hatena": null,
-        "note": null
-      },
-      "short": {
-        "slug": "tokyo-solar-panel",
-        "generated": false,
-        "uploaded": false,
-        "visibility": null,
-        "videoId": null,
-        "url": null,
-        "studioUrl": null,
-        "uploadedAt": null,
-        "label": "未生成"
-      }
-    },
-    {
-      "slug": "case-mqwdrley",
-      "title": "【東京都知事】小池百合子氏・学歴巡る刑事告発の経緯",
-      "shortTitle": "【東京都知事】小池百合子氏・学歴巡る刑事告発の経緯",
-      "adminHidden": false,
-      "pageReady": true,
-      "publishState": "live",
-      "previewUrl": "/dev/preview/case-mqwdrley/",
-      "gatePct": 100,
-      "goldPct": 100,
-      "published": true,
-      "publishGateOk": true,
-      "pipeline": [
-        {
-          "id": "content",
-          "label": "①コンテンツ",
-          "phase": 1,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "matrix",
-          "label": "②〇×2党確定",
-          "phase": 2,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "x",
-          "label": "③X検証1件+",
-          "phase": 3,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "legal",
-          "label": "④法務OK",
-          "phase": 4,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "deployed",
-          "label": "⑤本番デプロイ",
-          "phase": 5,
-          "preDeploy": false,
-          "ok": true
-        },
-        {
-          "id": "debug",
-          "label": "⑥デバッグOK",
-          "phase": 6,
-          "preDeploy": false,
-          "ok": true
-        }
-      ],
-      "gold": [
-        {
-          "id": "content",
-          "label": "①コンテンツ",
-          "phase": 1,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "matrix",
-          "label": "②〇×2党確定",
-          "phase": 2,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "x",
-          "label": "③X検証1件+",
-          "phase": 3,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "legal",
-          "label": "④法務OK",
-          "phase": 4,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "deployed",
-          "label": "⑤本番デプロイ",
-          "phase": 5,
-          "preDeploy": false,
-          "ok": true
-        },
-        {
-          "id": "debug",
-          "label": "⑥デバッグOK",
-          "phase": 6,
-          "preDeploy": false,
-          "ok": true
-        }
-      ],
-      "blockers": [],
-      "blockerCount": 0,
-      "runState": "idle",
-      "nextAction": "✅ 公開中 — /case/ に表示されています",
-      "promo": {
-        "x": null,
-        "hatena": null,
-        "note": null
-      },
-      "short": {
-        "slug": "case-mqwdrley",
-        "generated": false,
-        "uploaded": false,
-        "visibility": null,
-        "videoId": null,
-        "url": null,
-        "studioUrl": null,
-        "uploadedAt": null,
-        "label": "未生成"
-      }
-    },
-    {
-      "slug": "bouka-taisaku",
-      "title": "【物価高対策】支援策の内容といまの効果",
-      "shortTitle": "【物価高対策】支援策の内容といまの効果",
-      "adminHidden": false,
-      "pageReady": true,
-      "publishState": "live",
-      "previewUrl": "/dev/preview/bouka-taisaku/",
-      "gatePct": 100,
-      "goldPct": 100,
-      "published": true,
-      "publishGateOk": true,
-      "pipeline": [
-        {
-          "id": "content",
-          "label": "①コンテンツ",
-          "phase": 1,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "matrix",
-          "label": "②〇×2党確定",
-          "phase": 2,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "x",
-          "label": "③X検証1件+",
-          "phase": 3,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "legal",
-          "label": "④法務OK",
-          "phase": 4,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "deployed",
-          "label": "⑤本番デプロイ",
-          "phase": 5,
-          "preDeploy": false,
-          "ok": true
-        },
-        {
-          "id": "debug",
-          "label": "⑥デバッグOK",
-          "phase": 6,
-          "preDeploy": false,
-          "ok": true
-        }
-      ],
-      "gold": [
-        {
-          "id": "content",
-          "label": "①コンテンツ",
-          "phase": 1,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "matrix",
-          "label": "②〇×2党確定",
-          "phase": 2,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "x",
-          "label": "③X検証1件+",
-          "phase": 3,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "legal",
-          "label": "④法務OK",
-          "phase": 4,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "deployed",
-          "label": "⑤本番デプロイ",
-          "phase": 5,
-          "preDeploy": false,
-          "ok": true
-        },
-        {
-          "id": "debug",
-          "label": "⑥デバッグOK",
-          "phase": 6,
-          "preDeploy": false,
-          "ok": true
-        }
-      ],
-      "blockers": [],
-      "blockerCount": 0,
-      "runState": "idle",
-      "nextAction": "✅ 公開中 — /case/ に表示されています",
-      "promo": {
-        "x": null,
-        "hatena": null,
-        "note": null
-      },
-      "short": {
-        "slug": "bouka-taisaku",
-        "generated": false,
-        "uploaded": false,
-        "visibility": null,
-        "videoId": null,
-        "url": null,
-        "studioUrl": null,
-        "uploadedAt": null,
-        "label": "未生成"
-      }
-    },
-    {
-      "slug": "shohizei-genmen",
-      "title": "【食料品の消費税】減税・免税の議論と最新",
-      "shortTitle": "【食料品の消費税】減税・免税の議論と最新",
-      "adminHidden": false,
-      "pageReady": true,
-      "publishState": "live",
-      "previewUrl": "/dev/preview/shohizei-genmen/",
-      "gatePct": 100,
-      "goldPct": 100,
-      "published": true,
-      "publishGateOk": true,
-      "pipeline": [
-        {
-          "id": "content",
-          "label": "①コンテンツ",
-          "phase": 1,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "matrix",
-          "label": "②〇×2党確定",
-          "phase": 2,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "x",
-          "label": "③X検証1件+",
-          "phase": 3,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "legal",
-          "label": "④法務OK",
-          "phase": 4,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "deployed",
-          "label": "⑤本番デプロイ",
-          "phase": 5,
-          "preDeploy": false,
-          "ok": true
-        },
-        {
-          "id": "debug",
-          "label": "⑥デバッグOK",
-          "phase": 6,
-          "preDeploy": false,
-          "ok": true
-        }
-      ],
-      "gold": [
-        {
-          "id": "content",
-          "label": "①コンテンツ",
-          "phase": 1,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "matrix",
-          "label": "②〇×2党確定",
-          "phase": 2,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "x",
-          "label": "③X検証1件+",
-          "phase": 3,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "legal",
-          "label": "④法務OK",
-          "phase": 4,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "deployed",
-          "label": "⑤本番デプロイ",
-          "phase": 5,
-          "preDeploy": false,
-          "ok": true
-        },
-        {
-          "id": "debug",
-          "label": "⑥デバッグOK",
-          "phase": 6,
-          "preDeploy": false,
-          "ok": true
-        }
-      ],
-      "blockers": [],
-      "blockerCount": 0,
-      "runState": "idle",
-      "nextAction": "✅ 公開中 — /case/ に表示されています",
-      "promo": {
-        "x": null,
-        "hatena": null,
-        "note": null
-      },
-      "short": {
-        "slug": "shohizei-genmen",
-        "generated": false,
-        "uploaded": false,
-        "visibility": null,
-        "videoId": null,
-        "url": null,
-        "studioUrl": null,
-        "uploadedAt": null,
-        "label": "未生成"
-      }
-    },
-    {
-      "slug": "boeeihi",
-      "title": "【防衛費・安保】増額の行方と安保政策の最新",
-      "shortTitle": "【防衛費・安保】増額の行方と安保政策の最新",
-      "adminHidden": false,
-      "pageReady": true,
-      "publishState": "live",
-      "previewUrl": "/dev/preview/boeeihi/",
-      "gatePct": 100,
-      "goldPct": 100,
-      "published": true,
-      "publishGateOk": true,
-      "pipeline": [
-        {
-          "id": "content",
-          "label": "①コンテンツ",
-          "phase": 1,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "matrix",
-          "label": "②〇×2党確定",
-          "phase": 2,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "x",
-          "label": "③X検証1件+",
-          "phase": 3,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "legal",
-          "label": "④法務OK",
-          "phase": 4,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "deployed",
-          "label": "⑤本番デプロイ",
-          "phase": 5,
-          "preDeploy": false,
-          "ok": true
-        },
-        {
-          "id": "debug",
-          "label": "⑥デバッグOK",
-          "phase": 6,
-          "preDeploy": false,
-          "ok": true
-        }
-      ],
-      "gold": [
-        {
-          "id": "content",
-          "label": "①コンテンツ",
-          "phase": 1,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "matrix",
-          "label": "②〇×2党確定",
-          "phase": 2,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "x",
-          "label": "③X検証1件+",
-          "phase": 3,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "legal",
-          "label": "④法務OK",
-          "phase": 4,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "deployed",
-          "label": "⑤本番デプロイ",
-          "phase": 5,
-          "preDeploy": false,
-          "ok": true
-        },
-        {
-          "id": "debug",
-          "label": "⑥デバッグOK",
-          "phase": 6,
-          "preDeploy": false,
-          "ok": true
-        }
-      ],
-      "blockers": [],
-      "blockerCount": 0,
-      "runState": "idle",
-      "nextAction": "✅ 公開中 — /case/ に表示されています",
-      "promo": {
-        "x": null,
-        "hatena": null,
-        "note": null
-      },
-      "short": {
-        "slug": "boeeihi",
-        "generated": false,
-        "uploaded": false,
-        "visibility": null,
-        "videoId": null,
-        "url": null,
-        "studioUrl": null,
-        "uploadedAt": null,
-        "label": "未生成"
-      }
-    },
-    {
-      "slug": "chingin",
-      "title": "【賃上げ・最低賃金】企業と家計への影響",
-      "shortTitle": "【賃上げ・最低賃金】企業と家計への影響",
-      "adminHidden": false,
-      "pageReady": true,
-      "publishState": "live",
-      "previewUrl": "/dev/preview/chingin/",
-      "gatePct": 100,
-      "goldPct": 100,
-      "published": true,
-      "publishGateOk": true,
-      "pipeline": [
-        {
-          "id": "content",
-          "label": "①コンテンツ",
-          "phase": 1,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "matrix",
-          "label": "②〇×2党確定",
-          "phase": 2,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "x",
-          "label": "③X検証1件+",
-          "phase": 3,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "legal",
-          "label": "④法務OK",
-          "phase": 4,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "deployed",
-          "label": "⑤本番デプロイ",
-          "phase": 5,
-          "preDeploy": false,
-          "ok": true
-        },
-        {
-          "id": "debug",
-          "label": "⑥デバッグOK",
-          "phase": 6,
-          "preDeploy": false,
-          "ok": true
-        }
-      ],
-      "gold": [
-        {
-          "id": "content",
-          "label": "①コンテンツ",
-          "phase": 1,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "matrix",
-          "label": "②〇×2党確定",
-          "phase": 2,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "x",
-          "label": "③X検証1件+",
-          "phase": 3,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "legal",
-          "label": "④法務OK",
-          "phase": 4,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "deployed",
-          "label": "⑤本番デプロイ",
-          "phase": 5,
-          "preDeploy": false,
-          "ok": true
-        },
-        {
-          "id": "debug",
-          "label": "⑥デバッグOK",
-          "phase": 6,
-          "preDeploy": false,
-          "ok": true
-        }
-      ],
-      "blockers": [],
-      "blockerCount": 0,
-      "runState": "idle",
-      "nextAction": "✅ 公開中 — /case/ に表示されています",
-      "promo": {
-        "x": null,
-        "hatena": null,
-        "note": null
-      },
-      "short": {
-        "slug": "chingin",
-        "generated": false,
-        "uploaded": false,
-        "visibility": null,
-        "videoId": null,
-        "url": null,
-        "studioUrl": null,
-        "uploadedAt": null,
-        "label": "未生成"
-      }
-    },
-    {
-      "slug": "nenkin",
-      "title": "【年金制度改革】受給年齢・支給額の変更点",
-      "shortTitle": "【年金制度改革】受給年齢・支給額の変更点",
-      "adminHidden": false,
-      "pageReady": true,
-      "publishState": "live",
-      "previewUrl": "/dev/preview/nenkin/",
-      "gatePct": 100,
-      "goldPct": 100,
-      "published": true,
-      "publishGateOk": true,
-      "pipeline": [
-        {
-          "id": "content",
-          "label": "①コンテンツ",
-          "phase": 1,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "matrix",
-          "label": "②〇×2党確定",
-          "phase": 2,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "x",
-          "label": "③X検証1件+",
-          "phase": 3,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "legal",
-          "label": "④法務OK",
-          "phase": 4,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "deployed",
-          "label": "⑤本番デプロイ",
-          "phase": 5,
-          "preDeploy": false,
-          "ok": true
-        },
-        {
-          "id": "debug",
-          "label": "⑥デバッグOK",
-          "phase": 6,
-          "preDeploy": false,
-          "ok": true
-        }
-      ],
-      "gold": [
-        {
-          "id": "content",
-          "label": "①コンテンツ",
-          "phase": 1,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "matrix",
-          "label": "②〇×2党確定",
-          "phase": 2,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "x",
-          "label": "③X検証1件+",
-          "phase": 3,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "legal",
-          "label": "④法務OK",
-          "phase": 4,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "deployed",
-          "label": "⑤本番デプロイ",
-          "phase": 5,
-          "preDeploy": false,
-          "ok": true
-        },
-        {
-          "id": "debug",
-          "label": "⑥デバッグOK",
-          "phase": 6,
-          "preDeploy": false,
-          "ok": true
-        }
-      ],
-      "blockers": [],
-      "blockerCount": 0,
-      "runState": "idle",
-      "nextAction": "✅ 公開中 — /case/ に表示されています",
-      "promo": {
-        "x": null,
-        "hatena": null,
-        "note": null
-      },
-      "short": {
-        "slug": "nenkin",
-        "generated": false,
-        "uploaded": false,
-        "visibility": null,
-        "videoId": null,
-        "url": null,
-        "studioUrl": null,
-        "uploadedAt": null,
-        "label": "未生成"
-      }
-    },
-    {
-      "slug": "gaikokujin-seisaku",
-      "title": "【外国人政策】在留・労働・共生の最新論点",
-      "shortTitle": "【外国人政策】在留・労働・共生の最新論点",
-      "adminHidden": false,
-      "pageReady": true,
-      "publishState": "live",
-      "previewUrl": "/dev/preview/gaikokujin-seisaku/",
-      "gatePct": 100,
-      "goldPct": 100,
-      "published": true,
-      "publishGateOk": true,
-      "pipeline": [
-        {
-          "id": "content",
-          "label": "①コンテンツ",
-          "phase": 1,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "matrix",
-          "label": "②〇×2党確定",
-          "phase": 2,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "x",
-          "label": "③X検証1件+",
-          "phase": 3,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "legal",
-          "label": "④法務OK",
-          "phase": 4,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "deployed",
-          "label": "⑤本番デプロイ",
-          "phase": 5,
-          "preDeploy": false,
-          "ok": true
-        },
-        {
-          "id": "debug",
-          "label": "⑥デバッグOK",
-          "phase": 6,
-          "preDeploy": false,
-          "ok": true
-        }
-      ],
-      "gold": [
-        {
-          "id": "content",
-          "label": "①コンテンツ",
-          "phase": 1,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "matrix",
-          "label": "②〇×2党確定",
-          "phase": 2,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "x",
-          "label": "③X検証1件+",
-          "phase": 3,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "legal",
-          "label": "④法務OK",
-          "phase": 4,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "deployed",
-          "label": "⑤本番デプロイ",
-          "phase": 5,
-          "preDeploy": false,
-          "ok": true
-        },
-        {
-          "id": "debug",
-          "label": "⑥デバッグOK",
-          "phase": 6,
-          "preDeploy": false,
-          "ok": true
-        }
-      ],
-      "blockers": [],
-      "blockerCount": 0,
-      "runState": "idle",
-      "nextAction": "✅ 公開中 — /case/ に表示されています",
-      "promo": {
-        "x": null,
-        "hatena": null,
-        "note": null
-      },
-      "short": {
-        "slug": "gaikokujin-seisaku",
-        "generated": false,
-        "uploaded": false,
-        "visibility": null,
-        "videoId": null,
-        "url": null,
-        "studioUrl": null,
-        "uploadedAt": null,
-        "label": "未生成"
-      }
-    },
-    {
-      "slug": "shoshika",
-      "title": "【少子化対策】支援策の内容と出生率の動向",
-      "shortTitle": "【少子化対策】支援策の内容と出生率の動向",
-      "adminHidden": false,
-      "pageReady": true,
-      "publishState": "live",
-      "previewUrl": "/dev/preview/shoshika/",
-      "gatePct": 100,
-      "goldPct": 100,
-      "published": true,
-      "publishGateOk": true,
-      "pipeline": [
-        {
-          "id": "content",
-          "label": "①コンテンツ",
-          "phase": 1,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "matrix",
-          "label": "②〇×2党確定",
-          "phase": 2,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "x",
-          "label": "③X検証1件+",
-          "phase": 3,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "legal",
-          "label": "④法務OK",
-          "phase": 4,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "deployed",
-          "label": "⑤本番デプロイ",
-          "phase": 5,
-          "preDeploy": false,
-          "ok": true
-        },
-        {
-          "id": "debug",
-          "label": "⑥デバッグOK",
-          "phase": 6,
-          "preDeploy": false,
-          "ok": true
-        }
-      ],
-      "gold": [
-        {
-          "id": "content",
-          "label": "①コンテンツ",
-          "phase": 1,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "matrix",
-          "label": "②〇×2党確定",
-          "phase": 2,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "x",
-          "label": "③X検証1件+",
-          "phase": 3,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "legal",
-          "label": "④法務OK",
-          "phase": 4,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "deployed",
-          "label": "⑤本番デプロイ",
-          "phase": 5,
-          "preDeploy": false,
-          "ok": true
-        },
-        {
-          "id": "debug",
-          "label": "⑥デバッグOK",
-          "phase": 6,
-          "preDeploy": false,
-          "ok": true
-        }
-      ],
-      "blockers": [],
-      "blockerCount": 0,
-      "runState": "idle",
-      "nextAction": "✅ 公開中 — /case/ に表示されています",
-      "promo": {
-        "x": null,
-        "hatena": null,
-        "note": null
-      },
-      "short": {
-        "slug": "shoshika",
-        "generated": true,
-        "uploaded": false,
-        "visibility": null,
-        "videoId": null,
-        "url": null,
-        "studioUrl": null,
-        "uploadedAt": null,
-        "label": "生成済・未アップ"
-      }
-    },
-    {
-      "slug": "kyoiku-mushoka",
-      "title": "【大学無償化】対象者・条件と財源の争点",
-      "shortTitle": "【大学無償化】対象者・条件と財源の争点",
-      "adminHidden": false,
-      "pageReady": true,
-      "publishState": "live",
-      "previewUrl": "/dev/preview/kyoiku-mushoka/",
-      "gatePct": 100,
-      "goldPct": 100,
-      "published": true,
-      "publishGateOk": true,
-      "pipeline": [
-        {
-          "id": "content",
-          "label": "①コンテンツ",
-          "phase": 1,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "matrix",
-          "label": "②〇×2党確定",
-          "phase": 2,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "x",
-          "label": "③X検証1件+",
-          "phase": 3,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "legal",
-          "label": "④法務OK",
-          "phase": 4,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "deployed",
-          "label": "⑤本番デプロイ",
-          "phase": 5,
-          "preDeploy": false,
-          "ok": true
-        },
-        {
-          "id": "debug",
-          "label": "⑥デバッグOK",
-          "phase": 6,
-          "preDeploy": false,
-          "ok": true
-        }
-      ],
-      "gold": [
-        {
-          "id": "content",
-          "label": "①コンテンツ",
-          "phase": 1,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "matrix",
-          "label": "②〇×2党確定",
-          "phase": 2,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "x",
-          "label": "③X検証1件+",
-          "phase": 3,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "legal",
-          "label": "④法務OK",
-          "phase": 4,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "deployed",
-          "label": "⑤本番デプロイ",
-          "phase": 5,
-          "preDeploy": false,
-          "ok": true
-        },
-        {
-          "id": "debug",
-          "label": "⑥デバッグOK",
-          "phase": 6,
-          "preDeploy": false,
-          "ok": true
-        }
-      ],
-      "blockers": [],
-      "blockerCount": 0,
-      "runState": "idle",
-      "nextAction": "✅ 公開中 — /case/ に表示されています",
-      "promo": {
-        "x": null,
-        "hatena": null,
-        "note": null
-      },
-      "short": {
-        "slug": "kyoiku-mushoka",
-        "generated": false,
-        "uploaded": false,
-        "visibility": null,
-        "videoId": null,
-        "url": null,
-        "studioUrl": null,
-        "uploadedAt": null,
-        "label": "未生成"
-      }
-    },
-    {
-      "slug": "energy-policy",
-      "title": "【エネルギー政策】原発・再エネ・電気代の行方",
-      "shortTitle": "【エネルギー政策】原発・再エネ・電気代の行方",
-      "adminHidden": false,
-      "pageReady": true,
-      "publishState": "live",
-      "previewUrl": "/dev/preview/energy-policy/",
-      "gatePct": 100,
-      "goldPct": 100,
-      "published": true,
-      "publishGateOk": true,
-      "pipeline": [
-        {
-          "id": "content",
-          "label": "①コンテンツ",
-          "phase": 1,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "matrix",
-          "label": "②〇×2党確定",
-          "phase": 2,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "x",
-          "label": "③X検証1件+",
-          "phase": 3,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "legal",
-          "label": "④法務OK",
-          "phase": 4,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "deployed",
-          "label": "⑤本番デプロイ",
-          "phase": 5,
-          "preDeploy": false,
-          "ok": true
-        },
-        {
-          "id": "debug",
-          "label": "⑥デバッグOK",
-          "phase": 6,
-          "preDeploy": false,
-          "ok": true
-        }
-      ],
-      "gold": [
-        {
-          "id": "content",
-          "label": "①コンテンツ",
-          "phase": 1,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "matrix",
-          "label": "②〇×2党確定",
-          "phase": 2,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "x",
-          "label": "③X検証1件+",
-          "phase": 3,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "legal",
-          "label": "④法務OK",
-          "phase": 4,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "deployed",
-          "label": "⑤本番デプロイ",
-          "phase": 5,
-          "preDeploy": false,
-          "ok": true
-        },
-        {
-          "id": "debug",
-          "label": "⑥デバッグOK",
-          "phase": 6,
-          "preDeploy": false,
-          "ok": true
-        }
-      ],
-      "blockers": [],
-      "blockerCount": 0,
-      "runState": "idle",
-      "nextAction": "✅ 公開中 — /case/ に表示されています",
-      "promo": {
-        "x": null,
-        "hatena": null,
-        "note": null
-      },
-      "short": {
-        "slug": "energy-policy",
-        "generated": false,
-        "uploaded": false,
-        "visibility": null,
-        "videoId": null,
-        "url": null,
-        "studioUrl": null,
-        "uploadedAt": null,
-        "label": "未生成"
-      }
-    },
-    {
-      "slug": "seiji-shikin",
-      "title": "【政治資金】政党助成と献金ルールの最新",
-      "shortTitle": "【政治資金】政党助成と献金ルールの最新",
-      "adminHidden": false,
-      "pageReady": true,
-      "publishState": "live",
-      "previewUrl": "/dev/preview/seiji-shikin/",
-      "gatePct": 100,
-      "goldPct": 100,
-      "published": true,
-      "publishGateOk": true,
-      "pipeline": [
-        {
-          "id": "content",
-          "label": "①コンテンツ",
-          "phase": 1,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "matrix",
-          "label": "②〇×2党確定",
-          "phase": 2,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "x",
-          "label": "③X検証1件+",
-          "phase": 3,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "legal",
-          "label": "④法務OK",
-          "phase": 4,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "deployed",
-          "label": "⑤本番デプロイ",
-          "phase": 5,
-          "preDeploy": false,
-          "ok": true
-        },
-        {
-          "id": "debug",
-          "label": "⑥デバッグOK",
-          "phase": 6,
-          "preDeploy": false,
-          "ok": true
-        }
-      ],
-      "gold": [
-        {
-          "id": "content",
-          "label": "①コンテンツ",
-          "phase": 1,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "matrix",
-          "label": "②〇×2党確定",
-          "phase": 2,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "x",
-          "label": "③X検証1件+",
-          "phase": 3,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "legal",
-          "label": "④法務OK",
-          "phase": 4,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "deployed",
-          "label": "⑤本番デプロイ",
-          "phase": 5,
-          "preDeploy": false,
-          "ok": true
-        },
-        {
-          "id": "debug",
-          "label": "⑥デバッグOK",
-          "phase": 6,
-          "preDeploy": false,
-          "ok": true
-        }
-      ],
-      "blockers": [],
-      "blockerCount": 0,
-      "runState": "idle",
-      "nextAction": "✅ 公開中 — /case/ に表示されています",
-      "promo": {
-        "x": null,
-        "hatena": null,
-        "note": null
-      },
-      "short": {
-        "slug": "seiji-shikin",
-        "generated": false,
-        "uploaded": false,
-        "visibility": null,
-        "videoId": null,
-        "url": null,
-        "studioUrl": null,
-        "uploadedAt": null,
-        "label": "未生成"
-      }
-    },
-    {
-      "slug": "senkyo-kaikaku",
-      "title": "【選挙制度改革】論点と各党の主張",
-      "shortTitle": "【選挙制度改革】論点と各党の主張",
-      "adminHidden": false,
-      "pageReady": true,
-      "publishState": "live",
-      "previewUrl": "/dev/preview/senkyo-kaikaku/",
-      "gatePct": 100,
-      "goldPct": 100,
-      "published": true,
-      "publishGateOk": true,
-      "pipeline": [
-        {
-          "id": "content",
-          "label": "①コンテンツ",
-          "phase": 1,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "matrix",
-          "label": "②〇×2党確定",
-          "phase": 2,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "x",
-          "label": "③X検証1件+",
-          "phase": 3,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "legal",
-          "label": "④法務OK",
-          "phase": 4,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "deployed",
-          "label": "⑤本番デプロイ",
-          "phase": 5,
-          "preDeploy": false,
-          "ok": true
-        },
-        {
-          "id": "debug",
-          "label": "⑥デバッグOK",
-          "phase": 6,
-          "preDeploy": false,
-          "ok": true
-        }
-      ],
-      "gold": [
-        {
-          "id": "content",
-          "label": "①コンテンツ",
-          "phase": 1,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "matrix",
-          "label": "②〇×2党確定",
-          "phase": 2,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "x",
-          "label": "③X検証1件+",
-          "phase": 3,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "legal",
-          "label": "④法務OK",
-          "phase": 4,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "deployed",
-          "label": "⑤本番デプロイ",
-          "phase": 5,
-          "preDeploy": false,
-          "ok": true
-        },
-        {
-          "id": "debug",
-          "label": "⑥デバッグOK",
-          "phase": 6,
-          "preDeploy": false,
-          "ok": true
-        }
-      ],
-      "blockers": [],
-      "blockerCount": 0,
-      "runState": "idle",
-      "nextAction": "✅ 公開中 — /case/ に表示されています",
-      "promo": {
-        "x": null,
-        "hatena": null,
-        "note": null
-      },
-      "short": {
-        "slug": "senkyo-kaikaku",
-        "generated": false,
-        "uploaded": false,
-        "visibility": null,
-        "videoId": null,
-        "url": null,
-        "studioUrl": null,
-        "uploadedAt": null,
-        "label": "未生成"
-      }
-    },
-    {
-      "slug": "kaigo-iryo",
-      "title": "【介護・医療費】負担増の議論と支援策",
-      "shortTitle": "【介護・医療費】負担増の議論と支援策",
-      "adminHidden": false,
-      "pageReady": true,
-      "publishState": "live",
-      "previewUrl": "/dev/preview/kaigo-iryo/",
-      "gatePct": 100,
-      "goldPct": 100,
-      "published": true,
-      "publishGateOk": true,
-      "pipeline": [
-        {
-          "id": "content",
-          "label": "①コンテンツ",
-          "phase": 1,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "matrix",
-          "label": "②〇×2党確定",
-          "phase": 2,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "x",
-          "label": "③X検証1件+",
-          "phase": 3,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "legal",
-          "label": "④法務OK",
-          "phase": 4,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "deployed",
-          "label": "⑤本番デプロイ",
-          "phase": 5,
-          "preDeploy": false,
-          "ok": true
-        },
-        {
-          "id": "debug",
-          "label": "⑥デバッグOK",
-          "phase": 6,
-          "preDeploy": false,
-          "ok": true
-        }
-      ],
-      "gold": [
-        {
-          "id": "content",
-          "label": "①コンテンツ",
-          "phase": 1,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "matrix",
-          "label": "②〇×2党確定",
-          "phase": 2,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "x",
-          "label": "③X検証1件+",
-          "phase": 3,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "legal",
-          "label": "④法務OK",
-          "phase": 4,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "deployed",
-          "label": "⑤本番デプロイ",
-          "phase": 5,
-          "preDeploy": false,
-          "ok": true
-        },
-        {
-          "id": "debug",
-          "label": "⑥デバッグOK",
-          "phase": 6,
-          "preDeploy": false,
-          "ok": true
-        }
-      ],
-      "blockers": [],
-      "blockerCount": 0,
-      "runState": "idle",
-      "nextAction": "✅ 公開中 — /case/ に表示されています",
-      "promo": {
-        "x": null,
-        "hatena": null,
-        "note": null
-      },
-      "short": {
-        "slug": "kaigo-iryo",
-        "generated": false,
-        "uploaded": false,
-        "visibility": null,
-        "videoId": null,
-        "url": null,
-        "studioUrl": null,
-        "uploadedAt": null,
-        "label": "未生成"
-      }
-    },
-    {
-      "slug": "chiho-sosei",
-      "title": "【地方創生】交付金と地域政策の最新",
-      "shortTitle": "【地方創生】交付金と地域政策の最新",
-      "adminHidden": false,
-      "pageReady": true,
-      "publishState": "live",
-      "previewUrl": "/dev/preview/chiho-sosei/",
-      "gatePct": 100,
-      "goldPct": 100,
-      "published": true,
-      "publishGateOk": true,
-      "pipeline": [
-        {
-          "id": "content",
-          "label": "①コンテンツ",
-          "phase": 1,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "matrix",
-          "label": "②〇×2党確定",
-          "phase": 2,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "x",
-          "label": "③X検証1件+",
-          "phase": 3,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "legal",
-          "label": "④法務OK",
-          "phase": 4,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "deployed",
-          "label": "⑤本番デプロイ",
-          "phase": 5,
-          "preDeploy": false,
-          "ok": true
-        },
-        {
-          "id": "debug",
-          "label": "⑥デバッグOK",
-          "phase": 6,
-          "preDeploy": false,
-          "ok": true
-        }
-      ],
-      "gold": [
-        {
-          "id": "content",
-          "label": "①コンテンツ",
-          "phase": 1,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "matrix",
-          "label": "②〇×2党確定",
-          "phase": 2,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "x",
-          "label": "③X検証1件+",
-          "phase": 3,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "legal",
-          "label": "④法務OK",
-          "phase": 4,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "deployed",
-          "label": "⑤本番デプロイ",
-          "phase": 5,
-          "preDeploy": false,
-          "ok": true
-        },
-        {
-          "id": "debug",
-          "label": "⑥デバッグOK",
-          "phase": 6,
-          "preDeploy": false,
-          "ok": true
-        }
-      ],
-      "blockers": [],
-      "blockerCount": 0,
-      "runState": "idle",
-      "nextAction": "✅ 公開中 — /case/ に表示されています",
-      "promo": {
-        "x": null,
-        "hatena": null,
-        "note": null
-      },
-      "short": {
-        "slug": "chiho-sosei",
-        "generated": false,
-        "uploaded": false,
-        "visibility": null,
-        "videoId": null,
-        "url": null,
-        "studioUrl": null,
-        "uploadedAt": null,
-        "label": "未生成"
-      }
-    },
-    {
-      "slug": "hosei-yosan",
-      "title": "【補正予算】追加支出の内容と背景",
-      "shortTitle": "【補正予算】追加支出の内容と背景",
-      "adminHidden": false,
-      "pageReady": true,
-      "publishState": "live",
-      "previewUrl": "/dev/preview/hosei-yosan/",
-      "gatePct": 100,
-      "goldPct": 100,
-      "published": true,
-      "publishGateOk": true,
-      "pipeline": [
-        {
-          "id": "content",
-          "label": "①コンテンツ",
-          "phase": 1,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "matrix",
-          "label": "②〇×2党確定",
-          "phase": 2,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "x",
-          "label": "③X検証1件+",
-          "phase": 3,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "legal",
-          "label": "④法務OK",
-          "phase": 4,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "deployed",
-          "label": "⑤本番デプロイ",
-          "phase": 5,
-          "preDeploy": false,
-          "ok": true
-        },
-        {
-          "id": "debug",
-          "label": "⑥デバッグOK",
-          "phase": 6,
-          "preDeploy": false,
-          "ok": true
-        }
-      ],
-      "gold": [
-        {
-          "id": "content",
-          "label": "①コンテンツ",
-          "phase": 1,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "matrix",
-          "label": "②〇×2党確定",
-          "phase": 2,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "x",
-          "label": "③X検証1件+",
-          "phase": 3,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "legal",
-          "label": "④法務OK",
-          "phase": 4,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "deployed",
-          "label": "⑤本番デプロイ",
-          "phase": 5,
-          "preDeploy": false,
-          "ok": true
-        },
-        {
-          "id": "debug",
-          "label": "⑥デバッグOK",
-          "phase": 6,
-          "preDeploy": false,
-          "ok": true
-        }
-      ],
-      "blockers": [],
-      "blockerCount": 0,
-      "runState": "idle",
-      "nextAction": "✅ 公開中 — /case/ に表示されています",
+      "nextAction": "🚀 ①〜④完了 — デプロイ後にプレビューを確認",
       "promo": {
         "x": null,
         "hatena": null,
@@ -4006,19 +4684,19 @@
       "shortTitle": "【政治とカネ】献金問題と規制の動向",
       "adminHidden": false,
       "pageReady": true,
-      "publishState": "live",
-      "previewUrl": "/dev/preview/nichigyo/",
-      "gatePct": 100,
-      "goldPct": 100,
-      "published": true,
-      "publishGateOk": true,
+      "publishState": "wip",
+      "previewUrl": null,
+      "gatePct": 75,
+      "goldPct": 67,
+      "published": false,
+      "publishGateOk": false,
       "pipeline": [
         {
           "id": "content",
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": true
+          "ok": false
         },
         {
           "id": "matrix",
@@ -4046,7 +4724,7 @@
           "label": "⑤本番デプロイ",
           "phase": 5,
           "preDeploy": false,
-          "ok": true
+          "ok": false
         },
         {
           "id": "debug",
@@ -4062,7 +4740,7 @@
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": true
+          "ok": false
         },
         {
           "id": "matrix",
@@ -4090,7 +4768,7 @@
           "label": "⑤本番デプロイ",
           "phase": 5,
           "preDeploy": false,
-          "ok": true
+          "ok": false
         },
         {
           "id": "debug",
@@ -4100,10 +4778,23 @@
           "ok": true
         }
       ],
-      "blockers": [],
-      "blockerCount": 0,
+      "blockers": [
+        {
+          "id": "E4_timeline_diet_topic",
+          "label": "TL国会の話題",
+          "todo": "タイムライン国会3件が案件と一致",
+          "detail": "2/3 国会が話題一致"
+        },
+        {
+          "id": "H2_x_topic",
+          "label": "Xの話題",
+          "todo": "X投稿本文が案件キーワードと一致",
+          "detail": "1/3 件が話題一致"
+        }
+      ],
+      "blockerCount": 2,
       "runState": "idle",
-      "nextAction": "✅ 公開中 — /case/ に表示されています",
+      "nextAction": "2/3 国会が話題一致 → 1/3 件が話題一致",
       "promo": {
         "x": null,
         "hatena": null,
@@ -4127,19 +4818,19 @@
       "shortTitle": "【カジノIR】大阪を中心に進むIntegrated Resort",
       "adminHidden": false,
       "pageReady": true,
-      "publishState": "live",
-      "previewUrl": "/dev/preview/casino-ir/",
-      "gatePct": 100,
-      "goldPct": 100,
-      "published": true,
-      "publishGateOk": true,
+      "publishState": "wip",
+      "previewUrl": null,
+      "gatePct": 75,
+      "goldPct": 67,
+      "published": false,
+      "publishGateOk": false,
       "pipeline": [
         {
           "id": "content",
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": true
+          "ok": false
         },
         {
           "id": "matrix",
@@ -4167,7 +4858,7 @@
           "label": "⑤本番デプロイ",
           "phase": 5,
           "preDeploy": false,
-          "ok": true
+          "ok": false
         },
         {
           "id": "debug",
@@ -4183,7 +4874,7 @@
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": true
+          "ok": false
         },
         {
           "id": "matrix",
@@ -4211,7 +4902,7 @@
           "label": "⑤本番デプロイ",
           "phase": 5,
           "preDeploy": false,
-          "ok": true
+          "ok": false
         },
         {
           "id": "debug",
@@ -4221,10 +4912,23 @@
           "ok": true
         }
       ],
-      "blockers": [],
-      "blockerCount": 0,
+      "blockers": [
+        {
+          "id": "E4_timeline_diet_topic",
+          "label": "TL国会の話題",
+          "todo": "タイムライン国会3件が案件と一致",
+          "detail": "2/3 国会が話題一致"
+        },
+        {
+          "id": "H2_x_topic",
+          "label": "Xの話題",
+          "todo": "X投稿本文が案件キーワードと一致",
+          "detail": "0/3 件が話題一致"
+        }
+      ],
+      "blockerCount": 2,
       "runState": "idle",
-      "nextAction": "✅ 公開中 — /case/ に表示されています",
+      "nextAction": "2/3 国会が話題一致 → 0/3 件が話題一致",
       "promo": {
         "x": null,
         "hatena": null,
@@ -4248,19 +4952,19 @@
       "shortTitle": "【憲法改正】9条・緊急事態条項など争点整理",
       "adminHidden": false,
       "pageReady": true,
-      "publishState": "live",
-      "previewUrl": "/dev/preview/kenpo/",
-      "gatePct": 100,
-      "goldPct": 100,
-      "published": true,
-      "publishGateOk": true,
+      "publishState": "wip",
+      "previewUrl": null,
+      "gatePct": 75,
+      "goldPct": 67,
+      "published": false,
+      "publishGateOk": false,
       "pipeline": [
         {
           "id": "content",
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": true
+          "ok": false
         },
         {
           "id": "matrix",
@@ -4288,7 +4992,7 @@
           "label": "⑤本番デプロイ",
           "phase": 5,
           "preDeploy": false,
-          "ok": true
+          "ok": false
         },
         {
           "id": "debug",
@@ -4304,7 +5008,7 @@
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": true
+          "ok": false
         },
         {
           "id": "matrix",
@@ -4332,7 +5036,7 @@
           "label": "⑤本番デプロイ",
           "phase": 5,
           "preDeploy": false,
-          "ok": true
+          "ok": false
         },
         {
           "id": "debug",
@@ -4342,10 +5046,41 @@
           "ok": true
         }
       ],
-      "blockers": [],
-      "blockerCount": 0,
+      "blockers": [
+        {
+          "id": "B3_topic",
+          "label": "話題一致",
+          "todo": "要約が searchKeyword と一致（2行以上）",
+          "detail": "1/2 行がキーワード一致（憲法改正）"
+        },
+        {
+          "id": "D2_arc_topic",
+          "label": "経緯の話題",
+          "todo": "経緯3行以上が案件キーワードと一致",
+          "detail": "1/3 行が話題一致"
+        },
+        {
+          "id": "E4_timeline_diet_topic",
+          "label": "TL国会の話題",
+          "todo": "タイムライン国会3件が案件と一致",
+          "detail": "1/3 国会が話題一致"
+        },
+        {
+          "id": "G6_matrix_topic",
+          "label": "〇×の話題",
+          "todo": "公言と行動が案件キーワードと一致（2党）",
+          "detail": "公言テキストが案件と無関係"
+        },
+        {
+          "id": "H2_x_topic",
+          "label": "Xの話題",
+          "todo": "X投稿本文が案件キーワードと一致",
+          "detail": "0/3 件が話題一致"
+        }
+      ],
+      "blockerCount": 5,
       "runState": "idle",
-      "nextAction": "✅ 公開中 — /case/ に表示されています",
+      "nextAction": "1/2 行がキーワード一致（憲法改正） → 1/3 行が話題一致 → 1/3 国会が話題一致",
       "promo": {
         "x": null,
         "hatena": null,
@@ -4369,11 +5104,11 @@
       "shortTitle": "【米国関税・貿易】日本への影響と政府の対応",
       "adminHidden": false,
       "pageReady": true,
-      "publishState": "live",
+      "publishState": "draft",
       "previewUrl": "/dev/preview/tariff-us/",
       "gatePct": 100,
-      "goldPct": 100,
-      "published": true,
+      "goldPct": 83,
+      "published": false,
       "publishGateOk": true,
       "pipeline": [
         {
@@ -4409,7 +5144,7 @@
           "label": "⑤本番デプロイ",
           "phase": 5,
           "preDeploy": false,
-          "ok": true
+          "ok": false
         },
         {
           "id": "debug",
@@ -4453,7 +5188,7 @@
           "label": "⑤本番デプロイ",
           "phase": 5,
           "preDeploy": false,
-          "ok": true
+          "ok": false
         },
         {
           "id": "debug",
@@ -4463,10 +5198,17 @@
           "ok": true
         }
       ],
-      "blockers": [],
-      "blockerCount": 0,
+      "blockers": [
+        {
+          "id": "H2_x_topic",
+          "label": "Xの話題",
+          "todo": "X投稿本文が案件キーワードと一致",
+          "detail": "0/3 件が話題一致"
+        }
+      ],
+      "blockerCount": 1,
       "runState": "idle",
-      "nextAction": "✅ 公開中 — /case/ に表示されています",
+      "nextAction": "🚀 ①〜④完了 — デプロイ後にプレビューを確認",
       "promo": {
         "x": null,
         "hatena": null,
@@ -4490,19 +5232,19 @@
       "shortTitle": "【政権・内閣人事】首相交代と政策の行方",
       "adminHidden": false,
       "pageReady": true,
-      "publishState": "live",
-      "previewUrl": "/dev/preview/kishida-resign/",
-      "gatePct": 100,
-      "goldPct": 100,
-      "published": true,
-      "publishGateOk": true,
+      "publishState": "wip",
+      "previewUrl": null,
+      "gatePct": 75,
+      "goldPct": 67,
+      "published": false,
+      "publishGateOk": false,
       "pipeline": [
         {
           "id": "content",
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": true
+          "ok": false
         },
         {
           "id": "matrix",
@@ -4530,7 +5272,7 @@
           "label": "⑤本番デプロイ",
           "phase": 5,
           "preDeploy": false,
-          "ok": true
+          "ok": false
         },
         {
           "id": "debug",
@@ -4546,7 +5288,7 @@
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": true
+          "ok": false
         },
         {
           "id": "matrix",
@@ -4574,7 +5316,7 @@
           "label": "⑤本番デプロイ",
           "phase": 5,
           "preDeploy": false,
-          "ok": true
+          "ok": false
         },
         {
           "id": "debug",
@@ -4584,10 +5326,35 @@
           "ok": true
         }
       ],
-      "blockers": [],
-      "blockerCount": 0,
+      "blockers": [
+        {
+          "id": "D2_arc_topic",
+          "label": "経緯の話題",
+          "todo": "経緯3行以上が案件キーワードと一致",
+          "detail": "1/3 行が話題一致"
+        },
+        {
+          "id": "E4_timeline_diet_topic",
+          "label": "TL国会の話題",
+          "todo": "タイムライン国会3件が案件と一致",
+          "detail": "2/3 国会が話題一致"
+        },
+        {
+          "id": "G6_matrix_topic",
+          "label": "〇×の話題",
+          "todo": "公言と行動が案件キーワードと一致（2党）",
+          "detail": "公言テキストが案件と無関係"
+        },
+        {
+          "id": "H2_x_topic",
+          "label": "Xの話題",
+          "todo": "X投稿本文が案件キーワードと一致",
+          "detail": "1/3 件が話題一致"
+        }
+      ],
+      "blockerCount": 4,
       "runState": "idle",
-      "nextAction": "✅ 公開中 — /case/ に表示されています",
+      "nextAction": "1/3 行が話題一致 → 2/3 国会が話題一致 → 公言テキストが案件と無関係",
       "promo": {
         "x": null,
         "hatena": null,
@@ -4611,19 +5378,19 @@
       "shortTitle": "【超党派・教育法改正】学校現場への影響",
       "adminHidden": false,
       "pageReady": true,
-      "publishState": "live",
-      "previewUrl": "/dev/preview/komei-kokumin/",
-      "gatePct": 100,
-      "goldPct": 100,
-      "published": true,
-      "publishGateOk": true,
+      "publishState": "wip",
+      "previewUrl": null,
+      "gatePct": 75,
+      "goldPct": 67,
+      "published": false,
+      "publishGateOk": false,
       "pipeline": [
         {
           "id": "content",
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": true
+          "ok": false
         },
         {
           "id": "matrix",
@@ -4651,7 +5418,7 @@
           "label": "⑤本番デプロイ",
           "phase": 5,
           "preDeploy": false,
-          "ok": true
+          "ok": false
         },
         {
           "id": "debug",
@@ -4667,7 +5434,7 @@
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": true
+          "ok": false
         },
         {
           "id": "matrix",
@@ -4695,7 +5462,7 @@
           "label": "⑤本番デプロイ",
           "phase": 5,
           "preDeploy": false,
-          "ok": true
+          "ok": false
         },
         {
           "id": "debug",
@@ -4705,10 +5472,41 @@
           "ok": true
         }
       ],
-      "blockers": [],
-      "blockerCount": 0,
+      "blockers": [
+        {
+          "id": "B3_topic",
+          "label": "話題一致",
+          "todo": "要約が searchKeyword と一致（2行以上）",
+          "detail": "0/2 行がキーワード一致（国民民主党）"
+        },
+        {
+          "id": "D2_arc_topic",
+          "label": "経緯の話題",
+          "todo": "経緯3行以上が案件キーワードと一致",
+          "detail": "0/3 行が話題一致"
+        },
+        {
+          "id": "E4_timeline_diet_topic",
+          "label": "TL国会の話題",
+          "todo": "タイムライン国会3件が案件と一致",
+          "detail": "0/3 国会が話題一致"
+        },
+        {
+          "id": "G6_matrix_topic",
+          "label": "〇×の話題",
+          "todo": "公言と行動が案件キーワードと一致（2党）",
+          "detail": "公言テキストが案件と無関係"
+        },
+        {
+          "id": "H2_x_topic",
+          "label": "Xの話題",
+          "todo": "X投稿本文が案件キーワードと一致",
+          "detail": "2/3 件が話題一致"
+        }
+      ],
+      "blockerCount": 5,
       "runState": "idle",
-      "nextAction": "✅ 公開中 — /case/ に表示されています",
+      "nextAction": "0/2 行がキーワード一致（国民民主党） → 0/3 行が話題一致 → 0/3 国会が話題一致",
       "promo": {
         "x": null,
         "hatena": null,
@@ -4728,6 +5526,6 @@
     }
   ],
   "deltaGoldPct": 0,
-  "previousGoldPct": 89,
+  "previousGoldPct": 64,
   "deployedAt": "2026-06-30T00:12:58.602Z"
 }

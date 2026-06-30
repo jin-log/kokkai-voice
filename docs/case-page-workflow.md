@@ -22,13 +22,14 @@
 | # | 担当 | 成果物 | デプロイ前? |
 |---|------|--------|------------|
 | ① | ライター | 経緯・要約・timeline（**`docs/writer-editorial.md` 必読**） | 前 |
-| ② | ライター | policy-matrix + stanceMatrix | 前 |
+| ①b | ライター | **セクション別**: 経緯＝日付ごと別文、根拠＝結論の裏付け、メリデメ＝得失（件数禁止）、〇×＝方針要約＋行動の動詞 | 前 |
+| ② | ライター | policy-matrix + stanceMatrix（**方針＝要約・行動＝具体動詞**） | 前 |
 | ③ | x-researcher | X検証2件+ | 前 |
 | ④ | 法務 | legalReview.status: ok | **前（最終関門）** |
 | ⑤ | CEO | npm run deploy | 後 |
 | ⑥ | デバッガー | qaReview.status: ok | **後** |
 
-**公開ゲート** = ①〜④ + `check-case-page` exit 0。  
+**公開ゲート** = ①〜④ + `check-case-page` exit 0（**B4結論・D2経緯話題・E4TL国会話題・G6〇×話題** 含む）。  
 **100%** = ⑥まで。
 
 ---

@@ -1,4 +1,5 @@
 import { kokkaiKeywordCandidates } from "../../functions/lib/kokkai-keyword.js";
+import { topicTerms } from "../../src/lib/topic-relevance.mjs";
 
 const BASE = "https://kokkai.ndl.go.jp/api";
 
@@ -53,6 +54,89 @@ export function stripSpeechPrefix(text) {
     .replace(/^[^\n]{0,40}君[　\s]/, "")
     .replace(/^[^\n]{0,60}(でございます|です|ます)[。．\n]/, "")
     .trim();
+}
+
+/** 長い答弁を「お尋ねがありました」単位で分割し、話題ブロックだけ返す */
+function extractTopicQABlock(speech, terms) {
+  if (!speech) return "";
+  const blocks = speech.split(
+    /(?=　[^　\n]{3,42}について(?:お尋ねがありました|聞きます|伺います))/,
+  );
+  let best = "";
+  let bestScore = -1;
+  for (const block of blocks) {
+    if (!block.trim()) continue;
+    let score = 0;
+    for (const t of terms) {
+      if (t.length < 2) continue;
+      if (block.includes(t)) score += t.length * 12 + (block.split(t).length - 1) * 8;
+    }
+    if (score > bestScore) {
+      bestScore = score;
+      best = block.trim();
+    }
+  }
+  return bestScore > 0 ? best : "";
+}
+
+/** キーワード周辺の段落だけを要約ソースにする（長い総理答弁など） */
+export function extractKeywordSpeechWindow(speech, keyword, windowSize = 900) {
+  if (!speech || !keyword) return speech || "";
+  const terms = (Array.isArray(keyword) ? keyword : keywordTerms(keyword))
+    .flatMap((k) => keywordTerms(k))
+    .filter((t, i, a) => a.indexOf(t) === i)
+    .sort((a, b) => b.length - a.length);
+
+  if (speech.length > 1200) {
+    const block = extractTopicQABlock(speech, terms);
+    if (block && block.length >= 40) {
+      return block.length <= windowSize ? block : block.slice(0, windowSize).trim();
+    }
+  }
+
+  let anchor = -1;
+  for (const term of terms) {
+    const idx = speech.indexOf(term);
+    if (idx >= 0) {
+      anchor = idx;
+      break;
+    }
+  }
+  if (anchor < 0) return speech;
+  const start = Math.max(0, anchor - 40);
+  let end = Math.min(speech.length, anchor + windowSize);
+  const tail = speech.slice(anchor);
+  const nextTopic = tail.search(
+    /　[^　]{3,42}について(?:お尋ねがありました|聞きます|伺います)/,
+  );
+  if (nextTopic > 80 && nextTopic < windowSize) end = anchor + nextTopic;
+  const tail2 = speech.slice(anchor, end);
+  const nextTopic2 = tail2.slice(80).search(
+    /　いわゆる|　外国人及び|　消費税の|　国民会議|　生徒の|　学校教育|　多様性に対する|　ウクライナ|　中東情勢|　旧氏使用|　成年後見|　子育て支援/,
+  );
+  if (nextTopic2 > 40) end = anchor + 80 + nextTopic2;
+  return speech.slice(start, end).trim();
+}
+
+/** 話題ウィンドウから抜粋（冒頭切り取り禁止） */
+export function topicSpeechExcerpt(speech, keyword, maxLen = 120) {
+  const win = extractKeywordSpeechWindow(speech, keyword);
+  return excerptSpeech(win || speech, maxLen);
+}
+
+/** 話題ウィンドウ内のキーワード出現でスコア（長い答弁の誤採用を防ぐ） */
+export function scoreSpeechTopicRelevance(record, keyword) {
+  if (!isUsableSpeech(record)) return -9999;
+  const terms = topicTerms(keyword);
+  const win = extractKeywordSpeechWindow(record.speech || "", terms);
+  if (!win || win.length < 20) return -100;
+  let hits = 0;
+  for (const t of terms) {
+    if (t.length < 2) continue;
+    hits += (win.split(t).length - 1);
+  }
+  if (hits === 0) return -50;
+  return hits * 20 + Math.min(win.length / 40, 15) + scoreSpeechRelevance(record, keyword) * 0.15;
 }
 
 /** 原文のみから抜粋（AI生成なし・数値捏造なし） */
@@ -121,6 +205,11 @@ export function scoreSpeechRelevance(record, keyword) {
   const earlyHits = terms.reduce((n, t) => n + (early.includes(t) ? 1 : 0), 0);
   if (terms.length > 0 && earlyHits === 0) score *= 0.35;
 
+  const late = speech.slice(Math.floor(speech.length * 0.6));
+  const earlyPart = speech.slice(0, Math.floor(speech.length * 0.35));
+  const onlyLate = terms.some((t) => late.includes(t)) && !terms.some((t) => earlyPart.includes(t));
+  if (onlyLate) score *= 0.2;
+
   const density = score / Math.max(speech.length / 200, 1);
   score += density;
 
@@ -137,6 +226,30 @@ export function scoreSpeechRelevance(record, keyword) {
   return score;
 }
 
+/** 要約に使える発言を選ぶ（キーワード周辺の文脈量で判定） */
+export function pickSpeechForSummary(records, keyword) {
+  if (!records?.length) return null;
+  const terms = topicTerms(keyword);
+  let best = null;
+  let bestHits = -1;
+  let bestScore = -Infinity;
+
+  for (const r of records) {
+    if (!isUsableSpeech(r)) continue;
+    const win = extractKeywordSpeechWindow(r.speech, terms);
+    const hits = terms.reduce((n, t) => n + Math.max(0, win.split(t).length - 1), 0);
+    if (hits === 0) continue;
+    const score = scoreSpeechRelevance(r, keyword);
+    if (hits > bestHits || (hits === bestHits && score > bestScore)) {
+      bestHits = hits;
+      bestScore = score;
+      best = r;
+    }
+  }
+
+  return best || pickSpeech(records, keyword);
+}
+
 export function pickSpeech(records, keyword) {
   if (!records?.length) return null;
   if (keyword) {
@@ -147,7 +260,8 @@ export function pickSpeech(records, keyword) {
       .sort((a, b) => {
         const scoreDiff = b.score - a.score;
         if (Math.abs(scoreDiff) < 18) {
-          return b.r.speech.length - a.r.speech.length;
+          const density = (x) => x.score / Math.max(x.r.speech?.length || 1, 1);
+          return density(b) - density(a);
         }
         return scoreDiff;
       });

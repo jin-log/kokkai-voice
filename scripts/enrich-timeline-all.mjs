@@ -15,9 +15,11 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import {
   fetchSpeech,
-  excerptSpeech,
-  scoreSpeechRelevance,
+  topicSpeechExcerpt,
+  scoreSpeechTopicRelevance,
 } from "./lib/kokkai-api.mjs";
+import { textMatchesTopic, topicTerms, textStronglyMatchesTopic } from "../src/lib/topic-relevance.mjs";
+import { normalizeFactPhrase } from "../src/lib/diet-voice.mjs";
 
 const root = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
 const articlesDir = path.join(root, "data/articles");
@@ -110,17 +112,19 @@ async function fetchDietSpeeches(article, need) {
         maximumRecords: 40,
       });
       const records = data.speechRecord || [];
+      const terms = topicTerms(keywordFor(article));
       const ranked = records
-        .map((r) => ({ r, score: scoreSpeechRelevance(r, keywordFor(article)) }))
+        .map((r) => ({ r, score: scoreSpeechTopicRelevance(r, keywordFor(article)) }))
         .filter((x) => x.score > 8)
         .sort((a, b) => b.score - a.score);
 
       for (const { r } of ranked) {
         if (collected.length >= need) break;
         if (!r.speechID || seen.has(r.speechID)) continue;
+        const plain = normalizeFactPhrase(topicSpeechExcerpt(r.speech, terms, 180));
+        if (!plain || plain.length < 30) continue;
+        if (!textMatchesTopic(plain, terms)) continue;
         seen.add(r.speechID);
-        const plain = excerptSpeech(r.speech, 220);
-        if (!plain || plain.length < 40) continue;
         collected.push({
           id: `speech-${r.speechID}`,
           type: "speech",
@@ -141,7 +145,11 @@ function mergeTimeline(article, newSpeeches) {
   const ids = new Set(timeline.map((e) => e.id));
 
   for (const p of (article.xPosts || []).filter(
-    (x) => x.post_url && x.post_text && x.status === "url_found",
+    (x) =>
+      x.post_url &&
+      x.post_text &&
+      x.status === "url_found" &&
+      textStronglyMatchesTopic(String(x.post_text), keywordFor(article)),
   )) {
     const entry = xPostToEntry(p);
     if (!ids.has(entry.id)) {
@@ -182,6 +190,14 @@ async function enrichArticle(slug) {
   };
 
   let timeline = [...(article.timeline || [])];
+  const terms = topicTerms(keywordFor(article));
+  timeline = timeline.filter((e) => {
+    if (isXPost(e)) {
+      return textStronglyMatchesTopic(String(e.summaryPlain || e.xPost?.post_text || ""), keywordFor(article));
+    }
+    if (!isDietSpeech(e)) return true;
+    return textMatchesTopic(String(e.summaryPlain || ""), terms);
+  });
   timeline = mergeTimeline(article, []);
 
   let xCount = timeline.filter(isXPost).length;

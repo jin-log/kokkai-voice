@@ -1,5 +1,7 @@
 /** 国会発言から AI 要約レイヤーを生成（原文にない数字・引用は出さない） */
 
+import { topicTerms, textMatchesTopic } from "../../src/lib/topic-relevance.mjs";
+
 const GLOSSARY = {
   予備費: "予見しにくい支出に備えて、年度の予算に最初から計上しておく経費",
   補正予算: "年度の途中で国の歳出・歳入を見直すための追加予算",
@@ -58,9 +60,11 @@ const GLOSSARY = {
   国際収支: "国と外国との間のお金のやり取りの総計",
   貿易赤字: "輸入が輸出を上回り、貿易で赤字になる状態",
   スパイ防止法: "国家の安全や機密を守るため、諜報活動などを罰する法律の議論",
+  国旗: "日本の国旗（日の丸）。損壊・汚損を罰する法制化が国会で議論されている",
   国旗損壊罪: "国旗や国歌を損壊・汚損した行為を罰する罪（創設をめぐる法案）",
   特別職: "内閣総理大臣や大臣など、一般公務員とは別枠の公務員",
   歳費: "国会議員の報酬として支払われる手当",
+  給与法: "公務員の給与の決め方を定めた法律",
   国家情報: "外交・防衛・経済安保などに関わる機密情報",
 };
 
@@ -89,8 +93,8 @@ const KEYWORD_GLOSSARY_HINTS = {
   内閣: ["内閣", "補正予算"],
   国民民主党: ["国民民主党", "公明党"],
   スパイ防止法: ["スパイ防止法", "国家情報"],
-  国旗: ["国旗", "国旗損壊罪"],
-  ボーナス: ["ボーナス", "特別職"],
+  日本国旗: ["国旗損壊罪", "国旗"],
+  ボーナス: ["ボーナス", "特別職", "歳費", "給与法"],
 };
 
 const PROCEDURAL = [
@@ -146,6 +150,7 @@ export const AI_DISCLAIMER =
 export const NOW_SUMMARY_LABEL = "いまの結論（AI・平易語）";
 
 const MAX_NOW_BULLET = 60;
+const MAX_EDITORIAL_BULLET = 100;
 const MAX_SUMMARY_BULLET = 48;
 const MAX_PLAIN_SENTENCE = 90;
 
@@ -258,16 +263,27 @@ function shortenPolicyName(text) {
     .trim();
 }
 
+function isOffTopicNoise(text) {
+  return (
+    /に似てる|言われる機会|敬意と感謝|心から敬意|（拍手）|御尽力/.test(text) ||
+    /^私は、会派を代表/.test(text.trim()) ||
+    /^ただいま議題となりました/.test(text.trim()) ||
+    /^必要な(取組|検討)を進めてまいります。$/.test(text.trim())
+  );
+}
+
 function isQualityBullet(text) {
   if (!text || text.length < 12) return false;
-  if (/[のがをにはでとへ向]$/.test(text)) return false;
+  if (isOffTopicNoise(text)) return false;
+  if (/[のをにはでとへ向]$/.test(text) && text.length < 24) return false;
+  if (/[がは]$/.test(text) && text.length < 28) return false;
   if (/(向け|ため|べき|含め|議員|投票|けれども|けど)$/.test(text)) return false;
   if (text.endsWith("…") && text.length < 24) return false;
   if (/などなど|にに|必要な経など|描けなくて/.test(text)) return false;
   if (text.length > 36 && /令和.+予算|一般会計予算/.test(text)) return false;
   if (/ですね$/.test(text)) return false;
   if (text.length > 42 && !/確保|目的|決定|賛同|必要|課題|禁止|規制/.test(text)) return false;
-  if (!/確保|目的|決定|賛同|必要|課題|禁止|規制|主張|提案|提示|懸念|案|点|充|回す|延長|含む|緩和|制限/.test(text)) {
+  if (!/確保|目的|決定|賛同|必要|課題|禁止|規制|主張|提案|提示|懸念|案|点|充|回す|延長|含む|緩和|制限|引上げ|据え置|ボーナス|賛成|制定|法制化|お尋ね|答弁|連立|合意|検討|起草|提出|損壊/.test(text)) {
     return false;
   }
   return true;
@@ -276,8 +292,10 @@ function isQualityBullet(text) {
 function truncateAt(text, maxLen) {
   if (text.length <= maxLen) return text;
   const cut = text.slice(0, maxLen - 1);
+  const lastPeriod = cut.lastIndexOf("。");
+  if (lastPeriod > maxLen * 0.45) return cut.slice(0, lastPeriod + 1);
   const lastComma = cut.lastIndexOf("、");
-  if (lastComma > maxLen * 0.5) return cut.slice(0, lastComma);
+  if (lastComma > maxLen * 0.5) return cut.slice(0, lastComma + 1);
   return cut + "…";
 }
 
@@ -440,6 +458,7 @@ function compressMeaning(source, keywords, maxLen, style = "conclusion") {
   }
 
   line = line.replace(/承知をしています$/, "").replace(/承知しています$/, "");
+  line = line.replace(/[がは]$/, "").replace(/[、,]$/, "");
 
   return truncateAt(line, maxLen);
 }
@@ -489,11 +508,15 @@ export function buildNowSummaryBullets(speech, keywords, min = 3, max = 5) {
   }
 
   candidates.sort((a, b) => b.tier - a.tier || b.score - a.score);
-  const bullets = candidates.map((c) => c.line).slice(0, max);
+  const withKw = candidates.filter(
+    (c) => countKeywordHits(c.line, keywords) > 0 && matchesTopicText(c.line, keywords),
+  );
+  const pool = withKw.length >= min ? withKw : candidates.filter((c) => matchesTopicText(c.line, keywords));
+  const bullets = pool.map((c) => c.line).slice(0, max);
 
   while (bullets.length < min && ranked.length > bullets.length) {
     const s = ranked[bullets.length]?.s;
-    if (!s) break;
+    if (!s || !matchesTopicText(s, keywords)) break;
     const line = compressMeaning(s, keywords, MAX_NOW_BULLET, "conclusion");
     if (line && isQualityBullet(line) && !bullets.includes(line)) bullets.push(line);
     else break;
@@ -501,6 +524,8 @@ export function buildNowSummaryBullets(speech, keywords, min = 3, max = 5) {
 
   if (bullets.length < min) {
     for (const { s } of ranked) {
+      if (!matchesTopicText(s, keywords)) continue;
+      if (countKeywordHits(s, keywords) === 0 && withKw.length > 0) continue;
       const raw = s.replace(/\s+/g, " ").trim();
       const line = truncateAt(raw, MAX_NOW_BULLET);
       if (line.length < 12 || bullets.includes(line)) continue;
@@ -510,6 +535,98 @@ export function buildNowSummaryBullets(speech, keywords, min = 3, max = 5) {
   }
 
   return bullets.slice(0, max);
+}
+
+const INCOMPLETE_END = /(おりませんが|について|に対し|とは|では|が、|を、|は、|下|ともに|今後)。$/;
+
+function dedupeBullets(bullets) {
+  const out = [];
+  for (const raw of bullets) {
+    const plain = String(raw).trim();
+    if (!plain) continue;
+    const line = plain.endsWith("。") ? plain : `${plain}。`;
+    const key = bulletKey(line);
+    if (out.some((o) => bulletKey(o) === key || o.startsWith(line.slice(0, 18)))) continue;
+    out.push(line);
+  }
+  return out;
+}
+
+/** いまの結論：話題文を優先順に最大3行（逐語・汎用句を避ける） */
+function buildEditorialConclusion(speech, keywords) {
+  const body = normalizeSpeechBody(speech);
+  const useFull = body.length <= 520;
+  const ranked = rankSentences(speech, keywords).filter(
+    ({ s }) => matchesTopicText(s, keywords) && !isOffTopicNoise(s),
+  );
+  const lines = [];
+  const used = new Set();
+
+  for (const { s } of ranked) {
+    if (lines.length >= 3) break;
+    const raw = s.replace(/\s+/g, " ").trim();
+    let line = useFull ? raw : compressMeaning(s, keywords, MAX_NOW_BULLET, "conclusion");
+    const maxLen = useFull ? MAX_EDITORIAL_BULLET : MAX_NOW_BULLET;
+    if (!line || !matchesTopicText(line, keywords) || isOffTopicNoise(line)) {
+      line = truncateAt(raw, maxLen);
+    }
+    if (line.length > maxLen) line = truncateAt(line, maxLen);
+    const plain = line.endsWith("。") ? line : `${line}。`;
+    if (INCOMPLETE_END.test(plain) || isOffTopicNoise(plain) || !matchesTopicText(plain, keywords)) {
+      continue;
+    }
+    if (!isQualityBullet(line.replace(/。$/, ""))) continue;
+    const key = bulletKey(plain);
+    if (used.has(key)) continue;
+    used.add(key);
+    lines.push(plain);
+  }
+
+  return dedupeBullets(lines).slice(0, 4);
+}
+
+function matchesTopicText(text, keywords) {
+  const terms = topicTerms(keywords.join(" ") || keywords[0] || "");
+  return textMatchesTopic(String(text), terms);
+}
+
+function finalizeNowBullets(bullets, speech, keywords, min = 3, minTopic = 2) {
+  const out = [];
+  const seen = new Set();
+  const push = (raw) => {
+    const line = String(raw).trim();
+    if (!line || line.length < 10 || isOffTopicNoise(line)) return;
+    const plain = line.endsWith("。") ? line : `${line}。`;
+    if (seen.has(plain)) return;
+    seen.add(plain);
+    out.push(plain);
+  };
+
+  const ranked = rankSentences(speech, keywords);
+  for (const { s } of ranked) {
+    if (out.filter((b) => matchesTopicText(b, keywords)).length >= minTopic) break;
+    if (!matchesTopicText(s, keywords)) continue;
+    const line = compressMeaning(s, keywords, MAX_NOW_BULLET, "conclusion");
+    if (line && isQualityBullet(line)) push(line);
+  }
+
+  for (const b of bullets) {
+    if (!matchesTopicText(b, keywords) || !isQualityBullet(String(b).replace(/。$/, ""))) continue;
+    push(b);
+  }
+
+  for (const { s } of ranked) {
+    if (out.length >= min) break;
+    if (!matchesTopicText(s, keywords)) continue;
+    const line = compressMeaning(s, keywords, MAX_NOW_BULLET, "conclusion");
+    if (line && isQualityBullet(line)) push(line);
+    else {
+      const raw = truncateAt(s.replace(/\s+/g, " ").trim(), MAX_NOW_BULLET);
+      if (raw.length >= 12 && isQualityBullet(raw)) push(raw);
+    }
+  }
+
+  return out.slice(0, 5);
 }
 
 /** AI要約箇条書き：nowSummary とは別角度の短い要点 */
@@ -522,6 +639,7 @@ export function buildSummaryBullets(speech, keywords, min = 3, max = 7) {
   const tryAdd = (source) => {
     const line = compressMeaning(source, keywords, MAX_SUMMARY_BULLET, "detail");
     const plain = line.endsWith("。") ? line : line + "。";
+    if (!matchesTopicText(line, keywords)) return false;
     if (nowKeys.has(bulletKey(line))) return false;
     if (!isQualityBullet(line)) return false;
     if (isTooVerbatim(line.replace(/。$/, ""), speech)) return false;
@@ -550,11 +668,12 @@ export function buildSummaryBullets(speech, keywords, min = 3, max = 7) {
 
   if (bullets.length < min) {
     for (const { s } of ranked) {
+      if (!matchesTopicText(s, keywords)) continue;
       const raw = s.replace(/\s+/g, " ").trim();
       const line = truncateAt(raw, MAX_SUMMARY_BULLET);
       const plain = line.endsWith("。") ? line : `${line}。`;
-      if (plain.length < 14 || nowKeys.has(bulletKey(line)) || bullets.includes(plain))
-        continue;
+      if (plain.length < 14 || nowKeys.has(bulletKey(line)) || bullets.includes(plain)) continue;
+      if (!isQualityBullet(line)) continue;
       bullets.push(plain);
       if (bullets.length >= min) break;
     }
@@ -636,9 +755,21 @@ export function buildGlossary(speech, keywords) {
 /** 記事 JSON 用の AI 平易語レイヤー一式 */
 export function buildArticleLayers(speech, keywords, meta = {}) {
   const updatedAt = new Date().toISOString();
-  const nowBullets = buildNowSummaryBullets(speech, keywords);
+  let nowBullets = buildEditorialConclusion(speech, keywords);
+  if (nowBullets.length < 3) {
+    const extra = dedupeBullets(
+      finalizeNowBullets(buildNowSummaryBullets(speech, keywords), speech, keywords),
+    );
+    for (const b of extra) {
+      if (nowBullets.length >= 3) break;
+      const plain = b.endsWith("。") ? b : `${b}。`;
+      if (!matchesTopicText(plain, keywords) || isOffTopicNoise(plain)) continue;
+      if (nowBullets.includes(plain)) continue;
+      nowBullets.push(plain);
+    }
+  }
   const bullets = buildSummaryBullets(speech, keywords);
-  let summaryTexts = bullets.map((b) => b.text);
+  let summaryTexts = dedupeBullets(bullets.map((b) => b.text));
   for (const nb of nowBullets) {
     if (summaryTexts.length >= 3) break;
     const text = nb.endsWith("。") ? nb : `${nb}。`;
