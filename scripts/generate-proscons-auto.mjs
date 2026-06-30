@@ -67,12 +67,10 @@ function buildProsCons(article) {
     (article.arcSummary?.length >= 3 && article.primarySpeech?.speechURL)
   ) {
     const writerPc = synthesizeProsConsFromArticle(article);
-    if (
-      writerPc.merits.length >= 2 &&
-      writerPc.demerits.length >= 2 &&
-      writerPc.merits.every((m) => m.figure && m.sourceUrl) &&
-      writerPc.demerits.every((m) => m.figure && m.sourceUrl)
-    ) {
+    if (writerPc.merits.length >= 2 && writerPc.demerits.length >= 2) {
+      return writerPc;
+    }
+    if (article.category === "国会" || article.primarySpeech?.speechURL) {
       return writerPc;
     }
   }

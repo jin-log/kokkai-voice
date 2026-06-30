@@ -1,9 +1,9 @@
 {
-  "generatedAt": "2026-06-30T18:37:52.361Z",
+  "generatedAt": "2026-06-30T19:17:23.433Z",
   "strategy": "quality-first",
   "activeCount": 39,
   "parkedCount": 0,
-  "publishedCount": 0,
+  "publishedCount": 26,
   "overallGoldPct": 64,
   "overallGatePct": 79,
   "slugs": [
@@ -2364,6 +2364,12 @@
           "detail": "1/2 行がキーワード一致（不法移民 在留外国人数）"
         },
         {
+          "id": "B5_writer_voice",
+          "label": "第三者目線",
+          "todo": "議事録口調（お尋ね・私自身・御党）を除去",
+          "detail": "議事録口調が残っている"
+        },
+        {
           "id": "D2_arc_topic",
           "label": "経緯の話題",
           "todo": "経緯3行以上が案件キーワードと一致",
@@ -2388,9 +2394,9 @@
           "detail": "0/3 件が話題一致"
         }
       ],
-      "blockerCount": 5,
+      "blockerCount": 6,
       "runState": "idle",
-      "nextAction": "1/2 行がキーワード一致（不法移民 在留外国人数） → 0/3 行が話題一致 → 2/3 国会が話題一致",
+      "nextAction": "1/2 行がキーワード一致（不法移民 在留外国人数） → 議事録口調が残っている → 0/3 行が話題一致",
       "promo": {
         "x": null,
         "hatena": null,
@@ -2708,8 +2714,8 @@
       "pageReady": true,
       "publishState": "wip",
       "previewUrl": null,
-      "gatePct": 50,
-      "goldPct": 50,
+      "gatePct": 75,
+      "goldPct": 67,
       "published": false,
       "publishGateOk": false,
       "pipeline": [
@@ -2732,7 +2738,7 @@
           "label": "③X検証1件+",
           "phase": 3,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "legal",
@@ -2776,7 +2782,7 @@
           "label": "③X検証1件+",
           "phase": 3,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "legal",
@@ -2802,22 +2808,28 @@
       ],
       "blockers": [
         {
-          "id": "E2_timeline_x",
-          "label": "タイムラインX",
-          "todo": "X投稿を3件以上タイムラインに",
-          "detail": "0/3 X"
+          "id": "B3_topic",
+          "label": "話題一致",
+          "todo": "要約が searchKeyword と一致（2行以上）",
+          "detail": "0/2 行がキーワード一致（物価高対策）"
         },
         {
-          "id": "J1_prosCons",
-          "label": "メリデメ",
-          "todo": "公表数値付きメリット2・デメリット2",
-          "detail": "メリ0/2・デメ2/2（各 figure+sourceUrl 必須）"
+          "id": "D2_arc_topic",
+          "label": "経緯の話題",
+          "todo": "経緯3行以上が案件キーワードと一致",
+          "detail": "0/3 行が話題一致"
         },
         {
-          "id": "H1_xPosts",
-          "label": "X投稿",
-          "todo": "検証済みX URLを1件以上",
-          "detail": "検証済み 0/3 件（公開前必須）"
+          "id": "E4_timeline_diet_topic",
+          "label": "TL国会の話題",
+          "todo": "タイムライン国会3件が案件と一致",
+          "detail": "0/3 国会が話題一致"
+        },
+        {
+          "id": "G6_matrix_topic",
+          "label": "〇×の話題",
+          "todo": "公言と行動が案件キーワードと一致（2党）",
+          "detail": "公言テキストが案件と無関係"
         },
         {
           "id": "H2_x_topic",
@@ -2826,9 +2838,9 @@
           "detail": "0/3 件が話題一致"
         }
       ],
-      "blockerCount": 4,
+      "blockerCount": 5,
       "runState": "idle",
-      "nextAction": "タイムラインにX3件 → メリデメ（公表数値付き各2） → X投稿URLを検索・登録 → X調査: 5枠が未特定 — キーワード見直し or 手動URL",
+      "nextAction": "0/2 行がキーワード一致（物価高対策） → 0/3 行が話題一致 → 0/3 国会が話題一致",
       "promo": {
         "x": null,
         "hatena": null,
@@ -5533,5 +5545,5 @@
   ],
   "deltaGoldPct": 0,
   "previousGoldPct": 64,
-  "deployedAt": "2026-06-30T00:12:58.602Z"
+  "deployedAt": "2026-06-30T19:17:23.435Z"
 }

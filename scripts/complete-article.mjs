@@ -23,6 +23,7 @@ import {
   synthesizePartyMatrix,
   synthesizeProsCons,
   synthesizeProsConsFromArticle,
+  synthesizeTimelinePlain,
 } from "./lib/writer-synthesize.mjs";
 import { enrichGeneralArticle, writePolicyMatrixGeneral, fetchReadable, isGeneralContentReady } from "./lib/enrich-general.mjs";
 import { citizenTitle } from "../src/lib/title-format.mjs";
@@ -208,35 +209,48 @@ async function enrichKokkai(article) {
     }
   }
 
-  article.arcSummary = arcFromWriter.length >= 3 ? arcFromWriter : [...byDate.entries()]
-          .sort(([a], [b]) => b.localeCompare(a))
-          .slice(0, 6)
-          .map(([date, { excerpt }]) => ({ date, text: excerpt }));
+  article.arcSummary =
+    arcFromWriter.length >= 3
+      ? arcFromWriter
+      : (() => {
+          throw new Error(`[writer] 経緯が3行未満 (${arcFromWriter.length}) — 抜粋フォールバック禁止`);
+        })();
 
   article.prosCons = synthesizeProsCons(factBundle, article.arcSummary, nowBullets, meta);
 
   article.timeline = [...byDate.entries()]
     .sort(([a], [b]) => b.localeCompare(a))
     .slice(0, 6)
-    .map(([date, { record, excerpt }], i) => ({
-      id: `${slug}-tl-${i}`,
-      type: "speech",
-      date,
-      summaryPlain: excerpt,
-      speech: {
-        speechID: record.speechID,
-        issueID: record.issueID,
-        date: record.date,
-        nameOfHouse: record.nameOfHouse,
-        nameOfMeeting: record.nameOfMeeting,
-        session: record.session,
-        issue: record.issue,
+    .map(([date, { record, excerpt }], i) => {
+      const sn = {
+        date,
         speaker: record.speaker,
         speakerGroup: record.speakerGroup,
-        speechURL: record.speechURL,
-        meetingURL: record.meetingURL,
-      },
-    }));
+        speakerPosition: record.speakerPosition,
+        meeting: record.nameOfMeeting,
+        house: record.nameOfHouse,
+        excerpt,
+      };
+      return {
+        id: `${slug}-tl-${i}`,
+        type: "speech",
+        date,
+        summaryPlain: synthesizeTimelinePlain(sn, searchKeyword),
+        speech: {
+          speechID: record.speechID,
+          issueID: record.issueID,
+          date: record.date,
+          nameOfHouse: record.nameOfHouse,
+          nameOfMeeting: record.nameOfMeeting,
+          session: record.session,
+          issue: record.issue,
+          speaker: record.speaker,
+          speakerGroup: record.speakerGroup,
+          speechURL: record.speechURL,
+          meetingURL: record.meetingURL,
+        },
+      };
+    });
 
   await writePolicyMatrixKokkai(article, records, { force });
   return article;
