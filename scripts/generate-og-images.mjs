@@ -203,13 +203,18 @@ async function main() {
   await composeDefaultOg(path.join(assets, "og-default.png"));
   console.log("OK og-default.png");
 
-  const slugs = await getArticleSlugs();
+  const slugArg = (() => {
+    const i = process.argv.indexOf("--slug");
+    return i >= 0 ? process.argv[i + 1] : null;
+  })();
+
+  const slugs = slugArg ? [slugArg] : await getArticleSlugs();
   const stats = { title: 0, hook: 0, quote: 0, number: 0 };
   let n = 0;
 
   for (const slug of slugs) {
     const article = await loadArticle(slug);
-    if (article.adminHidden || !article.pageReady) continue;
+    if (!slugArg && (article.adminHidden || !article.pageReady)) continue;
     const primary = await generateCaseOgs(article, slug);
     stats[primary] = (stats[primary] || 0) + 1;
     n++;

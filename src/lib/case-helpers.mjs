@@ -1,7 +1,7 @@
 /** Shared helpers — patterns from scripts/generate-case-pages.mjs */
 import { citizenTitle } from "./title-format.mjs";
 
-export const ASSET_V = "20260629d";
+export const ASSET_V = "20260630a";
 
 export const SYMBOL_LEGEND = [
   { sym: "○", label: "公言通り実施済み（完了）" },
@@ -47,7 +47,30 @@ export function articleShortTitle(article) {
   return citizenTitle(article);
 }
 
-/** Exclude parties with sourceUrl null + 要出典 (legal L3). */
+/** SNS・OGP用 — いまの結論優先（議事録抜粋は使わない） */
+export function articleMetaDescription(article, maxLen = 120) {
+  const bullets = article.nowSummary?.bullets || [];
+  if (bullets.length) {
+    const text = bullets
+      .slice(0, 2)
+      .map((b) => String(b).replace(/。$/, "").trim())
+      .filter(Boolean)
+      .join("。");
+    if (text) {
+      const out = text.endsWith("。") ? text : `${text}。`;
+      return out.length > maxLen ? `${out.slice(0, maxLen - 1)}…` : out;
+    }
+  }
+  const plain = (article.plainExplanation || "").split(/\n\n/).find((p) => p.length >= 24) || "";
+  if (plain) {
+    const t = plain.replace(/\s+/g, " ").trim();
+    return t.length > maxLen ? `${t.slice(0, maxLen - 1)}…` : t;
+  }
+  const ev = article.summaryBullets?.[0];
+  if (ev) return String(ev).slice(0, maxLen);
+  return "";
+}
+
 export function shouldPublishParty(p) {
   const st = p.stance;
   if (!st?.sourceUrl && String(st?.sourceType || "").includes("要出典")) return false;

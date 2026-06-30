@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-30T18:13:36.284Z",
+  "generatedAt": "2026-06-30T18:37:52.361Z",
   "strategy": "quality-first",
   "activeCount": 39,
   "parkedCount": 0,
@@ -2708,8 +2708,8 @@
       "pageReady": true,
       "publishState": "wip",
       "previewUrl": null,
-      "gatePct": 75,
-      "goldPct": 67,
+      "gatePct": 50,
+      "goldPct": 50,
       "published": false,
       "publishGateOk": false,
       "pipeline": [
@@ -2732,7 +2732,7 @@
           "label": "③X検証1件+",
           "phase": 3,
           "preDeploy": true,
-          "ok": true
+          "ok": false
         },
         {
           "id": "legal",
@@ -2776,7 +2776,7 @@
           "label": "③X検証1件+",
           "phase": 3,
           "preDeploy": true,
-          "ok": true
+          "ok": false
         },
         {
           "id": "legal",
@@ -2802,27 +2802,33 @@
       ],
       "blockers": [
         {
-          "id": "B3_topic",
-          "label": "話題一致",
-          "todo": "要約が searchKeyword と一致（2行以上）",
-          "detail": "1/2 行がキーワード一致（物価）"
+          "id": "E2_timeline_x",
+          "label": "タイムラインX",
+          "todo": "X投稿を3件以上タイムラインに",
+          "detail": "0/3 X"
         },
         {
-          "id": "D2_arc_topic",
-          "label": "経緯の話題",
-          "todo": "経緯3行以上が案件キーワードと一致",
-          "detail": "2/3 行が話題一致"
+          "id": "J1_prosCons",
+          "label": "メリデメ",
+          "todo": "公表数値付きメリット2・デメリット2",
+          "detail": "メリ0/2・デメ2/2（各 figure+sourceUrl 必須）"
+        },
+        {
+          "id": "H1_xPosts",
+          "label": "X投稿",
+          "todo": "検証済みX URLを1件以上",
+          "detail": "検証済み 0/3 件（公開前必須）"
         },
         {
           "id": "H2_x_topic",
           "label": "Xの話題",
           "todo": "X投稿本文が案件キーワードと一致",
-          "detail": "2/3 件が話題一致"
+          "detail": "0/3 件が話題一致"
         }
       ],
-      "blockerCount": 3,
+      "blockerCount": 4,
       "runState": "idle",
-      "nextAction": "1/2 行がキーワード一致（物価） → 2/3 行が話題一致 → 2/3 件が話題一致",
+      "nextAction": "タイムラインにX3件 → メリデメ（公表数値付き各2） → X投稿URLを検索・登録 → X調査: 5枠が未特定 — キーワード見直し or 手動URL",
       "promo": {
         "x": null,
         "hatena": null,

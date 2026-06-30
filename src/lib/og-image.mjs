@@ -4,9 +4,11 @@
 
 /** @param {string} text */
 export function extractOgNumber(text) {
-  const m = String(text).match(
-    /(?:約|およそ)?[\d０-９]+(?:[\.．][\d０-９]+)?[%％]|(?:約|およそ)?[一二三四五六七八九十百千万]+[%％]/,
-  );
+  const t = String(text);
+  const m =
+    t.match(/(?:約|およそ)?[\d０-９]+(?:[\.．][\d０-９]+)?(?:兆|億|万)?円/) ||
+    t.match(/(?:約|およそ)?[\d０-９]+(?:[\.．][\d０-９]+)?[%％]/) ||
+    t.match(/(?:約|およそ)?[一二三四五六七八九十百千万]+(?:兆|億|万)?円/);
   return m ? m[0] : null;
 }
 
@@ -14,7 +16,11 @@ export function extractOgNumber(text) {
 function isSubstantiveQuote(excerpt) {
   const t = String(excerpt).trim();
   if (t.length < 40) return false;
-  if (/^本日も|質問の機会|よろしくお願い|ありがとうございます/.test(t)) return false;
+  if (/^[○◎▲▼■□◆◇]/.test(t)) return false;
+  if (/というふうに承知|お答えいたします|質問の機会|よろしくお願い|ありがとうございます/.test(t)) {
+    return false;
+  }
+  if (/^本日も/.test(t)) return false;
   return true;
 }
 

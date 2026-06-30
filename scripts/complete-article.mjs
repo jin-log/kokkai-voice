@@ -98,7 +98,18 @@ const EXTRA_KEYWORDS = {
   "case-mr0jbdpc": ["国旗損壊罪", "国旗"],
   "case-mqzxj4ro": ["歳費", "期末手当", "特別職給与", "議員報酬"],
   "case-mqzxgs3f": ["国家情報会議", "スパイ防止法制"],
+  "bouka-taisaku": ["物価高対策", "物価高騰対策", "予備費"],
 };
+
+/** タイトル【】から追加検索語（全国会記事） */
+function extraKeywordsFromTitle(article) {
+  const m = String(article.title || "").match(/【([^】]+)】/);
+  if (!m) return [];
+  return m[1]
+    .split(/[｜|・]/)
+    .map((s) => s.trim())
+    .filter((s) => s.length >= 4);
+}
 
 async function enrichKokkai(article) {
   const keyword = article.searchKeyword;
@@ -114,7 +125,9 @@ async function enrichKokkai(article) {
     article.searchKeyword = searchKeyword;
   }
 
-  for (const extra of EXTRA_KEYWORDS[slug] || []) {
+  for (const extra of [
+    ...new Set([...(EXTRA_KEYWORDS[slug] || []), ...extraKeywordsFromTitle(article)]),
+  ]) {
     const more = await fetchSpeechForKeyword(extra, { from, until, maximumRecords: 50 });
     for (const r of more.records) {
       if (!records.some((x) => x.speechID === r.speechID)) records.push(r);

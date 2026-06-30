@@ -1,5 +1,5 @@
 import { SITE } from "./site-config.mjs";
-import { articleShortTitle } from "./case-helpers.mjs";
+import { articleShortTitle, articleMetaDescription } from "./case-helpers.mjs";
 
 /**
  * @param {import('./articles.mjs').Article} article
@@ -9,8 +9,7 @@ export function buildSharePayload(article) {
   const pageUrl = `${SITE.domain}/case/${slug}/`;
   const shortTitle = articleShortTitle(article);
   const hook =
-    article.nowSummary?.bullets?.[0]?.replace(/\s+/g, " ").trim().slice(0, 80) ||
-    article.primarySpeech?.excerpt?.slice(0, 80) ||
+    articleMetaDescription(article, 80).replace(/。$/, "") ||
     "";
   const tweetText = hook ? `${shortTitle}\n${hook}\n` : `${shortTitle}\n`;
   const params = new URLSearchParams({
