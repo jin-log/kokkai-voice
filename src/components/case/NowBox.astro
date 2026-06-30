@@ -1,12 +1,18 @@
 ---
+import DietPendingNotice from "./DietPendingNotice.astro";
+import { showsDietPendingUI } from "../../lib/diet-pending.mjs";
+
 const { article } = Astro.props;
 const ns = article.nowSummary ?? {};
 const bullets = ns.bullets ?? [];
 const updatedNote = ns.updatedAt ? ` · 要約更新: ${ns.updatedAt.slice(0, 10)}` : "";
+const fetchedLabel = article.fetchedAt?.slice(0, 10) ?? "—";
+const dietPending = showsDietPendingUI(article);
 ---
 
 <div class="now-box" id="sec-now">
   <p class="now-box__label">{ns.label || "いまどうなってる？"}</p>
+  {dietPending && <DietPendingNotice article={article} variant="inline" />}
   {
     bullets.length > 0 ? (
       <ul class="now-box__bullets">
@@ -19,7 +25,8 @@ const updatedNote = ns.updatedAt ? ` · 要約更新: ${ns.updatedAt.slice(0, 10
     ) : null
   }
   <p class="now-box__updated">
-    データ取得: {article.fetchedAt.slice(0, 10)} · APIヒット {article.apiHits}件{updatedNote} ·{" "}
-    {ns.disclaimer}
+    データ取得: {fetchedLabel}
+    {!dietPending && article.apiHits != null && <> · APIヒット {article.apiHits}件</>}
+    {updatedNote} · {ns.disclaimer}
   </p>
 </div>

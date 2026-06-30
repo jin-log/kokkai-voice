@@ -5,12 +5,15 @@ import {
   sortTimelineEvents,
   TIMELINE_INITIAL_VISIBLE,
 } from "../../lib/timeline.mjs";
+import { showsDietPendingUI } from "../../lib/diet-pending.mjs";
 import { TIMELINE_SOURCE } from "../../lib/x-post-ui.mjs";
+import DietPendingNotice from "./DietPendingNotice.astro";
 import XPostCard from "./XPostCard.astro";
 
 const { article } = Astro.props;
 const defaultOrder = "desc";
 const events = sortTimelineEvents(getTimelineEvents(article), defaultOrder);
+const dietPending = showsDietPendingUI(article);
 
 function sourceOf(type) {
   return TIMELINE_SOURCE[type] ?? TIMELINE_SOURCE.source;
@@ -42,7 +45,11 @@ function sourceOf(type) {
 
   {
     events.length === 0 ? (
-      <p class="timeline-empty">国会・X のイベントはこれから追加します。</p>
+      dietPending ? (
+        <DietPendingNotice article={article} />
+      ) : (
+        <p class="timeline-empty">国会・X のイベントはこれから追加します。</p>
+      )
     ) : (
       <div
         class="timeline"
@@ -185,6 +192,8 @@ function sourceOf(type) {
       </button>
     )
   }
+
+  {dietPending && events.length > 0 && <DietPendingNotice article={article} />}
 
   <div class="x-lightbox" id="x-lightbox" hidden role="dialog" aria-modal="true" aria-label="X投稿スクリーンショット">
     <button type="button" class="x-lightbox__close" aria-label="閉じる">×</button>

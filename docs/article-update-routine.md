@@ -12,6 +12,7 @@
 | トリガー | 例 | 優先度 |
 |----------|-----|--------|
 | **国会で新発言** | 予算委・法案審議 | 高 |
+| **国会原文がAPIに載った** | dietPending 案件の追記 | 高 |
 | **政策の実施・頓挫** | 給付開始・法案廃案 | 高 |
 | **Xで話題再燃** | 削除投稿・拡散 | 中 |
 | **数字の訂正** | 白書・調査更新 | 高 |
@@ -50,6 +51,13 @@ node scripts/generate-promo-pack.mjs --slug {slug}
 ### B. 中量更新（1〜2時間）
 
 タイムライン・国会発言・X枠の追加。
+
+**国会待ち（`dietPending: true`）案件で原文が載ったとき:**
+
+1. `node scripts/enrich-timeline-all.mjs --slug {slug}`
+2. `node scripts/fetch-speech.mjs --slug {slug}`（必要時）
+3. JSON で `dietPending: false`、`dietCheckedAt` を今日に更新
+4. デプロイ後、X「国会原文が出ました」追記（hook PNG 推奨）
 
 ```powershell
 node scripts/enrich-timeline-all.mjs --slug {slug}

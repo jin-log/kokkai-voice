@@ -1,5 +1,6 @@
 ---
 import { articleShortTitle, caseCardMeta } from "../lib/case-helpers.mjs";
+import { dietPendingBadgeLabel } from "../lib/diet-pending.mjs";
 import { getTimelineEvents } from "../lib/timeline.mjs";
 
 const { article } = Astro.props;
@@ -7,10 +8,14 @@ const { goodPct, updated, tagLine, summary } = caseCardMeta(article);
 const events = getTimelineEvents(article);
 const eventCount = events.length;
 const xCount = events.filter((e) => e.type === "x_post").length;
+const dietBadge = dietPendingBadgeLabel(article);
 ---
 
 <a class="case-card" href={`/case/${article.slug}`}>
-  <span class="case-card__tag">{tagLine} · 更新 {updated}</span>
+  <span class="case-card__tag">
+    {tagLine} · 更新 {updated}
+    {dietBadge && <span class="case-card__badge case-card__badge--diet-pending">{dietBadge}</span>}
+  </span>
   <h2 class="case-card__title">{articleShortTitle(article)}</h2>
   <p class="case-card__summary">{summary}</p>
   <div class="case-card__meta">

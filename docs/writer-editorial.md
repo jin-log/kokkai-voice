@@ -92,6 +92,9 @@
 **3行目: いま国会で何を言っているか（中立）**
 
 - 「検討中」だけで終わらせない。**検討中である事実** と **未実施である事実** を並べる
+- **国会議事録未掲載（Phase A）** のときは、報道・Xベースで書き「国会原文は掲載待ち」と明示する（サイトが自動表示）
+
+---
 
 ### × 禁止パターン
 
@@ -120,6 +123,8 @@
 | **X** | **3件** | `timeline` に `type: "x_post"`。`xPosts` の url_found を同期 |
 | **国会** | **3件** | `type: "speech"` + `kokkai.ndl.go.jp` URL（行政案件も国会論点を拾う） |
 | **合計** | **6件以上** | milestone / source は補助。上記を満たしてから追加 |
+
+**Phase A（国会待ち先行公開）:** JSON に `"dietPending": true` → **X3 + タイムライン3件** で公開可。国会は載ったら追記して `dietPending: false`。
 
 チェック: `node scripts/check-case-page.mjs --slug {slug}` の E1/E2/E3。  
 一括強化: `node scripts/enrich-timeline-all.mjs`

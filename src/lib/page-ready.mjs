@@ -5,6 +5,7 @@
 import { readFile, access } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { isPhaseAPublish } from "./diet-pending.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 export const root = path.join(__dirname, "../..");
@@ -22,6 +23,7 @@ export const CHECK_LABELS = {
   E1_timeline_count: { label: "タイムライン", todo: "出来事を6件以上（X3+国会3）" },
   E2_timeline_x: { label: "タイムラインX", todo: "X投稿を3件以上タイムラインに" },
   E3_timeline_diet: { label: "タイムライン国会", todo: "国会発言を3件以上タイムラインに" },
+  A2_phaseA_source: { label: "一次ソース（国会待ち）", todo: "報道URLまたはタイムライン出典を追加" },
   J1_prosCons: { label: "メリデメ", todo: "公表数値付きメリット2・デメリット2" },
   F1_glossary: { label: "用語解説", todo: "用語を2語以上" },
   G1_stanceMatrix_ref: { label: "〇×表リンク", todo: "stanceMatrix を設定" },
@@ -55,9 +57,37 @@ export function checkCasePage(article, opts = {}) {
     checks.push({ id, ok, detail, blocker });
   }
 
+  const phaseA = isPhaseAPublish(article);
+  const tl = article.timeline ?? [];
+  const xInTl = tl.filter((e) => e.type === "x_post" && e.xPost?.post_url);
+  const dietInTl = tl.filter(
+    (e) =>
+      e.type === "speech" &&
+      e.speech?.speechURL?.includes("kokkai.ndl.go.jp"),
+  );
+
   // A. メタ
   add("A1_title", Boolean(article.title), article.title || "title なし");
-  add("A2_primarySpeech", Boolean(article.primarySpeech?.speechURL), article.primarySpeech?.speechURL || "speechURL なし");
+  if (phaseA) {
+    const milestones = tl.filter(
+      (e) => e.type === "milestone" && (e.milestone?.sourceUrl || e.sourceUrl),
+    );
+    const hasAltSource =
+      Boolean(article.sourceUrls?.length) ||
+      milestones.length >= 1 ||
+      xInTl.length >= 1;
+    add(
+      "A2_primarySpeech",
+      hasAltSource,
+      hasAltSource ? "国会待ち（報道・Xソース）" : "sourceUrls またはタイムライン出典が必要",
+    );
+  } else {
+    add(
+      "A2_primarySpeech",
+      Boolean(article.primarySpeech?.speechURL),
+      article.primarySpeech?.speechURL || "speechURL なし",
+    );
+  }
 
   // B. いまの結論
   const bullets = article.nowSummary?.bullets ?? [];
@@ -73,17 +103,16 @@ export function checkCasePage(article, opts = {}) {
   const arcDated = arc.filter((x) => typeof x === "object" && x.date && x.text);
   add("D1_arcSummary", arcDated.length >= 3, `${arcDated.length}/3 行（日付付き）`);
 
-  // E. タイムライン — X3 + 国会3 = 計6以上
-  const tl = article.timeline ?? [];
-  const xInTl = tl.filter((e) => e.type === "x_post" && e.xPost?.post_url);
-  const dietInTl = tl.filter(
-    (e) =>
-      e.type === "speech" &&
-      e.speech?.speechURL?.includes("kokkai.ndl.go.jp"),
-  );
-  add("E1_timeline_count", tl.length >= 6, `${tl.length}/6 件`);
-  add("E2_timeline_x", xInTl.length >= 3, `${xInTl.length}/3 X`);
-  add("E3_timeline_diet", dietInTl.length >= 3, `${dietInTl.length}/3 国会`);
+  // E. タイムライン
+  if (phaseA) {
+    add("E1_timeline_count", tl.length >= 3, `${tl.length}/3 件（国会待ち）`);
+    add("E2_timeline_x", xInTl.length >= 3, `${xInTl.length}/3 X`);
+    add("E3_timeline_diet", true, "国会待ち — 更新次第掲載", false);
+  } else {
+    add("E1_timeline_count", tl.length >= 6, `${tl.length}/6 件`);
+    add("E2_timeline_x", xInTl.length >= 3, `${xInTl.length}/3 X`);
+    add("E3_timeline_diet", dietInTl.length >= 3, `${dietInTl.length}/3 国会`);
+  }
 
   // F. 用語
   const gloss = article.glossary ?? article.nowSummary?.glossary ?? [];

@@ -1,19 +1,30 @@
 ---
+import { showsDietPendingUI } from "../../lib/diet-pending.mjs";
+
 const { article } = Astro.props;
 const bullets = article.summaryBullets || [];
 const hasBullets = bullets.length > 0;
+const dietPending = showsDietPendingUI(article);
 const aiDisclaimer =
   article.nowSummary?.disclaimer ||
-  "AI補助による要約です。解釈を含みます。数字・引用・発言内容の正本は国会議事録リンクをご確認ください。";
+  (dietPending
+    ? "AI補助による要約です。解釈を含みます。数字・引用の正本は報道・公開ソースをご確認ください。国会議事録は掲載待ちです。"
+    : "AI補助による要約です。解釈を含みます。数字・引用・発言内容の正本は国会議事録リンクをご確認ください。");
 ---
 
 {
   hasBullets && (
     <section id="sec-detail" class="summary-layers" aria-label="根拠となるポイント">
       <div class="plain-box">
-        <p class="plain-box__label">根拠となるポイント（国会の発言から）</p>
+        <p class="plain-box__label">
+          {dietPending
+            ? "根拠となるポイント（報道・公開情報）"
+            : "根拠となるポイント（国会の発言から）"}
+        </p>
         <p class="summary-layers__lead">
-          上の「いまの結論」を支える事実の整理。結論そのものではなく、国会で語られた内容の要点です。
+          {dietPending
+            ? "上の「いまの結論」を支える事実の整理。国会議事録は更新次第、タイムラインに追記します。"
+            : "上の「いまの結論」を支える事実の整理。結論そのものではなく、国会で語られた内容の要点です。"}
         </p>
         <ul class="summary-bullets">
           {bullets.map((b) => (

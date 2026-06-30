@@ -17,6 +17,7 @@ import NoteStickyBar from "./NoteStickyBar.astro";
 import FloatToc from "./case/FloatToc.astro";
 import FloatReact from "./case/FloatReact.astro";
 import { articleShortTitle, shouldPublishParty } from "../lib/case-helpers.mjs";
+import { dietPendingBadgeLabel } from "../lib/diet-pending.mjs";
 
 const { article, stance, preview = false } = Astro.props;
 const hasStance =
@@ -25,6 +26,7 @@ const hasStance =
 const shortTitle = articleShortTitle(article);
 const sourceTag =
   article.category === "国会" ? "国会議事録 API" : `${article.category || "報道"}・公開ソース`;
+const dietBadge = dietPendingBadgeLabel(article);
 ---
 
 {preview && (
@@ -44,6 +46,7 @@ const sourceTag =
         <span class="tag">{t}</span>
       ))}
       <span class="tag tag--source">{sourceTag}</span>
+      {dietBadge && <span class="tag tag--diet-pending">{dietBadge}</span>}
       {preview && <span class="tag tag--preview">非公開プレビュー</span>}
     </div>
     <h1 class="case-hero__title">{shortTitle}</h1>

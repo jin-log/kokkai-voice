@@ -82,6 +82,20 @@ node scripts/legal-check.mjs --slug {slug}
 - `adminHidden: false`（GO 時）
 - `publishedAt` タイムスタンプ
 
+### Phase A — 国会待ち先行公開
+
+国会議事録 API にまだ載っていない案件は、**X・報道タイムラインだけで先に公開**できる。
+
+記事 JSON に `"dietPending": true` を付ける。公開ゲートは次に緩和される。
+
+| 通常 | Phase A（dietPending） |
+|------|------------------------|
+| タイムライン6件（X3+国会3） | タイムライン3件以上・**X3必須** |
+| primarySpeech 必須 | sourceUrls またはタイムライン出典で可 |
+| — | 画面上「国会データが更新され次第掲載」 |
+
+**国会が載ったら:** `enrich-timeline-all` → `dietPending: false` → デプロイ → X「国会原文が出ました」追記（`docs/article-update-routine.md`）
+
 ---
 
 ## Phase 3 — デプロイ（自動）

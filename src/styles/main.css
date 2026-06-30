@@ -455,6 +455,70 @@ a { color: var(--color-primary); }
   font-size: 0.72rem;
   font-weight: 700;
   color: var(--color-primary);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.case-card__badge {
+  display: inline-block;
+  font-size: 0.65rem;
+  font-weight: 800;
+  padding: 0.12rem 0.45rem;
+  border-radius: 999px;
+  letter-spacing: 0.02em;
+}
+
+.case-card__badge--diet-pending {
+  color: #7c4a03;
+  background: #fff3cd;
+  border: 1px solid #f0d78c;
+}
+
+.tag--diet-pending {
+  color: #7c4a03;
+  background: #fff3cd;
+  border-color: #f0d78c;
+}
+
+.diet-pending-notice {
+  margin-top: 1.25rem;
+  padding: 1rem 1.1rem;
+  border-radius: var(--radius-md);
+  border: 1px dashed #c9a227;
+  background: #fffbeb;
+}
+
+.diet-pending-notice__title {
+  margin: 0 0 0.5rem;
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #7c4a03;
+}
+
+.diet-pending-notice__body {
+  margin: 0 0 0.5rem;
+  font-size: 0.88rem;
+  line-height: 1.55;
+  color: var(--color-text);
+}
+
+.diet-pending-notice__meta {
+  margin: 0;
+  font-size: 0.78rem;
+  color: var(--color-text-muted);
+}
+
+.diet-pending-notice__inline {
+  margin: 0 0 0.75rem;
+  padding: 0.55rem 0.75rem;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: #7c4a03;
+  background: #fffbeb;
+  border-left: 3px solid #e6b422;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
 }
 
 .case-card__title {

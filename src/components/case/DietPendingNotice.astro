@@ -1,0 +1,31 @@
+---
+import {
+  dietCheckedDateLabel,
+  showsDietPendingUI,
+} from "../../lib/diet-pending.mjs";
+
+const { article, variant = "block" } = Astro.props;
+const pending = showsDietPendingUI(article);
+const checked = dietCheckedDateLabel(article);
+---
+
+{
+  pending && variant === "block" && (
+    <aside class="diet-pending-notice" aria-label="国会議事録の掲載予定">
+      <p class="diet-pending-notice__title">国会での発言</p>
+      <p class="diet-pending-notice__body">
+        国立国会図書館の議事録データは、会議の種類により数日〜数週間かかることがあります。
+        <strong>国会データが更新され次第、ここに発言を掲載します。</strong>
+      </p>
+      <p class="diet-pending-notice__meta">最終確認: {checked}</p>
+    </aside>
+  )
+}
+
+{
+  pending && variant === "inline" && (
+    <p class="diet-pending-notice__inline">
+      国会議事録は未掲載（{checked} 時点）。報道・Xは下のタイムラインをご覧ください。
+    </p>
+  )
+}
