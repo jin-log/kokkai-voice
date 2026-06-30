@@ -1,12 +1,8 @@
 #!/usr/bin/env node
 /**
- * 品質巡回デーモン — patrol が落ちても自動再起動
- *
- * Usage:
- *   npm run pipeline:patrol:daemon
- *   node scripts/pipeline-patrol-daemon.mjs --restart-delay 15
+ * 品質巡回デーモン — 絶対に止めない（OBS/手動pause は子プロセス側）
  */
-import { appendFile, mkdir, readFile, writeFile } from "node:fs/promises";
+import { appendFile, mkdir, writeFile } from "node:fs/promises";
 import { spawn } from "node:child_process";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -22,15 +18,22 @@ const restartDelaySec = Math.max(
   5,
   Number(args.includes("--restart-delay") ? args[args.indexOf("--restart-delay") + 1] : 15),
 );
+const fatalRestartSec = Math.max(
+  5,
+  Number(args.includes("--fatal-restart") ? args[args.indexOf("--fatal-restart") + 1] : 15),
+);
 const patrolArgs = args.filter((a, i) => {
-  if (a === "--restart-delay") return false;
-  if (i > 0 && args[i - 1] === "--restart-delay") return false;
+  if (a === "--restart-delay" || a === "--fatal-restart") return false;
+  if (i > 0 && (args[i - 1] === "--restart-delay" || args[i - 1] === "--fatal-restart")) {
+    return false;
+  }
   return true;
 });
 
 let stopping = false;
 let child = null;
 let restartCount = 0;
+let fatalCount = 0;
 const startedAt = new Date().toISOString();
 
 async function daemonLog(msg) {
@@ -43,11 +46,13 @@ async function writeDaemonState(extra = {}) {
     pid: process.pid,
     startedAt,
     restartCount,
+    fatalCount,
     restartDelaySec,
     patrolArgs,
     lastHeartbeatAt: new Date().toISOString(),
     childPid: child?.pid ?? null,
     childRunning: child !== null && child.exitCode === null,
+    policy: "never-stop-except-obs-or-manual-pause",
     ...extra,
   };
   await mkdir(path.dirname(statePath), { recursive: true });
@@ -87,7 +92,7 @@ async function heartbeatLoop() {
   }
 }
 
-async function main() {
+async function runDaemon() {
   await daemonLog(
     `start pid=${process.pid} restartDelay=${restartDelaySec}s args=${patrolArgs.join(" ") || "(none)"}`,
   );
@@ -126,8 +131,22 @@ async function main() {
   await hb;
 }
 
-main().catch(async (err) => {
-  await daemonLog(`fatal: ${err instanceof Error ? err.message : String(err)}`);
-  await writeDaemonState({ running: false, error: String(err) });
-  process.exitCode = 1;
-});
+async function runForever() {
+  // eslint-disable-next-line no-constant-condition
+  while (true) {
+    try {
+      await runDaemon();
+      if (stopping) return;
+    } catch (err) {
+      fatalCount += 1;
+      const msg = err instanceof Error ? err.message : String(err);
+      await daemonLog(`fatal #${fatalCount}: ${msg} — daemon restart in ${fatalRestartSec}s`);
+      await writeDaemonState({ running: true, lastFatal: { at: new Date().toISOString(), msg } });
+      await sleep(fatalRestartSec * 1000);
+      stopping = false;
+      child = null;
+    }
+  }
+}
+
+runForever();

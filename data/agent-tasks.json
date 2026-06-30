@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-06-30T21:10:19.517Z",
-  "total": 158,
+  "generatedAt": "2026-06-30T21:17:21.370Z",
+  "total": 159,
   "byAgent": {
-    "writer": 108,
-    "x-researcher": 35,
-    "debugger": 14,
+    "writer": 107,
+    "x-researcher": 36,
+    "debugger": 15,
     "legal-check": 1
   },
   "tasks": [
@@ -944,6 +944,17 @@
       "priority": 30
     },
     {
+      "id": "nenkin:H1_xPosts",
+      "slug": "nenkin",
+      "agent": "x-researcher",
+      "agentLabel": "X調査",
+      "checkId": "H1_xPosts",
+      "title": "[ゲート] X投稿",
+      "todo": "検証済みX URLを3件以上（x-researcher）",
+      "command": "npm run x:research -- --slug nenkin",
+      "priority": 20
+    },
+    {
       "id": "nenkin:H2_x_topic",
       "slug": "nenkin",
       "agent": "x-researcher",
@@ -955,24 +966,24 @@
       "priority": 20
     },
     {
-      "id": "nenkin:D2_arc_topic",
+      "id": "nenkin:H3_x_screenshot",
       "slug": "nenkin",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "D2_arc_topic",
-      "title": "[ゲート] 経緯の話題",
-      "todo": "経緯3行以上が案件キーワードと一致",
-      "command": "npm run complete:article -- --slug nenkin --force",
-      "priority": 30
+      "agent": "debugger",
+      "agentLabel": "デバッガー",
+      "checkId": "H3_x_screenshot",
+      "title": "[ゲート] Xスクショ",
+      "todo": "npm run x:capture -- --slug <slug>（デバッガー）",
+      "command": "npm run x:capture -- --slug nenkin",
+      "priority": 20
     },
     {
-      "id": "nenkin:E4_timeline_diet_topic",
+      "id": "nenkin:E2_timeline_x",
       "slug": "nenkin",
       "agent": "writer",
       "agentLabel": "ライター",
-      "checkId": "E4_timeline_diet_topic",
-      "title": "[ゲート] TL国会の話題",
-      "todo": "タイムライン国会3件が案件と一致",
+      "checkId": "E2_timeline_x",
+      "title": "[ゲート] タイムラインX",
+      "todo": "X投稿を3件以上タイムラインに",
       "command": "npm run complete:article -- --slug nenkin --force",
       "priority": 30
     },

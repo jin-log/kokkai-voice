@@ -1,0 +1,59 @@
+name: 品質巡回ウォッチドッグ
+
+on:
+  schedule:
+    - cron: "*/10 * * * *"
+  workflow_dispatch:
+
+permissions:
+  actions: write
+  contents: read
+
+jobs:
+  watchdog:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const workflowFile = "pipeline-patrol.yml";
+
+            const { data } = await github.rest.actions.listWorkflowRuns({
+              owner,
+              repo,
+              workflow_id: workflowFile,
+              per_page: 3,
+            });
+
+            const runs = data.workflow_runs || [];
+            const latest = runs[0];
+            const now = Date.now();
+            const staleMs = 35 * 60 * 1000;
+
+            let needsKick = runs.length === 0;
+
+            if (latest) {
+              const age = now - new Date(latest.created_at).getTime();
+              const inProgress = latest.status === "in_progress" || latest.status === "queued";
+              const failed = latest.conclusion === "failure" || latest.conclusion === "cancelled";
+              const stale = age > staleMs;
+              needsKick = inProgress ? false : failed || stale;
+              core.info(
+                `latest=${latest.id} status=${latest.status} conclusion=${latest.conclusion} ageMin=${Math.round(age / 60000)} needsKick=${needsKick}`,
+              );
+            }
+
+            if (!needsKick) {
+              core.info("patrol healthy — skip");
+              return;
+            }
+
+            await github.rest.actions.createWorkflowDispatch({
+              owner,
+              repo,
+              workflow_id: workflowFile,
+              ref: "main",
+            });
+            core.info("dispatched pipeline-patrol.yml");

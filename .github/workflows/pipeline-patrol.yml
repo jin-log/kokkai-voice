@@ -2,11 +2,14 @@ name: 品質巡回（サーバー）
 
 on:
   schedule:
-    # 30分ごと（JST基準でずれるが十分）
-    - cron: "*/30 * * * *"
+    - cron: "*/15 * * * *"
   workflow_dispatch:
   push:
     branches: [main]
+
+concurrency:
+  group: pipeline-patrol
+  cancel-in-progress: false
 
 permissions:
   contents: write
@@ -27,9 +30,14 @@ jobs:
       - name: 品質巡回（ライター・X調査・法務 — スクショ除く）
         env:
           TAVILY_API_KEY: ${{ secrets.TAVILY_API_KEY }}
-        run: |
-          OFFSET=$(( ${{ github.run_number }} * 8 % 40 ))
-          node scripts/pipeline-patrol.mjs --once --batch 8 --rounds 3 --skip debugger --batch-offset "$OFFSET"
+        uses: nick-invision/retry@v3
+        with:
+          timeout_minutes: 45
+          max_attempts: 3
+          retry_on: error
+          command: |
+            OFFSET=$(( ${{ github.run_number }} * 8 % 40 ))
+            node scripts/pipeline-patrol.mjs --once --batch 8 --rounds 3 --skip debugger --batch-offset "$OFFSET"
 
       - name: 変更があればコミット
         run: |

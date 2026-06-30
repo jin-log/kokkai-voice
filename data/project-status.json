@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-30T21:12:06.391Z",
+  "generatedAt": "2026-06-30T21:18:37.209Z",
   "strategy": "quality-first",
   "activeCount": 39,
   "parkedCount": 0,
@@ -5020,6 +5020,17 @@
       "qualityBlockers": [],
       "agentTasks": [
         {
+          "id": "nenkin:H1_xPosts",
+          "slug": "nenkin",
+          "agent": "x-researcher",
+          "agentLabel": "X調査",
+          "checkId": "H1_xPosts",
+          "title": "[ゲート] X投稿",
+          "todo": "検証済みX URLを3件以上（x-researcher）",
+          "command": "npm run x:research -- --slug nenkin",
+          "priority": 20
+        },
+        {
           "id": "nenkin:H2_x_topic",
           "slug": "nenkin",
           "agent": "x-researcher",
@@ -5031,24 +5042,24 @@
           "priority": 20
         },
         {
-          "id": "nenkin:D2_arc_topic",
+          "id": "nenkin:H3_x_screenshot",
           "slug": "nenkin",
-          "agent": "writer",
-          "agentLabel": "ライター",
-          "checkId": "D2_arc_topic",
-          "title": "[ゲート] 経緯の話題",
-          "todo": "経緯3行以上が案件キーワードと一致",
-          "command": "npm run complete:article -- --slug nenkin --force",
-          "priority": 30
+          "agent": "debugger",
+          "agentLabel": "デバッガー",
+          "checkId": "H3_x_screenshot",
+          "title": "[ゲート] Xスクショ",
+          "todo": "npm run x:capture -- --slug <slug>（デバッガー）",
+          "command": "npm run x:capture -- --slug nenkin",
+          "priority": 20
         },
         {
-          "id": "nenkin:E4_timeline_diet_topic",
+          "id": "nenkin:E2_timeline_x",
           "slug": "nenkin",
           "agent": "writer",
           "agentLabel": "ライター",
-          "checkId": "E4_timeline_diet_topic",
-          "title": "[ゲート] TL国会の話題",
-          "todo": "タイムライン国会3件が案件と一致",
+          "checkId": "E2_timeline_x",
+          "title": "[ゲート] タイムラインX",
+          "todo": "X投稿を3件以上タイムラインに",
           "command": "npm run complete:article -- --slug nenkin --force",
           "priority": 30
         }
@@ -5147,27 +5158,33 @@
       ],
       "blockers": [
         {
-          "id": "D2_arc_topic",
-          "label": "経緯の話題",
-          "todo": "経緯3行以上が案件キーワードと一致",
-          "detail": "1/3 行が話題一致"
+          "id": "E2_timeline_x",
+          "label": "タイムラインX",
+          "todo": "X投稿を3件以上タイムラインに",
+          "detail": "0/3 X"
         },
         {
-          "id": "E4_timeline_diet_topic",
-          "label": "TL国会の話題",
-          "todo": "タイムライン国会3件が案件と一致",
-          "detail": "1/3 国会が話題一致"
+          "id": "H1_xPosts",
+          "label": "X投稿",
+          "todo": "検証済みX URLを3件以上（x-researcher）",
+          "detail": "検証済み 0/3 件（公開前必須）"
         },
         {
           "id": "H2_x_topic",
           "label": "Xの話題",
           "todo": "X投稿本文が案件キーワードと一致（x-researcher）",
-          "detail": "1/3 件が話題一致"
+          "detail": "0/3 件が話題一致"
+        },
+        {
+          "id": "H3_x_screenshot",
+          "label": "Xスクショ",
+          "todo": "npm run x:capture -- --slug <slug>（デバッガー）",
+          "detail": "スクショ 0/3 件 — x:capture 未実行"
         }
       ],
-      "blockerCount": 3,
+      "blockerCount": 4,
       "runState": "idle",
-      "nextAction": "1/3 行が話題一致 → 1/3 国会が話題一致 → X本文を案件キーワードに合わせて差し替え",
+      "nextAction": "タイムラインにX3件 → X URL検索・post_text 補完（x-researcher） → X本文を案件キーワードに合わせて差し替え → X調査: 5枠が未特定 — キーワード見直し or 手動URL",
       "promo": {
         "x": null,
         "hatena": null,
