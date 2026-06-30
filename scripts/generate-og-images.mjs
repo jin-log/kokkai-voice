@@ -2,24 +2,32 @@
 /**
  * OGP 画像生成（1200×630）— X / note シェア用
  * パターン: title | hook | quote | number
+ *
+ * Linux CI では fontconfig + 同梱 Noto Sans JP が必須（無いと日本語が文字化け）
  */
 import { mkdir } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import sharp from "sharp";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const root = path.join(__dirname, "..");
+const fontsDir = path.resolve(__dirname, "assets", "fonts");
+process.env.FONTCONFIG_PATH = fontsDir;
+process.env.FONTCONFIG_FILE = path.join(fontsDir, "fonts.conf");
+
+const sharp = (await import("sharp")).default;
+
 import { getArticleSlugs, loadArticle } from "../src/lib/articles.mjs";
 import { articleShortTitle } from "../src/lib/case-helpers.mjs";
 import { SITE } from "../src/lib/site-config.mjs";
 import { pickOgPattern, extractOgNumber } from "../src/lib/og-image.mjs";
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const root = path.join(__dirname, "..");
 const assets = path.join(root, "public", "assets");
 const ogDir = path.join(assets, "og");
 
 const W = 1200;
 const H = 630;
-const FONT = "'Segoe UI','Hiragino Sans','Yu Gothic','Meiryo',sans-serif";
+const FONT = "'Noto Sans JP', 'Noto Sans CJK JP', sans-serif";
 
 function esc(s) {
   return String(s)

@@ -40,6 +40,9 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Install Japanese fonts (OGP生成)
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq fontconfig fonts-noto-cjk
+
       - name: 関心ワード取得
         run: npm run trends:fetch
 
