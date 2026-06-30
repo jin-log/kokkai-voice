@@ -7,13 +7,20 @@
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { launchBrowserContext } from "./lib/playwright-browser.mjs";
+import { resolveBrowserLaunch } from "./lib/chrome-profile.mjs";
 
 const root = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
 const profileDir = path.join(root, "secrets/browser/profile-x");
 const testUrl = "https://x.com/takaichi_sanae/status/2070096912234238329";
 
 async function main() {
-  const context = await launchBrowserContext(profileDir, { headless: true, width: 620, height: 800 });
+  const resolved = await resolveBrowserLaunch(profileDir);
+  const context = await launchBrowserContext(resolved.userDataDir, {
+    headless: true,
+    width: 620,
+    height: 800,
+    profileDirectory: resolved.profileDirectory,
+  });
 
   try {
     const page = context.pages()[0] || (await context.newPage());

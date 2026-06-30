@@ -11,6 +11,7 @@
 import { mkdir } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { loadChromeProfileConfig } from "./lib/chrome-profile.mjs";
 import { launchBrowserContext } from "./lib/playwright-browser.mjs";
 
 const root = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -61,9 +62,19 @@ async function waitForLogin(page, timeoutMs = 600_000) {
 }
 
 async function main() {
-  await mkdir(cfg.dir, { recursive: true });
+  const shared = await loadChromeProfileConfig();
 
-  console.log(`\n[${service}] Chrome を開きます（このウィンドウでログインしてください）`);
+  if (shared) {
+    console.log(
+      `\n[${service}] 既存 Chrome プロフィールを使用: ${shared.profileDirectory}` +
+        (shared.label ? ` (${shared.label})` : ""),
+    );
+    console.log("⚠ 自動化開始前に、このプロフィールの Chrome をすべて閉じてください。\n");
+  } else {
+    await mkdir(cfg.dir, { recursive: true });
+    console.log(`\n[${service}] Chrome を開きます（このウィンドウでログインしてください）`);
+  }
+
   console.log(cfg.startUrl);
   if (service === "x") {
     console.log("");
@@ -74,7 +85,12 @@ async function main() {
   }
   console.log("ログインが終わると自動でセッションを保存して閉じます。\n");
 
-  const context = await launchBrowserContext(cfg.dir, { headless: false });
+  const context = await launchBrowserContext(
+    shared?.userDataDir ?? cfg.dir,
+    shared
+      ? { headless: false, profileDirectory: shared.profileDirectory }
+      : { headless: false },
+  );
 
   const page = context.pages()[0] || (await context.newPage());
   await page.goto(cfg.startUrl, { waitUntil: "domcontentloaded" });
@@ -87,9 +103,13 @@ async function main() {
     );
     console.warn("確認: npm run x:verify-login\n");
   }
-  console.log(`セッション保存先: ${cfg.dir}`);
+  if (shared) {
+    console.log(`セッション: Chrome ${shared.profileDirectory}（既存プロフィール）`);
+  } else {
+    console.log(`セッション保存先: ${cfg.dir}`);
+  }
   await context.close();
-  console.log(`OK [${service}] 次回からログイン不要です。`);
+  console.log(`OK [${service}] ログイン状態を確認しました。`);
 }
 
 main().catch((e) => {

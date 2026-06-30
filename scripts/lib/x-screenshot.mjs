@@ -6,6 +6,7 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { launchBrowserContext } from "./playwright-browser.mjs";
+import { resolveBrowserLaunch } from "./chrome-profile.mjs";
 import { generateXScreenshotThumb, thumbPublicPath } from "./x-screenshot-thumb.mjs";
 import { auditScreenshotFile } from "./x-screenshot-audit.mjs";
 
@@ -42,14 +43,16 @@ export async function captureTweetScreenshot(postUrl, opts = {}) {
 
   const profileDir = opts.profileDir ?? xProfileDir;
   const headless = opts.headless ?? true;
+  const resolved = await resolveBrowserLaunch(profileDir);
   await mkdir(screenshotDir, { recursive: true });
   const outPath = path.join(screenshotDir, `${statusId}.png`);
   const publicPath = `/assets/x-screenshots/${statusId}.png`;
 
-  const context = await launchBrowserContext(profileDir, {
+  const context = await launchBrowserContext(resolved.userDataDir, {
     headless,
     width: 620,
     height: 900,
+    profileDirectory: resolved.profileDirectory,
   });
 
   try {
