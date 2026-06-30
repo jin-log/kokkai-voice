@@ -3,6 +3,7 @@ import BaseLayout from "../../layouts/DevLayout.astro";
 import DevHeader from "../../components/DevHeader.astro";
 import SiteFooter from "../../components/SiteFooter.astro";
 import { loadTrendingTopics } from "../../lib/trending-topics.mjs";
+import { SITE } from "../../lib/site-config.mjs";
 
 const data = await loadTrendingTopics();
 const fetchedAt = data?.fetchedAt
@@ -29,11 +30,23 @@ const evergreen = data?.evergreen ?? [];
         <span class="dev-trends__meta-sep">·</span>
         更新: <code>npm run trends:fetch</code>
       </p>
+      <div class="dev-trends__ga">
+        <strong>政治なうのアクセス（GA4）</strong>
+        <span class="dev-trends__ga-note">「腎ログ」ではない。ブックマーク推奨。</span>
+        <div class="dev-trends__actions">
+          <a class="dev-trends__btn dev-trends__btn--primary" href={SITE.gaRealtimeUrl} target="_blank" rel="noopener noreferrer">
+            いま誰が見てる？（リアルタイム）
+          </a>
+          <a class="dev-trends__btn" href={SITE.gaPagesUrl} target="_blank" rel="noopener noreferrer">
+            記事別レポート
+          </a>
+        </div>
+      </div>
     </header>
 
     {!data && (
       <section class="dev-trends__empty">
-        <p>データがありません。まず <code>npm run trends:fetch</code> を実行してください。</p>
+        <p>データを読み込めませんでした。次回デプロイで自動取得されます。</p>
       </section>
     )}
 
@@ -152,6 +165,14 @@ const evergreen = data?.evergreen ?? [];
   .dev-trends__head h1 { font-size: 1.35rem; margin: 0 0 0.5rem; }
   .dev-trends__lead { color: var(--muted, #666); margin: 0 0 0.5rem; line-height: 1.6; }
   .dev-trends__meta { font-size: 0.85rem; color: var(--muted, #888); margin: 0; }
+  .dev-trends__ga {
+    margin-top: 1rem;
+    padding: 0.85rem 1rem;
+    border: 1px solid #c8dafb;
+    border-radius: 8px;
+    background: #f0f6ff;
+  }
+  .dev-trends__ga-note { display: block; font-size: 0.85rem; color: #555; margin: 0.25rem 0 0.5rem; }
   .dev-trends__meta-sep { margin: 0 0.35rem; }
   .dev-trends__section { margin-top: 2rem; }
   .dev-trends__section h2 { font-size: 1.05rem; margin: 0 0 0.75rem; }

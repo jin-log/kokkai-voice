@@ -24,6 +24,10 @@ export const SITE = {
   adsensePubId: "ca-pub-7197431000530819",
   /** GA4 測定ID（公開ページのみ BaseLayout で読み込み。/dev は除外） */
   gaMeasurementId: "G-N8JV8MKMNJ",
+  /** GA4 プロパティ ID（jin92.net - GA4 ＝ 政治なう）。管理画面から直リンク用 */
+  gaPropertyId: "397089537",
+  gaRealtimeUrl: "https://analytics.google.com/analytics/web/#/p397089537/realtime/overview",
+  gaPagesUrl: "https://analytics.google.com/analytics/web/#/p397089537/reports/reportinghub?params=_u..nav%3Dmaui-reporting-hub",
   /** 支援CTA A/B: "a" 感情 / "b" 価値 — docs/note-monetization-pdca.md */
   supportAbVariant: "a",
   /** IndexNow 検証キー — public/{key}.txt と一致 */

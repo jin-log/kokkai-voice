@@ -1,12 +1,26 @@
 /**
  * 政治・社会の関心ワード収集（Google Trends 等）
  */
-import { readFile, writeFile, mkdir } from "node:fs/promises";
+import { readFile, writeFile, mkdir, access } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { loadAllArticles } from "./articles.mjs";
 
-const root = path.join(path.dirname(fileURLToPath(import.meta.url)), "../..");
+/** Astro ビルド時は Vite バンドルで import.meta.url がずれるため cwd 優先 */
+async function resolveProjectRoot() {
+  const candidates = [process.cwd(), path.join(path.dirname(fileURLToPath(import.meta.url)), "../..")];
+  for (const root of candidates) {
+    try {
+      await access(path.join(root, "package.json"));
+      return root;
+    } catch {
+      /* try next */
+    }
+  }
+  return process.cwd();
+}
+
+const root = await resolveProjectRoot();
 export const TRENDING_PATH = path.join(root, "data/trending-topics.json");
 const TOPICS_PATH = path.join(root, "data/topics.json");
 
