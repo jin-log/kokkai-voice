@@ -14,6 +14,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { checkCasePageWithFiles } from "../src/lib/page-ready.mjs";
 import { refreshProjectStatus } from "../src/lib/project-status.mjs";
+import { enqueuePromoPublish } from "../src/lib/promo-publish-queue.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(__dirname, "..");
@@ -112,6 +113,7 @@ if (action === "publish") {
   delete article.adminHiddenAt;
   article.publishedAt = new Date().toISOString();
   await saveArticle(article);
+  await enqueuePromoPublish(slug);
   await refreshProjectStatus();
   console.log(`OK: ${slug} を公開しました（/case/${slug}/）`);
   process.exit(0);

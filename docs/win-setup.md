@@ -52,8 +52,8 @@ Mac も同様: `~/Projects/ceo-sync/scripts/ceosync.sh pull`
 |------|------|
 | 本番サイト | ✅ https://seiji1192.site |
 | ロゴ | ✅ 新ブランド PNG（ヘッダー・OGP・favicon） |
-| X 自動投稿 | ✅ 昼3選 / 夜単体（`marketing-*.yml` または手動 `npm run buffer:digest`） |
-| note・はてブ | Playwright スクリプトあり（`npm run browser:login` → `post:hatena` 等） |
+| X 自動投稿 | ✅ 昼12時3選 / 夜19時単体（`marketing-daily-digest.yml` / `marketing-hot-single.yml`）。deploy連投は停止 |
+| note・はてブ | ✅ 記事公開時（deploy後 `promo-on-publish.yml`）。Profile 9 または Secrets |
 | **Win デプロイ** | ✅ `npm run deploy:win`（functions コピー込み） |
 
 ---

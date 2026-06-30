@@ -1,0 +1,51 @@
+name: 公開時プロモ（はてな・note）
+
+on:
+  workflow_run:
+    workflows: ["Deploy to Cloudflare Pages"]
+    types: [completed]
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  promo-browser:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - run: npm ci
+
+      - name: Playwright Chromium
+        run: npx playwright install chromium
+
+      - name: ブラウザセッション復元
+        env:
+          HATENA_BROWSER_STATE: ${{ secrets.HATENA_BROWSER_STATE }}
+          NOTE_BROWSER_STATE: ${{ secrets.NOTE_BROWSER_STATE }}
+        run: |
+          mkdir -p secrets/browser
+          if [ -n "$HATENA_BROWSER_STATE" ]; then
+            printf '%s' "$HATENA_BROWSER_STATE" > secrets/browser/state-hatena.json
+          fi
+          if [ -n "$NOTE_BROWSER_STATE" ]; then
+            printf '%s' "$NOTE_BROWSER_STATE" > secrets/browser/state-note.json
+          fi
+
+      - name: はてな + note 投稿
+        run: node scripts/post-article-promo.mjs --from-queue
+
+      - name: ログ・キュー更新をコミット
+        run: |
+          git config user.email "bot@seiji1192.site"
+          git config user.name "kokkai-bot"
+          git add data/promo-publish-queue.json data/promo-intro-log.json
+          git diff --staged --quiet || git commit -m "promo: はてな/note 公開連動"
+          git push

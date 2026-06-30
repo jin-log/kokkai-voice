@@ -1,0 +1,29 @@
+name: マーケ・昼X3選
+
+on:
+  schedule:
+    # 12:00 JST = 03:00 UTC
+    - cron: "0 3 * * *"
+  workflow_dispatch:
+
+jobs:
+  noon-digest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+      - run: npm ci
+      - name: X 昼3選（Buffer）
+        env:
+          BUFFER_API_KEY: ${{ secrets.BUFFER_API_KEY }}
+          BUFFER_CHANNEL_ID: ${{ secrets.BUFFER_CHANNEL_ID }}
+        run: node scripts/post-daily-digest.mjs
+      - name: Buffer 状態更新
+        env:
+          BUFFER_API_KEY: ${{ secrets.BUFFER_API_KEY }}
+          BUFFER_CHANNEL_ID: ${{ secrets.BUFFER_CHANNEL_ID }}
+        run: node scripts/check-buffer.mjs
+        continue-on-error: true

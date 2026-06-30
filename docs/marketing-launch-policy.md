@@ -66,7 +66,19 @@ node scripts/call-post-hot-single.mjs
 
 ### やめること
 
-- デプロイのたびに **案件ごと連投**（旧 `post-to-buffer.mjs --recent 1`）
+- デプロイのたびに **案件ごと連投**（旧 `post-to-buffer.mjs --recent 1`）→ **2026-06-30 停止**。X は昼3選+夜単体のみ。
+
+---
+
+## 公開時プロモ（はてな・note）
+
+| タイミング | 内容 |
+|------------|------|
+| 記事「公開する」直後 | `data/promo-publish-queue.json` に slug を積む |
+| deploy 完了後 | `promo-on-publish.yml` → はてなブクマ + note 公開 |
+| ローカル deploy | `deploy:extras` → 同スクリプト（Profile 9 利用可） |
+
+CI では `npm run browser:export-state` の出力を GitHub Secrets（`HATENA_BROWSER_STATE` / `NOTE_BROWSER_STATE`）に登録。
 
 ---
 
