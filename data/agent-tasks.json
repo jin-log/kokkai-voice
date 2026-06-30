@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-06-30T21:23:42.067Z",
-  "total": 162,
+  "generatedAt": "2026-06-30T21:25:58.316Z",
+  "total": 161,
   "byAgent": {
     "writer": 107,
-    "x-researcher": 39,
-    "debugger": 15,
+    "x-researcher": 37,
+    "debugger": 16,
     "legal-check": 1
   },
   "tasks": [
@@ -251,26 +251,26 @@
       "priority": 10
     },
     {
-      "id": "case-mqzxj4ro:H1_xPosts",
+      "id": "case-mqzxj4ro:Q8_x_numbers_not_in_summary",
       "slug": "case-mqzxj4ro",
-      "agent": "x-researcher",
-      "agentLabel": "X調査",
-      "checkId": "H1_xPosts",
-      "title": "[ゲート] X投稿",
-      "todo": "検証済みX URLを3件以上（x-researcher）",
-      "command": "npm run x:research -- --slug case-mqzxj4ro",
-      "priority": 20
+      "agent": "writer",
+      "agentLabel": "ライター",
+      "checkId": "Q8_x_numbers_not_in_summary",
+      "title": "[品質] X枠に金額等の数字があるのに、いまの結論に反映されていない",
+      "todo": "Xの公表数値（例: 319万円）を結論1行目へ",
+      "command": "npm run complete:article -- --slug case-mqzxj4ro --force",
+      "priority": 10
     },
     {
-      "id": "case-mqzxj4ro:H2_x_topic",
+      "id": "case-mqzxj4ro:Q9_x_screenshot",
       "slug": "case-mqzxj4ro",
-      "agent": "x-researcher",
-      "agentLabel": "X調査",
-      "checkId": "H2_x_topic",
-      "title": "[ゲート] Xの話題",
-      "todo": "X投稿本文が案件キーワードと一致（x-researcher）",
-      "command": "npm run x:research -- --slug case-mqzxj4ro",
-      "priority": 20
+      "agent": "debugger",
+      "agentLabel": "デバッガー",
+      "checkId": "Q9_x_screenshot",
+      "title": "[品質] X URLは3件あるがスクショは0/3件（仕様違反）",
+      "todo": "npm run x:capture -- --slug <slug>（デバッガー担当）",
+      "command": "npm run x:capture -- --slug case-mqzxj4ro",
+      "priority": 10
     },
     {
       "id": "case-mqzxj4ro:H3_x_screenshot",
@@ -282,17 +282,6 @@
       "todo": "npm run x:capture -- --slug <slug>（デバッガー）",
       "command": "npm run x:capture -- --slug case-mqzxj4ro",
       "priority": 20
-    },
-    {
-      "id": "case-mqzxj4ro:E2_timeline_x",
-      "slug": "case-mqzxj4ro",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "E2_timeline_x",
-      "title": "[ゲート] タイムラインX",
-      "todo": "X投稿を3件以上タイムラインに",
-      "command": "npm run complete:article -- --slug case-mqzxj4ro --force",
-      "priority": 30
     },
     {
       "id": "case-mqzxj4ro:G5_parties_symbol",

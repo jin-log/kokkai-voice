@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-30T21:23:42.002Z",
+  "generatedAt": "2026-06-30T21:25:58.400Z",
   "strategy": "quality-first",
   "activeCount": 39,
   "parkedCount": 0,
@@ -181,7 +181,7 @@
       "previewUrl": "/dev/preview/case-mqzxj4ro/",
       "qualityOk": false,
       "needsQualityFix": true,
-      "qualityBlockerCount": 3,
+      "qualityBlockerCount": 5,
       "qualityBlockers": [
         {
           "id": "Q1_conclusion_numbers",
@@ -200,6 +200,18 @@
           "message": "つまり欄の冒頭がタイトルの疑問（金額・実績）に答えていない",
           "todo": "1段落目を「結論：〇〇万円（日付）」から始める",
           "agent": "writer"
+        },
+        {
+          "id": "Q8_x_numbers_not_in_summary",
+          "message": "X枠に金額等の数字があるのに、いまの結論に反映されていない",
+          "todo": "Xの公表数値（例: 319万円）を結論1行目へ",
+          "agent": "writer"
+        },
+        {
+          "id": "Q9_x_screenshot",
+          "message": "X URLは3件あるがスクショは0/3件（仕様違反）",
+          "todo": "npm run x:capture -- --slug <slug>（デバッガー担当）",
+          "agent": "debugger"
         }
       ],
       "agentTasks": [
@@ -237,26 +249,26 @@
           "priority": 10
         },
         {
-          "id": "case-mqzxj4ro:H1_xPosts",
+          "id": "case-mqzxj4ro:Q8_x_numbers_not_in_summary",
           "slug": "case-mqzxj4ro",
-          "agent": "x-researcher",
-          "agentLabel": "X調査",
-          "checkId": "H1_xPosts",
-          "title": "[ゲート] X投稿",
-          "todo": "検証済みX URLを3件以上（x-researcher）",
-          "command": "npm run x:research -- --slug case-mqzxj4ro",
-          "priority": 20
+          "agent": "writer",
+          "agentLabel": "ライター",
+          "checkId": "Q8_x_numbers_not_in_summary",
+          "title": "[品質] X枠に金額等の数字があるのに、いまの結論に反映されていない",
+          "todo": "Xの公表数値（例: 319万円）を結論1行目へ",
+          "command": "npm run complete:article -- --slug case-mqzxj4ro --force",
+          "priority": 10
         },
         {
-          "id": "case-mqzxj4ro:H2_x_topic",
+          "id": "case-mqzxj4ro:Q9_x_screenshot",
           "slug": "case-mqzxj4ro",
-          "agent": "x-researcher",
-          "agentLabel": "X調査",
-          "checkId": "H2_x_topic",
-          "title": "[ゲート] Xの話題",
-          "todo": "X投稿本文が案件キーワードと一致（x-researcher）",
-          "command": "npm run x:research -- --slug case-mqzxj4ro",
-          "priority": 20
+          "agent": "debugger",
+          "agentLabel": "デバッガー",
+          "checkId": "Q9_x_screenshot",
+          "title": "[品質] X URLは3件あるがスクショは0/3件（仕様違反）",
+          "todo": "npm run x:capture -- --slug <slug>（デバッガー担当）",
+          "command": "npm run x:capture -- --slug case-mqzxj4ro",
+          "priority": 10
         },
         {
           "id": "case-mqzxj4ro:H3_x_screenshot",
@@ -268,17 +280,6 @@
           "todo": "npm run x:capture -- --slug <slug>（デバッガー）",
           "command": "npm run x:capture -- --slug case-mqzxj4ro",
           "priority": 20
-        },
-        {
-          "id": "case-mqzxj4ro:E2_timeline_x",
-          "slug": "case-mqzxj4ro",
-          "agent": "writer",
-          "agentLabel": "ライター",
-          "checkId": "E2_timeline_x",
-          "title": "[ゲート] タイムラインX",
-          "todo": "X投稿を3件以上タイムラインに",
-          "command": "npm run complete:article -- --slug case-mqzxj4ro --force",
-          "priority": 30
         },
         {
           "id": "case-mqzxj4ro:G5_parties_symbol",
@@ -386,28 +387,10 @@
       ],
       "blockers": [
         {
-          "id": "E2_timeline_x",
-          "label": "タイムラインX",
-          "todo": "X投稿を3件以上タイムラインに",
-          "detail": "0/3 X"
-        },
-        {
           "id": "G5_parties_symbol",
           "label": "◎〇▲×",
           "todo": "各党の記号を確定（v2）",
           "detail": "◎▲❌ 確定 1/2 党以上"
-        },
-        {
-          "id": "H1_xPosts",
-          "label": "X投稿",
-          "todo": "検証済みX URLを3件以上（x-researcher）",
-          "detail": "検証済み 0/3 件（公開前必須）"
-        },
-        {
-          "id": "H2_x_topic",
-          "label": "Xの話題",
-          "todo": "X投稿本文が案件キーワードと一致（x-researcher）",
-          "detail": "0/3 件が話題一致"
         },
         {
           "id": "H3_x_screenshot",
@@ -416,9 +399,9 @@
           "detail": "スクショ 0/3 件 — x:capture 未実行"
         }
       ],
-      "blockerCount": 5,
+      "blockerCount": 2,
       "runState": "idle",
-      "nextAction": "品質: タイトルが金額・実績を問うのに、いまの結論に公表数値がない — 1行目に円・%・万人などタイトルへの直接回答を入れる（X・報道の数字を要約に反映） → タイムラインにX3件 → ◎▲❌ を確定 → X URL検索・post_text 補完（x-researcher） → X調査: 5枠が未特定 — キーワード見直し or 手動URL",
+      "nextAction": "品質: タイトルが金額・実績を問うのに、いまの結論に公表数値がない — 1行目に円・%・万人などタイトルへの直接回答を入れる（X・報道の数字を要約に反映） → ◎▲❌ を確定 → npm run x:capture -- --slug <slug>（デバッガー）",
       "promo": {
         "x": null,
         "hatena": null,
@@ -2969,14 +2952,14 @@
       },
       "short": {
         "slug": "shussho-budget-seika",
-        "generated": true,
-        "uploaded": true,
-        "visibility": "private",
-        "videoId": "8HPZ4sC7uck",
-        "url": "https://www.youtube.com/shorts/8HPZ4sC7uck",
-        "studioUrl": "https://studio.youtube.com/video/8HPZ4sC7uck/edit",
-        "uploadedAt": "2026-06-29T22:11:20.857Z",
-        "label": "YT非公開"
+        "generated": false,
+        "uploaded": false,
+        "visibility": null,
+        "videoId": null,
+        "url": null,
+        "studioUrl": null,
+        "uploadedAt": null,
+        "label": "未生成"
       }
     },
     {
@@ -5602,14 +5585,14 @@
       },
       "short": {
         "slug": "shoshika",
-        "generated": true,
+        "generated": false,
         "uploaded": false,
         "visibility": null,
         "videoId": null,
         "url": null,
         "studioUrl": null,
         "uploadedAt": null,
-        "label": "生成済・未アップ"
+        "label": "未生成"
       }
     },
     {
