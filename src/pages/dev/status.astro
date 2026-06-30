@@ -77,8 +77,8 @@ function formatJa(iso) {
               <section class="status-quality" aria-label="品質NG">
                 <h2>⚠ 品質NG {status.qualityFailed} 件（ゲート100%でも中身ダメ）</h2>
                 <p class="status-quality__lead">
-                  オーナー目視なしで検出。担当エージェントへ自動タスク化（<code>data/agent-tasks.json</code>）。
-                  修正は <code>npm run pipeline:autorun</code> または各コマンド。
+                  自動検出の一覧（オーナー操作不要）。担当エージェントへタスク化済み → 品質巡回が自動修正中。
+                  手動は取りこぼし用のみ。
                 </p>
                 <ul class="status-quality__list">
                   {status.slugs
