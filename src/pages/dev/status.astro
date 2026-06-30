@@ -168,6 +168,7 @@ function formatJa(iso) {
                       {s.publishState === "draft" && <span class="status-card__badge status-card__badge--draft">完成・非公開</span>}
                       {s.publishState === "live" && <span class="status-card__badge status-card__badge--live">公開中</span>}
                       {s.needsQualityFix && <span class="status-card__badge status-card__badge--quality">品質NG</span>}
+                      {s.xUnavailable && <span class="status-card__badge status-card__badge--x-miss">X未発見</span>}
                       {s.adminHidden && <span class="status-card__badge">非表示</span>}
                     </h3>
                     <span class="status-card__pct">{s.goldPct}%</span>

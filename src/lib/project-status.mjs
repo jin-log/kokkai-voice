@@ -11,6 +11,7 @@ import { filterPublishable, loadArticle } from "./articles.mjs";
 import { citizenTitle } from "./title-format.mjs";
 import { buildPromoIntroMap } from "./promo-intro-status.mjs";
 import { loadShortStatusMap } from "./short-status.mjs";
+import { isXUnavailable, X_UNAVAILABLE_ADMIN_MESSAGE } from "./x-research-policy.mjs";
 
 /** @typedef {{ id: string, label: string, phase: number, preDeploy: boolean }} PipelineItemDef */
 
@@ -46,8 +47,9 @@ export function pipelineChecks(article, gate, policyMatrix) {
     (p) => p.post_url && p.post_text && p.status === "url_found",
   ).length;
   const xMin = article.xPostsMinRequired ?? 3;
-  const xGateOk = !gate.blockers.some((b) => String(b.id).startsWith("H"));
-  const x = xOk >= xMin && xGateOk;
+  const xUnavailable = isXUnavailable(article);
+  const xGateOk = xUnavailable || !gate.blockers.some((b) => String(b.id).startsWith("H"));
+  const x = xUnavailable || (xOk >= xMin && xGateOk);
   const content = contentOk(gate, article);
   const matrix = symbolsOk >= 2;
   const legal = article.legalReview?.status === "ok";
@@ -133,7 +135,9 @@ export function computeNextAction(article, gate, pipeline) {
   }
 
   const xFailed = (article.xPosts ?? []).filter((p) => p.status === "search_failed").length;
-  if (xFailed >= 3) {
+  if (isXUnavailable(article)) {
+    parts.push(X_UNAVAILABLE_ADMIN_MESSAGE);
+  } else if (xFailed >= 3) {
     parts.push(`X調査: ${xFailed}枠が未特定 — キーワード見直し or 手動URL`);
   }
 
@@ -176,7 +180,11 @@ export async function computeProjectStatus() {
       /* missing */
     }
 
-    const pipeline = pipelineChecks(article, gate, policyMatrix);
+    const pipeline = pipelineChecks(article, gate, policyMatrix).map((p) =>
+      p.id === "x" && isXUnavailable(article)
+        ? { ...p, label: "③X未発見（調査完了）" }
+        : p,
+    );
     const publishGateOk = isPublishGate(pipeline);
     const pageReady = article.pageReady === true;
     const nextAction = computeNextAction(article, gate, pipeline);
@@ -226,6 +234,8 @@ export async function computeProjectStatus() {
       nextAction,
       promo: promoMap.get(slug) ?? { x: null, hatena: null, note: null },
       short: shortMap.get(slug) ?? { label: "未生成", generated: false, uploaded: false },
+      xUnavailable: isXUnavailable(article),
+      xResearchStatus: article.xResearch?.status ?? null,
     });
   }
 

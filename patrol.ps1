@@ -43,8 +43,13 @@ function Start-WatchdogLoop {
 
 if (-not (Test-DaemonHealthy)) {
   Remove-Item $PidFile -ErrorAction SilentlyContinue
-  $PatrolCmd = "Set-Location '$Root'; npm run pipeline:patrol:daemon -- --agents debugger --interval 300 --batch 3"
-  Start-Process powershell -ArgumentList @("-NoExit", "-Command", $PatrolCmd)
+  $p = Start-Process node -ArgumentList @(
+    "scripts/pipeline-patrol-daemon.mjs",
+    "--agents", "debugger",
+    "--interval", "300",
+    "--batch", "3"
+  ) -WorkingDirectory $Root -WindowStyle Hidden -PassThru
+  if ($p) { Set-Content -Path $PidFile -Value $p.Id -ErrorAction SilentlyContinue }
   Start-Sleep -Seconds 2
 }
 

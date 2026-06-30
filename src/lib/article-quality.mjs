@@ -3,6 +3,7 @@
  * オーナー目視なしで「中身がクソ」を検出する正本
  */
 import { isSpeechFragment } from "./diet-voice.mjs";
+import { isXUnavailable } from "./x-research-policy.mjs";
 
 const NUMERIC =
   /[０-９0-9]+[万千億百]|[０-９0-9]+[%％]|約?[０-９0-9,．.]+円|第[０-９0-9]+条/;
@@ -134,7 +135,7 @@ export function auditArticleQuality(article) {
   );
   const xMin = article.xPostsMinRequired ?? 3;
   const xShots = xVerified.filter((p) => p.screenshot && p.captured_at);
-  if (xVerified.length >= xMin && xShots.length < xMin) {
+  if (!isXUnavailable(article) && xVerified.length >= xMin && xShots.length < xMin) {
     issues.push({
       id: "Q9_x_screenshot",
       severity: "blocker",

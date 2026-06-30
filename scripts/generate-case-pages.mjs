@@ -4,6 +4,7 @@ import { readFile, readdir, writeFile, mkdir } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { SITE } from "../src/lib/site-config.mjs";
+import { isXUnavailable, X_UNAVAILABLE_USER_MESSAGE } from "../src/lib/x-research-policy.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(__dirname, "..");
@@ -341,7 +342,20 @@ function renderXPending(p) {
       </article>`;
 }
 
-function renderXSlots(posts) {
+function renderXUnavailableNotice(article) {
+  const researchedAt = article.xResearch?.researched_at?.slice(0, 10);
+  return `
+    <aside class="x-unavailable-notice" aria-label="X投稿について">
+      <p class="x-unavailable-notice__title">X（旧Twitter）の関連投稿</p>
+      <p class="x-unavailable-notice__body">${esc(X_UNAVAILABLE_USER_MESSAGE)}</p>
+      ${researchedAt ? `<p class="x-unavailable-notice__meta">調査日: ${esc(researchedAt)}</p>` : ""}
+    </aside>`;
+}
+
+function renderXSlots(posts, article) {
+  if (isXUnavailable(article)) {
+    return renderXUnavailableNotice(article);
+  }
   return posts.map((p) => (p.post_url ? renderXLinkCard(p) : renderXPending(p))).join("\n");
 }
 
@@ -481,7 +495,7 @@ ${renderGlossary(a)}
           </blockquote>
         </div>
       </article>
-      ${renderXSlots(a.xPosts)}
+      ${renderXSlots(a.xPosts, a)}
     </section>
 ${renderComments()}
     <p class="demo-note">※ 発言は国会議事録APIの実データ。X枠は構造のみ（URL・スクショ未）。YouTubeショートは未実装。</p>

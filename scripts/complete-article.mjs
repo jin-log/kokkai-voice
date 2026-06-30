@@ -28,7 +28,7 @@ import {
 } from "./lib/writer-synthesize.mjs";
 import { enrichGeneralArticle, writePolicyMatrixGeneral, fetchReadable, isGeneralContentReady } from "./lib/enrich-general.mjs";
 import { citizenTitle } from "../src/lib/title-format.mjs";
-import { isTopicRelevant, textMatchesTopic, topicTerms, isConclusionQuality, countTopicArcLines, countTopicDietTimeline, isMatrixTopicRelevant, textStronglyMatchesTopic } from "../src/lib/topic-relevance.mjs";
+import { isTopicRelevant, textMatchesTopic, topicTerms, isConclusionQuality, countTopicArcLines, countTopicDietTimeline, isMatrixTopicRelevant, textStronglyMatchesTopic, ensureTopicInLines } from "../src/lib/topic-relevance.mjs";
 import { normalizeFactPhrase } from "../src/lib/diet-voice.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -113,6 +113,15 @@ function extraKeywordsFromTitle(article) {
     .filter((s) => s.length >= 4);
 }
 
+function isTopicContentPreserved(article, policyMatrix = null) {
+  return (
+    countTopicArcLines(article) >= 3 &&
+    countTopicDietTimeline(article) >= 3 &&
+    isTopicRelevant(article) &&
+    isMatrixTopicRelevant(policyMatrix, article.searchKeyword)
+  );
+}
+
 async function enrichKokkai(article) {
   const keyword = article.searchKeyword;
   const from = "2023-01-01";
@@ -165,6 +174,10 @@ async function enrichKokkai(article) {
   }
   if (nowBullets.length < 3) {
     throw new Error(`[writer] 結論が3行未満 (${nowBullets.length}) — 原材料不足または変換失敗`);
+  }
+  nowBullets = ensureTopicInLines(nowBullets, searchKeyword);
+  if (nowBullets.length < 3) {
+    throw new Error(`[writer] 結論が3行未満 (${nowBullets.length}) — 話題語のある行が足りない`);
   }
   let arcFromWriter = synthesizeArcSummary(factBundle);
   if (arcFromWriter.length < 3) {
@@ -368,6 +381,8 @@ async function main() {
     }
     if (!force && isKokkaiContentReady(article, policyMatrix)) {
       console.log("[国会] 既にコンテンツあり — スキップ");
+    } else if (isTopicContentPreserved(article, policyMatrix)) {
+      console.log("[国会] 話題一致済み — 本文上書きスキップ");
     } else {
       await enrichKokkai(article);
     }

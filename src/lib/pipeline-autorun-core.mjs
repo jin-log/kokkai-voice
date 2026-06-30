@@ -43,7 +43,7 @@ export async function runAgentScript(agent, slug, checkId) {
   }
   switch (agent) {
     case "writer":
-      return runNodeScript("complete-article.mjs", ["--slug", slug, "--force"]);
+      return runNodeScript("complete-article.mjs", ["--slug", slug]);
     case "x-researcher":
       return runNodeScript("x-research-batch.mjs", ["--slug", slug]);
     case "debugger":

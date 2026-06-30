@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>デザイン案サンプル（実データ）｜日本の政治now.</title>
+  <link rel="stylesheet" href="css/tokens.css" />
+  <link rel="stylesheet" href="css/design-directions.css" />
+</head>
+<body class="dd-page">
+  <header class="dd-page__head">
+    <div class="dd-page__inner">
+      <p class="dd-page__eyebrow">案件データ実装 — bouka-taisaku（物価高対策）</p>
+      <h1>デザイン案 × 実サイト情報</h1>
+      <p class="dd-page__lead">
+        上段が<strong>今のサンプル案件ページそのまま</strong>。下の3案は同じ中身（タイトル・結論・立場・TL・メリデメ）を、見た目だけ変えたもの。
+      </p>
+      <p class="dd-page__ref">
+        データ出典:
+        <a href="case/bouka-taisaku.html">samples/case/bouka-taisaku.html</a> ·
+        <a href="https://seiji1192.site/case/bouka-taisaku/" target="_blank" rel="noopener">本番</a>
+      </p>
+    </div>
+  </header>
+
+  <section class="dd-baseline dd-page__inner" aria-labelledby="dd-baseline-title">
+    <h2 id="dd-baseline-title">現行サイト（そのまま）</h2>
+    <p class="dd-baseline__note">スクロールして中身を確認できます。下の3案と見比べてください。</p>
+    <div class="dd-baseline__frame">
+      <iframe
+        title="物価高対策 — 現行サンプル"
+        src="case/bouka-taisaku.html"
+        loading="lazy"
+      ></iframe>
+    </div>
+  </section>
+
+  <main class="dd-page__inner dd-grid">
+    <!-- A -->
+    <article class="dd-card">
+      <div class="dd-card__meta">
+        <span class="dd-tag dd-tag--a">案A</span>
+        <h2>現行リファイン</h2>
+        <p>色・ロゴは維持。結論ボックスと立場カードの視認性だけ上げる。</p>
+      </div>
+      <div class="dd-mock dd-mock--a" data-case-preview>
+        <header class="dd-mock__bar">
+          <img class="dd-mock__logo-img" src="assets/logo-header-nihon-seiji-naw.png" alt="日本の政治 now." />
+        </header>
+        <div class="dd-mock__scroll">
+          <div class="dd-case">
+            <div class="dd-case__tags">
+              <span class="dd-case__tag">経済</span>
+              <span class="dd-case__tag">国会</span>
+              <span class="dd-case__tag dd-case__tag--src">国会議事録 API</span>
+            </div>
+            <h3 class="dd-case__title">【物価高対策】支援策の内容といまの効果</h3>
+
+            <div class="dd-now dd-now--a">
+              <p class="dd-now__label">いまの結論（AI・平易語）</p>
+              <ul>
+                <li>物価高止まりが続く前提で、対策用の<strong>予備費1兆円</strong>を確保</li>
+                <li>単なる高騰想定の予備ではなく、不足時の<strong>機動対応</strong>が目的</li>
+                <li>2024年9月、燃料油価格対策などに使途を決定</li>
+              </ul>
+              <p class="dd-now__meta">APIヒット 1556件 · 更新 2026-06-30</p>
+            </div>
+
+            <div class="dd-mood">
+              <span>みんなのキモチ</span>
+              <div class="dd-mood__bar"><i style="width:62%"></i></div>
+              <span>😊 62 · 😐 21 · 😠 17</span>
+            </div>
+
+            <ul class="dd-bullets">
+              <li>2026-03-24：金子容三— 財政金融委員会で関連法案が可決・成立。</li>
+              <li>2026-03-10：岡本三成— 二年間で<strong>十兆円</strong>。国民全員に八万円ずつ配れます。</li>
+            </ul>
+
+            <div class="dd-stance dd-stance--a">
+              <p class="dd-stance__badge">公言 ↔ 行動</p>
+              <div class="dd-stance__card">
+                <div class="dd-stance__head">
+                  <strong>自由民主党</strong>
+                  <span class="dd-sym dd-sym--ok">◎</span>
+                </div>
+                <p><em>方針</em> 物価高止まりを前提に予備費で機動的に対応</p>
+                <p><em>行動</em> 予備費1兆円枠のうち、同年9月に燃料油価格対策等へ使用決定</p>
+              </div>
+            </div>
+
+            <ol class="dd-tl">
+              <li><time>2026-06-03</time> 片山さつき— 決算行政監視委員会</li>
+              <li><time>2026-05-28</time> 片山さつき— 参議院財政金融委員会</li>
+              <li><time>2026-05-26</time> 杉久武— 参議院財政金融委員会</li>
+            </ol>
+
+            <div class="dd-gloss">
+              <span>物価</span><span>選挙</span>
+            </div>
+
+            <div class="dd-pc">
+              <div><b>メリ</b> 成立 · 関連法案の進展（財政金融委員会で可決）</div>
+              <div><b>デメ</b> 慎重論 · 十兆円規模への懸念（岡本三成発言）</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- B -->
+    <article class="dd-card">
+      <div class="dd-card__meta">
+        <span class="dd-tag dd-tag--b">案B</span>
+        <h2>エディトリアル</h2>
+        <p>同じデータを新聞リード風に。数字（1兆円・十兆円）をリードに集約。</p>
+      </div>
+      <div class="dd-mock dd-mock--b" data-case-preview>
+        <header class="dd-mock__bar dd-mock__bar--dark">
+          <span class="dd-mock__wordmark">政治<span>now</span></span>
+        </header>
+        <div class="dd-mock__scroll">
+          <div class="dd-case dd-case--b">
+            <p class="dd-case__kicker">経済 · 国会 · API 1556件</p>
+            <h3 class="dd-case__title dd-case__title--serif">【物価高対策】支援策の内容といまの効果</h3>
+
+            <div class="dd-now dd-now--b">
+              <p class="dd-now__lead"><em>リード：</em> 予備費<strong>1兆円</strong>を機動枠として確保。2024年9月に燃料油対策へ充当済み。野党は消費税ゼロ案に<strong>十兆円</strong>規模で懸念。</p>
+            </div>
+
+            <div class="dd-mood dd-mood--ghost">
+              <span>納得 62%</span>
+              <span>モヤる 17%</span>
+            </div>
+
+            <blockquote class="dd-quote">
+              「二年間で十兆円。国民の皆さん全員に、この夏、八万円ずつ配れます」— 岡本三成（2026-03-10）
+            </blockquote>
+
+            <div class="dd-stance dd-stance--b">
+              <table class="dd-stance__table">
+                <tr><th>自民 ◎</th><td>予備費説明と使用決定が一致</td></tr>
+                <tr><th>国民民主 ？</th><td>賃上げ重視の方針、行動は未紐付け</td></tr>
+              </table>
+            </div>
+
+            <ol class="dd-tl dd-tl--b">
+              <li>06-03 片山さつき / 決算行政監視委員会</li>
+              <li>05-28 片山さつき / 参議院財金</li>
+              <li>05-26 杉久武 / 参議院財金</li>
+            </ol>
+
+            <div class="dd-pc dd-pc--b">
+              <div>メリット figure: <strong>成立</strong></div>
+              <div>デメリット figure: <strong>慎重論</strong></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- C -->
+    <article class="dd-card">
+      <div class="dd-card__meta">
+        <span class="dd-tag dd-tag--c">案C</span>
+        <h2>ひよこフレンドリー</h2>
+        <p>用語辞典・吹き出しを前面に。投票UIを大きく（親指ゾーン）。</p>
+      </div>
+      <div class="dd-mock dd-mock--c" data-case-preview>
+        <header class="dd-mock__bar dd-mock__bar--warm">
+          <img class="dd-mock__hiyoko" src="assets/logo-mark-hiyoko.png" width="36" height="36" alt="" />
+          <span class="dd-mock__wordmark dd-mock__wordmark--warm">政治<span>now.</span></span>
+        </header>
+        <div class="dd-mock__scroll">
+          <div class="dd-case dd-case--c">
+            <div class="dd-bubble">「予備費」って？ → いきなり使えるお金のストックだよ</div>
+            <h3 class="dd-case__title">物価高対策、いまどうなってる？</h3>
+
+            <div class="dd-now dd-now--c">
+              <span>💡 いまの結論</span>
+              <ul>
+                <li>対策用に<strong>1兆円</strong>の枠がある</li>
+                <li>すでに燃料の値上げ対策に一部使った（2024年9月）</li>
+                <li>国会ではまだ賛否が分かれてる（十兆円案など）</li>
+              </ul>
+            </div>
+
+            <div class="dd-gloss dd-gloss--big">
+              <div><strong>物価</strong> ものの値段</div>
+              <div><strong>選挙</strong> 議員を選ぶ投票</div>
+            </div>
+
+            <div class="dd-stance dd-stance--c">
+              <p>自民党 <span class="dd-sym dd-sym--ok">◎</span> 「言った通り予備費使った」</p>
+              <p>国民民主 <span class="dd-sym dd-sym--unk">？</span> 「賃上げが本丸」</p>
+            </div>
+
+            <ol class="dd-tl dd-tl--c">
+              <li>6/3 片山さつきが説明</li>
+              <li>5/28 参議院で質疑</li>
+              <li>3/10 岡本氏が十兆円案に反対論</li>
+            </ol>
+
+            <div class="dd-votes dd-votes--big">
+              <button type="button">😊 わかった</button>
+              <button type="button">😐 ふつう</button>
+              <button type="button">😠 まだモヤ</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </article>
+  </main>
+
+  <footer class="dd-page__foot dd-page__inner">
+    <p>表示内容は <code>data/articles/bouka-taisaku.json</code> とサンプルHTMLの実データ。デザインだけの差分比較用。</p>
+  </footer>
+</body>
+</html>

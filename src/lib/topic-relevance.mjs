@@ -7,7 +7,44 @@ const TOPIC_ALIASES = {
   国旗損壊罪: ["国旗", "損壊罪", "刑法九十二条", "刑法92条", "国旗損壊"],
   国会議員のボーナス: ["ボーナス", "歳費", "特別職", "期末手当", "給与法", "報酬", "議員報酬"],
   スパイ防止法: ["スパイ防止", "スパイ防止法制", "国家情報", "スパイ活動"],
+  副首都構想: ["副首都", "大阪都構想", "大阪都", "首都機能", "一極集中", "副首都法案", "都構想"],
+  物価高対策: ["物価", "物価高", "物価高騰", "予備費", "インフレ", "生活必需品", "物価対策"],
+  防衛費: ["防衛力", "防衛予算", "軍事費", "国防"],
+  "大阪万博 2025 費用": ["万博", "大阪万博", "EXPO2025", "2025", "入場者", "決算"],
+  "不法移民 在留外国人数": ["不法移民", "在留外国人", "入管", "移民", "難民"],
+  "太陽光パネル 設置義務 東京都": ["太陽光", "設置義務", "東京都", "パネル", "ゼロエミ"],
+  賃金: ["最低賃金", "賃上げ", "実質賃金", "春闘"],
+  能登半島地震: ["能登", "復興", "復興予算", "被災"],
 };
+
+/** 自動生成の空行（話題語なし） */
+export const BOILERPLATE_TOPIC =
+  /について国会で答弁・質疑を行った|が国会で答弁・質疑を行った|国会で答弁・質疑が継続|が国会で論じた。?$|を国会で論じた。?$|国会で答弁・質疑を行った。?$/;
+
+export function isBoilerplateTopicLine(text) {
+  return BOILERPLATE_TOPIC.test(String(text || "").trim());
+}
+
+/** 各行に案件語を必ず含める（定型文は null で捨てる） */
+export function ensureTopicInLine(text, keyword) {
+  let t = String(text || "").trim();
+  if (!t || isBoilerplateTopicLine(t)) return null;
+  if (!t.endsWith("。")) t += "。";
+  const terms = topicTerms(keyword);
+  if (textMatchesTopic(t, terms)) return t;
+  const label = String(keyword || "").trim().slice(0, 28) || "本件";
+  if (/^[\d-]+：/.test(t)) {
+    return t.replace(/^([\d-]+：)/, `$1${label}— `);
+  }
+  return `${label}：${t}`;
+}
+
+/** @param {string[]} lines @param {string} keyword */
+export function ensureTopicInLines(lines, keyword) {
+  return lines
+    .map((l) => ensureTopicInLine(l, keyword))
+    .filter(Boolean);
+}
 
 /** 弱い一致（「船の国旗」等）を除外する必須語 */
 const TOPIC_STRONG = {

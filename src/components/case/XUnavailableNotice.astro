@@ -1,0 +1,17 @@
+---
+import { X_UNAVAILABLE_USER_MESSAGE } from "../../lib/x-research-policy.mjs";
+
+const { researchedAt } = Astro.props;
+---
+
+<aside class="x-unavailable-notice" aria-label="X投稿について">
+  <p class="x-unavailable-notice__title">X（旧Twitter）の関連投稿</p>
+  <p class="x-unavailable-notice__body">{X_UNAVAILABLE_USER_MESSAGE}</p>
+  {
+    researchedAt && (
+      <p class="x-unavailable-notice__meta">
+        調査日: {researchedAt.slice(0, 10)}
+      </p>
+    )
+  }
+</aside>

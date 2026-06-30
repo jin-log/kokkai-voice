@@ -9,6 +9,11 @@ import { readFile, readdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { textStronglyMatchesTopic } from "../src/lib/topic-relevance.mjs";
+import {
+  X_RESEARCH_MIN_URLS,
+  expandXKeywords,
+  extraCommonHandles,
+} from "../src/lib/x-research-policy.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(__dirname, "..");
@@ -415,7 +420,13 @@ async function fetchTweetMeta(handle, id) {
   };
 }
 
-async function collectForTopic(keyword, config, dateRange) {
+async function collectForTopic(keyword, config, opts = {}) {
+  const dateRange = opts.dateRange ?? null;
+  const maxPostsPerHandle = opts.maxPostsPerHandle ?? 20;
+  const extraHandles = opts.extraHandles ?? [];
+  const keywords = config.keywords ?? [];
+  const handles = [...new Set([...(config.handles ?? []), ...extraHandles])];
+
   const candidates = new Map();
   const add = (item, score) => {
     const key = item.post_url;
@@ -429,12 +440,12 @@ async function collectForTopic(keyword, config, dateRange) {
     const meta = await fetchTweetMeta(parsed.handle, parsed.id);
     if (meta) {
       meta.account_label = seed.label ?? meta.account_label;
-      const kwScore = scoreText(meta.post_text, config.keywords);
+      const kwScore = scoreText(meta.post_text, keywords);
       if (kwScore < 1) continue;
       const engScore = scoreEngagement(meta);
       meta.score = kwScore + engScore;
       add(meta, meta.score);
-    } else if (seed.label && seed.text && scoreText(seed.text, config.keywords) >= 1) {
+    } else if (seed.label && seed.text && scoreText(seed.text, keywords) >= 1) {
       add(
         {
           post_url: seed.url.replace("twitter.com", "x.com"),
@@ -450,7 +461,7 @@ async function collectForTopic(keyword, config, dateRange) {
     await sleep(300);
   }
 
-  for (const handle of config.handles) {
+  for (const handle of handles) {
     let urls = [];
     try {
       urls = await fetchProfileStatuses(handle);
@@ -458,7 +469,7 @@ async function collectForTopic(keyword, config, dateRange) {
       /* ignore */
     }
     await sleep(400);
-    for (const url of urls.slice(0, 20)) {
+    for (const url of urls.slice(0, maxPostsPerHandle)) {
       const parsed = parseStatus(url);
       if (!parsed) continue;
       try {
@@ -466,7 +477,7 @@ async function collectForTopic(keyword, config, dateRange) {
         if (!meta) continue;
         // 日付フィルター: 案件のtimeline範囲外は除外
         if (!tweetInRange(meta.created_at, dateRange)) continue;
-        const kwScore = scoreText(meta.post_text, config.keywords);
+        const kwScore = scoreText(meta.post_text, keywords);
         // キーワード最低スコア1以上のみ採用
         if (kwScore < 1) continue;
         const engScore = scoreEngagement(meta);
@@ -490,6 +501,66 @@ async function collectForTopic(keyword, config, dateRange) {
     picked.push(item);
   }
   return picked;
+}
+
+function countPickedUrls(picked) {
+  return picked.filter((p) => p.post_url).length;
+}
+
+/** 段1〜5: 3本取れた段で打ち切り */
+async function collectWithTiers(keyword, config, dateRange) {
+  const baseHandles = config.handles ?? [];
+  const commonExtra = extraCommonHandles(baseHandles);
+  const tier5Keywords = expandXKeywords(config.keywords ?? [], keyword, 2);
+
+  /** @type {Array<{ tier: number, dateRange: typeof dateRange, maxPosts: number, extraHandles: string[], keywords: string[] }>} */
+  const attempts = [
+    { tier: 1, dateRange, maxPosts: 20, extraHandles: [], keywords: config.keywords ?? [] },
+    ...(dateRange
+      ? [{ tier: 2, dateRange: null, maxPosts: 20, extraHandles: [], keywords: config.keywords ?? [] }]
+      : []),
+    { tier: 3, dateRange: null, maxPosts: 20, extraHandles: commonExtra, keywords: config.keywords ?? [] },
+    { tier: 4, dateRange: null, maxPosts: 40, extraHandles: commonExtra, keywords: config.keywords ?? [] },
+    { tier: 5, dateRange: null, maxPosts: 40, extraHandles: commonExtra, keywords: tier5Keywords },
+  ];
+
+  let lastPicked = [];
+  let lastTier = 1;
+  const tiersRun = [];
+
+  for (const a of attempts) {
+    tiersRun.push(a.tier);
+    lastTier = a.tier;
+    console.log(`  段${a.tier}: handles=${baseHandles.length + a.extraHandles.length} 投稿/${a.maxPosts} 語=${a.keywords.length}`);
+    lastPicked = await collectForTopic(keyword, { ...config, keywords: a.keywords }, {
+      dateRange: a.dateRange,
+      maxPostsPerHandle: a.maxPosts,
+      extraHandles: a.extraHandles,
+    });
+    const n = countPickedUrls(lastPicked);
+    console.log(`  段${a.tier} → ${n}/${X_RESEARCH_MIN_URLS} URL`);
+    if (n >= X_RESEARCH_MIN_URLS) {
+      return { picked: lastPicked, tier: a.tier, tiersRun, exhausted: false };
+    }
+  }
+
+  return {
+    picked: lastPicked,
+    tier: lastTier,
+    tiersRun,
+    exhausted: countPickedUrls(lastPicked) < X_RESEARCH_MIN_URLS,
+  };
+}
+
+function markSlotsExhausted(slots) {
+  return slots.map((s) =>
+    s.status === "search_failed"
+      ? {
+          ...s,
+          note: "5段階の調査後も該当投稿を特定できませんでした",
+        }
+      : s,
+  );
 }
 
 function buildSlots(found) {
@@ -595,29 +666,48 @@ async function main() {
     } else {
       console.log(`Researching ${slug} (${kw}) | 日付範囲: なし...`);
     }
-    const found = await collectForTopic(kw, config, dateRange);
-    let picked = found;
-    if (picked.filter((f) => f.post_url).length < 3 && dateRange) {
-      console.log(`  日付範囲で不足 — 全期間で再検索`);
-      picked = await collectForTopic(kw, config, null);
-    }
-    const urlCount = picked.filter((f) => f.post_url).length;
+    const { picked, tier, tiersRun } = await collectWithTiers(kw, config, dateRange);
+    const urlCount = countPickedUrls(picked);
     totalFound += Math.min(urlCount, 5);
-    const merged = mergeXPosts(article.xPosts, picked, kw);
+    let merged = mergeXPosts(article.xPosts, picked, kw);
     const mergedCount = merged.filter((p) => p.post_url).length;
+    const xMin = article.xPostsMinRequired ?? X_RESEARCH_MIN_URLS;
+    const actuallyExhausted = mergedCount < xMin;
+
+    if (actuallyExhausted) {
+      merged = markSlotsExhausted(merged);
+      article.xPostsPolicy = "unavailable";
+    } else if (article.xPostsPolicy === "unavailable") {
+      delete article.xPostsPolicy;
+    }
+
     article.xPosts = merged;
     article.xResearch = {
       researched_at: new Date().toISOString(),
       urls_found: mergedCount,
-      method: "jina_reader+fxtwitter_public",
-      date_range: dateRange ? {
-        from: dateRange.min.toISOString().slice(0, 10),
-        to:   dateRange.max.toISOString().slice(0, 10),
-      } : null,
+      status: actuallyExhausted ? "exhausted" : "found",
+      exhausted: actuallyExhausted,
+      tier_reached: tier,
+      tiers_run: tiersRun,
+      method: "jina_reader+fxtwitter_public+tiered",
+      date_range: dateRange
+        ? {
+            from: dateRange.min.toISOString().slice(0, 10),
+            to: dateRange.max.toISOString().slice(0, 10),
+          }
+        : null,
     };
     await writeFile(articlePath, JSON.stringify(article, null, 2) + "\n", "utf8");
     report.push({ slug, urls_found: mergedCount });
-    console.log(`  -> ${mergedCount}/5 URLs${mergedCount > urlCount ? " (既存維持含む)" : ""}`);
+    const statusNote =
+      actuallyExhausted
+        ? " — X未発見（5段階調査完了）"
+        : tier > 1
+          ? ` — 段${tier}で確定`
+          : "";
+    console.log(
+      `  -> ${mergedCount}/5 URLs${mergedCount > urlCount ? " (既存維持含む)" : ""}${statusNote}`,
+    );
   }
 
   console.log("\n=== CEO REPORT ===");

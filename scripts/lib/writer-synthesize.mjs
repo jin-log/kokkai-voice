@@ -3,7 +3,13 @@
  * 正本の文体: scripts/writer-batch10-data.mjs / docs/writer-editorial.md
  */
 
-import { topicTerms, textStronglyMatchesTopic } from "../../src/lib/topic-relevance.mjs";
+import {
+  topicTerms,
+  textStronglyMatchesTopic,
+  isBoilerplateTopicLine,
+  ensureTopicInLine,
+  ensureTopicInLines,
+} from "../../src/lib/topic-relevance.mjs";
 import { topicSpeechExcerpt } from "./kokkai-api.mjs";
 import { isDietVoice, isIncompleteBullet, isSpeechFragment, normalizeFactPhrase, toThirdPersonBullet, isWriterReadyLine, isMatrixActionReady } from "../../src/lib/diet-voice.mjs";
 import { scorePartySymbol } from "../../src/lib/symbol-rules.mjs";
@@ -73,17 +79,7 @@ export function composeAllFallback(bundle, meta) {
       "野党は特別職・議員報酬の引上げに反対し、ボーナス据え置きを求める修正案を出している。",
     );
   }
-  if (lines.length < 3) {
-    const topic = topicShort(kw);
-    for (const sn of bundle.snippets.slice(0, 6)) {
-      if (!sn.date) continue;
-      lines.push(
-        `${sn.date}：${sn.speaker || "国会"}が${topic}について国会で答弁・質疑を行った。`,
-      );
-      if (lines.length >= 3) break;
-    }
-  }
-  return dedupeLines(lines);
+  return dedupeLines(lines.filter((l) => !isBoilerplateTopicLine(l)));
 }
 
 export function synthesizeNowSummary(bundle, meta = {}) {
@@ -109,8 +105,10 @@ export function synthesizeNowSummary(bundle, meta = {}) {
 
   const picked = pickConclusionTriple(lines, bundle, primary, meta);
   const good = picked.filter((l) => !isDietVoice(l) && !isSpeechFragment(l) && !isIncompleteBullet(l));
-  const merged = dedupeLines(fallback.length >= 3 ? fallback : [...fallback, ...good]);
-  return merged.slice(0, 3);
+  const merged = dedupeLines(
+    [...fallback, ...good].filter((l) => !isBoilerplateTopicLine(l)),
+  );
+  return ensureTopicInLines(merged, kw).slice(0, 3);
 }
 
 function isQuestionBullet(line) {
@@ -198,6 +196,8 @@ function topicShort(keyword) {
   if (/スパイ防止/.test(keyword)) return "スパイ防止法制";
   if (/ボーナス|歳費/.test(keyword)) return "議員ボーナス";
   if (/国旗/.test(keyword)) return "国旗損壊罪";
+  if (/副首都/.test(keyword)) return "副首都構想";
+  if (/物価高/.test(keyword)) return "物価高対策";
   return keyword;
 }
 
@@ -363,18 +363,22 @@ function synthesizePolicySummary(sn, keyword) {
   const ex = normalizeFactPhrase(sn.excerpt);
   const who = sn.speakerGroup?.split("・")[0] || sn.speaker || "会派";
   const topic = topicShort(keyword);
+  let line;
   if (isOppositionTone(ex, sn.speakerGroup, keyword)) {
-    return `${who}は${topic}に対し、人権・表現の自由等を理由に慎重または反対の立場。`;
+    line = `${who}は${topic}に対し、人権・表現の自由等を理由に慎重または反対の立場。`;
+  } else if (/推進|制定|整備|賛成|前向き|審議を進め|連立.*合意|検討を進め/.test(ex)) {
+    line = `${who}は${topic}の法制化・関連法案の審議を推進する立場。`;
+  } else {
+    const ev = extractEventText(sn, keyword).replace(/。$/, "");
+    if (ev && isWriterReadyLine(ev)) {
+      const partyLine = policyFromEvent(ev, who, topic);
+      if (isWriterReadyLine(partyLine)) {
+        line = partyLine.endsWith("。") ? partyLine : `${partyLine}。`;
+      }
+    }
+    if (!line) line = `${who}は${topic}に関する方針を国会で表明。`;
   }
-  if (/推進|制定|整備|賛成|前向き|審議を進め|連立.*合意|検討を進め/.test(ex)) {
-    return `${who}は${topic}の法制化・関連法案の審議を推進する立場。`;
-  }
-  const ev = extractEventText(sn, keyword).replace(/。$/, "");
-  if (ev && isWriterReadyLine(ev)) {
-    const partyLine = policyFromEvent(ev, who, topic);
-    if (isWriterReadyLine(partyLine)) return partyLine.endsWith("。") ? partyLine : `${partyLine}。`;
-  }
-  return `${who}が${topic}を国会で論じた。`;
+  return ensureTopicInLine(line, keyword) ?? line;
 }
 
 function isMatrixActionLine(text) {
@@ -408,13 +412,14 @@ function synthesizeActionSummary(sn, keyword) {
   }
   if (/質疑|答弁|質問|お尋ね|審議/.test(ex)) {
     if (/国家情報会議|スパイ防止/.test(ex)) {
-      return `${sn.date}、${mt}で${sp}がスパイ防止法制・国家情報会議法案の審議で答弁・質疑`;
+      return `${sn.date}、${mt}で${sp}がスパイ防止法制・国家情報会議法案の審議で具体論点を答弁`;
     }
-    return `${sn.date}、${mt}で${sp}が${topic}の審議で答弁・質疑`;
+    const ev = extractEventText(sn, keyword).replace(/。$/, "");
+    if (ev) return `${sn.date}、${mt}で${ev}`;
   }
   const ev = extractEventText(sn, keyword).replace(/。$/, "");
   if (ev) return `${sn.date}、${mt}で${ev}`;
-  return `${sn.date}、${mt}で${sp}が${topic}を国会で論じた`;
+  return ensureTopicInLine(`${sn.date}、${mt}で${sp}が${topic}に関する論点を表明`, keyword);
 }
 
 function snippetTopicScore(sn, keyword) {
@@ -574,30 +579,31 @@ export function synthesizeArcSummary(bundle) {
     }
   }
 
-  if (lines.length < 3) {
-    const topic = topicShort(kw);
-    for (const sn of bundle.snippets) {
-      if (!sn.date || seenDates.has(sn.date)) continue;
-      const text = `${sn.speaker || "国会"}が${topic}について国会で答弁・質疑を行った。`;
-      seenDates.add(sn.date);
-      usedTexts.add(textKey(text));
-      lines.push({ date: sn.date, text });
-      if (lines.length >= 3) break;
-    }
-  }
-
-  return lines.sort((a, b) => b.date.localeCompare(a.date));
+  return lines
+    .sort((a, b) => b.date.localeCompare(a.date))
+    .map((line) => ({
+      ...line,
+      text: ensureTopicInLine(line.text, kw) ?? line.text,
+    }))
+    .filter((line) => line.text && !isBoilerplateTopicLine(line.text));
 }
 
 /** タイムライン国会行の要約（抜粋禁止） */
 export function synthesizeTimelinePlain(sn, keyword) {
   const text = extractEventText(sn, keyword);
-  if (text && isWriterReadyLine(text)) return text;
+  if (text && isWriterReadyLine(text) && !isBoilerplateTopicLine(text)) {
+    const line = text.endsWith("。") ? text : `${text}。`;
+    return ensureTopicInLine(line, keyword) ?? line;
+  }
   for (const f of composeFromPrimary(sn, { date: sn.date, speaker: sn.speaker }, keyword)) {
-    if (isWriterReadyLine(f)) return f.endsWith("。") ? f : `${f}。`;
+    if (isWriterReadyLine(f) && !isBoilerplateTopicLine(f)) {
+      const line = f.endsWith("。") ? f : `${f}。`;
+      return ensureTopicInLine(line, keyword) ?? line;
+    }
   }
   const topic = topicShort(keyword);
-  return `${sn.speaker || "国会"}が${topic}を国会で論じた。`;
+  const fallback = `${sn.date}：${sn.speaker || "国会"}— ${topic}に関する${sn.meeting || "国会"}での論点`;
+  return ensureTopicInLine(fallback, keyword);
 }
 
 const PROSCONS_DISCLAIMER =
@@ -857,9 +863,10 @@ export function synthesizeProsCons(bundle, arcLines, nowBullets, meta = {}) {
     }
   }
   if (merits.length < 2) {
+    const topic = topicShort(kw);
     pushMerit({
-      headline: "国会で議論継続",
-      text: `国会では${topicShort(kw)}をめぐる答弁・質疑が継続し、制度の方向性が議論されている。`,
+      headline: `${topic}の国会論点`,
+      text: `${topic}をめぐる法案・予算・答弁が国会で継続している。`,
       figure: "国会答弁",
     });
   }

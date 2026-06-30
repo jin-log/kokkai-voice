@@ -6,6 +6,7 @@ import { readFile, access } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { isPhaseAPublish } from "./diet-pending.mjs";
+import { isXUnavailable, X_UNAVAILABLE_ADMIN_MESSAGE } from "./x-research-policy.mjs";
 import { countTopicBullets, isTitleReady, countTopicArcLines, countTopicDietTimeline, isMatrixTopicRelevant, isConclusionQuality, textStronglyMatchesTopic } from "./topic-relevance.mjs";
 import { isDietVoice, bulletsDistinctFrom, isSpeechFragment } from "./diet-voice.mjs";
 import { isValidSymbol } from "./symbol-rules.mjs";
@@ -71,6 +72,7 @@ export function checkCasePage(article, opts = {}) {
   }
 
   const phaseA = isPhaseAPublish(article);
+  const xUnavailable = isXUnavailable(article);
   const tl = article.timeline ?? [];
   const xInTl = tl.filter((e) => e.type === "x_post" && e.xPost?.post_url);
   const dietInTl = tl.filter(
@@ -141,8 +143,22 @@ export function checkCasePage(article, opts = {}) {
   // E. タイムライン
   if (phaseA) {
     add("E1_timeline_count", tl.length >= 3, `${tl.length}/3 件（国会待ち）`);
-    add("E2_timeline_x", xInTl.length >= 3, `${xInTl.length}/3 X`);
+    if (xUnavailable) {
+      add("E2_timeline_x", true, X_UNAVAILABLE_ADMIN_MESSAGE, false);
+    } else {
+      add("E2_timeline_x", xInTl.length >= 3, `${xInTl.length}/3 X`);
+    }
     add("E3_timeline_diet", true, "国会待ち — 更新次第掲載", false);
+  } else if (xUnavailable) {
+    add(
+      "E1_timeline_count",
+      tl.length >= 3 && dietInTl.length >= 3,
+      `${tl.length}件 · 国会${dietInTl.length}/3（X未発見）`,
+    );
+    add("E2_timeline_x", true, X_UNAVAILABLE_ADMIN_MESSAGE, false);
+    add("E3_timeline_diet", dietInTl.length >= 3, `${dietInTl.length}/3 国会`);
+    const dietTopic = countTopicDietTimeline(article);
+    add("E4_timeline_diet_topic", dietTopic >= 3, `${dietTopic}/3 国会が話題一致`);
   } else {
     add("E1_timeline_count", tl.length >= 6, `${tl.length}/6 件`);
     add("E2_timeline_x", xInTl.length >= 3, `${xInTl.length}/3 X`);
@@ -223,6 +239,10 @@ export function checkCasePage(article, opts = {}) {
   const xBad = xPosts.filter((p) => p.post_url && (!p.post_text || p.status !== "url_found"));
   if (article.xPostsPolicy === "deferred") {
     add("H1_xPosts", false, "xPostsPolicy: deferred — 公開不可（X完成後に解除）");
+  } else if (xUnavailable) {
+    add("H1_xPosts", true, X_UNAVAILABLE_ADMIN_MESSAGE, false);
+    add("H2_x_topic", true, "調査完了 — 該当投稿なし", false);
+    add("H3_x_screenshot", true, "該当投稿なしのためスキップ", false);
   } else if (xBad.length > 0) {
     add("H1_xPosts", false, `未検証URL ${xBad.length} 件 — reset-xposts または post_text 補完`);
   } else {
