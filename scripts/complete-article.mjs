@@ -12,7 +12,7 @@ import { spawn } from "node:child_process";
 import { checkCasePageWithFiles, root } from "../src/lib/page-ready.mjs";
 import { isPublishGate, pipelineChecks, refreshProjectStatus } from "../src/lib/project-status.mjs";
 import { loadArticle } from "../src/lib/articles.mjs";
-import { fetchSpeech, pickSpeech, excerptSpeech, scoreSpeechRelevance } from "./lib/kokkai-api.mjs";
+import { fetchSpeechForKeyword, pickSpeech, excerptSpeech, scoreSpeechRelevance } from "./lib/kokkai-api.mjs";
 import { buildArticleLayers } from "./lib/article-summary.mjs";
 import { enrichGeneralArticle, writePolicyMatrixGeneral, fetchReadable, isGeneralContentReady } from "./lib/enrich-general.mjs";
 
@@ -57,11 +57,16 @@ async function enrichKokkai(article) {
   const from = "2023-01-01";
   const until = new Date().toISOString().slice(0, 10);
   console.log(`[国会] API再取得: ${keyword}`);
-  const data = await fetchSpeech({ any: keyword, from, until, maximumRecords: 100 });
-  const records = data.speechRecord ?? [];
-  article.apiHits = parseInt(data.numberOfRecords ?? "0", 10);
+  const fetched = await fetchSpeechForKeyword(keyword, { from, until, maximumRecords: 100 });
+  const records = fetched.records;
+  article.apiHits = fetched.apiHits;
+  const searchKeyword = fetched.resolvedKeyword;
+  if (searchKeyword !== keyword) {
+    console.log(`  キーワードフォールバック: "${keyword}" → "${searchKeyword}"`);
+    article.searchKeyword = searchKeyword;
+  }
 
-  const best = pickSpeech(records, keyword);
+  const best = pickSpeech(records, searchKeyword);
   if (!best?.speech) throw new Error("国会発言が見つかりません");
 
   const meta = {
@@ -71,7 +76,7 @@ async function enrichKokkai(article) {
     speaker: best.speaker,
     speakerGroup: best.speakerGroup,
   };
-  const layers = buildArticleLayers(best.speech, keyword.split(/\s+/), meta);
+  const layers = buildArticleLayers(best.speech, searchKeyword.split(/\s+/), meta);
 
   article.nowSummary = layers.nowSummary;
   article.summaryBullets = layers.summaryBullets;
@@ -97,7 +102,7 @@ async function enrichKokkai(article) {
   const byDate = new Map();
   for (const r of records) {
     if (!r.date || !r.speech || !r.speechURL) continue;
-    const score = scoreSpeechRelevance(r, keyword);
+    const score = scoreSpeechRelevance(r, searchKeyword);
     if (score < 5) continue;
     const prev = byDate.get(r.date);
     if (!prev || score > prev.score) byDate.set(r.date, { record: r, score });

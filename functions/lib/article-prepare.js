@@ -3,6 +3,8 @@
  * dispatch（CF Pages）と scripts（Node）の両方から利用
  */
 
+import { kokkaiKeywordCandidates } from "./kokkai-keyword.js";
+
 const JINA_HEADERS = {
   Accept: "text/plain",
   "User-Agent": "kokkai-voice-prepare/1.0",
@@ -289,32 +291,51 @@ function isUsableSpeech(r) {
 export async function probeKokkai(keyword) {
   const from = "2023-01-01";
   const until = new Date().toISOString().slice(0, 10);
-  const q = new URLSearchParams({
-    recordPacking: "json",
-    any: keyword.trim(),
-    from,
-    until,
-    maximumRecords: "30",
-  });
-  const res = await fetch(`https://kokkai.ndl.go.jp/api/speech?${q}`, {
-    signal: AbortSignal.timeout(20000),
-  });
-  if (!res.ok) {
-    return { ok: false, hits: 0, reason: "国会APIに接続できませんでした。" };
+  /** @type {{ ok: false, hits: number, reason: string } | null} */
+  let lastFail = null;
+
+  for (const kw of kokkaiKeywordCandidates(keyword)) {
+    const q = new URLSearchParams({
+      recordPacking: "json",
+      any: kw,
+      from,
+      until,
+      maximumRecords: "30",
+    });
+    const res = await fetch(`https://kokkai.ndl.go.jp/api/speech?${q}`, {
+      signal: AbortSignal.timeout(20000),
+    });
+    if (!res.ok) {
+      return { ok: false, hits: 0, reason: "国会APIに接続できませんでした。" };
+    }
+    const data = await res.json();
+    const records = (data.speechRecord ?? []).filter(isUsableSpeech);
+    const relevant = records.filter((r) => scoreSpeechRelevance(r, kw) >= 3);
+    const hits = relevant.length;
+    if (hits >= 1) {
+      return {
+        ok: true,
+        hits,
+        total: parseInt(data.numberOfRecords ?? "0", 10),
+        resolvedKeyword: kw,
+        reason: null,
+      };
+    }
+    lastFail = {
+      ok: false,
+      hits: 0,
+      total: parseInt(data.numberOfRecords ?? "0", 10),
+      reason: "国会議事録に、このキーワードで使える発言が見つかりませんでした。",
+    };
   }
-  const data = await res.json();
-  const records = (data.speechRecord ?? []).filter(isUsableSpeech);
-  const relevant = records.filter((r) => scoreSpeechRelevance(r, keyword) >= 3);
-  const hits = relevant.length;
-  return {
-    ok: hits >= 1,
-    hits,
-    total: parseInt(data.numberOfRecords ?? "0", 10),
-    reason:
-      hits >= 1
-        ? null
-        : "国会議事録に、このキーワードで使える発言が見つかりませんでした。",
-  };
+
+  return (
+    lastFail ?? {
+      ok: false,
+      hits: 0,
+      reason: "国会議事録に、このキーワードで使える発言が見つかりませんでした。",
+    }
+  );
 }
 
 /**

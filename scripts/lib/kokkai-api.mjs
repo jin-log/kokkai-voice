@@ -1,4 +1,8 @@
+import { kokkaiKeywordCandidates } from "../../functions/lib/kokkai-keyword.js";
+
 const BASE = "https://kokkai.ndl.go.jp/api";
+
+export { kokkaiKeywordCandidates };
 
 export function sleep(ms) {
   return new Promise((r) => setTimeout(r, ms));
@@ -16,6 +20,30 @@ export async function fetchSpeech(params, { delayMs = 1200 } = {}) {
   const data = await res.json();
   await sleep(delayMs);
   return data;
+}
+
+/**
+ * 0件キーワード（例: 国旗損壊罪法案）を短縮候補で再試行
+ * @param {string} keyword
+ * @param {Record<string, string|number>} params
+ * @param {{ delayMs?: number }} [opts]
+ */
+export async function fetchSpeechForKeyword(keyword, params, opts = {}) {
+  const candidates = kokkaiKeywordCandidates(keyword);
+  /** @type {{ data: object; records: object[]; apiHits: number; resolvedKeyword: string; tried: string[] } | null} */
+  let last = null;
+
+  for (const kw of candidates) {
+    const data = await fetchSpeech({ ...params, any: kw }, opts);
+    const records = data.speechRecord ?? [];
+    const apiHits = parseInt(data.numberOfRecords ?? "0", 10);
+    const best = pickSpeech(records, kw);
+    const pack = { data, records, apiHits, resolvedKeyword: kw, tried: candidates };
+    if (apiHits > 0 && best) return pack;
+    last = pack;
+  }
+
+  return last ?? { data: {}, records: [], apiHits: 0, resolvedKeyword: keyword, tried: candidates };
 }
 
 /** 発言本文から冒頭の挨拶・呼びかけを軽く除去 */

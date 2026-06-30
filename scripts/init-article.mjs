@@ -16,7 +16,7 @@
 import { readFile, writeFile, mkdir, access } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { fetchSpeech, pickSpeech, scoreSpeechRelevance, excerptSpeech } from "./lib/kokkai-api.mjs";
+import { fetchSpeechForKeyword, pickSpeech, scoreSpeechRelevance, excerptSpeech } from "./lib/kokkai-api.mjs";
 import { buildNowSummaryBullets, buildGlossary, AI_DISCLAIMER } from "./lib/article-summary.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -65,15 +65,21 @@ console.log(`[init-article] slug=${slug} keyword="${keyword}" from=${from}〜${u
 
 // --- 国会API取得（最大100件で良質な発言を確保）---
 console.log("国会議事録API取得中...");
-const data = await fetchSpeech({ any: keyword, from, until, maximumRecords: 100 });
-const records = data.speechRecord ?? [];
-const apiHits = parseInt(data.numberOfRecords ?? "0", 10);
+const fetched = await fetchSpeechForKeyword(keyword, { from, until, maximumRecords: 100 });
+const records = fetched.records;
+const apiHits = fetched.apiHits;
+const searchKeyword = fetched.resolvedKeyword;
+if (searchKeyword !== keyword) {
+  console.log(`  キーワードフォールバック: "${keyword}" → "${searchKeyword}"`);
+}
 console.log(`  ${apiHits}件ヒット、${records.length}件取得`);
 
 // --- ベスト発言を選出 ---
-const best = pickSpeech(records, keyword);
+const best = pickSpeech(records, searchKeyword);
 if (!best) {
-  console.error("有効な発言が見つかりませんでした。--keyword を変えてみてください。");
+  console.error("有効な発言が見つかりませんでした。");
+  console.error(`  試行: ${fetched.tried.join(" → ")}`);
+  console.error("  --keyword を短くする（例: 国旗損壊罪）か別語にしてください。");
   process.exit(1);
 }
 
@@ -81,7 +87,7 @@ if (!best) {
 const byDate = new Map();
 for (const r of records) {
   if (!r.date || !r.speech) continue;
-  const score = scoreSpeechRelevance(r, keyword);
+  const score = scoreSpeechRelevance(r, searchKeyword);
   if (score < 5) continue;
   const prev = byDate.get(r.date);
   if (!prev || score > prev.score) {
@@ -98,7 +104,7 @@ const arcSummary = [...byDate.entries()]
   }));
 
 // --- nowSummary ---
-const keywords = keyword.split(/\s+/).filter(Boolean);
+const keywords = searchKeyword.split(/\s+/).filter(Boolean);
 const nowBullets = buildNowSummaryBullets(best.speech, keywords);
 const nowSummary = {
   label: "いまの結論",
@@ -172,7 +178,7 @@ const article = {
   title,
   tags,
   category,
-  searchKeyword: keyword,
+  searchKeyword,
   fetchedAt: new Date().toISOString(),
   apiHits,
   nowSummary,
