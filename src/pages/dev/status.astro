@@ -32,7 +32,7 @@ function formatJa(iso) {
       <h1 class="status-page__title">サイト完成度</h1>
       <p class="status-page__lead">
         active {status?.activeCount ?? 0} 件を <strong>100%完成</strong> まで仕上げてから次を増やす方針です。
-        完成度は <strong>30秒ごとにライブ更新</strong>（巡回の進捗をそのまま反映。デプロイ待ち不要）。
+        完成度は <strong>15秒ごとにライブ更新</strong>（巡回の進捗をそのまま反映。デプロイ待ち不要）。
       </p>
 
       <!-- 新規記事作成UI -->
@@ -56,6 +56,7 @@ function formatJa(iso) {
                 <span class="status-hero__sub">100%完成</span>
               </div>
               <p class="status-hero__live" id="status-live-badge" hidden aria-live="polite">● ライブ更新中</p>
+              <p class="status-hero__live status-hero__live--error" id="status-live-error" hidden aria-live="assertive"></p>
               <dl class="status-hero__stats">
                 <div><dt>一般公開</dt><dd id="stat-published">{status.publishedCount} / {status.activeCount} 件</dd></div>
                 <div><dt>保留（parked）</dt><dd id="stat-parked">{status.parkedCount} 件</dd></div>
@@ -484,14 +485,53 @@ async function refreshLiveStatus() {
   const pin = getPin();
   if (!pin) return;
   const badge = document.getElementById("status-live-badge");
+  const err = document.getElementById("status-live-error");
   try {
-    const res = await fetch(`/api/project-status?pin=${encodeURIComponent(pin)}&t=${Date.now()}`);
-    const data = await res.json();
-    if (!res.ok || !data.ok || !data.status) return;
-    applyLiveStatus(data.status);
+    let st = null;
+    const ts = Date.now();
+
+    const r1 = await fetch(`/api/project-status?pin=${encodeURIComponent(pin)}&t=${ts}`);
+    if (r1.ok) {
+      const ct = r1.headers.get("content-type") || "";
+      if (ct.includes("application/json")) {
+        const d1 = await r1.json();
+        if (d1.ok && d1.status) st = d1.status;
+      }
+    }
+
+    if (!st) {
+      const r2 = await fetch(`/api/admin-status?pin=${encodeURIComponent(pin)}&t=${ts}`);
+      if (r2.ok) {
+        const d2 = await r2.json();
+        if (d2.projectStatus) st = d2.projectStatus;
+        if (d2.deployFailed && err) {
+          err.hidden = false;
+          err.textContent = "⚠ 直近のデプロイ失敗 — 完成度はライブ、記事HTMLは古い可能性";
+        }
+      }
+    }
+
+    if (!st) {
+      const r3 = await fetch(`/status-live.json?t=${ts}`);
+      if (r3.ok) st = await r3.json();
+    }
+
+    if (!st) {
+      if (err) {
+        err.hidden = false;
+        err.textContent = "⚠ ライブ取得失敗 — 再試行中…";
+      }
+      return;
+    }
+
+    applyLiveStatus(st);
     if (badge) badge.hidden = false;
+    if (err) err.hidden = true;
   } catch {
-    /* 次回リトライ */
+    if (err) {
+      err.hidden = false;
+      err.textContent = "⚠ ライブ取得エラー — 再試行中…";
+    }
   }
 }
 
@@ -545,7 +585,7 @@ function startLiveStatusPoll() {
   refreshLiveStatus();
   refreshBufferStatus();
   initAdminPager();
-  liveStatusTimer = setInterval(refreshLiveStatus, 30000);
+  setInterval(refreshLiveStatus, 15000);
   setInterval(refreshBufferStatus, 15000);
 }
 

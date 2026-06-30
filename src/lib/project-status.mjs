@@ -307,6 +307,8 @@ export async function refreshProjectStatus() {
   status.deployedAt = previousDeployedAt;
 
   await writeFile(outPath, `${JSON.stringify(status, null, 2)}\n`, "utf8");
+  const livePath = path.join(root, "public/status-live.json");
+  await writeFile(livePath, `${JSON.stringify(status, null, 2)}\n`, "utf8");
   return status;
 }
 

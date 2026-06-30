@@ -15,17 +15,23 @@ export async function onRequestGet(context) {
   }
 
   const perPage = 12;
-  const res = await fetch(
-    `https://api.github.com/repos/jin-log/kokkai-voice/actions/runs?per_page=${perPage}&branch=main`,
-    { headers: ghHeaders(GH_TOKEN) },
-  );
+  const [runsRes, statusRes] = await Promise.all([
+    fetch(
+      `https://api.github.com/repos/jin-log/kokkai-voice/actions/runs?per_page=${perPage}&branch=main`,
+      { headers: ghHeaders(GH_TOKEN) },
+    ),
+    fetch(
+      "https://api.github.com/repos/jin-log/kokkai-voice/contents/data/project-status.json?ref=main",
+      { headers: ghHeaders(GH_TOKEN) },
+    ),
+  ]);
 
-  if (!res.ok) {
-    const detail = await res.text();
-    return json({ error: `GitHub API ${res.status}`, detail }, 500);
+  if (!runsRes.ok) {
+    const detail = await runsRes.text();
+    return json({ error: `GitHub API ${runsRes.status}`, detail }, 500);
   }
 
-  const data = await res.json();
+  const data = await runsRes.json();
   const runs = (data.workflow_runs ?? []).map((r) => {
     const slugHint = parseSlugFromRun(r);
     return {
@@ -46,6 +52,22 @@ export async function onRequestGet(context) {
   const active = runs.filter((r) => r.inProgress);
   const recentFailed = runs.filter((r) => r.conclusion === "failure").slice(0, 3);
 
+  let projectStatus = null;
+  if (statusRes.ok) {
+    try {
+      const meta = await statusRes.json();
+      if (meta.content) {
+        projectStatus = JSON.parse(atob(meta.content.replace(/\n/g, "")));
+      }
+    } catch {
+      /* 完成度だけ失敗 — Actions 情報は返す */
+    }
+  }
+
+  const deployFailed = runs.some(
+    (r) => r.name === "Deploy to Cloudflare Pages" && r.conclusion === "failure",
+  );
+
   return json({
     ok: true,
     fetchedAt: new Date().toISOString(),
@@ -53,6 +75,8 @@ export async function onRequestGet(context) {
     active,
     recentFailed,
     runs,
+    projectStatus,
+    deployFailed,
     /** slug → いま動いている workflow 名 */
     activeBySlug: buildActiveBySlug(runs),
   });
