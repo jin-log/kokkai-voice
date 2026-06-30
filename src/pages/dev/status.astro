@@ -12,6 +12,8 @@ const adminCounts = status
       action: status.slugs.filter((s) => adminSlugFilter(s) === "action").length,
       draft: status.slugs.filter((s) => adminSlugFilter(s) === "draft").length,
       live: status.slugs.filter((s) => adminSlugFilter(s) === "live").length,
+      hidden: status.slugs.filter((s) => adminSlugFilter(s) === "hidden").length,
+      qualityNg: status.qualityFailed ?? status.slugs.filter((s) => s.needsQualityFix).length,
       all: status.slugs.length,
     }
   : null;
@@ -160,6 +162,7 @@ function formatJa(iso) {
                       )}
                       {s.publishState === "draft" && <span class="status-card__badge status-card__badge--draft">完成・非公開</span>}
                       {s.publishState === "live" && <span class="status-card__badge status-card__badge--live">公開中</span>}
+                      {s.needsQualityFix && <span class="status-card__badge status-card__badge--quality">品質NG</span>}
                       {s.adminHidden && <span class="status-card__badge">非表示</span>}
                     </h3>
                     <span class="status-card__pct">{s.goldPct}%</span>
@@ -270,7 +273,8 @@ function formatJa(iso) {
             <section class="status-legend">
               <h2>状態の見方</h2>
               <ul class="status-legend__states">
-                <li><strong>要対応タブ</strong> — 制作中・非表示（公開済みは別タブ）</li>
+                <li><strong>要対応タブ</strong> — 制作中（①〜④未完了）。公開済みは「公開済み」タブ</li>
+                <li><strong>品質NG</strong> — 公開中でもバッジ表示。ゲートとは別（スクショ・数値等）</li>
                 <li><strong>📋 完成・非公開</strong> — プレビューで確認 →「公開する」</li>
                 <li><strong>✅ 公開中</strong> — 一般ユーザーに /case/ で表示</li>
                 <li><strong>X / はてブ / note</strong> — 紹介済みは緑✓＋日付、未は —</li>

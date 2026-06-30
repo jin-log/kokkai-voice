@@ -187,7 +187,7 @@ export async function computeProjectStatus() {
 
     let publishState = "wip";
     if (article.adminHidden) publishState = "hidden";
-    else if (pageReady && fullyReady) publishState = "live";
+    else if (pageReady) publishState = "live";
     else if (publishGateOk) publishState = "draft";
 
     slugs.push({
@@ -199,6 +199,7 @@ export async function computeProjectStatus() {
       publishState,
       previewUrl: !article.adminHidden ? `/dev/preview/${slug}/` : null,
       qualityOk: quality.ok,
+      needsQualityFix: !quality.ok,
       qualityBlockerCount: quality.blockers.length,
       qualityBlockers: quality.blockers.slice(0, 6).map((q) => ({
         id: q.id,
@@ -215,7 +216,7 @@ export async function computeProjectStatus() {
         pipeline.filter((p) => p.ok).length,
         pipeline.length,
       ),
-      published: pageReady && fullyReady,
+      published: pageReady && !article.adminHidden,
       publishGateOk,
       pipeline,
       gold: pipeline,
@@ -255,11 +256,10 @@ export async function computeProjectStatus() {
   };
 }
 
-/** 管理画面: 品質NGを最優先で要対応に */
+/** 管理画面タブ: 公開状態ベース（品質NGはバッジ表示・タブは動かさない） */
 export function sortSlugsForAdminPanel(slugs) {
   const rank = (s) => {
-    if (!s.qualityOk && s.publishState !== "live") return 5;
-    if (s.publishState === "live" && !s.adminHidden) return 40;
+    if (s.publishState === "live" && !s.adminHidden) return s.needsQualityFix ? 35 : 40;
     if (s.adminHidden) return 30;
     if (s.publishState === "draft") return 20;
     return 10;
@@ -276,8 +276,8 @@ export function sortSlugsForAdminPanel(slugs) {
 
 /** @param {ReturnType<typeof sortSlugsForAdminPanel>[number]} s */
 export function adminSlugFilter(s) {
-  if (!s.qualityOk || (s.qualityBlockerCount ?? 0) > 0) return "action";
-  if (s.publishState === "live" && !s.adminHidden) return "live";
+  if (s.adminHidden) return "hidden";
+  if (s.publishState === "live") return "live";
   if (s.publishState === "draft") return "draft";
   return "action";
 }
