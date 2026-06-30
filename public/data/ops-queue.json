@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-30T11:00:00.000Z",
+  "generatedAt": "2026-06-30T14:00:00.000Z",
   "generatedBy": "ceo",
   "dayLabel": "2026-06-30（月）",
   "ownerDailyCap": 7,
@@ -208,27 +208,77 @@
       "done": false
     },
     {
-      "id": "ceo-kv-free-pr-submit",
+      "id": "ceo-kv-hatena-note-secrets",
       "project": "kokkai-voice",
-      "title": "無料PR配信 — PR-FREE/PRESSNOW/ぷれりり等",
+      "title": "はてな・note — GitHub Secrets 登録（公開連動）",
+      "assignee": "ceo",
+      "horizon": "today",
+      "priority": 0,
+      "score": 920,
+      "etaMin": 30,
+      "tags": ["はてブ", "note", "自動化"],
+      "content": {
+        "summary": "記事公開→deploy後に promo-on-publish.yml が走る。Profile 9 から storageState を export し Secrets に登録。",
+        "steps": [
+          "Profile 9 の Chrome を全部閉じる",
+          "npm run browser:export-state",
+          "GitHub Secrets: HATENA_BROWSER_STATE ← secrets/browser/state-hatena.json 全文",
+          "GitHub Secrets: NOTE_BROWSER_STATE ← secrets/browser/state-note.json 全文",
+          "テスト: 管理画面で記事公開 → Actions「公開時プロモ」ログ確認"
+        ]
+      },
+      "links": [
+        { "label": "手順", "href": "/docs/win-setup.md" }
+      ],
+      "done": false
+    },
+    {
+      "id": "ceo-kv-free-pr-all",
+      "project": "kokkai-voice",
+      "title": "無料PR — 出せる所は全部出す（0円のみ）",
       "assignee": "ceo",
       "horizon": "week",
-      "priority": 1,
-      "score": 700,
-      "etaMin": 90,
+      "priority": 0,
+      "score": 850,
+      "etaMin": 240,
       "tags": ["PR", "集客", "0円"],
       "content": {
-        "summary": "docs/marketing-report-ceo.md §1 に5サイト＋無料枠あり3件記載済み。未投稿なら β公開告知文案で3〜4本併用。",
+        "summary": "方針: 無料・無料枠のみ。有料PR TIMES単体は後回し。文案1本を軸に全チャネルへ。",
+        "sites": {
+          "完全無料_必須5": [
+            "PR-FREE (pr-free.jp)",
+            "PRESSNOW (pressnow.jp)",
+            "ぷれりり (prerele.com)",
+            "リンクプレス (linkpress.jp)",
+            "PressGrid (pressgrid.jp)"
+          ],
+          "無料枠_条件付き": [
+            "PRONE フリープラン (prone.jp) — 記者向けネタ月1",
+            "商工会議所×PR TIMES 無料3件 — オーナー所属CCI要確認",
+            "PR TIMESスタートアップ — アイビスは対象外"
+          ],
+          "ディレクトリ_pitch_0円": [
+            "Product Hunt / Peerlist（英語1本）",
+            "Astro showcase 掲載申請",
+            "政治・社会系メディア編集部メール",
+            "THE BRIDGE pitch",
+            "Espresso Hub スターター登録",
+            "Podcast / 大学講座 pitch"
+          ]
+        },
         "steps": [
-          "文案1本確定（「あの話どうなった？ × 削除済みXスクショ」）",
-          "PR-FREE → PRESSNOW → ぷれりり（別日でも可）",
-          "リンクプレス・PressGrid は予備",
-          "release-taskboard M4 と突合"
+          "文案確定: 「あの話どうなった？×削除済みXスクショ」＋代表案件URL",
+          "完全無料5サイト — 同日〜1週間で順次投稿",
+          "PRONE フリー — 取材ネタ1枚登録",
+          "CCI無料枠 — オーナー確認後1枠",
+          "ディレクトリ・pitch — 週2本ペースで消化",
+          "投稿日・URLをスプレッドシート or promo-intro-log に記録"
         ]
       },
       "links": [
         { "label": "無料PR一覧", "href": "/docs/marketing-report-ceo.md" },
-        { "label": "0円プレイブック", "href": "/docs/traffic-zero-cost-playbook.md" }
+        { "label": "プレイブック C章", "href": "/docs/traffic-zero-cost-playbook.md" },
+        { "label": "文案", "href": "/docs/pr/pre-release-announce.md" }
       ],
       "done": false
     },
