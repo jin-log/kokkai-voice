@@ -129,6 +129,82 @@ const turnstileKey = SITE.turnstileSiteKey;
           scanTimer = setTimeout(scanLegal, 350);
         }
 
+        function renderCommentNode(c, { isReply = false } = {}) {
+          const li = document.createElement("li");
+          li.className = isReply ? "comment comment--reply" : "comment";
+          li.dataset.commentId = c.id;
+          const goodActive = c.myReaction === "good" ? " is-active" : "";
+          const badActive = c.myReaction === "bad" ? " is-active" : "";
+          li.innerHTML = `
+            <div class="comment__author"></div>
+            <p class="comment__body"></p>
+            <div class="comment__actions">
+              <button type="button" class="comment__react comment__react--good${goodActive}" data-react="good" aria-pressed="${c.myReaction === "good"}">
+                👍 <span class="comment__react-num">${c.good ?? 0}</span>
+              </button>
+              <button type="button" class="comment__react comment__react--bad${badActive}" data-react="bad" aria-pressed="${c.myReaction === "bad"}">
+                👎 <span class="comment__react-num">${c.bad ?? 0}</span>
+              </button>
+              ${isReply ? "" : '<button type="button" class="comment__reply-btn">返信</button>'}
+              <span class="comment__time"></span>
+              <button type="button" class="comment__report" data-comment-id="">通報</button>
+            </div>
+            <form class="comment__reply-form" hidden>
+              <textarea name="body" placeholder="返信を入力…" maxlength="500" required aria-label="返信"></textarea>
+              <button type="submit" class="btn btn--primary btn--sm">返信する</button>
+              <button type="button" class="comment__reply-cancel">キャンセル</button>
+            </form>
+            <ul class="comment__replies"></ul>`;
+          li.querySelector(".comment__author").textContent = c.name || "匿名";
+          li.querySelector(".comment__body").textContent = c.body;
+          li.querySelector(".comment__time").textContent = c.at
+            ? new Date(c.at).toLocaleString("ja-JP")
+            : "";
+
+          const reportBtn = li.querySelector(".comment__report");
+          reportBtn.dataset.commentId = c.id;
+          reportBtn.addEventListener("click", () => reportComment(c.id, reportBtn));
+
+          li.querySelectorAll(".comment__react").forEach((btn) => {
+            btn.addEventListener("click", () => voteComment(c.id, btn));
+          });
+
+          const replyBtn = li.querySelector(".comment__reply-btn");
+          const replyForm = li.querySelector(".comment__reply-form");
+          const replyCancel = li.querySelector(".comment__reply-cancel");
+          replyBtn?.addEventListener("click", () => {
+            replyForm.hidden = !replyForm.hidden;
+            if (!replyForm.hidden) replyForm.querySelector("textarea")?.focus();
+          });
+          replyCancel?.addEventListener("click", () => {
+            replyForm.hidden = true;
+            replyForm.reset();
+          });
+          replyForm?.addEventListener("submit", (e) => submitReply(e, c.id, replyForm));
+
+          const repliesUl = li.querySelector(".comment__replies");
+          for (const child of c.replies ?? []) {
+            repliesUl.appendChild(renderCommentNode(child, { isReply: true }));
+          }
+          return li;
+        }
+
+        function buildCommentTree(comments) {
+          const byId = new Map();
+          const roots = [];
+          for (const c of comments) {
+            byId.set(c.id, { ...c, replies: [] });
+          }
+          for (const c of byId.values()) {
+            if (c.parentId && byId.has(c.parentId)) {
+              byId.get(c.parentId).replies.push(c);
+            } else {
+              roots.push(c);
+            }
+          }
+          return roots;
+        }
+
         function renderApproved(comments) {
           const list = document.querySelector("[data-comment-list]");
           if (!list) return;
@@ -137,20 +213,61 @@ const turnstileKey = SITE.turnstileSiteKey;
             return;
           }
           list.innerHTML = "";
-          for (const c of comments) {
-            const li = document.createElement("li");
-            li.className = "comment";
-            li.innerHTML = `<div class="comment__author"></div><p class="comment__body"></p><div class="comment__meta"><span class="comment__time"></span><button type="button" class="comment__report" data-comment-id="">通報</button></div>`;
-            li.querySelector(".comment__author").textContent = c.name || "匿名";
-            li.querySelector(".comment__body").textContent = c.body;
-            li.querySelector(".comment__time").textContent = c.at
-              ? new Date(c.at).toLocaleString("ja-JP")
-              : "";
-            const reportBtn = li.querySelector(".comment__report");
-            reportBtn.dataset.commentId = c.id;
-            reportBtn.addEventListener("click", () => reportComment(c.id, reportBtn));
-            list.appendChild(li);
+          for (const c of buildCommentTree(comments)) {
+            list.appendChild(renderCommentNode(c));
           }
+        }
+
+        async function voteComment(commentId, btn) {
+          const kind = btn.dataset.react;
+          const isActive = btn.classList.contains("is-active");
+          const reaction = isActive ? "clear" : kind;
+          btn.disabled = true;
+          const res = await fetch("/api/comments-react", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ commentId, slug, reaction }),
+          });
+          btn.disabled = false;
+          if (!res.ok) return;
+          const data = await res.json();
+          const row = btn.closest(".comment");
+          const goodBtn = row?.querySelector('[data-react="good"]');
+          const badBtn = row?.querySelector('[data-react="bad"]');
+          if (goodBtn) {
+            goodBtn.classList.toggle("is-active", data.myReaction === "good");
+            goodBtn.setAttribute("aria-pressed", data.myReaction === "good" ? "true" : "false");
+            goodBtn.querySelector(".comment__react-num").textContent = String(data.good ?? 0);
+          }
+          if (badBtn) {
+            badBtn.classList.toggle("is-active", data.myReaction === "bad");
+            badBtn.setAttribute("aria-pressed", data.myReaction === "bad" ? "true" : "false");
+            badBtn.querySelector(".comment__react-num").textContent = String(data.bad ?? 0);
+          }
+        }
+
+        async function submitReply(e, parentId, replyForm) {
+          e.preventDefault();
+          const body = replyForm.body.value.trim();
+          const acceptedTerms = Boolean(termsBox?.checked);
+          if (!body || hardBlocked || !acceptedTerms) {
+            if (!acceptedTerms) alert("規約への同意が必要です。");
+            return;
+          }
+          const name = form?.name?.value?.trim() ?? "";
+          const res = await fetch("/api/comments", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ slug, name, body, parentId, acceptedTerms }),
+          });
+          const data = await res.json().catch(() => ({}));
+          if (!res.ok) {
+            alert(data.error || "返信に失敗しました。");
+            return;
+          }
+          replyForm.reset();
+          replyForm.hidden = true;
+          await loadComments();
         }
 
         async function reportComment(commentId, btn) {

@@ -6,13 +6,14 @@ import { ASSET_V } from "../lib/case-helpers.mjs";
 interface Props {
   showSearch?: boolean;
   searchQuery?: string;
+  caseTitle?: string;
 }
 
-const { showSearch = false, searchQuery = "" } = Astro.props;
+const { showSearch = false, searchQuery = "", caseTitle = "" } = Astro.props;
 const noteHref = noteMembershipLink("header");
 ---
 
-<header class="site-header">
+<header class="site-header" data-site-header>
   <div class="container site-header__inner site-header__inner--search">
     <a class="logo" href="/">
       <img
@@ -66,4 +67,13 @@ const noteHref = noteMembershipLink("header");
       <a href="/search" class="nav__all-btn">すべての案件</a>
     </nav>
   </div>
+  {
+    caseTitle && (
+      <div class="site-header__case" data-header-case aria-hidden="true">
+        <div class="container">
+          <p class="site-header__case-title">{caseTitle}</p>
+        </div>
+      </div>
+    )
+  }
 </header>

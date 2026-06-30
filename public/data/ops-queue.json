@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-06-29T20:00:00.000Z",
+  "generatedAt": "2026-06-27T14:00:00.000Z",
   "generatedBy": "ceo",
-  "dayLabel": "2026-06-29（日）",
+  "dayLabel": "2026-06-27（土）",
   "ownerDailyCap": 7,
   "projects": {
     "jin-log": { "label": "jin-log", "weight": 100, "color": "#2d6a4f" },
@@ -12,6 +12,244 @@
     "personal": { "label": "個人", "weight": 10, "color": "#64748b" }
   },
   "tasks": [
+    {
+      "id": "owner-sushi-venue-today",
+      "project": "sushi-sonic",
+      "title": "🔥 SUSHI SONIC — 会場決定（本日中）",
+      "assignee": "owner",
+      "horizon": "today",
+      "priority": 0,
+      "score": 980,
+      "etaMin": 60,
+      "tags": ["急務", "7月イベント"],
+      "content": {
+        "summary": "次回イベントの場所を本日中に確定。決まり次第CEOへ共有（フライヤー・招致資料に反映）。",
+        "steps": [
+          "候補地・時間帯・定員の最終決定",
+          "World/エリア名・座標 or リンクをメモ",
+          "フライヤー撮影に行けるメンバーへ連絡"
+        ]
+      },
+      "links": [
+        { "label": "イベント企画", "href": "/docs/" }
+      ],
+      "done": false
+    },
+    {
+      "id": "owner-sushi-flyer-shoot-today",
+      "project": "sushi-sonic",
+      "title": "🔥 SUSHI SONIC — フライヤー撮影（行ける人は今日）",
+      "assignee": "owner",
+      "horizon": "today",
+      "priority": 0,
+      "score": 960,
+      "etaMin": 90,
+      "tags": ["急務", "フライヤー"],
+      "content": {
+        "summary": "会場確定後、当日中にフライヤー用スクショ・集合写真等を撮影。行ける出演者・スタッフは今日対応。",
+        "steps": [
+          "会場決定を待つ（owner-sushi-venue-today）",
+          "FF14内スクショ or 実写素材を撮影",
+          "CEOへ素材渡し → フライヤー組版"
+        ]
+      },
+      "done": false
+    },
+    {
+      "id": "ceo-sushi-shop-pitch",
+      "project": "sushi-sonic",
+      "title": "SUSHI SONIC — 店舗招致資料（PDF/slides）",
+      "assignee": "ceo",
+      "horizon": "today",
+      "priority": 0,
+      "score": 900,
+      "etaMin": 120,
+      "tags": ["急務", "店舗協力"],
+      "content": {
+        "summary": "協力店・スポンサー向け1枚〜数枚。コンセプト・実績・来場者層・協力メリット・連絡先。会場確定後に日時を差替。",
+        "steps": [
+          "テンプレ骨子（過去告知・出演者リスト参照）",
+          "会場・日時確定後に差替",
+          "PDF or Googleスライドでオーナー確認"
+        ]
+      },
+      "links": [
+        { "label": "出演者リスト", "href": "/docs/" }
+      ],
+      "done": false
+    },
+    {
+      "id": "ceo-ff14-farewell-format",
+      "project": "sushi-sonic",
+      "title": "FF14 — お別れキャラ匿名メッセージ＋振り返り配信の形式",
+      "assignee": "ceo",
+      "horizon": "weekly",
+      "priority": 1,
+      "score": 700,
+      "etaMin": 90,
+      "tags": ["FF14", "企画", "配信形式"],
+      "content": {
+        "summary": "お別れしたキャラへ匿名/ペンネームでメッセージ募集 → 配信で皆で振り返る。DJ配信だと本編と混ざってブレる懸念あり。",
+        "steps": [
+          "募集フォーム案（Google Forms / 匿名投稿）",
+          "形式比較: ①ラジオ専用回 ②DJ前後30分トーク ③Discordボイス+画面共有 ④テキストスクロールのみ",
+          "CEO推奨案を1つに絞ってオーナー判断",
+          "SUSHI SONIC告知文テンプレへ落とし込み"
+        ],
+        "proposal": {
+          "recommended": "ラジオ専用回（30〜45分）— DJセットと分離。メッセージを画面表示しながら読み上げ/トークのみ。Twitchカテゴリも「Just Chatting」寄りでブレない。",
+          "avoid": "本編DJ MIXの途中に挟む — テンポと世界観が崩れる",
+          "alt": "DJ配信のオープニング15分だけ「メッセージ朗読」→本編へ切替（短くまとめる場合）"
+        }
+      },
+      "done": false
+    },
+    {
+      "id": "ceo-ff14-charcard-generator",
+      "project": "personal",
+      "title": "FF14 — キャラカードジェネレーター作成",
+      "assignee": "ceo",
+      "horizon": "weekly",
+      "priority": 2,
+      "score": 550,
+      "etaMin": 180,
+      "tags": ["FF14", "ツール"],
+      "content": {
+        "summary": "キャラ情報入力 → 画像カード出力。SUSHI SONIC告知・DJプロフィールにも流用可。",
+        "steps": [
+          "入力項目定義（名前・World・ジョブ・一言・スクショ）",
+          "HTML/CSS or Canvas でテンプレ",
+          "PNG/WebP ダウンロード",
+          "必要なら samples/ でプレビュー"
+        ]
+      },
+      "done": false
+    },
+    {
+      "id": "ceo-jin-log-content-marketing",
+      "project": "jin-log",
+      "title": "jin-log — 記事更新＋マーケ自動化",
+      "assignee": "ceo",
+      "horizon": "weekly",
+      "priority": 0,
+      "score": 800,
+      "etaMin": 240,
+      "tags": ["副収入最優先", "自動化"],
+      "content": {
+        "summary": "旗艦記事の更新ルーチン化＋X/はてブ/note文案の半自動生成。アフィ修復（ASPタグ）と並行。",
+        "steps": [
+          "更新対象記事の優先順位（PV・リンク切れ・アフィ死）",
+          "1本更新→ promo-pack 相当の文案自動",
+          "新規20本は jin-log-articles-20 と統合管理",
+          "jin-log-asp-login 完了後にアフィ差替スクリプト実行"
+        ]
+      },
+      "links": [
+        { "label": "jin92.net", "href": "https://jin92.net" }
+      ],
+      "done": false
+    },
+    {
+      "id": "ceo-kv-press-release",
+      "project": "kokkai-voice",
+      "title": "政治now — プレスリリース（仕様安定後）＋有料PR提案",
+      "assignee": "ceo",
+      "horizon": "weekly",
+      "priority": 2,
+      "score": 620,
+      "etaMin": 90,
+      "tags": ["PR", "マーケ", "判断待ち"],
+      "content": {
+        "summary": "サイト・Shorts・タイムラインが安定してから。無料チャネル優先。有料は安いプラン試し可 — 下記CEO提案をオーナー判断。",
+        "steps": [
+          "前提: 公開記事25本+・Shorts3本+・タイムラインX v2本番安定",
+          "無料: note/X thread/はてブ政治/Google News用サイトマップ確認",
+          "有料候補の比較表を docs に1枚",
+          "オーナーGO後にリリース文案＋配信"
+        ],
+        "spendProposal": {
+          "bestFree": [
+            "自社 note「出典付き政治解説メディア開始」",
+            "X 固定スレッド＋案件URL",
+            "はてブ政治カテゴリ（背景3行付き）",
+            "YouTube Shorts 説明欄→サイト導線（既存）"
+          ],
+          "bestPaidIfAny": [
+            {
+              "option": "PR TIMES スタート/ライト（初回1本）",
+              "cost": "約2.5〜4万円/本",
+              "why": "メディア引用・被リンク・「メディアとしての体裁」。初回のみで十分",
+              "roi": "中 — 認知は上がるがPV直結は弱い"
+            },
+            {
+              "option": "Google検索広告（超ニッチKW）",
+              "cost": "月1〜2万テスト",
+              "why": "「国会 議事録 わかりやすく」等",
+              "roi": "低〜中 — 記事数が少ないうちは非推奨"
+            },
+            {
+              "option": "X プロモ（案件1本ブースト）",
+              "cost": "5千〜1万/本",
+              "why": "政治アカウントはCPC高め",
+              "roi": "低 — オーガニック優先"
+            }
+          ],
+          "ceoRecommendation": "有料するなら **PR TIMES 初回1本のみ（3万前後）**。それ以外は Shorts→サイトSEO→はてブ の方がROI高。広告は記事30本＋Search Console流入後。"
+        }
+      },
+      "links": [
+        { "label": "サイト", "href": "https://seiji1192.site" },
+        { "label": "トラフィック playbook", "href": "/docs/traffic-zero-cost-playbook.md" }
+      ],
+      "done": false
+    },
+    {
+      "id": "owner-yt-shorts-studio",
+      "project": "kokkai-voice",
+      "title": "YouTube 1本目 — 固定コメント差替・公開確認",
+      "assignee": "owner",
+      "horizon": "today",
+      "priority": 0,
+      "score": 920,
+      "etaMin": 10,
+      "tags": ["Shorts", "Studio手動"],
+      "content": {
+        "summary": "180再生・1いいね。固定コメントを「3.6兆円…効果出てる？」＋サイトURLに差替→ピン留め。AI開示済なら公開のまま。",
+        "steps": [
+          "Studio → 1本目 → コメント編集（output/shorts/shussho-budget-seika/youtube-upload.txt 参照）",
+          "ピン留め",
+          "説明欄に💬質問ブロック追記（任意）"
+        ]
+      },
+      "links": [
+        { "label": "Studio", "href": "https://studio.youtube.com/" },
+        { "label": "文案", "href": "/docs/youtube-channel-setup.md" }
+      ],
+      "done": false
+    },
+    {
+      "id": "ceo-yt-shorts-shoshika",
+      "project": "kokkai-voice",
+      "title": "YouTube 2本目 — shoshika 生成→アップ（3〜7日空け）",
+      "assignee": "ceo",
+      "horizon": "weekly",
+      "priority": 0,
+      "score": 860,
+      "etaMin": 45,
+      "tags": ["Shorts", "コメントCTA込み"],
+      "content": {
+        "summary": "npm run short:generate -- --slug shoshika → short:upload-pack → short:upload。末尾「あなたはどう思う？」テロップ済み。",
+        "steps": [
+          "1本目から3〜7日空ける",
+          "short:generate / short:upload -- --slug shoshika",
+          "Studioで固定コメントピン留め"
+        ]
+      },
+      "links": [
+        { "label": "アップロード手順", "href": "/docs/youtube-api-setup.md" }
+      ],
+      "done": false
+    },
     {
       "id": "ceo-kv-promo-automation",
       "project": "kokkai-voice",
@@ -96,23 +334,22 @@
     {
       "id": "ceo-kv-short-video-pipeline",
       "project": "kokkai-voice",
-      "title": "政治ショート動画 — 記事→音声・テロップ・映像→自動アップロード",
+      "title": "政治ショート動画 — Phase1完了・量産とTikTokは続き",
       "assignee": "ceo",
-      "horizon": "backlog",
-      "priority": 2,
-      "score": 780,
-      "etaMin": 480,
-      "tags": ["コンテンツ自動化", "Phase2", "YouTube Shorts"],
+      "horizon": "weekly",
+      "priority": 1,
+      "score": 740,
+      "etaMin": 120,
+      "tags": ["コンテンツ自動化", "YouTube Shorts", "Phase1✅"],
       "content": {
-        "summary": "記事JSONから最適尺（目安30〜60秒）の縦型ショートを自動生成。ナレーション音声・テロップ・それっぽいB-roll付き。完成品をYouTube Shorts（将来TikTok）へアップロードまで。手動編集は例外時のみ。",
+        "summary": "✅ Remotion F1×2本・TTS・YouTube OAuth/API・コメント促しテンプレ。残: 記事横展開・TikTok・サーバー常駐化。",
         "steps": [
-          "記事→台本生成（フック・数字・争点3点・CTAでサイトURL）。尺は文字数/読み上げ秒で自動調整",
-          "音声合成（TTS）選定・声質固定。テロップは読み上げタイムスタンプ同期",
-          "映像素材：国会/記事OGP/ストック（Pexels等）＋ニュース風テンプレ（ffmpeg or Remotion）",
-          "縦1080×1920・セーフゾーン・#政治now 透かし・出典表記をテンプレ化",
-          "1記事1本 or 週次バッチ。出力を R2/artifacts 保管→プレビューURL（任意）",
-          "YouTube Data API で Shorts 投稿（OAuthはオーナー1回）。失敗時は下書きフォルダ",
-          "法務：公人発言・要約の範囲内・誤認防止ディスクレーマー。docs に方針1枚"
+          "✅ shussho-budget-seika / shoshika パイロット",
+          "✅ npm run short:upload + 文案自動",
+          "✅ コメントCTA（動画末尾・説明・固定コメント）",
+          "次案件への F1 ビート追加",
+          "TikTok API 調査",
+          "ceo-kv-server-routines とジョブ統合"
         ],
         "inputs": [
           "data/articles/*.json（title, nowSummary, summaryBullets, slug）",
@@ -219,24 +456,20 @@
     {
       "id": "ceo-kv-gh-deploy-check",
       "project": "kokkai-voice",
-      "title": "GitHub Actions 自動デプロイの確認",
+      "title": "✅ GitHub Actions 自動デプロイ — push 成功確認",
       "assignee": "ceo",
-      "horizon": "weekly",
-      "priority": 2,
-      "score": 480,
-      "etaMin": 15,
+      "horizon": "backlog",
+      "priority": 9,
+      "score": 0,
+      "etaMin": 0,
+      "tags": ["完了", "自動化"],
       "content": {
-        "summary": "push 後に Actions が走らず、今回は手動 npm run deploy。次回以降自動化を確認。",
-        "steps": [
-          "Actions で 4b060e1 の Deploy workflow 成否確認",
-          "失敗なら secrets / ログ修正",
-          "空コミット or workflow_dispatch で再テスト"
-        ]
+        "summary": "2026-06-27 f562d11 push 成功。stock 動画は gitignore。Actions デプロイ監視のみ。"
       },
       "links": [
         { "label": "Actions", "href": "https://github.com/jin-log/kokkai-voice/actions" }
       ],
-      "done": false
+      "done": true
     },
     {
       "id": "kv-note-weekly",
@@ -426,6 +659,24 @@
       },
       "links": [
         { "label": "本番", "href": "https://seiji1192.site/case/shussho-budget-seika/" }
+      ],
+      "done": true
+    },
+    {
+      "id": "done-timeline-x-v2",
+      "project": "kokkai-voice",
+      "title": "✅ 経緯タイムライン X v2 — 出典色分け・サムネ・スクショ再取得",
+      "assignee": "ceo",
+      "horizon": "daily",
+      "priority": 9,
+      "score": 0,
+      "etaMin": 0,
+      "tags": ["完了"],
+      "content": {
+        "summary": "2026-06-27 deploy。出典バッジ（X/国会/出来事/出典）・220×124 thumb・真っ黒スクショ9件再取得・監査0。"
+      },
+      "links": [
+        { "label": "本番例", "href": "https://seiji1192.site/case/shussho-budget-seika/" }
       ],
       "done": true
     }
