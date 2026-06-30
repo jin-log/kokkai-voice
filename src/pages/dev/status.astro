@@ -86,7 +86,7 @@ function formatJa(iso) {
                     .slice(0, 12)
                     .map((s) => (
                       <li class="status-quality__item">
-                        <a href={s.previewUrl ?? `#`}>{s.shortTitle}</a>
+                        <a href={s.previewUrl ?? (s.publishState === "live" ? `/case/${s.slug}/` : `/dev/preview/${s.slug}/`)}>{s.shortTitle}</a>
                         <span class="status-quality__meta">
                           {s.qualityBlockerCount} 件 — {s.agentTasks?.[0]?.agentLabel ?? "ライター"}
                         </span>
@@ -124,16 +124,19 @@ function formatJa(iso) {
                 <h2>案件別</h2>
                 <nav class="status-slugs__tabs" id="admin-tabs" aria-label="表示フィルタ">
                   <button type="button" class="status-slugs__tab is-active" data-filter="action">
-                    要対応 <span class="status-slugs__count">{adminCounts?.action ?? 0}</span>
+                    要対応 <span class="status-slugs__count" id="tab-count-action">{adminCounts?.action ?? 0}</span>
                   </button>
                   <button type="button" class="status-slugs__tab" data-filter="draft">
-                    公開待ち <span class="status-slugs__count">{adminCounts?.draft ?? 0}</span>
+                    公開待ち <span class="status-slugs__count" id="tab-count-draft">{adminCounts?.draft ?? 0}</span>
                   </button>
                   <button type="button" class="status-slugs__tab" data-filter="live">
-                    公開済み <span class="status-slugs__count">{adminCounts?.live ?? 0}</span>
+                    公開済み <span class="status-slugs__count" id="tab-count-live">{adminCounts?.live ?? 0}</span>
+                  </button>
+                  <button type="button" class="status-slugs__tab" data-filter="hidden">
+                    非表示 <span class="status-slugs__count" id="tab-count-hidden">{adminCounts?.hidden ?? 0}</span>
                   </button>
                   <button type="button" class="status-slugs__tab" data-filter="all">
-                    すべて <span class="status-slugs__count">{adminCounts?.all ?? 0}</span>
+                    すべて <span class="status-slugs__count" id="tab-count-all">{adminCounts?.all ?? 0}</span>
                   </button>
                 </nav>
               </div>
@@ -272,10 +275,105 @@ function formatJa(iso) {
               <p class="status-slugs__empty" id="admin-empty" hidden>このタブに該当する案件はありません。</p>
             </section>
 
+            <script is:inline>
+            (function () {
+              const PAGE = 8;
+              let filter = "action";
+              let page = 1;
+
+              function render() {
+                const cards = [...document.querySelectorAll("#admin-cards .status-card")];
+                const matched = cards.filter((c) => {
+                  const f = c.getAttribute("data-admin-filter");
+                  return filter === "all" || f === filter;
+                });
+                const totalPages = Math.max(1, Math.ceil(matched.length / PAGE));
+                if (page > totalPages) page = totalPages;
+
+                cards.forEach((c) => { c.style.display = "none"; });
+                const start = (page - 1) * PAGE;
+                matched.slice(start, start + PAGE).forEach((c) => { c.style.display = ""; });
+
+                const pager = document.getElementById("admin-pager");
+                const label = document.getElementById("admin-page-label");
+                const empty = document.getElementById("admin-empty");
+                const hint = document.getElementById("admin-filter-hint");
+                const wrap = document.getElementById("admin-cards");
+
+                if (empty) empty.hidden = matched.length > 0;
+                if (pager) pager.hidden = matched.length <= PAGE;
+                if (label) label.textContent = `${page} / ${totalPages}（${matched.length}件）`;
+                const prev = document.getElementById("admin-prev");
+                const next = document.getElementById("admin-next");
+                if (prev) prev.disabled = page <= 1;
+                if (next) next.disabled = page >= totalPages;
+                if (hint) {
+                  const hints = {
+                    action: "制作中 — いま手を入れる案件",
+                    draft: "完成・非公開 — プレビュー確認後に公開",
+                    live: "公開済み — 一般公開中の案件",
+                    hidden: "非表示 — 管理画面から隠している案件",
+                    all: "全案件一覧",
+                  };
+                  hint.textContent = hints[filter] || "";
+                }
+                if (wrap) wrap.dataset.filterMode = filter;
+              }
+
+              function setFilter(next) {
+                filter = next;
+                page = 1;
+                const tabs = document.getElementById("admin-tabs");
+                tabs?.querySelectorAll("[data-filter]").forEach((btn) => {
+                  btn.classList.toggle("is-active", btn.getAttribute("data-filter") === filter);
+                });
+                render();
+                document.getElementById("admin-cards")?.scrollIntoView({ behavior: "smooth", block: "start" });
+                try {
+                  const u = new URL(location.href);
+                  u.searchParams.set("filter", filter);
+                  history.replaceState(null, "", u);
+                } catch { /* ignore */ }
+              }
+
+              function init() {
+                const tabs = document.getElementById("admin-tabs");
+                if (!tabs || tabs.dataset.ready === "1") return;
+                tabs.dataset.ready = "1";
+
+                const q = new URLSearchParams(location.search).get("filter");
+                if (q && ["action", "draft", "live", "hidden", "all"].includes(q)) filter = q;
+
+                tabs.querySelectorAll("[data-filter]").forEach((btn) => {
+                  btn.addEventListener("click", () => setFilter(btn.getAttribute("data-filter") || "action"));
+                });
+                document.getElementById("admin-prev")?.addEventListener("click", () => {
+                  if (page > 1) { page -= 1; render(); }
+                });
+                document.getElementById("admin-next")?.addEventListener("click", () => {
+                  page += 1; render();
+                });
+
+                tabs.querySelectorAll("[data-filter]").forEach((btn) => {
+                  btn.classList.toggle("is-active", btn.getAttribute("data-filter") === filter);
+                });
+                render();
+              }
+
+              window.kvAdminTabs = { init, render, setFilter };
+              if (document.readyState === "loading") {
+                document.addEventListener("DOMContentLoaded", init);
+              } else {
+                init();
+              }
+            })();
+            </script>
+
             <section class="status-legend">
               <h2>状態の見方</h2>
               <ul class="status-legend__states">
-                <li><strong>要対応タブ</strong> — 制作中（①〜④未完了）。公開済みは「公開済み」タブ</li>
+                <li><strong>要対応タブ</strong> — 制作中（①〜④未完了）</li>
+                <li><strong>非表示タブ</strong> — adminHidden の案件（10件など）</li>
                 <li><strong>品質NG</strong> — 公開中でもバッジ表示。ゲートとは別（スクショ・数値等）</li>
                 <li><strong>📋 完成・非公開</strong> — プレビューで確認 →「公開する」</li>
                 <li><strong>✅ 公開中</strong> — 一般ユーザーに /case/ で表示</li>
@@ -347,13 +445,13 @@ if (localStorage.getItem(KEY) === PIN) {
   });
 }
 
-document.getElementById("new-keyword").addEventListener("input", () => {
+document.getElementById("new-keyword")?.addEventListener("input", () => {
   const kw = document.getElementById("new-keyword").value.trim();
   if (!document.getElementById("new-title").dataset.manual) {
     document.getElementById("new-title").value = kw ? `${kw}（具体疑問タイトルに編集）` : "";
   }
 });
-document.getElementById("new-title").addEventListener("input", () => {
+document.getElementById("new-title")?.addEventListener("input", () => {
   document.getElementById("new-title").dataset.manual = "1";
 });
 
@@ -577,14 +675,36 @@ function applyLiveStatus(st) {
     const bar = card.querySelector(".status-card__bar");
     if (bar) bar.setAttribute("aria-valuenow", String(s.goldPct));
   }
+
+  const counts = { action: 0, draft: 0, live: 0, hidden: 0, all: st.slugs?.length ?? 0 };
+  for (const s of st.slugs ?? []) {
+    if (s.adminHidden) counts.hidden += 1;
+    else if (s.publishState === "live") counts.live += 1;
+    else if (s.publishState === "draft") counts.draft += 1;
+    else counts.action += 1;
+  }
+  const countMap = {
+    action: "tab-count-action",
+    draft: "tab-count-draft",
+    live: "tab-count-live",
+    hidden: "tab-count-hidden",
+    all: "tab-count-all",
+  };
+  for (const [key, id] of Object.entries(countMap)) {
+    const el = document.getElementById(id);
+    if (el) el.textContent = String(counts[key] ?? 0);
+  }
+
+  window.kvAdminTabs?.render?.();
 }
 
 let liveStatusTimer = null;
 function startLiveStatusPoll() {
   if (liveStatusTimer) return;
+  liveStatusTimer = true;
   refreshLiveStatus();
   refreshBufferStatus();
-  initAdminPager();
+  window.kvAdminTabs?.init?.();
   setInterval(refreshLiveStatus, 15000);
   setInterval(refreshBufferStatus, 15000);
 }
@@ -665,83 +785,6 @@ async function refreshBufferStatus() {
       fixes.innerHTML = "";
     }
   }
-}
-
-const ADMIN_PAGE_SIZE = 8;
-let adminFilter = "action";
-let adminPage = 1;
-
-function initAdminPager() {
-  const tabs = document.getElementById("admin-tabs");
-  const prev = document.getElementById("admin-prev");
-  const next = document.getElementById("admin-next");
-  if (!tabs) return;
-
-  tabs.querySelectorAll("[data-filter]").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      adminFilter = btn.getAttribute("data-filter") || "action";
-      adminPage = 1;
-      tabs.querySelectorAll(".status-slugs__tab").forEach((t) => t.classList.remove("is-active"));
-      btn.classList.add("is-active");
-      renderAdminPage();
-    });
-  });
-  prev?.addEventListener("click", () => {
-    if (adminPage > 1) {
-      adminPage -= 1;
-      renderAdminPage();
-    }
-  });
-  next?.addEventListener("click", () => {
-    adminPage += 1;
-    renderAdminPage();
-  });
-  renderAdminPage();
-}
-
-function renderAdminPage() {
-  const cards = [...document.querySelectorAll("#admin-cards .status-card")];
-  const matched = cards.filter((c) => {
-    const f = c.getAttribute("data-admin-filter");
-    return adminFilter === "all" || f === adminFilter;
-  });
-  const totalPages = Math.max(1, Math.ceil(matched.length / ADMIN_PAGE_SIZE));
-  if (adminPage > totalPages) adminPage = totalPages;
-
-  cards.forEach((c) => {
-    c.style.display = "none";
-  });
-
-  const start = (adminPage - 1) * ADMIN_PAGE_SIZE;
-  matched.slice(start, start + ADMIN_PAGE_SIZE).forEach((c) => {
-    c.style.display = "";
-  });
-
-  const pager = document.getElementById("admin-pager");
-  const label = document.getElementById("admin-page-label");
-  const empty = document.getElementById("admin-empty");
-  const hint = document.getElementById("admin-filter-hint");
-
-  if (empty) empty.hidden = matched.length > 0;
-  if (pager) pager.hidden = matched.length <= ADMIN_PAGE_SIZE;
-  if (label) label.textContent = `${adminPage} / ${totalPages}（${matched.length}件）`;
-  if (document.getElementById("admin-prev")) {
-    document.getElementById("admin-prev").disabled = adminPage <= 1;
-  }
-  if (document.getElementById("admin-next")) {
-    document.getElementById("admin-next").disabled = adminPage >= totalPages;
-  }
-  if (hint) {
-    const hints = {
-      action: "制作中・非表示 — いま手を入れる案件",
-      draft: "完成・非公開 — プレビュー確認後に公開",
-      live: "公開済み — 薄く表示（終わった案件）",
-      all: "全案件 — 公開済みは末尾",
-    };
-    hint.textContent = hints[adminFilter] || "";
-  }
-  const wrap = document.getElementById("admin-cards");
-  if (wrap) wrap.dataset.filterMode = adminFilter;
 }
 
 document.querySelectorAll(".save-title-btn").forEach((btn) => {
