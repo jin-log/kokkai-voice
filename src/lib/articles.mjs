@@ -40,15 +40,9 @@ export function isPublishable(article) {
   return article.publishReady === true && article.pageReady === true;
 }
 
+/** 本番ビルドに載せる記事 — 管理画面の「公開する」(pageReady) を正とする。ゲート未達でも落とさない */
 export async function filterPublishable(articles) {
-  const visible = articles.filter((a) => !a.adminHidden && a.pageReady === true);
-  const checked = await Promise.all(
-    visible.map(async (article) => ({
-      article,
-      result: await checkCasePageWithFiles(article),
-    })),
-  );
-  return checked.filter(({ result }) => result.ok).map(({ article }) => article);
+  return articles.filter((a) => !a.adminHidden && a.pageReady === true);
 }
 
 /** プレビューページ用スラグ（完成・非公開含む） */
