@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-07-01T19:27:51.591Z",
-  "total": 84,
+  "generatedAt": "2026-07-01T19:35:37.746Z",
+  "total": 73,
   "byAgent": {
-    "writer": 78,
+    "writer": 67,
     "ceo": 3,
     "x-researcher": 2,
     "legal-check": 1
@@ -53,28 +53,6 @@
       "priority": 30
     },
     {
-      "id": "case-mqwdrley:D2_arc_topic",
-      "slug": "case-mqwdrley",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "D2_arc_topic",
-      "title": "[ゲート] 経緯の話題",
-      "todo": "経緯3行以上が案件キーワードと一致",
-      "command": "npm run complete:article -- --slug case-mqwdrley --force",
-      "priority": 30
-    },
-    {
-      "id": "case-mqwdrley:E4_timeline_diet_topic",
-      "slug": "case-mqwdrley",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "E4_timeline_diet_topic",
-      "title": "[ゲート] TL国会の話題",
-      "todo": "国会TLはある分だけ話題一致。TLなし可。根拠なしの結論は不可",
-      "command": "npm run complete:article -- --slug case-mqwdrley --force",
-      "priority": 30
-    },
-    {
       "id": "case-mqwdrley:G5_parties_symbol",
       "slug": "case-mqwdrley",
       "agent": "writer",
@@ -86,13 +64,13 @@
       "priority": 30
     },
     {
-      "id": "case-mqzxgs3f:B4_conclusion",
+      "id": "case-mqzxgs3f:E2_timeline_x",
       "slug": "case-mqzxgs3f",
       "agent": "writer",
       "agentLabel": "ライター",
-      "checkId": "B4_conclusion",
-      "title": "[ゲート] 結論の質",
-      "todo": "重複・途中切れ・定型文なし（行数固定なし）",
+      "checkId": "E2_timeline_x",
+      "title": "[ゲート] タイムラインX",
+      "todo": "X投稿を3件以上タイムラインに",
       "command": "npm run complete:article -- --slug case-mqzxgs3f --force",
       "priority": 30
     },
@@ -139,17 +117,6 @@
       "todo": "Xの公表数値（例: 319万円）を結論1行目へ",
       "command": "node scripts/run-case-pipeline.mjs --slug case-mqzxj4ro",
       "priority": 10
-    },
-    {
-      "id": "case-mqzxj4ro:E2_timeline_x",
-      "slug": "case-mqzxj4ro",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "E2_timeline_x",
-      "title": "[ゲート] タイムラインX",
-      "todo": "X投稿を3件以上タイムラインに",
-      "command": "npm run complete:article -- --slug case-mqzxj4ro --force",
-      "priority": 30
     },
     {
       "id": "case-mr0jbdpc:P1_opening_no_outcome",
@@ -240,17 +207,6 @@
       "priority": 30
     },
     {
-      "id": "energy-policy:P1_opening_no_outcome",
-      "slug": "energy-policy",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "P1_opening_no_outcome",
-      "title": "[公開] 1行目がタイトルに未回答",
-      "todo": "成立/見送り/予算額など、いまどうなっているかを1行目に書く",
-      "command": "npm run complete:article -- --slug energy-policy --force",
-      "priority": 5
-    },
-    {
       "id": "fuhou-immin-trend:P1_opening_off_topic",
       "slug": "fuhou-immin-trend",
       "agent": "writer",
@@ -306,24 +262,24 @@
       "priority": 30
     },
     {
-      "id": "fukushuto-koso:D2_arc_topic",
+      "id": "fukushuto-koso:E1_timeline_count",
       "slug": "fukushuto-koso",
       "agent": "writer",
       "agentLabel": "ライター",
-      "checkId": "D2_arc_topic",
-      "title": "[ゲート] 経緯の話題",
-      "todo": "経緯3行以上が案件キーワードと一致",
+      "checkId": "E1_timeline_count",
+      "title": "[ゲート] タイムライン",
+      "todo": "出来事を6件以上（X3+国会3）",
       "command": "npm run complete:article -- --slug fukushuto-koso --force",
       "priority": 30
     },
     {
-      "id": "fukushuto-koso:G5_parties_symbol",
+      "id": "fukushuto-koso:E3_timeline_diet",
       "slug": "fukushuto-koso",
       "agent": "writer",
       "agentLabel": "ライター",
-      "checkId": "G5_parties_symbol",
-      "title": "[ゲート] ◎〇▲×",
-      "todo": "各党の記号を確定（v2）",
+      "checkId": "E3_timeline_diet",
+      "title": "[ゲート] タイムライン国会",
+      "todo": "国会発言を3件以上タイムラインに",
       "command": "npm run complete:article -- --slug fukushuto-koso --force",
       "priority": 30
     },
@@ -337,28 +293,6 @@
       "todo": "成立/見送り/予算額など、いまどうなっているかを1行目に書く",
       "command": "npm run complete:article -- --slug gaikokujin-seisaku --force",
       "priority": 5
-    },
-    {
-      "id": "hosei-yosan:P1_opening_template",
-      "slug": "hosei-yosan",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "P1_opening_template",
-      "title": "[公開] 1行目がタイトルに未回答",
-      "todo": "可決・金額・合意内容など、読者が知りたい答えを1行目に書く",
-      "command": "npm run complete:article -- --slug hosei-yosan --force",
-      "priority": 5
-    },
-    {
-      "id": "hosei-yosan:B4_conclusion",
-      "slug": "hosei-yosan",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "B4_conclusion",
-      "title": "[ゲート] 結論の質",
-      "todo": "重複・途中切れ・定型文なし（行数固定なし）",
-      "command": "npm run complete:article -- --slug hosei-yosan --force",
-      "priority": 30
     },
     {
       "id": "kaigo-iryo:P1_opening_template",
@@ -427,17 +361,6 @@
       "priority": 5
     },
     {
-      "id": "komei-kokumin:P1_opening_template",
-      "slug": "komei-kokumin",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "P1_opening_template",
-      "title": "[公開] 1行目がタイトルに未回答",
-      "todo": "可決・金額・合意内容など、読者が知りたい答えを1行目に書く",
-      "command": "npm run complete:article -- --slug komei-kokumin --force",
-      "priority": 5
-    },
-    {
       "id": "komei-kokumin:B4_conclusion",
       "slug": "komei-kokumin",
       "agent": "writer",
@@ -471,39 +394,6 @@
       "priority": 30
     },
     {
-      "id": "nichigyo:P1_opening_template",
-      "slug": "nichigyo",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "P1_opening_template",
-      "title": "[公開] 1行目がタイトルに未回答",
-      "todo": "可決・金額・合意内容など、読者が知りたい答えを1行目に書く",
-      "command": "npm run complete:article -- --slug nichigyo --force",
-      "priority": 5
-    },
-    {
-      "id": "nichigyo:B4_conclusion",
-      "slug": "nichigyo",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "B4_conclusion",
-      "title": "[ゲート] 結論の質",
-      "todo": "重複・途中切れ・定型文なし（行数固定なし）",
-      "command": "npm run complete:article -- --slug nichigyo --force",
-      "priority": 30
-    },
-    {
-      "id": "osaka-to-metropolis:B3_topic",
-      "slug": "osaka-to-metropolis",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "B3_topic",
-      "title": "[ゲート] 話題一致",
-      "todo": "要約が searchKeyword と一致（2行以上）",
-      "command": "npm run complete:article -- --slug osaka-to-metropolis --force",
-      "priority": 30
-    },
-    {
       "id": "osaka-to-metropolis:D2_arc_topic",
       "slug": "osaka-to-metropolis",
       "agent": "writer",
@@ -515,13 +405,24 @@
       "priority": 30
     },
     {
-      "id": "osaka-to-metropolis:G6_matrix_topic",
+      "id": "osaka-to-metropolis:E1_timeline_count",
       "slug": "osaka-to-metropolis",
       "agent": "writer",
       "agentLabel": "ライター",
-      "checkId": "G6_matrix_topic",
-      "title": "[ゲート] 〇×の話題",
-      "todo": "1党以上が案件キーワードと一致。一致なしで結論だけは不可",
+      "checkId": "E1_timeline_count",
+      "title": "[ゲート] タイムライン",
+      "todo": "出来事を6件以上（X3+国会3）",
+      "command": "npm run complete:article -- --slug osaka-to-metropolis --force",
+      "priority": 30
+    },
+    {
+      "id": "osaka-to-metropolis:E3_timeline_diet",
+      "slug": "osaka-to-metropolis",
+      "agent": "writer",
+      "agentLabel": "ライター",
+      "checkId": "E3_timeline_diet",
+      "title": "[ゲート] タイムライン国会",
+      "todo": "国会発言を3件以上タイムラインに",
       "command": "npm run complete:article -- --slug osaka-to-metropolis --force",
       "priority": 30
     },
@@ -776,37 +677,15 @@
       "priority": 30
     },
     {
-      "id": "seiji-shikin:P1_opening_template",
+      "id": "seiji-shikin:P1_opening_no_outcome",
       "slug": "seiji-shikin",
       "agent": "writer",
       "agentLabel": "ライター",
-      "checkId": "P1_opening_template",
+      "checkId": "P1_opening_no_outcome",
       "title": "[公開] 1行目がタイトルに未回答",
-      "todo": "可決・金額・合意内容など、読者が知りたい答えを1行目に書く",
+      "todo": "成立/見送り/予算額など、いまどうなっているかを1行目に書く",
       "command": "npm run complete:article -- --slug seiji-shikin --force",
       "priority": 5
-    },
-    {
-      "id": "seiji-shikin:B4_conclusion",
-      "slug": "seiji-shikin",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "B4_conclusion",
-      "title": "[ゲート] 結論の質",
-      "todo": "重複・途中切れ・定型文なし（行数固定なし）",
-      "command": "npm run complete:article -- --slug seiji-shikin --force",
-      "priority": 30
-    },
-    {
-      "id": "senkyo-kaikaku:B4_conclusion",
-      "slug": "senkyo-kaikaku",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "B4_conclusion",
-      "title": "[ゲート] 結論の質",
-      "todo": "重複・途中切れ・定型文なし（行数固定なし）",
-      "command": "npm run complete:article -- --slug senkyo-kaikaku --force",
-      "priority": 30
     },
     {
       "id": "shohizei-genmen:P1_opening_template",
