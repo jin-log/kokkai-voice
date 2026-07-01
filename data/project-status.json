@@ -1,17 +1,19 @@
 {
-  "generatedAt": "2026-07-01T05:25:30.052Z",
+  "generatedAt": "2026-07-01T05:34:20.918Z",
   "strategy": "quality-first",
   "activeCount": 39,
   "parkedCount": 0,
   "publishedCount": 22,
   "overallGoldPct": 53,
-  "overallGatePct": 71,
-  "qualityFailed": 3,
+  "overallGatePct": 72,
+  "qualityFailed": 2,
   "slugs": [
     {
       "slug": "case-mr0jbdpc",
       "title": "【国旗損壊罪】連立合意で法制化へ？いま国会の動き",
       "shortTitle": "【国旗損壊罪】連立合意で法制化へ？いま国会の動き",
+      "category": "国会",
+      "policyCategory": "国会",
       "adminHidden": false,
       "pageReady": false,
       "publishState": "draft",
@@ -116,6 +118,7 @@
       "blockers": [],
       "blockerCount": 0,
       "runState": "idle",
+      "workItems": [],
       "nextAction": "📋 完成・非公開 — プレビューで確認して「公開する」を押してください",
       "promo": {
         "x": null,
@@ -140,6 +143,8 @@
       "slug": "case-mqzxj4ro",
       "title": "【国会議員のボーナス】期末手当はいくら？2023年給与法改正の争点",
       "shortTitle": "【国会議員のボーナス】期末手当はいくら？2023年給与法改正の争点",
+      "category": "国会",
+      "policyCategory": "国会",
       "adminHidden": false,
       "pageReady": false,
       "publishState": "wip",
@@ -332,6 +337,33 @@
       ],
       "blockerCount": 1,
       "runState": "idle",
+      "workItems": [
+        {
+          "id": "Q1_conclusion_numbers",
+          "label": "タイトルが金額・実績を問うのに、いまの結論に公表",
+          "state": "blocked"
+        },
+        {
+          "id": "Q2_template_conclusion",
+          "label": "いまの結論が「国会で議論された」型の繰り返し（3",
+          "state": "blocked"
+        },
+        {
+          "id": "Q3_plain_no_answer",
+          "label": "つまり欄の冒頭がタイトルの疑問（金額・実績）に答",
+          "state": "blocked"
+        },
+        {
+          "id": "Q8_x_numbers_not_in_summary",
+          "label": "X枠に金額等の数字があるのに、いまの結論に反映さ",
+          "state": "blocked"
+        },
+        {
+          "id": "G5_parties_symbol",
+          "label": "◎〇▲×",
+          "state": "blocked"
+        }
+      ],
       "nextAction": "品質: タイトルが金額・実績を問うのに、いまの結論に公表数値がない — 1行目に円・%・万人などタイトルへの直接回答を入れる（X・報道の数字を要約に反映） → ◎▲❌ を確定",
       "promo": {
         "x": null,
@@ -356,6 +388,8 @@
       "slug": "case-mqzxgs3f",
       "title": "【スパイ防止法】なぜ成立しない？国家情報会議法案との関係",
       "shortTitle": "【スパイ防止法】なぜ成立しない？国家情報会議法案との関係",
+      "category": "国会",
+      "policyCategory": "国会",
       "adminHidden": false,
       "pageReady": false,
       "publishState": "draft",
@@ -460,6 +494,7 @@
       "blockers": [],
       "blockerCount": 0,
       "runState": "idle",
+      "workItems": [],
       "nextAction": "📋 完成・非公開 — プレビューで確認して「公開する」を押してください",
       "promo": {
         "x": null,
@@ -484,44 +519,17 @@
       "slug": "zeihikaku-kojo",
       "title": "【給付付き税額控除】具体的内容と消費税ゼロ公約の代替案",
       "shortTitle": "【給付付き税額控除】具体的内容と消費税ゼロ公約の代替案",
+      "category": "行政",
+      "policyCategory": "行政",
       "adminHidden": true,
       "pageReady": false,
       "publishState": "hidden",
-      "previewUrl": null,
-      "qualityOk": false,
-      "needsQualityFix": true,
-      "qualityBlockerCount": 1,
-      "qualityBlockers": [
-        {
-          "id": "Q9_x_screenshot",
-          "message": "X URLは3件あるがスクショは2/3件（仕様違反）",
-          "todo": "npm run x:capture -- --slug <slug>（デバッガー担当）",
-          "agent": "debugger"
-        }
-      ],
+      "previewUrl": "/dev/preview/zeihikaku-kojo/",
+      "qualityOk": true,
+      "needsQualityFix": false,
+      "qualityBlockerCount": 0,
+      "qualityBlockers": [],
       "agentTasks": [
-        {
-          "id": "zeihikaku-kojo:Q9_x_screenshot",
-          "slug": "zeihikaku-kojo",
-          "agent": "debugger",
-          "agentLabel": "デバッガー",
-          "checkId": "Q9_x_screenshot",
-          "title": "[品質] X URLは3件あるがスクショは2/3件（仕様違反）",
-          "todo": "npm run x:capture -- --slug <slug>（デバッガー担当）",
-          "command": "npm run x:capture -- --slug zeihikaku-kojo",
-          "priority": 10
-        },
-        {
-          "id": "zeihikaku-kojo:H3_x_screenshot",
-          "slug": "zeihikaku-kojo",
-          "agent": "debugger",
-          "agentLabel": "デバッガー",
-          "checkId": "H3_x_screenshot",
-          "title": "[ゲート] Xスクショ",
-          "todo": "npm run x:capture -- --slug <slug>（デバッガー）",
-          "command": "npm run x:capture -- --slug zeihikaku-kojo",
-          "priority": 20
-        },
         {
           "id": "zeihikaku-kojo:D2_arc_topic",
           "slug": "zeihikaku-kojo",
@@ -567,8 +575,8 @@
           "priority": 30
         }
       ],
-      "gatePct": 25,
-      "goldPct": 17,
+      "gatePct": 50,
+      "goldPct": 33,
       "published": false,
       "publishGateOk": false,
       "pipeline": [
@@ -591,7 +599,7 @@
           "label": "③X検証1件+",
           "phase": 3,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "legal",
@@ -635,7 +643,7 @@
           "label": "③X検証1件+",
           "phase": 3,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "legal",
@@ -683,16 +691,32 @@
           "label": "〇×の話題",
           "todo": "公言と行動が案件キーワードと一致（2党）",
           "detail": "公言テキストが案件と無関係"
-        },
-        {
-          "id": "H3_x_screenshot",
-          "label": "Xスクショ",
-          "todo": "npm run x:capture -- --slug <slug>（デバッガー）",
-          "detail": "スクショ 2/3 件 — x:capture 未実行"
         }
       ],
-      "blockerCount": 5,
+      "blockerCount": 4,
       "runState": "idle",
+      "workItems": [
+        {
+          "id": "D2_arc_topic",
+          "label": "経緯の話題",
+          "state": "blocked"
+        },
+        {
+          "id": "E4_timeline_diet_topic",
+          "label": "TL国会の話題",
+          "state": "blocked"
+        },
+        {
+          "id": "G5_parties_symbol",
+          "label": "◎〇▲×",
+          "state": "blocked"
+        },
+        {
+          "id": "G6_matrix_topic",
+          "label": "〇×の話題",
+          "state": "blocked"
+        }
+      ],
       "nextAction": "👁️ 非表示中 — 「表示に戻す」でトップに出せます",
       "promo": {
         "x": null,
@@ -717,10 +741,12 @@
       "slug": "expo2025-kessan",
       "title": "【大阪・関西万博】公費は最終いくら？",
       "shortTitle": "【大阪・関西万博】公費は最終いくら？",
+      "category": "行政",
+      "policyCategory": "行政",
       "adminHidden": true,
       "pageReady": true,
       "publishState": "hidden",
-      "previewUrl": null,
+      "previewUrl": "/dev/preview/expo2025-kessan/",
       "qualityOk": true,
       "needsQualityFix": false,
       "qualityBlockerCount": 0,
@@ -891,6 +917,28 @@
       ],
       "blockerCount": 4,
       "runState": "idle",
+      "workItems": [
+        {
+          "id": "D2_arc_topic",
+          "label": "経緯の話題",
+          "state": "blocked"
+        },
+        {
+          "id": "E4_timeline_diet_topic",
+          "label": "TL国会の話題",
+          "state": "blocked"
+        },
+        {
+          "id": "G5_parties_symbol",
+          "label": "◎〇▲×",
+          "state": "blocked"
+        },
+        {
+          "id": "G6_matrix_topic",
+          "label": "〇×の話題",
+          "state": "blocked"
+        }
+      ],
       "nextAction": "👁️ 非表示中 — 「表示に戻す」でトップに出せます",
       "promo": {
         "x": null,
@@ -915,10 +963,12 @@
       "slug": "minimum-wage-2026",
       "title": "【2026年度最低賃金】全国平均はいくらに上がる？",
       "shortTitle": "【2026年度最低賃金】全国平均はいくらに上がる？",
+      "category": "行政",
+      "policyCategory": "行政",
       "adminHidden": true,
       "pageReady": false,
       "publishState": "hidden",
-      "previewUrl": null,
+      "previewUrl": "/dev/preview/minimum-wage-2026/",
       "qualityOk": true,
       "needsQualityFix": false,
       "qualityBlockerCount": 0,
@@ -1072,6 +1122,23 @@
       ],
       "blockerCount": 3,
       "runState": "idle",
+      "workItems": [
+        {
+          "id": "G5_parties_symbol",
+          "label": "◎〇▲×",
+          "state": "blocked"
+        },
+        {
+          "id": "G6_matrix_topic",
+          "label": "〇×の話題",
+          "state": "blocked"
+        },
+        {
+          "id": "H2_x_topic",
+          "label": "Xの話題",
+          "state": "blocked"
+        }
+      ],
       "nextAction": "👁️ 非表示中 — 「表示に戻す」でトップに出せます",
       "promo": {
         "x": null,
@@ -1096,10 +1163,12 @@
       "slug": "pension-kuriage-70",
       "title": "【年金繰下げ】70歳まで受取開始を遅らせると月額はいくら増える？",
       "shortTitle": "【年金繰下げ】70歳まで受取開始を遅らせると月額はいくら増える？",
+      "category": "行政",
+      "policyCategory": "行政",
       "adminHidden": true,
       "pageReady": false,
       "publishState": "hidden",
-      "previewUrl": null,
+      "previewUrl": "/dev/preview/pension-kuriage-70/",
       "qualityOk": true,
       "needsQualityFix": false,
       "qualityBlockerCount": 0,
@@ -1236,6 +1305,18 @@
       ],
       "blockerCount": 2,
       "runState": "idle",
+      "workItems": [
+        {
+          "id": "G5_parties_symbol",
+          "label": "◎〇▲×",
+          "state": "blocked"
+        },
+        {
+          "id": "G6_matrix_topic",
+          "label": "〇×の話題",
+          "state": "blocked"
+        }
+      ],
       "nextAction": "👁️ 非表示中 — 「表示に戻す」でトップに出せます",
       "promo": {
         "x": null,
@@ -1260,10 +1341,12 @@
       "slug": "denki-gas-genmen",
       "title": "【電気・ガス代支援】2026年も続く？減免の条件",
       "shortTitle": "【電気・ガス代支援】2026年も続く？減免の条件",
+      "category": "行政",
+      "policyCategory": "行政",
       "adminHidden": true,
       "pageReady": false,
       "publishState": "hidden",
-      "previewUrl": null,
+      "previewUrl": "/dev/preview/denki-gas-genmen/",
       "qualityOk": true,
       "needsQualityFix": false,
       "qualityBlockerCount": 0,
@@ -1434,6 +1517,28 @@
       ],
       "blockerCount": 4,
       "runState": "idle",
+      "workItems": [
+        {
+          "id": "B3_topic",
+          "label": "話題一致",
+          "state": "blocked"
+        },
+        {
+          "id": "E4_timeline_diet_topic",
+          "label": "TL国会の話題",
+          "state": "blocked"
+        },
+        {
+          "id": "G5_parties_symbol",
+          "label": "◎〇▲×",
+          "state": "blocked"
+        },
+        {
+          "id": "G6_matrix_topic",
+          "label": "〇×の話題",
+          "state": "blocked"
+        }
+      ],
       "nextAction": "👁️ 非表示中 — 「表示に戻す」でトップに出せます",
       "promo": {
         "x": null,
@@ -1458,10 +1563,12 @@
       "slug": "gakushu-shien-75000",
       "title": "【子ども学習支援費7.5万円】使えるものと申請方法",
       "shortTitle": "【子ども学習支援費7.5万円】使えるものと申請方法",
+      "category": "行政",
+      "policyCategory": "行政",
       "adminHidden": true,
       "pageReady": false,
       "publishState": "hidden",
-      "previewUrl": null,
+      "previewUrl": "/dev/preview/gakushu-shien-75000/",
       "qualityOk": true,
       "needsQualityFix": false,
       "qualityBlockerCount": 0,
@@ -1649,6 +1756,33 @@
       ],
       "blockerCount": 5,
       "runState": "idle",
+      "workItems": [
+        {
+          "id": "B3_topic",
+          "label": "話題一致",
+          "state": "blocked"
+        },
+        {
+          "id": "D2_arc_topic",
+          "label": "経緯の話題",
+          "state": "blocked"
+        },
+        {
+          "id": "E4_timeline_diet_topic",
+          "label": "TL国会の話題",
+          "state": "blocked"
+        },
+        {
+          "id": "G5_parties_symbol",
+          "label": "◎〇▲×",
+          "state": "blocked"
+        },
+        {
+          "id": "G6_matrix_topic",
+          "label": "〇×の話題",
+          "state": "blocked"
+        }
+      ],
       "nextAction": "👁️ 非表示中 — 「表示に戻す」でトップに出せます",
       "promo": {
         "x": null,
@@ -1673,10 +1807,12 @@
       "slug": "noto-fukko-budget",
       "title": "【能登半島地震】復興予算はいくら入った？",
       "shortTitle": "【能登半島地震】復興予算はいくら入った？",
+      "category": "行政",
+      "policyCategory": "行政",
       "adminHidden": true,
       "pageReady": false,
       "publishState": "hidden",
-      "previewUrl": null,
+      "previewUrl": "/dev/preview/noto-fukko-budget/",
       "qualityOk": false,
       "needsQualityFix": true,
       "qualityBlockerCount": 2,
@@ -1865,6 +2001,33 @@
       ],
       "blockerCount": 3,
       "runState": "idle",
+      "workItems": [
+        {
+          "id": "Q1_conclusion_numbers",
+          "label": "タイトルが金額・実績を問うのに、いまの結論に公表",
+          "state": "blocked"
+        },
+        {
+          "id": "Q3_plain_no_answer",
+          "label": "つまり欄の冒頭がタイトルの疑問（金額・実績）に答",
+          "state": "blocked"
+        },
+        {
+          "id": "B3_topic",
+          "label": "話題一致",
+          "state": "blocked"
+        },
+        {
+          "id": "E4_timeline_diet_topic",
+          "label": "TL国会の話題",
+          "state": "blocked"
+        },
+        {
+          "id": "G6_matrix_topic",
+          "label": "〇×の話題",
+          "state": "blocked"
+        }
+      ],
       "nextAction": "👁️ 非表示中 — 「表示に戻す」でトップに出せます",
       "promo": {
         "x": null,
@@ -1889,10 +2052,12 @@
       "slug": "boei-tokubetsuzei",
       "title": "【防衛特別所得税】給与から年間いくら引かれる？",
       "shortTitle": "【防衛特別所得税】給与から年間いくら引かれる？",
+      "category": "行政",
+      "policyCategory": "行政",
       "adminHidden": true,
       "pageReady": false,
       "publishState": "hidden",
-      "previewUrl": null,
+      "previewUrl": "/dev/preview/boei-tokubetsuzei/",
       "qualityOk": true,
       "needsQualityFix": false,
       "qualityBlockerCount": 0,
@@ -2080,6 +2245,33 @@
       ],
       "blockerCount": 5,
       "runState": "idle",
+      "workItems": [
+        {
+          "id": "B3_topic",
+          "label": "話題一致",
+          "state": "blocked"
+        },
+        {
+          "id": "D2_arc_topic",
+          "label": "経緯の話題",
+          "state": "blocked"
+        },
+        {
+          "id": "E4_timeline_diet_topic",
+          "label": "TL国会の話題",
+          "state": "blocked"
+        },
+        {
+          "id": "G5_parties_symbol",
+          "label": "◎〇▲×",
+          "state": "blocked"
+        },
+        {
+          "id": "G6_matrix_topic",
+          "label": "〇×の話題",
+          "state": "blocked"
+        }
+      ],
       "nextAction": "👁️ 非表示中 — 「表示に戻す」でトップに出せます",
       "promo": {
         "x": null,
@@ -2104,10 +2296,12 @@
       "slug": "invoice-menzei-2026",
       "title": "【インボイス2割特例】2026年10月まで延長で何が変わる？",
       "shortTitle": "【インボイス2割特例】2026年10月まで延長で何が変わる？",
+      "category": "行政",
+      "policyCategory": "行政",
       "adminHidden": true,
       "pageReady": false,
       "publishState": "hidden",
-      "previewUrl": null,
+      "previewUrl": "/dev/preview/invoice-menzei-2026/",
       "qualityOk": true,
       "needsQualityFix": false,
       "qualityBlockerCount": 0,
@@ -2278,6 +2472,28 @@
       ],
       "blockerCount": 4,
       "runState": "idle",
+      "workItems": [
+        {
+          "id": "B3_topic",
+          "label": "話題一致",
+          "state": "blocked"
+        },
+        {
+          "id": "E4_timeline_diet_topic",
+          "label": "TL国会の話題",
+          "state": "blocked"
+        },
+        {
+          "id": "G5_parties_symbol",
+          "label": "◎〇▲×",
+          "state": "blocked"
+        },
+        {
+          "id": "G6_matrix_topic",
+          "label": "〇×の話題",
+          "state": "blocked"
+        }
+      ],
       "nextAction": "👁️ 非表示中 — 「表示に戻す」でトップに出せます",
       "promo": {
         "x": null,
@@ -2302,10 +2518,12 @@
       "slug": "teigaku-kyufu-2024",
       "title": "【2024年定額給付3万円】もらえなかった人は？",
       "shortTitle": "【2024年定額給付3万円】もらえなかった人は？",
+      "category": "行政",
+      "policyCategory": "行政",
       "adminHidden": true,
       "pageReady": false,
       "publishState": "hidden",
-      "previewUrl": null,
+      "previewUrl": "/dev/preview/teigaku-kyufu-2024/",
       "qualityOk": true,
       "needsQualityFix": false,
       "qualityBlockerCount": 0,
@@ -2459,6 +2677,23 @@
       ],
       "blockerCount": 3,
       "runState": "idle",
+      "workItems": [
+        {
+          "id": "E4_timeline_diet_topic",
+          "label": "TL国会の話題",
+          "state": "blocked"
+        },
+        {
+          "id": "G5_parties_symbol",
+          "label": "◎〇▲×",
+          "state": "blocked"
+        },
+        {
+          "id": "G6_matrix_topic",
+          "label": "〇×の話題",
+          "state": "blocked"
+        }
+      ],
       "nextAction": "👁️ 非表示中 — 「表示に戻す」でトップに出せます",
       "promo": {
         "x": null,
@@ -2483,6 +2718,8 @@
       "slug": "shussho-budget-seika",
       "title": "【出生率・子育て支援】3.6兆円は効いた？2025年の実績",
       "shortTitle": "【出生率・子育て支援】3.6兆円は効いた？2025年の実績",
+      "category": "行政",
+      "policyCategory": "行政",
       "adminHidden": false,
       "pageReady": true,
       "publishState": "live",
@@ -2640,6 +2877,23 @@
       ],
       "blockerCount": 3,
       "runState": "idle",
+      "workItems": [
+        {
+          "id": "E4_timeline_diet_topic",
+          "label": "TL国会の話題",
+          "state": "blocked"
+        },
+        {
+          "id": "G5_parties_symbol",
+          "label": "◎〇▲×",
+          "state": "blocked"
+        },
+        {
+          "id": "G6_matrix_topic",
+          "label": "〇×の話題",
+          "state": "blocked"
+        }
+      ],
       "nextAction": "2/3 国会が話題一致 → ◎▲❌ を確定 → 公言テキストが案件と無関係 → X投稿は見つかりませんでした（5段階調査完了）",
       "promo": {
         "x": null,
@@ -2664,6 +2918,8 @@
       "slug": "fukushuto-koso",
       "title": "【副首都構想】第二の首都はどこ？具体案と争点",
       "shortTitle": "【副首都構想】第二の首都はどこ？具体案と争点",
+      "category": "行政",
+      "policyCategory": "行政",
       "adminHidden": false,
       "pageReady": true,
       "publishState": "live",
@@ -2821,6 +3077,23 @@
       ],
       "blockerCount": 3,
       "runState": "idle",
+      "workItems": [
+        {
+          "id": "D2_arc_topic",
+          "label": "経緯の話題",
+          "state": "blocked"
+        },
+        {
+          "id": "E4_timeline_diet_topic",
+          "label": "TL国会の話題",
+          "state": "blocked"
+        },
+        {
+          "id": "G5_parties_symbol",
+          "label": "◎〇▲×",
+          "state": "blocked"
+        }
+      ],
       "nextAction": "2/3 行が話題一致 → 2/3 国会が話題一致 → ◎▲❌ を確定 → X投稿は見つかりませんでした（5段階調査完了）",
       "promo": {
         "x": null,
@@ -2845,6 +3118,8 @@
       "slug": "osaka-to-metropolis",
       "title": "【大阪都構想】メリット・デメリットと最新の行方",
       "shortTitle": "【大阪都構想】メリット・デメリットと最新の行方",
+      "category": "行政",
+      "policyCategory": "行政",
       "adminHidden": false,
       "pageReady": true,
       "publishState": "live",
@@ -3002,6 +3277,23 @@
       ],
       "blockerCount": 3,
       "runState": "idle",
+      "workItems": [
+        {
+          "id": "B3_topic",
+          "label": "話題一致",
+          "state": "blocked"
+        },
+        {
+          "id": "D2_arc_topic",
+          "label": "経緯の話題",
+          "state": "blocked"
+        },
+        {
+          "id": "G6_matrix_topic",
+          "label": "〇×の話題",
+          "state": "blocked"
+        }
+      ],
       "nextAction": "1/2 行がキーワード一致（大阪都構想） → 0/3 行が話題一致 → 公言テキストが案件と無関係 → X投稿は見つかりませんでした（5段階調査完了）",
       "promo": {
         "x": null,
@@ -3026,6 +3318,8 @@
       "slug": "fuhou-immin-trend",
       "title": "【不法滞在】国内の人数推移と政府の対応",
       "shortTitle": "【不法滞在】国内の人数推移と政府の対応",
+      "category": "行政",
+      "policyCategory": "行政",
       "adminHidden": false,
       "pageReady": true,
       "publishState": "live",
@@ -3217,6 +3511,33 @@
       ],
       "blockerCount": 5,
       "runState": "idle",
+      "workItems": [
+        {
+          "id": "B5_writer_voice",
+          "label": "第三者目線",
+          "state": "blocked"
+        },
+        {
+          "id": "D2_arc_topic",
+          "label": "経緯の話題",
+          "state": "blocked"
+        },
+        {
+          "id": "E4_timeline_diet_topic",
+          "label": "TL国会の話題",
+          "state": "blocked"
+        },
+        {
+          "id": "G5_parties_symbol",
+          "label": "◎〇▲×",
+          "state": "blocked"
+        },
+        {
+          "id": "G6_matrix_topic",
+          "label": "〇×の話題",
+          "state": "blocked"
+        }
+      ],
       "nextAction": "議事録口調が残っている → 2/3 行が話題一致 → 2/3 国会が話題一致 → X投稿は見つかりませんでした（5段階調査完了）",
       "promo": {
         "x": null,
@@ -3241,6 +3562,8 @@
       "slug": "tokyo-solar-panel",
       "title": "【東京都】太陽光パネル設置義務とは？",
       "shortTitle": "【東京都】太陽光パネル設置義務とは？",
+      "category": "行政",
+      "policyCategory": "行政",
       "adminHidden": false,
       "pageReady": true,
       "publishState": "live",
@@ -3415,6 +3738,28 @@
       ],
       "blockerCount": 4,
       "runState": "idle",
+      "workItems": [
+        {
+          "id": "B3_topic",
+          "label": "話題一致",
+          "state": "blocked"
+        },
+        {
+          "id": "E4_timeline_diet_topic",
+          "label": "TL国会の話題",
+          "state": "blocked"
+        },
+        {
+          "id": "G5_parties_symbol",
+          "label": "◎〇▲×",
+          "state": "blocked"
+        },
+        {
+          "id": "G6_matrix_topic",
+          "label": "〇×の話題",
+          "state": "blocked"
+        }
+      ],
       "nextAction": "1/2 行がキーワード一致（太陽光パネル 設置義務 東京都） → 1/3 国会が話題一致 → ◎▲❌ を確定 → X投稿は見つかりませんでした（5段階調査完了）",
       "promo": {
         "x": null,
@@ -3439,6 +3784,8 @@
       "slug": "case-mqwdrley",
       "title": "【東京都知事】小池百合子氏・学歴巡る刑事告発の経緯",
       "shortTitle": "【東京都知事】小池百合子氏・学歴巡る刑事告発の経緯",
+      "category": "地方",
+      "policyCategory": "地方",
       "adminHidden": false,
       "pageReady": true,
       "publishState": "live",
@@ -3596,6 +3943,23 @@
       ],
       "blockerCount": 3,
       "runState": "idle",
+      "workItems": [
+        {
+          "id": "D2_arc_topic",
+          "label": "経緯の話題",
+          "state": "blocked"
+        },
+        {
+          "id": "E4_timeline_diet_topic",
+          "label": "TL国会の話題",
+          "state": "blocked"
+        },
+        {
+          "id": "G5_parties_symbol",
+          "label": "◎〇▲×",
+          "state": "blocked"
+        }
+      ],
       "nextAction": "1/3 行が話題一致 → 0/3 国会が話題一致 → ◎▲❌ を確定 → X投稿は見つかりませんでした（5段階調査完了）",
       "promo": {
         "x": null,
@@ -3620,6 +3984,8 @@
       "slug": "bouka-taisaku",
       "title": "【物価高対策】支援策の内容といまの効果",
       "shortTitle": "【物価高対策】支援策の内容といまの効果",
+      "category": "国会",
+      "policyCategory": "国会",
       "adminHidden": false,
       "pageReady": true,
       "publishState": "live",
@@ -3743,6 +4109,13 @@
       ],
       "blockerCount": 1,
       "runState": "idle",
+      "workItems": [
+        {
+          "id": "G5_parties_symbol",
+          "label": "◎〇▲×",
+          "state": "blocked"
+        }
+      ],
       "nextAction": "◎▲❌ を確定 → X投稿は見つかりませんでした（5段階調査完了）",
       "promo": {
         "x": null,
@@ -3767,6 +4140,8 @@
       "slug": "shohizei-genmen",
       "title": "【食料品の消費税】減税・免税の議論と最新",
       "shortTitle": "【食料品の消費税】減税・免税の議論と最新",
+      "category": "国会",
+      "policyCategory": "国会",
       "adminHidden": false,
       "pageReady": true,
       "publishState": "live",
@@ -3890,6 +4265,13 @@
       ],
       "blockerCount": 1,
       "runState": "idle",
+      "workItems": [
+        {
+          "id": "C2_evidence_distinct",
+          "label": "根拠の独自性",
+          "state": "blocked"
+        }
+      ],
       "nextAction": "根拠が結論のコピー → X投稿は見つかりませんでした（5段階調査完了）",
       "promo": {
         "x": null,
@@ -3914,6 +4296,8 @@
       "slug": "boeeihi",
       "title": "【防衛費・安保】増額の行方と安保政策の最新",
       "shortTitle": "【防衛費・安保】増額の行方と安保政策の最新",
+      "category": "国会",
+      "policyCategory": "国会",
       "adminHidden": false,
       "pageReady": true,
       "publishState": "live",
@@ -4018,6 +4402,7 @@
       "blockers": [],
       "blockerCount": 0,
       "runState": "idle",
+      "workItems": [],
       "nextAction": "✅ 公開中 — /case/ に表示されています",
       "promo": {
         "x": null,
@@ -4042,6 +4427,8 @@
       "slug": "chingin",
       "title": "【賃上げ・最低賃金】企業と家計への影響",
       "shortTitle": "【賃上げ・最低賃金】企業と家計への影響",
+      "category": "国会",
+      "policyCategory": "国会",
       "adminHidden": false,
       "pageReady": true,
       "publishState": "live",
@@ -4182,6 +4569,18 @@
       ],
       "blockerCount": 2,
       "runState": "idle",
+      "workItems": [
+        {
+          "id": "C2_evidence_distinct",
+          "label": "根拠の独自性",
+          "state": "blocked"
+        },
+        {
+          "id": "G5_parties_symbol",
+          "label": "◎〇▲×",
+          "state": "blocked"
+        }
+      ],
       "nextAction": "根拠が結論のコピー → ◎▲❌ を確定 → X投稿は見つかりませんでした（5段階調査完了）",
       "promo": {
         "x": null,
@@ -4206,6 +4605,8 @@
       "slug": "nenkin",
       "title": "【年金制度改革】受給年齢・支給額の変更点",
       "shortTitle": "【年金制度改革】受給年齢・支給額の変更点",
+      "category": "国会",
+      "policyCategory": "国会",
       "adminHidden": false,
       "pageReady": true,
       "publishState": "live",
@@ -4310,6 +4711,7 @@
       "blockers": [],
       "blockerCount": 0,
       "runState": "idle",
+      "workItems": [],
       "nextAction": "✅ 公開中 — /case/ に表示されています",
       "promo": {
         "x": null,
@@ -4334,6 +4736,8 @@
       "slug": "gaikokujin-seisaku",
       "title": "【外国人政策】在留・労働・共生の最新論点",
       "shortTitle": "【外国人政策】在留・労働・共生の最新論点",
+      "category": "国会",
+      "policyCategory": "国会",
       "adminHidden": false,
       "pageReady": true,
       "publishState": "live",
@@ -4438,6 +4842,7 @@
       "blockers": [],
       "blockerCount": 0,
       "runState": "idle",
+      "workItems": [],
       "nextAction": "✅ 公開中 — /case/ に表示されています",
       "promo": {
         "x": null,
@@ -4462,6 +4867,8 @@
       "slug": "shoshika",
       "title": "【少子化対策】支援策の内容と出生率の動向",
       "shortTitle": "【少子化対策】支援策の内容と出生率の動向",
+      "category": "国会",
+      "policyCategory": "国会",
       "adminHidden": false,
       "pageReady": true,
       "publishState": "live",
@@ -4636,6 +5043,28 @@
       ],
       "blockerCount": 4,
       "runState": "idle",
+      "workItems": [
+        {
+          "id": "B3_topic",
+          "label": "話題一致",
+          "state": "blocked"
+        },
+        {
+          "id": "D2_arc_topic",
+          "label": "経緯の話題",
+          "state": "blocked"
+        },
+        {
+          "id": "E4_timeline_diet_topic",
+          "label": "TL国会の話題",
+          "state": "blocked"
+        },
+        {
+          "id": "G6_matrix_topic",
+          "label": "〇×の話題",
+          "state": "blocked"
+        }
+      ],
       "nextAction": "1/2 行がキーワード一致（少子化） → 1/3 行が話題一致 → 1/3 国会が話題一致 → X投稿は見つかりませんでした（5段階調査完了）",
       "promo": {
         "x": null,
@@ -4660,6 +5089,8 @@
       "slug": "kyoiku-mushoka",
       "title": "【大学無償化】対象者・条件と財源の争点",
       "shortTitle": "【大学無償化】対象者・条件と財源の争点",
+      "category": "国会",
+      "policyCategory": "国会",
       "adminHidden": false,
       "pageReady": true,
       "publishState": "live",
@@ -4783,6 +5214,13 @@
       ],
       "blockerCount": 1,
       "runState": "idle",
+      "workItems": [
+        {
+          "id": "D2_arc_topic",
+          "label": "経緯の話題",
+          "state": "blocked"
+        }
+      ],
       "nextAction": "2/3 行が話題一致 → X投稿は見つかりませんでした（5段階調査完了）",
       "promo": {
         "x": null,
@@ -4807,6 +5245,8 @@
       "slug": "energy-policy",
       "title": "【エネルギー政策】原発・再エネ・電気代の行方",
       "shortTitle": "【エネルギー政策】原発・再エネ・電気代の行方",
+      "category": "国会",
+      "policyCategory": "国会",
       "adminHidden": false,
       "pageReady": true,
       "publishState": "live",
@@ -4947,6 +5387,18 @@
       ],
       "blockerCount": 2,
       "runState": "idle",
+      "workItems": [
+        {
+          "id": "D2_arc_topic",
+          "label": "経緯の話題",
+          "state": "blocked"
+        },
+        {
+          "id": "G6_matrix_topic",
+          "label": "〇×の話題",
+          "state": "blocked"
+        }
+      ],
       "nextAction": "1/3 行が話題一致 → 公言テキストが案件と無関係 → X投稿は見つかりませんでした（5段階調査完了）",
       "promo": {
         "x": null,
@@ -4971,6 +5423,8 @@
       "slug": "seiji-shikin",
       "title": "【政治資金】政党助成と献金ルールの最新",
       "shortTitle": "【政治資金】政党助成と献金ルールの最新",
+      "category": "国会",
+      "policyCategory": "国会",
       "adminHidden": false,
       "pageReady": false,
       "publishState": "draft",
@@ -5075,6 +5529,7 @@
       "blockers": [],
       "blockerCount": 0,
       "runState": "idle",
+      "workItems": [],
       "nextAction": "📋 完成・非公開 — プレビューで確認して「公開する」を押してください",
       "promo": {
         "x": null,
@@ -5099,6 +5554,8 @@
       "slug": "senkyo-kaikaku",
       "title": "【選挙制度改革】論点と各党の主張",
       "shortTitle": "【選挙制度改革】論点と各党の主張",
+      "category": "国会",
+      "policyCategory": "国会",
       "adminHidden": false,
       "pageReady": true,
       "publishState": "live",
@@ -5222,6 +5679,13 @@
       ],
       "blockerCount": 1,
       "runState": "idle",
+      "workItems": [
+        {
+          "id": "D2_arc_topic",
+          "label": "経緯の話題",
+          "state": "blocked"
+        }
+      ],
       "nextAction": "1/3 行が話題一致 → X投稿は見つかりませんでした（5段階調査完了）",
       "promo": {
         "x": null,
@@ -5246,6 +5710,8 @@
       "slug": "kaigo-iryo",
       "title": "【介護・医療費】負担増の議論と支援策",
       "shortTitle": "【介護・医療費】負担増の議論と支援策",
+      "category": "国会",
+      "policyCategory": "国会",
       "adminHidden": false,
       "pageReady": true,
       "publishState": "live",
@@ -5369,6 +5835,13 @@
       ],
       "blockerCount": 1,
       "runState": "idle",
+      "workItems": [
+        {
+          "id": "G5_parties_symbol",
+          "label": "◎〇▲×",
+          "state": "blocked"
+        }
+      ],
       "nextAction": "◎▲❌ を確定 → X投稿は見つかりませんでした（5段階調査完了）",
       "promo": {
         "x": null,
@@ -5393,6 +5866,8 @@
       "slug": "chiho-sosei",
       "title": "【地方創生】交付金と地域政策の最新",
       "shortTitle": "【地方創生】交付金と地域政策の最新",
+      "category": "国会",
+      "policyCategory": "国会",
       "adminHidden": false,
       "pageReady": true,
       "publishState": "live",
@@ -5516,6 +5991,13 @@
       ],
       "blockerCount": 1,
       "runState": "idle",
+      "workItems": [
+        {
+          "id": "G5_parties_symbol",
+          "label": "◎〇▲×",
+          "state": "blocked"
+        }
+      ],
       "nextAction": "◎▲❌ を確定 → X投稿は見つかりませんでした（5段階調査完了）",
       "promo": {
         "x": null,
@@ -5540,6 +6022,8 @@
       "slug": "hosei-yosan",
       "title": "【補正予算】追加支出の内容と背景",
       "shortTitle": "【補正予算】追加支出の内容と背景",
+      "category": "国会",
+      "policyCategory": "国会",
       "adminHidden": false,
       "pageReady": false,
       "publishState": "draft",
@@ -5644,6 +6128,7 @@
       "blockers": [],
       "blockerCount": 0,
       "runState": "idle",
+      "workItems": [],
       "nextAction": "📋 完成・非公開 — プレビューで確認して「公開する」を押してください",
       "promo": {
         "x": null,
@@ -5668,6 +6153,8 @@
       "slug": "nichigyo",
       "title": "【政治とカネ】献金問題と規制の動向",
       "shortTitle": "【政治とカネ】献金問題と規制の動向",
+      "category": "国会",
+      "policyCategory": "国会",
       "adminHidden": false,
       "pageReady": false,
       "publishState": "draft",
@@ -5772,6 +6259,7 @@
       "blockers": [],
       "blockerCount": 0,
       "runState": "idle",
+      "workItems": [],
       "nextAction": "📋 完成・非公開 — プレビューで確認して「公開する」を押してください",
       "promo": {
         "x": null,
@@ -5796,6 +6284,8 @@
       "slug": "casino-ir",
       "title": "【カジノIR】大阪を中心に進むIntegrated Resort",
       "shortTitle": "【カジノIR】大阪を中心に進むIntegrated Resort",
+      "category": "国会",
+      "policyCategory": "国会",
       "adminHidden": false,
       "pageReady": true,
       "publishState": "live",
@@ -5919,6 +6409,13 @@
       ],
       "blockerCount": 1,
       "runState": "idle",
+      "workItems": [
+        {
+          "id": "G5_parties_symbol",
+          "label": "◎〇▲×",
+          "state": "blocked"
+        }
+      ],
       "nextAction": "◎▲❌ を確定 → X投稿は見つかりませんでした（5段階調査完了）",
       "promo": {
         "x": null,
@@ -5943,6 +6440,8 @@
       "slug": "kenpo",
       "title": "【憲法改正】9条・緊急事態条項など争点整理",
       "shortTitle": "【憲法改正】9条・緊急事態条項など争点整理",
+      "category": "国会",
+      "policyCategory": "国会",
       "adminHidden": false,
       "pageReady": true,
       "publishState": "live",
@@ -6066,6 +6565,13 @@
       ],
       "blockerCount": 1,
       "runState": "idle",
+      "workItems": [
+        {
+          "id": "C2_evidence_distinct",
+          "label": "根拠の独自性",
+          "state": "blocked"
+        }
+      ],
       "nextAction": "根拠が結論のコピー → X投稿は見つかりませんでした（5段階調査完了）",
       "promo": {
         "x": null,
@@ -6090,6 +6596,8 @@
       "slug": "tariff-us",
       "title": "【米国関税・貿易】日本への影響と政府の対応",
       "shortTitle": "【米国関税・貿易】日本への影響と政府の対応",
+      "category": "国会",
+      "policyCategory": "国会",
       "adminHidden": false,
       "pageReady": true,
       "publishState": "live",
@@ -6194,6 +6702,7 @@
       "blockers": [],
       "blockerCount": 0,
       "runState": "idle",
+      "workItems": [],
       "nextAction": "✅ 公開中 — /case/ に表示されています",
       "promo": {
         "x": null,
@@ -6218,6 +6727,8 @@
       "slug": "kishida-resign",
       "title": "【政権・内閣人事】首相交代と政策の行方",
       "shortTitle": "【政権・内閣人事】首相交代と政策の行方",
+      "category": "国会",
+      "policyCategory": "国会",
       "adminHidden": false,
       "pageReady": true,
       "publishState": "live",
@@ -6341,6 +6852,13 @@
       ],
       "blockerCount": 1,
       "runState": "idle",
+      "workItems": [
+        {
+          "id": "C2_evidence_distinct",
+          "label": "根拠の独自性",
+          "state": "blocked"
+        }
+      ],
       "nextAction": "根拠が結論のコピー → X投稿は見つかりませんでした（5段階調査完了）",
       "promo": {
         "x": null,
@@ -6365,6 +6883,8 @@
       "slug": "komei-kokumin",
       "title": "【超党派・教育法改正】学校現場への影響",
       "shortTitle": "【超党派・教育法改正】学校現場への影響",
+      "category": "国会",
+      "policyCategory": "国会",
       "adminHidden": false,
       "pageReady": false,
       "publishState": "draft",
@@ -6469,6 +6989,7 @@
       "blockers": [],
       "blockerCount": 0,
       "runState": "idle",
+      "workItems": [],
       "nextAction": "📋 完成・非公開 — プレビューで確認して「公開する」を押してください",
       "promo": {
         "x": null,
@@ -6492,5 +7013,5 @@
   ],
   "deltaGoldPct": 0,
   "previousGoldPct": 53,
-  "deployedAt": "2026-07-01T05:15:29.229Z"
+  "deployedAt": "2026-07-01T05:25:52.230Z"
 }
