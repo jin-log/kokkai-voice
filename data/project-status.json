@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-01T18:26:00.394Z",
+  "generatedAt": "2026-07-01T18:26:57.592Z",
   "strategy": "quality-first",
   "activeCount": 39,
   "parkedCount": 0,
@@ -96,7 +96,7 @@
     "slugStalls": [],
     "stalledCount": 0,
     "message": "停止中",
-    "analyzedAt": "2026-07-01T18:26:00.393Z",
+    "analyzedAt": "2026-07-01T18:26:57.589Z",
     "lastPatrolCycleAt": null,
     "patrolRunning": false
   },
@@ -317,7 +317,7 @@
     },
     {
       "slug": "case-mqzxj4ro",
-      "title": "【国会議員のボーナス】期末手当はいくら？2023年給与法改正の争点",
+      "title": "\"【国会議員のボーナス】\"",
       "shortTitle": "【国会議員のボーナス】期末手当はいくら？2023年給与法改正の争点",
       "category": "国会",
       "policyCategory": "国会",
@@ -327,45 +327,16 @@
       "previewUrl": "/dev/preview/case-mqzxj4ro/",
       "qualityOk": false,
       "needsQualityFix": true,
-      "qualityBlockerCount": 4,
+      "qualityBlockerCount": 1,
       "qualityBlockers": [
-        {
-          "id": "Q1_conclusion_numbers",
-          "message": "タイトルが金額・実績を問うのに、いまの結論に公表数値がない",
-          "todo": "1行目に円・%・万人などタイトルへの直接回答を入れる（X・報道の数字を要約に反映）",
-          "agent": "writer"
-        },
         {
           "id": "Q2_template_conclusion",
           "message": "いまの結論が「国会で議論された」型の繰り返し（3行）",
           "todo": "可決・支給額・据え置き等、読者が知りたい状態を各行で変える",
           "agent": "writer"
-        },
-        {
-          "id": "Q3_plain_no_answer",
-          "message": "つまり欄の冒頭がタイトルの疑問（金額・実績）に答えていない",
-          "todo": "1段落目を「結論：〇〇万円（日付）」から始める",
-          "agent": "writer"
-        },
-        {
-          "id": "Q8_x_numbers_not_in_summary",
-          "message": "X枠に金額等の数字があるのに、いまの結論に反映されていない",
-          "todo": "Xの公表数値（例: 319万円）を結論1行目へ",
-          "agent": "writer"
         }
       ],
       "agentTasks": [
-        {
-          "id": "case-mqzxj4ro:Q1_conclusion_numbers",
-          "slug": "case-mqzxj4ro",
-          "agent": "writer",
-          "agentLabel": "ライター",
-          "checkId": "Q1_conclusion_numbers",
-          "title": "[品質] タイトルが金額・実績を問うのに、いまの結論に公表数値がない",
-          "todo": "1行目に円・%・万人などタイトルへの直接回答を入れる（X・報道の数字を要約に反映）",
-          "command": "npm run complete:article -- --slug case-mqzxj4ro --force",
-          "priority": 10
-        },
         {
           "id": "case-mqzxj4ro:Q2_template_conclusion",
           "slug": "case-mqzxj4ro",
@@ -374,28 +345,6 @@
           "checkId": "Q2_template_conclusion",
           "title": "[品質] いまの結論が「国会で議論された」型の繰り返し（3行）",
           "todo": "可決・支給額・据え置き等、読者が知りたい状態を各行で変える",
-          "command": "npm run complete:article -- --slug case-mqzxj4ro --force",
-          "priority": 10
-        },
-        {
-          "id": "case-mqzxj4ro:Q3_plain_no_answer",
-          "slug": "case-mqzxj4ro",
-          "agent": "writer",
-          "agentLabel": "ライター",
-          "checkId": "Q3_plain_no_answer",
-          "title": "[品質] つまり欄の冒頭がタイトルの疑問（金額・実績）に答えていない",
-          "todo": "1段落目を「結論：〇〇万円（日付）」から始める",
-          "command": "npm run complete:article -- --slug case-mqzxj4ro --force",
-          "priority": 10
-        },
-        {
-          "id": "case-mqzxj4ro:Q8_x_numbers_not_in_summary",
-          "slug": "case-mqzxj4ro",
-          "agent": "writer",
-          "agentLabel": "ライター",
-          "checkId": "Q8_x_numbers_not_in_summary",
-          "title": "[品質] X枠に金額等の数字があるのに、いまの結論に反映されていない",
-          "todo": "Xの公表数値（例: 319万円）を結論1行目へ",
           "command": "npm run complete:article -- --slug case-mqzxj4ro --force",
           "priority": 10
         },
@@ -515,23 +464,8 @@
       "runState": "idle",
       "workItems": [
         {
-          "id": "Q1_conclusion_numbers",
-          "label": "タイトルが金額・実績を問うのに、いまの結論に公表数値がない",
-          "state": "blocked"
-        },
-        {
           "id": "Q2_template_conclusion",
           "label": "いまの結論が「国会で議論された」型の繰り返し（3行）",
-          "state": "blocked"
-        },
-        {
-          "id": "Q3_plain_no_answer",
-          "label": "つまり欄の冒頭がタイトルの疑問（金額・実績）に答えていない",
-          "state": "blocked"
-        },
-        {
-          "id": "Q8_x_numbers_not_in_summary",
-          "label": "X枠に金額等の数字があるのに、いまの結論に反映されていない",
           "state": "blocked"
         },
         {
@@ -555,7 +489,7 @@
           "state": "blocked"
         }
       ],
-      "nextAction": "品質: タイトルが金額・実績を問うのに、いまの結論に公表数値がない — 1行目に円・%・万人などタイトルへの直接回答を入れる（X・報道の数字を要約に反映） → 結論が途中切れ・重複・逐語抜粋",
+      "nextAction": "品質: いまの結論が「国会で議論された」型の繰り返し（3行） — 可決・支給額・据え置き等、読者が知りたい状態を各行で変える → 結論が途中切れ・重複・逐語抜粋",
       "promo": {
         "x": null,
         "hatena": null,
@@ -10449,7 +10383,7 @@
       "stall": null
     }
   ],
-  "deltaGoldPct": 1,
-  "previousGoldPct": 51,
+  "deltaGoldPct": 0,
+  "previousGoldPct": 52,
   "deployedAt": "2026-07-01T18:14:47.898Z"
 }
