@@ -81,8 +81,8 @@ const flags = blocksMode ? blockFlags(article, stance) : null;
     )}
 
     {(!blocksMode || flags?.narrativeArc) && <ArcSummary article={article} />}
-    <ReactionSummary article={article} />
-    <SummaryLayers article={article} />
+    {(!blocksMode || flags?.caseType !== "statistical") && <ReactionSummary article={article} />}
+    {(!blocksMode || flags?.caseType !== "statistical") && <SummaryLayers article={article} />}
   </header>
 
   {hasStance && flags?.stance !== false && (

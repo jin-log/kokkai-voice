@@ -1,28 +1,134 @@
 ---
-const { article } = Astro.props;
-const items = [
-  ...(article.prosCons?.merits ?? []),
-  ...(article.prosCons?.demerits ?? []),
-].filter((i) => i.figure && i.figure.length > 0);
+import { resolveStatsSeries, deltaClass, subClass, valueClass } from "../../../lib/stats-series.mjs";
 
-const nums = items.slice(0, 3);
-if (!nums.length) return null;
+const { article } = Astro.props;
+const stats = resolveStatsSeries(article);
+if (!stats) return null;
 ---
 
 <section class="cb-chart-block" id="sec-stats" aria-labelledby="stats-title">
   <div class="cb-block__head">
-    <h2 class="cb-block__title" id="stats-title">公表数値・指標</h2>
+    <h2 class="cb-block__title" id="stats-title">{stats.title}</h2>
     <span class="cb-block__tag">数値統計型</span>
   </div>
-  <div class="cb-big-nums">
+  {stats.note && <p class="cb-block__note">{stats.note}</p>}
+
+  {stats.highlights.length > 0 && (
+    <div class="cb-big-nums" aria-label="主要指標">
+      {
+        stats.highlights.map((h) => (
+          <div class="cb-big-num">
+            <p class="cb-big-num__label">{h.label}</p>
+            <p class:list={["cb-big-num__value", valueClass(h.valueTone)]}>
+              {h.value}
+              {h.unit && <span style="font-size:0.45em">{h.unit}</span>}
+            </p>
+            {h.sub && <p class:list={["cb-big-num__sub", subClass(h.subTone)]}>{h.sub}</p>}
+          </div>
+        ))
+      }
+    </div>
+  )}
+
+  <div class="cb-bar-chart" aria-label={stats.chart.ariaLabel} role="img">
     {
-      nums.map((item, i) => (
-        <div class="cb-big-num">
-          <p class="cb-big-num__label">{item.headline || `指標${i + 1}`}</p>
-          <p class="cb-big-num__value">{item.figure}</p>
-          {item.text && <p class="cb-big-num__sub">{item.text.slice(0, 48)}</p>}
+      stats.chart.points.map((p) => (
+        <div class="cb-bar-chart__col">
+          <div class="cb-bar-chart__bar-wrap">
+            <div
+              class:list={["cb-bar-chart__bar", p.latest && "cb-bar-chart__bar--latest"]}
+              style={`height:${p.heightPct}%`}
+            >
+              <span class="cb-bar-chart__val">{p.display}</span>
+            </div>
+          </div>
+          <span class="cb-bar-chart__label">
+            {p.label.split("\n").map((line, i, arr) => (
+              <>
+                {line}
+                {i < arr.length - 1 && <br />}
+              </>
+            ))}
+          </span>
         </div>
       ))
     }
   </div>
+
+  {stats.table.rows.length > 0 && (
+    <table class="cb-trend-table">
+      <thead>
+        <tr>
+          {stats.table.columns.map((col) => (
+            <th>{col}</th>
+          ))}
+        </tr>
+      </thead>
+      <tbody>
+        {
+          stats.table.rows.map((row) => (
+            <tr>
+              <td>{row.date}</td>
+              <td class="cb-num-cell">{row.value}</td>
+              <td class={deltaClass(row.deltaTone)}>{row.delta || "—"}</td>
+              <td>
+                {row.sourceUrl ? (
+                  <a href={row.sourceUrl} target="_blank" rel="noopener">
+                    {row.sourceLabel || "出典"} ↗
+                  </a>
+                ) : (
+                  row.sourceLabel || "—"
+                )}
+              </td>
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+  )}
+
+  {stats.footnote && (
+    <p class="cb-block__note cb-block__note--foot" set:html={stats.footnote} />
+  )}
+
+  {stats.matrix && (
+    <div class="cb-stats-matrix">
+      <div class="cb-block__head cb-stats-matrix__head">
+        <h3 class="cb-block__title">{stats.matrix.title || "政府の説明 ↔ 公表数値"}</h3>
+        {stats.matrix.tag && <span class="cb-block__tag">{stats.matrix.tag}</span>}
+      </div>
+      {
+        (stats.matrix.rows ?? []).map((row) => (
+          <div class="cb-matrix-row">
+            <div class="cb-matrix-party">{row.party}</div>
+            <div class="cb-matrix-cell cb-matrix-cell--say">{row.say}</div>
+            <div class="cb-matrix-cell cb-matrix-cell--do">{row.do}</div>
+            <div>
+              <span class:list={["cb-sym", row.symClass && `cb-sym--${row.symClass}`]}>
+                {row.sym || "▲"}
+              </span>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  )}
 </section>
+
+<style>
+  .cb-block__note--foot {
+    margin-top: 0.75rem;
+    margin-bottom: 0;
+  }
+  .cb-stats-matrix {
+    margin-top: 1.25rem;
+    padding-top: 1rem;
+    border-top: 1px dashed var(--color-border);
+  }
+  .cb-stats-matrix__head {
+    margin-bottom: 0.5rem;
+  }
+  .cb-stats-matrix__head .cb-block__title {
+    font-size: 1rem;
+  }
+</style>
