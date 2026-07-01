@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-01T07:58:57.700Z",
+  "generatedAt": "2026-07-01T09:28:30.234Z",
   "strategy": "quality-first",
   "activeCount": 39,
   "parkedCount": 0,
@@ -6739,6 +6739,17 @@
       "qualityBlockers": [],
       "agentTasks": [
         {
+          "id": "kishida-resign:B3_topic",
+          "slug": "kishida-resign",
+          "agent": "writer",
+          "agentLabel": "ライター",
+          "checkId": "B3_topic",
+          "title": "[ゲート] 話題一致",
+          "todo": "要約が searchKeyword と一致（2行以上）",
+          "command": "npm run complete:article -- --slug kishida-resign --force",
+          "priority": 30
+        },
+        {
           "id": "kishida-resign:C2_evidence_distinct",
           "slug": "kishida-resign",
           "agent": "writer",
@@ -6746,6 +6757,39 @@
           "checkId": "C2_evidence_distinct",
           "title": "[ゲート] 根拠の独自性",
           "todo": "根拠は結論と同文禁止",
+          "command": "npm run complete:article -- --slug kishida-resign --force",
+          "priority": 30
+        },
+        {
+          "id": "kishida-resign:D2_arc_topic",
+          "slug": "kishida-resign",
+          "agent": "writer",
+          "agentLabel": "ライター",
+          "checkId": "D2_arc_topic",
+          "title": "[ゲート] 経緯の話題",
+          "todo": "経緯3行以上が案件キーワードと一致",
+          "command": "npm run complete:article -- --slug kishida-resign --force",
+          "priority": 30
+        },
+        {
+          "id": "kishida-resign:E4_timeline_diet_topic",
+          "slug": "kishida-resign",
+          "agent": "writer",
+          "agentLabel": "ライター",
+          "checkId": "E4_timeline_diet_topic",
+          "title": "[ゲート] TL国会の話題",
+          "todo": "タイムライン国会3件が案件と一致",
+          "command": "npm run complete:article -- --slug kishida-resign --force",
+          "priority": 30
+        },
+        {
+          "id": "kishida-resign:G6_matrix_topic",
+          "slug": "kishida-resign",
+          "agent": "writer",
+          "agentLabel": "ライター",
+          "checkId": "G6_matrix_topic",
+          "title": "[ゲート] 〇×の話題",
+          "todo": "公言と行動が案件キーワードと一致（2党）",
           "command": "npm run complete:article -- --slug kishida-resign --force",
           "priority": 30
         }
@@ -6844,22 +6888,66 @@
       ],
       "blockers": [
         {
+          "id": "B3_topic",
+          "label": "話題一致",
+          "todo": "要約が searchKeyword と一致（2行以上）",
+          "detail": "0/2 行がキーワード一致（高市内閣）"
+        },
+        {
           "id": "C2_evidence_distinct",
           "label": "根拠の独自性",
           "todo": "根拠は結論と同文禁止",
           "detail": "根拠が結論のコピー"
+        },
+        {
+          "id": "D2_arc_topic",
+          "label": "経緯の話題",
+          "todo": "経緯3行以上が案件キーワードと一致",
+          "detail": "0/3 行が話題一致"
+        },
+        {
+          "id": "E4_timeline_diet_topic",
+          "label": "TL国会の話題",
+          "todo": "タイムライン国会3件が案件と一致",
+          "detail": "0/3 国会が話題一致"
+        },
+        {
+          "id": "G6_matrix_topic",
+          "label": "〇×の話題",
+          "todo": "公言と行動が案件キーワードと一致（2党）",
+          "detail": "公言テキストが案件と無関係"
         }
       ],
-      "blockerCount": 1,
+      "blockerCount": 5,
       "runState": "idle",
       "workItems": [
+        {
+          "id": "B3_topic",
+          "label": "話題一致",
+          "state": "blocked"
+        },
         {
           "id": "C2_evidence_distinct",
           "label": "根拠の独自性",
           "state": "blocked"
+        },
+        {
+          "id": "D2_arc_topic",
+          "label": "経緯の話題",
+          "state": "blocked"
+        },
+        {
+          "id": "E4_timeline_diet_topic",
+          "label": "TL国会の話題",
+          "state": "blocked"
+        },
+        {
+          "id": "G6_matrix_topic",
+          "label": "〇×の話題",
+          "state": "blocked"
         }
       ],
-      "nextAction": "根拠が結論のコピー → X投稿は見つかりませんでした（5段階調査完了）",
+      "nextAction": "0/2 行がキーワード一致（高市内閣） → 根拠が結論のコピー → 0/3 行が話題一致 → X投稿は見つかりませんでした（5段階調査完了）",
       "promo": {
         "x": null,
         "hatena": null,
