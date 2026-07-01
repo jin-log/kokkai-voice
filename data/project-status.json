@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-01T21:13:21.440Z",
+  "generatedAt": "2026-07-01T21:15:04.791Z",
   "strategy": "quality-first",
   "activeCount": 39,
   "parkedCount": 0,
@@ -214,8 +214,8 @@
     ],
     "stalledCount": 9,
     "message": "9 記事が同じチェックで失敗ループ中（自動では越えられない壁の可能性）",
-    "analyzedAt": "2026-07-01T21:13:21.437Z",
-    "lastPatrolCycleAt": "2026-07-01T21:13:21.174Z",
+    "analyzedAt": "2026-07-01T21:15:04.786Z",
+    "lastPatrolCycleAt": "2026-07-01T21:15:04.422Z",
     "patrolRunning": true
   },
   "slugs": [
@@ -1002,7 +1002,7 @@
         {
           "id": "G5_parties_symbol",
           "label": "◎〇▲×",
-          "state": "active"
+          "state": "blocked"
         },
         {
           "id": "pipe:content",
@@ -1880,7 +1880,7 @@
         {
           "id": "G5_parties_symbol",
           "label": "◎〇▲×",
-          "state": "active"
+          "state": "blocked"
         },
         {
           "id": "pipe:content",
@@ -2794,7 +2794,7 @@
         {
           "id": "G5_parties_symbol",
           "label": "◎〇▲×",
-          "state": "active"
+          "state": "blocked"
         },
         {
           "id": "pipe:content",
@@ -3162,12 +3162,17 @@
         }
       ],
       "blockerCount": 1,
-      "runState": "idle",
+      "runState": "active",
       "workItems": [
+        {
+          "id": "E4_timeline_diet_topic",
+          "label": "TL国会の話題",
+          "state": "active"
+        },
         {
           "id": "G5_parties_symbol",
           "label": "◎〇▲×",
-          "state": "active"
+          "state": "blocked"
         },
         {
           "id": "pipe:matrix",
@@ -3199,8 +3204,15 @@
       "publishedAt": "2026-06-29T00:52:28.532Z",
       "adminHiddenBy": null,
       "adminHiddenAt": null,
-      "patrolFixing": false,
+      "patrolFixing": true,
       "activity": [
+        {
+          "at": "2026-07-01T21:14:38.216Z",
+          "when": "07/02 06:14",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — writer / E4_timeline_diet_topic"
+        },
         {
           "at": "2026-06-29T00:52:28.532Z",
           "when": "06/29 09:52",
@@ -3369,12 +3381,12 @@
         }
       ],
       "blockerCount": 1,
-      "runState": "active",
+      "runState": "idle",
       "workItems": [
         {
           "id": "G5_parties_symbol",
           "label": "◎〇▲×",
-          "state": "active"
+          "state": "blocked"
         },
         {
           "id": "pipe:matrix",
@@ -3401,13 +3413,41 @@
       },
       "xUnavailable": true,
       "xResearchStatus": "exhausted",
-      "statusExplain": "巡回が自動修正中 — ◌ が今処理している項目",
+      "statusExplain": "公開済 06/29 15:31",
       "publishedBy": null,
       "publishedAt": "2026-06-29T06:31:08.767Z",
       "adminHiddenBy": null,
       "adminHiddenAt": null,
-      "patrolFixing": true,
+      "patrolFixing": false,
       "activity": [
+        {
+          "at": "2026-07-01T21:14:23.557Z",
+          "when": "07/02 06:14",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — writer / G5_parties_symbol"
+        },
+        {
+          "at": "2026-07-01T21:14:23.037Z",
+          "when": "07/02 06:14",
+          "type": "content.updated",
+          "actor": "patrol",
+          "line": "content.updated（巡回） — 巡回でコンテンツ更新（公開は維持）"
+        },
+        {
+          "at": "2026-07-01T21:13:40.194Z",
+          "when": "07/02 06:13",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — writer / G5_parties_symbol"
+        },
+        {
+          "at": "2026-07-01T21:13:39.620Z",
+          "when": "07/02 06:13",
+          "type": "content.updated",
+          "actor": "patrol",
+          "line": "content.updated（巡回） — 巡回でコンテンツ更新（公開は維持）"
+        },
         {
           "at": "2026-07-01T21:13:06.209Z",
           "when": "07/02 06:13",
@@ -3638,7 +3678,7 @@
         {
           "id": "G5_parties_symbol",
           "label": "◎〇▲×",
-          "state": "active"
+          "state": "blocked"
         },
         {
           "id": "pipe:content",
@@ -3670,13 +3710,55 @@
       },
       "xUnavailable": true,
       "xResearchStatus": "exhausted",
-      "statusExplain": "巡回が自動修正中 — ◌ が今処理している項目",
+      "statusExplain": "公開済 06/29 15:31",
       "publishedBy": null,
       "publishedAt": "2026-06-29T06:31:08.845Z",
       "adminHiddenBy": null,
       "adminHiddenAt": null,
       "patrolFixing": true,
       "activity": [
+        {
+          "at": "2026-07-01T21:15:04.068Z",
+          "when": "07/02 06:15",
+          "type": "patrol.done",
+          "actor": "patrol",
+          "line": "巡回処理完了（巡回） — 完成度 33% / 品質 OK"
+        },
+        {
+          "at": "2026-07-01T21:15:03.372Z",
+          "when": "07/02 06:15",
+          "type": "content.updated",
+          "actor": "patrol",
+          "line": "content.updated（巡回） — 巡回でコンテンツ更新（公開は維持）"
+        },
+        {
+          "at": "2026-07-01T21:14:27.270Z",
+          "when": "07/02 06:14",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — writer / D2_arc_topic"
+        },
+        {
+          "at": "2026-07-01T21:14:26.604Z",
+          "when": "07/02 06:14",
+          "type": "content.updated",
+          "actor": "patrol",
+          "line": "content.updated（巡回） — 巡回でコンテンツ更新（公開は維持）"
+        },
+        {
+          "at": "2026-07-01T21:13:38.631Z",
+          "when": "07/02 06:13",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — writer / D2_arc_topic"
+        },
+        {
+          "at": "2026-07-01T21:13:37.911Z",
+          "when": "07/02 06:13",
+          "type": "content.updated",
+          "actor": "patrol",
+          "line": "content.updated（巡回） — 巡回でコンテンツ更新（公開は維持）"
+        },
         {
           "at": "2026-07-01T21:13:20.869Z",
           "when": "07/02 06:13",
@@ -3701,48 +3783,6 @@
         {
           "at": "2026-07-01T21:13:05.848Z",
           "when": "07/02 06:13",
-          "type": "content.updated",
-          "actor": "patrol",
-          "line": "content.updated（巡回） — 巡回でコンテンツ更新（公開は維持）"
-        },
-        {
-          "at": "2026-07-01T21:12:41.839Z",
-          "when": "07/02 06:12",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — writer / D2_arc_topic"
-        },
-        {
-          "at": "2026-07-01T21:12:41.090Z",
-          "when": "07/02 06:12",
-          "type": "content.updated",
-          "actor": "patrol",
-          "line": "content.updated（巡回） — 巡回でコンテンツ更新（公開は維持）"
-        },
-        {
-          "at": "2026-07-01T21:12:25.697Z",
-          "when": "07/02 06:12",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — writer / D2_arc_topic"
-        },
-        {
-          "at": "2026-07-01T21:12:24.393Z",
-          "when": "07/02 06:12",
-          "type": "content.updated",
-          "actor": "patrol",
-          "line": "content.updated（巡回） — 巡回でコンテンツ更新（公開は維持）"
-        },
-        {
-          "at": "2026-07-01T21:12:03.230Z",
-          "when": "07/02 06:12",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — writer / D2_arc_topic"
-        },
-        {
-          "at": "2026-07-01T21:12:02.439Z",
-          "when": "07/02 06:12",
           "type": "content.updated",
           "actor": "patrol",
           "line": "content.updated（巡回） — 巡回でコンテンツ更新（公開は維持）"
@@ -4112,7 +4152,7 @@
         {
           "id": "G5_parties_symbol",
           "label": "◎〇▲×",
-          "state": "active"
+          "state": "blocked"
         },
         {
           "id": "pipe:content",
@@ -4144,7 +4184,7 @@
       },
       "xUnavailable": true,
       "xResearchStatus": "exhausted",
-      "statusExplain": "巡回が自動修正中 — ◌ が今処理している項目",
+      "statusExplain": "公開済 06/29 15:31",
       "publishedBy": null,
       "publishedAt": "2026-06-29T06:31:08.986Z",
       "adminHiddenBy": null,
@@ -8392,5 +8432,5 @@
   ],
   "deltaGoldPct": 0,
   "previousGoldPct": 75,
-  "deployedAt": "2026-07-01T21:13:17.367Z"
+  "deployedAt": "2026-07-01T21:13:45.887Z"
 }
