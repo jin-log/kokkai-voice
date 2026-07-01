@@ -1,6 +1,5 @@
 ---
 import AdminShell from "../../components/admin/AdminShell.astro";
-import AdminPatrolAlert from "../../components/admin/AdminPatrolAlert.astro";
 import { loadDashboardData } from "../../lib/admin-dashboard.mjs";
 
 const dash = await loadDashboardData();
@@ -26,8 +25,6 @@ const { status, patrol, cards, activeArticle, generatedAtLabel, patrolHealth } =
       </div>
     </header>
   )}
-
-  {patrolHealth && <AdminPatrolAlert health={patrolHealth} id="dash-patrol-alert" />}
 
   <section class="admin-dash__patrol" aria-label="巡回状態">
     {patrolHealth?.status === "stalled" ? (

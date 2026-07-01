@@ -1,6 +1,8 @@
 ---
 import DevLayout from "../../layouts/DevLayout.astro";
 import { ADMIN_HOME, ADMIN_NAV_GROUPS } from "../../lib/admin-nav.mjs";
+import AdminPatrolAlert from "./AdminPatrolAlert.astro";
+import { loadProjectStatus } from "../../lib/project-status.mjs";
 
 interface Props {
   /** dashboard | articles | promo | ... */
@@ -22,6 +24,8 @@ const {
   bodyDataCase,
   includeAppJs = false,
 } = Astro.props;
+
+const shellStatus = liveStatus ? await loadProjectStatus().catch(() => null) : null;
 ---
 
 <DevLayout
@@ -73,6 +77,9 @@ const {
         {liveStatus && (
           <p class="admin-live" id="admin-live-badge" hidden aria-live="polite">● 15秒ごとに更新</p>
         )}
+        {shellStatus?.patrolHealth && (
+          <AdminPatrolAlert health={shellStatus.patrolHealth} id="shell-patrol-alert" />
+        )}
         <slot />
       </div>
     </div>
@@ -97,7 +104,9 @@ const {
       lock.hidden = true;
       gate.hidden = false;
       window.dispatchEvent(new CustomEvent("admin-unlocked"));
-      if (liveStatus) window.dispatchEvent(new CustomEvent("admin-live-start"));
+      if (liveStatus) {
+        queueMicrotask(() => window.dispatchEvent(new CustomEvent("admin-live-start")));
+      }
     }
 
     if (localStorage.getItem(KEY) === PIN) unlock();

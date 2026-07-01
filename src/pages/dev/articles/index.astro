@@ -1,7 +1,6 @@
 ---
 import AdminShell from "../../../components/admin/AdminShell.astro";
 import AdminArticleRow from "../../../components/admin/AdminArticleRow.astro";
-import AdminPatrolAlert from "../../../components/admin/AdminPatrolAlert.astro";
 import { loadProjectStatus, sortSlugsForAdminPanel, adminSlugFilter } from "../../../lib/project-status.mjs";
 import { loadPatrolRuntime } from "../../../lib/patrol-runtime.mjs";
 import { policyCategoryLabel, sortPolicyCategories } from "../../../lib/article-categories.mjs";
@@ -47,10 +46,8 @@ const policyCategories = Object.keys(categoryCounts).sort(sortPolicyCategories);
     <p class="admin-page-head__note">一覧・新規作成・公開はこの画面。一般公開だけはあなたの操作。それ以外は巡回が自動。</p>
   </header>
 
-  {status?.patrolHealth && <AdminPatrolAlert health={status.patrolHealth} id="articles-patrol-alert" />}
-
   <section class="admin-guide" aria-label="状態の意味と自動化">
-    <details class="admin-guide__panel" open>
+    <details class="admin-guide__panel">
       <summary class="admin-guide__summary">状態の違い・自動化の範囲（必読）</summary>
       <div class="admin-guide__body">
         <table class="admin-guide__table">
@@ -503,7 +500,7 @@ const policyCategories = Object.keys(categoryCounts).sort(sortPolicyCategories);
   });
 
   function renderPatrolAlert(health) {
-    const id = "articles-patrol-alert";
+    const id = "shell-patrol-alert";
     let el = document.getElementById(id);
     const show = health && (health.status === "stalled" || health.status === "paused" || (health.slugStalls?.length ?? 0) > 0);
     if (!show) {
@@ -515,8 +512,9 @@ const policyCategories = Object.keys(categoryCounts).sort(sortPolicyCategories);
       el.id = id;
       el.className = "admin-patrol-alert admin-patrol-alert--stalled";
       el.setAttribute("role", "alert");
+      const main = document.querySelector(".admin-main");
       const head = document.querySelector(".admin-page-head");
-      if (head?.parentNode) head.parentNode.insertBefore(el, head.nextSibling);
+      if (main) main.insertBefore(el, head || main.firstChild);
     }
     el.className = `admin-patrol-alert ${health.status === "paused" ? "admin-patrol-alert--paused" : "admin-patrol-alert--stalled"}`;
     const loops = (health.slugStalls ?? []).slice(0, 8).map((s) =>
@@ -698,6 +696,7 @@ const policyCategories = Object.keys(categoryCounts).sort(sortPolicyCategories);
   });
 
   window.addEventListener("admin-live-start", startLivePoll);
-  if (localStorage.getItem(KEY) === "1192") startLivePoll();
+  window.addEventListener("admin-unlocked", startLivePoll);
+  if (localStorage.getItem(KEY) === "1192") queueMicrotask(startLivePoll);
 })();
 </script>
