@@ -52,7 +52,7 @@ export async function onRequestPost(context) {
       GH_TOKEN,
       "admin-article.yml",
       { action: "publish", slug, title: "" },
-      `「${slug}」を公開しました。1〜2分で /case/${slug}/ に表示されます。`,
+      `「${slug}」を公開処理に送りました。GitHubで反映後、デプロイで本番に載ります（合計1〜3分）。`,
     );
   }
 

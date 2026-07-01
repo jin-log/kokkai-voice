@@ -317,7 +317,27 @@ document.querySelectorAll(".publish-slug-btn").forEach((btn) => {
     try {
       const data = await callDispatch("deploy_article", { slug });
       statusEl.className = "deploy-slug-status is-ok";
-      statusEl.textContent = "✅ " + data.message;
+      statusEl.textContent = "✅ 起動済み — 1〜2分待って更新します…";
+      const pin = getPin();
+      let done = false;
+      for (let i = 0; i < 18 && pin; i++) {
+        await new Promise((r) => setTimeout(r, 10000));
+        try {
+          const r = await fetch(`/api/project-status?pin=${encodeURIComponent(pin)}&t=${Date.now()}`);
+          if (!r.ok) continue;
+          const d = await r.json();
+          const row = d.status?.slugs?.find((s) => s.slug === slug);
+          if (row?.pageReady || row?.publishState === "live") {
+            done = true;
+            break;
+          }
+        } catch { /* retry */ }
+      }
+      statusEl.className = done ? "deploy-slug-status is-ok" : "deploy-slug-status is-error";
+      statusEl.textContent = done
+        ? "✅ 公開反映を確認しました"
+        : "⚠ まだ反映されていません。GitHub Actions を確認するか、しばらく後に再読み込みしてください";
+      setTimeout(() => location.reload(), done ? 1500 : 8000);
     } catch (e) {
       statusEl.className = "deploy-slug-status is-error";
       statusEl.textContent = "❌ " + e.message;
