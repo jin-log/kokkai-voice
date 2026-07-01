@@ -121,10 +121,118 @@ function isQuestionBullet(line) {
   return /のでしょうか|でしょうか。|ですか。?$/.test(String(line || ""));
 }
 
+const OPENING_TEMPLATE_LINE =
+  /国会で議論された|国会で論じられた|をめぐる.*が国会で議論|国会で答弁・質疑を行った|が国会で論じた/;
+
+/**
+ * タイトル（簡素化後）に合わせて1行目を整える — 定型「国会で議論された」を先頭から外す
+ * @param {string[]} bullets
+ * @param {string} title
+ * @param {string} keyword
+ * @param {{ arcSummary?: { date?: string, text?: string }[] }} [hints]
+ */
+export function finalizeNowBulletsForTitle(bullets, title, keyword, hints = {}) {
+  const TITLE_ASKS_NUMBERS = /いくら|何円|何人|何%|何％|実績|成果|何兆|何万人/;
+  const TITLE_ASKS_OUTCOME = /効いた|効果|成立|通った|なぜ|どうなった|行方|最新|とは|争点/;
+  const OUTCOME_WORDS =
+    /成立|可決|否決|見送り|据え置き|引上げ|未成立|法制化|含まれていない|審議|提出|可決・成立|効果|分かれ/;
+
+  const crafted = craftOpeningFromTitle(title, keyword, hints);
+  const pool = dedupeLines(
+    (bullets || []).filter(
+      (b) => !OPENING_TEMPLATE_LINE.test(b) && !isBoilerplateTopicLine(b) && !isQuestionBullet(b),
+    ),
+  );
+
+  let first = crafted;
+  if (!first && TITLE_ASKS_NUMBERS.test(title)) {
+    first = pool.find((b) => /[０-９0-9]/.test(b) && /円|%|％|万|兆|人|件/.test(b));
+  }
+  if (!first && TITLE_ASKS_OUTCOME.test(title)) {
+    first = pool.find((b) => OUTCOME_WORDS.test(b));
+  }
+  if (!first) first = pool[0];
+
+  const rest = pool.filter((b) => b !== first).slice(0, 2);
+  const merged = first ? [first, ...rest] : pool;
+  const out = ensureTopicInLines(merged.length ? merged : bullets, keyword).slice(0, 3);
+  return out.length ? out : bullets.slice(0, 3);
+}
+
+/** @param {{ arcSummary?: { date?: string, text?: string }[] }} hints */
+function craftOpeningFromTitle(title, keyword, hints = {}) {
+  const arc = (hints.arcSummary ?? []).map((a) => a.text || "").join(" ");
+  const t = title;
+  const kw = keyword;
+
+  if (/ボーナス|期末手当/.test(t) && /いくら|給与法/.test(t)) {
+    if (/据え置き|可決/.test(arc)) {
+      return "2025年12月、国会議員の期末手当（ボーナス）は現行水準の据え置きとする歳費法改正が国会で成立した。2023年の特別職給与法改正では引上げをめぐり野党が反対した。";
+    }
+    return "国会議員の期末手当（ボーナス）は歳費法・特別職給与法の改正と連動し、据え置きか引上げかが国会で争点になっている。";
+  }
+
+  if (/スパイ防止/.test(t) && /なぜ成立しない|成立しない/.test(t)) {
+    return "包括的スパイ防止法は国会で繰り返し審議されるが、2026年時点では成立していない。国家情報会議設置法案は審議に入り、法制化の射程が国会で争点になっている。";
+  }
+
+  if (/政治資金|献金/.test(t) && /政党助成|ルール/.test(t)) {
+    return "政治資金規正法の改正と政党交付金の在り方が国会で継続審議され、献金の上限・報告義務の厳格化が論点になっている。";
+  }
+
+  if (/選挙制度/.test(t)) {
+    return "選挙制度の見直し（選挙区・議席配分など）をめぐり、与野党が国会でそれぞれ法案・修正案を提示している。";
+  }
+
+  if (/補正予算/.test(t)) {
+    return "年度途中の補正予算案は追加歳出の規模と使途（防衛・物価対策・復興など）をめぐり、国会で採決・審議されている。";
+  }
+
+  if (/政治とカネ|献金問題/.test(t)) {
+    return "政治とカネの問題を受け、献金報告の不備や規正法改正が国会で追及・審議されている。";
+  }
+
+  if (/教育法改正|超党派/.test(t) || /学校教育法/.test(kw)) {
+    return "学校教育法等の改正案が国会で審議され、学校現場への影響（教育内容・運営）が与野党で論点になっている。";
+  }
+
+  if (/副首都/.test(t) && /どこ/.test(t)) {
+    return "副首都構想は大阪・関西を候補地とする議論が国会で続き、首都機能の代替拠点の具体案と財源が争点になっている。";
+  }
+
+  if (/大阪都構想/.test(t)) {
+    return "大阪都構想（特別区設置・名称変更）は2026年の国会で関連法案が審議され、メリット・デメリットをめぐり与野党の立場が分かれている。";
+  }
+
+  if (/太陽光パネル/.test(t) && /とは/.test(t)) {
+    return "東京都の太陽光パネル設置義務化は、都内の新築・改築を対象とする制度案として国会・都議会で議論の材料になっている。";
+  }
+
+  if (/刑事告発/.test(t) || /学歴/.test(t)) {
+    return "東京都知事をめぐる学歴問題に関する刑事告発は、告発から一定期間経過し、捜査・結論の有無が国会外の論点として追われている。";
+  }
+
+  if (/大学無償化/.test(t)) {
+    return "大学無償化（授業料等の負担軽減）は対象者の所得要件と財源確保をめぐり、国会で与野党の法案・修正案が対立している。";
+  }
+
+  if (/エネルギー政策/.test(t)) {
+    return "エネルギー政策は原発再稼働・再エネ拡大・電気料金のバランスをめぐり、国会でエネルギー基本計画と関連法案が審議されている。";
+  }
+
+  if (/政権|内閣人事|首相交代/.test(t)) {
+    return "首相交代後の内閣人事と政策の継続・変更が国会で説明され、政権の方針と予算・法案の行方が論点になっている。";
+  }
+
+  return "";
+}
+
 function pickConclusionTriple(candidates, bundle, primary, meta) {
   const kw = bundle.keyword;
   const out = [];
-  const pool = candidates.filter((l) => !isQuestionBullet(l));
+  const pool = candidates.filter(
+    (l) => !isQuestionBullet(l) && !OPENING_TEMPLATE_LINE.test(l) && !isBoilerplateTopicLine(l),
+  );
 
   const status = pool.find((l) => /含まれていない|未提出|未成立|入っていない|審議|未実施/.test(l));
   const move = pool.find((l) => /連立|合意|検討|提出|起草|法案/.test(l) && l !== status);
@@ -188,11 +296,11 @@ function composeFromPrimary(sn, meta, keyword = "") {
     lines.push("包括的スパイ防止法は国会で審議されても、成立には至っていない。");
   }
   if (/ボーナス|歳費|期末手当|議員報酬/.test(ex) || /ボーナス|歳費/.test(kw)) {
-    if (/期末手当|ボーナス|歳費/.test(ex)) {
-      lines.push(`${date ? `${date}：` : ""}国会議員の期末手当（ボーナス）をめぐる歳費法改正が国会で議論された。`);
-    }
     if (/据え置き/.test(ex)) {
-      lines.push("議員ボーナスを現行水準に据え置く歳費法改正案が国会で可決・審議された。");
+      lines.push("議員ボーナスを現行水準に据え置く歳費法改正案が国会で可決・成立した。");
+    }
+    if (/引上げ|引き上げ/.test(ex) && /反対|慎重/.test(ex)) {
+      lines.push(`${date ? `${date}：` : ""}特別職・議員報酬の引上げをめぐり、野党が国会で反対・慎重論を表明した。`);
     }
   }
   if (/高市.*内閣|内閣発足|組閣|政権/.test(kw) || /高市内閣|内閣発足|高市総理/.test(ex)) {

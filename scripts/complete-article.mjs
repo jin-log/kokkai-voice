@@ -27,6 +27,7 @@ import {
   synthesizeProsCons,
   synthesizeProsConsFromArticle,
   synthesizeTimelinePlain,
+  finalizeNowBulletsForTitle,
 } from "./lib/writer-synthesize.mjs";
 import { enrichGeneralArticle, writePolicyMatrixGeneral, fetchReadable, isGeneralContentReady } from "./lib/enrich-general.mjs";
 import { citizenTitle } from "../src/lib/title-format.mjs";
@@ -43,8 +44,10 @@ function arg(name) {
 
 const slug = arg("slug");
 const force = process.argv.includes("--force");
-if (!slug) {
-  console.error("必須: --slug");
+const contentOnly = process.argv.includes("--content-only");
+const allWip = process.argv.includes("--all-wip");
+if (!slug && !allWip) {
+  console.error("必須: --slug SLUG または --all-wip");
   process.exit(1);
 }
 
@@ -194,6 +197,12 @@ function buildNowBulletsPrimary(records, keyword, best, factBundle, meta) {
   return { nowBullets, layers };
 }
 
+/** @param {string} slug */
+async function loadArticleJson(slug) {
+  const articlePath = path.join(root, "data/articles", `${slug}.json`);
+  return JSON.parse(await readFile(articlePath, "utf8"));
+}
+
 async function enrichKokkai(article) {
   const keyword = article.searchKeyword;
   const from = "2023-01-01";
@@ -272,11 +281,16 @@ async function enrichKokkai(article) {
       console.log(`[writer] 経緯フォールバック: 既存 ${arcFromWriter.length} 行`);
     }
   }
+
+  article.title = citizenTitle({ ...article, slug });
+  nowBullets = finalizeNowBulletsForTitle(nowBullets, article.title, searchKeyword, {
+    arcSummary: arcFromWriter,
+  });
+
   const summaryTexts = synthesizeEvidence(factBundle, nowBullets, meta, arcFromWriter).slice(0, 5);
 
   const glossary = layers.glossary;
 
-  article.title = citizenTitle({ ...article, slug });
   article.nowSummary = {
     label: layers.nowSummary.label,
     bullets: nowBullets,
@@ -471,30 +485,34 @@ async function rescorePolicyMatrix(slug) {
   }
 }
 
-async function main() {
-  const articlePath = path.join(root, "data/articles", `${slug}.json`);
+async function completeOneSlug(targetSlug) {
+  const articlePath = path.join(root, "data/articles", `${targetSlug}.json`);
   let article = JSON.parse(await readFile(articlePath, "utf8"));
 
-  console.log(`\n=== complete-article: ${slug} (${article.category}) ===\n`);
+  console.log(`\n=== complete-article: ${targetSlug} (${article.category})${contentOnly ? " [content-only]" : ""} ===\n`);
 
   // ① コンテンツ
   if (article.category === "国会") {
     let policyMatrix = null;
     try {
       policyMatrix = JSON.parse(
-        await readFile(path.join(root, `data/policy-matrix/${slug}.json`), "utf8"),
+        await readFile(path.join(root, `data/policy-matrix/${targetSlug}.json`), "utf8"),
       );
     } catch {
       /* */
     }
-    if (!force && isKokkaiContentReady(article, policyMatrix)) {
+    const shouldEnrich =
+      contentOnly ||
+      force ||
+      (!isKokkaiContentReady(article, policyMatrix) && !isTopicContentPreserved(article, policyMatrix));
+    if (!shouldEnrich) {
       console.log("[国会] 既にコンテンツあり — スキップ");
-    } else if (isTopicContentPreserved(article, policyMatrix)) {
+    } else if (!contentOnly && !force && isTopicContentPreserved(article, policyMatrix)) {
       console.log("[国会] 話題一致済み — 本文上書きスキップ");
     } else {
       await enrichKokkai(article);
     }
-  } else if (isGeneralContentReady(article)) {
+  } else if (isGeneralContentReady(article) && !force && !contentOnly) {
     console.log("[一般] 既にコンテンツあり — スキップ");
   } else {
     console.log("[一般] ソース取得・要約");
@@ -505,13 +523,19 @@ async function main() {
     if (sources.length >= 2) {
       await writePolicyMatrixGeneral(article, root, sources);
     }
+    article.title = citizenTitle({ ...article, slug: targetSlug });
   }
 
   await writeFile(articlePath, `${JSON.stringify(article, null, 2)}\n`, "utf8");
   console.log("[①] コンテンツ投入完了");
 
+  if (contentOnly) {
+    await refreshProjectStatus();
+    return;
+  }
+
   console.log("[②] メリデメ自動生成");
-  await runNode("generate-proscons-auto.mjs", ["--slug", slug]);
+  await runNode("generate-proscons-auto.mjs", ["--slug", targetSlug]);
 
   // ③ X（話題一致が足りなければ再調査）
   article = JSON.parse(await readFile(articlePath, "utf8"));
