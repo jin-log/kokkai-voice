@@ -6,6 +6,75 @@
       "severity": "high",
       "assignee": "owner",
       "title": "品質巡回：進行停止（ループ中）",
+      "message": "完成度 63% が 3 サイクル連続で変わらず、1本も完成していません。16 記事が同じチェックで失敗ループ中（自動では越えられない壁の可能性）",
+      "slugStalls": [
+        {
+          "slug": "tokyo-solar-panel",
+          "title": "【東京都】太陽光パネル設置義務とは？",
+          "loopLine": "writer → 話題一致 → exit 1/1/1（3回連続）",
+          "ownerHint": "要約が searchKeyword と一致（2行以上）"
+        },
+        {
+          "slug": "fukushuto-koso",
+          "title": "【副首都構想】第二の首都はどこ？具体案と争点",
+          "loopLine": "writer → ◎〇▲× → exit 1/1/1（3回連続）",
+          "ownerHint": "各党の記号を確定（v2）"
+        },
+        {
+          "slug": "chingin",
+          "title": "賃上げ・最低賃金の動向",
+          "loopLine": "writer → 根拠の独自性 → exit 1/1/1（3回連続）",
+          "ownerHint": "根拠は結論と同文禁止"
+        },
+        {
+          "slug": "shoshika",
+          "title": "【少子化対策】支援策の内容と出生率の動向",
+          "loopLine": "writer → 話題一致 → exit 1/1/1（3回連続）",
+          "ownerHint": "要約が searchKeyword と一致（2行以上）"
+        },
+        {
+          "slug": "kenpo",
+          "title": "憲法改正の動向",
+          "loopLine": "writer → 根拠の独自性 → exit 1/1/1（3回連続）",
+          "ownerHint": "根拠は結論と同文禁止"
+        },
+        {
+          "slug": "komei-kokumin",
+          "title": "【超党派・教育法改正】学校現場への影響",
+          "loopLine": "writer → 結論の質 → exit 1/1/1（3回連続）",
+          "ownerHint": "重複・途中切れ・定型文なし（行数固定なし）"
+        },
+        {
+          "slug": "case-mqzxj4ro",
+          "title": "国会議員のボーナスの動向",
+          "loopLine": "writer → Q1_conclusion_numbers → exit 2/2/2（3回連続）",
+          "ownerHint": ""
+        },
+        {
+          "slug": "fuhou-immin-trend",
+          "title": "不法滞在の動向",
+          "loopLine": "writer → 第三者目線 → exit 1/1/1（3回連続）",
+          "ownerHint": "議事録口調（お尋ね・私自身・御党）を除去"
+        }
+      ],
+      "globalStall": {
+        "goldPct": 63,
+        "cycles": 3,
+        "since": "2026-07-01T20:21:07.117Z",
+        "lastAt": "2026-07-01T20:21:32.480Z",
+        "message": "完成度 63% が 3 サイクル連続で変わらず、1本も完成していません"
+      },
+      "createdAt": "2026-07-01T19:52:57.827Z",
+      "updatedAt": "2026-07-01T20:23:00.230Z",
+      "resolvedAt": null,
+      "acknowledged": false
+    },
+    {
+      "id": "patrol-stall-active",
+      "type": "patrol_stall",
+      "severity": "high",
+      "assignee": "owner",
+      "title": "品質巡回：進行停止（ループ中）",
       "message": "解消: 停止中（2026-07-01T17:29:52.579Z）",
       "slugStalls": [
         {

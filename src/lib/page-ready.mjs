@@ -11,7 +11,6 @@ import { countTopicBullets, isTitleReady, countTopicArcLines, countTopicDietTime
 import { isDietVoice, bulletsDistinctFrom, isSpeechFragment } from "./diet-voice.mjs";
 import { isValidSymbol } from "./symbol-rules.mjs";
 import { waivedCheckIds } from "./case-gates.mjs";
-import { waivedCheckIds } from "./case-gates.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 export const root = path.join(__dirname, "../..");

@@ -17,13 +17,17 @@ const index = JSON.parse(await readFile(path.join(root, "data/articles/index.jso
 /** @param {string} text */
 function extractCounts(text) {
   const hits = [];
-  const re = /([０-９0-9][０-９0-9,．.]*)\s*(万人|人|件|%|％|円|兆|億)/g;
+  const re = /([０-９0-9][０-９0-9,．.]*)\s*(万人|万円|万人|人|件|%|％|円|兆|億|万)/g;
   let m;
   while ((m = re.exec(text))) {
-    const raw = m[1].replace(/[０-９]/g, (c) => String.fromCharCode(c.charCodeAt(0) - 0xfee0));
-    const num = Number(raw.replace(/,/g, ""));
+    let raw = m[1].replace(/[０-９]/g, (c) => String.fromCharCode(c.charCodeAt(0) - 0xfee0));
+    raw = raw.replace(/,/g, "");
+    let num = Number(raw);
+    if (m[2] === "万" || m[2] === "万人" || m[2] === "万円") num *= 10000;
+    if (m[2] === "億") num *= 100000000;
+    if (m[2] === "兆") num *= 1000000000000;
     if (Number.isFinite(num) && num > 0) {
-      hits.push({ value: num, unit: m[2], display: `${raw}${m[2]}` });
+      hits.push({ value: num, unit: m[2], display: `${m[1]}${m[2]}` });
     }
   }
   return hits;
@@ -33,8 +37,12 @@ function extractCounts(text) {
 function buildStatsSeriesFromArticle(article) {
   const text = [
     ...(article.nowSummary?.bullets ?? []),
+    ...(article.summaryBullets ?? []).map((b) => (typeof b === "string" ? b : b.text)),
     ...(article.arcSummary ?? []).map((a) => a.text),
     article.primarySpeech?.excerpt || "",
+    article.primarySpeech?.speechFull?.slice(0, 800) || "",
+    ...(article.prosCons?.merits ?? []).map((i) => `${i.headline} ${i.text} ${i.figure}`),
+    ...(article.prosCons?.demerits ?? []).map((i) => `${i.headline} ${i.text} ${i.figure}`),
   ].join("\n");
 
   const counts = extractCounts(text);
@@ -180,11 +188,19 @@ for (const slug of index.slugs ?? []) {
   }
 
   if (caseType === "statistical" && !article.statsSeries?.chart?.points?.length) {
-    article.statsSeries =
+    const built =
       slug === "fuhou-immin-trend"
         ? FUHOU_STATS
         : buildStatsSeriesFromArticle(article);
-    if (article.statsSeries) changed = true;
+    if (built) {
+      article.statsSeries = built;
+      changed = true;
+    }
+  }
+
+  if (article.caseType === "policy_debate" && article.statsSeries) {
+    delete article.statsSeries;
+    changed = true;
   }
 
   if (slug === "fuhou-immin-trend") {
