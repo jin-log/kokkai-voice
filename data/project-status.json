@@ -1,9 +1,9 @@
 {
-  "generatedAt": "2026-07-01T20:38:49.210Z",
+  "generatedAt": "2026-07-01T20:39:21.106Z",
   "strategy": "quality-first",
   "activeCount": 39,
   "parkedCount": 0,
-  "publishedCount": 22,
+  "publishedCount": 23,
   "overallGoldPct": 75,
   "overallGatePct": 87,
   "qualityFailed": 0,
@@ -96,7 +96,7 @@
     "slugStalls": [],
     "stalledCount": 0,
     "message": "停止中",
-    "analyzedAt": "2026-07-01T20:38:49.208Z",
+    "analyzedAt": "2026-07-01T20:39:21.102Z",
     "lastPatrolCycleAt": null,
     "patrolRunning": false
   },
@@ -1974,9 +1974,9 @@
       "shortTitle": "【能登半島地震】復興予算はいくら入った？",
       "category": "行政",
       "policyCategory": "行政",
-      "adminHidden": true,
-      "pageReady": false,
-      "publishState": "hidden",
+      "adminHidden": false,
+      "pageReady": true,
+      "publishState": "live",
       "previewUrl": "/dev/preview/noto-fukko-budget/",
       "qualityOk": true,
       "needsQualityFix": false,
@@ -1984,8 +1984,8 @@
       "qualityBlockers": [],
       "agentTasks": [],
       "gatePct": 100,
-      "goldPct": 67,
-      "published": false,
+      "goldPct": 83,
+      "published": true,
       "publishGateOk": true,
       "pipelinePreOk": true,
       "titleAnswerOk": true,
@@ -2025,7 +2025,7 @@
           "label": "⑤本番デプロイ",
           "phase": 5,
           "preDeploy": false,
-          "ok": false
+          "ok": true
         },
         {
           "id": "debug",
@@ -2069,7 +2069,7 @@
           "label": "⑤本番デプロイ",
           "phase": 5,
           "preDeploy": false,
-          "ok": false
+          "ok": true
         },
         {
           "id": "debug",
@@ -2082,8 +2082,14 @@
       "blockers": [],
       "blockerCount": 0,
       "runState": "idle",
-      "workItems": [],
-      "nextAction": "👁️ 非表示中 — 「表示に戻す」でトップに出せます",
+      "workItems": [
+        {
+          "id": "pipe:debug",
+          "label": "⑥デバッグOK",
+          "state": "blocked"
+        }
+      ],
+      "nextAction": "✅ 公開中 — /case/ に表示されています",
       "promo": {
         "x": null,
         "hatena": null,
@@ -2102,13 +2108,28 @@
       },
       "xUnavailable": true,
       "xResearchStatus": "exhausted",
-      "statusExplain": "非表示（手動）。自動では戻らない。",
-      "publishedBy": null,
-      "publishedAt": null,
+      "statusExplain": "手動公開 07/01 20:39",
+      "publishedBy": "owner",
+      "publishedAt": "2026-07-01T20:39:20.684Z",
       "adminHiddenBy": null,
       "adminHiddenAt": null,
       "patrolFixing": false,
-      "activity": [],
+      "activity": [
+        {
+          "at": "2026-07-01T20:39:20.688Z",
+          "when": "07/01 20:39",
+          "type": "promo.queue",
+          "actor": "system",
+          "line": "発信キューに登録（system） — はてブ/note発信キューに登録"
+        },
+        {
+          "at": "2026-07-01T20:39:20.686Z",
+          "when": "07/01 20:39",
+          "type": "publish.manual",
+          "actor": "owner",
+          "line": "手動で一般公開（あなた） — 管理画面から一般公開"
+        }
+      ],
       "distribution": [
         {
           "channel": "X",
