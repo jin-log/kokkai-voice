@@ -235,7 +235,7 @@ export async function computeProjectStatus() {
       blockers: gate.blockers.map((b) => blockerToHuman(b)),
       blockerCount: gate.blockers.length,
       runState: patrolRuntime.activeSlug === slug ? "active" : "idle",
-      workItems: buildWorkItems(slug, gate, quality, patrolRuntime),
+      workItems: buildWorkItems(slug, gate, quality, patrolRuntime, pipeline),
       nextAction,
       promo: promoMap.get(slug) ?? { x: null, hatena: null, note: null },
       short: shortMap.get(slug) ?? { label: "未生成", generated: false, uploaded: false },
@@ -295,6 +295,17 @@ export function adminSlugFilter(s) {
   if (s.publishState === "live") return "live";
   if (s.publishState === "draft") return "draft";
   return "action";
+}
+
+/** @param {ReturnType<typeof adminSlugFilter>} filter */
+export function adminFilterLabel(filter) {
+  const labels = {
+    action: "要対応",
+    draft: "公開待ち",
+    live: "公開済み",
+    hidden: "非表示",
+  };
+  return labels[filter] ?? filter;
 }
 
 export async function loadProjectStatus() {
