@@ -315,10 +315,10 @@ function projectMeta(slug) {
                             }
 
                             <footer class="ops-card__foot">
-                              <label class="ops-done">
-                                <input type="checkbox" class="ops-done__input" data-task-done={task.id} />
-                                完了（サンプル: ブラウザに保存）
-                              </label>
+                              <button type="button" class="ops-done-btn" data-task-done={task.id}>
+                                完了
+                              </button>
+                              <span class="ops-done-status" data-task-status={task.id} hidden></span>
                               <span class="ops-card__score" title="CEO優先度スコア">score {task.score}</span>
                             </footer>
                           </li>
@@ -375,7 +375,6 @@ function projectMeta(slug) {
 <script>
 const PIN = "1192";
 const KEY = "dev_auth";
-const DONE_KEY = "ops_done_sample";
 
 function show(id) { document.getElementById(id).style.display = "block"; }
 function hide(id) { document.getElementById(id).style.display = "none"; }
@@ -399,27 +398,13 @@ if (localStorage.getItem(KEY) === PIN) {
   });
 }
 
-function loadDone() {
-  try {
-    return JSON.parse(localStorage.getItem(DONE_KEY) || "[]");
-  } catch {
-    return [];
-  }
-}
-
-function saveDone(ids) {
-  localStorage.setItem(DONE_KEY, JSON.stringify(ids));
-}
-
-function applyDoneState() {
-  const done = loadDone();
-  document.querySelectorAll("[data-task-done]").forEach((el) => {
-    const id = el.getAttribute("data-task-done");
-    if (done.includes(id)) {
-      el.checked = true;
-      el.closest(".ops-card")?.classList.add("is-done");
-    }
-  });
+function bumpTabCounts() {
+  const panel = document.querySelector(".ops-panel:not([hidden])");
+  if (!panel) return;
+  const n = panel.querySelectorAll(".ops-card:not(.is-removing)").length;
+  const tab = panel.getAttribute("data-panel");
+  const btn = document.querySelector(`.ops-tabs__btn[data-tab="${tab}"] .ops-tabs__count`);
+  if (btn) btn.textContent = String(n);
 }
 
 document.querySelectorAll(".ops-tabs__btn").forEach((btn) => {
@@ -440,6 +425,7 @@ function applyAssigneeFilter() {
   const panel = document.querySelector(".ops-panel:not([hidden])");
   if (!panel) return;
   panel.querySelectorAll(".ops-card").forEach((card) => {
+    if (card.classList.contains("is-removing")) return;
     const a = card.getAttribute("data-assignee");
     card.style.display = !val || a === val ? "" : "none";
   });
@@ -453,28 +439,58 @@ document.querySelectorAll(".ops-copy-btn").forEach((btn) => {
     try {
       await navigator.clipboard.writeText(text);
       btn.textContent = "コピー済";
-      setTimeout(() => { btn.textContent = "コピー"; }, 1500);
+      setTimeout(() => { btn.textContent = "文案コピー"; }, 1500);
     } catch {
       btn.textContent = "失敗";
     }
   });
 });
 
-document.querySelectorAll(".ops-done__input").forEach((el) => {
-  el.addEventListener("change", () => {
-    const id = el.getAttribute("data-task-done");
-    let done = loadDone();
-    if (el.checked) {
-      if (!done.includes(id)) done.push(id);
-      el.closest(".ops-card")?.classList.add("is-done");
-    } else {
-      done = done.filter((x) => x !== id);
-      el.closest(".ops-card")?.classList.remove("is-done");
+document.querySelectorAll(".ops-done-btn").forEach((btn) => {
+  btn.addEventListener("click", async () => {
+    const id = btn.getAttribute("data-task-done");
+    const card = btn.closest(".ops-card");
+    const statusEl = document.querySelector(`[data-task-status="${id}"]`);
+    if (!id || !confirm("完了にしますか？一覧から消えます（ログは残ります）")) return;
+    btn.disabled = true;
+    if (statusEl) {
+      statusEl.hidden = false;
+      statusEl.textContent = "保存中…";
+      statusEl.className = "ops-done-status is-loading";
     }
-    saveDone(done);
+    try {
+      const res = await fetch("/api/ops-task-done", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ pin: localStorage.getItem(KEY), taskId: id }),
+      });
+      const data = await res.json();
+      if (!res.ok || !data.ok) throw new Error(data.error || "完了に失敗しました");
+      if (statusEl) {
+        statusEl.className = "ops-done-status is-ok";
+        statusEl.textContent = "✓ 完了";
+      }
+      card?.classList.add("is-removing");
+      setTimeout(() => {
+        card?.remove();
+        bumpTabCounts();
+        const list = card?.closest(".ops-list");
+        if (list && !list.querySelector(".ops-card")) {
+          const empty = document.createElement("p");
+          empty.className = "ops-empty";
+          empty.textContent = "該当タスクなし 🎉";
+          list.after(empty);
+        }
+      }, 300);
+    } catch (err) {
+      if (statusEl) {
+        statusEl.className = "ops-done-status is-error";
+        statusEl.textContent = err instanceof Error ? err.message : "エラー";
+      }
+      btn.disabled = false;
+    }
   });
 });
 
-applyDoneState();
 applyAssigneeFilter();
 </script>

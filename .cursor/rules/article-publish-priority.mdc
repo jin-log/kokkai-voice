@@ -1,0 +1,28 @@
+---
+description: kokkai-voice 記事公開優先・スクショ後追い可
+globs:
+  - data/articles/**
+  - src/pages/dev/**
+  - src/lib/page-ready.mjs
+  - src/lib/article-quality.mjs
+---
+
+# 記事最優先・公開ルール
+
+## スクショ（Xキャプチャ）
+
+- **スクショなしでも公開してよい**（`H3_x_screenshot` / `Q9_x_screenshot` はブロッカーではない）
+- 公開後に巡回・X調査で後追い挿入する
+- オーナーに「スクショ待ちで公開を止めない」
+
+## 記事関連の本番反映
+
+- **記事本文・メタ・公開状態の変更は最優先で本番へ**
+- `data/articles/` に変更があれば `push-and-deploy` の10分デバウンスを**スキップ**して即 push + deploy
+- 管理画面の完成度％は本番 `status-live.json` と一致させる（巡回後の自動同期）
+
+## 管理画面
+
+- `/dev/` ホーム + 左メニュー（記事 / 発信 / 運用）
+- Buffer ページは**自動投稿ログ**（オーナー手動操作不要）
+- 非表示記事もプレビューリンクで中身を確認できること

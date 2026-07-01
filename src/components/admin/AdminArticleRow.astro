@@ -1,0 +1,154 @@
+---
+import { promoDateShort } from "../../lib/promo-intro-status.mjs";
+import { adminSlugFilter } from "../../lib/project-status.mjs";
+
+/** @typedef {import("../../lib/project-status.mjs").SlugStatus} SlugStatus */
+
+interface Props {
+  s: SlugStatus;
+}
+
+const { s } = Astro.props;
+const workItems = s.workItems ?? [];
+const firstBlocker = workItems[0]?.label ?? s.nextAction ?? "—";
+---
+
+<article
+  class:list={[
+    "admin-row",
+    s.adminHidden && "admin-row--hidden",
+    s.publishState === "draft" && "admin-row--draft",
+    s.publishState === "live" && !s.adminHidden && "admin-row--live",
+    !s.qualityOk && "admin-row--quality-ng",
+    s.runState === "active" && "admin-row--active",
+  ]}
+  data-slug={s.slug}
+  data-publish-state={s.publishState}
+  data-admin-filter={adminSlugFilter(s)}
+  data-quality-ng={!s.qualityOk ? "1" : "0"}
+  data-gold-pct={s.goldPct}
+  data-title={s.shortTitle}
+  data-category={s.category || ""}
+>
+  <div class="admin-row__grid">
+    <div class="admin-row__meter" aria-hidden="true">
+      <span class="admin-row__meter-fill" style={`height: ${s.goldPct}%`}></span>
+      <span class="admin-row__meter-label">{s.goldPct}</span>
+    </div>
+
+    <div class="admin-row__main">
+      <header class="admin-row__head">
+        <h3 class="admin-row__title">
+          {s.previewUrl ? (
+            <a href={s.previewUrl} target="_blank" rel="noopener">{s.shortTitle}</a>
+          ) : s.publishState === "live" && !s.adminHidden ? (
+            <a href={`/case/${s.slug}/`}>{s.shortTitle}</a>
+          ) : (
+            s.shortTitle
+          )}
+        </h3>
+        <div class="admin-row__badges">
+          {s.publishState === "draft" && <span class="admin-row__badge admin-row__badge--draft">非公開</span>}
+          {s.publishState === "live" && <span class="admin-row__badge admin-row__badge--live">公開中</span>}
+          {s.needsQualityFix && <span class="admin-row__badge admin-row__badge--ng">品質NG</span>}
+          {s.xUnavailable && <span class="admin-row__badge admin-row__badge--x">X未発見</span>}
+          {s.category && (
+            <span class:list={["admin-row__badge", "admin-row__badge--cat", `admin-row__badge--cat-${s.category}`]}>
+              {s.category}
+            </span>
+          )}
+          {s.adminHidden && <span class="admin-row__badge">非表示</span>}
+        </div>
+      </header>
+
+      {workItems.length > 0 ? (
+        <ul class="admin-row__work" aria-label="未完了の作業">
+          {workItems.map((w) => (
+            <li class:list={["admin-row__work-item", w.state === "active" && "is-active", w.state === "blocked" && "is-blocked"]}>
+              <span class="admin-row__work-icon" aria-hidden="true">
+                {w.state === "active" ? "◌" : "✕"}
+              </span>
+              <span>{w.label}</span>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p class="admin-row__summary admin-row__summary--ok">作業項目なし（公開可または完了）</p>
+      )}
+    </div>
+
+    <div class="admin-row__quick">
+      {s.previewUrl && (
+        <a href={s.previewUrl} class="admin-row__btn admin-row__btn--ghost" target="_blank" rel="noopener">
+          プレビュー
+        </a>
+      )}
+      {s.publishGateOk && !s.pageReady ? (
+        <button type="button" class="admin-row__btn admin-row__btn--primary publish-slug-btn" data-slug={s.slug}>
+          公開する
+        </button>
+      ) : s.publishState === "live" ? (
+        <a href={`/case/${s.slug}/`} class="admin-row__btn admin-row__btn--ghost">本番を見る</a>
+      ) : (
+        <span class="admin-row__gate-hint">ゲート {s.gatePct}%</span>
+      )}
+      <span class="deploy-slug-status" data-slug={s.slug} hidden></span>
+    </div>
+  </div>
+
+  <details class="admin-row__details">
+    <summary>詳細・編集</summary>
+    <div class="admin-row__details-body">
+      <p class="admin-row__slug"><code>{s.slug}</code></p>
+      <div class="status-card__bar" role="progressbar" aria-valuenow={s.goldPct} aria-valuemin={0} aria-valuemax={100}>
+        <span style={`width: ${s.goldPct}%`} />
+      </div>
+      <ul class="admin-row__promo">
+        <li class:list={s.promo?.x && "is-done"}>X {s.promo?.x ? promoDateShort(s.promo.x) : "—"}</li>
+        <li class:list={s.promo?.hatena && "is-done"}>はてブ {s.promo?.hatena ? promoDateShort(s.promo.hatena) : "—"}</li>
+        <li class:list={s.promo?.note && "is-done"}>note {s.promo?.note ? promoDateShort(s.promo.note) : "—"}</li>
+        <li>Shorts {s.short?.label ?? "未"}</li>
+      </ul>
+      {!s.published && s.blockers.length > 0 && (
+        <div class="status-card__blockers">
+          <p class="status-card__blockers-title">ゲート未達</p>
+          <ol class="status-card__blockers-list">
+            {s.blockers.map((b) => (
+              <li>
+                <strong>{b.label ?? b.id}</strong>
+                <span>{b.todo ?? b.detail}</span>
+              </li>
+            ))}
+          </ol>
+        </div>
+      )}
+      {!s.qualityOk && (s.qualityBlockers?.length ?? 0) > 0 && (
+        <div class="status-card__blockers status-card__blockers--quality">
+          <p class="status-card__blockers-title">品質NG</p>
+          <ol class="status-card__blockers-list">
+            {s.qualityBlockers.map((q) => (
+              <li>
+                <strong>{q.id}</strong>
+                <span>{q.message}</span>
+              </li>
+            ))}
+          </ol>
+        </div>
+      )}
+      <div class="status-card__title-edit">
+        <input type="text" class="status-card__title-input" value={s.title} data-slug={s.slug} aria-label="タイトル" />
+        <button type="button" class="admin-row__btn save-title-btn" data-slug={s.slug}>保存</button>
+        <span class="title-save-status" data-slug={s.slug} hidden></span>
+      </div>
+      <div class="admin-row__admin-btns">
+        {s.adminHidden ? (
+          <button type="button" class="admin-row__btn unhide-btn" data-slug={s.slug}>表示に戻す</button>
+        ) : (
+          <button type="button" class="admin-row__btn hide-btn" data-slug={s.slug}>非表示</button>
+        )}
+        <button type="button" class="admin-row__btn admin-row__btn--danger delete-btn" data-slug={s.slug}>削除</button>
+        <span class="admin-action-status" data-slug={s.slug} hidden></span>
+      </div>
+    </div>
+  </details>
+</article>

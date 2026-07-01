@@ -1,0 +1,59 @@
+---
+import AdminShell from "../../../components/admin/AdminShell.astro";
+---
+
+<AdminShell activeId="buffer" title="Buffer">
+  <header class="admin-page-head">
+    <h1 class="admin-page-head__title">Buffer × X 自動投稿</h1>
+    <p class="admin-page-head__note">
+      <strong>オーナー作業は不要。</strong> 記事を公開して deploy すると、新規1件を Buffer 経由で X に自動投稿します（1日3本まで）。
+      ここは<strong>状態確認用のログ</strong>です。
+    </p>
+  </header>
+  <section class="dev-buffer-panel admin-buffer" id="buffer-panel" aria-live="polite">
+    <p id="buffer-summary" class="dev-buffer-panel__summary">読み込み中…</p>
+    <dl class="dev-buffer-panel__meta" id="buffer-meta"></dl>
+    <ul id="buffer-fix-steps" class="dev-buffer-panel__fixes" hidden></ul>
+    <p class="admin-page-head__note">設定: <code>docs/buffer-setup.md</code></p>
+  </section>
+</AdminShell>
+
+<script>
+function getPin() { return window.adminGetPin?.() || localStorage.getItem("dev_auth") || ""; }
+
+async function refreshBuffer() {
+  const summary = document.getElementById("buffer-summary");
+  const meta = document.getElementById("buffer-meta");
+  const fixes = document.getElementById("buffer-fix-steps");
+  if (!summary) return;
+  const pin = getPin();
+  let s = null;
+  if (pin) {
+    try {
+      const res = await fetch(`/api/buffer-status?pin=${encodeURIComponent(pin)}`);
+      s = await res.json();
+    } catch { /* local */ }
+  }
+  if (!s) {
+    try {
+      const res = await fetch(`/buffer-status.json?t=${Date.now()}`);
+      if (res.ok) s = await res.json();
+    } catch { /* ignore */ }
+  }
+  if (!s) { summary.textContent = "状態取得失敗"; return; }
+  summary.textContent = s.message || s.statusLabel || "—";
+  if (meta) {
+    const rows = [];
+    if (s.channelName) rows.push(["チャンネル", s.channelName]);
+    if (s.postsToday != null) rows.push(["本日", `${s.postsToday}/${s.dailyCap ?? 3}`]);
+    meta.innerHTML = rows.map(([dt, dd]) => `<div><dt>${dt}</dt><dd>${dd}</dd></div>`).join("");
+  }
+  if (fixes && s.fixSteps?.length && !s.ok) {
+    fixes.hidden = false;
+    fixes.innerHTML = s.fixSteps.map((x) => `<li>${x}</li>`).join("");
+  }
+}
+
+window.addEventListener("admin-live-start", refreshBuffer);
+if (localStorage.getItem("dev_auth") === "1192") refreshBuffer();
+</script>

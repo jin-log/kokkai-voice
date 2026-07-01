@@ -1,0 +1,105 @@
+---
+import DevLayout from "../../layouts/DevLayout.astro";
+import { ADMIN_HOME, ADMIN_NAV_GROUPS } from "../../lib/admin-nav.mjs";
+
+interface Props {
+  /** dashboard | articles | promo | ... */
+  activeId?: string;
+  title?: string;
+  /** 15秒ライブ更新を有効化 */
+  liveStatus?: boolean;
+}
+
+const { activeId = "", title = "管理", liveStatus = false } = Astro.props;
+---
+
+<DevLayout tabTitle={`· ${title}`} bodyClass="admin-app">
+  <div id="admin-gate" class="admin-gate" hidden>
+    <div class="admin-layout">
+      <aside class="admin-sidebar" aria-label="管理メニュー">
+        <a class="admin-sidebar__brand" href={ADMIN_HOME.href}>
+          <span class="admin-sidebar__brand-title">政治now.</span>
+          <span class="admin-sidebar__brand-sub">管理</span>
+        </a>
+        <nav class="admin-sidebar__nav">
+          <a
+            class:list={["admin-sidebar__link", "admin-sidebar__link--solo", activeId === "dashboard" && "is-active"]}
+            href={ADMIN_HOME.href}
+          >
+            <span class="admin-sidebar__link-text">ダッシュボード</span>
+          </a>
+          {
+            ADMIN_NAV_GROUPS.map((group) => (
+              <div class="admin-sidebar__group">
+                <p class="admin-sidebar__group-label">
+                  <span class="admin-sidebar__rail-icon" aria-hidden="true">{group.icon}</span>
+                  <span class="admin-sidebar__group-text">{group.label}</span>
+                </p>
+                <ul class="admin-sidebar__list">
+                  {group.items.map((item) => (
+                    <li>
+                      <a
+                        class:list={["admin-sidebar__link", activeId === item.id && "is-active"]}
+                        href={item.href}
+                      >
+                        <span class="admin-sidebar__link-text">{item.label}</span>
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))
+          }
+        </nav>
+        <a class="admin-sidebar__public" href="/">公開サイト →</a>
+      </aside>
+      <div class="admin-main">
+        {liveStatus && (
+          <p class="admin-live" id="admin-live-badge" hidden aria-live="polite">● 15秒ごとに更新</p>
+        )}
+        <slot />
+      </div>
+    </div>
+  </div>
+
+  <div id="admin-lock" class="admin-lock">
+    <div class="admin-lock__box">
+      <p class="admin-lock__title">PINを入力</p>
+      <input id="admin-pin-input" class="admin-lock__input" type="password" maxlength="8" placeholder="••••" autocomplete="off" />
+      <button type="button" id="admin-pin-submit" class="admin-lock__btn">入力</button>
+      <p id="admin-pin-error" class="admin-lock__error" hidden>PINが違います</p>
+    </div>
+  </div>
+
+  <script define:vars={{ liveStatus }}>
+    const PIN = "1192";
+    const KEY = "dev_auth";
+    const gate = document.getElementById("admin-gate");
+    const lock = document.getElementById("admin-lock");
+
+    function unlock() {
+      lock.hidden = true;
+      gate.hidden = false;
+      if (liveStatus) window.dispatchEvent(new CustomEvent("admin-live-start"));
+    }
+
+    if (localStorage.getItem(KEY) === PIN) unlock();
+    else lock.hidden = false;
+
+    document.getElementById("admin-pin-submit")?.addEventListener("click", () => {
+      const val = document.getElementById("admin-pin-input")?.value;
+      if (val === PIN) {
+        localStorage.setItem(KEY, PIN);
+        unlock();
+      } else {
+        const err = document.getElementById("admin-pin-error");
+        if (err) err.hidden = false;
+      }
+    });
+    document.getElementById("admin-pin-input")?.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") document.getElementById("admin-pin-submit")?.click();
+    });
+
+    window.adminGetPin = () => localStorage.getItem(KEY) || "";
+  </script>
+</DevLayout>
