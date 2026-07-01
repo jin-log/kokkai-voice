@@ -7,6 +7,7 @@ import { spawn } from "node:child_process";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { autorunLog } from "../src/lib/pipeline-autorun-core.mjs";
+import { getXCapturePauseState } from "../src/lib/x-capture-pause.mjs";
 
 const root = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
 const patrolPidPath = path.join(root, "data/.patrol-daemon.pid");
@@ -60,11 +61,13 @@ function restartPatrolStack() {
 
 async function tick() {
   const patrolOk = await isProcessHealthy(patrolPidPath, patrolStatePath);
-  const captureOk = await isProcessHealthy(capturePidPath, captureStatePath);
+  const xPause = await getXCapturePauseState();
+  const captureOk =
+    xPause.paused || (await isProcessHealthy(capturePidPath, captureStatePath));
   if (patrolOk && captureOk) return;
   const parts = [];
   if (!patrolOk) parts.push("patrol");
-  if (!captureOk) parts.push("x-capture");
+  if (!xPause.paused && !captureOk) parts.push("x-capture");
   await log(`${parts.join("+")} unhealthy — restarting stack`);
   restartPatrolStack();
 }

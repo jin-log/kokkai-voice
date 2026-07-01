@@ -12,6 +12,7 @@ import {
   runNodeScript,
 } from "../src/lib/pipeline-autorun-core.mjs";
 import { getPatrolPauseState } from "../src/lib/patrol-pause.mjs";
+import { getXCapturePauseState } from "../src/lib/x-capture-pause.mjs";
 
 const root = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
 const statePath = path.join(root, "data/x-capture-daemon.json");
@@ -76,6 +77,14 @@ async function runCaptureBatch(pending) {
 }
 
 async function mainLoop() {
+  const xPause = await getXCapturePauseState();
+  if (xPause.paused) {
+    await log(`disabled — ${xPause.reason || "paused"} (exit)`);
+    await writeState({ running: false, paused: true, pausedReason: xPause.reason });
+    stopping = true;
+    return;
+  }
+
   await log(`daemon start pid=${process.pid} poll=${pollSec}s limit=${captureLimit}`);
   await writeState({ running: true });
 
