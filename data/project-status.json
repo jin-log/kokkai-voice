@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-07-01T17:29:52.911Z",
+  "generatedAt": "2026-07-01T17:31:13.914Z",
   "strategy": "quality-first",
   "activeCount": 39,
   "parkedCount": 0,
-  "publishedCount": 19,
-  "overallGoldPct": 50,
+  "publishedCount": 20,
+  "overallGoldPct": 51,
   "overallGatePct": 71,
   "qualityFailed": 2,
   "automationPolicy": [
@@ -96,7 +96,7 @@
     "slugStalls": [],
     "stalledCount": 0,
     "message": "停止中",
-    "analyzedAt": "2026-07-01T17:29:52.908Z",
+    "analyzedAt": "2026-07-01T17:31:13.912Z",
     "lastPatrolCycleAt": null,
     "patrolRunning": false
   },
@@ -7101,8 +7101,8 @@
       "category": "国会",
       "policyCategory": "国会",
       "adminHidden": false,
-      "pageReady": false,
-      "publishState": "draft",
+      "pageReady": true,
+      "publishState": "live",
       "previewUrl": "/dev/preview/gaikokujin-seisaku/",
       "qualityOk": true,
       "needsQualityFix": false,
@@ -7110,8 +7110,8 @@
       "qualityBlockers": [],
       "agentTasks": [],
       "gatePct": 100,
-      "goldPct": 83,
-      "published": false,
+      "goldPct": 100,
+      "published": true,
       "publishGateOk": true,
       "pipeline": [
         {
@@ -7147,7 +7147,7 @@
           "label": "⑤本番デプロイ",
           "phase": 5,
           "preDeploy": false,
-          "ok": false
+          "ok": true
         },
         {
           "id": "debug",
@@ -7191,7 +7191,7 @@
           "label": "⑤本番デプロイ",
           "phase": 5,
           "preDeploy": false,
-          "ok": false
+          "ok": true
         },
         {
           "id": "debug",
@@ -7204,14 +7204,8 @@
       "blockers": [],
       "blockerCount": 0,
       "runState": "idle",
-      "workItems": [
-        {
-          "id": "pipe:deployed",
-          "label": "⑤本番デプロイ",
-          "state": "blocked"
-        }
-      ],
-      "nextAction": "📋 完成・非公開 — プレビューで確認して「公開する」を押してください",
+      "workItems": [],
+      "nextAction": "✅ 公開中 — /case/ に表示されています",
       "promo": {
         "x": null,
         "hatena": null,
@@ -7230,13 +7224,27 @@
       },
       "xUnavailable": true,
       "xResearchStatus": "exhausted",
-      "statusExplain": "①〜④完了・非公開。一般公開はあなたの「公開する」のみ（自動公開なし）",
-      "publishedBy": null,
-      "publishedAt": null,
+      "statusExplain": "手動公開 07/01 17:31",
+      "publishedBy": "owner",
+      "publishedAt": "2026-07-01T17:31:13.446Z",
       "adminHiddenBy": null,
       "adminHiddenAt": null,
       "patrolFixing": false,
       "activity": [
+        {
+          "at": "2026-07-01T17:31:13.452Z",
+          "when": "07/01 17:31",
+          "type": "promo.queue",
+          "actor": "system",
+          "line": "発信キューに登録（system） — はてブ/note発信キューに登録"
+        },
+        {
+          "at": "2026-07-01T17:31:13.448Z",
+          "when": "07/01 17:31",
+          "type": "publish.manual",
+          "actor": "owner",
+          "line": "手動で一般公開（あなた） — 管理画面から一般公開"
+        },
         {
           "at": "2026-07-01T16:33:50.764Z",
           "when": "07/01 16:33",
@@ -10881,6 +10889,6 @@
     }
   ],
   "deltaGoldPct": 0,
-  "previousGoldPct": 50,
+  "previousGoldPct": 51,
   "deployedAt": "2026-07-01T17:18:45.823Z"
 }
