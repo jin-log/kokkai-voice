@@ -90,10 +90,6 @@ export async function pushAndDeploy(opts = {}) {
 
   const prev = await loadState();
   const lastAt = prev.lastPushAt ? new Date(prev.lastPushAt).getTime() : 0;
-  if (!forceRun && lastAt && Date.now() - lastAt < MIN_INTERVAL_MS) {
-    console.log("skip push-and-deploy: 前回から10分未満");
-    return { pushed: false, reason: "debounce" };
-  }
 
   const status = await refreshProjectStatus();
   try {
@@ -103,6 +99,20 @@ export async function pushAndDeploy(opts = {}) {
   }
 
   await run("git", ["add", "--", ...GIT_PATHS]);
+
+  let stagedNames = "";
+  try {
+    const { stdout } = await run("git", ["diff", "--staged", "--name-only"]);
+    stagedNames = stdout;
+  } catch {
+    /* no staged */
+  }
+  const articlePriority = stagedNames.split(/\r?\n/).some((n) => n.startsWith("data/articles/"));
+
+  if (!forceRun && !articlePriority && lastAt && Date.now() - lastAt < MIN_INTERVAL_MS) {
+    console.log("skip push-and-deploy: 前回から10分未満（記事変更なし）");
+    return { pushed: false, reason: "debounce" };
+  }
 
   try {
     await run("git", ["diff", "--staged", "--quiet"]);

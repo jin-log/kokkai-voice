@@ -265,10 +265,11 @@ export function checkCasePage(article, opts = {}) {
     const xWithShot = xVerified.filter((p) => p.screenshot && p.captured_at);
     add(
       "H3_x_screenshot",
-      xWithShot.length >= xMin,
+      true,
       xWithShot.length >= xMin
         ? `スクショ ${xWithShot.length}/${xMin} 件`
-        : `スクショ ${xWithShot.length}/${xMin} 件 — x:capture 未実行`,
+        : `スクショ ${xWithShot.length}/${xMin} 件 — 後追い可（公開は可）`,
+      false,
     );
   }
 

@@ -45,17 +45,12 @@ export async function filterPublishable(articles) {
   return articles.filter((a) => !a.adminHidden && a.pageReady === true);
 }
 
-/** プレビューページ用スラグ（完成・非公開含む） */
+/** プレビューページ用スラグ（管理画面から全activeをプレビュー可） */
 export async function getPreviewSlugs() {
   const index = JSON.parse(
     await readFile(path.join(root, "data/articles/index.json"), "utf8"),
   );
-  const slugs = [];
-  for (const slug of index.slugs ?? []) {
-    const article = await loadArticle(slug);
-    if (await isPreviewable(article)) slugs.push(slug);
-  }
-  return slugs;
+  return index.slugs ?? [];
 }
 
 export async function getArticleSlugs() {

@@ -11,6 +11,7 @@ import { filterPublishable, loadArticle } from "./articles.mjs";
 import { citizenTitle } from "./title-format.mjs";
 import { buildPromoIntroMap } from "./promo-intro-status.mjs";
 import { loadShortStatusMap } from "./short-status.mjs";
+import { loadPatrolRuntime, buildWorkItems } from "./patrol-runtime.mjs";
 import { isXUnavailable, X_UNAVAILABLE_ADMIN_MESSAGE } from "./x-research-policy.mjs";
 
 /** @typedef {{ id: string, label: string, phase: number, preDeploy: boolean }} PipelineItemDef */
@@ -165,6 +166,7 @@ export async function computeProjectStatus() {
   const slugs = [];
   const promoMap = await buildPromoIntroMap();
   const shortMap = await loadShortStatusMap(activeSlugs);
+  const patrolRuntime = await loadPatrolRuntime();
 
   for (const slug of activeSlugs) {
     const article = await loadArticle(slug);
@@ -205,7 +207,7 @@ export async function computeProjectStatus() {
       adminHidden: article.adminHidden === true,
       pageReady,
       publishState,
-      previewUrl: !article.adminHidden ? `/dev/preview/${slug}/` : null,
+      previewUrl: `/dev/preview/${slug}/`,
       qualityOk: quality.ok,
       needsQualityFix: !quality.ok,
       qualityBlockerCount: quality.blockers.length,
@@ -230,7 +232,8 @@ export async function computeProjectStatus() {
       gold: pipeline,
       blockers: gate.blockers.map((b) => blockerToHuman(b)),
       blockerCount: gate.blockers.length,
-      runState: "idle",
+      runState: patrolRuntime.activeSlug === slug ? "active" : "idle",
+      workItems: buildWorkItems(slug, gate, quality, patrolRuntime),
       nextAction,
       promo: promoMap.get(slug) ?? { x: null, hatena: null, note: null },
       short: shortMap.get(slug) ?? { label: "未生成", generated: false, uploaded: false },

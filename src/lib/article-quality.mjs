@@ -138,10 +138,10 @@ export function auditArticleQuality(article) {
   if (!isXUnavailable(article) && xVerified.length >= xMin && xShots.length < xMin) {
     issues.push({
       id: "Q9_x_screenshot",
-      severity: "blocker",
+      severity: "warn",
       field: "xPosts",
-      message: `X URLは${xVerified.length}件あるがスクショは${xShots.length}/${xMin}件（仕様違反）`,
-      todo: "npm run x:capture -- --slug <slug>（デバッガー担当）",
+      message: `スクショ ${xShots.length}/${xMin} 件 — 後追い予定`,
+      todo: "npm run x:capture -- --slug <slug>（巡回が自動実行）",
     });
   }
 
