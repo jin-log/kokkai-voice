@@ -186,6 +186,92 @@ const policyCategories = Object.keys(categoryCounts).sort(sortPolicyCategories);
     return data;
   }
 
+  function adminSlugFilterFrom(s) {
+    if (s.adminHidden) return "hidden";
+    if (s.publishState === "live") return "live";
+    if (s.publishState === "draft") return "draft";
+    return "action";
+  }
+
+  const FILTER_LABELS = { action: "要対応", draft: "公開待ち", live: "公開済み", hidden: "非表示", quality: "品質NG" };
+
+  function updateFilterCounts(slugs) {
+    const counts = { action: 0, draft: 0, live: 0, hidden: 0, quality: 0, all: slugs.length };
+    for (const s of slugs) {
+      counts[adminSlugFilterFrom(s)] += 1;
+      if (!s.qualityOk) counts.quality += 1;
+    }
+    document.querySelectorAll("#status-pills .admin-filter__pill").forEach((btn) => {
+      const f = btn.dataset.filter;
+      const n = btn.querySelector(".admin-filter__pill-n");
+      if (n && counts[f] != null) n.textContent = String(counts[f]);
+    });
+  }
+
+  function updateRowQuick(row, s) {
+    const quick = row.querySelector(".admin-row__quick");
+    if (!quick) return;
+    let pubBtn = quick.querySelector(".publish-slug-btn");
+    let hint = quick.querySelector("[data-role=gate-hint]");
+    const liveLink = quick.querySelector("[data-role=live-link]");
+
+    if (s.publishGateOk && !s.pageReady) {
+      if (!pubBtn) {
+        pubBtn = document.createElement("button");
+        pubBtn.type = "button";
+        pubBtn.className = "admin-row__btn admin-row__btn--primary publish-slug-btn";
+        pubBtn.dataset.slug = s.slug;
+        pubBtn.textContent = "公開する";
+        quick.insertBefore(pubBtn, quick.querySelector(".deploy-slug-status"));
+      }
+      if (hint) hint.remove();
+      if (liveLink) liveLink.remove();
+      return;
+    }
+
+    if (pubBtn) pubBtn.remove();
+    if (s.publishState === "live" && !s.adminHidden) {
+      if (!liveLink) {
+        const a = document.createElement("a");
+        a.href = `/case/${s.slug}/`;
+        a.className = "admin-row__btn admin-row__btn--ghost";
+        a.dataset.role = "live-link";
+        a.textContent = "本番を見る";
+        quick.insertBefore(a, quick.querySelector(".deploy-slug-status"));
+      }
+      if (hint) hint.remove();
+      return;
+    }
+
+    if (liveLink) liveLink.remove();
+    if (!hint) {
+      hint = document.createElement("span");
+      hint.className = "admin-row__gate-hint";
+      hint.dataset.role = "gate-hint";
+      quick.insertBefore(hint, quick.querySelector(".deploy-slug-status"));
+    }
+    const f = adminSlugFilterFrom(s);
+    if (f === "draft") hint.textContent = "公開ボタンで一般公開";
+    else if (f === "action" && (s.goldPct ?? 0) < 100) hint.textContent = `完成度 ${s.goldPct ?? 0}%`;
+    else hint.textContent = `ゲート ${s.gatePct ?? 0}%`;
+  }
+
+  function updateRowBadges(row, s) {
+    const badges = row.querySelector(".admin-row__badges");
+    if (!badges) return;
+    const f = adminSlugFilterFrom(s);
+    let stateBadge = badges.querySelector(".admin-row__badge--state");
+    if (!stateBadge) {
+      stateBadge = document.createElement("span");
+      stateBadge.className = "admin-row__badge admin-row__badge--state";
+      badges.prepend(stateBadge);
+    }
+    stateBadge.className = `admin-row__badge admin-row__badge--state admin-row__badge--state-${f}`;
+    stateBadge.textContent = FILTER_LABELS[f] || f;
+    row.classList.toggle("admin-row--quality-ng", s.qualityOk === false);
+    row.classList.toggle("admin-row--active", (s.workItems ?? []).some((w) => w.state === "active"));
+  }
+
   function renderWorkItems(row, workItems) {
     const main = row.querySelector(".admin-row__main");
     if (!main) return;
@@ -215,7 +301,8 @@ const policyCategories = Object.keys(categoryCounts).sort(sortPolicyCategories);
     ul.innerHTML = workItems.map((w) => {
       const cls = w.state === "active" ? "is-active" : "is-blocked";
       const icon = w.state === "active" ? "" : "✕";
-      return `<li class="admin-row__work-item ${cls}"><span class="admin-row__work-icon" aria-hidden="true">${icon}</span><span>${w.label}</span></li>`;
+      const label = String(w.label || "").replace(/</g, "&lt;");
+      return `<li class="admin-row__work-item ${cls}"><span class="admin-row__work-icon" aria-hidden="true">${icon}</span><span>${label}</span></li>`;
     }).join("");
     row.classList.toggle("admin-row--active", workItems.some((w) => w.state === "active"));
   }
@@ -350,11 +437,16 @@ const policyCategories = Object.keys(categoryCounts).sort(sortPolicyCategories);
     try {
       let st = null;
       const ts = Date.now();
-      const r1 = await fetch(`/api/project-status?pin=${encodeURIComponent(pin)}&t=${ts}`);
-      if (r1.ok) { const d1 = await r1.json(); if (d1.ok && d1.status) st = d1.status; }
+      try {
+        const r0 = await fetch(`/status-live.json?t=${ts}`);
+        if (r0.ok) st = await r0.json();
+      } catch { /* local optional */ }
       if (!st) {
-        const r2 = await fetch(`/status-live.json?t=${ts}`);
-        if (r2.ok) st = await r2.json();
+        const r1 = await fetch(`/api/project-status?pin=${encodeURIComponent(pin)}&t=${ts}`);
+        if (r1.ok) {
+          const d1 = await r1.json();
+          if (d1.ok && d1.status) st = d1.status;
+        }
       }
       if (!st) {
         if (err) { err.hidden = false; err.textContent = "⚠ 状態の取得に失敗しました"; }
@@ -366,12 +458,14 @@ const policyCategories = Object.keys(categoryCounts).sort(sortPolicyCategories);
       if (pub) pub.textContent = `${st.publishedCount}/${st.activeCount}`;
       const gate = document.getElementById("stat-gate");
       if (gate) gate.textContent = `${st.overallGatePct}%`;
+      updateFilterCounts(st.slugs ?? []);
       for (const s of st.slugs ?? []) {
         const row = document.querySelector(`.admin-row[data-slug="${s.slug}"]`);
         if (!row) continue;
         row.dataset.goldPct = String(s.goldPct ?? 0);
         row.dataset.qualityNg = s.qualityOk === false ? "1" : "0";
-        row.dataset.adminFilter = s.adminHidden ? "hidden" : s.publishState === "live" ? "live" : s.publishState === "draft" ? "draft" : "action";
+        row.dataset.adminFilter = adminSlugFilterFrom(s);
+        row.dataset.publishState = s.publishState || "";
         if (s.category != null) row.dataset.category = s.category;
         const label = row.querySelector(".admin-row__meter-label");
         if (label) label.textContent = String(s.goldPct);
@@ -380,6 +474,8 @@ const policyCategories = Object.keys(categoryCounts).sort(sortPolicyCategories);
         const bar = row.querySelector(".status-card__bar > span");
         if (bar) bar.style.width = `${s.goldPct}%`;
         renderWorkItems(row, s.workItems);
+        updateRowQuick(row, s);
+        updateRowBadges(row, s);
       }
       applyFilterSort();
       if (badge) badge.hidden = false;

@@ -157,20 +157,9 @@ export function buildWorkItems(slug, gate, quality, runtime, pipeline = []) {
     });
   }
 
-  if (items.length > 1) {
-    let activeSet = false;
+  if (items.length > 1 && runtime.activeCheckId) {
     for (const it of items) {
-      if (it.state === "active") {
-        activeSet = true;
-        break;
-      }
-    }
-    if (activeSet) {
-      for (const it of items) {
-        if (it.id !== runtime.activeCheckId && it.state === "active") it.state = "blocked";
-      }
-      const active = items.find((i) => i.id === runtime.activeCheckId);
-      if (active) active.state = "active";
+      it.state = it.id === runtime.activeCheckId ? "active" : "blocked";
     }
   }
 

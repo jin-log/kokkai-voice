@@ -1,3 +1,5 @@
+import { decodeGitHubBase64Utf8 } from "../lib/github-content.js";
+
 /**
  * GET /api/project-status?pin=1192
  * main の data/project-status.json を GitHub から取得（デプロイ不要で完成度をライブ更新）
@@ -28,7 +30,7 @@ export async function onRequestGet(context) {
     return json({ error: "empty content" }, 500);
   }
 
-  const raw = atob(meta.content.replace(/\n/g, ""));
+  const raw = decodeGitHubBase64Utf8(meta.content);
   /** @type {Record<string, unknown>} */
   let status;
   try {

@@ -1,3 +1,5 @@
+import { decodeGitHubBase64Utf8 } from "../lib/github-content.js";
+
 /**
  * GET /api/admin-status?pin=1192
  * GitHub Actions の実行状況（デプロイ待ち可視化）
@@ -57,7 +59,7 @@ export async function onRequestGet(context) {
     try {
       const meta = await statusRes.json();
       if (meta.content) {
-        projectStatus = JSON.parse(atob(meta.content.replace(/\n/g, "")));
+        projectStatus = JSON.parse(decodeGitHubBase64Utf8(meta.content));
       }
     } catch {
       /* 完成度だけ失敗 — Actions 情報は返す */

@@ -1,3 +1,5 @@
+import { decodeGitHubBase64Utf8 } from "../lib/github-content.js";
+
 const REPO = "jin-log/kokkai-voice";
 const QUEUE_PATH = "data/ops-queue.json";
 const LOG_PATH = "data/ops-task-log.jsonl";
@@ -45,7 +47,7 @@ export async function onRequestPost(context) {
 
   try {
     const queueMeta = await ghGetFile(GH_TOKEN, QUEUE_PATH);
-    const queue = JSON.parse(atob(queueMeta.content.replace(/\n/g, "")));
+    const queue = JSON.parse(decodeGitHubBase64Utf8(queueMeta.content));
     const { queue: updated, logLine } = applyTaskComplete(queue, taskId.trim());
 
     let logContent = `${logLine}\n`;
@@ -53,7 +55,7 @@ export async function onRequestPost(context) {
     try {
       const logMeta = await ghGetFile(GH_TOKEN, LOG_PATH);
       logSha = logMeta.sha;
-      logContent = `${atob(logMeta.content.replace(/\n/g, ""))}${logLine}\n`;
+      logContent = `${decodeGitHubBase64Utf8(logMeta.content)}${logLine}\n`;
     } catch {
       /* new log file */
     }

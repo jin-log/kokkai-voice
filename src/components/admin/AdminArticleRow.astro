@@ -1,6 +1,6 @@
 ---
 import { promoDateShort } from "../../lib/promo-intro-status.mjs";
-import { adminSlugFilter } from "../../lib/project-status.mjs";
+import { adminSlugFilter, adminFilterLabel } from "../../lib/project-status.mjs";
 
 /** @typedef {import("../../lib/project-status.mjs").SlugStatus} SlugStatus */
 
@@ -10,7 +10,8 @@ interface Props {
 
 const { s } = Astro.props;
 const workItems = s.workItems ?? [];
-const firstBlocker = workItems[0]?.label ?? s.nextAction ?? "—";
+const adminFilter = adminSlugFilter(s);
+const filterLabel = adminFilterLabel(adminFilter);
 ---
 
 <article
@@ -48,6 +49,9 @@ const firstBlocker = workItems[0]?.label ?? s.nextAction ?? "—";
           )}
         </h3>
         <div class="admin-row__badges">
+          <span class:list={["admin-row__badge", "admin-row__badge--state", `admin-row__badge--state-${adminFilter}`]}>
+            {filterLabel}
+          </span>
           {s.publishState === "draft" && <span class="admin-row__badge admin-row__badge--draft">非公開</span>}
           {s.publishState === "live" && <span class="admin-row__badge admin-row__badge--live">公開中</span>}
           {s.needsQualityFix && <span class="admin-row__badge admin-row__badge--ng">品質NG</span>}
@@ -90,7 +94,13 @@ const firstBlocker = workItems[0]?.label ?? s.nextAction ?? "—";
       ) : s.publishState === "live" ? (
         <a href={`/case/${s.slug}/`} class="admin-row__btn admin-row__btn--ghost">本番を見る</a>
       ) : (
-        <span class="admin-row__gate-hint">ゲート {s.gatePct}%</span>
+        <span class="admin-row__gate-hint" data-role="gate-hint">
+          {adminFilter === "draft"
+            ? "公開ボタンで一般公開"
+            : adminFilter === "action" && s.goldPct < 100
+              ? `完成度 ${s.goldPct}%`
+              : `ゲート ${s.gatePct}%`}
+        </span>
       )}
       <span class="deploy-slug-status" data-slug={s.slug} hidden></span>
     </div>
