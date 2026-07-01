@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-01T11:38:36.804Z",
+  "generatedAt": "2026-07-01T11:54:11.309Z",
   "strategy": "quality-first",
   "activeCount": 39,
   "parkedCount": 0,
@@ -5759,21 +5759,10 @@
           "todo": "いまの結論が要点3行（重複・途中切れなし）",
           "command": "npm run complete:article -- --slug kaigo-iryo --force",
           "priority": 30
-        },
-        {
-          "id": "kaigo-iryo:G5_parties_symbol",
-          "slug": "kaigo-iryo",
-          "agent": "writer",
-          "agentLabel": "ライター",
-          "checkId": "G5_parties_symbol",
-          "title": "[ゲート] ◎〇▲×",
-          "todo": "各党の記号を確定（v2）",
-          "command": "npm run complete:article -- --slug kaigo-iryo --force",
-          "priority": 30
         }
       ],
-      "gatePct": 50,
-      "goldPct": 33,
+      "gatePct": 75,
+      "goldPct": 50,
       "published": true,
       "publishGateOk": false,
       "pipeline": [
@@ -5789,7 +5778,7 @@
           "label": "②〇×2党確定",
           "phase": 2,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "x",
@@ -5833,7 +5822,7 @@
           "label": "②〇×2党確定",
           "phase": 2,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "x",
@@ -5870,29 +5859,18 @@
           "label": "結論の質",
           "todo": "いまの結論が要点3行（重複・途中切れなし）",
           "detail": "結論が途中切れ・重複・逐語抜粋"
-        },
-        {
-          "id": "G5_parties_symbol",
-          "label": "◎〇▲×",
-          "todo": "各党の記号を確定（v2）",
-          "detail": "◎▲❌ 確定 1/2 党以上"
         }
       ],
-      "blockerCount": 2,
+      "blockerCount": 1,
       "runState": "idle",
       "workItems": [
         {
           "id": "B4_conclusion",
           "label": "結論の質",
           "state": "blocked"
-        },
-        {
-          "id": "G5_parties_symbol",
-          "label": "◎〇▲×",
-          "state": "blocked"
         }
       ],
-      "nextAction": "結論が途中切れ・重複・逐語抜粋 → ◎▲❌ を確定 → X投稿は見つかりませんでした（5段階調査完了）",
+      "nextAction": "結論が途中切れ・重複・逐語抜粋 → X投稿は見つかりませんでした（5段階調査完了）",
       "promo": {
         "x": null,
         "hatena": null,
