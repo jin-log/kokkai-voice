@@ -34,14 +34,24 @@ export function isBoilerplateTopicLine(text) {
   return BOILERPLATE_TOPIC.test(String(text || "").trim());
 }
 
-/** 各行に案件語を必ず含める（定型文は null で捨てる） */
+/** 各行に案件語を必ず含める（定型文は案件語注入後に再判定） */
 export function ensureTopicInLine(text, keyword) {
   let t = String(text || "").trim();
-  if (!t || isBoilerplateTopicLine(t)) return null;
+  if (!t) return null;
   if (!t.endsWith("。")) t += "。";
-  const terms = topicTerms(keyword);
-  if (textMatchesTopic(t, terms)) return t;
   const label = String(keyword || "").trim().slice(0, 28) || "本件";
+  const terms = topicTerms(keyword);
+
+  if (isBoilerplateTopicLine(t)) {
+    const diet = t.match(/^(\d{4}-\d{2}-\d{2})：(.+?)が.+について国会で答弁・質疑を行った。$/);
+    if (diet) {
+      t = `${diet[1]}：${diet[2]}が${label}について国会で答弁・質疑した。`;
+    } else if (!textMatchesTopic(t, terms)) {
+      return null;
+    }
+  }
+
+  if (textMatchesTopic(t, terms)) return t;
   if (/^[\d-]+：/.test(t)) {
     return t.replace(/^([\d-]+：)/, `$1${label}— `);
   }
@@ -119,6 +129,16 @@ export function isMatrixTopicRelevant(policyMatrix, keyword) {
 
 const INCOMPLETE_END = /(今後|おりませんが|について|に対し|とは|では|が、|を、|は、|下|ともに)。$/;
 const VERBATIM_OPENERS = null;
+const DATE_PREFIX = /^\d{4}-\d{2}-\d{2}[：:]\s*/;
+
+/** 重複判定用 — 日付プレフィックスを除いた本文キー */
+function conclusionBodyKey(line) {
+  return String(line)
+    .trim()
+    .replace(DATE_PREFIX, "")
+    .replace(/[、。…\s]/g, "")
+    .slice(0, 24);
+}
 
 /** @param {string[]} bullets */
 export function isConclusionQuality(bullets) {
@@ -128,9 +148,11 @@ export function isConclusionQuality(bullets) {
 
   const keys = new Set();
   for (const b of normalized) {
+    if (isBoilerplateTopicLine(b)) return false;
     if (INCOMPLETE_END.test(b)) return false;
     if (VERBATIM_OPENERS && VERBATIM_OPENERS.test(b) && b.length < 28) return false;
-    const key = b.replace(/[、。…\s]/g, "").slice(0, 20);
+    const key = conclusionBodyKey(b);
+    if (key.length < 8) return false;
     for (const prev of keys) {
       if (prev.startsWith(key.slice(0, 14)) || key.startsWith(prev.slice(0, 14))) return false;
     }

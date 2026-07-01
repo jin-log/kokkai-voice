@@ -61,9 +61,15 @@ export function buildFactBundle(records, keyword) {
  */
 export function composeAllFallback(bundle, meta) {
   const lines = [];
-  for (const sn of bundle.snippets.slice(0, 8)) {
+  for (const sn of bundle.snippets.slice(0, 12)) {
     for (const f of composeFromPrimary(sn, { ...meta, speaker: sn.speaker, date: sn.date }, bundle.keyword)) {
       if (f && !lines.includes(f)) lines.push(f);
+    }
+    const ev = extractEventText(sn, bundle.keyword);
+    if (ev && isWriterReadyLine(ev) && !isBoilerplateTopicLine(ev)) {
+      const line = ev.endsWith("。") ? ev : `${ev}。`;
+      const dated = sn.date && !line.startsWith(sn.date) ? `${sn.date}：${line}` : line;
+      if (!lines.includes(dated)) lines.push(dated);
     }
   }
   const kw = bundle.keyword;
@@ -189,6 +195,25 @@ function composeFromPrimary(sn, meta, keyword = "") {
       lines.push("議員ボーナスを現行水準に据え置く歳費法改正案が国会で可決・審議された。");
     }
   }
+  if (/高市.*内閣|内閣発足|組閣|政権/.test(kw) || /高市内閣|内閣発足|高市総理/.test(ex)) {
+    if (/閣議決定|閣議に/.test(ex)) {
+      lines.push(
+        `${date ? `${date}：` : ""}政府が関連法案を閣議決定した旨が国会で答弁された。`,
+      );
+    }
+    if (/事前説明せず|国会に説明.*ない|国会を無視|合同審査会.*説明/.test(ex)) {
+      lines.push(`野党が閣議前の国会説明欠如を追及している${date ? `（${date}）` : ""}。`);
+    }
+    if (/組閣|内閣発足|新内閣/.test(ex)) {
+      lines.push(`高市内閣の発足・人事が国会で論点になっている${date ? `（${date}）` : ""}。`);
+    }
+    if (/一般会計.*兆|歳出総額|予算.*規模|百.*兆円/.test(ex)) {
+      lines.push(`高市内閣下の予算・歳出規模が国会で説明された${date ? `（${date}）` : ""}。`);
+    }
+    if (/連立政権合意|与党.*合意|政策の実現/.test(ex)) {
+      lines.push(`与党合意に基づく政策実施が高市内閣の国会答弁で示された${date ? `（${date}）` : ""}。`);
+    }
+  }
   return lines;
 }
 
@@ -198,6 +223,7 @@ function topicShort(keyword) {
   if (/国旗/.test(keyword)) return "国旗損壊罪";
   if (/副首都/.test(keyword)) return "副首都構想";
   if (/物価高/.test(keyword)) return "物価高対策";
+  if (/高市.*内閣|内閣発足|組閣|政権/.test(keyword)) return "高市内閣";
   return keyword;
 }
 
@@ -266,6 +292,17 @@ function extractEventText(sn, keyword) {
 
   /** @type {[RegExp, string][]} */
   const rules = [
+    [/閣議決定|閣議に上程|閣議で決定/, `${sp}が関連法案の閣議決定を国会で説明`],
+    [/事前説明せず|国会に説明.*ない|国会を無視/, `野党が高市内閣の国会説明不足を追及`],
+    [/賃上げ.*実質賃金|実質賃金.*プラス/, `高市内閣は賃上げ・実質賃金のプラス転換を重点目標に据える`],
+    [/危機管理投資|成長投資/, `高市内閣は危機管理・成長投資で強い経済実現を掲げる`],
+    [/見直し.*歳出|重点化.*一方|効果が乏しい施策/, `高市内閣は歳出の重点化と施策見直しを国会で説明`],
+    [/食料品.*消費税|給付つき税額控除/, `高市内閣が食料品消費税・減税策を国会答弁`],
+    [/一般会計.*兆|歳出総額.*兆/, `高市内閣下の予算・歳出規模が国会で説明`],
+    [/女性.*大臣|女性閣僚|片山大臣/, `高市内閣の閣僚人事（女性大臣起用）が国会で論点に`],
+    [/組閣|内閣発足|新内閣/, `高市内閣の発足・人事が国会で論点に`],
+    [/内閣総理大臣.*答弁|総理.*お答え|高市総理/, `${sp}が高市内閣の政策方針を国会答弁`],
+    [/連立政権合意|政策の実現に向け/, `与党合意に基づく高市内閣の政策実施が国会で説明`],
     [/スパイ防止.*発議|スパイ防止法.*提出|スパイ防止.*法案.*提出/, `${sp}がスパイ防止法案を国会に提出`],
     [/インテリジェンス.*法案.*提出|インテリジェンス態勢/, `国民民主党がインテリジェンス関連法案を提出`],
     [/国家情報会議設置.*審議|国家情報会議.*法案/, `${mt}で国家情報会議設置法案が審議に入る`],

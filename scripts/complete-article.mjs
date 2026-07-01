@@ -28,8 +28,9 @@ import {
 } from "./lib/writer-synthesize.mjs";
 import { enrichGeneralArticle, writePolicyMatrixGeneral, fetchReadable, isGeneralContentReady } from "./lib/enrich-general.mjs";
 import { citizenTitle } from "../src/lib/title-format.mjs";
-import { isTopicRelevant, textMatchesTopic, topicTerms, isConclusionQuality, countTopicArcLines, countTopicDietTimeline, isMatrixTopicRelevant, textStronglyMatchesTopic, ensureTopicInLines } from "../src/lib/topic-relevance.mjs";
-import { normalizeFactPhrase } from "../src/lib/diet-voice.mjs";
+import { isTopicRelevant, textMatchesTopic, topicTerms, isConclusionQuality, countTopicArcLines, countTopicDietTimeline, isMatrixTopicRelevant, textStronglyMatchesTopic, ensureTopicInLines, isBoilerplateTopicLine } from "../src/lib/topic-relevance.mjs";
+import { normalizeFactPhrase, isDietVoice, isSpeechFragment, isIncompleteBullet, isWriterReadyLine } from "../src/lib/diet-voice.mjs";
+import { scorePartySymbol, SYMBOL_METHODOLOGY } from "../src/lib/symbol-rules.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -122,6 +123,74 @@ function isTopicContentPreserved(article, policyMatrix = null) {
   );
 }
 
+function mergeUniqueBullets(target, source, max = 3) {
+  const seen = new Set(target.map((b) => String(b).replace(/[、。…\s]/g, "").slice(0, 20)));
+  for (const raw of source) {
+    if (target.length >= max) break;
+    const b = String(raw || "").trim();
+    if (!b || isBoilerplateTopicLine(b)) continue;
+    const plain = b.endsWith("。") ? b : `${b}。`;
+    const key = plain.replace(/[、。…\s]/g, "").slice(0, 20);
+    if (seen.has(key)) continue;
+    seen.add(key);
+    target.push(plain);
+  }
+  return target;
+}
+
+function isGoodNowBullet(text) {
+  const b = String(text || "").trim();
+  if (!b || b.length < 12 || isBoilerplateTopicLine(b)) return false;
+  if (/お尋ねがございました|についてお尋ね|受け止めとジェンダー/.test(b)) return false;
+  if (isSpeechFragment(b) || isIncompleteBullet(b)) return false;
+  if (isDietVoice(b) && !/閣議|発足|予算|法案|賃上げ|投資|歳出|消費税|高市内閣/.test(b)) {
+    return false;
+  }
+  return isWriterReadyLine(b) || /閣議|発足|予算|法案|連立|追及|答弁|賃上げ|投資|歳出|消費税|兆円|高市内閣/.test(b);
+}
+
+/** speechFull 要約（buildArticleLayers）を primary に、不足時のみライター層で補完 */
+function buildNowBulletsPrimary(records, keyword, best, factBundle, meta) {
+  const topicKw = topicTerms(keyword);
+  const layers = buildArticleLayers(best.speech, topicKw, meta);
+  let nowBullets = [];
+
+  mergeUniqueBullets(
+    nowBullets,
+    synthesizeNowSummary(factBundle, meta).filter(isGoodNowBullet),
+    3,
+  );
+  mergeUniqueBullets(
+    nowBullets,
+    composeAllFallback(factBundle, meta).filter(isGoodNowBullet),
+    3,
+  );
+
+  const layerCandidates = [
+    ...(layers.nowSummary?.bullets ?? []),
+  ];
+  const ranked = records
+    .filter((r) => r.speech && r.speechID !== best.speechID)
+    .map((r) => ({ r, score: scoreSpeechTopicRelevance(r, keyword) }))
+    .filter((x) => x.score > 8)
+    .sort((a, b) => b.score - a.score);
+
+  for (const { r } of ranked.slice(0, 6)) {
+    const subMeta = {
+      date: r.date,
+      nameOfHouse: r.nameOfHouse,
+      nameOfMeeting: r.nameOfMeeting,
+      speaker: r.speaker,
+      speakerGroup: r.speakerGroup,
+      speechURL: r.speechURL,
+    };
+    layerCandidates.push(...(buildArticleLayers(r.speech, topicKw, subMeta).nowSummary?.bullets ?? []));
+  }
+  mergeUniqueBullets(nowBullets, layerCandidates.filter(isGoodNowBullet), 3);
+
+  return { nowBullets, layers };
+}
+
 async function enrichKokkai(article) {
   const keyword = article.searchKeyword;
   const from = "2023-01-01";
@@ -162,17 +231,14 @@ async function enrichKokkai(article) {
   };
 
   const factBundle = buildFactBundle(records, searchKeyword);
-  let nowBullets = synthesizeNowSummary(factBundle, meta);
-  if (nowBullets.length < 3) {
-    const existing = article.nowSummary?.bullets ?? [];
-    if (existing.length >= 3) {
-      nowBullets = existing.slice(0, 3);
-      console.log(`[writer] 結論フォールバック: 既存 ${nowBullets.length} 行`);
-    } else {
-      const pad = composeAllFallback(factBundle, meta);
-      nowBullets = [...new Set([...nowBullets, ...pad])].slice(0, 3);
-    }
-  }
+  const { nowBullets: primaryBullets, layers } = buildNowBulletsPrimary(
+    records,
+    searchKeyword,
+    best,
+    factBundle,
+    meta,
+  );
+  let nowBullets = primaryBullets;
   if (nowBullets.length < 3) {
     throw new Error(`[writer] 結論が3行未満 (${nowBullets.length}) — 原材料不足または変換失敗`);
   }
@@ -182,7 +248,22 @@ async function enrichKokkai(article) {
   }
   let arcFromWriter = synthesizeArcSummary(factBundle);
   if (arcFromWriter.length < 3) {
-    const existingArc = article.arcSummary ?? [];
+    const seenDates = new Set(arcFromWriter.map((x) => x.date));
+    for (const sn of factBundle.snippets) {
+      if (arcFromWriter.length >= 3) break;
+      if (!sn.date || seenDates.has(sn.date)) continue;
+      const plain = synthesizeTimelinePlain(sn, searchKeyword);
+      if (!plain || isBoilerplateTopicLine(plain) || !textStronglyMatchesTopic(plain, searchKeyword)) {
+        continue;
+      }
+      const text = plain.endsWith("。") ? plain : `${plain}。`;
+      seenDates.add(sn.date);
+      arcFromWriter.push({ date: sn.date, text });
+    }
+    arcFromWriter.sort((a, b) => b.date.localeCompare(a.date));
+  }
+  if (arcFromWriter.length < 3) {
+    const existingArc = (article.arcSummary ?? []).filter((x) => x?.text && !isBoilerplateTopicLine(x.text));
     if (existingArc.length >= 3) {
       arcFromWriter = existingArc;
       console.log(`[writer] 経緯フォールバック: 既存 ${arcFromWriter.length} 行`);
@@ -190,7 +271,6 @@ async function enrichKokkai(article) {
   }
   const summaryTexts = synthesizeEvidence(factBundle, nowBullets, meta, arcFromWriter).slice(0, 5);
 
-  const layers = buildArticleLayers(summarySource, topicKw, meta);
   const glossary = layers.glossary;
 
   article.title = citizenTitle({ ...article, slug });
@@ -364,6 +444,30 @@ async function writePolicyMatrixKokkai(article, records, { force = false } = {})
   console.log("[matrix] 作成完了");
 }
 
+async function rescorePolicyMatrix(slug) {
+  const matrixPath = path.join(root, "data/policy-matrix", `${slug}.json`);
+  try {
+    const matrix = JSON.parse(await readFile(matrixPath, "utf8"));
+    let changed = 0;
+    for (const p of matrix.parties ?? []) {
+      const { symbol, symbolReason } = scorePartySymbol(p);
+      if (p.symbol !== symbol || p.symbolReason !== symbolReason) {
+        p.symbol = symbol;
+        p.symbolReason = symbolReason;
+        changed++;
+      }
+    }
+    if (changed > 0) {
+      matrix.methodologyVersion = SYMBOL_METHODOLOGY;
+      matrix.updatedAt = new Date().toISOString();
+      await writeFile(matrixPath, `${JSON.stringify(matrix, null, 2)}\n`, "utf8");
+      console.log(`[matrix] 記号再採点（${changed}党）`);
+    }
+  } catch {
+    /* matrix なし */
+  }
+}
+
 async function main() {
   const articlePath = path.join(root, "data/articles", `${slug}.json`);
   let article = JSON.parse(await readFile(articlePath, "utf8"));
@@ -430,6 +534,8 @@ async function main() {
   // ④ 法務
   console.log("[④] 法務");
   await runNode("legal-check.mjs", ["--slug", slug, "--fix"]);
+
+  await rescorePolicyMatrix(slug);
 
   article = await loadArticle(slug);
   const gate = await checkCasePageWithFiles(article);
