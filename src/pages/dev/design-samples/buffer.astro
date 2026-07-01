@@ -1,0 +1,32 @@
+---
+import AdminShell from "../../../components/admin/AdminShell.astro";
+import AdminKpiBar from "../../../components/admin/AdminKpiBar.astro";
+---
+
+<AdminShell activeId="buffer" title="Buffer">
+  <div class="admin-preview-ribbon"><span class="admin-preview-ribbon__dot"></span>デザイン案</div>
+
+  <header class="admin-page-head">
+    <h1 class="admin-page-head__title">Buffer（自動投稿ログ）</h1>
+  </header>
+
+  <AdminKpiBar items={[
+    { label: "状態", value: "正常", tone: "ok" },
+    { label: "本日", value: "2/3" },
+    { label: "最終投稿", value: "12:04" },
+    { label: "上限", value: "3/日" },
+  ]} />
+
+  <section class="admin-surface">
+    <div class="admin-status-hero">
+      <p class="admin-status-hero__icon">🟢</p>
+      <p class="admin-status-hero__label">自動投稿は正常</p>
+      <p class="admin-status-hero__sub">deploy 時に新規公開1件をキュー · 日上限3本</p>
+    </div>
+  </section>
+
+  <div class="admin-hub-links">
+    <a href="/dev/design-samples/automation/">自動化ログ →</a>
+    <a href="/dev/design-samples/promo/">プロモ →</a>
+  </div>
+</AdminShell>

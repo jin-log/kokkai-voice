@@ -1,0 +1,61 @@
+---
+import AdminShell from "../../../components/admin/AdminShell.astro";
+import AdminKpiBar from "../../../components/admin/AdminKpiBar.astro";
+import AdminAlertBand from "../../../components/admin/AdminAlertBand.astro";
+---
+
+<AdminShell activeId="tasks" title="今日のタスク">
+  <div class="admin-preview-ribbon"><span class="admin-preview-ribbon__dot"></span>デザイン案</div>
+
+  <header class="admin-page-head">
+    <h1 class="admin-page-head__title">今日のタスク</h1>
+  </header>
+
+  <AdminKpiBar items={[
+    { label: "オーナー今日", value: "2", tone: "warn" },
+    { label: "CEO", value: "5" },
+    { label: "完了", value: "12", tone: "ok" },
+    { label: "全体", value: "19" },
+  ]} />
+
+  <div class="admin-filter">
+    <div class="admin-filter__pills">
+      <button type="button" class="admin-filter__pill is-active">今日</button>
+      <button type="button" class="admin-filter__pill">今週</button>
+      <button type="button" class="admin-filter__pill">オーナー</button>
+      <button type="button" class="admin-filter__pill">CEO</button>
+    </div>
+  </div>
+
+  <div class="admin-list">
+    <article class="admin-row admin-row--quality-ng">
+      <div class="admin-row__grid admin-row__grid--fluid">
+        <div class="admin-row__main">
+          <header class="admin-row__head">
+            <h3 class="admin-row__title">はてブ登録 — 大阪都構想</h3>
+            <span class="admin-row__badge admin-row__badge--ng">高</span>
+          </header>
+          <p class="admin-row__summary admin-clamp-2">公開済み。Chromeではてブ登録 → コメント貼付。</p>
+        </div>
+        <div class="admin-row__quick">
+          <button type="button" class="admin-row__btn admin-row__btn--ghost">はてブへ</button>
+          <button type="button" class="admin-row__btn admin-row__btn--primary">完了</button>
+        </div>
+      </div>
+    </article>
+    <article class="admin-row">
+      <div class="admin-row__grid admin-row__grid--fluid">
+        <div class="admin-row__main">
+          <header class="admin-row__head">
+            <h3 class="admin-row__title">X投稿確認 — 消費税</h3>
+            <span class="admin-row__badge">中</span>
+          </header>
+        </div>
+        <div class="admin-row__quick">
+          <button type="button" class="admin-row__btn admin-row__btn--ghost">プロモへ</button>
+          <button type="button" class="admin-row__btn admin-row__btn--primary">完了</button>
+        </div>
+      </div>
+    </article>
+  </div>
+</AdminShell>

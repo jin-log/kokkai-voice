@@ -1,0 +1,68 @@
+---
+import AdminShell from "../../../components/admin/AdminShell.astro";
+import AdminKpiBar from "../../../components/admin/AdminKpiBar.astro";
+---
+
+<AdminShell activeId="hatena" title="はてなブックマーク">
+  <div class="admin-preview-ribbon"><span class="admin-preview-ribbon__dot"></span>デザイン案</div>
+
+  <header class="admin-page-head">
+    <h1 class="admin-page-head__title">はてなブックマーク</h1>
+    <p class="admin-page-head__note">1記事 = ①登録 → ②コメント の2ステップだけ。</p>
+  </header>
+
+  <AdminKpiBar items={[
+    { label: "公開", value: "26" },
+    { label: "未登録", value: "3", tone: "warn" },
+    { label: "直近7日", value: "2" },
+    { label: "登録済", value: "23", tone: "ok" },
+  ]} />
+
+  <div class="admin-toolbar" style="margin-bottom:1rem">
+    <div class="admin-toolbar__row">
+      <button type="button" class="admin-toolbar__btn">Chromeでマイページ</button>
+    </div>
+  </div>
+
+  <div class="admin-filter admin-filter--sticky">
+    <div class="admin-filter__pills">
+      <button type="button" class="admin-filter__pill is-active">すべて<span class="admin-filter__pill-n">26</span></button>
+      <button type="button" class="admin-filter__pill">未登録<span class="admin-filter__pill-n">3</span></button>
+      <button type="button" class="admin-filter__pill">直近7日</button>
+    </div>
+  </div>
+
+  <div class="admin-list">
+    <article class="admin-row admin-row--live">
+      <div class="admin-row__grid admin-row__grid--fluid">
+        <div class="admin-row__main">
+          <header class="admin-row__head">
+            <h3 class="admin-row__title">大阪都構想、今の国会では</h3>
+            <div class="admin-row__badges"><span class="admin-row__badge admin-row__badge--x">未登録</span></div>
+          </header>
+          <p class="admin-row__summary">2026-06-28 公開</p>
+          <div class="admin-flow-steps">
+            <button type="button" class="admin-row__btn admin-row__btn--primary">① はてブ登録</button>
+            <span class="admin-flow-steps__arrow">→</span>
+            <button type="button" class="admin-row__btn">② コメントコピー</button>
+          </div>
+        </div>
+      </div>
+    </article>
+    <article class="admin-row">
+      <div class="admin-row__grid admin-row__grid--fluid">
+        <div class="admin-row__main">
+          <header class="admin-row__head">
+            <h3 class="admin-row__title">防衛特別税の行方</h3>
+            <div class="admin-row__badges"><span class="admin-row__badge admin-row__badge--live">登録済</span></div>
+          </header>
+          <p class="admin-row__summary">2026-06-20</p>
+          <div class="admin-row__quick">
+            <button type="button" class="admin-row__btn admin-row__btn--ghost">登録を開く</button>
+            <button type="button" class="admin-row__btn">コメントコピー</button>
+          </div>
+        </div>
+      </div>
+    </article>
+  </div>
+</AdminShell>

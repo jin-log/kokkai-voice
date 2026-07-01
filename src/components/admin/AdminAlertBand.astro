@@ -1,0 +1,10 @@
+---
+interface Props {
+  tone?: "danger" | "warn" | "info";
+}
+const { tone = "info" } = Astro.props;
+---
+
+<div class:list={["admin-alert-band", `admin-alert-band--${tone}`]}>
+  <slot />
+</div>

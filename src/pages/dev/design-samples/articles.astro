@@ -1,0 +1,91 @@
+---
+import AdminShell from "../../../components/admin/AdminShell.astro";
+import AdminKpiBar from "../../../components/admin/AdminKpiBar.astro";
+---
+
+<AdminShell activeId="articles" title="記事" liveStatus={true}>
+  <div class="admin-preview-ribbon"><span class="admin-preview-ribbon__dot"></span>デザイン案</div>
+
+  <header class="admin-page-head">
+    <h1 class="admin-page-head__title">記事</h1>
+    <p class="admin-page-head__meta">完成度 <strong>53%</strong> · 公開 <strong>22/39</strong> · ゲート <strong>100%</strong></p>
+  </header>
+
+  <section class="admin-dash__patrol admin-dash__patrol-off" style="margin-bottom:1rem">
+    品質NG <strong>3件</strong> — 要対応フィルタを確認
+  </section>
+
+  <details class="admin-create-fold">
+    <summary>＋ 新規記事を作成</summary>
+    <div class="admin-create-fold__body">
+      <div class="admin-toolbar__row">
+        <input class="admin-toolbar__input admin-toolbar__input--grow" placeholder="生成キーワード" />
+        <input class="admin-toolbar__input" placeholder="タイトル（任意）" />
+        <button type="button" class="admin-toolbar__btn">生成</button>
+      </div>
+    </div>
+  </details>
+
+  <div class="admin-filter admin-filter--sticky">
+    <header class="admin-filter__head">
+      <h2 class="admin-filter__title">絞り込み</h2>
+      <button type="button" class="admin-filter__reset">クリア</button>
+    </header>
+    <div class="admin-filter__pills">
+      <button type="button" class="admin-filter__pill is-active">要対応<span class="admin-filter__pill-n">8</span></button>
+      <button type="button" class="admin-filter__pill">公開中<span class="admin-filter__pill-n">22</span></button>
+      <button type="button" class="admin-filter__pill">下書き</button>
+      <button type="button" class="admin-filter__pill">税制<span class="admin-filter__pill-n">4</span></button>
+      <button type="button" class="admin-filter__pill">防衛</button>
+    </div>
+  </div>
+
+  <div class="admin-list">
+    <article class="admin-row admin-row--draft admin-row--quality-ng">
+      <div class="admin-row__grid">
+        <div class="admin-row__meter" aria-hidden="true">
+          <span class="admin-row__meter-fill" style="height: 67%"></span>
+          <span class="admin-row__meter-label">67</span>
+        </div>
+        <div class="admin-row__main">
+          <header class="admin-row__head">
+            <h3 class="admin-row__title">給付付き税額控除</h3>
+            <div class="admin-row__badges">
+              <span class="admin-row__badge admin-row__badge--draft">非公開</span>
+              <span class="admin-row__badge admin-row__badge--ng">品質NG</span>
+              <span class="admin-row__badge admin-row__badge--cat">税制</span>
+            </div>
+          </header>
+          <ul class="admin-row__work">
+            <li class="admin-row__work-item is-blocked"><span class="admin-row__work-icon">✕</span><span>X検証</span></li>
+            <li class="admin-row__work-item is-active"><span class="admin-row__work-icon">◌</span><span>品質チェック</span></li>
+          </ul>
+        </div>
+        <div class="admin-row__quick">
+          <button type="button" class="admin-row__btn admin-row__btn--ghost">プレビュー</button>
+          <button type="button" class="admin-row__btn admin-row__btn--primary">公開</button>
+        </div>
+      </div>
+    </article>
+    <article class="admin-row admin-row--live">
+      <div class="admin-row__grid">
+        <div class="admin-row__meter" aria-hidden="true">
+          <span class="admin-row__meter-fill" style="height: 100%"></span>
+          <span class="admin-row__meter-label">100</span>
+        </div>
+        <div class="admin-row__main">
+          <header class="admin-row__head">
+            <h3 class="admin-row__title">大阪都構想、今の国会では</h3>
+            <div class="admin-row__badges">
+              <span class="admin-row__badge admin-row__badge--live">公開中</span>
+            </div>
+          </header>
+          <p class="admin-row__summary admin-row__summary--ok">作業なし</p>
+        </div>
+        <div class="admin-row__quick">
+          <button type="button" class="admin-row__btn admin-row__btn--ghost">記事</button>
+        </div>
+      </div>
+    </article>
+  </div>
+</AdminShell>

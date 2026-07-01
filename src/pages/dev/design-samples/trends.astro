@@ -1,0 +1,67 @@
+---
+import AdminShell from "../../../components/admin/AdminShell.astro";
+import AdminKpiBar from "../../../components/admin/AdminKpiBar.astro";
+---
+
+<AdminShell activeId="trends" title="関心ワード">
+  <div class="admin-preview-ribbon"><span class="admin-preview-ribbon__dot"></span>デザイン案</div>
+
+  <header class="admin-page-head">
+    <h1 class="admin-page-head__title">関心ワード</h1>
+    <p class="admin-page-head__note">ネタ探し → 記事作成へ1クリック。</p>
+  </header>
+
+  <AdminKpiBar items={[
+    { label: "取得", value: "14:28" },
+    { label: "トレンド", value: "12" },
+    { label: "Yahoo", value: "5" },
+    { label: "NHK", value: "3" },
+  ]} />
+
+  <div class="admin-filter admin-filter--sticky">
+    <div class="admin-filter__pills">
+      <button type="button" class="admin-filter__pill is-active">すべて</button>
+      <button type="button" class="admin-filter__pill">Yahoo</button>
+      <button type="button" class="admin-filter__pill">Google</button>
+      <button type="button" class="admin-filter__pill">NHK</button>
+    </div>
+  </div>
+
+  <div class="admin-list">
+    <article class="admin-row">
+      <div class="admin-row__grid admin-row__grid--fluid">
+        <div class="admin-row__main">
+          <header class="admin-row__head">
+            <h3 class="admin-row__title">消費税減税を閣議決定</h3>
+            <span class="admin-row__badge">Yahoo</span>
+          </header>
+        </div>
+        <div class="admin-row__quick">
+          <button type="button" class="admin-row__btn admin-row__btn--primary">記事作成</button>
+          <button type="button" class="admin-row__btn admin-row__btn--ghost">↗</button>
+        </div>
+      </div>
+    </article>
+    <article class="admin-row">
+      <div class="admin-row__grid admin-row__grid--fluid">
+        <div class="admin-row__main">
+          <header class="admin-row__head">
+            <h3 class="admin-row__title">防衛費、衆院で論戦</h3>
+            <span class="admin-row__badge">NHK</span>
+          </header>
+        </div>
+        <div class="admin-row__quick">
+          <button type="button" class="admin-row__btn admin-row__btn--primary">記事作成</button>
+          <button type="button" class="admin-row__btn admin-row__btn--ghost">↗</button>
+        </div>
+      </div>
+    </article>
+  </div>
+
+  <details class="admin-create-fold" id="ga">
+    <summary>アクセスレポート（GA4）</summary>
+    <div class="admin-create-fold__body">
+      <p class="admin-page-head__note">ダッシュボード統合予定</p>
+    </div>
+  </details>
+</AdminShell>

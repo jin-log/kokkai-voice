@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;800&display=swap");
+@import "./admin-samples.css";
 
 *, *::before, *::after { box-sizing: border-box; }
 
@@ -4042,13 +4043,21 @@ body.has-progress-strip {
 .dev-comments-admin__case { font-weight: 600; }
 .dev-comments-admin__list { list-style: none; margin: 0; padding: 0; }
 .dev-comments-admin__item {
-  border: 1px solid var(--color-border);
-  border-radius: 0.5rem;
-  padding: 1rem;
-  margin-bottom: 0.75rem;
+  border: 0;
+  border-radius: 0.85rem;
+  padding: 0;
+  margin-bottom: 0;
+  background: transparent;
+  box-shadow: none;
 }
 .dev-comments-admin__meta { font-size: 0.8rem; color: var(--color-text-muted); display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.5rem; }
-.dev-comments-admin__body { margin: 0 0 0.75rem; }
+.dev-comments-admin__body {
+  margin: 0 0 0.75rem;
+  font-size: 0.9rem;
+  line-height: 1.55;
+  word-break: break-word;
+  white-space: pre-wrap;
+}
 .dev-comments-admin__actions { display: flex; gap: 0.5rem; }
 .dev-comments-admin__empty { color: var(--color-text-muted); }
 
@@ -4294,6 +4303,7 @@ body.has-progress-strip {
 }
 .ops-copy-block__head {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
   gap: 0.5rem;
@@ -4331,10 +4341,10 @@ body.has-progress-strip {
   margin: 0;
   white-space: pre-wrap;
   word-break: break-word;
-  font-size: 0.8rem;
-  line-height: 1.45;
-  max-height: 12rem;
-  overflow: auto;
+  font-size: 0.88rem;
+  line-height: 1.55;
+  max-height: none;
+  overflow: visible;
 }
 .ops-copy-block__text a.ops-link-external {
   color: var(--color-primary);
@@ -4427,29 +4437,27 @@ body.has-progress-strip {
   color: var(--color-text-muted);
 }
 .hatena-row {
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  gap: 0.35rem 0.65rem;
-  align-items: start;
-  margin-bottom: 0.65rem;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.5rem;
+  margin-bottom: 0.85rem;
   font-size: 0.85rem;
 }
 .hatena-row__label {
   font-weight: 600;
-  white-space: nowrap;
   color: var(--color-text-muted);
   font-size: 0.78rem;
 }
-.hatena-row__action {
-  word-break: break-all;
+.hatena-row__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  align-items: center;
 }
 .hatena-row__url {
-  grid-column: 2 / -1;
-  font-size: 0.72rem;
-  color: var(--color-text-muted);
-  word-break: break-all;
+  display: none;
 }
-.hatena-copy { grid-column: 3; }
 .hatena-comment { margin-top: 0.25rem; }
 .hatena-comment__title {
   margin: 0.5rem 0 0;
@@ -4745,10 +4753,24 @@ body.has-progress-strip {
 
 .admin-row__grid {
   display: grid;
-  grid-template-columns: 2.25rem 1fr auto;
+  grid-template-columns: 2.25rem minmax(0, 1fr) auto;
   gap: 0.75rem;
   padding: 0.65rem 0.75rem;
   align-items: start;
+}
+
+.admin-row__grid--fluid,
+.admin-row__grid:not(:has(.admin-row__meter)) {
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+}
+
+.admin-row__grid--stack {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.admin-row__main {
+  min-width: 0;
 }
 
 .admin-row__meter {
@@ -5103,10 +5125,26 @@ body.has-progress-strip {
 .admin-live--error { color: #b91c1c; }
 
 .admin-lock {
-  min-height: 60vh;
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  min-height: 0;
   display: grid;
   place-items: center;
   padding: 2rem;
+  background: #eef2f7;
+}
+
+.admin-lock[hidden],
+.admin-gate[hidden] {
+  display: none !important;
+}
+
+#dev-lock {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: #eef2f7;
 }
 
 .admin-lock__box {

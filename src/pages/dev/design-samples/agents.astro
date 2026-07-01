@@ -1,0 +1,35 @@
+---
+import AdminShell from "../../../components/admin/AdminShell.astro";
+import AdminKpiBar from "../../../components/admin/AdminKpiBar.astro";
+---
+
+<AdminShell activeId="agents" title="エージェント">
+  <div class="admin-preview-ribbon"><span class="admin-preview-ribbon__dot"></span>デザイン案</div>
+
+  <header class="admin-page-head">
+    <h1 class="admin-page-head__title">エージェント</h1>
+  </header>
+
+  <AdminKpiBar items={[
+    { label: "エージェント", value: "7" },
+    { label: "段階", value: "5" },
+    { label: "ゲート", value: "12" },
+    { label: "skills", value: "9" },
+  ]} />
+
+  <div class="admin-filter__pills" style="margin-bottom:1rem">
+    <button type="button" class="admin-filter__pill is-active">CEO</button>
+    <button type="button" class="admin-filter__pill">Writer</button>
+    <button type="button" class="admin-filter__pill">Patrol</button>
+    <button type="button" class="admin-filter__pill">Promo</button>
+  </div>
+
+  <section class="admin-surface admin-agent-focus">
+    <h3>CEO</h3>
+    <p class="admin-page-head__note">方針決定 · 優先順位 · デプロイ判断</p>
+    <details>
+      <summary>rules 3 · skills 2</summary>
+      <p class="admin-page-head__note">デフォルト閉じ。展開で詳細。</p>
+    </details>
+  </section>
+</AdminShell>

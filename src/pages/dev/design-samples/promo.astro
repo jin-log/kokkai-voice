@@ -1,0 +1,76 @@
+---
+import AdminShell from "../../../components/admin/AdminShell.astro";
+import AdminKpiBar from "../../../components/admin/AdminKpiBar.astro";
+import AdminAlertBand from "../../../components/admin/AdminAlertBand.astro";
+---
+
+<AdminShell activeId="promo" title="プロモ文案">
+  <div class="admin-preview-ribbon"><span class="admin-preview-ribbon__dot"></span>デザイン案</div>
+
+  <header class="admin-page-head">
+    <h1 class="admin-page-head__title">プロモ文案</h1>
+    <p class="admin-page-head__note">今日やる投稿だけ上に固定。週次・全件は下に畳む。</p>
+  </header>
+
+  <AdminKpiBar items={[
+    { label: "今日", value: "火" },
+    { label: "推奨", value: "1件" },
+    { label: "今週未", value: "2", tone: "warn" },
+    { label: "全案件", value: "26" },
+  ]} />
+
+  <section class="admin-surface">
+    <header class="admin-surface__head">
+      <div>
+        <h2 class="admin-surface__title">消費税減税、いつ・誰が得する？</h2>
+        <p class="admin-surface__meta">2026-07-01 · 推奨投稿</p>
+      </div>
+    </header>
+    <div class="admin-surface__body">
+      <div class="admin-filter__pills" style="margin-bottom:0.85rem">
+        <button type="button" class="admin-filter__pill is-active">本投稿</button>
+        <button type="button" class="admin-filter__pill">数字</button>
+        <button type="button" class="admin-filter__pill">メリデメ</button>
+        <button type="button" class="admin-filter__pill">2/3</button>
+      </div>
+      <div class="admin-split">
+        <div class="admin-copy-panel">
+          <span class="admin-copy-panel__label">X 本投稿</span>
+          <p class="admin-copy-panel__text">【消費税】減税論争、財源はどこから？出典付きで整理しました。国会・政府の一次情報ベースです。</p>
+        </div>
+        <div class="admin-copy-panel__actions" style="flex-direction:column">
+          <button type="button" class="admin-row__btn admin-row__btn--primary">コピー</button>
+          <button type="button" class="admin-row__btn">Chromeで X</button>
+          <button type="button" class="admin-row__btn admin-row__btn--ghost">はてブへ</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <details class="admin-create-fold">
+    <summary>今週ローテ</summary>
+    <div class="admin-create-fold__body">
+      <div class="admin-week-grid">
+        {["月","火","水","木","金","土","日"].map((d,i) => (
+          <div class:list={["admin-week-grid__cell", i===1 && "is-today", i===0 && "is-done"]}>
+            <div>{d}</div>
+            <div>{i===1 ? "今日" : i===0 ? "済" : "—"}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </details>
+
+  <details class="admin-create-fold">
+    <summary>全案件クイック（表）</summary>
+    <div class="admin-create-fold__body">
+      <table class="admin-table-compact">
+        <thead><tr><th>記事</th><th>X</th><th>はてブ</th><th></th></tr></thead>
+        <tbody>
+          <tr><td>大阪都構想</td><td><button class="admin-row__btn admin-row__btn--ghost">コピー</button></td><td><button class="admin-row__btn admin-row__btn--ghost">コピー</button></td><td><button class="admin-row__btn">開く</button></td></tr>
+          <tr><td>防衛特別税</td><td><button class="admin-row__btn admin-row__btn--ghost">コピー</button></td><td><button class="admin-row__btn admin-row__btn--ghost">コピー</button></td><td><button class="admin-row__btn">開く</button></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </details>
+</AdminShell>
