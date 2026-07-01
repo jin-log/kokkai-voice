@@ -104,7 +104,7 @@ export async function loadPatrolRuntime() {
  * @param {{ activeSlug: string|null, activeCheckId: string|null, activeLabel: string|null, running?: boolean, batchSlugs?: string[], xCaptureRunning?: boolean }} runtime
  * @param {{ id: string, label: string, ok: boolean, preDeploy?: boolean }[]} [pipeline]
  */
-export function buildWorkItems(slug, gate, quality, runtime, pipeline = []) {
+export function buildWorkItems(slug, gate, quality, runtime, pipeline = [], article = null) {
   /** @type {{ id: string, label: string, state: 'active'|'blocked' }[]} */
   const items = [];
   const seen = new Set();

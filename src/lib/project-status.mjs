@@ -229,7 +229,7 @@ export async function computeProjectStatus() {
     else if (pageReady) publishState = "live";
     else if (publishGateOk) publishState = "draft";
 
-    const workItems = buildWorkItems(slug, gate, quality, patrolRuntime, pipeline);
+    const workItems = buildWorkItems(slug, gate, quality, patrolRuntime, pipeline, article);
     const runState = patrolRuntime.activeSlug === slug ? "active" : "idle";
 
     slugs.push({
