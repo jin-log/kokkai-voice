@@ -1,0 +1,53 @@
+---
+import AdminShell from "../../../components/admin/AdminShell.astro";
+import AdminKpiBar from "../../../components/admin/AdminKpiBar.astro";
+---
+
+<AdminShell activeId="shorts" title="ショート動画">
+  <div class="admin-preview-ribbon"><span class="admin-preview-ribbon__dot"></span>デザイン案</div>
+
+  <header class="admin-page-head">
+    <h1 class="admin-page-head__title">ショート動画</h1>
+  </header>
+
+  <AdminKpiBar items={[
+    { label: "フェーズ", value: "調査" },
+    { label: "型", value: "5" },
+    { label: "素材", value: "3" },
+    { label: "更新", value: "6/28" },
+  ]} />
+
+  <div class="admin-filter__pills" style="margin-bottom:1rem">
+    <button type="button" class="admin-filter__pill is-active">型一覧</button>
+    <button type="button" class="admin-filter__pill">素材</button>
+    <button type="button" class="admin-filter__pill">方針・NG</button>
+  </div>
+
+  <div class="admin-dash__cards" style="margin-bottom:1rem">
+    <div class="admin-dash__card" style="--card-grad: linear-gradient(135deg,#1e40af,#3b82f6)">
+      <div class="admin-dash__card-link" style="pointer-events:none">
+        <div class="admin-dash__card-head">
+          <span class="admin-dash__card-head-icon">F1</span>
+          <span class="admin-dash__card-head-meta">
+            <span class="admin-dash__card-cat">数字フック</span>
+            <span class="admin-dash__card-title">国会で示された数字は…</span>
+          </span>
+        </div>
+        <div class="admin-dash__card-body">
+          <button type="button" class="admin-row__btn">Chromeで開く</button>
+        </div>
+      </div>
+    </div>
+    <div class="admin-dash__card" style="--card-grad: linear-gradient(135deg,#475569,#64748b)">
+      <div class="admin-dash__card-link" style="pointer-events:none">
+        <div class="admin-dash__card-head">
+          <span class="admin-dash__card-head-icon">F2</span>
+          <span class="admin-dash__card-head-meta">
+            <span class="admin-dash__card-cat">対立構図</span>
+            <span class="admin-dash__card-title">調査中</span>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</AdminShell>

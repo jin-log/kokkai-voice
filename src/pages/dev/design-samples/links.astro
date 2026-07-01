@@ -1,0 +1,43 @@
+---
+import AdminShell from "../../../components/admin/AdminShell.astro";
+---
+
+<AdminShell activeId="links" title="リンク">
+  <div class="admin-preview-ribbon"><span class="admin-preview-ribbon__dot"></span>デザイン案</div>
+
+  <header class="admin-page-head">
+    <h1 class="admin-page-head__title">リンク</h1>
+  </header>
+
+  <div class="admin-filter__pills" style="margin-bottom:1rem">
+    <button type="button" class="admin-filter__pill is-active">外部リンク</button>
+    <button type="button" class="admin-filter__pill">プレビュー</button>
+    <button type="button" class="admin-filter__pill">設定値</button>
+  </div>
+
+  <div class="admin-list">
+    {[
+      { t: "X @seiji1192site", n: "本アカウント" },
+      { t: "note", n: "週次ダイジェスト" },
+      { t: "はてブ マイページ", n: "ホットエントリー" },
+      { t: "GitHub Actions", n: "CI" },
+    ].map((row) => (
+      <article class="admin-row">
+        <div class="admin-row__grid admin-row__grid--fluid">
+          <div class="admin-row__main">
+            <header class="admin-row__head">
+              <h3 class="admin-row__title">{row.t}</h3>
+            </header>
+            <p class="admin-row__summary">{row.n}</p>
+          </div>
+          <button type="button" class="admin-row__btn admin-row__btn--ghost">↗</button>
+        </div>
+      </article>
+    ))}
+  </div>
+
+  <details class="admin-create-fold">
+    <summary>コンポーネントプレビュー</summary>
+    <div class="admin-create-fold__body"><p class="admin-page-head__note">フッター / CTA — 普段は閉じる</p></div>
+  </details>
+</AdminShell>

@@ -1,0 +1,35 @@
+---
+import AdminShell from "../../components/admin/AdminShell.astro";
+import AdminKpiBar from "../../components/admin/AdminKpiBar.astro";
+import { ADMIN_NAV_GROUPS } from "../../lib/admin-nav.mjs";
+
+const samples = ADMIN_NAV_GROUPS.flatMap((g) =>
+  g.items.map((item) => ({ ...item, group: g.label })),
+).filter((i) => i.id !== "reports");
+---
+
+<AdminShell activeId="dashboard" title="デザイン案">
+  <div class="admin-preview-ribbon">
+    <span class="admin-preview-ribbon__dot"></span>
+    デザイン案プレビュー — 左メニューと同じ操作感
+  </div>
+
+  <header class="admin-page-head">
+    <h1 class="admin-page-head__title">各画面のデザイン案</h1>
+    <p class="admin-page-head__note">下のリンク → 左カラムは本番と同じ。メインだけ新デザイン。</p>
+  </header>
+
+  <div class="admin-hub-links">
+    <a href="/dev/design-samples/articles/">記事</a>
+    <a href="/dev/design-samples/promo/">プロモ</a>
+    <a href="/dev/design-samples/hatena/">はてブ</a>
+    <a href="/dev/design-samples/shorts/">ショート</a>
+    <a href="/dev/design-samples/buffer/">Buffer</a>
+    <a href="/dev/design-samples/tasks/">タスク</a>
+    <a href="/dev/design-samples/automation/">自動化</a>
+    <a href="/dev/design-samples/agents/">エージェント</a>
+    <a href="/dev/design-samples/links/">リンク</a>
+    <a href="/dev/design-samples/comments/">コメント</a>
+    <a href="/dev/design-samples/trends/">関心ワード</a>
+  </div>
+</AdminShell>

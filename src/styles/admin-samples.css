@@ -1,0 +1,333 @@
+/* 管理画面 — ページ共通（ダッシュボード準拠・サンプル/本番共用） */
+.admin-preview-ribbon {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  padding: 0.45rem 0.85rem;
+  border-radius: 0.55rem;
+  background: linear-gradient(90deg, #1e3a8a, #2563eb);
+  color: #fff;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.admin-preview-ribbon__dot {
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 50%;
+  background: #4ade80;
+  box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.35);
+}
+
+.admin-kpi-bar {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(7.5rem, 1fr));
+  gap: 0;
+  margin-bottom: 1rem;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.85rem;
+  overflow: hidden;
+  box-shadow: 0 4px 18px rgba(15, 23, 42, 0.05);
+}
+
+.admin-kpi-bar__cell {
+  padding: 0.85rem 1rem;
+  border-right: 1px solid #f1f5f9;
+}
+
+.admin-kpi-bar__cell:last-child { border-right: 0; }
+
+.admin-kpi-bar__label {
+  display: block;
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #64748b;
+  margin-bottom: 0.25rem;
+}
+
+.admin-kpi-bar__value {
+  display: block;
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #0f172a;
+  line-height: 1.1;
+}
+
+.admin-kpi-bar__cell.is-warn .admin-kpi-bar__value { color: #b45309; }
+.admin-kpi-bar__cell.is-danger .admin-kpi-bar__value { color: #b91c1c; }
+.admin-kpi-bar__cell.is-ok .admin-kpi-bar__value { color: #15803d; }
+
+.admin-alert-band {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+  padding: 0.7rem 1rem;
+  border-radius: 0.65rem;
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+
+.admin-alert-band--danger {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #991b1b;
+}
+
+.admin-alert-band--warn {
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  color: #92400e;
+}
+
+.admin-alert-band--info {
+  background: linear-gradient(90deg, #eff6ff, #f0fdf4);
+  border: 1px solid #bfdbfe;
+  color: #1e40af;
+}
+
+.admin-surface {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.85rem;
+  box-shadow: 0 4px 18px rgba(15, 23, 42, 0.05);
+  margin-bottom: 1rem;
+}
+
+.admin-surface__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 1rem 1.15rem 0.75rem;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.admin-surface__title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.admin-surface__meta {
+  margin: 0.2rem 0 0;
+  font-size: 0.8rem;
+  color: #64748b;
+}
+
+.admin-surface__body { padding: 1rem 1.15rem 1.1rem; }
+
+.admin-split {
+  display: grid;
+  grid-template-columns: 1fr minmax(10rem, 13rem);
+  gap: 1rem;
+  align-items: start;
+}
+
+@media (max-width: 720px) {
+  .admin-split { grid-template-columns: 1fr; }
+}
+
+.admin-copy-panel {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.65rem;
+  padding: 0.85rem 1rem;
+}
+
+.admin-copy-panel__label {
+  display: block;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #64748b;
+  margin-bottom: 0.45rem;
+}
+
+.admin-copy-panel__text {
+  margin: 0 0 0.75rem;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: #1e293b;
+}
+
+.admin-copy-panel__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.admin-week-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.4rem;
+}
+
+.admin-week-grid__cell {
+  text-align: center;
+  padding: 0.55rem 0.25rem;
+  border-radius: 0.5rem;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  font-size: 0.72rem;
+  color: #475569;
+}
+
+.admin-week-grid__cell.is-today {
+  background: linear-gradient(135deg, #1e40af, #2563eb);
+  border-color: transparent;
+  color: #fff;
+  font-weight: 700;
+}
+
+.admin-week-grid__cell.is-done {
+  background: #f0fdf4;
+  border-color: #bbf7d0;
+}
+
+.admin-table-compact {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.admin-table-compact th {
+  text-align: left;
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #64748b;
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.admin-table-compact td {
+  padding: 0.65rem 0.75rem;
+  border-bottom: 1px solid #f1f5f9;
+  vertical-align: middle;
+}
+
+.admin-table-compact tr:hover td { background: #f8fafc; }
+
+.admin-status-hero {
+  text-align: center;
+  padding: 1.75rem 1rem;
+}
+
+.admin-status-hero__icon {
+  font-size: 2.5rem;
+  line-height: 1;
+  margin-bottom: 0.35rem;
+}
+
+.admin-status-hero__label {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 800;
+}
+
+.admin-status-hero__sub {
+  margin: 0.35rem 0 0;
+  font-size: 0.88rem;
+  color: #64748b;
+}
+
+.admin-filter--sticky {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+}
+
+.admin-create-fold {
+  margin-bottom: 1rem;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.85rem;
+  overflow: hidden;
+}
+
+.admin-create-fold summary {
+  padding: 0.75rem 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.admin-create-fold summary::-webkit-details-marker { display: none; }
+
+.admin-create-fold__body {
+  padding: 0 1rem 1rem;
+  border-top: 1px solid #f1f5f9;
+}
+
+.admin-hub-links {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr));
+  gap: 0.5rem;
+}
+
+.admin-hub-links a {
+  display: block;
+  padding: 0.65rem 0.85rem;
+  border-radius: 0.55rem;
+  border: 1px solid #e2e8f0;
+  background: #fff;
+  text-decoration: none;
+  color: #1e40af;
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-align: center;
+  transition: border-color 0.12s, background 0.12s;
+}
+
+.admin-hub-links a:hover {
+  border-color: #93c5fd;
+  background: #eff6ff;
+}
+
+.admin-flow-steps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+  margin-top: 0.5rem;
+}
+
+.admin-flow-steps__arrow {
+  color: #94a3b8;
+  font-size: 1.1rem;
+}
+
+.admin-agent-focus {
+  padding: 1rem 1.15rem;
+}
+
+.admin-agent-focus h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1.05rem;
+}
+
+.admin-agent-focus details {
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+}
+
+.admin-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}

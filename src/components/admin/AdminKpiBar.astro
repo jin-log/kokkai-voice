@@ -1,0 +1,17 @@
+---
+interface Props {
+  items: { label: string; value: string; tone?: "warn" | "danger" | "ok" }[];
+}
+const { items } = Astro.props;
+---
+
+<div class="admin-kpi-bar" role="group">
+  {
+    items.map((item) => (
+      <div class:list={["admin-kpi-bar__cell", item.tone && `is-${item.tone}`]}>
+        <span class="admin-kpi-bar__label">{item.label}</span>
+        <span class="admin-kpi-bar__value">{item.value}</span>
+      </div>
+    ))
+  }
+</div>

@@ -80,6 +80,7 @@ const { activeId = "", title = "管理", liveStatus = false } = Astro.props;
     function unlock() {
       lock.hidden = true;
       gate.hidden = false;
+      window.dispatchEvent(new CustomEvent("admin-unlocked"));
       if (liveStatus) window.dispatchEvent(new CustomEvent("admin-live-start"));
     }
 

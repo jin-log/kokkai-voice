@@ -1,0 +1,50 @@
+---
+import AdminShell from "../../../components/admin/AdminShell.astro";
+import AdminKpiBar from "../../../components/admin/AdminKpiBar.astro";
+import AdminAlertBand from "../../../components/admin/AdminAlertBand.astro";
+---
+
+<AdminShell activeId="automation" title="自動化ログ">
+  <div class="admin-preview-ribbon"><span class="admin-preview-ribbon__dot"></span>デザイン案</div>
+
+  <AdminAlertBand tone="danger">deploy-site 失敗 · 12分前</AdminAlertBand>
+
+  <header class="admin-page-head">
+    <h1 class="admin-page-head__title">自動化ログ</h1>
+    <span class="admin-row__badge admin-row__badge--ng">モック</span>
+  </header>
+
+  <AdminKpiBar items={[
+    { label: "OK", value: "4", tone: "ok" },
+    { label: "Warn", value: "1", tone: "warn" },
+    { label: "Fail", value: "1", tone: "danger" },
+    { label: "24h", value: "6" },
+  ]} />
+
+  <div class="admin-list">
+    <article class="admin-row admin-row--quality-ng">
+      <div class="admin-row__grid admin-row__grid--fluid">
+        <div class="admin-row__main">
+          <header class="admin-row__head">
+            <h3 class="admin-row__title">deploy-site</h3>
+            <span class="admin-row__badge admin-row__badge--ng">fail</span>
+          </header>
+          <p class="admin-row__summary">12分前 · main · Cloudflare</p>
+        </div>
+        <button type="button" class="admin-row__btn">ログ</button>
+      </div>
+    </article>
+    <article class="admin-row admin-row--live">
+      <div class="admin-row__grid admin-row__grid--fluid">
+        <div class="admin-row__main">
+          <header class="admin-row__head">
+            <h3 class="admin-row__title">patrol</h3>
+            <span class="admin-row__badge admin-row__badge--live">ok</span>
+          </header>
+          <p class="admin-row__summary">3分前</p>
+        </div>
+        <button type="button" class="admin-row__btn admin-row__btn--ghost">ログ</button>
+      </div>
+    </article>
+  </div>
+</AdminShell>
