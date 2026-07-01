@@ -1,11 +1,11 @@
 {
-  "generatedAt": "2026-07-01T22:59:04.724Z",
+  "generatedAt": "2026-07-01T22:59:13.331Z",
   "strategy": "quality-first",
   "activeCount": 39,
   "parkedCount": 0,
   "publishedCount": 27,
-  "overallGoldPct": 75,
-  "overallGatePct": 87,
+  "overallGoldPct": 68,
+  "overallGatePct": 80,
   "qualityFailed": 0,
   "automationPolicy": [
     {
@@ -21,7 +21,7 @@
     {
       "channel": "一般公開（/case/）",
       "mode": "manual",
-      "note": "1行目がタイトルに答えている記事のみ「公開する」"
+      "note": "管理画面「公開する」のみ。自動公開なし"
     },
     {
       "channel": "非表示",
@@ -60,8 +60,8 @@
     {
       "id": "draft",
       "label": "公開待ち",
-      "meaning": "1行目がタイトルに回答済み。プレビュー可だが一般公開はまだ。",
-      "autoFix": "巡回は①〜④の改善を継続（公開条件には含めない）",
+      "meaning": "①〜④完了。プレビュー可だが一般公開はまだ。",
+      "autoFix": "巡回は内容改善のみ（公開はしない）",
       "autoRevert": "—"
     },
     {
@@ -92,13 +92,7 @@
     "paused": false,
     "pauseReason": null,
     "pauseDetail": null,
-    "globalStall": {
-      "goldPct": 75,
-      "cycles": 3,
-      "since": "2026-07-01T22:56:37.435Z",
-      "lastAt": "2026-07-01T22:59:04.462Z",
-      "message": "完成度 75% が 3 サイクル連続で変わらず、1本も完成していません"
-    },
+    "globalStall": null,
     "slugStalls": [
       {
         "stalled": true,
@@ -116,7 +110,7 @@
       {
         "stalled": true,
         "slug": "case-mqzxj4ro",
-        "shortTitle": "国会議員のボーナスの動向",
+        "shortTitle": "【国会議員のボーナス】期末手当はいくら？2023年給与法改正の争点",
         "goldPct": 83,
         "checkId": "Q1_conclusion_numbers",
         "checkLabel": "Q1_conclusion_numbers",
@@ -129,11 +123,11 @@
       {
         "stalled": true,
         "slug": "boeeihi",
-        "shortTitle": "防衛費・安保の動向",
+        "shortTitle": "【防衛費・安保】増額の行方と安保政策の最新",
         "goldPct": 100,
         "checkId": "B4_conclusion",
         "checkLabel": "結論の質",
-        "ownerHint": "重複・途中切れ・定型文なし（行数固定なし）",
+        "ownerHint": "いまの結論が要点3行（重複・途中切れなし）",
         "agent": "writer",
         "attempts": 3,
         "lastAt": "2026-07-01T19:46:43.020Z",
@@ -142,11 +136,11 @@
       {
         "stalled": true,
         "slug": "kaigo-iryo",
-        "shortTitle": "介護・医療費の動向",
+        "shortTitle": "【介護・医療費】負担増の議論と支援策",
         "goldPct": 100,
         "checkId": "B4_conclusion",
         "checkLabel": "結論の質",
-        "ownerHint": "重複・途中切れ・定型文なし（行数固定なし）",
+        "ownerHint": "いまの結論が要点3行（重複・途中切れなし）",
         "agent": "writer",
         "attempts": 3,
         "lastAt": "2026-07-01T19:35:00.378Z",
@@ -155,11 +149,11 @@
       {
         "stalled": true,
         "slug": "chiho-sosei",
-        "shortTitle": "地方創生の動向",
+        "shortTitle": "【地方創生】交付金と地域政策の最新",
         "goldPct": 100,
         "checkId": "B4_conclusion",
         "checkLabel": "結論の質",
-        "ownerHint": "重複・途中切れ・定型文なし（行数固定なし）",
+        "ownerHint": "いまの結論が要点3行（重複・途中切れなし）",
         "agent": "writer",
         "attempts": 3,
         "lastAt": "2026-07-01T19:36:21.168Z",
@@ -167,16 +161,16 @@
       }
     ],
     "stalledCount": 5,
-    "message": "完成度 75% が 3 サイクル連続で変わらず、1本も完成していません。5 記事が同じチェックで失敗ループ中（自動では越えられない壁の可能性）",
-    "analyzedAt": "2026-07-01T22:59:04.723Z",
-    "lastPatrolCycleAt": "2026-07-01T22:59:04.463Z",
+    "message": "5 記事が同じチェックで失敗ループ中（自動では越えられない壁の可能性）",
+    "analyzedAt": "2026-07-01T22:59:13.327Z",
+    "lastPatrolCycleAt": "2026-07-01T22:59:12.872Z",
     "patrolRunning": true
   },
   "slugs": [
     {
       "slug": "case-mr0jbdpc",
       "title": "国旗損壊罪の動向",
-      "shortTitle": "国旗損壊罪の動向",
+      "shortTitle": "【国旗損壊罪】連立合意で法制化へ？いま国会の動き",
       "category": "国会",
       "policyCategory": "国会",
       "adminHidden": false,
@@ -192,10 +186,6 @@
       "goldPct": 83,
       "published": true,
       "publishGateOk": true,
-      "pipelinePreOk": true,
-      "titleAnswerOk": true,
-      "titleAnswerDetail": "1行目がタイトルに回答している",
-      "titleAnswerTodo": null,
       "pipeline": [
         {
           "id": "content",
@@ -373,7 +363,7 @@
     {
       "slug": "case-mqzxj4ro",
       "title": "国会議員のボーナスの動向",
-      "shortTitle": "国会議員のボーナスの動向",
+      "shortTitle": "【国会議員のボーナス】期末手当はいくら？2023年給与法改正の争点",
       "category": "国会",
       "policyCategory": "国会",
       "adminHidden": false,
@@ -389,10 +379,6 @@
       "goldPct": 83,
       "published": true,
       "publishGateOk": true,
-      "pipelinePreOk": true,
-      "titleAnswerOk": true,
-      "titleAnswerDetail": "1行目がタイトルに回答している",
-      "titleAnswerTodo": null,
       "pipeline": [
         {
           "id": "content",
@@ -488,7 +474,7 @@
         {
           "id": "pipe:debug",
           "label": "⑥デバッグOK",
-          "state": "active"
+          "state": "blocked"
         }
       ],
       "nextAction": "✅ 公開中 — /case/ に表示されています",
@@ -510,12 +496,12 @@
       },
       "xUnavailable": false,
       "xResearchStatus": "found",
-      "statusExplain": "巡回が自動修正中 — ◌ が今処理している項目",
+      "statusExplain": "手動公開 07/02 05:35",
       "publishedBy": "owner",
       "publishedAt": "2026-07-01T20:35:13.073Z",
       "adminHiddenBy": null,
       "adminHiddenAt": null,
-      "patrolFixing": true,
+      "patrolFixing": false,
       "activity": [
         {
           "at": "2026-07-01T22:59:04.137Z",
@@ -561,7 +547,7 @@
       "stall": {
         "stalled": true,
         "slug": "case-mqzxj4ro",
-        "shortTitle": "国会議員のボーナスの動向",
+        "shortTitle": "【国会議員のボーナス】期末手当はいくら？2023年給与法改正の争点",
         "goldPct": 83,
         "checkId": "Q1_conclusion_numbers",
         "checkLabel": "Q1_conclusion_numbers",
@@ -591,10 +577,6 @@
       "goldPct": 83,
       "published": true,
       "publishGateOk": true,
-      "pipelinePreOk": true,
-      "titleAnswerOk": true,
-      "titleAnswerDetail": "1行目がタイトルに回答している",
-      "titleAnswerTodo": null,
       "pipeline": [
         {
           "id": "content",
@@ -690,7 +672,7 @@
         {
           "id": "pipe:debug",
           "label": "⑥デバッグOK",
-          "state": "active"
+          "state": "blocked"
         }
       ],
       "nextAction": "✅ 公開中 — /case/ に表示されています",
@@ -712,12 +694,12 @@
       },
       "xUnavailable": false,
       "xResearchStatus": "found",
-      "statusExplain": "巡回が自動修正中 — ◌ が今処理している項目",
+      "statusExplain": "手動公開 07/02 05:35",
       "publishedBy": "owner",
       "publishedAt": "2026-07-01T20:35:24.570Z",
       "adminHiddenBy": null,
       "adminHiddenAt": null,
-      "patrolFixing": true,
+      "patrolFixing": false,
       "activity": [
         {
           "at": "2026-07-01T22:59:04.141Z",
@@ -789,6 +771,17 @@
           "priority": 30
         },
         {
+          "id": "zeihikaku-kojo:E4_timeline_diet_topic",
+          "slug": "zeihikaku-kojo",
+          "agent": "writer",
+          "agentLabel": "ライター",
+          "checkId": "E4_timeline_diet_topic",
+          "title": "[ゲート] TL国会の話題",
+          "todo": "タイムライン国会3件が案件と一致",
+          "command": "npm run complete:article -- --slug zeihikaku-kojo --force",
+          "priority": 30
+        },
+        {
           "id": "zeihikaku-kojo:G5_parties_symbol",
           "slug": "zeihikaku-kojo",
           "agent": "writer",
@@ -798,16 +791,23 @@
           "todo": "各党の記号を確定（v2）",
           "command": "npm run complete:article -- --slug zeihikaku-kojo --force",
           "priority": 30
+        },
+        {
+          "id": "zeihikaku-kojo:G6_matrix_topic",
+          "slug": "zeihikaku-kojo",
+          "agent": "writer",
+          "agentLabel": "ライター",
+          "checkId": "G6_matrix_topic",
+          "title": "[ゲート] 〇×の話題",
+          "todo": "公言と行動が案件キーワードと一致（2党）",
+          "command": "npm run complete:article -- --slug zeihikaku-kojo --force",
+          "priority": 30
         }
       ],
       "gatePct": 50,
       "goldPct": 33,
       "published": false,
-      "publishGateOk": true,
-      "pipelinePreOk": false,
-      "titleAnswerOk": true,
-      "titleAnswerDetail": "1行目がタイトルに回答している",
-      "titleAnswerTodo": null,
+      "publishGateOk": false,
       "pipeline": [
         {
           "id": "content",
@@ -904,13 +904,25 @@
           "detail": "2/3 行が話題一致"
         },
         {
+          "id": "E4_timeline_diet_topic",
+          "label": "TL国会の話題",
+          "todo": "タイムライン国会3件が案件と一致",
+          "detail": "0/3 国会が話題一致"
+        },
+        {
           "id": "G5_parties_symbol",
           "label": "◎〇▲×",
           "todo": "各党の記号を確定（v2）",
           "detail": "◎▲❌ 確定 1/2 党以上"
+        },
+        {
+          "id": "G6_matrix_topic",
+          "label": "〇×の話題",
+          "todo": "公言と行動が案件キーワードと一致（2党）",
+          "detail": "公言テキストが案件と無関係"
         }
       ],
-      "blockerCount": 2,
+      "blockerCount": 4,
       "runState": "idle",
       "workItems": [
         {
@@ -919,8 +931,18 @@
           "state": "blocked"
         },
         {
+          "id": "E4_timeline_diet_topic",
+          "label": "TL国会の話題",
+          "state": "blocked"
+        },
+        {
           "id": "G5_parties_symbol",
           "label": "◎〇▲×",
+          "state": "active"
+        },
+        {
+          "id": "G6_matrix_topic",
+          "label": "〇×の話題",
           "state": "blocked"
         },
         {
@@ -931,6 +953,16 @@
         {
           "id": "pipe:matrix",
           "label": "②〇×2党確定",
+          "state": "blocked"
+        },
+        {
+          "id": "pipe:deployed",
+          "label": "⑤本番デプロイ",
+          "state": "blocked"
+        },
+        {
+          "id": "pipe:debug",
+          "label": "⑥デバッグOK",
           "state": "blocked"
         }
       ],
@@ -1013,16 +1045,45 @@
           "todo": "経緯3行以上が案件キーワードと一致",
           "command": "npm run complete:article -- --slug expo2025-kessan --force",
           "priority": 30
+        },
+        {
+          "id": "expo2025-kessan:E4_timeline_diet_topic",
+          "slug": "expo2025-kessan",
+          "agent": "writer",
+          "agentLabel": "ライター",
+          "checkId": "E4_timeline_diet_topic",
+          "title": "[ゲート] TL国会の話題",
+          "todo": "タイムライン国会3件が案件と一致",
+          "command": "npm run complete:article -- --slug expo2025-kessan --force",
+          "priority": 30
+        },
+        {
+          "id": "expo2025-kessan:G5_parties_symbol",
+          "slug": "expo2025-kessan",
+          "agent": "writer",
+          "agentLabel": "ライター",
+          "checkId": "G5_parties_symbol",
+          "title": "[ゲート] ◎〇▲×",
+          "todo": "各党の記号を確定（v2）",
+          "command": "npm run complete:article -- --slug expo2025-kessan --force",
+          "priority": 30
+        },
+        {
+          "id": "expo2025-kessan:G6_matrix_topic",
+          "slug": "expo2025-kessan",
+          "agent": "writer",
+          "agentLabel": "ライター",
+          "checkId": "G6_matrix_topic",
+          "title": "[ゲート] 〇×の話題",
+          "todo": "公言と行動が案件キーワードと一致（2党）",
+          "command": "npm run complete:article -- --slug expo2025-kessan --force",
+          "priority": 30
         }
       ],
-      "gatePct": 75,
-      "goldPct": 50,
+      "gatePct": 50,
+      "goldPct": 33,
       "published": false,
-      "publishGateOk": true,
-      "pipelinePreOk": false,
-      "titleAnswerOk": true,
-      "titleAnswerDetail": "1行目がタイトルに回答している",
-      "titleAnswerTodo": null,
+      "publishGateOk": false,
       "pipeline": [
         {
           "id": "content",
@@ -1036,7 +1097,7 @@
           "label": "②〇×2党確定",
           "phase": 2,
           "preDeploy": true,
-          "ok": true
+          "ok": false
         },
         {
           "id": "x",
@@ -1080,7 +1141,7 @@
           "label": "②〇×2党確定",
           "phase": 2,
           "preDeploy": true,
-          "ok": true
+          "ok": false
         },
         {
           "id": "x",
@@ -1117,9 +1178,27 @@
           "label": "経緯の話題",
           "todo": "経緯3行以上が案件キーワードと一致",
           "detail": "2/3 行が話題一致"
+        },
+        {
+          "id": "E4_timeline_diet_topic",
+          "label": "TL国会の話題",
+          "todo": "タイムライン国会3件が案件と一致",
+          "detail": "2/3 国会が話題一致"
+        },
+        {
+          "id": "G5_parties_symbol",
+          "label": "◎〇▲×",
+          "todo": "各党の記号を確定（v2）",
+          "detail": "◎▲❌ 確定 0/2 党以上"
+        },
+        {
+          "id": "G6_matrix_topic",
+          "label": "〇×の話題",
+          "todo": "公言と行動が案件キーワードと一致（2党）",
+          "detail": "公言テキストが案件と無関係"
         }
       ],
-      "blockerCount": 1,
+      "blockerCount": 4,
       "runState": "idle",
       "workItems": [
         {
@@ -1128,8 +1207,38 @@
           "state": "blocked"
         },
         {
+          "id": "E4_timeline_diet_topic",
+          "label": "TL国会の話題",
+          "state": "blocked"
+        },
+        {
+          "id": "G5_parties_symbol",
+          "label": "◎〇▲×",
+          "state": "active"
+        },
+        {
+          "id": "G6_matrix_topic",
+          "label": "〇×の話題",
+          "state": "blocked"
+        },
+        {
           "id": "pipe:content",
           "label": "①コンテンツ",
+          "state": "blocked"
+        },
+        {
+          "id": "pipe:matrix",
+          "label": "②〇×2党確定",
+          "state": "blocked"
+        },
+        {
+          "id": "pipe:deployed",
+          "label": "⑤本番デプロイ",
+          "state": "blocked"
+        },
+        {
+          "id": "pipe:debug",
+          "label": "⑥デバッグOK",
           "state": "blocked"
         }
       ],
@@ -1220,16 +1329,34 @@
           "todo": "X投稿本文が案件キーワードと一致（x-researcher）",
           "command": "npm run x:research -- --slug minimum-wage-2026",
           "priority": 20
+        },
+        {
+          "id": "minimum-wage-2026:G5_parties_symbol",
+          "slug": "minimum-wage-2026",
+          "agent": "writer",
+          "agentLabel": "ライター",
+          "checkId": "G5_parties_symbol",
+          "title": "[ゲート] ◎〇▲×",
+          "todo": "各党の記号を確定（v2）",
+          "command": "npm run complete:article -- --slug minimum-wage-2026 --force",
+          "priority": 30
+        },
+        {
+          "id": "minimum-wage-2026:G6_matrix_topic",
+          "slug": "minimum-wage-2026",
+          "agent": "writer",
+          "agentLabel": "ライター",
+          "checkId": "G6_matrix_topic",
+          "title": "[ゲート] 〇×の話題",
+          "todo": "公言と行動が案件キーワードと一致（2党）",
+          "command": "npm run complete:article -- --slug minimum-wage-2026 --force",
+          "priority": 30
         }
       ],
-      "gatePct": 75,
-      "goldPct": 50,
+      "gatePct": 50,
+      "goldPct": 33,
       "published": false,
-      "publishGateOk": true,
-      "pipelinePreOk": false,
-      "titleAnswerOk": true,
-      "titleAnswerDetail": "1行目がタイトルに回答している",
-      "titleAnswerTodo": null,
+      "publishGateOk": false,
       "pipeline": [
         {
           "id": "content",
@@ -1243,7 +1370,7 @@
           "label": "②〇×2党確定",
           "phase": 2,
           "preDeploy": true,
-          "ok": true
+          "ok": false
         },
         {
           "id": "x",
@@ -1287,7 +1414,7 @@
           "label": "②〇×2党確定",
           "phase": 2,
           "preDeploy": true,
-          "ok": true
+          "ok": false
         },
         {
           "id": "x",
@@ -1320,23 +1447,60 @@
       ],
       "blockers": [
         {
+          "id": "G5_parties_symbol",
+          "label": "◎〇▲×",
+          "todo": "各党の記号を確定（v2）",
+          "detail": "◎▲❌ 確定 0/2 党以上"
+        },
+        {
+          "id": "G6_matrix_topic",
+          "label": "〇×の話題",
+          "todo": "公言と行動が案件キーワードと一致（2党）",
+          "detail": "公言テキストが案件と無関係"
+        },
+        {
           "id": "H2_x_topic",
           "label": "Xの話題",
           "todo": "X投稿本文が案件キーワードと一致（x-researcher）",
           "detail": "1/3 件が話題一致"
         }
       ],
-      "blockerCount": 1,
+      "blockerCount": 3,
       "runState": "idle",
       "workItems": [
+        {
+          "id": "G5_parties_symbol",
+          "label": "◎〇▲×",
+          "state": "active"
+        },
+        {
+          "id": "G6_matrix_topic",
+          "label": "〇×の話題",
+          "state": "blocked"
+        },
         {
           "id": "H2_x_topic",
           "label": "Xの話題",
           "state": "blocked"
         },
         {
+          "id": "pipe:matrix",
+          "label": "②〇×2党確定",
+          "state": "blocked"
+        },
+        {
           "id": "pipe:x",
           "label": "③X検証1件+",
+          "state": "blocked"
+        },
+        {
+          "id": "pipe:deployed",
+          "label": "⑤本番デプロイ",
+          "state": "blocked"
+        },
+        {
+          "id": "pipe:debug",
+          "label": "⑥デバッグOK",
           "state": "blocked"
         }
       ],
@@ -1408,15 +1572,34 @@
       "needsQualityFix": false,
       "qualityBlockerCount": 0,
       "qualityBlockers": [],
-      "agentTasks": [],
-      "gatePct": 100,
-      "goldPct": 83,
+      "agentTasks": [
+        {
+          "id": "pension-kuriage-70:G5_parties_symbol",
+          "slug": "pension-kuriage-70",
+          "agent": "writer",
+          "agentLabel": "ライター",
+          "checkId": "G5_parties_symbol",
+          "title": "[ゲート] ◎〇▲×",
+          "todo": "各党の記号を確定（v2）",
+          "command": "npm run complete:article -- --slug pension-kuriage-70 --force",
+          "priority": 30
+        },
+        {
+          "id": "pension-kuriage-70:G6_matrix_topic",
+          "slug": "pension-kuriage-70",
+          "agent": "writer",
+          "agentLabel": "ライター",
+          "checkId": "G6_matrix_topic",
+          "title": "[ゲート] 〇×の話題",
+          "todo": "公言と行動が案件キーワードと一致（2党）",
+          "command": "npm run complete:article -- --slug pension-kuriage-70 --force",
+          "priority": 30
+        }
+      ],
+      "gatePct": 75,
+      "goldPct": 50,
       "published": true,
-      "publishGateOk": true,
-      "pipelinePreOk": true,
-      "titleAnswerOk": true,
-      "titleAnswerDetail": "1行目がタイトルに回答している",
-      "titleAnswerTodo": null,
+      "publishGateOk": false,
       "pipeline": [
         {
           "id": "content",
@@ -1430,7 +1613,7 @@
           "label": "②〇×2党確定",
           "phase": 2,
           "preDeploy": true,
-          "ok": true
+          "ok": false
         },
         {
           "id": "x",
@@ -1451,7 +1634,7 @@
           "label": "⑤本番デプロイ",
           "phase": 5,
           "preDeploy": false,
-          "ok": true
+          "ok": false
         },
         {
           "id": "debug",
@@ -1474,7 +1657,7 @@
           "label": "②〇×2党確定",
           "phase": 2,
           "preDeploy": true,
-          "ok": true
+          "ok": false
         },
         {
           "id": "x",
@@ -1495,7 +1678,7 @@
           "label": "⑤本番デプロイ",
           "phase": 5,
           "preDeploy": false,
-          "ok": true
+          "ok": false
         },
         {
           "id": "debug",
@@ -1505,17 +1688,50 @@
           "ok": false
         }
       ],
-      "blockers": [],
-      "blockerCount": 0,
+      "blockers": [
+        {
+          "id": "G5_parties_symbol",
+          "label": "◎〇▲×",
+          "todo": "各党の記号を確定（v2）",
+          "detail": "◎▲❌ 確定 1/2 党以上"
+        },
+        {
+          "id": "G6_matrix_topic",
+          "label": "〇×の話題",
+          "todo": "公言と行動が案件キーワードと一致（2党）",
+          "detail": "公言テキストが案件と無関係"
+        }
+      ],
+      "blockerCount": 2,
       "runState": "idle",
       "workItems": [
         {
+          "id": "G5_parties_symbol",
+          "label": "◎〇▲×",
+          "state": "active"
+        },
+        {
+          "id": "G6_matrix_topic",
+          "label": "〇×の話題",
+          "state": "blocked"
+        },
+        {
+          "id": "pipe:matrix",
+          "label": "②〇×2党確定",
+          "state": "blocked"
+        },
+        {
+          "id": "pipe:deployed",
+          "label": "⑤本番デプロイ",
+          "state": "blocked"
+        },
+        {
           "id": "pipe:debug",
           "label": "⑥デバッグOK",
-          "state": "active"
+          "state": "blocked"
         }
       ],
-      "nextAction": "✅ 公開中 — /case/ に表示されています",
+      "nextAction": "◎▲❌ を確定 → 公言テキストが案件と無関係 → X投稿は見つかりませんでした（5段階調査完了）",
       "promo": {
         "x": null,
         "hatena": null,
@@ -1541,6 +1757,20 @@
       "adminHiddenAt": null,
       "patrolFixing": true,
       "activity": [
+        {
+          "at": "2026-07-01T22:59:12.409Z",
+          "when": "07/02 07:59",
+          "type": "patrol.done",
+          "actor": "patrol",
+          "line": "巡回処理完了（巡回） — 完成度 50% / 品質 OK"
+        },
+        {
+          "at": "2026-07-01T22:59:11.334Z",
+          "when": "07/02 07:59",
+          "type": "content.updated",
+          "actor": "patrol",
+          "line": "content.updated（巡回） — 巡回でコンテンツ更新（公開は維持）"
+        },
         {
           "at": "2026-07-01T22:59:04.144Z",
           "when": "07/02 07:59",
@@ -1593,20 +1823,6 @@
         {
           "at": "2026-07-01T22:57:02.650Z",
           "when": "07/02 07:57",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — writer / G5_parties_symbol"
-        },
-        {
-          "at": "2026-07-01T22:57:01.793Z",
-          "when": "07/02 07:57",
-          "type": "content.updated",
-          "actor": "patrol",
-          "line": "content.updated（巡回） — 巡回でコンテンツ更新（公開は維持）"
-        },
-        {
-          "at": "2026-07-01T22:56:29.682Z",
-          "when": "07/02 07:56",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / G5_parties_symbol"
@@ -1667,6 +1883,17 @@
           "priority": 30
         },
         {
+          "id": "denki-gas-genmen:E4_timeline_diet_topic",
+          "slug": "denki-gas-genmen",
+          "agent": "writer",
+          "agentLabel": "ライター",
+          "checkId": "E4_timeline_diet_topic",
+          "title": "[ゲート] TL国会の話題",
+          "todo": "タイムライン国会3件が案件と一致",
+          "command": "npm run complete:article -- --slug denki-gas-genmen --force",
+          "priority": 30
+        },
+        {
           "id": "denki-gas-genmen:G5_parties_symbol",
           "slug": "denki-gas-genmen",
           "agent": "writer",
@@ -1676,16 +1903,23 @@
           "todo": "各党の記号を確定（v2）",
           "command": "npm run complete:article -- --slug denki-gas-genmen --force",
           "priority": 30
+        },
+        {
+          "id": "denki-gas-genmen:G6_matrix_topic",
+          "slug": "denki-gas-genmen",
+          "agent": "writer",
+          "agentLabel": "ライター",
+          "checkId": "G6_matrix_topic",
+          "title": "[ゲート] 〇×の話題",
+          "todo": "公言と行動が案件キーワードと一致（2党）",
+          "command": "npm run complete:article -- --slug denki-gas-genmen --force",
+          "priority": 30
         }
       ],
       "gatePct": 50,
       "goldPct": 33,
       "published": false,
-      "publishGateOk": true,
-      "pipelinePreOk": false,
-      "titleAnswerOk": true,
-      "titleAnswerDetail": "1行目がタイトルに回答している",
-      "titleAnswerTodo": null,
+      "publishGateOk": false,
       "pipeline": [
         {
           "id": "content",
@@ -1782,13 +2016,25 @@
           "detail": "1/2 行がキーワード一致（電気 ガス 価格激変緩和）"
         },
         {
+          "id": "E4_timeline_diet_topic",
+          "label": "TL国会の話題",
+          "todo": "タイムライン国会3件が案件と一致",
+          "detail": "2/3 国会が話題一致"
+        },
+        {
           "id": "G5_parties_symbol",
           "label": "◎〇▲×",
           "todo": "各党の記号を確定（v2）",
           "detail": "◎▲❌ 確定 1/2 党以上"
+        },
+        {
+          "id": "G6_matrix_topic",
+          "label": "〇×の話題",
+          "todo": "公言と行動が案件キーワードと一致（2党）",
+          "detail": "公言テキストが案件と無関係"
         }
       ],
-      "blockerCount": 2,
+      "blockerCount": 4,
       "runState": "idle",
       "workItems": [
         {
@@ -1797,8 +2043,18 @@
           "state": "blocked"
         },
         {
+          "id": "E4_timeline_diet_topic",
+          "label": "TL国会の話題",
+          "state": "blocked"
+        },
+        {
           "id": "G5_parties_symbol",
           "label": "◎〇▲×",
+          "state": "active"
+        },
+        {
+          "id": "G6_matrix_topic",
+          "label": "〇×の話題",
           "state": "blocked"
         },
         {
@@ -1809,6 +2065,16 @@
         {
           "id": "pipe:matrix",
           "label": "②〇×2党確定",
+          "state": "blocked"
+        },
+        {
+          "id": "pipe:deployed",
+          "label": "⑤本番デプロイ",
+          "state": "blocked"
+        },
+        {
+          "id": "pipe:debug",
+          "label": "⑥デバッグOK",
           "state": "blocked"
         }
       ],
@@ -1888,7 +2154,7 @@
           "agentLabel": "ライター",
           "checkId": "B4_conclusion",
           "title": "[ゲート] 結論の質",
-          "todo": "重複・途中切れ・定型文なし（行数固定なし）",
+          "todo": "いまの結論が要点3行（重複・途中切れなし）",
           "command": "npm run complete:article -- --slug gakushu-shien-75000 --force",
           "priority": 30
         },
@@ -1902,16 +2168,34 @@
           "todo": "経緯3行以上が案件キーワードと一致",
           "command": "npm run complete:article -- --slug gakushu-shien-75000 --force",
           "priority": 30
+        },
+        {
+          "id": "gakushu-shien-75000:E4_timeline_diet_topic",
+          "slug": "gakushu-shien-75000",
+          "agent": "writer",
+          "agentLabel": "ライター",
+          "checkId": "E4_timeline_diet_topic",
+          "title": "[ゲート] TL国会の話題",
+          "todo": "タイムライン国会3件が案件と一致",
+          "command": "npm run complete:article -- --slug gakushu-shien-75000 --force",
+          "priority": 30
+        },
+        {
+          "id": "gakushu-shien-75000:G6_matrix_topic",
+          "slug": "gakushu-shien-75000",
+          "agent": "writer",
+          "agentLabel": "ライター",
+          "checkId": "G6_matrix_topic",
+          "title": "[ゲート] 〇×の話題",
+          "todo": "公言と行動が案件キーワードと一致（2党）",
+          "command": "npm run complete:article -- --slug gakushu-shien-75000 --force",
+          "priority": 30
         }
       ],
       "gatePct": 75,
       "goldPct": 50,
       "published": false,
-      "publishGateOk": true,
-      "pipelinePreOk": false,
-      "titleAnswerOk": true,
-      "titleAnswerDetail": "1行目がタイトルに回答している",
-      "titleAnswerTodo": null,
+      "publishGateOk": false,
       "pipeline": [
         {
           "id": "content",
@@ -2004,7 +2288,7 @@
         {
           "id": "B4_conclusion",
           "label": "結論の質",
-          "todo": "重複・途中切れ・定型文なし（行数固定なし）",
+          "todo": "いまの結論が要点3行（重複・途中切れなし）",
           "detail": "結論が途中切れ・重複・逐語抜粋"
         },
         {
@@ -2012,9 +2296,21 @@
           "label": "経緯の話題",
           "todo": "経緯3行以上が案件キーワードと一致",
           "detail": "0/3 行が話題一致"
+        },
+        {
+          "id": "E4_timeline_diet_topic",
+          "label": "TL国会の話題",
+          "todo": "タイムライン国会3件が案件と一致",
+          "detail": "0/3 国会が話題一致"
+        },
+        {
+          "id": "G6_matrix_topic",
+          "label": "〇×の話題",
+          "todo": "公言と行動が案件キーワードと一致（2党）",
+          "detail": "公言テキストが案件と無関係"
         }
       ],
-      "blockerCount": 2,
+      "blockerCount": 4,
       "runState": "idle",
       "workItems": [
         {
@@ -2028,8 +2324,28 @@
           "state": "blocked"
         },
         {
+          "id": "E4_timeline_diet_topic",
+          "label": "TL国会の話題",
+          "state": "blocked"
+        },
+        {
+          "id": "G6_matrix_topic",
+          "label": "〇×の話題",
+          "state": "blocked"
+        },
+        {
           "id": "pipe:content",
           "label": "①コンテンツ",
+          "state": "blocked"
+        },
+        {
+          "id": "pipe:deployed",
+          "label": "⑤本番デプロイ",
+          "state": "blocked"
+        },
+        {
+          "id": "pipe:debug",
+          "label": "⑥デバッグOK",
           "state": "blocked"
         }
       ],
@@ -2101,22 +2417,41 @@
       "needsQualityFix": false,
       "qualityBlockerCount": 0,
       "qualityBlockers": [],
-      "agentTasks": [],
-      "gatePct": 100,
-      "goldPct": 83,
+      "agentTasks": [
+        {
+          "id": "noto-fukko-budget:E4_timeline_diet_topic",
+          "slug": "noto-fukko-budget",
+          "agent": "writer",
+          "agentLabel": "ライター",
+          "checkId": "E4_timeline_diet_topic",
+          "title": "[ゲート] TL国会の話題",
+          "todo": "タイムライン国会3件が案件と一致",
+          "command": "npm run complete:article -- --slug noto-fukko-budget --force",
+          "priority": 30
+        },
+        {
+          "id": "noto-fukko-budget:G6_matrix_topic",
+          "slug": "noto-fukko-budget",
+          "agent": "writer",
+          "agentLabel": "ライター",
+          "checkId": "G6_matrix_topic",
+          "title": "[ゲート] 〇×の話題",
+          "todo": "公言と行動が案件キーワードと一致（2党）",
+          "command": "npm run complete:article -- --slug noto-fukko-budget --force",
+          "priority": 30
+        }
+      ],
+      "gatePct": 75,
+      "goldPct": 50,
       "published": true,
-      "publishGateOk": true,
-      "pipelinePreOk": true,
-      "titleAnswerOk": true,
-      "titleAnswerDetail": "1行目がタイトルに回答している",
-      "titleAnswerTodo": null,
+      "publishGateOk": false,
       "pipeline": [
         {
           "id": "content",
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": true
+          "ok": false
         },
         {
           "id": "matrix",
@@ -2144,7 +2479,7 @@
           "label": "⑤本番デプロイ",
           "phase": 5,
           "preDeploy": false,
-          "ok": true
+          "ok": false
         },
         {
           "id": "debug",
@@ -2160,7 +2495,7 @@
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": true
+          "ok": false
         },
         {
           "id": "matrix",
@@ -2188,7 +2523,7 @@
           "label": "⑤本番デプロイ",
           "phase": 5,
           "preDeploy": false,
-          "ok": true
+          "ok": false
         },
         {
           "id": "debug",
@@ -2198,17 +2533,50 @@
           "ok": false
         }
       ],
-      "blockers": [],
-      "blockerCount": 0,
+      "blockers": [
+        {
+          "id": "E4_timeline_diet_topic",
+          "label": "TL国会の話題",
+          "todo": "タイムライン国会3件が案件と一致",
+          "detail": "1/3 国会が話題一致"
+        },
+        {
+          "id": "G6_matrix_topic",
+          "label": "〇×の話題",
+          "todo": "公言と行動が案件キーワードと一致（2党）",
+          "detail": "公言テキストが案件と無関係"
+        }
+      ],
+      "blockerCount": 2,
       "runState": "idle",
       "workItems": [
         {
+          "id": "E4_timeline_diet_topic",
+          "label": "TL国会の話題",
+          "state": "blocked"
+        },
+        {
+          "id": "G6_matrix_topic",
+          "label": "〇×の話題",
+          "state": "blocked"
+        },
+        {
+          "id": "pipe:content",
+          "label": "①コンテンツ",
+          "state": "blocked"
+        },
+        {
+          "id": "pipe:deployed",
+          "label": "⑤本番デプロイ",
+          "state": "blocked"
+        },
+        {
           "id": "pipe:debug",
           "label": "⑥デバッグOK",
-          "state": "active"
+          "state": "blocked"
         }
       ],
-      "nextAction": "✅ 公開中 — /case/ に表示されています",
+      "nextAction": "1/3 国会が話題一致 → 公言テキストが案件と無関係 → X投稿は見つかりませんでした（5段階調査完了）",
       "promo": {
         "x": null,
         "hatena": null,
@@ -2227,12 +2595,12 @@
       },
       "xUnavailable": true,
       "xResearchStatus": "exhausted",
-      "statusExplain": "巡回が自動修正中 — ◌ が今処理している項目",
+      "statusExplain": "手動公開 07/02 05:39",
       "publishedBy": "owner",
       "publishedAt": "2026-07-01T20:39:20.684Z",
       "adminHiddenBy": null,
       "adminHiddenAt": null,
-      "patrolFixing": true,
+      "patrolFixing": false,
       "activity": [
         {
           "at": "2026-07-01T22:59:04.147Z",
@@ -2369,16 +2737,45 @@
           "todo": "経緯3行以上が案件キーワードと一致",
           "command": "npm run complete:article -- --slug boei-tokubetsuzei --force",
           "priority": 30
+        },
+        {
+          "id": "boei-tokubetsuzei:E4_timeline_diet_topic",
+          "slug": "boei-tokubetsuzei",
+          "agent": "writer",
+          "agentLabel": "ライター",
+          "checkId": "E4_timeline_diet_topic",
+          "title": "[ゲート] TL国会の話題",
+          "todo": "タイムライン国会3件が案件と一致",
+          "command": "npm run complete:article -- --slug boei-tokubetsuzei --force",
+          "priority": 30
+        },
+        {
+          "id": "boei-tokubetsuzei:G5_parties_symbol",
+          "slug": "boei-tokubetsuzei",
+          "agent": "writer",
+          "agentLabel": "ライター",
+          "checkId": "G5_parties_symbol",
+          "title": "[ゲート] ◎〇▲×",
+          "todo": "各党の記号を確定（v2）",
+          "command": "npm run complete:article -- --slug boei-tokubetsuzei --force",
+          "priority": 30
+        },
+        {
+          "id": "boei-tokubetsuzei:G6_matrix_topic",
+          "slug": "boei-tokubetsuzei",
+          "agent": "writer",
+          "agentLabel": "ライター",
+          "checkId": "G6_matrix_topic",
+          "title": "[ゲート] 〇×の話題",
+          "todo": "公言と行動が案件キーワードと一致（2党）",
+          "command": "npm run complete:article -- --slug boei-tokubetsuzei --force",
+          "priority": 30
         }
       ],
-      "gatePct": 75,
-      "goldPct": 50,
+      "gatePct": 50,
+      "goldPct": 33,
       "published": false,
-      "publishGateOk": true,
-      "pipelinePreOk": false,
-      "titleAnswerOk": true,
-      "titleAnswerDetail": "1行目がタイトルに回答している",
-      "titleAnswerTodo": null,
+      "publishGateOk": false,
       "pipeline": [
         {
           "id": "content",
@@ -2392,7 +2789,7 @@
           "label": "②〇×2党確定",
           "phase": 2,
           "preDeploy": true,
-          "ok": true
+          "ok": false
         },
         {
           "id": "x",
@@ -2436,7 +2833,7 @@
           "label": "②〇×2党確定",
           "phase": 2,
           "preDeploy": true,
-          "ok": true
+          "ok": false
         },
         {
           "id": "x",
@@ -2479,9 +2876,27 @@
           "label": "経緯の話題",
           "todo": "経緯3行以上が案件キーワードと一致",
           "detail": "2/3 行が話題一致"
+        },
+        {
+          "id": "E4_timeline_diet_topic",
+          "label": "TL国会の話題",
+          "todo": "タイムライン国会3件が案件と一致",
+          "detail": "2/3 国会が話題一致"
+        },
+        {
+          "id": "G5_parties_symbol",
+          "label": "◎〇▲×",
+          "todo": "各党の記号を確定（v2）",
+          "detail": "◎▲❌ 確定 1/2 党以上"
+        },
+        {
+          "id": "G6_matrix_topic",
+          "label": "〇×の話題",
+          "todo": "公言と行動が案件キーワードと一致（2党）",
+          "detail": "公言テキストが案件と無関係"
         }
       ],
-      "blockerCount": 2,
+      "blockerCount": 5,
       "runState": "idle",
       "workItems": [
         {
@@ -2495,8 +2910,38 @@
           "state": "blocked"
         },
         {
+          "id": "E4_timeline_diet_topic",
+          "label": "TL国会の話題",
+          "state": "blocked"
+        },
+        {
+          "id": "G5_parties_symbol",
+          "label": "◎〇▲×",
+          "state": "active"
+        },
+        {
+          "id": "G6_matrix_topic",
+          "label": "〇×の話題",
+          "state": "blocked"
+        },
+        {
           "id": "pipe:content",
           "label": "①コンテンツ",
+          "state": "blocked"
+        },
+        {
+          "id": "pipe:matrix",
+          "label": "②〇×2党確定",
+          "state": "blocked"
+        },
+        {
+          "id": "pipe:deployed",
+          "label": "⑤本番デプロイ",
+          "state": "blocked"
+        },
+        {
+          "id": "pipe:debug",
+          "label": "⑥デバッグOK",
           "state": "blocked"
         }
       ],
@@ -2581,6 +3026,17 @@
           "priority": 30
         },
         {
+          "id": "invoice-menzei-2026:E4_timeline_diet_topic",
+          "slug": "invoice-menzei-2026",
+          "agent": "writer",
+          "agentLabel": "ライター",
+          "checkId": "E4_timeline_diet_topic",
+          "title": "[ゲート] TL国会の話題",
+          "todo": "タイムライン国会3件が案件と一致",
+          "command": "npm run complete:article -- --slug invoice-menzei-2026 --force",
+          "priority": 30
+        },
+        {
           "id": "invoice-menzei-2026:G5_parties_symbol",
           "slug": "invoice-menzei-2026",
           "agent": "writer",
@@ -2590,16 +3046,23 @@
           "todo": "各党の記号を確定（v2）",
           "command": "npm run complete:article -- --slug invoice-menzei-2026 --force",
           "priority": 30
+        },
+        {
+          "id": "invoice-menzei-2026:G6_matrix_topic",
+          "slug": "invoice-menzei-2026",
+          "agent": "writer",
+          "agentLabel": "ライター",
+          "checkId": "G6_matrix_topic",
+          "title": "[ゲート] 〇×の話題",
+          "todo": "公言と行動が案件キーワードと一致（2党）",
+          "command": "npm run complete:article -- --slug invoice-menzei-2026 --force",
+          "priority": 30
         }
       ],
       "gatePct": 50,
       "goldPct": 33,
       "published": false,
-      "publishGateOk": true,
-      "pipelinePreOk": false,
-      "titleAnswerOk": true,
-      "titleAnswerDetail": "1行目がタイトルに回答している",
-      "titleAnswerTodo": null,
+      "publishGateOk": false,
       "pipeline": [
         {
           "id": "content",
@@ -2696,13 +3159,25 @@
           "detail": "1/2 行がキーワード一致（インボイス 免税事業者 2割特例）"
         },
         {
+          "id": "E4_timeline_diet_topic",
+          "label": "TL国会の話題",
+          "todo": "タイムライン国会3件が案件と一致",
+          "detail": "2/3 国会が話題一致"
+        },
+        {
           "id": "G5_parties_symbol",
           "label": "◎〇▲×",
           "todo": "各党の記号を確定（v2）",
           "detail": "◎▲❌ 確定 0/2 党以上"
+        },
+        {
+          "id": "G6_matrix_topic",
+          "label": "〇×の話題",
+          "todo": "公言と行動が案件キーワードと一致（2党）",
+          "detail": "公言テキストが案件と無関係"
         }
       ],
-      "blockerCount": 2,
+      "blockerCount": 4,
       "runState": "idle",
       "workItems": [
         {
@@ -2711,8 +3186,18 @@
           "state": "blocked"
         },
         {
+          "id": "E4_timeline_diet_topic",
+          "label": "TL国会の話題",
+          "state": "blocked"
+        },
+        {
           "id": "G5_parties_symbol",
           "label": "◎〇▲×",
+          "state": "active"
+        },
+        {
+          "id": "G6_matrix_topic",
+          "label": "〇×の話題",
           "state": "blocked"
         },
         {
@@ -2723,6 +3208,16 @@
         {
           "id": "pipe:matrix",
           "label": "②〇×2党確定",
+          "state": "blocked"
+        },
+        {
+          "id": "pipe:deployed",
+          "label": "⑤本番デプロイ",
+          "state": "blocked"
+        },
+        {
+          "id": "pipe:debug",
+          "label": "⑥デバッグOK",
           "state": "blocked"
         }
       ],
@@ -2794,29 +3289,59 @@
       "needsQualityFix": false,
       "qualityBlockerCount": 0,
       "qualityBlockers": [],
-      "agentTasks": [],
-      "gatePct": 100,
-      "goldPct": 67,
+      "agentTasks": [
+        {
+          "id": "teigaku-kyufu-2024:E4_timeline_diet_topic",
+          "slug": "teigaku-kyufu-2024",
+          "agent": "writer",
+          "agentLabel": "ライター",
+          "checkId": "E4_timeline_diet_topic",
+          "title": "[ゲート] TL国会の話題",
+          "todo": "タイムライン国会3件が案件と一致",
+          "command": "npm run complete:article -- --slug teigaku-kyufu-2024 --force",
+          "priority": 30
+        },
+        {
+          "id": "teigaku-kyufu-2024:G5_parties_symbol",
+          "slug": "teigaku-kyufu-2024",
+          "agent": "writer",
+          "agentLabel": "ライター",
+          "checkId": "G5_parties_symbol",
+          "title": "[ゲート] ◎〇▲×",
+          "todo": "各党の記号を確定（v2）",
+          "command": "npm run complete:article -- --slug teigaku-kyufu-2024 --force",
+          "priority": 30
+        },
+        {
+          "id": "teigaku-kyufu-2024:G6_matrix_topic",
+          "slug": "teigaku-kyufu-2024",
+          "agent": "writer",
+          "agentLabel": "ライター",
+          "checkId": "G6_matrix_topic",
+          "title": "[ゲート] 〇×の話題",
+          "todo": "公言と行動が案件キーワードと一致（2党）",
+          "command": "npm run complete:article -- --slug teigaku-kyufu-2024 --force",
+          "priority": 30
+        }
+      ],
+      "gatePct": 50,
+      "goldPct": 33,
       "published": false,
-      "publishGateOk": true,
-      "pipelinePreOk": true,
-      "titleAnswerOk": true,
-      "titleAnswerDetail": "1行目がタイトルに回答している",
-      "titleAnswerTodo": null,
+      "publishGateOk": false,
       "pipeline": [
         {
           "id": "content",
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": true
+          "ok": false
         },
         {
           "id": "matrix",
           "label": "②〇×2党確定",
           "phase": 2,
           "preDeploy": true,
-          "ok": true
+          "ok": false
         },
         {
           "id": "x",
@@ -2853,14 +3378,14 @@
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": true
+          "ok": false
         },
         {
           "id": "matrix",
           "label": "②〇×2党確定",
           "phase": 2,
           "preDeploy": true,
-          "ok": true
+          "ok": false
         },
         {
           "id": "x",
@@ -2891,10 +3416,65 @@
           "ok": false
         }
       ],
-      "blockers": [],
-      "blockerCount": 0,
+      "blockers": [
+        {
+          "id": "E4_timeline_diet_topic",
+          "label": "TL国会の話題",
+          "todo": "タイムライン国会3件が案件と一致",
+          "detail": "2/3 国会が話題一致"
+        },
+        {
+          "id": "G5_parties_symbol",
+          "label": "◎〇▲×",
+          "todo": "各党の記号を確定（v2）",
+          "detail": "◎▲❌ 確定 0/2 党以上"
+        },
+        {
+          "id": "G6_matrix_topic",
+          "label": "〇×の話題",
+          "todo": "公言と行動が案件キーワードと一致（2党）",
+          "detail": "公言テキストが案件と無関係"
+        }
+      ],
+      "blockerCount": 3,
       "runState": "idle",
-      "workItems": [],
+      "workItems": [
+        {
+          "id": "E4_timeline_diet_topic",
+          "label": "TL国会の話題",
+          "state": "blocked"
+        },
+        {
+          "id": "G5_parties_symbol",
+          "label": "◎〇▲×",
+          "state": "active"
+        },
+        {
+          "id": "G6_matrix_topic",
+          "label": "〇×の話題",
+          "state": "blocked"
+        },
+        {
+          "id": "pipe:content",
+          "label": "①コンテンツ",
+          "state": "blocked"
+        },
+        {
+          "id": "pipe:matrix",
+          "label": "②〇×2党確定",
+          "state": "blocked"
+        },
+        {
+          "id": "pipe:deployed",
+          "label": "⑤本番デプロイ",
+          "state": "blocked"
+        },
+        {
+          "id": "pipe:debug",
+          "label": "⑥デバッグOK",
+          "state": "blocked"
+        }
+      ],
       "nextAction": "👁️ 非表示中 — 「表示に戻す」でトップに出せます",
       "promo": {
         "x": null,
@@ -2952,7 +3532,7 @@
     {
       "slug": "shussho-budget-seika",
       "title": "出生率・子育て支援の動向",
-      "shortTitle": "出生率・子育て支援の動向",
+      "shortTitle": "【出生率・子育て支援】3.6兆円は効いた？2025年の実績",
       "category": "行政",
       "policyCategory": "行政",
       "adminHidden": false,
@@ -2965,6 +3545,17 @@
       "qualityBlockers": [],
       "agentTasks": [
         {
+          "id": "shussho-budget-seika:E4_timeline_diet_topic",
+          "slug": "shussho-budget-seika",
+          "agent": "writer",
+          "agentLabel": "ライター",
+          "checkId": "E4_timeline_diet_topic",
+          "title": "[ゲート] TL国会の話題",
+          "todo": "タイムライン国会3件が案件と一致",
+          "command": "npm run complete:article -- --slug shussho-budget-seika --force",
+          "priority": 30
+        },
+        {
           "id": "shussho-budget-seika:G5_parties_symbol",
           "slug": "shussho-budget-seika",
           "agent": "writer",
@@ -2974,23 +3565,30 @@
           "todo": "各党の記号を確定（v2）",
           "command": "npm run complete:article -- --slug shussho-budget-seika --force",
           "priority": 30
+        },
+        {
+          "id": "shussho-budget-seika:G6_matrix_topic",
+          "slug": "shussho-budget-seika",
+          "agent": "writer",
+          "agentLabel": "ライター",
+          "checkId": "G6_matrix_topic",
+          "title": "[ゲート] 〇×の話題",
+          "todo": "公言と行動が案件キーワードと一致（2党）",
+          "command": "npm run complete:article -- --slug shussho-budget-seika --force",
+          "priority": 30
         }
       ],
-      "gatePct": 75,
-      "goldPct": 50,
+      "gatePct": 50,
+      "goldPct": 33,
       "published": true,
-      "publishGateOk": true,
-      "pipelinePreOk": false,
-      "titleAnswerOk": true,
-      "titleAnswerDetail": "1行目がタイトルに回答している",
-      "titleAnswerTodo": null,
+      "publishGateOk": false,
       "pipeline": [
         {
           "id": "content",
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": true
+          "ok": false
         },
         {
           "id": "matrix",
@@ -3034,7 +3632,7 @@
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": true
+          "ok": false
         },
         {
           "id": "matrix",
@@ -3074,27 +3672,64 @@
       ],
       "blockers": [
         {
+          "id": "E4_timeline_diet_topic",
+          "label": "TL国会の話題",
+          "todo": "タイムライン国会3件が案件と一致",
+          "detail": "2/3 国会が話題一致"
+        },
+        {
           "id": "G5_parties_symbol",
           "label": "◎〇▲×",
           "todo": "各党の記号を確定（v2）",
           "detail": "◎▲❌ 確定 0/2 党以上"
+        },
+        {
+          "id": "G6_matrix_topic",
+          "label": "〇×の話題",
+          "todo": "公言と行動が案件キーワードと一致（2党）",
+          "detail": "公言テキストが案件と無関係"
         }
       ],
-      "blockerCount": 1,
+      "blockerCount": 3,
       "runState": "idle",
       "workItems": [
         {
+          "id": "E4_timeline_diet_topic",
+          "label": "TL国会の話題",
+          "state": "blocked"
+        },
+        {
           "id": "G5_parties_symbol",
           "label": "◎〇▲×",
+          "state": "active"
+        },
+        {
+          "id": "G6_matrix_topic",
+          "label": "〇×の話題",
+          "state": "blocked"
+        },
+        {
+          "id": "pipe:content",
+          "label": "①コンテンツ",
           "state": "blocked"
         },
         {
           "id": "pipe:matrix",
           "label": "②〇×2党確定",
           "state": "blocked"
+        },
+        {
+          "id": "pipe:deployed",
+          "label": "⑤本番デプロイ",
+          "state": "blocked"
+        },
+        {
+          "id": "pipe:debug",
+          "label": "⑥デバッグOK",
+          "state": "blocked"
         }
       ],
-      "nextAction": "✅ 公開中 — 要対応あり（裏で修正中・URLは維持）",
+      "nextAction": "2/3 国会が話題一致 → ◎▲❌ を確定 → 公言テキストが案件と無関係 → X投稿は見つかりませんでした（5段階調査完了）",
       "promo": {
         "x": null,
         "hatena": null,
@@ -3113,12 +3748,12 @@
       },
       "xUnavailable": true,
       "xResearchStatus": "exhausted",
-      "statusExplain": "公開済 06/29 09:52",
+      "statusExplain": "巡回が自動修正中 — ◌ が今処理している項目",
       "publishedBy": null,
       "publishedAt": "2026-06-29T00:52:28.532Z",
       "adminHiddenBy": null,
       "adminHiddenAt": null,
-      "patrolFixing": false,
+      "patrolFixing": true,
       "activity": [
         {
           "at": "2026-07-01T22:53:47.150Z",
@@ -3193,11 +3828,7 @@
       "gatePct": 75,
       "goldPct": 50,
       "published": true,
-      "publishGateOk": true,
-      "pipelinePreOk": false,
-      "titleAnswerOk": true,
-      "titleAnswerDetail": "1行目がタイトルに回答している",
-      "titleAnswerTodo": null,
+      "publishGateOk": false,
       "pipeline": [
         {
           "id": "content",
@@ -3300,15 +3931,25 @@
         {
           "id": "G5_parties_symbol",
           "label": "◎〇▲×",
-          "state": "blocked"
+          "state": "active"
         },
         {
           "id": "pipe:matrix",
           "label": "②〇×2党確定",
           "state": "blocked"
+        },
+        {
+          "id": "pipe:deployed",
+          "label": "⑤本番デプロイ",
+          "state": "blocked"
+        },
+        {
+          "id": "pipe:debug",
+          "label": "⑥デバッグOK",
+          "state": "blocked"
         }
       ],
-      "nextAction": "✅ 公開中 — 要対応あり（裏で修正中・URLは維持）",
+      "nextAction": "◎▲❌ を確定 → X投稿は見つかりませんでした（5段階調査完了）",
       "promo": {
         "x": null,
         "hatena": null,
@@ -3327,7 +3968,7 @@
       },
       "xUnavailable": true,
       "xResearchStatus": "exhausted",
-      "statusExplain": "公開済 06/29 15:31",
+      "statusExplain": "巡回が自動修正中 — ◌ が今処理している項目",
       "publishedBy": null,
       "publishedAt": "2026-06-29T06:31:08.767Z",
       "adminHiddenBy": null,
@@ -3474,11 +4115,7 @@
       "gatePct": 50,
       "goldPct": 33,
       "published": true,
-      "publishGateOk": true,
-      "pipelinePreOk": false,
-      "titleAnswerOk": true,
-      "titleAnswerDetail": "1行目がタイトルに回答している",
-      "titleAnswerTodo": null,
+      "publishGateOk": false,
       "pipeline": [
         {
           "id": "content",
@@ -3592,7 +4229,7 @@
         {
           "id": "G5_parties_symbol",
           "label": "◎〇▲×",
-          "state": "blocked"
+          "state": "active"
         },
         {
           "id": "pipe:content",
@@ -3603,9 +4240,19 @@
           "id": "pipe:matrix",
           "label": "②〇×2党確定",
           "state": "blocked"
+        },
+        {
+          "id": "pipe:deployed",
+          "label": "⑤本番デプロイ",
+          "state": "blocked"
+        },
+        {
+          "id": "pipe:debug",
+          "label": "⑥デバッグOK",
+          "state": "blocked"
         }
       ],
-      "nextAction": "✅ 公開中 — 要対応あり（裏で修正中・URLは維持）",
+      "nextAction": "2/3 行が話題一致 → ◎▲❌ を確定 → X投稿は見つかりませんでした（5段階調査完了）",
       "promo": {
         "x": null,
         "hatena": null,
@@ -3624,12 +4271,12 @@
       },
       "xUnavailable": true,
       "xResearchStatus": "exhausted",
-      "statusExplain": "公開済 06/29 15:31",
+      "statusExplain": "巡回が自動修正中 — ◌ が今処理している項目",
       "publishedBy": null,
       "publishedAt": "2026-06-29T06:31:08.845Z",
       "adminHiddenBy": null,
       "adminHiddenAt": null,
-      "patrolFixing": false,
+      "patrolFixing": true,
       "activity": [
         {
           "at": "2026-07-01T22:56:39.760Z",
@@ -3733,7 +4380,7 @@
     {
       "slug": "fuhou-immin-trend",
       "title": "不法滞在の動向",
-      "shortTitle": "不法滞在の動向",
+      "shortTitle": "【不法滞在】国内の人数推移と政府の対応",
       "category": "行政",
       "policyCategory": "行政",
       "adminHidden": false,
@@ -3744,29 +4391,81 @@
       "needsQualityFix": false,
       "qualityBlockerCount": 0,
       "qualityBlockers": [],
-      "agentTasks": [],
-      "gatePct": 100,
-      "goldPct": 100,
+      "agentTasks": [
+        {
+          "id": "fuhou-immin-trend:B5_writer_voice",
+          "slug": "fuhou-immin-trend",
+          "agent": "writer",
+          "agentLabel": "ライター",
+          "checkId": "B5_writer_voice",
+          "title": "[ゲート] 第三者目線",
+          "todo": "議事録口調（お尋ね・私自身・御党）を除去",
+          "command": "npm run complete:article -- --slug fuhou-immin-trend --force",
+          "priority": 30
+        },
+        {
+          "id": "fuhou-immin-trend:D2_arc_topic",
+          "slug": "fuhou-immin-trend",
+          "agent": "writer",
+          "agentLabel": "ライター",
+          "checkId": "D2_arc_topic",
+          "title": "[ゲート] 経緯の話題",
+          "todo": "経緯3行以上が案件キーワードと一致",
+          "command": "npm run complete:article -- --slug fuhou-immin-trend --force",
+          "priority": 30
+        },
+        {
+          "id": "fuhou-immin-trend:E4_timeline_diet_topic",
+          "slug": "fuhou-immin-trend",
+          "agent": "writer",
+          "agentLabel": "ライター",
+          "checkId": "E4_timeline_diet_topic",
+          "title": "[ゲート] TL国会の話題",
+          "todo": "タイムライン国会3件が案件と一致",
+          "command": "npm run complete:article -- --slug fuhou-immin-trend --force",
+          "priority": 30
+        },
+        {
+          "id": "fuhou-immin-trend:G5_parties_symbol",
+          "slug": "fuhou-immin-trend",
+          "agent": "writer",
+          "agentLabel": "ライター",
+          "checkId": "G5_parties_symbol",
+          "title": "[ゲート] ◎〇▲×",
+          "todo": "各党の記号を確定（v2）",
+          "command": "npm run complete:article -- --slug fuhou-immin-trend --force",
+          "priority": 30
+        },
+        {
+          "id": "fuhou-immin-trend:G6_matrix_topic",
+          "slug": "fuhou-immin-trend",
+          "agent": "writer",
+          "agentLabel": "ライター",
+          "checkId": "G6_matrix_topic",
+          "title": "[ゲート] 〇×の話題",
+          "todo": "公言と行動が案件キーワードと一致（2党）",
+          "command": "npm run complete:article -- --slug fuhou-immin-trend --force",
+          "priority": 30
+        }
+      ],
+      "gatePct": 50,
+      "goldPct": 33,
       "published": true,
-      "publishGateOk": true,
-      "pipelinePreOk": true,
-      "titleAnswerOk": true,
-      "titleAnswerDetail": "1行目がタイトルに回答している",
-      "titleAnswerTodo": null,
+      "publishGateOk": false,
       "pipeline": [
         {
           "id": "content",
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": true
+          "ok": false
         },
         {
           "id": "matrix",
           "label": "②〇×2党確定",
           "phase": 2,
           "preDeploy": true,
-          "ok": true
+          "ok": false
         },
         {
           "id": "x",
@@ -3787,14 +4486,14 @@
           "label": "⑤本番デプロイ",
           "phase": 5,
           "preDeploy": false,
-          "ok": true
+          "ok": false
         },
         {
           "id": "debug",
           "label": "⑥デバッグOK",
           "phase": 6,
           "preDeploy": false,
-          "ok": true
+          "ok": false
         }
       ],
       "gold": [
@@ -3803,14 +4502,14 @@
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": true
+          "ok": false
         },
         {
           "id": "matrix",
           "label": "②〇×2党確定",
           "phase": 2,
           "preDeploy": true,
-          "ok": true
+          "ok": false
         },
         {
           "id": "x",
@@ -3831,27 +4530,98 @@
           "label": "⑤本番デプロイ",
           "phase": 5,
           "preDeploy": false,
-          "ok": true
+          "ok": false
         },
         {
           "id": "debug",
           "label": "⑥デバッグOK",
           "phase": 6,
           "preDeploy": false,
-          "ok": true
+          "ok": false
         }
       ],
-      "blockers": [],
-      "blockerCount": 0,
-      "runState": "active",
+      "blockers": [
+        {
+          "id": "B5_writer_voice",
+          "label": "第三者目線",
+          "todo": "議事録口調（お尋ね・私自身・御党）を除去",
+          "detail": "議事録口調が残っている"
+        },
+        {
+          "id": "D2_arc_topic",
+          "label": "経緯の話題",
+          "todo": "経緯3行以上が案件キーワードと一致",
+          "detail": "2/3 行が話題一致"
+        },
+        {
+          "id": "E4_timeline_diet_topic",
+          "label": "TL国会の話題",
+          "todo": "タイムライン国会3件が案件と一致",
+          "detail": "2/3 国会が話題一致"
+        },
+        {
+          "id": "G5_parties_symbol",
+          "label": "◎〇▲×",
+          "todo": "各党の記号を確定（v2）",
+          "detail": "◎▲❌ 確定 0/2 党以上"
+        },
+        {
+          "id": "G6_matrix_topic",
+          "label": "〇×の話題",
+          "todo": "公言と行動が案件キーワードと一致（2党）",
+          "detail": "公言テキストが案件と無関係"
+        }
+      ],
+      "blockerCount": 5,
+      "runState": "idle",
       "workItems": [
         {
           "id": "B5_writer_voice",
           "label": "第三者目線",
+          "state": "blocked"
+        },
+        {
+          "id": "D2_arc_topic",
+          "label": "経緯の話題",
+          "state": "blocked"
+        },
+        {
+          "id": "E4_timeline_diet_topic",
+          "label": "TL国会の話題",
+          "state": "blocked"
+        },
+        {
+          "id": "G5_parties_symbol",
+          "label": "◎〇▲×",
           "state": "active"
+        },
+        {
+          "id": "G6_matrix_topic",
+          "label": "〇×の話題",
+          "state": "blocked"
+        },
+        {
+          "id": "pipe:content",
+          "label": "①コンテンツ",
+          "state": "blocked"
+        },
+        {
+          "id": "pipe:matrix",
+          "label": "②〇×2党確定",
+          "state": "blocked"
+        },
+        {
+          "id": "pipe:deployed",
+          "label": "⑤本番デプロイ",
+          "state": "blocked"
+        },
+        {
+          "id": "pipe:debug",
+          "label": "⑥デバッグOK",
+          "state": "blocked"
         }
       ],
-      "nextAction": "✅ 公開中 — /case/ に表示されています",
+      "nextAction": "議事録口調が残っている → 2/3 行が話題一致 → 2/3 国会が話題一致 → X投稿は見つかりませんでした（5段階調査完了）",
       "promo": {
         "x": null,
         "hatena": null,
@@ -3989,6 +4759,17 @@
           "priority": 30
         },
         {
+          "id": "tokyo-solar-panel:E4_timeline_diet_topic",
+          "slug": "tokyo-solar-panel",
+          "agent": "writer",
+          "agentLabel": "ライター",
+          "checkId": "E4_timeline_diet_topic",
+          "title": "[ゲート] TL国会の話題",
+          "todo": "タイムライン国会3件が案件と一致",
+          "command": "npm run complete:article -- --slug tokyo-solar-panel --force",
+          "priority": 30
+        },
+        {
           "id": "tokyo-solar-panel:G5_parties_symbol",
           "slug": "tokyo-solar-panel",
           "agent": "writer",
@@ -4003,11 +4784,7 @@
       "gatePct": 50,
       "goldPct": 33,
       "published": true,
-      "publishGateOk": true,
-      "pipelinePreOk": false,
-      "titleAnswerOk": true,
-      "titleAnswerDetail": "1行目がタイトルに回答している",
-      "titleAnswerTodo": null,
+      "publishGateOk": false,
       "pipeline": [
         {
           "id": "content",
@@ -4104,13 +4881,19 @@
           "detail": "1/2 行がキーワード一致（太陽光パネル 設置義務 東京都）"
         },
         {
+          "id": "E4_timeline_diet_topic",
+          "label": "TL国会の話題",
+          "todo": "タイムライン国会3件が案件と一致",
+          "detail": "1/3 国会が話題一致"
+        },
+        {
           "id": "G5_parties_symbol",
           "label": "◎〇▲×",
           "todo": "各党の記号を確定（v2）",
           "detail": "◎▲❌ 確定 0/2 党以上"
         }
       ],
-      "blockerCount": 2,
+      "blockerCount": 3,
       "runState": "idle",
       "workItems": [
         {
@@ -4119,9 +4902,14 @@
           "state": "blocked"
         },
         {
+          "id": "E4_timeline_diet_topic",
+          "label": "TL国会の話題",
+          "state": "blocked"
+        },
+        {
           "id": "G5_parties_symbol",
           "label": "◎〇▲×",
-          "state": "blocked"
+          "state": "active"
         },
         {
           "id": "pipe:content",
@@ -4132,9 +4920,19 @@
           "id": "pipe:matrix",
           "label": "②〇×2党確定",
           "state": "blocked"
+        },
+        {
+          "id": "pipe:deployed",
+          "label": "⑤本番デプロイ",
+          "state": "blocked"
+        },
+        {
+          "id": "pipe:debug",
+          "label": "⑥デバッグOK",
+          "state": "blocked"
         }
       ],
-      "nextAction": "✅ 公開中 — 要対応あり（裏で修正中・URLは維持）",
+      "nextAction": "1/2 行がキーワード一致（太陽光パネル 設置義務 東京都） → 1/3 国会が話題一致 → ◎▲❌ を確定 → X投稿は見つかりませんでした（5段階調査完了）",
       "promo": {
         "x": null,
         "hatena": null,
@@ -4153,12 +4951,12 @@
       },
       "xUnavailable": true,
       "xResearchStatus": "exhausted",
-      "statusExplain": "公開済 06/29 15:31",
+      "statusExplain": "巡回が自動修正中 — ◌ が今処理している項目",
       "publishedBy": null,
       "publishedAt": "2026-06-29T06:31:08.986Z",
       "adminHiddenBy": null,
       "adminHiddenAt": null,
-      "patrolFixing": false,
+      "patrolFixing": true,
       "activity": [
         {
           "at": "2026-07-01T22:56:29.676Z",
@@ -4267,21 +5065,29 @@
       "policyCategory": "地方",
       "adminHidden": false,
       "pageReady": false,
-      "publishState": "draft",
+      "publishState": "wip",
       "previewUrl": "/dev/preview/case-mqwdrley/",
       "qualityOk": true,
       "needsQualityFix": false,
       "qualityBlockerCount": 0,
       "qualityBlockers": [],
-      "agentTasks": [],
-      "gatePct": 100,
-      "goldPct": 83,
+      "agentTasks": [
+        {
+          "id": "case-mqwdrley:G5_parties_symbol",
+          "slug": "case-mqwdrley",
+          "agent": "writer",
+          "agentLabel": "ライター",
+          "checkId": "G5_parties_symbol",
+          "title": "[ゲート] ◎〇▲×",
+          "todo": "各党の記号を確定（v2）",
+          "command": "npm run complete:article -- --slug case-mqwdrley --force",
+          "priority": 30
+        }
+      ],
+      "gatePct": 75,
+      "goldPct": 50,
       "published": false,
-      "publishGateOk": true,
-      "pipelinePreOk": true,
-      "titleAnswerOk": true,
-      "titleAnswerDetail": "1行目がタイトルに回答している",
-      "titleAnswerTodo": null,
+      "publishGateOk": false,
       "pipeline": [
         {
           "id": "content",
@@ -4295,7 +5101,7 @@
           "label": "②〇×2党確定",
           "phase": 2,
           "preDeploy": true,
-          "ok": true
+          "ok": false
         },
         {
           "id": "x",
@@ -4323,7 +5129,7 @@
           "label": "⑥デバッグOK",
           "phase": 6,
           "preDeploy": false,
-          "ok": true
+          "ok": false
         }
       ],
       "gold": [
@@ -4339,7 +5145,7 @@
           "label": "②〇×2党確定",
           "phase": 2,
           "preDeploy": true,
-          "ok": true
+          "ok": false
         },
         {
           "id": "x",
@@ -4367,14 +5173,42 @@
           "label": "⑥デバッグOK",
           "phase": 6,
           "preDeploy": false,
-          "ok": true
+          "ok": false
         }
       ],
-      "blockers": [],
-      "blockerCount": 0,
-      "runState": "idle",
-      "workItems": [],
-      "nextAction": "📋 1行目OK — プレビュー確認後「公開する」を押してください",
+      "blockers": [
+        {
+          "id": "G5_parties_symbol",
+          "label": "◎〇▲×",
+          "todo": "各党の記号を確定（v2）",
+          "detail": "◎▲❌ 確定 0/2 党以上"
+        }
+      ],
+      "blockerCount": 1,
+      "runState": "active",
+      "workItems": [
+        {
+          "id": "G5_parties_symbol",
+          "label": "◎〇▲×",
+          "state": "active"
+        },
+        {
+          "id": "pipe:matrix",
+          "label": "②〇×2党確定",
+          "state": "blocked"
+        },
+        {
+          "id": "pipe:deployed",
+          "label": "⑤本番デプロイ",
+          "state": "blocked"
+        },
+        {
+          "id": "pipe:debug",
+          "label": "⑥デバッグOK",
+          "state": "blocked"
+        }
+      ],
+      "nextAction": "◎▲❌ を確定 → X投稿は見つかりませんでした（5段階調査完了）",
       "promo": {
         "x": null,
         "hatena": null,
@@ -4393,13 +5227,27 @@
       },
       "xUnavailable": true,
       "xResearchStatus": "exhausted",
-      "statusExplain": "1行目OK・非公開。一般公開はあなたの「公開する」のみ",
+      "statusExplain": "巡回が自動修正中 — ◌ が今処理している項目",
       "publishedBy": "owner",
       "publishedAt": "2026-07-01T20:35:25.094Z",
       "adminHiddenBy": null,
       "adminHiddenAt": null,
       "patrolFixing": true,
       "activity": [
+        {
+          "at": "2026-07-01T22:59:11.643Z",
+          "when": "07/02 07:59",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — writer / G5_parties_symbol"
+        },
+        {
+          "at": "2026-07-01T22:59:10.887Z",
+          "when": "07/02 07:59",
+          "type": "gate.ready",
+          "actor": "patrol",
+          "line": "公開ゲート到達（まだ非公開）（巡回） — 1行目がタイトルに回答済み。一般公開は手動のみ"
+        },
         {
           "at": "2026-07-01T22:59:04.151Z",
           "when": "07/02 07:59",
@@ -4453,7 +5301,7 @@
     {
       "slug": "bouka-taisaku",
       "title": "物価高対策の動向",
-      "shortTitle": "物価高対策の動向",
+      "shortTitle": "【物価高対策】支援策の内容といまの効果",
       "category": "国会",
       "policyCategory": "国会",
       "adminHidden": false,
@@ -4469,10 +5317,6 @@
       "goldPct": 100,
       "published": true,
       "publishGateOk": true,
-      "pipelinePreOk": true,
-      "titleAnswerOk": true,
-      "titleAnswerDetail": "1行目がタイトルに回答している",
-      "titleAnswerTodo": null,
       "pipeline": [
         {
           "id": "content",
@@ -4630,7 +5474,7 @@
     {
       "slug": "shohizei-genmen",
       "title": "食料品の消費税の動向",
-      "shortTitle": "食料品の消費税の動向",
+      "shortTitle": "【食料品の消費税】減税・免税の議論と最新",
       "category": "国会",
       "policyCategory": "国会",
       "adminHidden": false,
@@ -4646,10 +5490,6 @@
       "goldPct": 100,
       "published": true,
       "publishGateOk": true,
-      "pipelinePreOk": true,
-      "titleAnswerOk": true,
-      "titleAnswerDetail": "1行目がタイトルに回答している",
-      "titleAnswerTodo": null,
       "pipeline": [
         {
           "id": "content",
@@ -4807,7 +5647,7 @@
     {
       "slug": "boeeihi",
       "title": "防衛費・安保の動向",
-      "shortTitle": "防衛費・安保の動向",
+      "shortTitle": "【防衛費・安保】増額の行方と安保政策の最新",
       "category": "国会",
       "policyCategory": "国会",
       "adminHidden": false,
@@ -4823,10 +5663,6 @@
       "goldPct": 100,
       "published": true,
       "publishGateOk": true,
-      "pipelinePreOk": true,
-      "titleAnswerOk": true,
-      "titleAnswerDetail": "1行目がタイトルに回答している",
-      "titleAnswerTodo": null,
       "pipeline": [
         {
           "id": "content",
@@ -4974,11 +5810,11 @@
       "stall": {
         "stalled": true,
         "slug": "boeeihi",
-        "shortTitle": "防衛費・安保の動向",
+        "shortTitle": "【防衛費・安保】増額の行方と安保政策の最新",
         "goldPct": 100,
         "checkId": "B4_conclusion",
         "checkLabel": "結論の質",
-        "ownerHint": "重複・途中切れ・定型文なし（行数固定なし）",
+        "ownerHint": "いまの結論が要点3行（重複・途中切れなし）",
         "agent": "writer",
         "attempts": 3,
         "lastAt": "2026-07-01T19:46:43.020Z",
@@ -4988,12 +5824,12 @@
     {
       "slug": "chingin",
       "title": "賃上げ・最低賃金の動向",
-      "shortTitle": "賃上げ・最低賃金の動向",
+      "shortTitle": "【賃上げ・最低賃金】企業と家計への影響",
       "category": "国会",
       "policyCategory": "国会",
       "adminHidden": false,
       "pageReady": false,
-      "publishState": "draft",
+      "publishState": "wip",
       "previewUrl": "/dev/preview/chingin/",
       "qualityOk": true,
       "needsQualityFix": false,
@@ -5015,11 +5851,7 @@
       "gatePct": 75,
       "goldPct": 50,
       "published": false,
-      "publishGateOk": true,
-      "pipelinePreOk": false,
-      "titleAnswerOk": true,
-      "titleAnswerDetail": "1行目がタイトルに回答している",
-      "titleAnswerTodo": null,
+      "publishGateOk": false,
       "pipeline": [
         {
           "id": "content",
@@ -5128,9 +5960,19 @@
           "id": "pipe:content",
           "label": "①コンテンツ",
           "state": "blocked"
+        },
+        {
+          "id": "pipe:deployed",
+          "label": "⑤本番デプロイ",
+          "state": "blocked"
+        },
+        {
+          "id": "pipe:debug",
+          "label": "⑥デバッグOK",
+          "state": "blocked"
         }
       ],
-      "nextAction": "📋 1行目OK — プレビュー確認後「公開する」を押してください",
+      "nextAction": "根拠が結論のコピー → X投稿は見つかりませんでした（5段階調査完了）",
       "promo": {
         "x": null,
         "hatena": null,
@@ -5149,7 +5991,7 @@
       },
       "xUnavailable": true,
       "xResearchStatus": "exhausted",
-      "statusExplain": "1行目OK・非公開。一般公開はあなたの「公開する」のみ",
+      "statusExplain": "要対応 — ゲート未達。巡回が順に自動処理",
       "publishedBy": null,
       "publishedAt": null,
       "adminHiddenBy": null,
@@ -5187,7 +6029,7 @@
     {
       "slug": "nenkin",
       "title": "年金制度改革の動向",
-      "shortTitle": "年金制度改革の動向",
+      "shortTitle": "【年金制度改革】受給年齢・支給額の変更点",
       "category": "国会",
       "policyCategory": "国会",
       "adminHidden": false,
@@ -5203,10 +6045,6 @@
       "goldPct": 100,
       "published": true,
       "publishGateOk": true,
-      "pipelinePreOk": true,
-      "titleAnswerOk": true,
-      "titleAnswerDetail": "1行目がタイトルに回答している",
-      "titleAnswerTodo": null,
       "pipeline": [
         {
           "id": "content",
@@ -5356,7 +6194,7 @@
     {
       "slug": "gaikokujin-seisaku",
       "title": "外国人政策の動向",
-      "shortTitle": "外国人政策の動向",
+      "shortTitle": "【外国人政策】在留・労働・共生の最新論点",
       "category": "国会",
       "policyCategory": "国会",
       "adminHidden": false,
@@ -5372,10 +6210,6 @@
       "goldPct": 100,
       "published": true,
       "publishGateOk": true,
-      "pipelinePreOk": true,
-      "titleAnswerOk": true,
-      "titleAnswerDetail": "1行目がタイトルに回答している",
-      "titleAnswerTodo": null,
       "pipeline": [
         {
           "id": "content",
@@ -5566,16 +6400,34 @@
           "todo": "経緯3行以上が案件キーワードと一致",
           "command": "npm run complete:article -- --slug shoshika --force",
           "priority": 30
+        },
+        {
+          "id": "shoshika:E4_timeline_diet_topic",
+          "slug": "shoshika",
+          "agent": "writer",
+          "agentLabel": "ライター",
+          "checkId": "E4_timeline_diet_topic",
+          "title": "[ゲート] TL国会の話題",
+          "todo": "タイムライン国会3件が案件と一致",
+          "command": "npm run complete:article -- --slug shoshika --force",
+          "priority": 30
+        },
+        {
+          "id": "shoshika:G6_matrix_topic",
+          "slug": "shoshika",
+          "agent": "writer",
+          "agentLabel": "ライター",
+          "checkId": "G6_matrix_topic",
+          "title": "[ゲート] 〇×の話題",
+          "todo": "公言と行動が案件キーワードと一致（2党）",
+          "command": "npm run complete:article -- --slug shoshika --force",
+          "priority": 30
         }
       ],
       "gatePct": 75,
       "goldPct": 50,
       "published": true,
-      "publishGateOk": true,
-      "pipelinePreOk": false,
-      "titleAnswerOk": true,
-      "titleAnswerDetail": "1行目がタイトルに回答している",
-      "titleAnswerTodo": null,
+      "publishGateOk": false,
       "pipeline": [
         {
           "id": "content",
@@ -5676,9 +6528,21 @@
           "label": "経緯の話題",
           "todo": "経緯3行以上が案件キーワードと一致",
           "detail": "1/3 行が話題一致"
+        },
+        {
+          "id": "E4_timeline_diet_topic",
+          "label": "TL国会の話題",
+          "todo": "タイムライン国会3件が案件と一致",
+          "detail": "1/3 国会が話題一致"
+        },
+        {
+          "id": "G6_matrix_topic",
+          "label": "〇×の話題",
+          "todo": "公言と行動が案件キーワードと一致（2党）",
+          "detail": "公言テキストが案件と無関係"
         }
       ],
-      "blockerCount": 2,
+      "blockerCount": 4,
       "runState": "idle",
       "workItems": [
         {
@@ -5692,12 +6556,32 @@
           "state": "blocked"
         },
         {
+          "id": "E4_timeline_diet_topic",
+          "label": "TL国会の話題",
+          "state": "blocked"
+        },
+        {
+          "id": "G6_matrix_topic",
+          "label": "〇×の話題",
+          "state": "blocked"
+        },
+        {
           "id": "pipe:content",
           "label": "①コンテンツ",
           "state": "blocked"
+        },
+        {
+          "id": "pipe:deployed",
+          "label": "⑤本番デプロイ",
+          "state": "blocked"
+        },
+        {
+          "id": "pipe:debug",
+          "label": "⑥デバッグOK",
+          "state": "blocked"
         }
       ],
-      "nextAction": "✅ 公開中 — 要対応あり（裏で修正中・URLは維持）",
+      "nextAction": "1/2 行がキーワード一致（少子化） → 1/3 行が話題一致 → 1/3 国会が話題一致 → X投稿は見つかりませんでした（5段階調査完了）",
       "promo": {
         "x": null,
         "hatena": null,
@@ -5782,10 +6666,6 @@
       "goldPct": 100,
       "published": true,
       "publishGateOk": true,
-      "pipelinePreOk": true,
-      "titleAnswerOk": true,
-      "titleAnswerDetail": "1行目がタイトルに回答している",
-      "titleAnswerTodo": null,
       "pipeline": [
         {
           "id": "content",
@@ -5959,10 +6839,6 @@
       "goldPct": 100,
       "published": true,
       "publishGateOk": true,
-      "pipelinePreOk": true,
-      "titleAnswerOk": true,
-      "titleAnswerDetail": "1行目がタイトルに回答している",
-      "titleAnswerTodo": null,
       "pipeline": [
         {
           "id": "content",
@@ -6120,7 +6996,7 @@
     {
       "slug": "seiji-shikin",
       "title": "政治資金の動向",
-      "shortTitle": "政治資金の動向",
+      "shortTitle": "【政治資金】政党助成と献金ルールの最新",
       "category": "国会",
       "policyCategory": "国会",
       "adminHidden": false,
@@ -6136,10 +7012,6 @@
       "goldPct": 100,
       "published": true,
       "publishGateOk": true,
-      "pipelinePreOk": true,
-      "titleAnswerOk": true,
-      "titleAnswerDetail": "1行目がタイトルに回答している",
-      "titleAnswerTodo": null,
       "pipeline": [
         {
           "id": "content",
@@ -6313,10 +7185,6 @@
       "goldPct": 100,
       "published": true,
       "publishGateOk": true,
-      "pipelinePreOk": true,
-      "titleAnswerOk": true,
-      "titleAnswerDetail": "1行目がタイトルに回答している",
-      "titleAnswerTodo": null,
       "pipeline": [
         {
           "id": "content",
@@ -6474,7 +7342,7 @@
     {
       "slug": "kaigo-iryo",
       "title": "介護・医療費の動向",
-      "shortTitle": "介護・医療費の動向",
+      "shortTitle": "【介護・医療費】負担増の議論と支援策",
       "category": "国会",
       "policyCategory": "国会",
       "adminHidden": false,
@@ -6490,10 +7358,6 @@
       "goldPct": 100,
       "published": true,
       "publishGateOk": true,
-      "pipelinePreOk": true,
-      "titleAnswerOk": true,
-      "titleAnswerDetail": "1行目がタイトルに回答している",
-      "titleAnswerTodo": null,
       "pipeline": [
         {
           "id": "content",
@@ -6641,11 +7505,11 @@
       "stall": {
         "stalled": true,
         "slug": "kaigo-iryo",
-        "shortTitle": "介護・医療費の動向",
+        "shortTitle": "【介護・医療費】負担増の議論と支援策",
         "goldPct": 100,
         "checkId": "B4_conclusion",
         "checkLabel": "結論の質",
-        "ownerHint": "重複・途中切れ・定型文なし（行数固定なし）",
+        "ownerHint": "いまの結論が要点3行（重複・途中切れなし）",
         "agent": "writer",
         "attempts": 3,
         "lastAt": "2026-07-01T19:35:00.378Z",
@@ -6655,7 +7519,7 @@
     {
       "slug": "chiho-sosei",
       "title": "地方創生の動向",
-      "shortTitle": "地方創生の動向",
+      "shortTitle": "【地方創生】交付金と地域政策の最新",
       "category": "国会",
       "policyCategory": "国会",
       "adminHidden": false,
@@ -6671,10 +7535,6 @@
       "goldPct": 100,
       "published": true,
       "publishGateOk": true,
-      "pipelinePreOk": true,
-      "titleAnswerOk": true,
-      "titleAnswerDetail": "1行目がタイトルに回答している",
-      "titleAnswerTodo": null,
       "pipeline": [
         {
           "id": "content",
@@ -6822,11 +7682,11 @@
       "stall": {
         "stalled": true,
         "slug": "chiho-sosei",
-        "shortTitle": "地方創生の動向",
+        "shortTitle": "【地方創生】交付金と地域政策の最新",
         "goldPct": 100,
         "checkId": "B4_conclusion",
         "checkLabel": "結論の質",
-        "ownerHint": "重複・途中切れ・定型文なし（行数固定なし）",
+        "ownerHint": "いまの結論が要点3行（重複・途中切れなし）",
         "agent": "writer",
         "attempts": 3,
         "lastAt": "2026-07-01T19:36:21.168Z",
@@ -6852,10 +7712,6 @@
       "goldPct": 100,
       "published": true,
       "publishGateOk": true,
-      "pipelinePreOk": true,
-      "titleAnswerOk": true,
-      "titleAnswerDetail": "1行目がタイトルに回答している",
-      "titleAnswerTodo": null,
       "pipeline": [
         {
           "id": "content",
@@ -7029,10 +7885,6 @@
       "goldPct": 100,
       "published": true,
       "publishGateOk": true,
-      "pipelinePreOk": true,
-      "titleAnswerOk": true,
-      "titleAnswerDetail": "1行目がタイトルに回答している",
-      "titleAnswerTodo": null,
       "pipeline": [
         {
           "id": "content",
@@ -7190,7 +8042,7 @@
     {
       "slug": "casino-ir",
       "title": "カジノIRの動向",
-      "shortTitle": "カジノIRの動向",
+      "shortTitle": "【カジノIR】大阪を中心に進むIntegrated Resort",
       "category": "国会",
       "policyCategory": "国会",
       "adminHidden": false,
@@ -7206,10 +8058,6 @@
       "goldPct": 100,
       "published": true,
       "publishGateOk": true,
-      "pipelinePreOk": true,
-      "titleAnswerOk": true,
-      "titleAnswerDetail": "1行目がタイトルに回答している",
-      "titleAnswerTodo": null,
       "pipeline": [
         {
           "id": "content",
@@ -7367,12 +8215,12 @@
     {
       "slug": "kenpo",
       "title": "憲法改正の動向",
-      "shortTitle": "憲法改正の動向",
+      "shortTitle": "【憲法改正】9条・緊急事態条項など争点整理",
       "category": "国会",
       "policyCategory": "国会",
       "adminHidden": false,
       "pageReady": false,
-      "publishState": "draft",
+      "publishState": "wip",
       "previewUrl": "/dev/preview/kenpo/",
       "qualityOk": true,
       "needsQualityFix": false,
@@ -7394,11 +8242,7 @@
       "gatePct": 75,
       "goldPct": 50,
       "published": false,
-      "publishGateOk": true,
-      "pipelinePreOk": false,
-      "titleAnswerOk": true,
-      "titleAnswerDetail": "1行目がタイトルに回答している",
-      "titleAnswerTodo": null,
+      "publishGateOk": false,
       "pipeline": [
         {
           "id": "content",
@@ -7507,9 +8351,19 @@
           "id": "pipe:content",
           "label": "①コンテンツ",
           "state": "blocked"
+        },
+        {
+          "id": "pipe:deployed",
+          "label": "⑤本番デプロイ",
+          "state": "blocked"
+        },
+        {
+          "id": "pipe:debug",
+          "label": "⑥デバッグOK",
+          "state": "blocked"
         }
       ],
-      "nextAction": "📋 1行目OK — プレビュー確認後「公開する」を押してください",
+      "nextAction": "根拠が結論のコピー → X投稿は見つかりませんでした（5段階調査完了）",
       "promo": {
         "x": null,
         "hatena": null,
@@ -7528,7 +8382,7 @@
       },
       "xUnavailable": true,
       "xResearchStatus": "exhausted",
-      "statusExplain": "1行目OK・非公開。一般公開はあなたの「公開する」のみ",
+      "statusExplain": "要対応 — ゲート未達。巡回が順に自動処理",
       "publishedBy": null,
       "publishedAt": null,
       "adminHiddenBy": null,
@@ -7604,10 +8458,6 @@
       "goldPct": 100,
       "published": true,
       "publishGateOk": true,
-      "pipelinePreOk": true,
-      "titleAnswerOk": true,
-      "titleAnswerDetail": "1行目がタイトルに回答している",
-      "titleAnswerTodo": null,
       "pipeline": [
         {
           "id": "content",
@@ -7757,7 +8607,7 @@
     {
       "slug": "kishida-resign",
       "title": "政権・内閣人事の動向",
-      "shortTitle": "政権・内閣人事の動向",
+      "shortTitle": "【政権・内閣人事】首相交代と政策の行方",
       "category": "国会",
       "policyCategory": "国会",
       "adminHidden": false,
@@ -7773,10 +8623,6 @@
       "goldPct": 100,
       "published": true,
       "publishGateOk": true,
-      "pipelinePreOk": true,
-      "titleAnswerOk": true,
-      "titleAnswerDetail": "1行目がタイトルに回答している",
-      "titleAnswerTodo": null,
       "pipeline": [
         {
           "id": "content",
@@ -7939,7 +8785,7 @@
       "policyCategory": "国会",
       "adminHidden": false,
       "pageReady": false,
-      "publishState": "draft",
+      "publishState": "wip",
       "previewUrl": "/dev/preview/komei-kokumin/",
       "qualityOk": true,
       "needsQualityFix": false,
@@ -7953,7 +8799,7 @@
           "agentLabel": "ライター",
           "checkId": "B4_conclusion",
           "title": "[ゲート] 結論の質",
-          "todo": "重複・途中切れ・定型文なし（行数固定なし）",
+          "todo": "いまの結論が要点3行（重複・途中切れなし）",
           "command": "npm run complete:article -- --slug komei-kokumin --force",
           "priority": 30
         }
@@ -7961,11 +8807,7 @@
       "gatePct": 75,
       "goldPct": 50,
       "published": false,
-      "publishGateOk": true,
-      "pipelinePreOk": false,
-      "titleAnswerOk": true,
-      "titleAnswerDetail": "1行目がタイトルに回答している",
-      "titleAnswerTodo": null,
+      "publishGateOk": false,
       "pipeline": [
         {
           "id": "content",
@@ -8058,7 +8900,7 @@
         {
           "id": "B4_conclusion",
           "label": "結論の質",
-          "todo": "重複・途中切れ・定型文なし（行数固定なし）",
+          "todo": "いまの結論が要点3行（重複・途中切れなし）",
           "detail": "結論が途中切れ・重複・逐語抜粋"
         }
       ],
@@ -8074,9 +8916,19 @@
           "id": "pipe:content",
           "label": "①コンテンツ",
           "state": "blocked"
+        },
+        {
+          "id": "pipe:deployed",
+          "label": "⑤本番デプロイ",
+          "state": "blocked"
+        },
+        {
+          "id": "pipe:debug",
+          "label": "⑥デバッグOK",
+          "state": "blocked"
         }
       ],
-      "nextAction": "📋 1行目OK — プレビュー確認後「公開する」を押してください",
+      "nextAction": "結論が途中切れ・重複・逐語抜粋 → X投稿は見つかりませんでした（5段階調査完了）",
       "promo": {
         "x": null,
         "hatena": null,
@@ -8095,7 +8947,7 @@
       },
       "xUnavailable": true,
       "xResearchStatus": "exhausted",
-      "statusExplain": "1行目OK・非公開。一般公開はあなたの「公開する」のみ",
+      "statusExplain": "要対応 — ゲート未達。巡回が順に自動処理",
       "publishedBy": null,
       "publishedAt": null,
       "adminHiddenBy": null,
@@ -8203,6 +9055,6 @@
     }
   ],
   "deltaGoldPct": 0,
-  "previousGoldPct": 75,
+  "previousGoldPct": 68,
   "deployedAt": "2026-07-01T22:57:30.446Z"
 }
