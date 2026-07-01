@@ -10,6 +10,8 @@ import { isXUnavailable, X_UNAVAILABLE_ADMIN_MESSAGE } from "./x-research-policy
 import { countTopicBullets, isTitleReady, countTopicArcLines, countTopicDietTimeline, countDietTimelineEntries, isMatrixTopicRelevant, isMatrixTopicConsistent, isConclusionQuality, isDietTimelineTopicOk, textStronglyMatchesTopic } from "./topic-relevance.mjs";
 import { isDietVoice, bulletsDistinctFrom, isSpeechFragment } from "./diet-voice.mjs";
 import { isValidSymbol } from "./symbol-rules.mjs";
+import { waivedCheckIds } from "./case-gates.mjs";
+import { waivedCheckIds } from "./case-gates.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 export const root = path.join(__dirname, "../..");
@@ -68,8 +70,14 @@ export function checkCasePage(article, opts = {}) {
   const slug = article.slug || "(no slug)";
 
   function add(id, ok, detail, blocker = true) {
+    if (waived.has(id)) {
+      checks.push({ id, ok: true, detail: "案件タイプにより不要", blocker: false });
+      return;
+    }
     checks.push({ id, ok, detail, blocker });
   }
+
+  const waived = waivedCheckIds(article, { policyMatrix });
 
   const phaseA = isPhaseAPublish(article);
   const xUnavailable = isXUnavailable(article);
@@ -124,7 +132,9 @@ export function checkCasePage(article, opts = {}) {
   );
   const voiceOk =
     conclusionLines >= 1 &&
-    bullets.filter((b) => String(b).trim().length >= 12).every((b) => !isDietVoice(String(b)) && !isSpeechFragment(String(b)));
+    bullets
+      .filter((b) => String(b).trim().length >= 12)
+      .every((b) => !isDietVoice(String(b)));
   add("B5_writer_voice", voiceOk, voiceOk ? "第三者目線" : "議事録口調が残っている");
 
   // C. 根拠

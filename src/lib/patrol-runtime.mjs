@@ -128,6 +128,11 @@ export function buildWorkItems(slug, gate, quality, runtime, pipeline = []) {
 
   for (const step of pipeline) {
     if (step.ok) continue;
+    const preDeployOk = pipeline.filter((p) => p.preDeploy).every((p) => p.ok);
+    if (!step.preDeploy) {
+      if (!preDeployOk) continue;
+      if (!article?.pageReady && (step.id === "deployed" || step.id === "debug")) continue;
+    }
     push(`pipe:${step.id}`, step.label);
   }
 

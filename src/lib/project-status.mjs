@@ -27,6 +27,7 @@ import {
 } from "./admin-status-guide.mjs";
 import { analyzePatrolHealth, stallForSlug, loadPatrolHealthForAdmin } from "./patrol-stall.mjs";
 import { isXUnavailable, X_UNAVAILABLE_ADMIN_MESSAGE } from "./x-research-policy.mjs";
+import { waivedCheckIds, matrixPipelineOk, contentStatsOk } from "./case-gates.mjs";
 
 /** @typedef {{ id: string, label: string, phase: number, preDeploy: boolean }} PipelineItemDef */
 
@@ -44,11 +45,13 @@ export function isPublishGate(gold) {
   return PIPELINE_ITEMS.filter((p) => p.preDeploy).every((p) => gold.find((g) => g.id === p.id)?.ok);
 }
 
-function contentOk(gate, article) {
+function contentOk(gate, article, policyMatrix = null) {
+  const waived = waivedCheckIds(article, { policyMatrix });
   const ids = /^[A-FJ]/;
-  const subset = gate.checks.filter((c) => ids.test(c.id));
+  const subset = gate.checks.filter((c) => ids.test(c.id) && !waived.has(c.id));
   const formOk = subset.length > 0 && subset.every((c) => c.ok);
-  const qualityOk = auditArticleQuality(article).ok;
+  const quality = auditArticleQuality(article);
+  const qualityOk = quality.ok;
   return formOk && qualityOk;
 }
 
@@ -65,8 +68,8 @@ export function pipelineChecks(article, gate, policyMatrix) {
   const xUnavailable = isXUnavailable(article);
   const xGateOk = xUnavailable || !gate.blockers.some((b) => String(b.id).startsWith("H"));
   const x = xUnavailable || (xOk >= xMin && xGateOk);
-  const content = contentOk(gate, article);
-  const matrix = symbolsOk >= 2;
+  const content = contentOk(gate, article, policyMatrix);
+  const matrix = matrixPipelineOk(article, { policyMatrix });
   const legal = article.legalReview?.status === "ok";
 
   return PIPELINE_ITEMS.map((item) => ({
