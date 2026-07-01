@@ -27,7 +27,7 @@ export function isPublishable(article) {
   return article.publishReady === true && article.pageReady === true;
 }
 
-/** 本番ビルドに載せる記事 — 管理画面の「公開する」(pageReady) を正とする。ゲート未達でも落とさない */
+/** 本番ビルドに載せる記事 — pageReady=true を正とする。一度公開したら自動処理で落とさない（publish-lock.mjs） */
 export async function filterPublishable(articles) {
   return articles.filter((a) => !a.adminHidden && a.pageReady === true);
 }

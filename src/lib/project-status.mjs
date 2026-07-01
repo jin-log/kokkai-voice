@@ -110,6 +110,10 @@ export function computeNextAction(article, gate, pipeline) {
     return "📋 1行目OK — プレビュー確認後「公開する」を押してください";
   }
   if (titleAnswer.ok && article.pageReady) {
+    const openPre = pipeline.filter((p) => p.preDeploy && !p.ok);
+    if (openPre.length > 0 || gate.blockers.length > 0) {
+      return "✅ 公開中 — 要対応あり（裏で修正中・URLは維持）";
+    }
     return "✅ 公開中 — /case/ に表示されています";
   }
   if (!titleAnswer.ok && !article.pageReady) {

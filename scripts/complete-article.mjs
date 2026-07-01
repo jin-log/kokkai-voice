@@ -14,6 +14,7 @@ import { pipelineChecks, refreshProjectStatus } from "../src/lib/project-status.
 import { isTitleAnsweredInOpeningLine, assessTitleOpeningAnswer } from "../src/lib/publish-policy.mjs";
 import { recordArticleActivity } from "../src/lib/article-activity.mjs";
 import { loadArticle } from "../src/lib/articles.mjs";
+import { enforceLivePublishLock, isLiveOnSite } from "../src/lib/publish-lock.mjs";
 import { fetchSpeechForArticle, fetchSpeechForKeyword, pickSpeechForSummary, excerptSpeech, scoreSpeechRelevance, extractKeywordSpeechWindow, topicSpeechExcerpt, scoreSpeechTopicRelevance } from "./lib/kokkai-api.mjs";
 import { buildArticleLayers } from "./lib/article-summary.mjs";
 import {
@@ -488,8 +489,16 @@ async function rescorePolicyMatrix(slug) {
 async function completeOneSlug(targetSlug) {
   const articlePath = path.join(root, "data/articles", `${targetSlug}.json`);
   let article = JSON.parse(await readFile(articlePath, "utf8"));
+  const liveLock = isLiveOnSite(article);
 
-  console.log(`\n=== complete-article: ${targetSlug} (${article.category})${contentOnly ? " [content-only]" : ""} ===\n`);
+  async function saveArticleJson(art) {
+    enforceLivePublishLock(art, liveLock);
+    await writeFile(articlePath, `${JSON.stringify(art, null, 2)}\n`, "utf8");
+  }
+
+  console.log(
+    `\n=== complete-article: ${targetSlug} (${article.category})${contentOnly ? " [content-only]" : ""}${liveLock ? " [公開維持]" : ""} ===\n`,
+  );
 
   // ① コンテンツ
   if (article.category === "国会") {
@@ -526,7 +535,7 @@ async function completeOneSlug(targetSlug) {
     article.title = citizenTitle({ ...article, slug: targetSlug });
   }
 
-  await writeFile(articlePath, `${JSON.stringify(article, null, 2)}\n`, "utf8");
+  await saveArticleJson(article);
   console.log("[①] コンテンツ投入完了");
 
   if (contentOnly) {
@@ -578,19 +587,27 @@ async function completeOneSlug(targetSlug) {
 
   if (titleAnswer.ok) {
     article.publishReady = true;
-    article.pageReady = false;
-    await writeFile(articlePath, `${JSON.stringify(article, null, 2)}\n`, "utf8");
+    if (!liveLock) {
+      article.pageReady = false;
+    }
+    await saveArticleJson(article);
     await recordArticleActivity({
       slug: targetSlug,
-      type: "gate.ready",
+      type: liveLock ? "content.updated" : "gate.ready",
       actor: "patrol",
-      detail: "1行目がタイトルに回答済み。一般公開は手動のみ",
+      detail: liveLock
+        ? "巡回でコンテンツ更新（公開は維持）"
+        : "1行目がタイトルに回答済み。一般公開は手動のみ",
     });
-    console.log("\n✅ 1行目OK — 非公開プレビュー可。管理画面で「公開する」");
+    console.log(
+      liveLock
+        ? "\n✅ 公開維持のまま更新完了"
+        : "\n✅ 1行目OK — 非公開プレビュー可。管理画面で「公開する」",
+    );
   } else {
     console.log(`\n⚠️ 1行目がタイトルに未回答: ${titleAnswer.detail}`);
     if (titleAnswer.todo) console.log(`  → ${titleAnswer.todo}`);
-    await writeFile(articlePath, `${JSON.stringify(article, null, 2)}\n`, "utf8");
+    await saveArticleJson(article);
     await refreshProjectStatus();
     process.exit(2);
   }

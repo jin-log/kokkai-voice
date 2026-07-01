@@ -10,6 +10,8 @@ import { readFile, writeFile, readdir, mkdir } from "node:fs/promises";
 import path from "node:path";
 import { spawn } from "node:child_process";
 import { fileURLToPath } from "node:url";
+import { loadArticle } from "../src/lib/articles.mjs";
+import { isLiveOnSite } from "../src/lib/publish-lock.mjs";
 
 const root = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
 const progressPath = path.join(root, "data/batch-force-progress.json");
@@ -78,6 +80,16 @@ async function main() {
 
   const results = [];
   for (const slug of slugs) {
+    const article = await loadArticle(slug);
+    if (isLiveOnSite(article)) {
+      console.log(`\n>>> ${slug} — skip（公開中・SEO保護）`);
+      if (!completed.has(slug)) {
+        completed.add(slug);
+        progress.completed = [...completed].sort();
+        await saveProgress(progress);
+      }
+      continue;
+    }
     console.log(`\n>>> ${slug}`);
     const result = await runSlug(slug);
     results.push(result);
