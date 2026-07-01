@@ -1,0 +1,57 @@
+---
+/** @typedef {import("../../lib/patrol-stall.mjs").analyzePatrolHealth extends (...args: any) => Promise<infer R> ? R : never} PatrolHealth */
+
+interface Props {
+  health: PatrolHealth | null | undefined;
+  id?: string;
+}
+
+const { health, id = "admin-patrol-alert" } = Astro.props;
+
+const isStalled = health?.status === "stalled";
+const isPaused = health?.status === "paused";
+const show = health && (isStalled || isPaused);
+---
+
+{show && health && (
+  <section
+    id={id}
+    class:list={[
+      "admin-patrol-alert",
+      isStalled && "admin-patrol-alert--stalled",
+      isPaused && "admin-patrol-alert--paused",
+    ]}
+    role="alert"
+    aria-live="polite"
+  >
+    <header class="admin-patrol-alert__head">
+      <strong class="admin-patrol-alert__title">
+        {isStalled ? "⚠ 進行停止 — 巡回は動いているが％が上がっていません" : "⏸ 巡回一時停止"}
+      </strong>
+      <span class="admin-patrol-alert__badge">{health.statusLabel}</span>
+    </header>
+    <p class="admin-patrol-alert__msg">{health.message}</p>
+  {health.globalStall && (
+    <p class="admin-patrol-alert__global">
+      全体: {health.globalStall.message}
+    </p>
+  )}
+  {health.slugStalls.length > 0 && (
+    <details class="admin-patrol-alert__loops" open={isStalled}>
+      <summary>ループ中の記事（{health.slugStalls.length}件）</summary>
+      <ol class="admin-patrol-alert__loop-list">
+        {health.slugStalls.map((s) => (
+          <li>
+            <strong>{s.shortTitle}</strong>
+            <span class="admin-patrol-alert__loop-line">{s.loopLine}</span>
+            {s.ownerHint && <span class="admin-patrol-alert__hint">→ {s.ownerHint}</span>}
+          </li>
+        ))}
+      </ol>
+    </details>
+  )}
+  {isStalled && (
+    <p class="admin-patrol-alert__ceo">CEOがオーナー向けに記録済み（<code>data/ceo-alerts.json</code>）</p>
+  )}
+  </section>
+)}

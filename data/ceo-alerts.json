@@ -1,0 +1,73 @@
+{
+  "alerts": [
+    {
+      "id": "patrol-stall-active",
+      "type": "patrol_stall",
+      "severity": "high",
+      "assignee": "owner",
+      "title": "品質巡回：進行停止（ループ中）",
+      "message": "完成度 50% が 3 サイクル連続で変わらず、1本も完成していません。21 記事が同じチェックで失敗ループ中（自動では越えられない壁の可能性）",
+      "slugStalls": [
+        {
+          "slug": "shussho-budget-seika",
+          "title": "【出生率・子育て支援】3.6兆円は効いた？2025年の実績",
+          "loopLine": "writer → TL国会の話題 → exit 2/2/2（3回連続）",
+          "ownerHint": "タイムライン国会3件が案件と一致"
+        },
+        {
+          "slug": "fukushuto-koso",
+          "title": "【副首都構想】第二の首都はどこ？具体案と争点",
+          "loopLine": "writer → 経緯の話題 → exit 2/2/2（3回連続）",
+          "ownerHint": "経緯3行以上が案件キーワードと一致"
+        },
+        {
+          "slug": "fuhou-immin-trend",
+          "title": "【不法滞在】国内の人数推移と政府の対応",
+          "loopLine": "writer → 第三者目線 → exit 2/2/2（3回連続）",
+          "ownerHint": "議事録口調（お尋ね・私自身・御党）を除去"
+        },
+        {
+          "slug": "case-mqwdrley",
+          "title": "【東京都知事】小池百合子氏・学歴巡る刑事告発の経緯",
+          "loopLine": "writer → 経緯の話題 → exit 2/2/2（3回連続）",
+          "ownerHint": "経緯3行以上が案件キーワードと一致"
+        },
+        {
+          "slug": "case-mqzxj4ro",
+          "title": "【国会議員のボーナス】期末手当はいくら？2023年給与法改正の争点",
+          "loopLine": "writer → Q1_conclusion_numbers → exit 2/2/2（3回連続）",
+          "ownerHint": ""
+        },
+        {
+          "slug": "case-mqzxgs3f",
+          "title": "【スパイ防止法】なぜ成立しない？国家情報会議法案との関係",
+          "loopLine": "writer → 結論の質 → exit 2/2/2（3回連続）",
+          "ownerHint": "いまの結論が要点3行（重複・途中切れなし）"
+        },
+        {
+          "slug": "osaka-to-metropolis",
+          "title": "【大阪都構想】メリット・デメリットと最新の行方",
+          "loopLine": "writer → 話題一致 → exit 2/2/2（3回連続）",
+          "ownerHint": "要約が searchKeyword と一致（2行以上）"
+        },
+        {
+          "slug": "bouka-taisaku",
+          "title": "【物価高対策】支援策の内容といまの効果",
+          "loopLine": "writer → 結論の質 → exit 2/2/2（3回連続）",
+          "ownerHint": "いまの結論が要点3行（重複・途中切れなし）"
+        }
+      ],
+      "globalStall": {
+        "goldPct": 50,
+        "cycles": 3,
+        "since": "2026-07-01T16:28:26.255Z",
+        "lastAt": "2026-07-01T16:36:15.604Z",
+        "message": "完成度 50% が 3 サイクル連続で変わらず、1本も完成していません"
+      },
+      "createdAt": "2026-07-01T16:45:13.482Z",
+      "updatedAt": "2026-07-01T16:47:08.099Z",
+      "resolvedAt": null,
+      "acknowledged": false
+    }
+  ]
+}

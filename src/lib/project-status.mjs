@@ -24,6 +24,7 @@ import {
   AUTOMATION_POLICY,
   STATUS_DEFINITIONS,
 } from "./admin-status-guide.mjs";
+import { analyzePatrolHealth, stallForSlug } from "./patrol-stall.mjs";
 import { isXUnavailable, X_UNAVAILABLE_ADMIN_MESSAGE } from "./x-research-policy.mjs";
 
 /** @typedef {{ id: string, label: string, phase: number, preDeploy: boolean }} PipelineItemDef */
@@ -305,6 +306,29 @@ export async function computeProjectStatus() {
 
   const qualityFailed = slugs.filter((s) => !s.qualityOk).length;
 
+  let patrolState = null;
+  try {
+    patrolState = JSON.parse(
+      await readFile(path.join(root, "data/pipeline-patrol.json"), "utf8"),
+    );
+  } catch {
+    /* optional */
+  }
+
+  const patrolHealth = await analyzePatrolHealth({
+    slugs: slugs.map((s) => ({
+      slug: s.slug,
+      shortTitle: s.shortTitle,
+      goldPct: s.goldPct,
+      adminHidden: s.adminHidden,
+    })),
+    patrolState,
+  });
+
+  for (const s of slugs) {
+    s.stall = stallForSlug(s.slug, patrolHealth);
+  }
+
   return {
     generatedAt: new Date().toISOString(),
     strategy: index.strategy ?? "quality-first",
@@ -316,6 +340,7 @@ export async function computeProjectStatus() {
     qualityFailed,
     automationPolicy: AUTOMATION_POLICY,
     statusDefinitions: STATUS_DEFINITIONS,
+    patrolHealth,
     slugs,
   };
 }

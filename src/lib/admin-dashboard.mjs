@@ -91,13 +91,26 @@ function buildCardMetrics(status, patrol, agentTasks, opsCounts, topTrends, shor
       ],
     },
     automation: {
-      stat: patrol.running ? "ON" : "OFF",
+      stat: patrolHealth?.status === "stalled"
+        ? "停止気味"
+        : patrolHealth?.status === "paused"
+          ? "PAUSE"
+          : patrol.running
+            ? "ON"
+            : "OFF",
       statLabel: "品質巡回",
-      lines: patrol.activeSlug
-        ? [`処理中: ${patrol.activeLabel ?? patrol.activeCheckId}`]
-        : patrol.running
-          ? ["サイクル待機中"]
-          : ["停止中"],
+      lines: patrolHealth?.status === "stalled"
+        ? [
+            `⚠ ${patrolHealth.stalledCount}記事ループ中`,
+            patrolHealth.globalStall?.message ?? patrolHealth.message,
+          ]
+        : patrolHealth?.status === "paused"
+          ? [patrolHealth.message]
+          : patrol.activeSlug
+            ? [`処理中: ${patrol.activeLabel ?? patrol.activeCheckId}`]
+            : patrol.running
+              ? ["サイクル待機中"]
+              : ["停止中"],
     },
     agents: {
       stat: String(agentTasks?.total ?? 0),
@@ -163,6 +176,7 @@ export async function loadDashboardData() {
   return {
     status,
     patrol,
+    patrolHealth: status?.patrolHealth ?? null,
     topTrends,
     opsCounts,
     agentTasksTotal: agentTasks?.total ?? 0,

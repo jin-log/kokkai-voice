@@ -1,9 +1,10 @@
 ---
 import AdminShell from "../../components/admin/AdminShell.astro";
+import AdminPatrolAlert from "../../components/admin/AdminPatrolAlert.astro";
 import { loadDashboardData } from "../../lib/admin-dashboard.mjs";
 
 const dash = await loadDashboardData();
-const { status, patrol, cards, activeArticle, generatedAtLabel } = dash;
+const { status, patrol, cards, activeArticle, generatedAtLabel, patrolHealth } = dash;
 ---
 
 <AdminShell activeId="dashboard" title="ダッシュボード" liveStatus={true}>
@@ -26,8 +27,18 @@ const { status, patrol, cards, activeArticle, generatedAtLabel } = dash;
     </header>
   )}
 
+  {patrolHealth && <AdminPatrolAlert health={patrolHealth} id="dash-patrol-alert" />}
+
   <section class="admin-dash__patrol" aria-label="巡回状態">
-    {patrol.running ? (
+    {patrolHealth?.status === "stalled" ? (
+      <p class="admin-dash__patrol-stalled">
+        <strong>進行停止</strong> — プロセスは動いていますが完成度が上がっていません。下の詳細を確認
+      </p>
+    ) : patrolHealth?.status === "paused" ? (
+      <p class="admin-dash__patrol-paused">
+        <strong>一時停止</strong> — {patrolHealth.message}
+      </p>
+    ) : patrol.running ? (
       activeArticle || patrol.activeSlug ? (
         <p class="admin-dash__patrol-live">
           <span class="admin-row__work-icon is-demo-spin" aria-hidden="true"></span>

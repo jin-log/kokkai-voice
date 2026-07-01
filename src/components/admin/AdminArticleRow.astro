@@ -24,12 +24,14 @@ const distribution = s.distribution ?? [];
     s.publishState === "draft" && "admin-row--draft",
     s.publishState === "live" && !s.adminHidden && "admin-row--live",
     !s.qualityOk && "admin-row--quality-ng",
+    s.stall?.stalled && "admin-row--stalled",
     s.runState === "active" && "admin-row--active",
   ]}
   data-slug={s.slug}
   data-publish-state={s.publishState}
   data-admin-filter={adminSlugFilter(s)}
   data-quality-ng={!s.qualityOk ? "1" : "0"}
+  data-stall={s.stall?.stalled ? "1" : "0"}
   data-gold-pct={s.goldPct}
   data-title={s.shortTitle}
   data-category={s.category || ""}
@@ -58,6 +60,7 @@ const distribution = s.distribution ?? [];
           {s.publishState === "draft" && <span class="admin-row__badge admin-row__badge--draft">非公開</span>}
           {s.publishState === "live" && <span class="admin-row__badge admin-row__badge--live">公開中</span>}
           {s.needsQualityFix && <span class="admin-row__badge admin-row__badge--ng">品質NG</span>}
+          {s.stall?.stalled && <span class="admin-row__badge admin-row__badge--stall">ループ</span>}
           {s.xUnavailable && <span class="admin-row__badge admin-row__badge--x">X未発見</span>}
           {s.category && (
             <span class:list={["admin-row__badge", "admin-row__badge--cat", `admin-row__badge--cat-${s.category}`]}>
@@ -70,6 +73,14 @@ const distribution = s.distribution ?? [];
 
       {s.statusExplain && (
         <p class="admin-row__explain" data-role="status-explain">{s.statusExplain}</p>
+      )}
+
+      {s.stall?.stalled && (
+        <div class="admin-row__stall" data-role="stall-box">
+          <p class="admin-row__stall-title">⚠ ループ中（自動では進まない）</p>
+          <p class="admin-row__stall-line"><code>{s.stall.loopLine}</code></p>
+          {s.stall.ownerHint && <p class="admin-row__stall-hint">{s.stall.ownerHint}</p>}
+        </div>
       )}
 
       {workItems.length > 0 ? (
