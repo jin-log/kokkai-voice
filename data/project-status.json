@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-01T12:48:54.139Z",
+  "generatedAt": "2026-07-01T12:49:16.756Z",
   "strategy": "quality-first",
   "activeCount": 39,
   "parkedCount": 0,
@@ -7,6 +7,85 @@
   "overallGoldPct": 50,
   "overallGatePct": 71,
   "qualityFailed": 2,
+  "automationPolicy": [
+    {
+      "channel": "記事生成・①〜④",
+      "mode": "auto",
+      "note": "巡回がライター/X/法務で自動処理"
+    },
+    {
+      "channel": "品質NGの修正",
+      "mode": "auto",
+      "note": "巡回が試行。直らなければ要対応のまま"
+    },
+    {
+      "channel": "一般公開（/case/）",
+      "mode": "manual",
+      "note": "管理画面「公開する」のみ。自動公開なし"
+    },
+    {
+      "channel": "非表示",
+      "mode": "manual",
+      "note": "あなたの操作のみ。自動では戻らない"
+    },
+    {
+      "channel": "本番サイト反映",
+      "mode": "auto",
+      "note": "git push 後 Cloudflare デプロイ"
+    },
+    {
+      "channel": "X投稿",
+      "mode": "semi",
+      "note": "Buffer連携時はキュー自動。未設定なら手動"
+    },
+    {
+      "channel": "はてブ / note",
+      "mode": "semi",
+      "note": "公開後キュー→ブラウザ半自動（要ログイン）"
+    },
+    {
+      "channel": "ショート動画",
+      "mode": "manual",
+      "note": "オーナー手作り（生成スクリプトは別途）"
+    }
+  ],
+  "statusDefinitions": [
+    {
+      "id": "action",
+      "label": "要対応",
+      "meaning": "①〜④のゲートが未完了。記事は非公開。",
+      "autoFix": "巡回が順に自動処理（◌=今動いている項目）",
+      "autoRevert": "—"
+    },
+    {
+      "id": "draft",
+      "label": "公開待ち",
+      "meaning": "①〜④完了。プレビュー可だが一般公開はまだ。",
+      "autoFix": "巡回は内容改善のみ（公開はしない）",
+      "autoRevert": "—"
+    },
+    {
+      "id": "live",
+      "label": "公開済み",
+      "meaning": "/case/ に表示中。",
+      "autoFix": "巡回で品質改善を継続",
+      "autoRevert": "—"
+    },
+    {
+      "id": "hidden",
+      "label": "非表示",
+      "meaning": "トップ・一覧から除外。データは残る。",
+      "autoFix": "巡回はスキップ（修正しない）",
+      "autoRevert": "自動復帰なし。「表示に戻す」が必要"
+    },
+    {
+      "id": "quality",
+      "label": "品質NG",
+      "meaning": "監査不合格のバッジ。公開状態とは別軸。",
+      "autoFix": "巡回がライター等で修正試行",
+      "autoRevert": "公開/非公開は変えない"
+    }
+  ],
   "slugs": [
     {
       "slug": "case-mr0jbdpc",
@@ -148,7 +227,40 @@
         "label": "未生成"
       },
       "xUnavailable": false,
-      "xResearchStatus": "found"
+      "xResearchStatus": "found",
+      "statusExplain": "①〜④完了・非公開。一般公開はあなたの「公開する」のみ（自動公開なし）",
+      "publishedBy": null,
+      "publishedAt": null,
+      "adminHiddenBy": null,
+      "adminHiddenAt": null,
+      "patrolFixing": false,
+      "activity": [],
+      "distribution": [
+        {
+          "channel": "X",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "はてブ",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "note",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "ショート",
+          "automation": "manual",
+          "status": "未生成",
+          "done": false
+        }
+      ]
     },
     {
       "slug": "case-mqzxj4ro",
@@ -408,7 +520,40 @@
         "label": "未生成"
       },
       "xUnavailable": false,
-      "xResearchStatus": "found"
+      "xResearchStatus": "found",
+      "statusExplain": "巡回が自動修正中 — ◌ が今処理している項目",
+      "publishedBy": null,
+      "publishedAt": null,
+      "adminHiddenBy": null,
+      "adminHiddenAt": null,
+      "patrolFixing": true,
+      "activity": [],
+      "distribution": [
+        {
+          "channel": "X",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "はてブ",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "note",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "ショート",
+          "automation": "manual",
+          "status": "未生成",
+          "done": false
+        }
+      ]
     },
     {
       "slug": "case-mqzxgs3f",
@@ -579,7 +724,40 @@
         "label": "未生成"
       },
       "xUnavailable": false,
-      "xResearchStatus": "found"
+      "xResearchStatus": "found",
+      "statusExplain": "巡回が自動修正中 — ◌ が今処理している項目",
+      "publishedBy": null,
+      "publishedAt": null,
+      "adminHiddenBy": null,
+      "adminHiddenAt": null,
+      "patrolFixing": true,
+      "activity": [],
+      "distribution": [
+        {
+          "channel": "X",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "はてブ",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "note",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "ショート",
+          "automation": "manual",
+          "status": "未生成",
+          "done": false
+        }
+      ]
     },
     {
       "slug": "zeihikaku-kojo",
@@ -821,7 +999,40 @@
         "label": "未生成"
       },
       "xUnavailable": true,
-      "xResearchStatus": "exhausted"
+      "xResearchStatus": "exhausted",
+      "statusExplain": "非表示（手動）。自動では戻らない。",
+      "publishedBy": null,
+      "publishedAt": null,
+      "adminHiddenBy": null,
+      "adminHiddenAt": null,
+      "patrolFixing": false,
+      "activity": [],
+      "distribution": [
+        {
+          "channel": "X",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "はてブ",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "note",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "ショート",
+          "automation": "manual",
+          "status": "未生成",
+          "done": false
+        }
+      ]
     },
     {
       "slug": "expo2025-kessan",
@@ -1063,7 +1274,48 @@
         "label": "未生成"
       },
       "xUnavailable": true,
-      "xResearchStatus": "exhausted"
+      "xResearchStatus": "exhausted",
+      "statusExplain": "非表示（手動）。自動では戻らない。",
+      "publishedBy": null,
+      "publishedAt": "2026-06-29T04:34:44.409Z",
+      "adminHiddenBy": null,
+      "adminHiddenAt": null,
+      "patrolFixing": false,
+      "activity": [
+        {
+          "at": "2026-06-29T04:34:44.409Z",
+          "when": "06/29 13:34",
+          "type": "publish.manual",
+          "actor": "owner",
+          "line": "手動で一般公開（あなた） — 履歴補完（公開日時から）"
+        }
+      ],
+      "distribution": [
+        {
+          "channel": "X",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "はてブ",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "note",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "ショート",
+          "automation": "manual",
+          "status": "未生成",
+          "done": false
+        }
+      ]
     },
     {
       "slug": "minimum-wage-2026",
@@ -1283,7 +1535,40 @@
         "label": "未生成"
       },
       "xUnavailable": false,
-      "xResearchStatus": "found"
+      "xResearchStatus": "found",
+      "statusExplain": "非表示（手動）。自動では戻らない。",
+      "publishedBy": null,
+      "publishedAt": null,
+      "adminHiddenBy": null,
+      "adminHiddenAt": null,
+      "patrolFixing": false,
+      "activity": [],
+      "distribution": [
+        {
+          "channel": "X",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "はてブ",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "note",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "ショート",
+          "automation": "manual",
+          "status": "未生成",
+          "done": false
+        }
+      ]
     },
     {
       "slug": "pension-kuriage-70",
@@ -1476,7 +1761,40 @@
         "label": "未生成"
       },
       "xUnavailable": true,
-      "xResearchStatus": "exhausted"
+      "xResearchStatus": "exhausted",
+      "statusExplain": "非表示（手動）。自動では戻らない。",
+      "publishedBy": null,
+      "publishedAt": null,
+      "adminHiddenBy": null,
+      "adminHiddenAt": null,
+      "patrolFixing": false,
+      "activity": [],
+      "distribution": [
+        {
+          "channel": "X",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "はてブ",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "note",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "ショート",
+          "automation": "manual",
+          "status": "未生成",
+          "done": false
+        }
+      ]
     },
     {
       "slug": "denki-gas-genmen",
@@ -1718,7 +2036,40 @@
         "label": "未生成"
       },
       "xUnavailable": true,
-      "xResearchStatus": "exhausted"
+      "xResearchStatus": "exhausted",
+      "statusExplain": "非表示（手動）。自動では戻らない。",
+      "publishedBy": null,
+      "publishedAt": null,
+      "adminHiddenBy": null,
+      "adminHiddenAt": null,
+      "patrolFixing": false,
+      "activity": [],
+      "distribution": [
+        {
+          "channel": "X",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "はてブ",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "note",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "ショート",
+          "automation": "manual",
+          "status": "未生成",
+          "done": false
+        }
+      ]
     },
     {
       "slug": "gakushu-shien-75000",
@@ -1955,7 +2306,40 @@
         "label": "未生成"
       },
       "xUnavailable": true,
-      "xResearchStatus": "exhausted"
+      "xResearchStatus": "exhausted",
+      "statusExplain": "非表示（手動）。自動では戻らない。",
+      "publishedBy": null,
+      "publishedAt": null,
+      "adminHiddenBy": null,
+      "adminHiddenAt": null,
+      "patrolFixing": false,
+      "activity": [],
+      "distribution": [
+        {
+          "channel": "X",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "はてブ",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "note",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "ショート",
+          "automation": "manual",
+          "status": "未生成",
+          "done": false
+        }
+      ]
     },
     {
       "slug": "noto-fukko-budget",
@@ -2215,7 +2599,40 @@
         "label": "未生成"
       },
       "xUnavailable": true,
-      "xResearchStatus": "exhausted"
+      "xResearchStatus": "exhausted",
+      "statusExplain": "非表示（手動）。自動では戻らない。",
+      "publishedBy": null,
+      "publishedAt": null,
+      "adminHiddenBy": null,
+      "adminHiddenAt": null,
+      "patrolFixing": false,
+      "activity": [],
+      "distribution": [
+        {
+          "channel": "X",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "はてブ",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "note",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "ショート",
+          "automation": "manual",
+          "status": "未生成",
+          "done": false
+        }
+      ]
     },
     {
       "slug": "boei-tokubetsuzei",
@@ -2479,7 +2896,40 @@
         "label": "未生成"
       },
       "xUnavailable": true,
-      "xResearchStatus": "exhausted"
+      "xResearchStatus": "exhausted",
+      "statusExplain": "非表示（手動）。自動では戻らない。",
+      "publishedBy": null,
+      "publishedAt": null,
+      "adminHiddenBy": null,
+      "adminHiddenAt": null,
+      "patrolFixing": false,
+      "activity": [],
+      "distribution": [
+        {
+          "channel": "X",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "はてブ",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "note",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "ショート",
+          "automation": "manual",
+          "status": "未生成",
+          "done": false
+        }
+      ]
     },
     {
       "slug": "invoice-menzei-2026",
@@ -2721,7 +3171,40 @@
         "label": "未生成"
       },
       "xUnavailable": true,
-      "xResearchStatus": "exhausted"
+      "xResearchStatus": "exhausted",
+      "statusExplain": "非表示（手動）。自動では戻らない。",
+      "publishedBy": null,
+      "publishedAt": null,
+      "adminHiddenBy": null,
+      "adminHiddenAt": null,
+      "patrolFixing": false,
+      "activity": [],
+      "distribution": [
+        {
+          "channel": "X",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "はてブ",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "note",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "ショート",
+          "automation": "manual",
+          "status": "未生成",
+          "done": false
+        }
+      ]
     },
     {
       "slug": "teigaku-kyufu-2024",
@@ -2941,7 +3424,40 @@
         "label": "未生成"
       },
       "xUnavailable": true,
-      "xResearchStatus": "exhausted"
+      "xResearchStatus": "exhausted",
+      "statusExplain": "非表示（手動）。自動では戻らない。",
+      "publishedBy": null,
+      "publishedAt": null,
+      "adminHiddenBy": null,
+      "adminHiddenAt": null,
+      "patrolFixing": false,
+      "activity": [],
+      "distribution": [
+        {
+          "channel": "X",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "はてブ",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "note",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "ショート",
+          "automation": "manual",
+          "status": "未生成",
+          "done": false
+        }
+      ]
     },
     {
       "slug": "shussho-budget-seika",
@@ -3161,7 +3677,48 @@
         "label": "YT非公開"
       },
       "xUnavailable": true,
-      "xResearchStatus": "exhausted"
+      "xResearchStatus": "exhausted",
+      "statusExplain": "公開済 06/29 09:52",
+      "publishedBy": null,
+      "publishedAt": "2026-06-29T00:52:28.532Z",
+      "adminHiddenBy": null,
+      "adminHiddenAt": null,
+      "patrolFixing": false,
+      "activity": [
+        {
+          "at": "2026-06-29T00:52:28.532Z",
+          "when": "06/29 09:52",
+          "type": "publish.manual",
+          "actor": "owner",
+          "line": "手動で一般公開（あなた） — 履歴補完（公開日時から）"
+        }
+      ],
+      "distribution": [
+        {
+          "channel": "X",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "はてブ",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "note",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "ショート",
+          "automation": "manual",
+          "status": "YT YT非公開 06/30 07:11",
+          "done": true
+        }
+      ]
     },
     {
       "slug": "fukushuto-koso",
@@ -3381,7 +3938,48 @@
         "label": "未生成"
       },
       "xUnavailable": true,
-      "xResearchStatus": "exhausted"
+      "xResearchStatus": "exhausted",
+      "statusExplain": "公開済 06/29 15:31",
+      "publishedBy": null,
+      "publishedAt": "2026-06-29T06:31:08.767Z",
+      "adminHiddenBy": null,
+      "adminHiddenAt": null,
+      "patrolFixing": false,
+      "activity": [
+        {
+          "at": "2026-06-29T06:31:08.767Z",
+          "when": "06/29 15:31",
+          "type": "publish.manual",
+          "actor": "owner",
+          "line": "手動で一般公開（あなた） — 履歴補完（公開日時から）"
+        }
+      ],
+      "distribution": [
+        {
+          "channel": "X",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "はてブ",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "note",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "ショート",
+          "automation": "manual",
+          "status": "未生成",
+          "done": false
+        }
+      ]
     },
     {
       "slug": "osaka-to-metropolis",
@@ -3596,7 +4194,48 @@
         "label": "未生成"
       },
       "xUnavailable": true,
-      "xResearchStatus": "exhausted"
+      "xResearchStatus": "exhausted",
+      "statusExplain": "巡回が自動修正中 — ◌ が今処理している項目",
+      "publishedBy": null,
+      "publishedAt": "2026-06-29T06:31:08.845Z",
+      "adminHiddenBy": null,
+      "adminHiddenAt": null,
+      "patrolFixing": true,
+      "activity": [
+        {
+          "at": "2026-06-29T06:31:08.845Z",
+          "when": "06/29 15:31",
+          "type": "publish.manual",
+          "actor": "owner",
+          "line": "手動で一般公開（あなた） — 履歴補完（公開日時から）"
+        }
+      ],
+      "distribution": [
+        {
+          "channel": "X",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "はてブ",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "note",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "ショート",
+          "automation": "manual",
+          "status": "未生成",
+          "done": false
+        }
+      ]
     },
     {
       "slug": "fuhou-immin-trend",
@@ -3860,7 +4499,48 @@
         "label": "未生成"
       },
       "xUnavailable": true,
-      "xResearchStatus": "exhausted"
+      "xResearchStatus": "exhausted",
+      "statusExplain": "公開済 06/29 15:31",
+      "publishedBy": null,
+      "publishedAt": "2026-06-29T06:31:08.916Z",
+      "adminHiddenBy": null,
+      "adminHiddenAt": null,
+      "patrolFixing": false,
+      "activity": [
+        {
+          "at": "2026-06-29T06:31:08.916Z",
+          "when": "06/29 15:31",
+          "type": "publish.manual",
+          "actor": "owner",
+          "line": "手動で一般公開（あなた） — 履歴補完（公開日時から）"
+        }
+      ],
+      "distribution": [
+        {
+          "channel": "X",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "はてブ",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "note",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "ショート",
+          "automation": "manual",
+          "status": "未生成",
+          "done": false
+        }
+      ]
     },
     {
       "slug": "tokyo-solar-panel",
@@ -4102,7 +4782,48 @@
         "label": "未生成"
       },
       "xUnavailable": true,
-      "xResearchStatus": "exhausted"
+      "xResearchStatus": "exhausted",
+      "statusExplain": "公開済 06/29 15:31",
+      "publishedBy": null,
+      "publishedAt": "2026-06-29T06:31:08.986Z",
+      "adminHiddenBy": null,
+      "adminHiddenAt": null,
+      "patrolFixing": false,
+      "activity": [
+        {
+          "at": "2026-06-29T06:31:08.986Z",
+          "when": "06/29 15:31",
+          "type": "publish.manual",
+          "actor": "owner",
+          "line": "手動で一般公開（あなた） — 履歴補完（公開日時から）"
+        }
+      ],
+      "distribution": [
+        {
+          "channel": "X",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "はてブ",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "note",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "ショート",
+          "automation": "manual",
+          "status": "未生成",
+          "done": false
+        }
+      ]
     },
     {
       "slug": "case-mqwdrley",
@@ -4322,7 +5043,48 @@
         "label": "未生成"
       },
       "xUnavailable": true,
-      "xResearchStatus": "exhausted"
+      "xResearchStatus": "exhausted",
+      "statusExplain": "公開済 06/29 15:31",
+      "publishedBy": null,
+      "publishedAt": "2026-06-29T06:31:09.056Z",
+      "adminHiddenBy": null,
+      "adminHiddenAt": null,
+      "patrolFixing": false,
+      "activity": [
+        {
+          "at": "2026-06-29T06:31:09.056Z",
+          "when": "06/29 15:31",
+          "type": "publish.manual",
+          "actor": "owner",
+          "line": "手動で一般公開（あなた） — 履歴補完（公開日時から）"
+        }
+      ],
+      "distribution": [
+        {
+          "channel": "X",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "はてブ",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "note",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "ショート",
+          "automation": "manual",
+          "status": "未生成",
+          "done": false
+        }
+      ]
     },
     {
       "slug": "bouka-taisaku",
@@ -4493,7 +5255,40 @@
         "label": "未生成"
       },
       "xUnavailable": true,
-      "xResearchStatus": "exhausted"
+      "xResearchStatus": "exhausted",
+      "statusExplain": "巡回が自動修正中 — ◌ が今処理している項目",
+      "publishedBy": null,
+      "publishedAt": null,
+      "adminHiddenBy": null,
+      "adminHiddenAt": null,
+      "patrolFixing": true,
+      "activity": [],
+      "distribution": [
+        {
+          "channel": "X",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "はてブ",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "note",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "ショート",
+          "automation": "manual",
+          "status": "未生成",
+          "done": false
+        }
+      ]
     },
     {
       "slug": "shohizei-genmen",
@@ -4686,7 +5481,40 @@
         "label": "未生成"
       },
       "xUnavailable": true,
-      "xResearchStatus": "exhausted"
+      "xResearchStatus": "exhausted",
+      "statusExplain": "巡回が自動修正中 — ◌ が今処理している項目",
+      "publishedBy": null,
+      "publishedAt": null,
+      "adminHiddenBy": null,
+      "adminHiddenAt": null,
+      "patrolFixing": true,
+      "activity": [],
+      "distribution": [
+        {
+          "channel": "X",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "はてブ",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "note",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "ショート",
+          "automation": "manual",
+          "status": "未生成",
+          "done": false
+        }
+      ]
     },
     {
       "slug": "boeeihi",
@@ -4857,7 +5685,40 @@
         "label": "未生成"
       },
       "xUnavailable": true,
-      "xResearchStatus": "exhausted"
+      "xResearchStatus": "exhausted",
+      "statusExplain": "公開済",
+      "publishedBy": null,
+      "publishedAt": null,
+      "adminHiddenBy": null,
+      "adminHiddenAt": null,
+      "patrolFixing": false,
+      "activity": [],
+      "distribution": [
+        {
+          "channel": "X",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "はてブ",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "note",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "ショート",
+          "automation": "manual",
+          "status": "未生成",
+          "done": false
+        }
+      ]
     },
     {
       "slug": "chingin",
@@ -5050,7 +5911,40 @@
         "label": "未生成"
       },
       "xUnavailable": true,
-      "xResearchStatus": "exhausted"
+      "xResearchStatus": "exhausted",
+      "statusExplain": "公開済",
+      "publishedBy": null,
+      "publishedAt": null,
+      "adminHiddenBy": null,
+      "adminHiddenAt": null,
+      "patrolFixing": false,
+      "activity": [],
+      "distribution": [
+        {
+          "channel": "X",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "はてブ",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "note",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "ショート",
+          "automation": "manual",
+          "status": "未生成",
+          "done": false
+        }
+      ]
     },
     {
       "slug": "nenkin",
@@ -5221,7 +6115,40 @@
         "label": "未生成"
       },
       "xUnavailable": true,
-      "xResearchStatus": "exhausted"
+      "xResearchStatus": "exhausted",
+      "statusExplain": "公開済",
+      "publishedBy": null,
+      "publishedAt": null,
+      "adminHiddenBy": null,
+      "adminHiddenAt": null,
+      "patrolFixing": false,
+      "activity": [],
+      "distribution": [
+        {
+          "channel": "X",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "はてブ",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "note",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "ショート",
+          "automation": "manual",
+          "status": "未生成",
+          "done": false
+        }
+      ]
     },
     {
       "slug": "gaikokujin-seisaku",
@@ -5358,7 +6285,40 @@
         "label": "未生成"
       },
       "xUnavailable": true,
-      "xResearchStatus": "exhausted"
+      "xResearchStatus": "exhausted",
+      "statusExplain": "①〜④完了・非公開。一般公開はあなたの「公開する」のみ（自動公開なし）",
+      "publishedBy": null,
+      "publishedAt": null,
+      "adminHiddenBy": null,
+      "adminHiddenAt": null,
+      "patrolFixing": false,
+      "activity": [],
+      "distribution": [
+        {
+          "channel": "X",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "はてブ",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "note",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "ショート",
+          "automation": "manual",
+          "status": "未生成",
+          "done": false
+        }
+      ]
     },
     {
       "slug": "shoshika",
@@ -5595,7 +6555,40 @@
         "label": "生成済・未アップ"
       },
       "xUnavailable": true,
-      "xResearchStatus": "exhausted"
+      "xResearchStatus": "exhausted",
+      "statusExplain": "公開済",
+      "publishedBy": null,
+      "publishedAt": null,
+      "adminHiddenBy": null,
+      "adminHiddenAt": null,
+      "patrolFixing": false,
+      "activity": [],
+      "distribution": [
+        {
+          "channel": "X",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "はてブ",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "note",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "ショート",
+          "automation": "manual",
+          "status": "生成済・未アップ",
+          "done": false
+        }
+      ]
     },
     {
       "slug": "kyoiku-mushoka",
@@ -5732,7 +6725,40 @@
         "label": "未生成"
       },
       "xUnavailable": true,
-      "xResearchStatus": "exhausted"
+      "xResearchStatus": "exhausted",
+      "statusExplain": "①〜④完了・非公開。一般公開はあなたの「公開する」のみ（自動公開なし）",
+      "publishedBy": null,
+      "publishedAt": null,
+      "adminHiddenBy": null,
+      "adminHiddenAt": null,
+      "patrolFixing": false,
+      "activity": [],
+      "distribution": [
+        {
+          "channel": "X",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "はてブ",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "note",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "ショート",
+          "automation": "manual",
+          "status": "未生成",
+          "done": false
+        }
+      ]
     },
     {
       "slug": "energy-policy",
@@ -5869,7 +6895,40 @@
         "label": "未生成"
       },
       "xUnavailable": true,
-      "xResearchStatus": "exhausted"
+      "xResearchStatus": "exhausted",
+      "statusExplain": "①〜④完了・非公開。一般公開はあなたの「公開する」のみ（自動公開なし）",
+      "publishedBy": null,
+      "publishedAt": null,
+      "adminHiddenBy": null,
+      "adminHiddenAt": null,
+      "patrolFixing": false,
+      "activity": [],
+      "distribution": [
+        {
+          "channel": "X",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "はてブ",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "note",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "ショート",
+          "automation": "manual",
+          "status": "未生成",
+          "done": false
+        }
+      ]
     },
     {
       "slug": "seiji-shikin",
@@ -6040,7 +7099,40 @@
         "label": "未生成"
       },
       "xUnavailable": true,
-      "xResearchStatus": "exhausted"
+      "xResearchStatus": "exhausted",
+      "statusExplain": "要対応 — ゲート未達。巡回が順に自動処理",
+      "publishedBy": null,
+      "publishedAt": null,
+      "adminHiddenBy": null,
+      "adminHiddenAt": null,
+      "patrolFixing": false,
+      "activity": [],
+      "distribution": [
+        {
+          "channel": "X",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "はてブ",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "note",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "ショート",
+          "automation": "manual",
+          "status": "未生成",
+          "done": false
+        }
+      ]
     },
     {
       "slug": "senkyo-kaikaku",
@@ -6211,7 +7303,40 @@
         "label": "未生成"
       },
       "xUnavailable": true,
-      "xResearchStatus": "exhausted"
+      "xResearchStatus": "exhausted",
+      "statusExplain": "公開済",
+      "publishedBy": null,
+      "publishedAt": null,
+      "adminHiddenBy": null,
+      "adminHiddenAt": null,
+      "patrolFixing": false,
+      "activity": [],
+      "distribution": [
+        {
+          "channel": "X",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "はてブ",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "note",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "ショート",
+          "automation": "manual",
+          "status": "未生成",
+          "done": false
+        }
+      ]
     },
     {
       "slug": "kaigo-iryo",
@@ -6382,7 +7507,40 @@
         "label": "未生成"
       },
       "xUnavailable": true,
-      "xResearchStatus": "exhausted"
+      "xResearchStatus": "exhausted",
+      "statusExplain": "公開済",
+      "publishedBy": null,
+      "publishedAt": null,
+      "adminHiddenBy": null,
+      "adminHiddenAt": null,
+      "patrolFixing": false,
+      "activity": [],
+      "distribution": [
+        {
+          "channel": "X",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "はてブ",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "note",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "ショート",
+          "automation": "manual",
+          "status": "未生成",
+          "done": false
+        }
+      ]
     },
     {
       "slug": "chiho-sosei",
@@ -6553,7 +7711,40 @@
         "label": "未生成"
       },
       "xUnavailable": true,
-      "xResearchStatus": "exhausted"
+      "xResearchStatus": "exhausted",
+      "statusExplain": "公開済",
+      "publishedBy": null,
+      "publishedAt": null,
+      "adminHiddenBy": null,
+      "adminHiddenAt": null,
+      "patrolFixing": false,
+      "activity": [],
+      "distribution": [
+        {
+          "channel": "X",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "はてブ",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "note",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "ショート",
+          "automation": "manual",
+          "status": "未生成",
+          "done": false
+        }
+      ]
     },
     {
       "slug": "hosei-yosan",
@@ -6724,7 +7915,40 @@
         "label": "未生成"
       },
       "xUnavailable": true,
-      "xResearchStatus": "exhausted"
+      "xResearchStatus": "exhausted",
+      "statusExplain": "要対応 — ゲート未達。巡回が順に自動処理",
+      "publishedBy": null,
+      "publishedAt": null,
+      "adminHiddenBy": null,
+      "adminHiddenAt": null,
+      "patrolFixing": false,
+      "activity": [],
+      "distribution": [
+        {
+          "channel": "X",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "はてブ",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "note",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "ショート",
+          "automation": "manual",
+          "status": "未生成",
+          "done": false
+        }
+      ]
     },
     {
       "slug": "nichigyo",
@@ -6895,7 +8119,40 @@
         "label": "未生成"
       },
       "xUnavailable": true,
-      "xResearchStatus": "exhausted"
+      "xResearchStatus": "exhausted",
+      "statusExplain": "要対応 — ゲート未達。巡回が順に自動処理",
+      "publishedBy": null,
+      "publishedAt": null,
+      "adminHiddenBy": null,
+      "adminHiddenAt": null,
+      "patrolFixing": false,
+      "activity": [],
+      "distribution": [
+        {
+          "channel": "X",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "はてブ",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "note",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "ショート",
+          "automation": "manual",
+          "status": "未生成",
+          "done": false
+        }
+      ]
     },
     {
       "slug": "casino-ir",
@@ -7066,7 +8323,40 @@
         "label": "未生成"
       },
       "xUnavailable": true,
-      "xResearchStatus": "exhausted"
+      "xResearchStatus": "exhausted",
+      "statusExplain": "公開済",
+      "publishedBy": null,
+      "publishedAt": null,
+      "adminHiddenBy": null,
+      "adminHiddenAt": null,
+      "patrolFixing": false,
+      "activity": [],
+      "distribution": [
+        {
+          "channel": "X",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "はてブ",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "note",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "ショート",
+          "automation": "manual",
+          "status": "未生成",
+          "done": false
+        }
+      ]
     },
     {
       "slug": "kenpo",
@@ -7259,7 +8549,40 @@
         "label": "未生成"
       },
       "xUnavailable": true,
-      "xResearchStatus": "exhausted"
+      "xResearchStatus": "exhausted",
+      "statusExplain": "公開済",
+      "publishedBy": null,
+      "publishedAt": null,
+      "adminHiddenBy": null,
+      "adminHiddenAt": null,
+      "patrolFixing": false,
+      "activity": [],
+      "distribution": [
+        {
+          "channel": "X",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "はてブ",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "note",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "ショート",
+          "automation": "manual",
+          "status": "未生成",
+          "done": false
+        }
+      ]
     },
     {
       "slug": "tariff-us",
@@ -7390,7 +8713,40 @@
         "label": "未生成"
       },
       "xUnavailable": true,
-      "xResearchStatus": "exhausted"
+      "xResearchStatus": "exhausted",
+      "statusExplain": "公開済",
+      "publishedBy": null,
+      "publishedAt": null,
+      "adminHiddenBy": null,
+      "adminHiddenAt": null,
+      "patrolFixing": false,
+      "activity": [],
+      "distribution": [
+        {
+          "channel": "X",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "はてブ",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "note",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "ショート",
+          "automation": "manual",
+          "status": "未生成",
+          "done": false
+        }
+      ]
     },
     {
       "slug": "kishida-resign",
@@ -7527,7 +8883,40 @@
         "label": "未生成"
       },
       "xUnavailable": true,
-      "xResearchStatus": "exhausted"
+      "xResearchStatus": "exhausted",
+      "statusExplain": "①〜④完了・非公開。一般公開はあなたの「公開する」のみ（自動公開なし）",
+      "publishedBy": null,
+      "publishedAt": null,
+      "adminHiddenBy": null,
+      "adminHiddenAt": null,
+      "patrolFixing": false,
+      "activity": [],
+      "distribution": [
+        {
+          "channel": "X",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "はてブ",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "note",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "ショート",
+          "automation": "manual",
+          "status": "未生成",
+          "done": false
+        }
+      ]
     },
     {
       "slug": "komei-kokumin",
@@ -7698,10 +9087,43 @@
         "label": "未生成"
       },
       "xUnavailable": true,
-      "xResearchStatus": "exhausted"
+      "xResearchStatus": "exhausted",
+      "statusExplain": "要対応 — ゲート未達。巡回が順に自動処理",
+      "publishedBy": null,
+      "publishedAt": null,
+      "adminHiddenBy": null,
+      "adminHiddenAt": null,
+      "patrolFixing": false,
+      "activity": [],
+      "distribution": [
+        {
+          "channel": "X",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "はてブ",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "note",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "ショート",
+          "automation": "manual",
+          "status": "未生成",
+          "done": false
+        }
+      ]
     }
   ],
   "deltaGoldPct": 0,
   "previousGoldPct": 50,
-  "deployedAt": "2026-07-01T12:38:27.035Z"
+  "deployedAt": "2026-07-01T12:49:16.761Z"
 }
