@@ -1,153 +1,93 @@
 ---
-import BaseLayout from "../../layouts/DevLayout.astro";
-import DevHeader from "../../components/DevHeader.astro";
-import SiteFooter from "../../components/SiteFooter.astro";
+import AdminShell from "../../components/admin/AdminShell.astro";
 import SupportCta from "../../components/SupportCta.astro";
+import SiteFooter from "../../components/SiteFooter.astro";
 import { SITE } from "../../lib/site-config.mjs";
 import { getOutboundLinkGroups } from "../../lib/note-link.mjs";
 
 const groups = getOutboundLinkGroups();
 ---
 
-<BaseLayout tabTitle="リンク一覧" bodyClass="dev-links-page">
-  <DevHeader current="links" />
-  <main class="container dev-links">
-    <header class="dev-links__head">
-      <h1>リンク一覧（site-config プレビュー）</h1>
-      <p class="dev-links__lead">
-        <code>src/lib/site-config.mjs</code> の外部リンクをここから開ける。フッター・支援CTAの見え方も下に確認。
-      </p>
-    </header>
+<AdminShell activeId="links" title="リンク">
+  <header class="admin-page-head">
+    <h1 class="admin-page-head__title">リンク</h1>
+    <p class="admin-page-head__note">
+      <code>site-config</code> の外部リンクと、公開フッター・支援CTAのプレビュー。
+    </p>
+  </header>
 
+  <div class="admin-page-content admin-page-content--full">
     {
       groups.map((group) => (
-        <section class="dev-links__group" aria-labelledby={`links-${group.title}`}>
-          <h2 id={`links-${group.title}`} class="dev-links__group-title">
-            {group.title}
-          </h2>
-          <ul class="dev-links__list">
+        <section class="admin-hub__section" aria-labelledby={`links-${group.title}`}>
+          <h2 id={`links-${group.title}`} class="admin-hub__heading">{group.title}</h2>
+          <div class="admin-list">
             {group.links.map((link) => (
-              <li class="dev-links__item">
-                <a
-                  class="dev-links__btn"
-                  href={link.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {link.label} ↗
-                </a>
-                {link.note && <p class="dev-links__note">{link.note}</p>}
-              </li>
+              <article class="admin-row">
+                <div class="admin-row__grid admin-row__grid--fluid">
+                  <div class="admin-row__main">
+                    <header class="admin-row__head">
+                      <h3 class="admin-row__title">
+                        <a href={link.href} target="_blank" rel="noopener noreferrer">{link.label}</a>
+                      </h3>
+                    </header>
+                    {link.note && <p class="admin-row__summary">{link.note}</p>}
+                  </div>
+                  <div class="admin-row__quick">
+                    <a href={link.href} class="admin-row__btn admin-row__btn--primary" target="_blank" rel="noopener noreferrer">
+                      開く ↗
+                    </a>
+                  </div>
+                </div>
+              </article>
             ))}
-          </ul>
+          </div>
         </section>
       ))
     }
 
-    <section class="dev-links__preview" aria-labelledby="footer-preview-title">
-      <h2 id="footer-preview-title" class="dev-links__group-title">公開フッター（プレビュー）</h2>
-      <div class="dev-links__frame">
-        <SiteFooter />
+    <section class="admin-hub__section" aria-labelledby="footer-preview-title">
+      <h2 id="footer-preview-title" class="admin-hub__heading">公開フッター（プレビュー）</h2>
+      <div class="admin-surface">
+        <div class="admin-surface__body">
+          <SiteFooter />
+        </div>
       </div>
     </section>
 
-    <section class="dev-links__preview" aria-labelledby="cta-preview-title">
-      <h2 id="cta-preview-title" class="dev-links__group-title">記事末尾 SupportCta（プレビュー）</h2>
-      <div class="dev-links__frame dev-links__frame--cta">
-        <SupportCta context="dev-links-preview" />
+    <section class="admin-hub__section" aria-labelledby="cta-preview-title">
+      <h2 id="cta-preview-title" class="admin-hub__heading">記事末尾 SupportCta（プレビュー）</h2>
+      <div class="admin-surface">
+        <div class="admin-surface__body">
+          <SupportCta context="dev-links-preview" />
+        </div>
       </div>
     </section>
 
-    <section class="dev-links__config" aria-labelledby="config-raw-title">
-      <h2 id="config-raw-title" class="dev-links__group-title">設定値（参照用）</h2>
-      <dl class="dev-links__dl">
+    <section class="admin-hub__section" aria-labelledby="config-raw-title">
+      <h2 id="config-raw-title" class="admin-hub__heading">設定値</h2>
+      <dl class="admin-config-dl">
         <dt>noteMembershipLive</dt>
         <dd>{String(SITE.noteMembershipLive)}</dd>
         <dt>supportAbVariant</dt>
         <dd>{SITE.supportAbVariant}</dd>
       </dl>
     </section>
-  </main>
-  <SiteFooter note="" />
-</BaseLayout>
+  </div>
+</AdminShell>
 
 <style>
-  .dev-links {
-    padding: 1.5rem 0 3rem;
-    max-width: 52rem;
-  }
-  .dev-links__head h1 {
-    font-size: 1.35rem;
-    margin: 0 0 0.5rem;
-  }
-  .dev-links__lead {
-    color: var(--color-text-muted);
-    font-size: 0.92rem;
-    line-height: 1.55;
-    margin: 0 0 1.5rem;
-  }
-  .dev-links__group {
-    margin-bottom: 1.75rem;
-  }
-  .dev-links__group-title {
-    font-size: 1rem;
-    margin: 0 0 0.75rem;
-    padding-bottom: 0.35rem;
-    border-bottom: 2px solid var(--color-border);
-  }
-  .dev-links__list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 0.65rem;
-  }
-  .dev-links__item {
-    margin: 0;
-  }
-  .dev-links__btn {
-    display: inline-block;
-    font-weight: 700;
-    font-size: 0.95rem;
-    padding: 0.55rem 1rem;
-    border-radius: var(--radius-md);
-    background: var(--color-primary);
-    color: #fff;
-    text-decoration: none;
-  }
-  .dev-links__btn:hover {
-    filter: brightness(1.08);
-  }
-  .dev-links__note {
-    margin: 0.25rem 0 0;
-    font-size: 0.78rem;
-    color: var(--color-text-muted);
-  }
-  .dev-links__preview {
-    margin-bottom: 1.75rem;
-  }
-  .dev-links__frame {
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-md);
-    padding: 1rem;
-    background: var(--color-surface);
-  }
-  .dev-links__frame--cta {
-    padding: 1.25rem;
-  }
-  .dev-links__dl {
+  .admin-config-dl {
     display: grid;
     grid-template-columns: 10rem 1fr;
     gap: 0.35rem 1rem;
     font-size: 0.88rem;
     margin: 0;
+    padding: 1rem;
+    background: #fff;
+    border: 1px solid var(--color-border);
+    border-radius: 0.65rem;
   }
-  .dev-links__dl dt {
-    font-weight: 700;
-    color: var(--color-text-muted);
-  }
-  .dev-links__dl dd {
-    margin: 0;
-  }
+  .admin-config-dl dt { font-weight: 700; color: var(--color-text-muted); }
+  .admin-config-dl dd { margin: 0; }
 </style>

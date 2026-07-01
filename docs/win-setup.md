@@ -40,6 +40,8 @@ cd C:\Users\bero1\Projects\ceo-sync
 
 → ルール同期 + **kokkai-voice 含む全プロジェクト pull** + `npm ci` まで自動。
 
+**バッチ続き:** `data/batch-force-progress.json` に未完了があれば、Win の pull 直後に `complete-article --force` が自動再開（ログ: `logs/batch-force-resume.log`）。止める: `$env:KOKKAI_SKIP_POST_PULL_BATCH=1`
+
 Mac も同様: `~/Projects/ceo-sync/scripts/ceosync.sh pull`
 
 手動の `git clone` / `git pull` は **不要**（初回も ceosync pull だけで可）。

@@ -8,12 +8,28 @@ interface Props {
   title?: string;
   /** 15秒ライブ更新を有効化 */
   liveStatus?: boolean;
+  /** プレビュー等・本文を広く */
+  wide?: boolean;
+  bodyDataCase?: string;
+  includeAppJs?: boolean;
 }
 
-const { activeId = "", title = "管理", liveStatus = false } = Astro.props;
+const {
+  activeId = "",
+  title = "管理",
+  liveStatus = false,
+  wide = false,
+  bodyDataCase,
+  includeAppJs = false,
+} = Astro.props;
 ---
 
-<DevLayout tabTitle={`· ${title}`} bodyClass="admin-app">
+<DevLayout
+  tabTitle={`· ${title}`}
+  bodyClass="admin-app"
+  bodyDataCase={bodyDataCase}
+  includeAppJs={includeAppJs}
+>
   <div id="admin-gate" class="admin-gate" hidden>
     <div class="admin-layout">
       <aside class="admin-sidebar" aria-label="管理メニュー">
@@ -53,7 +69,7 @@ const { activeId = "", title = "管理", liveStatus = false } = Astro.props;
         </nav>
         <a class="admin-sidebar__public" href="/">公開サイト →</a>
       </aside>
-      <div class="admin-main">
+      <div class:list={["admin-main", wide && "admin-main--wide"]}>
         {liveStatus && (
           <p class="admin-live" id="admin-live-badge" hidden aria-live="polite">● 15秒ごとに更新</p>
         )}

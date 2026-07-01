@@ -69,12 +69,21 @@ function directionConflict(policy, action) {
 
 function directionAligned(policy, action) {
   const joined = `${policy} ${action}`;
-  if (/質疑|提出|表明|答弁|質問|発議|可決|成立|施行|検討を進め|継続|主張|と訴え|と指摘|使用決定|支出/.test(String(action || ""))) {
+  if (/質疑|提出|表明|答弁|質問|発議|可決|成立|施行|検討を進め|継続|主張|と訴え|と指摘|使用決定|支出|委員会で|本会議で|国会で/.test(String(action || ""))) {
     if (directionConflict(policy, action)) return false;
     return true;
   }
   if (/一致|継続|一貫/.test(joined)) return true;
   return false;
+}
+
+function policyEchoedInAction(policy, action) {
+  const core = String(policy || "")
+    .replace(/[、。…\s]/g, "")
+    .slice(0, 28);
+  if (core.length < 10) return false;
+  const act = String(action || "").replace(/[、。…\s\d年月日：:]/g, "");
+  return act.includes(core.slice(0, Math.min(core.length, 18)));
 }
 
 function pledgeGap(policy, action, pledgeSummary) {
@@ -153,6 +162,15 @@ export function scorePartySymbol(party) {
       symbolReason: pledge
         ? `方針と行動は近いが実施完了とは言えない（${action.slice(0, 28)}…）`
         : `公約なし・発言ベース。国会行動は方針と同方向（${action.slice(0, 24)}…）`,
+    };
+  }
+
+  if (policyEchoedInAction(policy, action)) {
+    return {
+      symbol: "〇",
+      symbolReason: pledge
+        ? `方針と国会発言内容が一致（${action.slice(0, 28)}…）`
+        : "公約なし・発言ベース。国会発言は方針表明と一致",
     };
   }
 

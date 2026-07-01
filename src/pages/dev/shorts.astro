@@ -1,25 +1,29 @@
 ---
-import BaseLayout from "../../layouts/DevLayout.astro";
-import DevHeader from "../../components/DevHeader.astro";
+import AdminShell from "../../components/admin/AdminShell.astro";
+import AdminKpiBar from "../../components/admin/AdminKpiBar.astro";
 import DevChromeOpen from "../../components/DevChromeOpen.astro";
-import SiteFooter from "../../components/SiteFooter.astro";
 import { loadShortsBenchmarks, listFormats } from "../../lib/shorts-benchmarks.mjs";
 
 const data = await loadShortsBenchmarks().catch(() => null);
 const formats = data ? listFormats(data) : [];
 ---
 
-<BaseLayout tabTitle="·">
-  <DevHeader current="shorts" />
-  <div id="dev-gate" style="display:none">
-    <main class="container shorts-page">
-      <p class="status-page__lead status-page__lead--dev">🔒 認証が必要です</p>
-      <h1 class="status-page__title">ショート動画ベンチマーク</h1>
-      <p class="shorts-page__lead">
-        <strong>調査フェーズ。</strong>顔なし・TTS・テロップ・ストック素材で再現できる型（F1〜F5）だけを載せます。
-        前回の報道切り抜きは<strong>誤りで削除済み</strong>。詳細はリポ内 <code>docs/shorts-consult-research.md</code>。
-      </p>
+<AdminShell activeId="shorts" title="ショート動画">
+  <header class="admin-page-head">
+    <h1 class="admin-page-head__title">ショート動画ベンチマーク</h1>
+    <p class="admin-page-head__note">
+      調査フェーズ。顔なし・TTS・テロップ・ストック素材で再現できる型（F1〜F5）だけを載せます。
+    </p>
+  </header>
 
+  <AdminKpiBar items={[
+    { label: "型", value: String(formats.length) },
+    { label: "参考URL", value: String(formats.reduce((n, p) => n + p.items.length, 0)) },
+    { label: "フェーズ", value: data?.status === "research_phase" ? "調査中" : "—", tone: "warn" },
+    { label: "素材", value: String(data?.material_stack?.length ?? 0) },
+  ]} />
+
+  <div class="shorts-page admin-page-content admin-page-content--full">
       {
         data?.status === "research_phase" ? (
           <aside class="shorts-research-banner" role="note">
@@ -163,65 +167,10 @@ const formats = data ? listFormats(data) : [];
           コンサル調査正本: <code>docs/shorts-consult-research.md</code>
         </p>
       </section>
-    </main>
   </div>
-
-  <div id="dev-lock" style="display:none">
-    <div style="min-height:60vh;display:flex;align-items:center;justify-content:center">
-      <div style="text-align:center;padding:2rem">
-        <p style="font-size:1.1rem;margin-bottom:1rem">🔒 PINを入力してください</p>
-        <input
-          id="pin-input"
-          type="password"
-          maxlength="8"
-          style="font-size:1.5rem;text-align:center;width:8rem;padding:0.5rem;border:2px solid var(--color-border);border-radius:0.5rem"
-          placeholder="••••"
-        />
-        <br /><br />
-        <button
-          id="pin-submit"
-          style="background:var(--color-primary);color:#fff;border:none;padding:0.6rem 1.5rem;border-radius:2rem;font-size:1rem;cursor:pointer"
-        >
-          入力
-        </button>
-        <p id="pin-error" style="color:red;margin-top:0.5rem;display:none">PINが違います</p>
-      </div>
-    </div>
-  </div>
-
-  <SiteFooter note="" />
-</BaseLayout>
+</AdminShell>
 
 <script>
-  const PIN = "1192";
-  const KEY = "dev_auth";
-
-  function show(id) {
-    document.getElementById(id).style.display = "block";
-  }
-  function hide(id) {
-    document.getElementById(id).style.display = "none";
-  }
-
-  if (localStorage.getItem(KEY) === PIN) {
-    show("dev-gate");
-  } else {
-    show("dev-lock");
-    document.getElementById("pin-submit").addEventListener("click", () => {
-      const val = document.getElementById("pin-input").value;
-      if (val === PIN) {
-        localStorage.setItem(KEY, PIN);
-        hide("dev-lock");
-        show("dev-gate");
-      } else {
-        document.getElementById("pin-error").style.display = "block";
-      }
-    });
-    document.getElementById("pin-input").addEventListener("keydown", (e) => {
-      if (e.key === "Enter") document.getElementById("pin-submit").click();
-    });
-  }
-
   document.querySelectorAll("[data-copy]").forEach((btn) => {
     btn.addEventListener("click", async () => {
       const text = btn.getAttribute("data-copy") || "";
@@ -302,6 +251,7 @@ const formats = data ? listFormats(data) : [];
     background: #fee2e2;
     color: #991b1b;
   }
+  .shorts-summary {
     margin: 1.5rem 0;
     padding: 1rem 1.25rem;
     background: var(--color-surface-alt, #f8fafc);

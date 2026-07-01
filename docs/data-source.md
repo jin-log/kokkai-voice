@@ -30,7 +30,7 @@ https://kokkai.ndl.go.jp/api/speech?any=物価&from=2026-01-01&until=2026-06-30&
 
 | パラメータ | 意味 |
 |------------|------|
-| `any` | 検索語（スペース区切り OR） |
+| `any` | 検索語（半角スペース区切りは **AND**） |
 | `speaker` | 発言者名 |
 | `from` / `until` | 開会日（YYYY-MM-DD） |
 | `nameOfMeeting` | 会議名 |

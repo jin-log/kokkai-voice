@@ -1,11 +1,11 @@
 {
-  "generatedAt": "2026-07-01T11:59:08.504Z",
+  "generatedAt": "2026-07-01T12:00:24.603Z",
   "strategy": "quality-first",
   "activeCount": 39,
   "parkedCount": 0,
-  "publishedCount": 22,
-  "overallGoldPct": 53,
-  "overallGatePct": 72,
+  "publishedCount": 18,
+  "overallGoldPct": 50,
+  "overallGatePct": 71,
   "qualityFailed": 2,
   "slugs": [
     {
@@ -224,19 +224,19 @@
           "priority": 10
         },
         {
-          "id": "case-mqzxj4ro:G5_parties_symbol",
+          "id": "case-mqzxj4ro:B4_conclusion",
           "slug": "case-mqzxj4ro",
           "agent": "writer",
           "agentLabel": "ライター",
-          "checkId": "G5_parties_symbol",
-          "title": "[ゲート] ◎〇▲×",
-          "todo": "各党の記号を確定（v2）",
+          "checkId": "B4_conclusion",
+          "title": "[ゲート] 結論の質",
+          "todo": "いまの結論が要点3行（重複・途中切れなし）",
           "command": "npm run complete:article -- --slug case-mqzxj4ro --force",
           "priority": 30
         }
       ],
-      "gatePct": 50,
-      "goldPct": 33,
+      "gatePct": 75,
+      "goldPct": 50,
       "published": false,
       "publishGateOk": false,
       "pipeline": [
@@ -252,7 +252,7 @@
           "label": "②〇×2党確定",
           "phase": 2,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "x",
@@ -296,7 +296,7 @@
           "label": "②〇×2党確定",
           "phase": 2,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "x",
@@ -329,10 +329,10 @@
       ],
       "blockers": [
         {
-          "id": "G5_parties_symbol",
-          "label": "◎〇▲×",
-          "todo": "各党の記号を確定（v2）",
-          "detail": "◎▲❌ 確定 1/2 党以上"
+          "id": "B4_conclusion",
+          "label": "結論の質",
+          "todo": "いまの結論が要点3行（重複・途中切れなし）",
+          "detail": "結論が途中切れ・重複・逐語抜粋"
         }
       ],
       "blockerCount": 1,
@@ -359,12 +359,12 @@
           "state": "blocked"
         },
         {
-          "id": "G5_parties_symbol",
-          "label": "◎〇▲×",
+          "id": "B4_conclusion",
+          "label": "結論の質",
           "state": "blocked"
         }
       ],
-      "nextAction": "品質: タイトルが金額・実績を問うのに、いまの結論に公表数値がない — 1行目に円・%・万人などタイトルへの直接回答を入れる（X・報道の数字を要約に反映） → ◎▲❌ を確定",
+      "nextAction": "品質: タイトルが金額・実績を問うのに、いまの結論に公表数値がない — 1行目に円・%・万人などタイトルへの直接回答を入れる（X・報道の数字を要約に反映） → 結論が途中切れ・重複・逐語抜粋",
       "promo": {
         "x": null,
         "hatena": null,
@@ -392,24 +392,36 @@
       "policyCategory": "国会",
       "adminHidden": false,
       "pageReady": false,
-      "publishState": "draft",
+      "publishState": "wip",
       "previewUrl": "/dev/preview/case-mqzxgs3f/",
       "qualityOk": true,
       "needsQualityFix": false,
       "qualityBlockerCount": 0,
       "qualityBlockers": [],
-      "agentTasks": [],
-      "gatePct": 100,
-      "goldPct": 67,
+      "agentTasks": [
+        {
+          "id": "case-mqzxgs3f:B4_conclusion",
+          "slug": "case-mqzxgs3f",
+          "agent": "writer",
+          "agentLabel": "ライター",
+          "checkId": "B4_conclusion",
+          "title": "[ゲート] 結論の質",
+          "todo": "いまの結論が要点3行（重複・途中切れなし）",
+          "command": "npm run complete:article -- --slug case-mqzxgs3f --force",
+          "priority": 30
+        }
+      ],
+      "gatePct": 75,
+      "goldPct": 50,
       "published": false,
-      "publishGateOk": true,
+      "publishGateOk": false,
       "pipeline": [
         {
           "id": "content",
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": true
+          "ok": false
         },
         {
           "id": "matrix",
@@ -453,7 +465,7 @@
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": true
+          "ok": false
         },
         {
           "id": "matrix",
@@ -491,11 +503,24 @@
           "ok": false
         }
       ],
-      "blockers": [],
-      "blockerCount": 0,
+      "blockers": [
+        {
+          "id": "B4_conclusion",
+          "label": "結論の質",
+          "todo": "いまの結論が要点3行（重複・途中切れなし）",
+          "detail": "結論が途中切れ・重複・逐語抜粋"
+        }
+      ],
+      "blockerCount": 1,
       "runState": "idle",
-      "workItems": [],
-      "nextAction": "📋 完成・非公開 — プレビューで確認して「公開する」を押してください",
+      "workItems": [
+        {
+          "id": "B4_conclusion",
+          "label": "結論の質",
+          "state": "blocked"
+        }
+      ],
+      "nextAction": "結論が途中切れ・重複・逐語抜粋",
       "promo": {
         "x": null,
         "hatena": null,
@@ -596,7 +621,7 @@
         },
         {
           "id": "x",
-          "label": "③X検証1件+",
+          "label": "③X未発見（調査完了）",
           "phase": 3,
           "preDeploy": true,
           "ok": true
@@ -640,7 +665,7 @@
         },
         {
           "id": "x",
-          "label": "③X検証1件+",
+          "label": "③X未発見（調査完了）",
           "phase": 3,
           "preDeploy": true,
           "ok": true
@@ -734,8 +759,8 @@
         "uploadedAt": null,
         "label": "未生成"
       },
-      "xUnavailable": false,
-      "xResearchStatus": "found"
+      "xUnavailable": true,
+      "xResearchStatus": "exhausted"
     },
     {
       "slug": "expo2025-kessan",
@@ -1608,17 +1633,6 @@
           "priority": 30
         },
         {
-          "id": "gakushu-shien-75000:G5_parties_symbol",
-          "slug": "gakushu-shien-75000",
-          "agent": "writer",
-          "agentLabel": "ライター",
-          "checkId": "G5_parties_symbol",
-          "title": "[ゲート] ◎〇▲×",
-          "todo": "各党の記号を確定（v2）",
-          "command": "npm run complete:article -- --slug gakushu-shien-75000 --force",
-          "priority": 30
-        },
-        {
           "id": "gakushu-shien-75000:G6_matrix_topic",
           "slug": "gakushu-shien-75000",
           "agent": "writer",
@@ -1630,8 +1644,8 @@
           "priority": 30
         }
       ],
-      "gatePct": 50,
-      "goldPct": 33,
+      "gatePct": 75,
+      "goldPct": 50,
       "published": false,
       "publishGateOk": false,
       "pipeline": [
@@ -1647,7 +1661,7 @@
           "label": "②〇×2党確定",
           "phase": 2,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "x",
@@ -1691,7 +1705,7 @@
           "label": "②〇×2党確定",
           "phase": 2,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "x",
@@ -1742,19 +1756,13 @@
           "detail": "0/3 国会が話題一致"
         },
         {
-          "id": "G5_parties_symbol",
-          "label": "◎〇▲×",
-          "todo": "各党の記号を確定（v2）",
-          "detail": "◎▲❌ 確定 1/2 党以上"
-        },
-        {
           "id": "G6_matrix_topic",
           "label": "〇×の話題",
           "todo": "公言と行動が案件キーワードと一致（2党）",
           "detail": "公言テキストが案件と無関係"
         }
       ],
-      "blockerCount": 5,
+      "blockerCount": 4,
       "runState": "idle",
       "workItems": [
         {
@@ -1770,11 +1778,6 @@
         {
           "id": "E4_timeline_diet_topic",
           "label": "TL国会の話題",
-          "state": "blocked"
-        },
-        {
-          "id": "G5_parties_symbol",
-          "label": "◎〇▲×",
           "state": "blocked"
         },
         {
@@ -3996,13 +3999,13 @@
       "qualityBlockers": [],
       "agentTasks": [
         {
-          "id": "bouka-taisaku:G5_parties_symbol",
+          "id": "bouka-taisaku:B4_conclusion",
           "slug": "bouka-taisaku",
           "agent": "writer",
           "agentLabel": "ライター",
-          "checkId": "G5_parties_symbol",
-          "title": "[ゲート] ◎〇▲×",
-          "todo": "各党の記号を確定（v2）",
+          "checkId": "B4_conclusion",
+          "title": "[ゲート] 結論の質",
+          "todo": "いまの結論が要点3行（重複・途中切れなし）",
           "command": "npm run complete:article -- --slug bouka-taisaku --force",
           "priority": 30
         }
@@ -4017,14 +4020,14 @@
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": true
+          "ok": false
         },
         {
           "id": "matrix",
           "label": "②〇×2党確定",
           "phase": 2,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "x",
@@ -4061,14 +4064,14 @@
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": true
+          "ok": false
         },
         {
           "id": "matrix",
           "label": "②〇×2党確定",
           "phase": 2,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "x",
@@ -4101,22 +4104,22 @@
       ],
       "blockers": [
         {
-          "id": "G5_parties_symbol",
-          "label": "◎〇▲×",
-          "todo": "各党の記号を確定（v2）",
-          "detail": "◎▲❌ 確定 1/2 党以上"
+          "id": "B4_conclusion",
+          "label": "結論の質",
+          "todo": "いまの結論が要点3行（重複・途中切れなし）",
+          "detail": "結論が途中切れ・重複・逐語抜粋"
         }
       ],
       "blockerCount": 1,
       "runState": "idle",
       "workItems": [
         {
-          "id": "G5_parties_symbol",
-          "label": "◎〇▲×",
+          "id": "B4_conclusion",
+          "label": "結論の質",
           "state": "blocked"
         }
       ],
-      "nextAction": "◎▲❌ を確定 → X投稿は見つかりませんでした（5段階調査完了）",
+      "nextAction": "結論が途中切れ・重複・逐語抜粋 → X投稿は見つかりませんでした（5段階調査完了）",
       "promo": {
         "x": null,
         "hatena": null,
@@ -4151,6 +4154,17 @@
       "qualityBlockerCount": 0,
       "qualityBlockers": [],
       "agentTasks": [
+        {
+          "id": "shohizei-genmen:B4_conclusion",
+          "slug": "shohizei-genmen",
+          "agent": "writer",
+          "agentLabel": "ライター",
+          "checkId": "B4_conclusion",
+          "title": "[ゲート] 結論の質",
+          "todo": "いまの結論が要点3行（重複・途中切れなし）",
+          "command": "npm run complete:article -- --slug shohizei-genmen --force",
+          "priority": 30
+        },
         {
           "id": "shohizei-genmen:C2_evidence_distinct",
           "slug": "shohizei-genmen",
@@ -4257,22 +4271,33 @@
       ],
       "blockers": [
         {
+          "id": "B4_conclusion",
+          "label": "結論の質",
+          "todo": "いまの結論が要点3行（重複・途中切れなし）",
+          "detail": "結論が途中切れ・重複・逐語抜粋"
+        },
+        {
           "id": "C2_evidence_distinct",
           "label": "根拠の独自性",
           "todo": "根拠は結論と同文禁止",
           "detail": "根拠が結論のコピー"
         }
       ],
-      "blockerCount": 1,
+      "blockerCount": 2,
       "runState": "idle",
       "workItems": [
+        {
+          "id": "B4_conclusion",
+          "label": "結論の質",
+          "state": "blocked"
+        },
         {
           "id": "C2_evidence_distinct",
           "label": "根拠の独自性",
           "state": "blocked"
         }
       ],
-      "nextAction": "根拠が結論のコピー → X投稿は見つかりませんでした（5段階調査完了）",
+      "nextAction": "結論が途中切れ・重複・逐語抜粋 → 根拠が結論のコピー → X投稿は見つかりませんでした（5段階調査完了）",
       "promo": {
         "x": null,
         "hatena": null,
@@ -4306,18 +4331,30 @@
       "needsQualityFix": false,
       "qualityBlockerCount": 0,
       "qualityBlockers": [],
-      "agentTasks": [],
-      "gatePct": 100,
-      "goldPct": 100,
+      "agentTasks": [
+        {
+          "id": "boeeihi:B4_conclusion",
+          "slug": "boeeihi",
+          "agent": "writer",
+          "agentLabel": "ライター",
+          "checkId": "B4_conclusion",
+          "title": "[ゲート] 結論の質",
+          "todo": "いまの結論が要点3行（重複・途中切れなし）",
+          "command": "npm run complete:article -- --slug boeeihi --force",
+          "priority": 30
+        }
+      ],
+      "gatePct": 75,
+      "goldPct": 50,
       "published": true,
-      "publishGateOk": true,
+      "publishGateOk": false,
       "pipeline": [
         {
           "id": "content",
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": true
+          "ok": false
         },
         {
           "id": "matrix",
@@ -4345,14 +4382,14 @@
           "label": "⑤本番デプロイ",
           "phase": 5,
           "preDeploy": false,
-          "ok": true
+          "ok": false
         },
         {
           "id": "debug",
           "label": "⑥デバッグOK",
           "phase": 6,
           "preDeploy": false,
-          "ok": true
+          "ok": false
         }
       ],
       "gold": [
@@ -4361,7 +4398,7 @@
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": true
+          "ok": false
         },
         {
           "id": "matrix",
@@ -4389,21 +4426,34 @@
           "label": "⑤本番デプロイ",
           "phase": 5,
           "preDeploy": false,
-          "ok": true
+          "ok": false
         },
         {
           "id": "debug",
           "label": "⑥デバッグOK",
           "phase": 6,
           "preDeploy": false,
-          "ok": true
+          "ok": false
         }
       ],
-      "blockers": [],
-      "blockerCount": 0,
+      "blockers": [
+        {
+          "id": "B4_conclusion",
+          "label": "結論の質",
+          "todo": "いまの結論が要点3行（重複・途中切れなし）",
+          "detail": "結論が途中切れ・重複・逐語抜粋"
+        }
+      ],
+      "blockerCount": 1,
       "runState": "idle",
-      "workItems": [],
-      "nextAction": "✅ 公開中 — /case/ に表示されています",
+      "workItems": [
+        {
+          "id": "B4_conclusion",
+          "label": "結論の質",
+          "state": "blocked"
+        }
+      ],
+      "nextAction": "結論が途中切れ・重複・逐語抜粋 → X投稿は見つかりませんでした（5段階調査完了）",
       "promo": {
         "x": null,
         "hatena": null,
@@ -4439,6 +4489,17 @@
       "qualityBlockers": [],
       "agentTasks": [
         {
+          "id": "chingin:B4_conclusion",
+          "slug": "chingin",
+          "agent": "writer",
+          "agentLabel": "ライター",
+          "checkId": "B4_conclusion",
+          "title": "[ゲート] 結論の質",
+          "todo": "いまの結論が要点3行（重複・途中切れなし）",
+          "command": "npm run complete:article -- --slug chingin --force",
+          "priority": 30
+        },
+        {
           "id": "chingin:C2_evidence_distinct",
           "slug": "chingin",
           "agent": "writer",
@@ -4448,21 +4509,10 @@
           "todo": "根拠は結論と同文禁止",
           "command": "npm run complete:article -- --slug chingin --force",
           "priority": 30
-        },
-        {
-          "id": "chingin:G5_parties_symbol",
-          "slug": "chingin",
-          "agent": "writer",
-          "agentLabel": "ライター",
-          "checkId": "G5_parties_symbol",
-          "title": "[ゲート] ◎〇▲×",
-          "todo": "各党の記号を確定（v2）",
-          "command": "npm run complete:article -- --slug chingin --force",
-          "priority": 30
         }
       ],
-      "gatePct": 50,
-      "goldPct": 33,
+      "gatePct": 75,
+      "goldPct": 50,
       "published": true,
       "publishGateOk": false,
       "pipeline": [
@@ -4478,7 +4528,7 @@
           "label": "②〇×2党確定",
           "phase": 2,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "x",
@@ -4522,7 +4572,7 @@
           "label": "②〇×2党確定",
           "phase": 2,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "x",
@@ -4555,33 +4605,33 @@
       ],
       "blockers": [
         {
+          "id": "B4_conclusion",
+          "label": "結論の質",
+          "todo": "いまの結論が要点3行（重複・途中切れなし）",
+          "detail": "結論が途中切れ・重複・逐語抜粋"
+        },
+        {
           "id": "C2_evidence_distinct",
           "label": "根拠の独自性",
           "todo": "根拠は結論と同文禁止",
           "detail": "根拠が結論のコピー"
-        },
-        {
-          "id": "G5_parties_symbol",
-          "label": "◎〇▲×",
-          "todo": "各党の記号を確定（v2）",
-          "detail": "◎▲❌ 確定 1/2 党以上"
         }
       ],
       "blockerCount": 2,
       "runState": "idle",
       "workItems": [
         {
-          "id": "C2_evidence_distinct",
-          "label": "根拠の独自性",
+          "id": "B4_conclusion",
+          "label": "結論の質",
           "state": "blocked"
         },
         {
-          "id": "G5_parties_symbol",
-          "label": "◎〇▲×",
+          "id": "C2_evidence_distinct",
+          "label": "根拠の独自性",
           "state": "blocked"
         }
       ],
-      "nextAction": "根拠が結論のコピー → ◎▲❌ を確定 → X投稿は見つかりませんでした（5段階調査完了）",
+      "nextAction": "結論が途中切れ・重複・逐語抜粋 → 根拠が結論のコピー → X投稿は見つかりませんでした（5段階調査完了）",
       "promo": {
         "x": null,
         "hatena": null,
@@ -4615,18 +4665,30 @@
       "needsQualityFix": false,
       "qualityBlockerCount": 0,
       "qualityBlockers": [],
-      "agentTasks": [],
-      "gatePct": 100,
-      "goldPct": 100,
+      "agentTasks": [
+        {
+          "id": "nenkin:B4_conclusion",
+          "slug": "nenkin",
+          "agent": "writer",
+          "agentLabel": "ライター",
+          "checkId": "B4_conclusion",
+          "title": "[ゲート] 結論の質",
+          "todo": "いまの結論が要点3行（重複・途中切れなし）",
+          "command": "npm run complete:article -- --slug nenkin --force",
+          "priority": 30
+        }
+      ],
+      "gatePct": 75,
+      "goldPct": 50,
       "published": true,
-      "publishGateOk": true,
+      "publishGateOk": false,
       "pipeline": [
         {
           "id": "content",
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": true
+          "ok": false
         },
         {
           "id": "matrix",
@@ -4654,14 +4716,14 @@
           "label": "⑤本番デプロイ",
           "phase": 5,
           "preDeploy": false,
-          "ok": true
+          "ok": false
         },
         {
           "id": "debug",
           "label": "⑥デバッグOK",
           "phase": 6,
           "preDeploy": false,
-          "ok": true
+          "ok": false
         }
       ],
       "gold": [
@@ -4670,7 +4732,7 @@
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": true
+          "ok": false
         },
         {
           "id": "matrix",
@@ -4698,21 +4760,34 @@
           "label": "⑤本番デプロイ",
           "phase": 5,
           "preDeploy": false,
-          "ok": true
+          "ok": false
         },
         {
           "id": "debug",
           "label": "⑥デバッグOK",
           "phase": 6,
           "preDeploy": false,
-          "ok": true
+          "ok": false
         }
       ],
-      "blockers": [],
-      "blockerCount": 0,
+      "blockers": [
+        {
+          "id": "B4_conclusion",
+          "label": "結論の質",
+          "todo": "いまの結論が要点3行（重複・途中切れなし）",
+          "detail": "結論が途中切れ・重複・逐語抜粋"
+        }
+      ],
+      "blockerCount": 1,
       "runState": "idle",
-      "workItems": [],
-      "nextAction": "✅ 公開中 — /case/ に表示されています",
+      "workItems": [
+        {
+          "id": "B4_conclusion",
+          "label": "結論の質",
+          "state": "blocked"
+        }
+      ],
+      "nextAction": "結論が途中切れ・重複・逐語抜粋 → X投稿は見つかりませんでした（5段階調査完了）",
       "promo": {
         "x": null,
         "hatena": null,
@@ -4739,8 +4814,8 @@
       "category": "国会",
       "policyCategory": "国会",
       "adminHidden": false,
-      "pageReady": true,
-      "publishState": "live",
+      "pageReady": false,
+      "publishState": "draft",
       "previewUrl": "/dev/preview/gaikokujin-seisaku/",
       "qualityOk": true,
       "needsQualityFix": false,
@@ -4748,8 +4823,8 @@
       "qualityBlockers": [],
       "agentTasks": [],
       "gatePct": 100,
-      "goldPct": 100,
-      "published": true,
+      "goldPct": 83,
+      "published": false,
       "publishGateOk": true,
       "pipeline": [
         {
@@ -4785,7 +4860,7 @@
           "label": "⑤本番デプロイ",
           "phase": 5,
           "preDeploy": false,
-          "ok": true
+          "ok": false
         },
         {
           "id": "debug",
@@ -4829,7 +4904,7 @@
           "label": "⑤本番デプロイ",
           "phase": 5,
           "preDeploy": false,
-          "ok": true
+          "ok": false
         },
         {
           "id": "debug",
@@ -4843,7 +4918,7 @@
       "blockerCount": 0,
       "runState": "idle",
       "workItems": [],
-      "nextAction": "✅ 公開中 — /case/ に表示されています",
+      "nextAction": "📋 完成・非公開 — プレビューで確認して「公開する」を押してください",
       "promo": {
         "x": null,
         "hatena": null,
@@ -5092,343 +5167,9 @@
       "category": "国会",
       "policyCategory": "国会",
       "adminHidden": false,
-      "pageReady": true,
-      "publishState": "live",
-      "previewUrl": "/dev/preview/kyoiku-mushoka/",
-      "qualityOk": true,
-      "needsQualityFix": false,
-      "qualityBlockerCount": 0,
-      "qualityBlockers": [],
-      "agentTasks": [
-        {
-          "id": "kyoiku-mushoka:D2_arc_topic",
-          "slug": "kyoiku-mushoka",
-          "agent": "writer",
-          "agentLabel": "ライター",
-          "checkId": "D2_arc_topic",
-          "title": "[ゲート] 経緯の話題",
-          "todo": "経緯3行以上が案件キーワードと一致",
-          "command": "npm run complete:article -- --slug kyoiku-mushoka --force",
-          "priority": 30
-        }
-      ],
-      "gatePct": 75,
-      "goldPct": 50,
-      "published": true,
-      "publishGateOk": false,
-      "pipeline": [
-        {
-          "id": "content",
-          "label": "①コンテンツ",
-          "phase": 1,
-          "preDeploy": true,
-          "ok": false
-        },
-        {
-          "id": "matrix",
-          "label": "②〇×2党確定",
-          "phase": 2,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "x",
-          "label": "③X未発見（調査完了）",
-          "phase": 3,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "legal",
-          "label": "④法務OK",
-          "phase": 4,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "deployed",
-          "label": "⑤本番デプロイ",
-          "phase": 5,
-          "preDeploy": false,
-          "ok": false
-        },
-        {
-          "id": "debug",
-          "label": "⑥デバッグOK",
-          "phase": 6,
-          "preDeploy": false,
-          "ok": false
-        }
-      ],
-      "gold": [
-        {
-          "id": "content",
-          "label": "①コンテンツ",
-          "phase": 1,
-          "preDeploy": true,
-          "ok": false
-        },
-        {
-          "id": "matrix",
-          "label": "②〇×2党確定",
-          "phase": 2,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "x",
-          "label": "③X未発見（調査完了）",
-          "phase": 3,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "legal",
-          "label": "④法務OK",
-          "phase": 4,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "deployed",
-          "label": "⑤本番デプロイ",
-          "phase": 5,
-          "preDeploy": false,
-          "ok": false
-        },
-        {
-          "id": "debug",
-          "label": "⑥デバッグOK",
-          "phase": 6,
-          "preDeploy": false,
-          "ok": false
-        }
-      ],
-      "blockers": [
-        {
-          "id": "D2_arc_topic",
-          "label": "経緯の話題",
-          "todo": "経緯3行以上が案件キーワードと一致",
-          "detail": "2/3 行が話題一致"
-        }
-      ],
-      "blockerCount": 1,
-      "runState": "idle",
-      "workItems": [
-        {
-          "id": "D2_arc_topic",
-          "label": "経緯の話題",
-          "state": "blocked"
-        }
-      ],
-      "nextAction": "2/3 行が話題一致 → X投稿は見つかりませんでした（5段階調査完了）",
-      "promo": {
-        "x": null,
-        "hatena": null,
-        "note": null
-      },
-      "short": {
-        "slug": "kyoiku-mushoka",
-        "generated": false,
-        "uploaded": false,
-        "visibility": null,
-        "videoId": null,
-        "url": null,
-        "studioUrl": null,
-        "uploadedAt": null,
-        "label": "未生成"
-      },
-      "xUnavailable": true,
-      "xResearchStatus": "exhausted"
-    },
-    {
-      "slug": "energy-policy",
-      "title": "【エネルギー政策】原発・再エネ・電気代の行方",
-      "shortTitle": "【エネルギー政策】原発・再エネ・電気代の行方",
-      "category": "国会",
-      "policyCategory": "国会",
-      "adminHidden": false,
-      "pageReady": true,
-      "publishState": "live",
-      "previewUrl": "/dev/preview/energy-policy/",
-      "qualityOk": true,
-      "needsQualityFix": false,
-      "qualityBlockerCount": 0,
-      "qualityBlockers": [],
-      "agentTasks": [
-        {
-          "id": "energy-policy:D2_arc_topic",
-          "slug": "energy-policy",
-          "agent": "writer",
-          "agentLabel": "ライター",
-          "checkId": "D2_arc_topic",
-          "title": "[ゲート] 経緯の話題",
-          "todo": "経緯3行以上が案件キーワードと一致",
-          "command": "npm run complete:article -- --slug energy-policy --force",
-          "priority": 30
-        },
-        {
-          "id": "energy-policy:G6_matrix_topic",
-          "slug": "energy-policy",
-          "agent": "writer",
-          "agentLabel": "ライター",
-          "checkId": "G6_matrix_topic",
-          "title": "[ゲート] 〇×の話題",
-          "todo": "公言と行動が案件キーワードと一致（2党）",
-          "command": "npm run complete:article -- --slug energy-policy --force",
-          "priority": 30
-        }
-      ],
-      "gatePct": 75,
-      "goldPct": 50,
-      "published": true,
-      "publishGateOk": false,
-      "pipeline": [
-        {
-          "id": "content",
-          "label": "①コンテンツ",
-          "phase": 1,
-          "preDeploy": true,
-          "ok": false
-        },
-        {
-          "id": "matrix",
-          "label": "②〇×2党確定",
-          "phase": 2,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "x",
-          "label": "③X未発見（調査完了）",
-          "phase": 3,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "legal",
-          "label": "④法務OK",
-          "phase": 4,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "deployed",
-          "label": "⑤本番デプロイ",
-          "phase": 5,
-          "preDeploy": false,
-          "ok": false
-        },
-        {
-          "id": "debug",
-          "label": "⑥デバッグOK",
-          "phase": 6,
-          "preDeploy": false,
-          "ok": false
-        }
-      ],
-      "gold": [
-        {
-          "id": "content",
-          "label": "①コンテンツ",
-          "phase": 1,
-          "preDeploy": true,
-          "ok": false
-        },
-        {
-          "id": "matrix",
-          "label": "②〇×2党確定",
-          "phase": 2,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "x",
-          "label": "③X未発見（調査完了）",
-          "phase": 3,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "legal",
-          "label": "④法務OK",
-          "phase": 4,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "deployed",
-          "label": "⑤本番デプロイ",
-          "phase": 5,
-          "preDeploy": false,
-          "ok": false
-        },
-        {
-          "id": "debug",
-          "label": "⑥デバッグOK",
-          "phase": 6,
-          "preDeploy": false,
-          "ok": false
-        }
-      ],
-      "blockers": [
-        {
-          "id": "D2_arc_topic",
-          "label": "経緯の話題",
-          "todo": "経緯3行以上が案件キーワードと一致",
-          "detail": "1/3 行が話題一致"
-        },
-        {
-          "id": "G6_matrix_topic",
-          "label": "〇×の話題",
-          "todo": "公言と行動が案件キーワードと一致（2党）",
-          "detail": "公言テキストが案件と無関係"
-        }
-      ],
-      "blockerCount": 2,
-      "runState": "idle",
-      "workItems": [
-        {
-          "id": "D2_arc_topic",
-          "label": "経緯の話題",
-          "state": "blocked"
-        },
-        {
-          "id": "G6_matrix_topic",
-          "label": "〇×の話題",
-          "state": "blocked"
-        }
-      ],
-      "nextAction": "1/3 行が話題一致 → 公言テキストが案件と無関係 → X投稿は見つかりませんでした（5段階調査完了）",
-      "promo": {
-        "x": null,
-        "hatena": null,
-        "note": null
-      },
-      "short": {
-        "slug": "energy-policy",
-        "generated": false,
-        "uploaded": false,
-        "visibility": null,
-        "videoId": null,
-        "url": null,
-        "studioUrl": null,
-        "uploadedAt": null,
-        "label": "未生成"
-      },
-      "xUnavailable": true,
-      "xResearchStatus": "exhausted"
-    },
-    {
-      "slug": "seiji-shikin",
-      "title": "【政治資金】政党助成と献金ルールの最新",
-      "shortTitle": "【政治資金】政党助成と献金ルールの最新",
-      "category": "国会",
-      "policyCategory": "国会",
-      "adminHidden": false,
       "pageReady": false,
       "publishState": "draft",
-      "previewUrl": "/dev/preview/seiji-shikin/",
+      "previewUrl": "/dev/preview/kyoiku-mushoka/",
       "qualityOk": true,
       "needsQualityFix": false,
       "qualityBlockerCount": 0,
@@ -5537,6 +5278,293 @@
         "note": null
       },
       "short": {
+        "slug": "kyoiku-mushoka",
+        "generated": false,
+        "uploaded": false,
+        "visibility": null,
+        "videoId": null,
+        "url": null,
+        "studioUrl": null,
+        "uploadedAt": null,
+        "label": "未生成"
+      },
+      "xUnavailable": true,
+      "xResearchStatus": "exhausted"
+    },
+    {
+      "slug": "energy-policy",
+      "title": "【エネルギー政策】原発・再エネ・電気代の行方",
+      "shortTitle": "【エネルギー政策】原発・再エネ・電気代の行方",
+      "category": "国会",
+      "policyCategory": "国会",
+      "adminHidden": false,
+      "pageReady": false,
+      "publishState": "draft",
+      "previewUrl": "/dev/preview/energy-policy/",
+      "qualityOk": true,
+      "needsQualityFix": false,
+      "qualityBlockerCount": 0,
+      "qualityBlockers": [],
+      "agentTasks": [],
+      "gatePct": 100,
+      "goldPct": 83,
+      "published": false,
+      "publishGateOk": true,
+      "pipeline": [
+        {
+          "id": "content",
+          "label": "①コンテンツ",
+          "phase": 1,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "matrix",
+          "label": "②〇×2党確定",
+          "phase": 2,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "x",
+          "label": "③X未発見（調査完了）",
+          "phase": 3,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "legal",
+          "label": "④法務OK",
+          "phase": 4,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "deployed",
+          "label": "⑤本番デプロイ",
+          "phase": 5,
+          "preDeploy": false,
+          "ok": false
+        },
+        {
+          "id": "debug",
+          "label": "⑥デバッグOK",
+          "phase": 6,
+          "preDeploy": false,
+          "ok": true
+        }
+      ],
+      "gold": [
+        {
+          "id": "content",
+          "label": "①コンテンツ",
+          "phase": 1,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "matrix",
+          "label": "②〇×2党確定",
+          "phase": 2,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "x",
+          "label": "③X未発見（調査完了）",
+          "phase": 3,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "legal",
+          "label": "④法務OK",
+          "phase": 4,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "deployed",
+          "label": "⑤本番デプロイ",
+          "phase": 5,
+          "preDeploy": false,
+          "ok": false
+        },
+        {
+          "id": "debug",
+          "label": "⑥デバッグOK",
+          "phase": 6,
+          "preDeploy": false,
+          "ok": true
+        }
+      ],
+      "blockers": [],
+      "blockerCount": 0,
+      "runState": "idle",
+      "workItems": [],
+      "nextAction": "📋 完成・非公開 — プレビューで確認して「公開する」を押してください",
+      "promo": {
+        "x": null,
+        "hatena": null,
+        "note": null
+      },
+      "short": {
+        "slug": "energy-policy",
+        "generated": false,
+        "uploaded": false,
+        "visibility": null,
+        "videoId": null,
+        "url": null,
+        "studioUrl": null,
+        "uploadedAt": null,
+        "label": "未生成"
+      },
+      "xUnavailable": true,
+      "xResearchStatus": "exhausted"
+    },
+    {
+      "slug": "seiji-shikin",
+      "title": "【政治資金】政党助成と献金ルールの最新",
+      "shortTitle": "【政治資金】政党助成と献金ルールの最新",
+      "category": "国会",
+      "policyCategory": "国会",
+      "adminHidden": false,
+      "pageReady": false,
+      "publishState": "wip",
+      "previewUrl": "/dev/preview/seiji-shikin/",
+      "qualityOk": true,
+      "needsQualityFix": false,
+      "qualityBlockerCount": 0,
+      "qualityBlockers": [],
+      "agentTasks": [
+        {
+          "id": "seiji-shikin:B4_conclusion",
+          "slug": "seiji-shikin",
+          "agent": "writer",
+          "agentLabel": "ライター",
+          "checkId": "B4_conclusion",
+          "title": "[ゲート] 結論の質",
+          "todo": "いまの結論が要点3行（重複・途中切れなし）",
+          "command": "npm run complete:article -- --slug seiji-shikin --force",
+          "priority": 30
+        }
+      ],
+      "gatePct": 75,
+      "goldPct": 50,
+      "published": false,
+      "publishGateOk": false,
+      "pipeline": [
+        {
+          "id": "content",
+          "label": "①コンテンツ",
+          "phase": 1,
+          "preDeploy": true,
+          "ok": false
+        },
+        {
+          "id": "matrix",
+          "label": "②〇×2党確定",
+          "phase": 2,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "x",
+          "label": "③X未発見（調査完了）",
+          "phase": 3,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "legal",
+          "label": "④法務OK",
+          "phase": 4,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "deployed",
+          "label": "⑤本番デプロイ",
+          "phase": 5,
+          "preDeploy": false,
+          "ok": false
+        },
+        {
+          "id": "debug",
+          "label": "⑥デバッグOK",
+          "phase": 6,
+          "preDeploy": false,
+          "ok": false
+        }
+      ],
+      "gold": [
+        {
+          "id": "content",
+          "label": "①コンテンツ",
+          "phase": 1,
+          "preDeploy": true,
+          "ok": false
+        },
+        {
+          "id": "matrix",
+          "label": "②〇×2党確定",
+          "phase": 2,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "x",
+          "label": "③X未発見（調査完了）",
+          "phase": 3,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "legal",
+          "label": "④法務OK",
+          "phase": 4,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "deployed",
+          "label": "⑤本番デプロイ",
+          "phase": 5,
+          "preDeploy": false,
+          "ok": false
+        },
+        {
+          "id": "debug",
+          "label": "⑥デバッグOK",
+          "phase": 6,
+          "preDeploy": false,
+          "ok": false
+        }
+      ],
+      "blockers": [
+        {
+          "id": "B4_conclusion",
+          "label": "結論の質",
+          "todo": "いまの結論が要点3行（重複・途中切れなし）",
+          "detail": "結論が途中切れ・重複・逐語抜粋"
+        }
+      ],
+      "blockerCount": 1,
+      "runState": "idle",
+      "workItems": [
+        {
+          "id": "B4_conclusion",
+          "label": "結論の質",
+          "state": "blocked"
+        }
+      ],
+      "nextAction": "結論が途中切れ・重複・逐語抜粋 → X投稿は見つかりませんでした（5段階調査完了）",
+      "promo": {
+        "x": null,
+        "hatena": null,
+        "note": null
+      },
+      "short": {
         "slug": "seiji-shikin",
         "generated": false,
         "uploaded": false,
@@ -5566,13 +5594,13 @@
       "qualityBlockers": [],
       "agentTasks": [
         {
-          "id": "senkyo-kaikaku:D2_arc_topic",
+          "id": "senkyo-kaikaku:B4_conclusion",
           "slug": "senkyo-kaikaku",
           "agent": "writer",
           "agentLabel": "ライター",
-          "checkId": "D2_arc_topic",
-          "title": "[ゲート] 経緯の話題",
-          "todo": "経緯3行以上が案件キーワードと一致",
+          "checkId": "B4_conclusion",
+          "title": "[ゲート] 結論の質",
+          "todo": "いまの結論が要点3行（重複・途中切れなし）",
           "command": "npm run complete:article -- --slug senkyo-kaikaku --force",
           "priority": 30
         }
@@ -5671,22 +5699,22 @@
       ],
       "blockers": [
         {
-          "id": "D2_arc_topic",
-          "label": "経緯の話題",
-          "todo": "経緯3行以上が案件キーワードと一致",
-          "detail": "1/3 行が話題一致"
+          "id": "B4_conclusion",
+          "label": "結論の質",
+          "todo": "いまの結論が要点3行（重複・途中切れなし）",
+          "detail": "結論が途中切れ・重複・逐語抜粋"
         }
       ],
       "blockerCount": 1,
       "runState": "idle",
       "workItems": [
         {
-          "id": "D2_arc_topic",
-          "label": "経緯の話題",
+          "id": "B4_conclusion",
+          "label": "結論の質",
           "state": "blocked"
         }
       ],
-      "nextAction": "1/3 行が話題一致 → X投稿は見つかりませんでした（5段階調査完了）",
+      "nextAction": "結論が途中切れ・重複・逐語抜粋 → X投稿は見つかりませんでした（5段階調査完了）",
       "promo": {
         "x": null,
         "hatena": null,
@@ -5722,13 +5750,13 @@
       "qualityBlockers": [],
       "agentTasks": [
         {
-          "id": "kaigo-iryo:G5_parties_symbol",
+          "id": "kaigo-iryo:B4_conclusion",
           "slug": "kaigo-iryo",
           "agent": "writer",
           "agentLabel": "ライター",
-          "checkId": "G5_parties_symbol",
-          "title": "[ゲート] ◎〇▲×",
-          "todo": "各党の記号を確定（v2）",
+          "checkId": "B4_conclusion",
+          "title": "[ゲート] 結論の質",
+          "todo": "いまの結論が要点3行（重複・途中切れなし）",
           "command": "npm run complete:article -- --slug kaigo-iryo --force",
           "priority": 30
         }
@@ -5743,14 +5771,14 @@
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": true
+          "ok": false
         },
         {
           "id": "matrix",
           "label": "②〇×2党確定",
           "phase": 2,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "x",
@@ -5787,14 +5815,14 @@
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": true
+          "ok": false
         },
         {
           "id": "matrix",
           "label": "②〇×2党確定",
           "phase": 2,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "x",
@@ -5827,22 +5855,22 @@
       ],
       "blockers": [
         {
-          "id": "G5_parties_symbol",
-          "label": "◎〇▲×",
-          "todo": "各党の記号を確定（v2）",
-          "detail": "◎▲❌ 確定 1/2 党以上"
+          "id": "B4_conclusion",
+          "label": "結論の質",
+          "todo": "いまの結論が要点3行（重複・途中切れなし）",
+          "detail": "結論が途中切れ・重複・逐語抜粋"
         }
       ],
       "blockerCount": 1,
       "runState": "idle",
       "workItems": [
         {
-          "id": "G5_parties_symbol",
-          "label": "◎〇▲×",
+          "id": "B4_conclusion",
+          "label": "結論の質",
           "state": "blocked"
         }
       ],
-      "nextAction": "◎▲❌ を確定 → X投稿は見つかりませんでした（5段階調査完了）",
+      "nextAction": "結論が途中切れ・重複・逐語抜粋 → X投稿は見つかりませんでした（5段階調査完了）",
       "promo": {
         "x": null,
         "hatena": null,
@@ -5878,13 +5906,13 @@
       "qualityBlockers": [],
       "agentTasks": [
         {
-          "id": "chiho-sosei:G5_parties_symbol",
+          "id": "chiho-sosei:B4_conclusion",
           "slug": "chiho-sosei",
           "agent": "writer",
           "agentLabel": "ライター",
-          "checkId": "G5_parties_symbol",
-          "title": "[ゲート] ◎〇▲×",
-          "todo": "各党の記号を確定（v2）",
+          "checkId": "B4_conclusion",
+          "title": "[ゲート] 結論の質",
+          "todo": "いまの結論が要点3行（重複・途中切れなし）",
           "command": "npm run complete:article -- --slug chiho-sosei --force",
           "priority": 30
         }
@@ -5899,14 +5927,14 @@
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": true
+          "ok": false
         },
         {
           "id": "matrix",
           "label": "②〇×2党確定",
           "phase": 2,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "x",
@@ -5943,14 +5971,14 @@
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": true
+          "ok": false
         },
         {
           "id": "matrix",
           "label": "②〇×2党確定",
           "phase": 2,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "x",
@@ -5983,22 +6011,22 @@
       ],
       "blockers": [
         {
-          "id": "G5_parties_symbol",
-          "label": "◎〇▲×",
-          "todo": "各党の記号を確定（v2）",
-          "detail": "◎▲❌ 確定 1/2 党以上"
+          "id": "B4_conclusion",
+          "label": "結論の質",
+          "todo": "いまの結論が要点3行（重複・途中切れなし）",
+          "detail": "結論が途中切れ・重複・逐語抜粋"
         }
       ],
       "blockerCount": 1,
       "runState": "idle",
       "workItems": [
         {
-          "id": "G5_parties_symbol",
-          "label": "◎〇▲×",
+          "id": "B4_conclusion",
+          "label": "結論の質",
           "state": "blocked"
         }
       ],
-      "nextAction": "◎▲❌ を確定 → X投稿は見つかりませんでした（5段階調査完了）",
+      "nextAction": "結論が途中切れ・重複・逐語抜粋 → X投稿は見つかりませんでした（5段階調査完了）",
       "promo": {
         "x": null,
         "hatena": null,
@@ -6026,24 +6054,36 @@
       "policyCategory": "国会",
       "adminHidden": false,
       "pageReady": false,
-      "publishState": "draft",
+      "publishState": "wip",
       "previewUrl": "/dev/preview/hosei-yosan/",
       "qualityOk": true,
       "needsQualityFix": false,
       "qualityBlockerCount": 0,
       "qualityBlockers": [],
-      "agentTasks": [],
-      "gatePct": 100,
-      "goldPct": 83,
+      "agentTasks": [
+        {
+          "id": "hosei-yosan:B4_conclusion",
+          "slug": "hosei-yosan",
+          "agent": "writer",
+          "agentLabel": "ライター",
+          "checkId": "B4_conclusion",
+          "title": "[ゲート] 結論の質",
+          "todo": "いまの結論が要点3行（重複・途中切れなし）",
+          "command": "npm run complete:article -- --slug hosei-yosan --force",
+          "priority": 30
+        }
+      ],
+      "gatePct": 75,
+      "goldPct": 50,
       "published": false,
-      "publishGateOk": true,
+      "publishGateOk": false,
       "pipeline": [
         {
           "id": "content",
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": true
+          "ok": false
         },
         {
           "id": "matrix",
@@ -6078,7 +6118,7 @@
           "label": "⑥デバッグOK",
           "phase": 6,
           "preDeploy": false,
-          "ok": true
+          "ok": false
         }
       ],
       "gold": [
@@ -6087,7 +6127,7 @@
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": true
+          "ok": false
         },
         {
           "id": "matrix",
@@ -6122,14 +6162,27 @@
           "label": "⑥デバッグOK",
           "phase": 6,
           "preDeploy": false,
-          "ok": true
+          "ok": false
         }
       ],
-      "blockers": [],
-      "blockerCount": 0,
+      "blockers": [
+        {
+          "id": "B4_conclusion",
+          "label": "結論の質",
+          "todo": "いまの結論が要点3行（重複・途中切れなし）",
+          "detail": "結論が途中切れ・重複・逐語抜粋"
+        }
+      ],
+      "blockerCount": 1,
       "runState": "idle",
-      "workItems": [],
-      "nextAction": "📋 完成・非公開 — プレビューで確認して「公開する」を押してください",
+      "workItems": [
+        {
+          "id": "B4_conclusion",
+          "label": "結論の質",
+          "state": "blocked"
+        }
+      ],
+      "nextAction": "結論が途中切れ・重複・逐語抜粋 → X投稿は見つかりませんでした（5段階調査完了）",
       "promo": {
         "x": null,
         "hatena": null,
@@ -6157,24 +6210,36 @@
       "policyCategory": "国会",
       "adminHidden": false,
       "pageReady": false,
-      "publishState": "draft",
+      "publishState": "wip",
       "previewUrl": "/dev/preview/nichigyo/",
       "qualityOk": true,
       "needsQualityFix": false,
       "qualityBlockerCount": 0,
       "qualityBlockers": [],
-      "agentTasks": [],
-      "gatePct": 100,
-      "goldPct": 83,
+      "agentTasks": [
+        {
+          "id": "nichigyo:B4_conclusion",
+          "slug": "nichigyo",
+          "agent": "writer",
+          "agentLabel": "ライター",
+          "checkId": "B4_conclusion",
+          "title": "[ゲート] 結論の質",
+          "todo": "いまの結論が要点3行（重複・途中切れなし）",
+          "command": "npm run complete:article -- --slug nichigyo --force",
+          "priority": 30
+        }
+      ],
+      "gatePct": 75,
+      "goldPct": 50,
       "published": false,
-      "publishGateOk": true,
+      "publishGateOk": false,
       "pipeline": [
         {
           "id": "content",
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": true
+          "ok": false
         },
         {
           "id": "matrix",
@@ -6209,7 +6274,7 @@
           "label": "⑥デバッグOK",
           "phase": 6,
           "preDeploy": false,
-          "ok": true
+          "ok": false
         }
       ],
       "gold": [
@@ -6218,7 +6283,7 @@
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": true
+          "ok": false
         },
         {
           "id": "matrix",
@@ -6253,14 +6318,27 @@
           "label": "⑥デバッグOK",
           "phase": 6,
           "preDeploy": false,
-          "ok": true
+          "ok": false
         }
       ],
-      "blockers": [],
-      "blockerCount": 0,
+      "blockers": [
+        {
+          "id": "B4_conclusion",
+          "label": "結論の質",
+          "todo": "いまの結論が要点3行（重複・途中切れなし）",
+          "detail": "結論が途中切れ・重複・逐語抜粋"
+        }
+      ],
+      "blockerCount": 1,
       "runState": "idle",
-      "workItems": [],
-      "nextAction": "📋 完成・非公開 — プレビューで確認して「公開する」を押してください",
+      "workItems": [
+        {
+          "id": "B4_conclusion",
+          "label": "結論の質",
+          "state": "blocked"
+        }
+      ],
+      "nextAction": "結論が途中切れ・重複・逐語抜粋 → X投稿は見つかりませんでした（5段階調査完了）",
       "promo": {
         "x": null,
         "hatena": null,
@@ -6296,13 +6374,13 @@
       "qualityBlockers": [],
       "agentTasks": [
         {
-          "id": "casino-ir:G5_parties_symbol",
+          "id": "casino-ir:B4_conclusion",
           "slug": "casino-ir",
           "agent": "writer",
           "agentLabel": "ライター",
-          "checkId": "G5_parties_symbol",
-          "title": "[ゲート] ◎〇▲×",
-          "todo": "各党の記号を確定（v2）",
+          "checkId": "B4_conclusion",
+          "title": "[ゲート] 結論の質",
+          "todo": "いまの結論が要点3行（重複・途中切れなし）",
           "command": "npm run complete:article -- --slug casino-ir --force",
           "priority": 30
         }
@@ -6317,14 +6395,14 @@
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": true
+          "ok": false
         },
         {
           "id": "matrix",
           "label": "②〇×2党確定",
           "phase": 2,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "x",
@@ -6361,14 +6439,14 @@
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": true
+          "ok": false
         },
         {
           "id": "matrix",
           "label": "②〇×2党確定",
           "phase": 2,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "x",
@@ -6401,22 +6479,22 @@
       ],
       "blockers": [
         {
-          "id": "G5_parties_symbol",
-          "label": "◎〇▲×",
-          "todo": "各党の記号を確定（v2）",
-          "detail": "◎▲❌ 確定 1/2 党以上"
+          "id": "B4_conclusion",
+          "label": "結論の質",
+          "todo": "いまの結論が要点3行（重複・途中切れなし）",
+          "detail": "結論が途中切れ・重複・逐語抜粋"
         }
       ],
       "blockerCount": 1,
       "runState": "idle",
       "workItems": [
         {
-          "id": "G5_parties_symbol",
-          "label": "◎〇▲×",
+          "id": "B4_conclusion",
+          "label": "結論の質",
           "state": "blocked"
         }
       ],
-      "nextAction": "◎▲❌ を確定 → X投稿は見つかりませんでした（5段階調査完了）",
+      "nextAction": "結論が途中切れ・重複・逐語抜粋 → X投稿は見つかりませんでした（5段階調査完了）",
       "promo": {
         "x": null,
         "hatena": null,
@@ -6451,6 +6529,17 @@
       "qualityBlockerCount": 0,
       "qualityBlockers": [],
       "agentTasks": [
+        {
+          "id": "kenpo:B4_conclusion",
+          "slug": "kenpo",
+          "agent": "writer",
+          "agentLabel": "ライター",
+          "checkId": "B4_conclusion",
+          "title": "[ゲート] 結論の質",
+          "todo": "いまの結論が要点3行（重複・途中切れなし）",
+          "command": "npm run complete:article -- --slug kenpo --force",
+          "priority": 30
+        },
         {
           "id": "kenpo:C2_evidence_distinct",
           "slug": "kenpo",
@@ -6557,22 +6646,33 @@
       ],
       "blockers": [
         {
+          "id": "B4_conclusion",
+          "label": "結論の質",
+          "todo": "いまの結論が要点3行（重複・途中切れなし）",
+          "detail": "結論が途中切れ・重複・逐語抜粋"
+        },
+        {
           "id": "C2_evidence_distinct",
           "label": "根拠の独自性",
           "todo": "根拠は結論と同文禁止",
           "detail": "根拠が結論のコピー"
         }
       ],
-      "blockerCount": 1,
+      "blockerCount": 2,
       "runState": "idle",
       "workItems": [
+        {
+          "id": "B4_conclusion",
+          "label": "結論の質",
+          "state": "blocked"
+        },
         {
           "id": "C2_evidence_distinct",
           "label": "根拠の独自性",
           "state": "blocked"
         }
       ],
-      "nextAction": "根拠が結論のコピー → X投稿は見つかりませんでした（5段階調査完了）",
+      "nextAction": "結論が途中切れ・重複・逐語抜粋 → 根拠が結論のコピー → X投稿は見つかりませんでした（5段階調査完了）",
       "promo": {
         "x": null,
         "hatena": null,
@@ -6730,165 +6830,9 @@
       "category": "国会",
       "policyCategory": "国会",
       "adminHidden": false,
-      "pageReady": true,
-      "publishState": "live",
-      "previewUrl": "/dev/preview/kishida-resign/",
-      "qualityOk": true,
-      "needsQualityFix": false,
-      "qualityBlockerCount": 0,
-      "qualityBlockers": [],
-      "agentTasks": [
-        {
-          "id": "kishida-resign:C2_evidence_distinct",
-          "slug": "kishida-resign",
-          "agent": "writer",
-          "agentLabel": "ライター",
-          "checkId": "C2_evidence_distinct",
-          "title": "[ゲート] 根拠の独自性",
-          "todo": "根拠は結論と同文禁止",
-          "command": "npm run complete:article -- --slug kishida-resign --force",
-          "priority": 30
-        }
-      ],
-      "gatePct": 75,
-      "goldPct": 50,
-      "published": true,
-      "publishGateOk": false,
-      "pipeline": [
-        {
-          "id": "content",
-          "label": "①コンテンツ",
-          "phase": 1,
-          "preDeploy": true,
-          "ok": false
-        },
-        {
-          "id": "matrix",
-          "label": "②〇×2党確定",
-          "phase": 2,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "x",
-          "label": "③X未発見（調査完了）",
-          "phase": 3,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "legal",
-          "label": "④法務OK",
-          "phase": 4,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "deployed",
-          "label": "⑤本番デプロイ",
-          "phase": 5,
-          "preDeploy": false,
-          "ok": false
-        },
-        {
-          "id": "debug",
-          "label": "⑥デバッグOK",
-          "phase": 6,
-          "preDeploy": false,
-          "ok": false
-        }
-      ],
-      "gold": [
-        {
-          "id": "content",
-          "label": "①コンテンツ",
-          "phase": 1,
-          "preDeploy": true,
-          "ok": false
-        },
-        {
-          "id": "matrix",
-          "label": "②〇×2党確定",
-          "phase": 2,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "x",
-          "label": "③X未発見（調査完了）",
-          "phase": 3,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "legal",
-          "label": "④法務OK",
-          "phase": 4,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "deployed",
-          "label": "⑤本番デプロイ",
-          "phase": 5,
-          "preDeploy": false,
-          "ok": false
-        },
-        {
-          "id": "debug",
-          "label": "⑥デバッグOK",
-          "phase": 6,
-          "preDeploy": false,
-          "ok": false
-        }
-      ],
-      "blockers": [
-        {
-          "id": "C2_evidence_distinct",
-          "label": "根拠の独自性",
-          "todo": "根拠は結論と同文禁止",
-          "detail": "根拠が結論のコピー"
-        }
-      ],
-      "blockerCount": 1,
-      "runState": "idle",
-      "workItems": [
-        {
-          "id": "C2_evidence_distinct",
-          "label": "根拠の独自性",
-          "state": "blocked"
-        }
-      ],
-      "nextAction": "根拠が結論のコピー → X投稿は見つかりませんでした（5段階調査完了）",
-      "promo": {
-        "x": null,
-        "hatena": null,
-        "note": null
-      },
-      "short": {
-        "slug": "kishida-resign",
-        "generated": false,
-        "uploaded": false,
-        "visibility": null,
-        "videoId": null,
-        "url": null,
-        "studioUrl": null,
-        "uploadedAt": null,
-        "label": "未生成"
-      },
-      "xUnavailable": true,
-      "xResearchStatus": "exhausted"
-    },
-    {
-      "slug": "komei-kokumin",
-      "title": "【超党派・教育法改正】学校現場への影響",
-      "shortTitle": "【超党派・教育法改正】学校現場への影響",
-      "category": "国会",
-      "policyCategory": "国会",
-      "adminHidden": false,
       "pageReady": false,
       "publishState": "draft",
-      "previewUrl": "/dev/preview/komei-kokumin/",
+      "previewUrl": "/dev/preview/kishida-resign/",
       "qualityOk": true,
       "needsQualityFix": false,
       "qualityBlockerCount": 0,
@@ -6997,6 +6941,162 @@
         "note": null
       },
       "short": {
+        "slug": "kishida-resign",
+        "generated": false,
+        "uploaded": false,
+        "visibility": null,
+        "videoId": null,
+        "url": null,
+        "studioUrl": null,
+        "uploadedAt": null,
+        "label": "未生成"
+      },
+      "xUnavailable": true,
+      "xResearchStatus": "exhausted"
+    },
+    {
+      "slug": "komei-kokumin",
+      "title": "【超党派・教育法改正】学校現場への影響",
+      "shortTitle": "【超党派・教育法改正】学校現場への影響",
+      "category": "国会",
+      "policyCategory": "国会",
+      "adminHidden": false,
+      "pageReady": false,
+      "publishState": "wip",
+      "previewUrl": "/dev/preview/komei-kokumin/",
+      "qualityOk": true,
+      "needsQualityFix": false,
+      "qualityBlockerCount": 0,
+      "qualityBlockers": [],
+      "agentTasks": [
+        {
+          "id": "komei-kokumin:B4_conclusion",
+          "slug": "komei-kokumin",
+          "agent": "writer",
+          "agentLabel": "ライター",
+          "checkId": "B4_conclusion",
+          "title": "[ゲート] 結論の質",
+          "todo": "いまの結論が要点3行（重複・途中切れなし）",
+          "command": "npm run complete:article -- --slug komei-kokumin --force",
+          "priority": 30
+        }
+      ],
+      "gatePct": 75,
+      "goldPct": 50,
+      "published": false,
+      "publishGateOk": false,
+      "pipeline": [
+        {
+          "id": "content",
+          "label": "①コンテンツ",
+          "phase": 1,
+          "preDeploy": true,
+          "ok": false
+        },
+        {
+          "id": "matrix",
+          "label": "②〇×2党確定",
+          "phase": 2,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "x",
+          "label": "③X未発見（調査完了）",
+          "phase": 3,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "legal",
+          "label": "④法務OK",
+          "phase": 4,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "deployed",
+          "label": "⑤本番デプロイ",
+          "phase": 5,
+          "preDeploy": false,
+          "ok": false
+        },
+        {
+          "id": "debug",
+          "label": "⑥デバッグOK",
+          "phase": 6,
+          "preDeploy": false,
+          "ok": false
+        }
+      ],
+      "gold": [
+        {
+          "id": "content",
+          "label": "①コンテンツ",
+          "phase": 1,
+          "preDeploy": true,
+          "ok": false
+        },
+        {
+          "id": "matrix",
+          "label": "②〇×2党確定",
+          "phase": 2,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "x",
+          "label": "③X未発見（調査完了）",
+          "phase": 3,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "legal",
+          "label": "④法務OK",
+          "phase": 4,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "deployed",
+          "label": "⑤本番デプロイ",
+          "phase": 5,
+          "preDeploy": false,
+          "ok": false
+        },
+        {
+          "id": "debug",
+          "label": "⑥デバッグOK",
+          "phase": 6,
+          "preDeploy": false,
+          "ok": false
+        }
+      ],
+      "blockers": [
+        {
+          "id": "B4_conclusion",
+          "label": "結論の質",
+          "todo": "いまの結論が要点3行（重複・途中切れなし）",
+          "detail": "結論が途中切れ・重複・逐語抜粋"
+        }
+      ],
+      "blockerCount": 1,
+      "runState": "idle",
+      "workItems": [
+        {
+          "id": "B4_conclusion",
+          "label": "結論の質",
+          "state": "blocked"
+        }
+      ],
+      "nextAction": "結論が途中切れ・重複・逐語抜粋 → X投稿は見つかりませんでした（5段階調査完了）",
+      "promo": {
+        "x": null,
+        "hatena": null,
+        "note": null
+      },
+      "short": {
         "slug": "komei-kokumin",
         "generated": false,
         "uploaded": false,
@@ -7011,7 +7111,7 @@
       "xResearchStatus": "exhausted"
     }
   ],
-  "deltaGoldPct": 0,
+  "deltaGoldPct": -3,
   "previousGoldPct": 53,
   "deployedAt": "2026-07-01T07:41:57.784Z"
 }

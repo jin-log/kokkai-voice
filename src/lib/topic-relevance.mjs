@@ -8,6 +8,8 @@ const TOPIC_ALIASES = {
   国会議員のボーナス: ["ボーナス", "歳費", "特別職", "期末手当", "給与法", "報酬", "議員報酬"],
   スパイ防止法: ["スパイ防止", "スパイ防止法制", "国家情報", "スパイ活動"],
   副首都構想: ["副首都", "大阪都構想", "大阪都", "首都機能", "一極集中", "副首都法案", "都構想"],
+  政権・内閣人事: ["高市内閣", "高市 内閣", "組閣", "内閣発足"],
+  高市内閣: ["高市内閣", "高市 内閣", "組閣", "内閣発足"],
   物価高対策: ["物価", "物価高", "物価高騰", "予備費", "インフレ", "生活必需品", "物価対策"],
   防衛費: ["防衛力", "防衛予算", "軍事費", "国防"],
   "大阪万博 2025 費用": ["万博", "大阪万博", "EXPO2025", "2025", "入場者", "決算"],
@@ -17,6 +19,13 @@ const TOPIC_ALIASES = {
   能登半島地震: ["能登", "復興", "復興予算", "被災"],
 };
 
+/** @param {{ searchKeyword?: string, searchKeywords?: string[] }} article */
+export function articleTopicTerms(article) {
+  const base = topicTerms(article?.searchKeyword);
+  const extras = (article?.searchKeywords || []).flatMap((k) => topicTerms(k));
+  return [...new Set([...base, ...extras])].filter(Boolean);
+}
+
 /** 自動生成の空行（話題語なし） */
 export const BOILERPLATE_TOPIC =
   /について国会で答弁・質疑を行った|が国会で答弁・質疑を行った|国会で答弁・質疑が継続|が国会で論じた。?$|を国会で論じた。?$|国会で答弁・質疑を行った。?$/;
@@ -25,14 +34,24 @@ export function isBoilerplateTopicLine(text) {
   return BOILERPLATE_TOPIC.test(String(text || "").trim());
 }
 
-/** 各行に案件語を必ず含める（定型文は null で捨てる） */
+/** 各行に案件語を必ず含める（定型文は案件語注入後に再判定） */
 export function ensureTopicInLine(text, keyword) {
   let t = String(text || "").trim();
-  if (!t || isBoilerplateTopicLine(t)) return null;
+  if (!t) return null;
   if (!t.endsWith("。")) t += "。";
-  const terms = topicTerms(keyword);
-  if (textMatchesTopic(t, terms)) return t;
   const label = String(keyword || "").trim().slice(0, 28) || "本件";
+  const terms = topicTerms(keyword);
+
+  if (isBoilerplateTopicLine(t)) {
+    const diet = t.match(/^(\d{4}-\d{2}-\d{2})：(.+?)が.+について国会で答弁・質疑を行った。$/);
+    if (diet) {
+      t = `${diet[1]}：${diet[2]}が${label}について国会で答弁・質疑した。`;
+    } else if (!textMatchesTopic(t, terms)) {
+      return null;
+    }
+  }
+
+  if (textMatchesTopic(t, terms)) return t;
   if (/^[\d-]+：/.test(t)) {
     return t.replace(/^([\d-]+：)/, `$1${label}— `);
   }
@@ -110,6 +129,16 @@ export function isMatrixTopicRelevant(policyMatrix, keyword) {
 
 const INCOMPLETE_END = /(今後|おりませんが|について|に対し|とは|では|が、|を、|は、|下|ともに)。$/;
 const VERBATIM_OPENERS = null;
+const DATE_PREFIX = /^\d{4}-\d{2}-\d{2}[：:]\s*/;
+
+/** 重複判定用 — 日付プレフィックスを除いた本文キー */
+function conclusionBodyKey(line) {
+  return String(line)
+    .trim()
+    .replace(DATE_PREFIX, "")
+    .replace(/[、。…\s]/g, "")
+    .slice(0, 24);
+}
 
 /** @param {string[]} bullets */
 export function isConclusionQuality(bullets) {
@@ -119,9 +148,11 @@ export function isConclusionQuality(bullets) {
 
   const keys = new Set();
   for (const b of normalized) {
+    if (isBoilerplateTopicLine(b)) return false;
     if (INCOMPLETE_END.test(b)) return false;
     if (VERBATIM_OPENERS && VERBATIM_OPENERS.test(b) && b.length < 28) return false;
-    const key = b.replace(/[、。…\s]/g, "").slice(0, 20);
+    const key = conclusionBodyKey(b);
+    if (key.length < 8) return false;
     for (const prev of keys) {
       if (prev.startsWith(key.slice(0, 14)) || key.startsWith(prev.slice(0, 14))) return false;
     }

@@ -1,7 +1,6 @@
 ---
-import BaseLayout from "../../layouts/DevLayout.astro";
-import DevHeader from "../../components/DevHeader.astro";
-import SiteFooter from "../../components/SiteFooter.astro";
+import AdminShell from "../../components/admin/AdminShell.astro";
+import AdminKpiBar from "../../components/admin/AdminKpiBar.astro";
 import { loadTrendingTopics } from "../../lib/trending-topics.mjs";
 import { SITE } from "../../lib/site-config.mjs";
 
@@ -12,192 +11,141 @@ const fetchedAt = data?.fetchedAt
 
 const trendCards = data?.trendCards ?? data?.political?.slice(0, 12) ?? [];
 const evergreen = data?.evergreen ?? [];
+const unpublished = evergreen.filter((e) => !e.published).length;
 ---
 
-<BaseLayout tabTitle="関心ワード" bodyClass="dev-trends-page">
-  <DevHeader current="trends" />
-  <main class="container dev-trends">
-    <header class="dev-trends__head">
-      <h1>関心ワード・記事ネタ</h1>
-      <p class="dev-trends__lead">
-        政治・社会の注目キーワードから記事案を拾う。タイトルは
-        <code>kokkai-headlines</code> スキル、ショート冒頭2秒は <code>kokkai-short-hook</code> スキル。
-      </p>
-      <p class="dev-trends__meta">
-        最終取得: {fetchedAt}
-        <span class="dev-trends__meta-sep">·</span>
-        更新: <code>npm run trends:fetch</code>
-      </p>
-      <div class="dev-trends__ga">
-        <strong>政治なうのアクセス（GA4）</strong>
-        <span class="dev-trends__ga-note">「腎ログ」ではない。ブックマーク推奨。</span>
-        <div class="dev-trends__actions">
-          <a class="dev-trends__btn dev-trends__btn--primary" href={SITE.gaRealtimeUrl} target="_blank" rel="noopener noreferrer">
-            いま誰が見てる？（リアルタイム）
-          </a>
-          <a class="dev-trends__btn" href={SITE.gaPagesUrl} target="_blank" rel="noopener noreferrer">
-            記事別レポート
-          </a>
-        </div>
+<AdminShell activeId="trends" title="関心ワード">
+  <header class="admin-page-head">
+    <h1 class="admin-page-head__title">関心ワード</h1>
+    <p class="admin-page-head__note">
+      政治・社会の注目キーワードから記事案を拾う。最終取得: {fetchedAt}
+    </p>
+  </header>
+
+  <AdminKpiBar items={[
+    { label: "トレンド", value: String(trendCards.length) },
+    { label: "常連テーマ", value: String(evergreen.length) },
+    { label: "未公開", value: String(unpublished), tone: unpublished ? "warn" : undefined },
+    { label: "更新", value: "deploy時" },
+  ]} />
+
+  <section class="admin-surface" id="ga">
+    <header class="admin-surface__head">
+      <div>
+        <h2 class="admin-surface__title">政治なうのアクセス（GA4）</h2>
+        <p class="admin-surface__meta">「腎ログ」ではない。ブックマーク推奨。</p>
       </div>
     </header>
+    <div class="admin-surface__body">
+      <div class="admin-toolbar__row">
+        <a class="admin-row__btn admin-row__btn--primary" href={SITE.gaRealtimeUrl} target="_blank" rel="noopener noreferrer">
+          いま誰が見てる？（リアルタイム）
+        </a>
+        <a class="admin-row__btn" href={SITE.gaPagesUrl} target="_blank" rel="noopener noreferrer">
+          記事別レポート
+        </a>
+      </div>
+    </div>
+  </section>
 
-    {!data && (
-      <section class="dev-trends__empty">
-        <p>データを読み込めませんでした。次回デプロイで自動取得されます。</p>
-      </section>
-    )}
+  {!data && (
+    <p class="admin-list__empty">データを読み込めませんでした。次回デプロイで自動取得されます。</p>
+  )}
 
-    {data && (
-      <>
-        <section class="dev-trends__section">
-          <h2>いまのトレンド（{trendCards.length}件）</h2>
-          <p class="dev-trends__hint">Yahooトピックス・Google急上昇・NHK政治/社会（3本）から自動取得。スポーツ・芸能は除外。</p>
-          {trendCards.length === 0 ? (
-            <p class="dev-trends__hint">取得データなし。次回デプロイで更新されます。</p>
-          ) : (
-            <ul class="dev-trends__list dev-trends__list--compact">
-              {trendCards.map((item) => (
-                <li class="dev-trends__card dev-trends__card--compact">
-                  <div class="dev-trends__card-top">
-                    <span class="dev-trends__badge dev-trends__badge--pol">{item.source}</span>
-                    {item.traffic && <span class="dev-trends__traffic">{item.traffic}</span>}
+  {data && (
+    <>
+      <section class="admin-hub__section">
+        <h2 class="admin-hub__heading">いまのトレンド（{trendCards.length}件）</h2>
+        <p class="admin-page-head__note" style="margin:0 0 1rem">
+          Yahooトピックス・Google急上昇・NHK政治/社会から自動取得。スポーツ・芸能は除外。
+        </p>
+        {trendCards.length === 0 ? (
+          <p class="admin-list__empty">取得データなし。</p>
+        ) : (
+          <div class="admin-list admin-trends-grid">
+            {trendCards.map((item) => (
+              <article class="admin-row">
+                <div class="admin-row__grid admin-row__grid--stack">
+                  <div class="admin-row__main">
+                    <header class="admin-row__head">
+                      <span class="admin-row__badge admin-row__badge--cat">{item.source}</span>
+                      {item.traffic && <span class="admin-row__badge admin-row__badge--ng">{item.traffic}</span>}
+                    </header>
+                    <h3 class="admin-row__title">{item.headline || item.keyword}</h3>
+                    <p class="admin-row__summary">検索: {item.keyword}</p>
+                    <div class="admin-row__quick" style="margin-top:0.65rem">
+                      <button type="button" class="admin-row__btn admin-row__btn--primary use-keyword" data-keyword={item.keyword}>
+                        記事作成へ
+                      </button>
+                      {item.url && (
+                        <a class="admin-row__btn" href={item.url} target="_blank" rel="noopener noreferrer">ニュース</a>
+                      )}
+                      {item.articleSlug && (
+                        <a class="admin-row__btn admin-row__btn--ghost" href={`/dev/preview/${item.articleSlug}/`}>プレビュー</a>
+                      )}
+                    </div>
                   </div>
-                  <h3 class="dev-trends__kw">{item.headline || item.keyword}</h3>
-                  <p class="dev-trends__sub">検索: {item.keyword}</p>
-                  <div class="dev-trends__actions">
-                    <button
-                      type="button"
-                      class="dev-trends__btn dev-trends__btn--primary use-keyword"
-                      data-keyword={item.keyword}
-                    >
-                      記事作成へ
-                    </button>
-                    {item.url && (
-                      <a class="dev-trends__btn" href={item.url} target="_blank" rel="noopener noreferrer">
-                        ニュース
-                      </a>
-                    )}
-                    {item.articleSlug && (
-                      <a class="dev-trends__btn" href={`/dev/preview/${item.articleSlug}/`}>
-                        プレビュー
-                      </a>
-                    )}
-                  </div>
-                </li>
-              ))}
-            </ul>
-          )}
-        </section>
-
-        <section class="dev-trends__section">
-          <h2>常連テーマ（topics.json）</h2>
-          <p class="dev-trends__hint">サイトの柱になる争点。未公開は優先度高。</p>
-          <ul class="dev-trends__list dev-trends__list--compact">
-            {evergreen.map((item) => (
-              <li class="dev-trends__card dev-trends__card--compact">
-                <div class="dev-trends__card-top">
-                  <span class:list={[
-                    "dev-trends__badge",
-                    item.published ? "dev-trends__badge--live" : "dev-trends__badge--draft",
-                  ]}>
-                    {item.published ? "公開済" : "未公開/下書き"}
-                  </span>
                 </div>
-                <h3 class="dev-trends__kw">{item.headline}</h3>
-                <p class="dev-trends__sub">検索: {item.keyword}</p>
-                <div class="dev-trends__actions">
-                  <button
-                    type="button"
-                    class="dev-trends__btn use-keyword"
-                    data-keyword={item.keyword}
-                  >
-                    記事作成へ
-                  </button>
-                  {item.articleSlug && (
-                    <a class="dev-trends__btn" href={`/dev/preview/${item.articleSlug}/`}>
-                      プレビュー
-                    </a>
-                  )}
-                </div>
-              </li>
+              </article>
             ))}
-          </ul>
-        </section>
+          </div>
+        )}
+      </section>
 
-        <section class="dev-trends__section dev-trends__section--guide">
-          <h2>タイトル・ショートの型（要約）</h2>
-          <ul class="dev-trends__guide">
-            <li><strong>タイトル</strong> — 政策名ではなく<strong>読者の疑問</strong>。数字＋「いまどうなった？」。全角42字以内。</li>
-            <li><strong>冒頭2秒</strong> — テロップ2行・1行14字以内。「数字の矛盾」か「？」で止める。</li>
-            <li><strong>禁止</strong> — 裏切り・嘘・煽り評価語。`— あの話どうなった？` はタイトルに付けない。</li>
-          </ul>
-          <p class="dev-trends__hint">詳細は <code>.cursor/skills/kokkai-headlines</code> と <code>kokkai-short-hook</code></p>
-        </section>
-      </>
-    )}
-  </main>
-  <SiteFooter />
-</BaseLayout>
+      <section class="admin-hub__section">
+        <h2 class="admin-hub__heading">常連テーマ</h2>
+        <div class="admin-list admin-trends-grid">
+          {evergreen.map((item) => (
+            <article class="admin-row">
+              <div class="admin-row__grid admin-row__grid--stack">
+                <div class="admin-row__main">
+                  <header class="admin-row__head">
+                    <span class:list={["admin-row__badge", item.published ? "admin-row__badge--live" : "admin-row__badge--draft"]}>
+                      {item.published ? "公開済" : "未公開"}
+                    </span>
+                  </header>
+                  <h3 class="admin-row__title">{item.headline}</h3>
+                  <p class="admin-row__summary">検索: {item.keyword}</p>
+                  <div class="admin-row__quick" style="margin-top:0.65rem">
+                    <button type="button" class="admin-row__btn use-keyword" data-keyword={item.keyword}>記事作成へ</button>
+                    {item.articleSlug && (
+                      <a class="admin-row__btn admin-row__btn--ghost" href={`/dev/preview/${item.articleSlug}/`}>プレビュー</a>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section class="admin-hub__section">
+        <h2 class="admin-hub__heading">タイトル・ショートの型</h2>
+        <ul class="admin-guide-list">
+          <li><strong>タイトル</strong> — 政策名ではなく読者の疑問。数字＋「いまどうなった？」。全角42字以内。</li>
+          <li><strong>冒頭2秒</strong> — テロップ2行・1行14字以内。「数字の矛盾」か「？」で止める。</li>
+          <li><strong>禁止</strong> — 裏切り・嘘・煽り評価語。</li>
+        </ul>
+      </section>
+    </>
+  )}
+</AdminShell>
 
 <style>
-  .dev-trends { padding: 1.5rem 0 3rem; max-width: 52rem; }
-  .dev-trends__head h1 { font-size: 1.35rem; margin: 0 0 0.5rem; }
-  .dev-trends__lead { color: var(--muted, #666); margin: 0 0 0.5rem; line-height: 1.6; }
-  .dev-trends__meta { font-size: 0.85rem; color: var(--muted, #888); margin: 0; }
-  .dev-trends__ga {
-    margin-top: 1rem;
-    padding: 0.85rem 1rem;
-    border: 1px solid #c8dafb;
-    border-radius: 8px;
-    background: #f0f6ff;
+  .admin-trends-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+    gap: 0.5rem;
   }
-  .dev-trends__ga-note { display: block; font-size: 0.85rem; color: #555; margin: 0.25rem 0 0.5rem; }
-  .dev-trends__meta-sep { margin: 0 0.35rem; }
-  .dev-trends__section { margin-top: 2rem; }
-  .dev-trends__section h2 { font-size: 1.05rem; margin: 0 0 0.75rem; }
-  .dev-trends__hint { font-size: 0.9rem; color: var(--muted, #666); margin: 0 0 1rem; }
-  .dev-trends__list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.75rem; }
-  .dev-trends__list--compact { display: grid; grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr)); gap: 0.75rem; }
-  .dev-trends__card {
-    border: 1px solid var(--border, #e0e0e0);
-    border-radius: 8px;
-    padding: 0.85rem 1rem;
-    background: var(--surface, #fff);
-  }
-  .dev-trends__card--compact { padding: 0.75rem; }
-  .dev-trends__card-top { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.35rem; }
-  .dev-trends__badge {
-    font-size: 0.7rem;
-    padding: 0.15rem 0.45rem;
-    border-radius: 4px;
-    background: #eee;
-    text-transform: uppercase;
-  }
-  .dev-trends__badge--pol { background: #e8f0fe; color: #1a56db; }
-  .dev-trends__badge--live { background: #e6f4ea; color: #137333; }
-  .dev-trends__badge--draft { background: #fef7e0; color: #b06000; }
-  .dev-trends__traffic { font-size: 0.8rem; font-weight: 600; color: #c5221f; }
-  .dev-trends__kw { font-size: 1rem; margin: 0 0 0.35rem; line-height: 1.45; }
-  .dev-trends__headline, .dev-trends__sub { font-size: 0.85rem; color: var(--muted, #666); margin: 0 0 0.5rem; }
-  .dev-trends__actions { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.5rem; }
-  .dev-trends__btn {
-    font-size: 0.8rem;
-    padding: 0.35rem 0.65rem;
-    border-radius: 6px;
-    border: 1px solid var(--border, #ccc);
-    background: #fafafa;
-    cursor: pointer;
-    text-decoration: none;
-    color: inherit;
-  }
-  .dev-trends__btn--primary { background: #1a56db; color: #fff; border-color: #1a56db; }
-  .dev-trends__guide { margin: 0; padding-left: 1.2rem; line-height: 1.7; font-size: 0.92rem; }
-  .dev-trends__empty {
-    margin-top: 2rem;
-    padding: 1.5rem;
-    border: 1px dashed #ccc;
-    border-radius: 8px;
+  .admin-trends-grid .admin-row { margin-bottom: 0; height: 100%; }
+  .admin-guide-list {
+    margin: 0;
+    padding: 1rem 1rem 1rem 1.35rem;
+    background: #fff;
+    border: 1px solid var(--color-border);
+    border-radius: 0.65rem;
+    line-height: 1.7;
+    font-size: 0.92rem;
   }
 </style>
 
@@ -206,7 +154,7 @@ document.querySelectorAll(".use-keyword").forEach((btn) => {
   btn.addEventListener("click", () => {
     const kw = btn.getAttribute("data-keyword") || "";
     if (!kw) return;
-    const url = new URL("/dev/status/", window.location.origin);
+    const url = new URL("/dev/articles/", window.location.origin);
     url.searchParams.set("keyword", kw);
     window.location.href = url.toString();
   });

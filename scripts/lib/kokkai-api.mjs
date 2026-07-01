@@ -24,6 +24,75 @@ export async function fetchSpeech(params, { delayMs = 1200 } = {}) {
 }
 
 /**
+ * 記事の searchKeywords またはフォールバック候補
+ * @param {string | { searchKeyword?: string, searchKeywords?: string[] }} input
+ */
+export function resolveSearchKeywords(input) {
+  if (Array.isArray(input)) return input.map((k) => String(k).trim()).filter((k) => k.length >= 2);
+  if (input && typeof input === "object") {
+    if (Array.isArray(input.searchKeywords) && input.searchKeywords.length) {
+      return resolveSearchKeywords(input.searchKeywords);
+    }
+    return kokkaiKeywordCandidates(input.searchKeyword || "");
+  }
+  return kokkaiKeywordCandidates(String(input ?? ""));
+}
+
+/**
+ * 複数キーワードを順に叩き speechID で重複除去してマージ
+ * @param {string[]} keywords
+ */
+export async function fetchSpeechMerged(keywords, params, opts = {}) {
+  const list = [...new Set(resolveSearchKeywords(keywords))];
+  const seen = new Set();
+  const merged = [];
+  let apiHits = 0;
+  let resolvedKeyword = list[0] || "";
+
+  for (const kw of list) {
+    const data = await fetchSpeech({ ...params, any: kw }, opts);
+    const records = data.speechRecord ?? [];
+    apiHits += parseInt(data.numberOfRecords ?? "0", 10);
+    for (const r of records) {
+      if (!r.speechID || seen.has(r.speechID)) continue;
+      seen.add(r.speechID);
+      merged.push(r);
+    }
+    if (pickSpeech(records, kw)) resolvedKeyword = kw;
+  }
+
+  return { data: {}, records: merged, apiHits, resolvedKeyword, tried: list };
+}
+
+/**
+ * 記事オブジェクトまたは単一キーワードで国会API取得
+ * @param {string | { searchKeyword?: string, searchKeywords?: string[] }} articleOrKeyword
+ */
+export async function fetchSpeechForArticle(articleOrKeyword, params, opts = {}) {
+  const keywords = resolveSearchKeywords(articleOrKeyword);
+  const primary =
+    typeof articleOrKeyword === "object" && articleOrKeyword?.searchKeyword
+      ? articleOrKeyword.searchKeyword
+      : keywords[0] || "";
+
+  if (keywords.length <= 1) {
+    return fetchSpeechForKeyword(primary || keywords[0] || "", params, opts);
+  }
+
+  const merged = await fetchSpeechMerged(keywords, params, opts);
+  merged.resolvedKeyword = primary;
+  if (!pickSpeech(merged.records, primary)) {
+    for (const kw of keywords) {
+      if (pickSpeech(merged.records, kw)) {
+        merged.resolvedKeyword = kw;
+        break;
+      }
+    }
+  }
+  return merged;
+}
+
+/**
  * 0件キーワード（例: 国旗損壊罪法案）を短縮候補で再試行
  * @param {string} keyword
  * @param {Record<string, string|number>} params
@@ -173,6 +242,9 @@ const PROCEDURAL_PATTERNS = [
   /討論通告/,
   /〔「異議なし」/,
   /委員長　これより会議を開きます/,
+  /委員長の報告がございまして/,
+  /次に、日程第/,
+  /傍聴にお見え/,
 ];
 
 function isProceduralSpeech(speech) {
@@ -226,28 +298,52 @@ export function scoreSpeechRelevance(record, keyword) {
   return score;
 }
 
+/** primarySpeech / nowSummary 用の選定スコア（手続き発言・委員長報告を減点） */
+export function scoreSpeechForSummaryPick(record, keyword) {
+  if (!isUsableSpeech(record)) return -9999;
+
+  let score = scoreSpeechTopicRelevance(record, keyword);
+  const speech = record.speech || "";
+  const pos = record.speakerPosition || "";
+  const meeting = record.nameOfMeeting || "";
+  const speaker = record.speaker || "";
+
+  if (isProceduralSpeech(speech)) score -= 8000;
+  if (/議院運営|議事運営/.test(meeting)) score -= 4000;
+  if (/事務総長/.test(pos) || /事務総長/.test(speaker)) score -= 5000;
+
+  if (/高市.*内閣|内閣発足|組閣|政権/.test(keyword)) {
+    const win = extractKeywordSpeechWindow(speech, topicTerms(keyword));
+    if (/内閣委員長|委員長の報告/.test(win) && !/高市総理|高市内閣|内閣発足|組閣|閣議/.test(win)) {
+      score -= 3000;
+    }
+  }
+
+  if (/総理|内閣総理|首相/.test(pos)) score += 500;
+  if (/大臣|官房長官|副大臣|国務大臣/.test(pos)) score += 250;
+  if (/お尋ねがありました|お答えいたします|御答弁/.test(speech)) score += 150;
+  if (speech.length > 600 && speech.length < 8000) score += 80;
+
+  return score;
+}
+
 /** 要約に使える発言を選ぶ（キーワード周辺の文脈量で判定） */
 export function pickSpeechForSummary(records, keyword) {
   if (!records?.length) return null;
-  const terms = topicTerms(keyword);
+
   let best = null;
-  let bestHits = -1;
   let bestScore = -Infinity;
 
   for (const r of records) {
-    if (!isUsableSpeech(r)) continue;
-    const win = extractKeywordSpeechWindow(r.speech, terms);
-    const hits = terms.reduce((n, t) => n + Math.max(0, win.split(t).length - 1), 0);
-    if (hits === 0) continue;
-    const score = scoreSpeechRelevance(r, keyword);
-    if (hits > bestHits || (hits === bestHits && score > bestScore)) {
-      bestHits = hits;
+    const score = scoreSpeechForSummaryPick(r, keyword);
+    if (score > bestScore) {
       bestScore = score;
       best = r;
     }
   }
 
-  return best || pickSpeech(records, keyword);
+  if (best && bestScore > -100) return best;
+  return pickSpeech(records, keyword);
 }
 
 export function pickSpeech(records, keyword) {
