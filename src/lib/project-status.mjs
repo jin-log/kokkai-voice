@@ -24,7 +24,7 @@ import {
   AUTOMATION_POLICY,
   STATUS_DEFINITIONS,
 } from "./admin-status-guide.mjs";
-import { analyzePatrolHealth, stallForSlug } from "./patrol-stall.mjs";
+import { analyzePatrolHealth, stallForSlug, loadPatrolHealthForAdmin } from "./patrol-stall.mjs";
 import { isXUnavailable, X_UNAVAILABLE_ADMIN_MESSAGE } from "./x-research-policy.mjs";
 
 /** @typedef {{ id: string, label: string, phase: number, preDeploy: boolean }} PipelineItemDef */
@@ -382,9 +382,29 @@ export function adminFilterLabel(filter) {
   return labels[filter] ?? filter;
 }
 
+export async function enrichProjectStatusForAdmin(status) {
+  if (!status?.slugs?.length) return status;
+
+  const patrolHealth = await loadPatrolHealthForAdmin(
+    status.slugs.map((s) => ({
+      slug: s.slug,
+      shortTitle: s.shortTitle,
+      goldPct: s.goldPct,
+      adminHidden: s.adminHidden,
+    })),
+  );
+
+  status.patrolHealth = patrolHealth;
+  for (const s of status.slugs) {
+    s.stall = stallForSlug(s.slug, patrolHealth);
+  }
+  return status;
+}
+
 export async function loadProjectStatus() {
   const raw = await readFile(path.join(root, "data/project-status.json"), "utf8");
-  return JSON.parse(raw);
+  const status = JSON.parse(raw);
+  return enrichProjectStatusForAdmin(status);
 }
 
 export async function refreshProjectStatus() {

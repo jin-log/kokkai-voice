@@ -505,7 +505,7 @@ const policyCategories = Object.keys(categoryCounts).sort(sortPolicyCategories);
   function renderPatrolAlert(health) {
     const id = "articles-patrol-alert";
     let el = document.getElementById(id);
-    const show = health && (health.status === "stalled" || health.status === "paused");
+    const show = health && (health.status === "stalled" || health.status === "paused" || (health.slugStalls?.length ?? 0) > 0);
     if (!show) {
       if (el) el.remove();
       return;

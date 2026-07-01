@@ -10,7 +10,8 @@ const { health, id = "admin-patrol-alert" } = Astro.props;
 
 const isStalled = health?.status === "stalled";
 const isPaused = health?.status === "paused";
-const show = health && (isStalled || isPaused);
+const hasLoops = (health?.slugStalls?.length ?? 0) > 0;
+const show = health && (isStalled || isPaused || hasLoops);
 ---
 
 {show && health && (
@@ -26,7 +27,9 @@ const show = health && (isStalled || isPaused);
   >
     <header class="admin-patrol-alert__head">
       <strong class="admin-patrol-alert__title">
-        {isStalled ? "⚠ 進行停止 — 巡回は動いているが％が上がっていません" : "⏸ 巡回一時停止"}
+        {isStalled || hasLoops
+          ? "⚠ 進行停止 — 巡回は動いているが％が上がっていません"
+          : "⏸ 巡回一時停止"}
       </strong>
       <span class="admin-patrol-alert__badge">{health.statusLabel}</span>
     </header>

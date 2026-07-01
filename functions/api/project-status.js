@@ -1,4 +1,5 @@
 import { decodeGitHubBase64Utf8 } from "../lib/github-content.js";
+import { enrichStatusWithPatrolStall } from "../lib/patrol-health-enrich.js";
 
 /**
  * GET /api/project-status?pin=1192
@@ -39,6 +40,16 @@ export async function onRequestGet(context) {
     return json({ error: "invalid JSON" }, 500);
   }
 
+  const stallMeta = await fetchGhFile(GH_TOKEN, "data/patrol-stall-state.json");
+  if (stallMeta?.content) {
+    try {
+      const snap = JSON.parse(decodeGitHubBase64Utf8(stallMeta.content));
+      enrichStatusWithPatrolStall(status, snap);
+    } catch {
+      /* optional */
+    }
+  }
+
   return json({
     ok: true,
     fetchedAt: new Date().toISOString(),
@@ -54,6 +65,13 @@ function ghHeaders(token) {
     "X-GitHub-Api-Version": "2022-11-28",
     "User-Agent": "kokkai-voice-pages/1.0",
   };
+}
+
+async function fetchGhFile(token, filePath) {
+  const url = `https://api.github.com/repos/jin-log/kokkai-voice/contents/${filePath}?ref=main`;
+  const res = await fetch(url, { headers: ghHeaders(token) });
+  if (!res.ok) return null;
+  return res.json();
 }
 
 function json(data, status = 200) {

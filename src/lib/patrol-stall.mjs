@@ -294,3 +294,139 @@ export async function syncCeoStallAlert(health) {
 export function stallForSlug(slug, health) {
   return health.slugStalls.find((s) => s.slug === slug) ?? null;
 }
+
+/** @returns {Promise<{ status: string, globalStall: object|null, slugStalls: object[] }|null>} */
+export async function loadPatrolStallSnapshot() {
+  try {
+    return JSON.parse(await readFile(STALL_STATE_PATH, "utf8"));
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * 本番ビルド・GitHub JSON 用 — patrol-stall-state から patrolHealth を復元
+ * @param {{ slug: string, shortTitle: string, goldPct?: number, adminHidden?: boolean }[]} slugs
+ * @param {object|null} snapshot
+ * @param {object|null} patrolState
+ * @param {{ paused: boolean, reason: string|null, detail?: string }} pauseState
+ */
+export function healthFromStallSnapshot(slugs, snapshot, patrolState, pauseState) {
+  if (!snapshot?.slugStalls?.length) {
+    /** @type {'paused'|'idle'|'progressing'} */
+    let status = patrolState?.running ? "progressing" : "idle";
+    if (pauseState.paused) status = "paused";
+    return {
+      status,
+      statusLabel: status === "paused" ? "一時停止" : status === "idle" ? "停止中" : "進行中",
+      paused: pauseState.paused,
+      pauseReason: pauseState.reason,
+      pauseDetail: pauseState.detail ?? null,
+      globalStall: null,
+      slugStalls: [],
+      stalledCount: 0,
+      message:
+        status === "paused"
+          ? pauseState.reason === "obs"
+            ? `OBS稼働中（${pauseState.detail ?? "obs"}）のため巡回は止まっています`
+            : `手動停止中（${pauseState.detail ?? pauseState.reason}）`
+          : status === "idle"
+            ? "品質巡回プロセスが停止中です（ローカルで patrol.ps1 を起動）"
+            : "進行中",
+      analyzedAt: snapshot?.updatedAt ?? new Date().toISOString(),
+      lastPatrolCycleAt: patrolState?.lastCycleAt ?? null,
+      patrolRunning: patrolState?.running === true,
+    };
+  }
+
+  const titleBySlug = new Map(slugs.map((s) => [s.slug, s.shortTitle]));
+  const goldBySlug = new Map(slugs.map((s) => [s.slug, s.goldPct ?? 0]));
+
+  const slugStalls = snapshot.slugStalls.map((row) => {
+    const meta = CHECK_LABELS[row.checkId];
+    return {
+      stalled: true,
+      slug: row.slug,
+      shortTitle: titleBySlug.get(row.slug) ?? row.slug,
+      goldPct: goldBySlug.get(row.slug) ?? 0,
+      checkId: row.checkId,
+      checkLabel: meta?.label ?? row.checkId,
+      ownerHint: meta?.todo ?? "",
+      agent: "writer",
+      attempts: row.attempts,
+      lastAt: row.lastAt,
+      loopLine: row.loopLine,
+    };
+  });
+
+  /** @type {'stalled'|'paused'|'idle'|'progressing'} */
+  let status = snapshot.status === "stalled" ? "stalled" : "progressing";
+  if (pauseState.paused) status = "paused";
+  else if (!patrolState?.running && snapshot.status === "stalled") status = "stalled";
+
+  const statusLabels = {
+    paused: "一時停止",
+    stalled: "進行停止（ループ中）",
+    progressing: "進行中",
+    idle: "停止中",
+  };
+
+  const parts = [];
+  if (pauseState.paused) {
+    parts.push(
+      pauseState.reason === "obs"
+        ? `OBS稼働中（${pauseState.detail ?? "obs"}）`
+        : `手動停止: ${pauseState.detail ?? pauseState.reason}`,
+    );
+  }
+  if (!patrolState?.running && !pauseState.paused) {
+    parts.push("巡回プロセスは停止中（ループ情報は最後の検知結果）");
+  }
+  if (snapshot.globalStall) parts.push(snapshot.globalStall.message);
+  if (slugStalls.length > 0) {
+    parts.push(`${slugStalls.length} 記事が同じチェックで失敗ループ中`);
+  }
+
+  return {
+    status,
+    statusLabel: statusLabels[status] ?? status,
+    paused: pauseState.paused,
+    pauseReason: pauseState.reason,
+    pauseDetail: pauseState.detail ?? null,
+    globalStall: snapshot.globalStall ?? null,
+    slugStalls,
+    stalledCount: slugStalls.length,
+    message: parts.join("。") || statusLabels[status],
+    analyzedAt: snapshot.updatedAt ?? new Date().toISOString(),
+    lastPatrolCycleAt: patrolState?.lastCycleAt ?? null,
+    patrolRunning: patrolState?.running === true,
+  };
+}
+
+/**
+ * 管理画面用 — ログ解析 or patrol-stall-state.json
+ * @param {{ slug: string, shortTitle: string, goldPct?: number, adminHidden?: boolean }[]} slugs
+ */
+export async function loadPatrolHealthForAdmin(slugs) {
+  let patrolState = null;
+  try {
+    patrolState = JSON.parse(
+      await readFile(path.join(root, "data/pipeline-patrol.json"), "utf8"),
+    );
+  } catch {
+    /* optional */
+  }
+  const pauseState = await getPatrolPauseState();
+
+  const lines = await readLogTail(AUTORUN_LOG_PATH, 500);
+  if (lines.length > 80) {
+    try {
+      return await analyzePatrolHealth({ slugs, patrolState });
+    } catch {
+      /* fall through */
+    }
+  }
+
+  const snapshot = await loadPatrolStallSnapshot();
+  return healthFromStallSnapshot(slugs, snapshot, patrolState, pauseState);
+}
