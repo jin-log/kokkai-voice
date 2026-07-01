@@ -1,12 +1,12 @@
 {
-  "generatedAt": "2026-07-01T04:23:08.355Z",
+  "generatedAt": "2026-07-01T04:32:04.117Z",
   "strategy": "quality-first",
   "activeCount": 39,
   "parkedCount": 0,
   "publishedCount": 22,
   "overallGoldPct": 53,
-  "overallGatePct": 71,
-  "qualityFailed": 3,
+  "overallGatePct": 72,
+  "qualityFailed": 2,
   "slugs": [
     {
       "slug": "case-mr0jbdpc",
@@ -116,6 +116,7 @@
       "blockers": [],
       "blockerCount": 0,
       "runState": "idle",
+      "workItems": [],
       "nextAction": "📋 完成・非公開 — プレビューで確認して「公開する」を押してください",
       "promo": {
         "x": null,
@@ -332,6 +333,33 @@
       ],
       "blockerCount": 1,
       "runState": "idle",
+      "workItems": [
+        {
+          "id": "Q1_conclusion_numbers",
+          "label": "タイトルが金額・実績を問うのに、いまの結論に公表",
+          "state": "blocked"
+        },
+        {
+          "id": "Q2_template_conclusion",
+          "label": "いまの結論が「国会で議論された」型の繰り返し（3",
+          "state": "blocked"
+        },
+        {
+          "id": "Q3_plain_no_answer",
+          "label": "つまり欄の冒頭がタイトルの疑問（金額・実績）に答",
+          "state": "blocked"
+        },
+        {
+          "id": "Q8_x_numbers_not_in_summary",
+          "label": "X枠に金額等の数字があるのに、いまの結論に反映さ",
+          "state": "blocked"
+        },
+        {
+          "id": "G5_parties_symbol",
+          "label": "◎〇▲×",
+          "state": "blocked"
+        }
+      ],
       "nextAction": "品質: タイトルが金額・実績を問うのに、いまの結論に公表数値がない — 1行目に円・%・万人などタイトルへの直接回答を入れる（X・報道の数字を要約に反映） → ◎▲❌ を確定",
       "promo": {
         "x": null,
@@ -460,6 +488,7 @@
       "blockers": [],
       "blockerCount": 0,
       "runState": "idle",
+      "workItems": [],
       "nextAction": "📋 完成・非公開 — プレビューで確認して「公開する」を押してください",
       "promo": {
         "x": null,
@@ -487,41 +516,12 @@
       "adminHidden": true,
       "pageReady": false,
       "publishState": "hidden",
-      "previewUrl": null,
-      "qualityOk": false,
-      "needsQualityFix": true,
-      "qualityBlockerCount": 1,
-      "qualityBlockers": [
-        {
-          "id": "Q9_x_screenshot",
-          "message": "X URLは3件あるがスクショは2/3件（仕様違反）",
-          "todo": "npm run x:capture -- --slug <slug>（デバッガー担当）",
-          "agent": "debugger"
-        }
-      ],
+      "previewUrl": "/dev/preview/zeihikaku-kojo/",
+      "qualityOk": true,
+      "needsQualityFix": false,
+      "qualityBlockerCount": 0,
+      "qualityBlockers": [],
       "agentTasks": [
-        {
-          "id": "zeihikaku-kojo:Q9_x_screenshot",
-          "slug": "zeihikaku-kojo",
-          "agent": "debugger",
-          "agentLabel": "デバッガー",
-          "checkId": "Q9_x_screenshot",
-          "title": "[品質] X URLは3件あるがスクショは2/3件（仕様違反）",
-          "todo": "npm run x:capture -- --slug <slug>（デバッガー担当）",
-          "command": "npm run x:capture -- --slug zeihikaku-kojo",
-          "priority": 10
-        },
-        {
-          "id": "zeihikaku-kojo:H3_x_screenshot",
-          "slug": "zeihikaku-kojo",
-          "agent": "debugger",
-          "agentLabel": "デバッガー",
-          "checkId": "H3_x_screenshot",
-          "title": "[ゲート] Xスクショ",
-          "todo": "npm run x:capture -- --slug <slug>（デバッガー）",
-          "command": "npm run x:capture -- --slug zeihikaku-kojo",
-          "priority": 20
-        },
         {
           "id": "zeihikaku-kojo:D2_arc_topic",
           "slug": "zeihikaku-kojo",
@@ -567,8 +567,8 @@
           "priority": 30
         }
       ],
-      "gatePct": 25,
-      "goldPct": 17,
+      "gatePct": 50,
+      "goldPct": 33,
       "published": false,
       "publishGateOk": false,
       "pipeline": [
@@ -591,7 +591,7 @@
           "label": "③X検証1件+",
           "phase": 3,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "legal",
@@ -635,7 +635,7 @@
           "label": "③X検証1件+",
           "phase": 3,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "legal",
@@ -683,16 +683,32 @@
           "label": "〇×の話題",
           "todo": "公言と行動が案件キーワードと一致（2党）",
           "detail": "公言テキストが案件と無関係"
-        },
-        {
-          "id": "H3_x_screenshot",
-          "label": "Xスクショ",
-          "todo": "npm run x:capture -- --slug <slug>（デバッガー）",
-          "detail": "スクショ 2/3 件 — x:capture 未実行"
         }
       ],
-      "blockerCount": 5,
+      "blockerCount": 4,
       "runState": "idle",
+      "workItems": [
+        {
+          "id": "D2_arc_topic",
+          "label": "経緯の話題",
+          "state": "blocked"
+        },
+        {
+          "id": "E4_timeline_diet_topic",
+          "label": "TL国会の話題",
+          "state": "blocked"
+        },
+        {
+          "id": "G5_parties_symbol",
+          "label": "◎〇▲×",
+          "state": "blocked"
+        },
+        {
+          "id": "G6_matrix_topic",
+          "label": "〇×の話題",
+          "state": "blocked"
+        }
+      ],
       "nextAction": "👁️ 非表示中 — 「表示に戻す」でトップに出せます",
       "promo": {
         "x": null,
@@ -720,7 +736,7 @@
       "adminHidden": true,
       "pageReady": true,
       "publishState": "hidden",
-      "previewUrl": null,
+      "previewUrl": "/dev/preview/expo2025-kessan/",
       "qualityOk": true,
       "needsQualityFix": false,
       "qualityBlockerCount": 0,
@@ -891,6 +907,28 @@
       ],
       "blockerCount": 4,
       "runState": "idle",
+      "workItems": [
+        {
+          "id": "D2_arc_topic",
+          "label": "経緯の話題",
+          "state": "blocked"
+        },
+        {
+          "id": "E4_timeline_diet_topic",
+          "label": "TL国会の話題",
+          "state": "blocked"
+        },
+        {
+          "id": "G5_parties_symbol",
+          "label": "◎〇▲×",
+          "state": "blocked"
+        },
+        {
+          "id": "G6_matrix_topic",
+          "label": "〇×の話題",
+          "state": "blocked"
+        }
+      ],
       "nextAction": "👁️ 非表示中 — 「表示に戻す」でトップに出せます",
       "promo": {
         "x": null,
@@ -918,7 +956,7 @@
       "adminHidden": true,
       "pageReady": false,
       "publishState": "hidden",
-      "previewUrl": null,
+      "previewUrl": "/dev/preview/minimum-wage-2026/",
       "qualityOk": true,
       "needsQualityFix": false,
       "qualityBlockerCount": 0,
@@ -1072,6 +1110,23 @@
       ],
       "blockerCount": 3,
       "runState": "idle",
+      "workItems": [
+        {
+          "id": "G5_parties_symbol",
+          "label": "◎〇▲×",
+          "state": "blocked"
+        },
+        {
+          "id": "G6_matrix_topic",
+          "label": "〇×の話題",
+          "state": "blocked"
+        },
+        {
+          "id": "H2_x_topic",
+          "label": "Xの話題",
+          "state": "blocked"
+        }
+      ],
       "nextAction": "👁️ 非表示中 — 「表示に戻す」でトップに出せます",
       "promo": {
         "x": null,
@@ -1099,7 +1154,7 @@
       "adminHidden": true,
       "pageReady": false,
       "publishState": "hidden",
-      "previewUrl": null,
+      "previewUrl": "/dev/preview/pension-kuriage-70/",
       "qualityOk": true,
       "needsQualityFix": false,
       "qualityBlockerCount": 0,
@@ -1236,6 +1291,18 @@
       ],
       "blockerCount": 2,
       "runState": "idle",
+      "workItems": [
+        {
+          "id": "G5_parties_symbol",
+          "label": "◎〇▲×",
+          "state": "blocked"
+        },
+        {
+          "id": "G6_matrix_topic",
+          "label": "〇×の話題",
+          "state": "blocked"
+        }
+      ],
       "nextAction": "👁️ 非表示中 — 「表示に戻す」でトップに出せます",
       "promo": {
         "x": null,
@@ -1263,7 +1330,7 @@
       "adminHidden": true,
       "pageReady": false,
       "publishState": "hidden",
-      "previewUrl": null,
+      "previewUrl": "/dev/preview/denki-gas-genmen/",
       "qualityOk": true,
       "needsQualityFix": false,
       "qualityBlockerCount": 0,
@@ -1434,6 +1501,28 @@
       ],
       "blockerCount": 4,
       "runState": "idle",
+      "workItems": [
+        {
+          "id": "B3_topic",
+          "label": "話題一致",
+          "state": "blocked"
+        },
+        {
+          "id": "E4_timeline_diet_topic",
+          "label": "TL国会の話題",
+          "state": "blocked"
+        },
+        {
+          "id": "G5_parties_symbol",
+          "label": "◎〇▲×",
+          "state": "blocked"
+        },
+        {
+          "id": "G6_matrix_topic",
+          "label": "〇×の話題",
+          "state": "blocked"
+        }
+      ],
       "nextAction": "👁️ 非表示中 — 「表示に戻す」でトップに出せます",
       "promo": {
         "x": null,
@@ -1461,7 +1550,7 @@
       "adminHidden": true,
       "pageReady": false,
       "publishState": "hidden",
-      "previewUrl": null,
+      "previewUrl": "/dev/preview/gakushu-shien-75000/",
       "qualityOk": true,
       "needsQualityFix": false,
       "qualityBlockerCount": 0,
@@ -1649,6 +1738,33 @@
       ],
       "blockerCount": 5,
       "runState": "idle",
+      "workItems": [
+        {
+          "id": "B3_topic",
+          "label": "話題一致",
+          "state": "blocked"
+        },
+        {
+          "id": "D2_arc_topic",
+          "label": "経緯の話題",
+          "state": "blocked"
+        },
+        {
+          "id": "E4_timeline_diet_topic",
+          "label": "TL国会の話題",
+          "state": "blocked"
+        },
+        {
+          "id": "G5_parties_symbol",
+          "label": "◎〇▲×",
+          "state": "blocked"
+        },
+        {
+          "id": "G6_matrix_topic",
+          "label": "〇×の話題",
+          "state": "blocked"
+        }
+      ],
       "nextAction": "👁️ 非表示中 — 「表示に戻す」でトップに出せます",
       "promo": {
         "x": null,
@@ -1676,7 +1792,7 @@
       "adminHidden": true,
       "pageReady": false,
       "publishState": "hidden",
-      "previewUrl": null,
+      "previewUrl": "/dev/preview/noto-fukko-budget/",
       "qualityOk": false,
       "needsQualityFix": true,
       "qualityBlockerCount": 2,
@@ -1865,6 +1981,33 @@
       ],
       "blockerCount": 3,
       "runState": "idle",
+      "workItems": [
+        {
+          "id": "Q1_conclusion_numbers",
+          "label": "タイトルが金額・実績を問うのに、いまの結論に公表",
+          "state": "blocked"
+        },
+        {
+          "id": "Q3_plain_no_answer",
+          "label": "つまり欄の冒頭がタイトルの疑問（金額・実績）に答",
+          "state": "blocked"
+        },
+        {
+          "id": "B3_topic",
+          "label": "話題一致",
+          "state": "blocked"
+        },
+        {
+          "id": "E4_timeline_diet_topic",
+          "label": "TL国会の話題",
+          "state": "blocked"
+        },
+        {
+          "id": "G6_matrix_topic",
+          "label": "〇×の話題",
+          "state": "blocked"
+        }
+      ],
       "nextAction": "👁️ 非表示中 — 「表示に戻す」でトップに出せます",
       "promo": {
         "x": null,
@@ -1892,7 +2035,7 @@
       "adminHidden": true,
       "pageReady": false,
       "publishState": "hidden",
-      "previewUrl": null,
+      "previewUrl": "/dev/preview/boei-tokubetsuzei/",
       "qualityOk": true,
       "needsQualityFix": false,
       "qualityBlockerCount": 0,
@@ -2080,6 +2223,33 @@
       ],
       "blockerCount": 5,
       "runState": "idle",
+      "workItems": [
+        {
+          "id": "B3_topic",
+          "label": "話題一致",
+          "state": "blocked"
+        },
+        {
+          "id": "D2_arc_topic",
+          "label": "経緯の話題",
+          "state": "blocked"
+        },
+        {
+          "id": "E4_timeline_diet_topic",
+          "label": "TL国会の話題",
+          "state": "blocked"
+        },
+        {
+          "id": "G5_parties_symbol",
+          "label": "◎〇▲×",
+          "state": "blocked"
+        },
+        {
+          "id": "G6_matrix_topic",
+          "label": "〇×の話題",
+          "state": "blocked"
+        }
+      ],
       "nextAction": "👁️ 非表示中 — 「表示に戻す」でトップに出せます",
       "promo": {
         "x": null,
@@ -2107,7 +2277,7 @@
       "adminHidden": true,
       "pageReady": false,
       "publishState": "hidden",
-      "previewUrl": null,
+      "previewUrl": "/dev/preview/invoice-menzei-2026/",
       "qualityOk": true,
       "needsQualityFix": false,
       "qualityBlockerCount": 0,
@@ -2278,6 +2448,28 @@
       ],
       "blockerCount": 4,
       "runState": "idle",
+      "workItems": [
+        {
+          "id": "B3_topic",
+          "label": "話題一致",
+          "state": "blocked"
+        },
+        {
+          "id": "E4_timeline_diet_topic",
+          "label": "TL国会の話題",
+          "state": "blocked"
+        },
+        {
+          "id": "G5_parties_symbol",
+          "label": "◎〇▲×",
+          "state": "blocked"
+        },
+        {
+          "id": "G6_matrix_topic",
+          "label": "〇×の話題",
+          "state": "blocked"
+        }
+      ],
       "nextAction": "👁️ 非表示中 — 「表示に戻す」でトップに出せます",
       "promo": {
         "x": null,
@@ -2305,7 +2497,7 @@
       "adminHidden": true,
       "pageReady": false,
       "publishState": "hidden",
-      "previewUrl": null,
+      "previewUrl": "/dev/preview/teigaku-kyufu-2024/",
       "qualityOk": true,
       "needsQualityFix": false,
       "qualityBlockerCount": 0,
@@ -2459,6 +2651,23 @@
       ],
       "blockerCount": 3,
       "runState": "idle",
+      "workItems": [
+        {
+          "id": "E4_timeline_diet_topic",
+          "label": "TL国会の話題",
+          "state": "blocked"
+        },
+        {
+          "id": "G5_parties_symbol",
+          "label": "◎〇▲×",
+          "state": "blocked"
+        },
+        {
+          "id": "G6_matrix_topic",
+          "label": "〇×の話題",
+          "state": "blocked"
+        }
+      ],
       "nextAction": "👁️ 非表示中 — 「表示に戻す」でトップに出せます",
       "promo": {
         "x": null,
@@ -2640,6 +2849,23 @@
       ],
       "blockerCount": 3,
       "runState": "idle",
+      "workItems": [
+        {
+          "id": "E4_timeline_diet_topic",
+          "label": "TL国会の話題",
+          "state": "blocked"
+        },
+        {
+          "id": "G5_parties_symbol",
+          "label": "◎〇▲×",
+          "state": "blocked"
+        },
+        {
+          "id": "G6_matrix_topic",
+          "label": "〇×の話題",
+          "state": "blocked"
+        }
+      ],
       "nextAction": "2/3 国会が話題一致 → ◎▲❌ を確定 → 公言テキストが案件と無関係 → X投稿は見つかりませんでした（5段階調査完了）",
       "promo": {
         "x": null,
@@ -2821,6 +3047,23 @@
       ],
       "blockerCount": 3,
       "runState": "idle",
+      "workItems": [
+        {
+          "id": "D2_arc_topic",
+          "label": "経緯の話題",
+          "state": "blocked"
+        },
+        {
+          "id": "E4_timeline_diet_topic",
+          "label": "TL国会の話題",
+          "state": "blocked"
+        },
+        {
+          "id": "G5_parties_symbol",
+          "label": "◎〇▲×",
+          "state": "blocked"
+        }
+      ],
       "nextAction": "2/3 行が話題一致 → 2/3 国会が話題一致 → ◎▲❌ を確定 → X投稿は見つかりませんでした（5段階調査完了）",
       "promo": {
         "x": null,
@@ -3002,6 +3245,23 @@
       ],
       "blockerCount": 3,
       "runState": "idle",
+      "workItems": [
+        {
+          "id": "B3_topic",
+          "label": "話題一致",
+          "state": "blocked"
+        },
+        {
+          "id": "D2_arc_topic",
+          "label": "経緯の話題",
+          "state": "blocked"
+        },
+        {
+          "id": "G6_matrix_topic",
+          "label": "〇×の話題",
+          "state": "blocked"
+        }
+      ],
       "nextAction": "1/2 行がキーワード一致（大阪都構想） → 0/3 行が話題一致 → 公言テキストが案件と無関係 → X投稿は見つかりませんでした（5段階調査完了）",
       "promo": {
         "x": null,
@@ -3217,6 +3477,33 @@
       ],
       "blockerCount": 5,
       "runState": "idle",
+      "workItems": [
+        {
+          "id": "B5_writer_voice",
+          "label": "第三者目線",
+          "state": "blocked"
+        },
+        {
+          "id": "D2_arc_topic",
+          "label": "経緯の話題",
+          "state": "blocked"
+        },
+        {
+          "id": "E4_timeline_diet_topic",
+          "label": "TL国会の話題",
+          "state": "blocked"
+        },
+        {
+          "id": "G5_parties_symbol",
+          "label": "◎〇▲×",
+          "state": "blocked"
+        },
+        {
+          "id": "G6_matrix_topic",
+          "label": "〇×の話題",
+          "state": "blocked"
+        }
+      ],
       "nextAction": "議事録口調が残っている → 2/3 行が話題一致 → 2/3 国会が話題一致 → X投稿は見つかりませんでした（5段階調査完了）",
       "promo": {
         "x": null,
@@ -3415,6 +3702,28 @@
       ],
       "blockerCount": 4,
       "runState": "idle",
+      "workItems": [
+        {
+          "id": "B3_topic",
+          "label": "話題一致",
+          "state": "blocked"
+        },
+        {
+          "id": "E4_timeline_diet_topic",
+          "label": "TL国会の話題",
+          "state": "blocked"
+        },
+        {
+          "id": "G5_parties_symbol",
+          "label": "◎〇▲×",
+          "state": "blocked"
+        },
+        {
+          "id": "G6_matrix_topic",
+          "label": "〇×の話題",
+          "state": "blocked"
+        }
+      ],
       "nextAction": "1/2 行がキーワード一致（太陽光パネル 設置義務 東京都） → 1/3 国会が話題一致 → ◎▲❌ を確定 → X投稿は見つかりませんでした（5段階調査完了）",
       "promo": {
         "x": null,
@@ -3596,6 +3905,23 @@
       ],
       "blockerCount": 3,
       "runState": "idle",
+      "workItems": [
+        {
+          "id": "D2_arc_topic",
+          "label": "経緯の話題",
+          "state": "blocked"
+        },
+        {
+          "id": "E4_timeline_diet_topic",
+          "label": "TL国会の話題",
+          "state": "blocked"
+        },
+        {
+          "id": "G5_parties_symbol",
+          "label": "◎〇▲×",
+          "state": "blocked"
+        }
+      ],
       "nextAction": "1/3 行が話題一致 → 0/3 国会が話題一致 → ◎▲❌ を確定 → X投稿は見つかりませんでした（5段階調査完了）",
       "promo": {
         "x": null,
@@ -3743,6 +4069,13 @@
       ],
       "blockerCount": 1,
       "runState": "idle",
+      "workItems": [
+        {
+          "id": "G5_parties_symbol",
+          "label": "◎〇▲×",
+          "state": "blocked"
+        }
+      ],
       "nextAction": "◎▲❌ を確定 → X投稿は見つかりませんでした（5段階調査完了）",
       "promo": {
         "x": null,
@@ -3890,6 +4223,13 @@
       ],
       "blockerCount": 1,
       "runState": "idle",
+      "workItems": [
+        {
+          "id": "C2_evidence_distinct",
+          "label": "根拠の独自性",
+          "state": "blocked"
+        }
+      ],
       "nextAction": "根拠が結論のコピー → X投稿は見つかりませんでした（5段階調査完了）",
       "promo": {
         "x": null,
@@ -4018,6 +4358,7 @@
       "blockers": [],
       "blockerCount": 0,
       "runState": "idle",
+      "workItems": [],
       "nextAction": "✅ 公開中 — /case/ に表示されています",
       "promo": {
         "x": null,
@@ -4182,6 +4523,18 @@
       ],
       "blockerCount": 2,
       "runState": "idle",
+      "workItems": [
+        {
+          "id": "C2_evidence_distinct",
+          "label": "根拠の独自性",
+          "state": "blocked"
+        },
+        {
+          "id": "G5_parties_symbol",
+          "label": "◎〇▲×",
+          "state": "blocked"
+        }
+      ],
       "nextAction": "根拠が結論のコピー → ◎▲❌ を確定 → X投稿は見つかりませんでした（5段階調査完了）",
       "promo": {
         "x": null,
@@ -4310,6 +4663,7 @@
       "blockers": [],
       "blockerCount": 0,
       "runState": "idle",
+      "workItems": [],
       "nextAction": "✅ 公開中 — /case/ に表示されています",
       "promo": {
         "x": null,
@@ -4438,6 +4792,7 @@
       "blockers": [],
       "blockerCount": 0,
       "runState": "idle",
+      "workItems": [],
       "nextAction": "✅ 公開中 — /case/ に表示されています",
       "promo": {
         "x": null,
@@ -4636,6 +4991,28 @@
       ],
       "blockerCount": 4,
       "runState": "idle",
+      "workItems": [
+        {
+          "id": "B3_topic",
+          "label": "話題一致",
+          "state": "blocked"
+        },
+        {
+          "id": "D2_arc_topic",
+          "label": "経緯の話題",
+          "state": "blocked"
+        },
+        {
+          "id": "E4_timeline_diet_topic",
+          "label": "TL国会の話題",
+          "state": "blocked"
+        },
+        {
+          "id": "G6_matrix_topic",
+          "label": "〇×の話題",
+          "state": "blocked"
+        }
+      ],
       "nextAction": "1/2 行がキーワード一致（少子化） → 1/3 行が話題一致 → 1/3 国会が話題一致 → X投稿は見つかりませんでした（5段階調査完了）",
       "promo": {
         "x": null,
@@ -4644,7 +5021,7 @@
       },
       "short": {
         "slug": "shoshika",
-        "generated": true,
+        "generated": false,
         "uploaded": false,
         "visibility": null,
         "videoId": null,
@@ -4783,6 +5160,13 @@
       ],
       "blockerCount": 1,
       "runState": "idle",
+      "workItems": [
+        {
+          "id": "D2_arc_topic",
+          "label": "経緯の話題",
+          "state": "blocked"
+        }
+      ],
       "nextAction": "2/3 行が話題一致 → X投稿は見つかりませんでした（5段階調査完了）",
       "promo": {
         "x": null,
@@ -4947,6 +5331,18 @@
       ],
       "blockerCount": 2,
       "runState": "idle",
+      "workItems": [
+        {
+          "id": "D2_arc_topic",
+          "label": "経緯の話題",
+          "state": "blocked"
+        },
+        {
+          "id": "G6_matrix_topic",
+          "label": "〇×の話題",
+          "state": "blocked"
+        }
+      ],
       "nextAction": "1/3 行が話題一致 → 公言テキストが案件と無関係 → X投稿は見つかりませんでした（5段階調査完了）",
       "promo": {
         "x": null,
@@ -5075,6 +5471,7 @@
       "blockers": [],
       "blockerCount": 0,
       "runState": "idle",
+      "workItems": [],
       "nextAction": "📋 完成・非公開 — プレビューで確認して「公開する」を押してください",
       "promo": {
         "x": null,
@@ -5222,6 +5619,13 @@
       ],
       "blockerCount": 1,
       "runState": "idle",
+      "workItems": [
+        {
+          "id": "D2_arc_topic",
+          "label": "経緯の話題",
+          "state": "blocked"
+        }
+      ],
       "nextAction": "1/3 行が話題一致 → X投稿は見つかりませんでした（5段階調査完了）",
       "promo": {
         "x": null,
@@ -5369,6 +5773,13 @@
       ],
       "blockerCount": 1,
       "runState": "idle",
+      "workItems": [
+        {
+          "id": "G5_parties_symbol",
+          "label": "◎〇▲×",
+          "state": "blocked"
+        }
+      ],
       "nextAction": "◎▲❌ を確定 → X投稿は見つかりませんでした（5段階調査完了）",
       "promo": {
         "x": null,
@@ -5516,6 +5927,13 @@
       ],
       "blockerCount": 1,
       "runState": "idle",
+      "workItems": [
+        {
+          "id": "G5_parties_symbol",
+          "label": "◎〇▲×",
+          "state": "blocked"
+        }
+      ],
       "nextAction": "◎▲❌ を確定 → X投稿は見つかりませんでした（5段階調査完了）",
       "promo": {
         "x": null,
@@ -5644,6 +6062,7 @@
       "blockers": [],
       "blockerCount": 0,
       "runState": "idle",
+      "workItems": [],
       "nextAction": "📋 完成・非公開 — プレビューで確認して「公開する」を押してください",
       "promo": {
         "x": null,
@@ -5772,6 +6191,7 @@
       "blockers": [],
       "blockerCount": 0,
       "runState": "idle",
+      "workItems": [],
       "nextAction": "📋 完成・非公開 — プレビューで確認して「公開する」を押してください",
       "promo": {
         "x": null,
@@ -5919,6 +6339,13 @@
       ],
       "blockerCount": 1,
       "runState": "idle",
+      "workItems": [
+        {
+          "id": "G5_parties_symbol",
+          "label": "◎〇▲×",
+          "state": "blocked"
+        }
+      ],
       "nextAction": "◎▲❌ を確定 → X投稿は見つかりませんでした（5段階調査完了）",
       "promo": {
         "x": null,
@@ -6066,6 +6493,13 @@
       ],
       "blockerCount": 1,
       "runState": "idle",
+      "workItems": [
+        {
+          "id": "C2_evidence_distinct",
+          "label": "根拠の独自性",
+          "state": "blocked"
+        }
+      ],
       "nextAction": "根拠が結論のコピー → X投稿は見つかりませんでした（5段階調査完了）",
       "promo": {
         "x": null,
@@ -6194,6 +6628,7 @@
       "blockers": [],
       "blockerCount": 0,
       "runState": "idle",
+      "workItems": [],
       "nextAction": "✅ 公開中 — /case/ に表示されています",
       "promo": {
         "x": null,
@@ -6341,6 +6776,13 @@
       ],
       "blockerCount": 1,
       "runState": "idle",
+      "workItems": [
+        {
+          "id": "C2_evidence_distinct",
+          "label": "根拠の独自性",
+          "state": "blocked"
+        }
+      ],
       "nextAction": "根拠が結論のコピー → X投稿は見つかりませんでした（5段階調査完了）",
       "promo": {
         "x": null,
@@ -6469,6 +6911,7 @@
       "blockers": [],
       "blockerCount": 0,
       "runState": "idle",
+      "workItems": [],
       "nextAction": "📋 完成・非公開 — プレビューで確認して「公開する」を押してください",
       "promo": {
         "x": null,
