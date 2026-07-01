@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-01T22:33:31.179Z",
+  "generatedAt": "2026-07-01T22:34:19.037Z",
   "strategy": "quality-first",
   "activeCount": 39,
   "parkedCount": 0,
@@ -86,6 +86,125 @@
       "autoRevert": "公開/非公開は変えない"
     }
   ],
+  "patrolHealth": {
+    "status": "stalled",
+    "statusLabel": "進行停止（ループ中）",
+    "paused": false,
+    "pauseReason": null,
+    "pauseDetail": null,
+    "globalStall": null,
+    "slugStalls": [
+      {
+        "stalled": true,
+        "slug": "shoshika",
+        "shortTitle": "【少子化対策】支援策の内容と出生率の動向",
+        "goldPct": 50,
+        "checkId": "B3_topic",
+        "checkLabel": "話題一致",
+        "ownerHint": "要約が searchKeyword と一致（2行以上）",
+        "agent": "writer",
+        "attempts": 3,
+        "lastAt": "2026-07-01T22:34:15.269Z",
+        "loopLine": "writer → 話題一致 → exit 1/1/1（3回連続）"
+      },
+      {
+        "stalled": true,
+        "slug": "case-mqzxj4ro",
+        "shortTitle": "【国会議員のボーナス】期末手当はいくら？2023年給与法改正の争点",
+        "goldPct": 83,
+        "checkId": "Q1_conclusion_numbers",
+        "checkLabel": "Q1_conclusion_numbers",
+        "ownerHint": "",
+        "agent": "writer",
+        "attempts": 3,
+        "lastAt": "2026-07-01T19:36:13.141Z",
+        "loopLine": "writer → Q1_conclusion_numbers → exit 2/2/2（3回連続）"
+      },
+      {
+        "stalled": true,
+        "slug": "boeeihi",
+        "shortTitle": "【防衛費・安保】増額の行方と安保政策の最新",
+        "goldPct": 100,
+        "checkId": "B4_conclusion",
+        "checkLabel": "結論の質",
+        "ownerHint": "いまの結論が要点3行（重複・途中切れなし）",
+        "agent": "writer",
+        "attempts": 3,
+        "lastAt": "2026-07-01T19:46:43.020Z",
+        "loopLine": "writer → 結論の質 → exit 2/2/2（3回連続）"
+      },
+      {
+        "stalled": true,
+        "slug": "nenkin",
+        "shortTitle": "【年金制度改革】受給年齢・支給額の変更点",
+        "goldPct": 100,
+        "checkId": "B4_conclusion",
+        "checkLabel": "結論の質",
+        "ownerHint": "いまの結論が要点3行（重複・途中切れなし）",
+        "agent": "writer",
+        "attempts": 3,
+        "lastAt": "2026-07-01T19:32:04.231Z",
+        "loopLine": "writer → 結論の質 → exit 2/2/2（3回連続）"
+      },
+      {
+        "stalled": true,
+        "slug": "seiji-shikin",
+        "shortTitle": "【政治資金】政党助成と献金ルールの最新",
+        "goldPct": 100,
+        "checkId": "B4_conclusion",
+        "checkLabel": "結論の質",
+        "ownerHint": "いまの結論が要点3行（重複・途中切れなし）",
+        "agent": "writer",
+        "attempts": 3,
+        "lastAt": "2026-07-01T19:30:40.364Z",
+        "loopLine": "writer → 結論の質 → exit 2/2/2（3回連続）"
+      },
+      {
+        "stalled": true,
+        "slug": "kaigo-iryo",
+        "shortTitle": "【介護・医療費】負担増の議論と支援策",
+        "goldPct": 100,
+        "checkId": "B4_conclusion",
+        "checkLabel": "結論の質",
+        "ownerHint": "いまの結論が要点3行（重複・途中切れなし）",
+        "agent": "writer",
+        "attempts": 3,
+        "lastAt": "2026-07-01T19:35:00.378Z",
+        "loopLine": "writer → 結論の質 → exit 2/2/2（3回連続）"
+      },
+      {
+        "stalled": true,
+        "slug": "chiho-sosei",
+        "shortTitle": "【地方創生】交付金と地域政策の最新",
+        "goldPct": 100,
+        "checkId": "B4_conclusion",
+        "checkLabel": "結論の質",
+        "ownerHint": "いまの結論が要点3行（重複・途中切れなし）",
+        "agent": "writer",
+        "attempts": 3,
+        "lastAt": "2026-07-01T19:36:21.168Z",
+        "loopLine": "writer → 結論の質 → exit 2/2/2（3回連続）"
+      },
+      {
+        "stalled": true,
+        "slug": "nichigyo",
+        "shortTitle": "【政治とカネ】献金問題と規制の動向",
+        "goldPct": 100,
+        "checkId": "B4_conclusion",
+        "checkLabel": "結論の質",
+        "ownerHint": "いまの結論が要点3行（重複・途中切れなし）",
+        "agent": "writer",
+        "attempts": 3,
+        "lastAt": "2026-07-01T19:16:18.760Z",
+        "loopLine": "writer → 結論の質 → exit 2/2/2（3回連続）"
+      }
+    ],
+    "stalledCount": 8,
+    "message": "8 記事が同じチェックで失敗ループ中（自動では越えられない壁の可能性）",
+    "analyzedAt": "2026-07-01T22:34:19.032Z",
+    "lastPatrolCycleAt": "2026-07-01T22:34:18.700Z",
+    "patrolRunning": true
+  },
   "slugs": [
     {
       "slug": "case-mr0jbdpc",
@@ -201,7 +320,7 @@
         {
           "id": "pipe:debug",
           "label": "⑥デバッグOK",
-          "state": "active"
+          "state": "blocked"
         }
       ],
       "nextAction": "✅ 公開中 — /case/ に表示されています",
@@ -223,12 +342,12 @@
       },
       "xUnavailable": false,
       "xResearchStatus": "found",
-      "statusExplain": "巡回が自動修正中 — ◌ が今処理している項目",
+      "statusExplain": "手動公開 07/02 02:29",
       "publishedBy": "owner",
       "publishedAt": "2026-07-01T17:29:52.342Z",
       "adminHiddenBy": null,
       "adminHiddenAt": null,
-      "patrolFixing": true,
+      "patrolFixing": false,
       "activity": [
         {
           "at": "2026-07-01T22:33:30.851Z",
@@ -284,7 +403,8 @@
           "status": "未生成",
           "done": false
         }
-      ]
+      ],
+      "stall": null
     },
     {
       "slug": "case-mqzxj4ro",
@@ -400,7 +520,7 @@
         {
           "id": "pipe:debug",
           "label": "⑥デバッグOK",
-          "state": "active"
+          "state": "blocked"
         }
       ],
       "nextAction": "✅ 公開中 — /case/ に表示されています",
@@ -422,12 +542,12 @@
       },
       "xUnavailable": false,
       "xResearchStatus": "found",
-      "statusExplain": "巡回が自動修正中 — ◌ が今処理している項目",
+      "statusExplain": "手動公開 07/02 05:35",
       "publishedBy": "owner",
       "publishedAt": "2026-07-01T20:35:13.073Z",
       "adminHiddenBy": null,
       "adminHiddenAt": null,
-      "patrolFixing": true,
+      "patrolFixing": false,
       "activity": [
         {
           "at": "2026-07-01T22:33:30.859Z",
@@ -483,7 +603,20 @@
           "status": "未生成",
           "done": false
         }
-      ]
+      ],
+      "stall": {
+        "stalled": true,
+        "slug": "case-mqzxj4ro",
+        "shortTitle": "【国会議員のボーナス】期末手当はいくら？2023年給与法改正の争点",
+        "goldPct": 83,
+        "checkId": "Q1_conclusion_numbers",
+        "checkLabel": "Q1_conclusion_numbers",
+        "ownerHint": "",
+        "agent": "writer",
+        "attempts": 3,
+        "lastAt": "2026-07-01T19:36:13.141Z",
+        "loopLine": "writer → Q1_conclusion_numbers → exit 2/2/2（3回連続）"
+      }
     },
     {
       "slug": "case-mqzxgs3f",
@@ -599,7 +732,7 @@
         {
           "id": "pipe:debug",
           "label": "⑥デバッグOK",
-          "state": "active"
+          "state": "blocked"
         }
       ],
       "nextAction": "✅ 公開中 — /case/ に表示されています",
@@ -621,12 +754,12 @@
       },
       "xUnavailable": false,
       "xResearchStatus": "found",
-      "statusExplain": "巡回が自動修正中 — ◌ が今処理している項目",
+      "statusExplain": "手動公開 07/02 05:35",
       "publishedBy": "owner",
       "publishedAt": "2026-07-01T20:35:24.570Z",
       "adminHiddenBy": null,
       "adminHiddenAt": null,
-      "patrolFixing": true,
+      "patrolFixing": false,
       "activity": [
         {
           "at": "2026-07-01T22:33:30.868Z",
@@ -682,7 +815,8 @@
           "status": "未生成",
           "done": false
         }
-      ]
+      ],
+      "stall": null
     },
     {
       "slug": "zeihikaku-kojo",
@@ -957,7 +1091,8 @@
           "status": "未生成",
           "done": false
         }
-      ]
+      ],
+      "stall": null
     },
     {
       "slug": "expo2025-kessan",
@@ -1240,7 +1375,8 @@
           "status": "未生成",
           "done": false
         }
-      ]
+      ],
+      "stall": null
     },
     {
       "slug": "minimum-wage-2026",
@@ -1493,7 +1629,8 @@
           "status": "未生成",
           "done": false
         }
-      ]
+      ],
+      "stall": null
     },
     {
       "slug": "pension-kuriage-70",
@@ -1790,7 +1927,8 @@
           "status": "未生成",
           "done": false
         }
-      ]
+      ],
+      "stall": null
     },
     {
       "slug": "denki-gas-genmen",
@@ -2065,7 +2203,8 @@
           "status": "未生成",
           "done": false
         }
-      ]
+      ],
+      "stall": null
     },
     {
       "slug": "gakushu-shien-75000",
@@ -2335,7 +2474,8 @@
           "status": "未生成",
           "done": false
         }
-      ]
+      ],
+      "stall": null
     },
     {
       "slug": "noto-fukko-budget",
@@ -2534,7 +2674,7 @@
       "publishedAt": "2026-07-01T20:39:20.684Z",
       "adminHiddenBy": null,
       "adminHiddenAt": null,
-      "patrolFixing": false,
+      "patrolFixing": true,
       "activity": [
         {
           "at": "2026-07-01T22:32:24.104Z",
@@ -2632,7 +2772,8 @@
           "status": "未生成",
           "done": false
         }
-      ]
+      ],
+      "stall": null
     },
     {
       "slug": "boei-tokubetsuzei",
@@ -2929,7 +3070,8 @@
           "status": "未生成",
           "done": false
         }
-      ]
+      ],
+      "stall": null
     },
     {
       "slug": "invoice-menzei-2026",
@@ -3204,7 +3346,8 @@
           "status": "未生成",
           "done": false
         }
-      ]
+      ],
+      "stall": null
     },
     {
       "slug": "teigaku-kyufu-2024",
@@ -3457,7 +3600,8 @@
           "status": "未生成",
           "done": false
         }
-      ]
+      ],
+      "stall": null
     },
     {
       "slug": "shussho-budget-seika",
@@ -3718,7 +3862,8 @@
           "status": "YT YT非公開 06/30 07:11",
           "done": true
         }
-      ]
+      ],
+      "stall": null
     },
     {
       "slug": "fukushuto-koso",
@@ -3848,7 +3993,7 @@
         }
       ],
       "blockerCount": 1,
-      "runState": "active",
+      "runState": "idle",
       "workItems": [
         {
           "id": "G5_parties_symbol",
@@ -3898,6 +4043,34 @@
       "patrolFixing": true,
       "activity": [
         {
+          "at": "2026-07-01T22:34:16.078Z",
+          "when": "07/02 07:34",
+          "type": "patrol.done",
+          "actor": "patrol",
+          "line": "巡回処理完了（巡回） — 完成度 50% / 品質 OK"
+        },
+        {
+          "at": "2026-07-01T22:34:15.555Z",
+          "when": "07/02 07:34",
+          "type": "content.updated",
+          "actor": "patrol",
+          "line": "content.updated（巡回） — 巡回でコンテンツ更新（公開は維持）"
+        },
+        {
+          "at": "2026-07-01T22:33:42.937Z",
+          "when": "07/02 07:33",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — writer / G5_parties_symbol"
+        },
+        {
+          "at": "2026-07-01T22:33:41.620Z",
+          "when": "07/02 07:33",
+          "type": "content.updated",
+          "actor": "patrol",
+          "line": "content.updated（巡回） — 巡回でコンテンツ更新（公開は維持）"
+        },
+        {
           "at": "2026-07-01T22:33:10.411Z",
           "when": "07/02 07:33",
           "type": "patrol.start",
@@ -3938,34 +4111,6 @@
           "type": "content.updated",
           "actor": "patrol",
           "line": "content.updated（巡回） — 巡回でコンテンツ更新（公開は維持）"
-        },
-        {
-          "at": "2026-07-01T22:31:17.057Z",
-          "when": "07/02 07:31",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — writer / G5_parties_symbol"
-        },
-        {
-          "at": "2026-07-01T22:26:39.388Z",
-          "when": "07/02 07:26",
-          "type": "patrol.done",
-          "actor": "patrol",
-          "line": "巡回処理完了（巡回） — 完成度 50% / 品質 OK"
-        },
-        {
-          "at": "2026-07-01T22:26:38.644Z",
-          "when": "07/02 07:26",
-          "type": "content.updated",
-          "actor": "patrol",
-          "line": "content.updated（巡回） — 巡回でコンテンツ更新（公開は維持）"
-        },
-        {
-          "at": "2026-07-01T22:26:03.556Z",
-          "when": "07/02 07:26",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — writer / G5_parties_symbol"
         }
       ],
       "distribution": [
@@ -3993,7 +4138,8 @@
           "status": "未生成",
           "done": false
         }
-      ]
+      ],
+      "stall": null
     },
     {
       "slug": "osaka-to-metropolis",
@@ -4200,6 +4346,13 @@
       "patrolFixing": false,
       "activity": [
         {
+          "at": "2026-07-01T22:33:52.451Z",
+          "when": "07/02 07:33",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — writer / D2_arc_topic"
+        },
+        {
           "at": "2026-06-29T06:31:08.845Z",
           "when": "06/29 15:31",
           "type": "publish.manual",
@@ -4232,7 +4385,8 @@
           "status": "未生成",
           "done": false
         }
-      ]
+      ],
+      "stall": null
     },
     {
       "slug": "fuhou-immin-trend",
@@ -4558,7 +4712,8 @@
           "status": "未生成",
           "done": false
         }
-      ]
+      ],
+      "stall": null
     },
     {
       "slug": "tokyo-solar-panel",
@@ -4847,7 +5002,8 @@
           "status": "未生成",
           "done": false
         }
-      ]
+      ],
+      "stall": null
     },
     {
       "slug": "case-mqwdrley",
@@ -4977,7 +5133,7 @@
         }
       ],
       "blockerCount": 1,
-      "runState": "idle",
+      "runState": "active",
       "workItems": [
         {
           "id": "G5_parties_symbol",
@@ -5024,8 +5180,22 @@
       "publishedAt": "2026-07-01T20:35:25.094Z",
       "adminHiddenBy": null,
       "adminHiddenAt": null,
-      "patrolFixing": false,
+      "patrolFixing": true,
       "activity": [
+        {
+          "at": "2026-07-01T22:34:16.088Z",
+          "when": "07/02 07:34",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — writer / G5_parties_symbol"
+        },
+        {
+          "at": "2026-07-01T22:33:52.446Z",
+          "when": "07/02 07:33",
+          "type": "patrol.done",
+          "actor": "patrol",
+          "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
+        },
         {
           "at": "2026-07-01T22:30:53.375Z",
           "when": "07/02 07:30",
@@ -5081,20 +5251,6 @@
           "type": "gate.ready",
           "actor": "patrol",
           "line": "公開ゲート到達（まだ非公開）（巡回） — 1行目がタイトルに回答済み。一般公開は手動のみ"
-        },
-        {
-          "at": "2026-07-01T22:27:36.137Z",
-          "when": "07/02 07:27",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — writer / G5_parties_symbol"
-        },
-        {
-          "at": "2026-07-01T22:27:35.368Z",
-          "when": "07/02 07:27",
-          "type": "gate.ready",
-          "actor": "patrol",
-          "line": "公開ゲート到達（まだ非公開）（巡回） — 1行目がタイトルに回答済み。一般公開は手動のみ"
         }
       ],
       "distribution": [
@@ -5122,7 +5278,8 @@
           "status": "未生成",
           "done": false
         }
-      ]
+      ],
+      "stall": null
     },
     {
       "slug": "bouka-taisaku",
@@ -5294,7 +5451,8 @@
           "status": "未生成",
           "done": false
         }
-      ]
+      ],
+      "stall": null
     },
     {
       "slug": "shohizei-genmen",
@@ -5466,7 +5624,8 @@
           "status": "未生成",
           "done": false
         }
-      ]
+      ],
+      "stall": null
     },
     {
       "slug": "boeeihi",
@@ -5630,7 +5789,20 @@
           "status": "未生成",
           "done": false
         }
-      ]
+      ],
+      "stall": {
+        "stalled": true,
+        "slug": "boeeihi",
+        "shortTitle": "【防衛費・安保】増額の行方と安保政策の最新",
+        "goldPct": 100,
+        "checkId": "B4_conclusion",
+        "checkLabel": "結論の質",
+        "ownerHint": "いまの結論が要点3行（重複・途中切れなし）",
+        "agent": "writer",
+        "attempts": 3,
+        "lastAt": "2026-07-01T19:46:43.020Z",
+        "loopLine": "writer → 結論の質 → exit 2/2/2（3回連続）"
+      }
     },
     {
       "slug": "chingin",
@@ -5807,8 +5979,22 @@
       "publishedAt": null,
       "adminHiddenBy": null,
       "adminHiddenAt": null,
-      "patrolFixing": false,
+      "patrolFixing": true,
       "activity": [
+        {
+          "at": "2026-07-01T22:34:03.068Z",
+          "when": "07/02 07:34",
+          "type": "patrol.done",
+          "actor": "patrol",
+          "line": "巡回処理完了（巡回） — 完成度 50% / 品質 OK"
+        },
+        {
+          "at": "2026-07-01T22:34:02.354Z",
+          "when": "07/02 07:34",
+          "type": "gate.ready",
+          "actor": "patrol",
+          "line": "公開ゲート到達（まだ非公開）（巡回） — 1行目がタイトルに回答済み。一般公開は手動のみ"
+        },
         {
           "at": "2026-07-01T22:33:27.454Z",
           "when": "07/02 07:33",
@@ -5864,20 +6050,6 @@
           "type": "gate.ready",
           "actor": "patrol",
           "line": "公開ゲート到達（まだ非公開）（巡回） — 1行目がタイトルに回答済み。一般公開は手動のみ"
-        },
-        {
-          "at": "2026-07-01T22:30:53.377Z",
-          "when": "07/02 07:30",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — writer / C2_evidence_distinct"
-        },
-        {
-          "at": "2026-07-01T22:24:44.074Z",
-          "when": "07/02 07:24",
-          "type": "patrol.done",
-          "actor": "patrol",
-          "line": "巡回処理完了（巡回） — 完成度 50% / 品質 OK"
         }
       ],
       "distribution": [
@@ -5905,7 +6077,8 @@
           "status": "未生成",
           "done": false
         }
-      ]
+      ],
+      "stall": null
     },
     {
       "slug": "nenkin",
@@ -6069,7 +6242,20 @@
           "status": "未生成",
           "done": false
         }
-      ]
+      ],
+      "stall": {
+        "stalled": true,
+        "slug": "nenkin",
+        "shortTitle": "【年金制度改革】受給年齢・支給額の変更点",
+        "goldPct": 100,
+        "checkId": "B4_conclusion",
+        "checkLabel": "結論の質",
+        "ownerHint": "いまの結論が要点3行（重複・途中切れなし）",
+        "agent": "writer",
+        "attempts": 3,
+        "lastAt": "2026-07-01T19:32:04.231Z",
+        "loopLine": "writer → 結論の質 → exit 2/2/2（3回連続）"
+      }
     },
     {
       "slug": "gaikokujin-seisaku",
@@ -6241,7 +6427,8 @@
           "status": "未生成",
           "done": false
         }
-      ]
+      ],
+      "stall": null
     },
     {
       "slug": "shoshika",
@@ -6484,8 +6671,50 @@
       "publishedAt": null,
       "adminHiddenBy": null,
       "adminHiddenAt": null,
-      "patrolFixing": false,
+      "patrolFixing": true,
       "activity": [
+        {
+          "at": "2026-07-01T22:34:18.371Z",
+          "when": "07/02 07:34",
+          "type": "patrol.done",
+          "actor": "patrol",
+          "line": "巡回処理完了（巡回） — 完成度 50% / 品質 OK"
+        },
+        {
+          "at": "2026-07-01T22:34:15.271Z",
+          "when": "07/02 07:34",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — writer / B3_topic"
+        },
+        {
+          "at": "2026-07-01T22:34:12.213Z",
+          "when": "07/02 07:34",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — writer / B3_topic"
+        },
+        {
+          "at": "2026-07-01T22:34:09.159Z",
+          "when": "07/02 07:34",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — writer / B3_topic"
+        },
+        {
+          "at": "2026-07-01T22:34:06.129Z",
+          "when": "07/02 07:34",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — writer / B3_topic"
+        },
+        {
+          "at": "2026-07-01T22:34:03.071Z",
+          "when": "07/02 07:34",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — writer / B3_topic"
+        },
         {
           "at": "2026-07-01T22:24:58.283Z",
           "when": "07/02 07:24",
@@ -6510,48 +6739,6 @@
         {
           "at": "2026-07-01T22:24:49.836Z",
           "when": "07/02 07:24",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — writer / B3_topic"
-        },
-        {
-          "at": "2026-07-01T22:24:47.024Z",
-          "when": "07/02 07:24",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — writer / B3_topic"
-        },
-        {
-          "at": "2026-07-01T22:24:44.079Z",
-          "when": "07/02 07:24",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — writer / B3_topic"
-        },
-        {
-          "at": "2026-07-01T22:23:31.131Z",
-          "when": "07/02 07:23",
-          "type": "patrol.done",
-          "actor": "patrol",
-          "line": "巡回処理完了（巡回） — 完成度 50% / 品質 OK"
-        },
-        {
-          "at": "2026-07-01T22:23:28.035Z",
-          "when": "07/02 07:23",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — writer / B3_topic"
-        },
-        {
-          "at": "2026-07-01T22:23:25.037Z",
-          "when": "07/02 07:23",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — writer / B3_topic"
-        },
-        {
-          "at": "2026-07-01T22:23:22.043Z",
-          "when": "07/02 07:23",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / B3_topic"
@@ -6582,7 +6769,20 @@
           "status": "生成済・未アップ",
           "done": false
         }
-      ]
+      ],
+      "stall": {
+        "stalled": true,
+        "slug": "shoshika",
+        "shortTitle": "【少子化対策】支援策の内容と出生率の動向",
+        "goldPct": 50,
+        "checkId": "B3_topic",
+        "checkLabel": "話題一致",
+        "ownerHint": "要約が searchKeyword と一致（2行以上）",
+        "agent": "writer",
+        "attempts": 3,
+        "lastAt": "2026-07-01T22:34:15.269Z",
+        "loopLine": "writer → 話題一致 → exit 1/1/1（3回連続）"
+      }
     },
     {
       "slug": "kyoiku-mushoka",
@@ -6754,7 +6954,8 @@
           "status": "未生成",
           "done": false
         }
-      ]
+      ],
+      "stall": null
     },
     {
       "slug": "energy-policy",
@@ -6926,7 +7127,8 @@
           "status": "未生成",
           "done": false
         }
-      ]
+      ],
+      "stall": null
     },
     {
       "slug": "seiji-shikin",
@@ -7098,7 +7300,20 @@
           "status": "未生成",
           "done": false
         }
-      ]
+      ],
+      "stall": {
+        "stalled": true,
+        "slug": "seiji-shikin",
+        "shortTitle": "【政治資金】政党助成と献金ルールの最新",
+        "goldPct": 100,
+        "checkId": "B4_conclusion",
+        "checkLabel": "結論の質",
+        "ownerHint": "いまの結論が要点3行（重複・途中切れなし）",
+        "agent": "writer",
+        "attempts": 3,
+        "lastAt": "2026-07-01T19:30:40.364Z",
+        "loopLine": "writer → 結論の質 → exit 2/2/2（3回連続）"
+      }
     },
     {
       "slug": "senkyo-kaikaku",
@@ -7270,7 +7485,8 @@
           "status": "未生成",
           "done": false
         }
-      ]
+      ],
+      "stall": null
     },
     {
       "slug": "kaigo-iryo",
@@ -7434,7 +7650,20 @@
           "status": "未生成",
           "done": false
         }
-      ]
+      ],
+      "stall": {
+        "stalled": true,
+        "slug": "kaigo-iryo",
+        "shortTitle": "【介護・医療費】負担増の議論と支援策",
+        "goldPct": 100,
+        "checkId": "B4_conclusion",
+        "checkLabel": "結論の質",
+        "ownerHint": "いまの結論が要点3行（重複・途中切れなし）",
+        "agent": "writer",
+        "attempts": 3,
+        "lastAt": "2026-07-01T19:35:00.378Z",
+        "loopLine": "writer → 結論の質 → exit 2/2/2（3回連続）"
+      }
     },
     {
       "slug": "chiho-sosei",
@@ -7598,7 +7827,20 @@
           "status": "未生成",
           "done": false
         }
-      ]
+      ],
+      "stall": {
+        "stalled": true,
+        "slug": "chiho-sosei",
+        "shortTitle": "【地方創生】交付金と地域政策の最新",
+        "goldPct": 100,
+        "checkId": "B4_conclusion",
+        "checkLabel": "結論の質",
+        "ownerHint": "いまの結論が要点3行（重複・途中切れなし）",
+        "agent": "writer",
+        "attempts": 3,
+        "lastAt": "2026-07-01T19:36:21.168Z",
+        "loopLine": "writer → 結論の質 → exit 2/2/2（3回連続）"
+      }
     },
     {
       "slug": "hosei-yosan",
@@ -7770,7 +8012,8 @@
           "status": "未生成",
           "done": false
         }
-      ]
+      ],
+      "stall": null
     },
     {
       "slug": "nichigyo",
@@ -7942,7 +8185,20 @@
           "status": "未生成",
           "done": false
         }
-      ]
+      ],
+      "stall": {
+        "stalled": true,
+        "slug": "nichigyo",
+        "shortTitle": "【政治とカネ】献金問題と規制の動向",
+        "goldPct": 100,
+        "checkId": "B4_conclusion",
+        "checkLabel": "結論の質",
+        "ownerHint": "いまの結論が要点3行（重複・途中切れなし）",
+        "agent": "writer",
+        "attempts": 3,
+        "lastAt": "2026-07-01T19:16:18.760Z",
+        "loopLine": "writer → 結論の質 → exit 2/2/2（3回連続）"
+      }
     },
     {
       "slug": "casino-ir",
@@ -8114,7 +8370,8 @@
           "status": "未生成",
           "done": false
         }
-      ]
+      ],
+      "stall": null
     },
     {
       "slug": "kenpo",
@@ -8291,7 +8548,7 @@
       "publishedAt": null,
       "adminHiddenBy": null,
       "adminHiddenAt": null,
-      "patrolFixing": true,
+      "patrolFixing": false,
       "activity": [
         {
           "at": "2026-07-01T22:30:25.068Z",
@@ -8389,7 +8646,8 @@
           "status": "未生成",
           "done": false
         }
-      ]
+      ],
+      "stall": null
     },
     {
       "slug": "tariff-us",
@@ -8553,7 +8811,8 @@
           "status": "未生成",
           "done": false
         }
-      ]
+      ],
+      "stall": null
     },
     {
       "slug": "kishida-resign",
@@ -8725,7 +8984,8 @@
           "status": "未生成",
           "done": false
         }
-      ]
+      ],
+      "stall": null
     },
     {
       "slug": "komei-kokumin",
@@ -8902,7 +9162,7 @@
       "publishedAt": null,
       "adminHiddenBy": null,
       "adminHiddenAt": null,
-      "patrolFixing": true,
+      "patrolFixing": false,
       "activity": [
         {
           "at": "2026-07-01T22:33:30.842Z",
@@ -9000,10 +9260,11 @@
           "status": "未生成",
           "done": false
         }
-      ]
+      ],
+      "stall": null
     }
   ],
   "deltaGoldPct": 0,
   "previousGoldPct": 68,
-  "deployedAt": "2026-07-01T22:31:52.057Z"
+  "deployedAt": "2026-07-01T22:33:52.380Z"
 }
