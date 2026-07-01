@@ -10,7 +10,12 @@
 import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { autorunLog, runAutorunCycle, parseAgentFilter } from "../src/lib/pipeline-autorun-core.mjs";
+import {
+  autorunLog,
+  runAutorunCycle,
+  parseAgentFilter,
+  runDebuggerScreenshotSweep,
+} from "../src/lib/pipeline-autorun-core.mjs";
 import { getPatrolPauseState } from "../src/lib/patrol-pause.mjs";
 import { pushAndDeploy } from "./push-and-deploy.mjs";
 
@@ -123,6 +128,16 @@ async function main() {
       if (once || stopping) break;
       await sleep(pausePollMs);
       continue;
+    }
+
+    if (onlyAgents?.has("debugger") && !skipAgents.has("debugger")) {
+      try {
+        await runDebuggerScreenshotSweep({ log: autorunLog });
+      } catch (err) {
+        await autorunLog(
+          `debugger sweep error: ${err instanceof Error ? err.message : String(err)}`,
+        );
+      }
     }
 
     await runCycle(startedAt);

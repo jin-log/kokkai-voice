@@ -1,7 +1,7 @@
 /**
  * パイプライン自動実行コア（1サイクル分）
  */
-import { appendFile, mkdir, readFile } from "node:fs/promises";
+import { appendFile, mkdir, readFile, readdir } from "node:fs/promises";
 import { spawn } from "node:child_process";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -53,6 +53,42 @@ export async function runAgentScript(agent, slug, checkId) {
     default:
       return 0;
   }
+}
+
+/** 未取得スクショ件数（capture --all と同じ判定・全記事JSON走査） */
+export async function countPendingScreenshots() {
+  const articlesDir = path.join(root, "data/articles");
+  const files = await readdir(articlesDir);
+  let pending = 0;
+  for (const f of files) {
+    if (!f.endsWith(".json") || f === "index.json" || f === "parked.json") continue;
+    const article = await loadArticle(f.replace(/\.json$/, ""));
+    pending += (article.xPosts ?? []).filter(
+      (p) => p.post_url && !p.screenshot && p.status !== "search_failed",
+    ).length;
+  }
+  return pending;
+}
+
+/**
+ * debugger 巡回用 — 品質 warn 化後も毎サイクル先にスクショを回す
+ * @param {{ log?: (msg: string) => Promise<void>, limit?: number }} [opts]
+ */
+export async function runDebuggerScreenshotSweep(opts = {}) {
+  const { log = autorunLog, limit = 10 } = opts;
+  const pending = await countPendingScreenshots();
+  if (pending === 0) {
+    await log("debugger sweep: pending screenshots 0");
+    return { pending: 0, ok: 0, code: 0 };
+  }
+  await log(`debugger sweep: ${pending} pending — x:capture --all --limit ${limit}`);
+  const code = await runNodeScript("capture-x-screenshots.mjs", [
+    "--all",
+    "--limit",
+    String(limit),
+  ]);
+  await log(`debugger sweep done exit=${code}`);
+  return { pending, code, ok: code === 0 ? 1 : 0 };
 }
 
 /** @param {string[]} args */

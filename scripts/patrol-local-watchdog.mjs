@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 /**
- * ローカル patrol ウォッチドッグ — 5分ごとにデーモン死活確認、死んでたら再起動
- * patrol.ps1 から別プロセスで起動（タスクスケジューラ不要）
+ * ローカル patrol ウォッチドッグ — 1分ごとにデーモン死活確認、死んでたら patrol.ps1 で再起動
  */
 import { readFile } from "node:fs/promises";
 import { spawn } from "node:child_process";
@@ -10,17 +9,19 @@ import { fileURLToPath } from "node:url";
 import { autorunLog } from "../src/lib/pipeline-autorun-core.mjs";
 
 const root = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
-const pidPath = path.join(root, "data/.patrol-daemon.pid");
-const statePath = path.join(root, "data/pipeline-patrol-daemon.json");
+const patrolPidPath = path.join(root, "data/.patrol-daemon.pid");
+const patrolStatePath = path.join(root, "data/pipeline-patrol-daemon.json");
+const capturePidPath = path.join(root, "data/.x-capture-daemon.pid");
+const captureStatePath = path.join(root, "data/x-capture-daemon.json");
 const logPath = path.join(root, "docs/pipeline-autorun.log");
-const pollMs = 5 * 60 * 1000;
-const maxStaleMs = 15 * 60 * 1000;
+const pollMs = 60 * 1000;
+const maxStaleMs = 10 * 60 * 1000;
 
 async function log(msg) {
   await autorunLog(`[watchdog] ${msg}`, logPath);
 }
 
-async function isDaemonHealthy() {
+async function isProcessHealthy(pidPath, statePath) {
   let pid = 0;
   try {
     const raw = await readFile(pidPath, "utf8");
@@ -48,19 +49,24 @@ async function isDaemonHealthy() {
   return true;
 }
 
-function startPatrolDaemon() {
-  const script = path.join(root, "scripts", "pipeline-patrol-daemon.mjs");
+function restartPatrolStack() {
+  const ps1 = path.join(root, "patrol.ps1");
   spawn(
-    process.execPath,
-    [script, "--agents", "debugger", "--interval", "300", "--batch", "3"],
+    "powershell.exe",
+    ["-NoProfile", "-ExecutionPolicy", "Bypass", "-WindowStyle", "Hidden", "-File", ps1],
     { cwd: root, detached: true, stdio: "ignore", shell: false },
   ).unref();
 }
 
 async function tick() {
-  if (await isDaemonHealthy()) return;
-  await log("daemon unhealthy — restarting");
-  startPatrolDaemon();
+  const patrolOk = await isProcessHealthy(patrolPidPath, patrolStatePath);
+  const captureOk = await isProcessHealthy(capturePidPath, captureStatePath);
+  if (patrolOk && captureOk) return;
+  const parts = [];
+  if (!patrolOk) parts.push("patrol");
+  if (!captureOk) parts.push("x-capture");
+  await log(`${parts.join("+")} unhealthy — restarting stack`);
+  restartPatrolStack();
 }
 
 await log(`local watchdog start poll=${pollMs / 1000}s`);
