@@ -58,6 +58,17 @@ function Start-PatrolDaemon {
 }
 
 function Start-XCaptureDaemon {
+  $pauseFile = Join-Path $Root "data\x-capture-paused.json"
+  if (Test-Path $pauseFile) {
+    try {
+      $p = Get-Content $pauseFile -Raw | ConvertFrom-Json
+      if ($p.paused -eq $true) {
+        Write-Host "x-capture: paused ($($p.reason))"
+        Remove-Item $CapturePidFile -ErrorAction SilentlyContinue
+        return
+      }
+    } catch {}
+  }
   if (Test-ProcessHealthy $CapturePidFile $CaptureStateFile) { return }
   Remove-Item $CapturePidFile -ErrorAction SilentlyContinue
   $p = Start-Process node -ArgumentList @(
@@ -81,10 +92,21 @@ if (-not (Get-ScheduledTask -TaskName $WatchdogTaskName -ErrorAction SilentlyCon
 }
 
 $patrolOk = Test-ProcessHealthy $PidFile $StateFile
-$captureOk = Test-ProcessHealthy $CapturePidFile $CaptureStateFile
+$capturePaused = $false
+if (Test-Path (Join-Path $Root "data\x-capture-paused.json")) {
+  try {
+    $cp = Get-Content (Join-Path $Root "data\x-capture-paused.json") -Raw | ConvertFrom-Json
+    if ($cp.paused -eq $true) { $capturePaused = $true }
+  } catch {}
+}
+$captureOk = $capturePaused -or (Test-ProcessHealthy $CapturePidFile $CaptureStateFile)
 
 if ($patrolOk -and $captureOk) {
-  Write-Host "Local patrol: writer patrol + x-capture + watchdog (Mac/Win same)"
+  if ($capturePaused) {
+    Write-Host "Local patrol: writer patrol + watchdog (x-capture PAUSED)"
+  } else {
+    Write-Host "Local patrol: writer patrol + x-capture + watchdog (Mac/Win same)"
+  }
   Write-Host "Pause only: OBS or data/patrol-pause-until.json"
   Write-Host "Log: $LogFile"
 } else {

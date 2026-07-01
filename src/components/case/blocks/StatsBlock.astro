@@ -1,0 +1,28 @@
+---
+const { article } = Astro.props;
+const items = [
+  ...(article.prosCons?.merits ?? []),
+  ...(article.prosCons?.demerits ?? []),
+].filter((i) => i.figure && i.figure.length > 0);
+
+const nums = items.slice(0, 3);
+if (!nums.length) return null;
+---
+
+<section class="cb-chart-block" id="sec-stats" aria-labelledby="stats-title">
+  <div class="cb-block__head">
+    <h2 class="cb-block__title" id="stats-title">公表数値・指標</h2>
+    <span class="cb-block__tag">数値統計型</span>
+  </div>
+  <div class="cb-big-nums">
+    {
+      nums.map((item, i) => (
+        <div class="cb-big-num">
+          <p class="cb-big-num__label">{item.headline || `指標${i + 1}`}</p>
+          <p class="cb-big-num__value">{item.figure}</p>
+          {item.text && <p class="cb-big-num__sub">{item.text.slice(0, 48)}</p>}
+        </div>
+      ))
+    }
+  </div>
+</section>

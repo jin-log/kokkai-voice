@@ -126,8 +126,12 @@ const distribution = s.distribution ?? [];
     </div>
   </div>
 
-  <details class="admin-row__details">
-    <summary>詳細・編集</summary>
+  <details class="admin-row__details admin-disclosure">
+    <summary class="admin-disclosure__summary">
+      <span class="admin-disclosure__chev" aria-hidden="true"></span>
+      <span class="admin-disclosure__label">詳細・編集を開く</span>
+      <span class="admin-disclosure__hint">タイトル変更・非表示・履歴</span>
+    </summary>
     <div class="admin-row__details-body">
       <p class="admin-row__slug"><code>{s.slug}</code></p>
       <div class="status-card__bar" role="progressbar" aria-valuenow={s.goldPct} aria-valuemin={0} aria-valuemax={100}>

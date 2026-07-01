@@ -15,8 +15,17 @@ import ShareBar from "./case/ShareBar.astro";
 import SupportCta from "./SupportCta.astro";
 import FloatToc from "./case/FloatToc.astro";
 import FloatReact from "./case/FloatReact.astro";
+import ImpactBlock from "./case/blocks/ImpactBlock.astro";
+import StatsBlock from "./case/blocks/StatsBlock.astro";
 import { articleShortTitle, shouldPublishParty } from "../lib/case-helpers.mjs";
 import { dietPendingBadgeLabel } from "../lib/diet-pending.mjs";
+import {
+  usesContentBlocks,
+  blockFlags,
+  caseTypeLabel,
+  caseTypeBadgeClass,
+} from "../lib/case-blocks.mjs";
+import "../styles/content-blocks.css";
 
 const { article, stance, preview = false } = Astro.props;
 const hasStance =
@@ -26,6 +35,8 @@ const shortTitle = articleShortTitle(article);
 const sourceTag =
   article.category === "国会" ? "国会議事録 API" : `${article.category || "報道"}・公開ソース`;
 const dietBadge = dietPendingBadgeLabel(article);
+const blocksMode = usesContentBlocks(article);
+const flags = blocksMode ? blockFlags(article, stance) : null;
 ---
 
 {preview && (
@@ -38,8 +49,8 @@ const dietBadge = dietPendingBadgeLabel(article);
   </div>
 )}
 
-<main class="container">
-  <header class="case-hero">
+<main class:list={["container", blocksMode && "case-blocks"]}>
+  <header class:list={["case-hero", blocksMode && "cb-hero"]}>
     <div class="case-hero__tags">
       {article.tags.map((t) => (
         <span class="tag">{t}</span>
@@ -47,19 +58,42 @@ const dietBadge = dietPendingBadgeLabel(article);
       <span class="tag tag--source">{sourceTag}</span>
       {dietBadge && <span class="tag tag--diet-pending">{dietBadge}</span>}
       {preview && <span class="tag tag--preview">非公開プレビュー</span>}
+      {blocksMode && flags && (
+        <span class:list={["cb-type-badge", caseTypeBadgeClass(flags.caseType)]}>
+          {caseTypeLabel(flags.caseType)}
+        </span>
+      )}
     </div>
     <h1 class="case-hero__title">{shortTitle}</h1>
 
     {!preview && <ShareBar article={article} />}
 
-    <NowBox article={article} />
-    <ProsCons article={article} />
-    <ArcSummary article={article} />
+    <NowBox article={article} variant={blocksMode ? "blocks" : "default"} />
+
+    {blocksMode && flags ? (
+      <>
+        {flags.impact && <ImpactBlock article={article} />}
+        {flags.stats && <StatsBlock article={article} />}
+        {!flags.impact && !flags.stats && flags.legacyProsCons && <ProsCons article={article} />}
+      </>
+    ) : (
+      <ProsCons article={article} />
+    )}
+
+    {(!blocksMode || flags?.narrativeArc) && <ArcSummary article={article} />}
     <ReactionSummary article={article} />
     <SummaryLayers article={article} />
   </header>
 
-  {hasStance && <StanceMatrix article={article} stance={stance} />}
+  {hasStance && flags?.stance !== false && (
+    blocksMode ? (
+      <div class="cb-block cb-block--stance">
+        <StanceMatrix article={article} stance={stance} />
+      </div>
+    ) : (
+      <StanceMatrix article={article} stance={stance} />
+    )
+  )}
   <Glossary article={article} />
   <Timeline article={article} />
   {!preview && <SupportCta context={article.slug} />}
@@ -68,3 +102,15 @@ const dietBadge = dietPendingBadgeLabel(article);
 
 <FloatToc article={article} hasStance={hasStance} />
 <FloatReact article={article} />
+
+<style>
+  .case-blocks .cb-block--stance {
+    padding: 0;
+    overflow: hidden;
+  }
+  .case-blocks .cb-block--stance :global(.stance-matrix) {
+    margin: 0;
+    border: none;
+    box-shadow: none;
+  }
+</style>

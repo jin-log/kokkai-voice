@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>政策論争型サンプル｜食料品消費税</title>
+  <link rel="stylesheet" href="../css/tokens.css" />
+  <link rel="stylesheet" href="css/blocks.css" />
+</head>
+<body class="cb-page">
+  <div class="cb-wrap">
+    <header class="cb-hub-head">
+      <p class="cb-hub-head__eyebrow">サンプル — policy_debate</p>
+      <nav class="cb-nav" aria-label="サンプル一覧">
+        <a href="index.html">一覧</a>
+        <a href="policy-debate.html" aria-current="page">政策論争型</a>
+        <a href="statistical.html">数値統計型</a>
+        <a href="narrative.html">経過・結末型</a>
+        <a href="mixed.html">複合型</a>
+      </nav>
+    </header>
+
+    <article>
+      <header class="cb-hero">
+        <span class="cb-type-badge cb-type-badge--debate">case_type: policy_debate</span>
+        <h1>食料品消費税ゼロ公約、スーパーはまだ8%？</h1>
+        <div class="cb-now">
+          <p class="cb-now__label">いまの結論</p>
+          <ul>
+            <li>2026年夏前の社会保障国民会議で中間案。飲食料品の<strong>実質ゼロ</strong>（2年間時限）が論点。</li>
+            <li>小売は値札貼替の手間、価格転嫁の不透明さを国会ヒアリングで指摘。</li>
+            <li>野党は「家計に残らない」懸念。与党は財源・還付負担を課題として検討中。</li>
+          </ul>
+        </div>
+      </header>
+
+      <!-- 新: 賛否マップ -->
+      <section class="cb-block" aria-labelledby="stance-map-title">
+        <div class="cb-block__head">
+          <h2 class="cb-block__title" id="stance-map-title">国会での賛否（党ごと）</h2>
+          <span class="cb-block__tag">ON — policy_debate</span>
+        </div>
+        <p class="cb-party-scope">
+          <strong>掲載する党：</strong>この論点で国会・党文書に立場が確認できる政党のみ（全政党ではない）。
+          通常は<strong>自民・立憲・公明・維新・国民民主・共産</strong>など主要党＋発言のあった党。
+          議事録上の発言がなければ「未回答」とする（API該当0件）。
+        </p>
+        <table class="cb-stance-table">
+          <thead>
+            <tr>
+              <th>政党</th>
+              <th>立場</th>
+              <th>誰にどう効くと言っているか</th>
+              <th>条件・但し書き</th>
+              <th>出典</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>自由民主党</td>
+              <td><span class="cb-pill cb-pill--cond">条件付き賛成</span></td>
+              <td><span class="cb-perspective">家計</span>物価高のつなぎとして食費負担を下げたい</td>
+              <td>財源・還付の実務負担が整理できること</td>
+              <td><a href="#">国会答弁 ↗</a><br><small>2026-04-10</small></td>
+            </tr>
+            <tr>
+              <td>国民民主党</td>
+              <td><span class="cb-pill cb-pill--caution">慎重</span></td>
+              <td><span class="cb-perspective">家計</span>減税分が値下げに乗らず実質増税になりうる</td>
+              <td>給付の先行導入等の組み合わせを求める</td>
+              <td><a href="#">国会質疑 ↗</a><br><small>2026-04-10</small></td>
+            </tr>
+            <tr>
+              <td>日本共産党</td>
+              <td><span class="cb-pill cb-pill--con">反対</span></td>
+              <td><span class="cb-perspective">家計</span>5%に戻し消費税廃止の方が手取りに効く</td>
+              <td>—</td>
+              <td><a href="#">国会発言 ↗</a><br><small>2026-04-10</small></td>
+            </tr>
+            <tr>
+              <td>日本維新の会</td>
+              <td><span class="cb-pill cb-pill--na">未回答</span></td>
+              <td>—</td>
+              <td>本論点の党代表発言が議事録上未確認</td>
+              <td><small>API該当0件</small></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- 新: 視点タグ付き利害整理（旧メリデメの代わり） -->
+      <section class="cb-block" aria-labelledby="impact-title">
+        <div class="cb-block__head">
+          <h2 class="cb-block__title" id="impact-title">実施した場合の利害整理（出典付き）</h2>
+          <span class="cb-block__tag">ON — 視点タグ必須</span>
+        </div>
+        <p class="cb-block__note">「メリット／デメリット」ラベルは使わない。<strong>誰にとって</strong>をタグで明示し、政府・野党・業界の説明として並べる。</p>
+        <div class="cb-impact-grid">
+          <div class="cb-impact-card cb-impact-card--plus">
+            <p class="cb-impact-card__who"><span class="cb-perspective">家計</span>政府の説明</p>
+            <p>飲食料品の消費税を実質ゼロにすれば、食費の税負担が下がると説明。</p>
+            <p class="cb-impact-card__fig">5%→0%（2年・案）</p>
+          </div>
+          <div class="cb-impact-card cb-impact-card--plus">
+            <p class="cb-impact-card__who"><span class="cb-perspective">家計</span>与党の位置づけ</p>
+            <p>物価高対策の<strong>つなぎ</strong>として時限措置を検討。</p>
+            <p class="cb-impact-card__fig">2年間</p>
+          </div>
+          <div class="cb-impact-card cb-impact-card--minus">
+            <p class="cb-impact-card__who"><span class="cb-perspective">小売業</span>国会ヒアリング</p>
+            <p>値札貼替の手間、2年後の再変更。価格転嫁が難しいとの指摘。</p>
+            <p class="cb-impact-card__fig">実務負担</p>
+          </div>
+          <div class="cb-impact-card cb-impact-card--minus">
+            <p class="cb-impact-card__who"><span class="cb-perspective">家計</span>野党の指摘</p>
+            <p>減税分が必ずしも値下げに反映されず、家計に残らない可能性。</p>
+            <p class="cb-impact-card__fig">価格転嫁</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 既存: 公言↔行動（賛否マップの下に配置） -->
+      <section class="cb-block" aria-labelledby="matrix-title">
+        <div class="cb-block__head">
+          <h2 class="cb-block__title" id="matrix-title">公言 ↔ 行動（賛否に対する動き）</h2>
+          <span class="cb-block__tag">ON — 賛否マップとセット</span>
+        </div>
+        <p class="cb-block__note">「言ったこと」と「その後やったこと」のギャップ。嘘判定はしない。</p>
+        <div class="cb-matrix-row">
+          <div class="cb-matrix-party">自民党</div>
+          <div class="cb-matrix-cell cb-matrix-cell--say"><strong>方針</strong> 物価高つなぎとして食料品減税を検討</div>
+          <div class="cb-matrix-cell cb-matrix-cell--do"><strong>行動</strong> 国民会議で中間案を議論。法案提出前</div>
+          <div><span class="cb-sym cb-sym--unknown" title="未判定">？</span></div>
+        </div>
+        <div class="cb-matrix-row">
+          <div class="cb-matrix-party">国民民主</div>
+          <div class="cb-matrix-cell cb-matrix-cell--say"><strong>方針</strong> 実質増税になりうると指摘</div>
+          <div class="cb-matrix-cell cb-matrix-cell--do"><strong>行動</strong> 国会質疑・党首発信で代替案を提示</div>
+          <div><span class="cb-sym cb-sym--ok" title="言動一致">〇</span></div>
+        </div>
+      </section>
+
+      <!-- 廃止想定 -->
+      <section class="cb-block cb-block--skip" aria-labelledby="old-proscons">
+        <div class="cb-block__head">
+          <h2 class="cb-block__title" id="old-proscons">メリット・デメリット（左右2カード・視点なし）</h2>
+          <span class="cb-block__tag cb-block__tag--off">OFF — 廃止</span>
+        </div>
+        <p class="cb-block__note">「国会で論点具体化」「読者の判断材料になる」等、誰の得失か不明な文が入りやすいため非表示。</p>
+      </section>
+    </article>
+  </div>
+</body>
+</html>

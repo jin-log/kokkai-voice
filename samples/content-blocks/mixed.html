@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>複合型サンプル｜出生率予算</title>
+  <link rel="stylesheet" href="../css/tokens.css" />
+  <link rel="stylesheet" href="css/blocks.css" />
+</head>
+<body class="cb-page">
+  <div class="cb-wrap">
+    <header class="cb-hub-head">
+      <p class="cb-hub-head__eyebrow">サンプル — mixed</p>
+      <nav class="cb-nav" aria-label="サンプル一覧">
+        <a href="index.html">一覧</a>
+        <a href="policy-debate.html">政策論争型</a>
+        <a href="statistical.html">数値統計型</a>
+        <a href="narrative.html">経過・結末型</a>
+        <a href="mixed.html" aria-current="page">複合型</a>
+      </nav>
+    </header>
+
+    <article>
+      <header class="cb-hero">
+        <span class="cb-type-badge cb-type-badge--mixed">case_type: mixed</span>
+        <h1>【出生率・子育て支援】3.6兆円は効いた？2025年の実績</h1>
+        <div class="cb-now">
+          <p class="cb-now__label">いまの結論</p>
+          <ul>
+            <li>子育て支援等で<strong>3.6兆円規模</strong>の予算枠。出生数は2024年<strong>72.7万人</strong>（過去最少更新）。</li>
+            <li>「金額」と「効果」の両方が読者の疑問 → ブロックを2つ組み合わせる。</li>
+          </ul>
+        </div>
+      </header>
+
+      <!-- 数値: 使途内訳 -->
+      <section class="cb-chart-block" aria-labelledby="ledger-title">
+        <div class="cb-block__head">
+          <h2 class="cb-block__title" id="ledger-title">予算の使途・規模</h2>
+          <span class="cb-block__tag">ON — ledger（mixed）</span>
+        </div>
+        <p class="cb-block__note">「いくら使った／何に回ったか」— 棒グラフ＋大きな数字で先に見せる。</p>
+
+        <div class="cb-big-nums">
+          <div class="cb-big-num">
+            <p class="cb-big-num__label">支援予算枠</p>
+            <p class="cb-big-num__value">3.6<span style="font-size:0.5em">兆円</span></p>
+          </div>
+          <div class="cb-big-num">
+            <p class="cb-big-num__label">出生数 2024年</p>
+            <p class="cb-big-num__value cb-big-num__value--up">72.7<span style="font-size:0.5em">万人</span></p>
+            <p class="cb-big-num__sub cb-big-num__sub--bad">過去最少更新</p>
+          </div>
+          <div class="cb-big-num">
+            <p class="cb-big-num__label">合計特殊出生率 2023</p>
+            <p class="cb-big-num__value">1.20</p>
+          </div>
+        </div>
+
+        <div class="cb-ledger-legend" aria-hidden="true">
+          <span class="lg-a">児童手当 42%</span>
+          <span class="lg-b">保育・教育 28%</span>
+          <span class="lg-c">出産・育児 18%</span>
+          <span class="lg-d">その他 12%</span>
+        </div>
+        <div class="cb-ledger-bar" aria-hidden="true">
+          <span style="width:42%;background:#1e40af">児童手当 42%</span>
+          <span style="width:28%;background:#0369a1">保育・教育 28%</span>
+          <span style="width:18%;background:#0d9488">出産・育児 18%</span>
+          <span style="width:12%;background:#64748b">その他 12%</span>
+        </div>
+        <table class="cb-trend-table">
+          <thead>
+            <tr><th>指標</th><th>数値</th><th>出典</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>支援予算枠（累計イメージ）</td><td class="cb-num-cell">3.6兆円</td><td><a href="#">予算資料 ↗</a></td></tr>
+            <tr><td>出生数（2024年）</td><td class="cb-num-cell">72.7万人</td><td><a href="#">厚労省 ↗</a></td></tr>
+            <tr><td>合計特殊出生率（2023年）</td><td class="cb-num-cell">1.20</td><td><a href="#">厚労省 ↗</a></td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- 賛否: 効いたかどうかの党の見方 -->
+      <section class="cb-block" aria-labelledby="stance-mixed">
+        <div class="cb-block__head">
+          <h2 class="cb-block__title" id="stance-mixed">「効いたか」に対する党の見方</h2>
+          <span class="cb-block__tag">ON — 賛否マップ（mixed）</span>
+        </div>
+        <p class="cb-party-scope">
+          <strong>掲載する党：</strong>全政党ではなく、この論点で立場が確認できる党だけ。主要党を基本に、発言のあった党を追加。
+        </p>
+        <table class="cb-stance-table">
+          <thead>
+            <tr><th>政党</th><th>立場</th><th>誰にどう言っているか</th><th>出典</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>政府</td>
+              <td><span class="cb-pill cb-pill--pro">賛成</span></td>
+              <td><span class="cb-perspective">家計</span>児童手当拡充等で子育て負担を下げた</td>
+              <td><a href="#">国会答弁 ↗</a></td>
+            </tr>
+            <tr>
+              <td>立憲民主党</td>
+              <td><span class="cb-pill cb-pill--con">反対</span></td>
+              <td><span class="cb-perspective">社会全体</span>出生数は減少続き。規模・設計が不十分</td>
+              <td><a href="#">国会質疑 ↗</a></td>
+            </tr>
+            <tr>
+              <td>日本維新の会</td>
+              <td><span class="cb-pill cb-pill--cond">条件付き</span></td>
+              <td><span class="cb-perspective">地方</span>交付の偏り是正を条件に評価</td>
+              <td><a href="#">国会 ↗</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="cb-block" aria-labelledby="matrix-mixed">
+        <div class="cb-block__head">
+          <h2 class="cb-block__title" id="matrix-mixed">公言 ↔ 行動</h2>
+          <span class="cb-block__tag">ON — 賛否とセット</span>
+        </div>
+        <div class="cb-matrix-row">
+          <div class="cb-matrix-party">自民党</div>
+          <div class="cb-matrix-cell cb-matrix-cell--say">出生率改善に最大限の支援</div>
+          <div class="cb-matrix-cell cb-matrix-cell--do">児童手当拡充・3.6兆円枠を予算化</div>
+          <div><span class="cb-sym cb-sym--partial">▲</span></div>
+        </div>
+        <p class="cb-block__note" style="margin:0.5rem 0 0">▲＝予算は執行したが出生数は過去最少（公言の「改善」と数値のギャップ）</p>
+      </section>
+
+      <section class="cb-block cb-block--skip">
+        <div class="cb-block__head">
+          <h2 class="cb-block__title">旧メリデメ（視点なし）</h2>
+          <span class="cb-block__tag cb-block__tag--off">OFF</span>
+        </div>
+      </section>
+    </article>
+  </div>
+</body>
+</html>

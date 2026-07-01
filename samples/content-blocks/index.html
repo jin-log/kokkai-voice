@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>コンテンツブロック案｜日本の政治now. サンプル</title>
+  <link rel="stylesheet" href="../css/tokens.css" />
+  <link rel="stylesheet" href="css/blocks.css" />
+</head>
+<body class="cb-page">
+  <div class="cb-wrap">
+    <header class="cb-hub-head">
+      <p class="cb-hub-head__eyebrow">編集方針ドラフト — 2026-07-01</p>
+      <h1>案件タイプ別コンテンツブロック（サンプル）</h1>
+      <p class="cb-hub-head__lead">
+        全記事にメリデメを付けるのをやめ、<strong>案件の中身</strong>に応じてブロックを出し分ける案の見た目サンプル。
+        タイトル語ではなく <code>case_type</code> で ON/OFF。旧「左右メリデメ（視点なし）」は廃止想定。
+      </p>
+      <nav class="cb-nav" aria-label="サンプル一覧">
+        <a href="index.html" aria-current="page">一覧</a>
+        <a href="policy-debate.html">政策論争型</a>
+        <a href="statistical.html">数値統計型</a>
+        <a href="narrative.html">経過・結末型</a>
+        <a href="mixed.html">複合型</a>
+      </nav>
+    </header>
+
+    <section class="cb-cards" aria-label="タイプ別サンプル">
+      <a class="cb-card-link" href="policy-debate.html">
+        <span class="cb-type-badge cb-type-badge--debate">policy_debate</span>
+        <h2>食料品消費税減税 — 政策論争型</h2>
+        <p>実施すると利害が分かれる。賛否マップ＋視点付き利害整理＋公言↔行動。</p>
+        <div class="cb-card-link__blocks">
+          <span class="cb-mini">賛否マップ</span>
+          <span class="cb-mini">利害（視点タグ）</span>
+          <span class="cb-mini">公言↔行動</span>
+          <span class="cb-mini cb-mini--off">旧メリデメ</span>
+        </div>
+      </a>
+
+      <a class="cb-card-link" href="statistical.html">
+        <span class="cb-type-badge cb-type-badge--stat">statistical</span>
+        <h2>不法滞在の人数推移 — 数値統計型</h2>
+        <p>指標の変化が主題。推移表のみ。賛否・メリデメは付けない。</p>
+        <div class="cb-card-link__blocks">
+          <span class="cb-mini">推移表</span>
+          <span class="cb-mini cb-mini--off">賛否マップ</span>
+          <span class="cb-mini cb-mini--off">メリデメ</span>
+        </div>
+      </a>
+
+      <a class="cb-card-link" href="narrative.html">
+        <span class="cb-type-badge cb-type-badge--narrative">narrative</span>
+        <h2>岸田辞任から1年 — 経過・結末型</h2>
+        <p>人事・結末が主題。タイムライン＋結論のみ。追加ブロックなし。</p>
+        <div class="cb-card-link__blocks">
+          <span class="cb-mini">タイムライン</span>
+          <span class="cb-mini cb-mini--off">賛否マップ</span>
+          <span class="cb-mini cb-mini--off">数値ブロック</span>
+        </div>
+      </a>
+
+      <a class="cb-card-link" href="mixed.html">
+        <span class="cb-type-badge cb-type-badge--mixed">mixed</span>
+        <h2>出生率3.6兆円は効いた？ — 複合型</h2>
+        <p>予算の使途（数値）＋政策の賛否＋公言↔行動。ブロック2〜3個。</p>
+        <div class="cb-card-link__blocks">
+          <span class="cb-mini">使途内訳</span>
+          <span class="cb-mini">賛否マップ</span>
+          <span class="cb-mini">公言↔行動</span>
+        </div>
+      </a>
+    </section>
+
+    <aside class="cb-legend">
+      <h2>ブロック ON/OFF 早見表（案）</h2>
+      <ul>
+        <li><strong>policy_debate</strong> — 賛否マップ・利害（視点タグ）・公言↔行動</li>
+        <li><strong>statistical</strong> — 推移表（or 単発数値）</li>
+        <li><strong>progress</strong> — 手続き位置（法案段階）</li>
+        <li><strong>narrative</strong> — 追加ブロックなし（層Aのみ）</li>
+        <li><strong>mixed</strong> — 上記から2つまで組み合わせ</li>
+      </ul>
+    </aside>
+  </div>
+</body>
+</html>

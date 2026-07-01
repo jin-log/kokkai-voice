@@ -1,0 +1,74 @@
+---
+import { formatDate } from "../../../lib/case-helpers.mjs";
+
+const { article } = Astro.props;
+const pc = article.prosCons;
+const merits = pc?.merits ?? [];
+const demerits = pc?.demerits ?? [];
+if (!merits.length && !demerits.length) return null;
+
+function perspective(item, kind) {
+  return item.perspective || (kind === "merit" ? "支持側" : "懸念側");
+}
+---
+
+<section class="cb-block" id="sec-impact" aria-labelledby="impact-title">
+  <div class="cb-block__head">
+    <h2 class="cb-block__title" id="impact-title">実施した場合の利害整理（出典付き）</h2>
+    <span class="cb-block__tag">視点タグ</span>
+  </div>
+  {pc?.disclaimer && <p class="cb-block__note">{pc.disclaimer}</p>}
+  <div class="cb-impact-grid">
+    {
+      merits.map((item) => (
+        <div class="cb-impact-card cb-impact-card--plus">
+          <p class="cb-impact-card__who">
+            <span class="cb-perspective">{perspective(item, "merit")}</span>
+            {item.headline || "支持の論点"}
+          </p>
+          <p>{item.text}</p>
+          {item.figure && <p class="cb-impact-card__fig">{item.figure}</p>}
+          {item.sourceUrl && (
+            <p class="cb-impact-card__source">
+              <a href={item.sourceUrl} target="_blank" rel="noopener">
+                {item.sourceLabel || "出典"} ↗
+              </a>
+              {item.sourceDate && (
+                <time datetime={item.sourceDate}> · {formatDate(item.sourceDate)}</time>
+              )}
+            </p>
+          )}
+        </div>
+      ))
+    }
+    {
+      demerits.map((item) => (
+        <div class="cb-impact-card cb-impact-card--minus">
+          <p class="cb-impact-card__who">
+            <span class="cb-perspective">{perspective(item, "demerit")}</span>
+            {item.headline || "懸念の論点"}
+          </p>
+          <p>{item.text}</p>
+          {item.figure && <p class="cb-impact-card__fig">{item.figure}</p>}
+          {item.sourceUrl && (
+            <p class="cb-impact-card__source">
+              <a href={item.sourceUrl} target="_blank" rel="noopener">
+                {item.sourceLabel || "出典"} ↗
+              </a>
+              {item.sourceDate && (
+                <time datetime={item.sourceDate}> · {formatDate(item.sourceDate)}</time>
+              )}
+            </p>
+          )}
+        </div>
+      ))
+    }
+  </div>
+</section>
+
+<style>
+  .cb-impact-card__source {
+    margin: 0.4rem 0 0;
+    font-size: 0.75rem;
+  }
+</style>

@@ -47,8 +47,12 @@ const policyCategories = Object.keys(categoryCounts).sort(sortPolicyCategories);
   </header>
 
   <section class="admin-guide" aria-label="状態の意味と自動化">
-    <details class="admin-guide__panel">
-      <summary class="admin-guide__summary">状態の違い・自動化の範囲（必読）</summary>
+    <details class="admin-guide__panel admin-disclosure">
+      <summary class="admin-disclosure__summary admin-guide__summary">
+        <span class="admin-disclosure__chev" aria-hidden="true"></span>
+        <span class="admin-disclosure__label">状態の違い・自動化の範囲（必読）</span>
+        <span class="admin-disclosure__hint">タップで表を表示</span>
+      </summary>
       <div class="admin-guide__body">
         <table class="admin-guide__table">
           <thead>

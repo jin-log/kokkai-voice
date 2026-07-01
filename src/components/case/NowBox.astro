@@ -2,29 +2,32 @@
 import DietPendingNotice from "./DietPendingNotice.astro";
 import { showsDietPendingUI } from "../../lib/diet-pending.mjs";
 
-const { article } = Astro.props;
+const { article, variant = "default" } = Astro.props;
 const ns = article.nowSummary ?? {};
 const bullets = ns.bullets ?? [];
 const updatedNote = ns.updatedAt ? ` · 要約更新: ${ns.updatedAt.slice(0, 10)}` : "";
 const fetchedLabel = article.fetchedAt?.slice(0, 10) ?? "—";
 const dietPending = showsDietPendingUI(article);
+const isBlocks = variant === "blocks";
 ---
 
-<div class="now-box" id="sec-now">
-  <p class="now-box__label">{ns.label || "いまどうなってる？"}</p>
+<div class:list={[isBlocks ? "cb-now" : "now-box"]} id="sec-now">
+  <p class:list={[isBlocks ? "cb-now__label" : "now-box__label"]}>
+    {isBlocks ? "いまの結論" : ns.label || "いまどうなってる？"}
+  </p>
   {dietPending && <DietPendingNotice article={article} variant="inline" />}
   {
     bullets.length > 0 ? (
-      <ul class="now-box__bullets">
+      <ul class:list={[isBlocks ? undefined : "now-box__bullets"]}>
         {bullets.map((b) => (
           <li>{b}</li>
         ))}
       </ul>
     ) : ns.text ? (
-      <p class="now-box__text">{ns.text}</p>
+      <p class:list={[isBlocks ? undefined : "now-box__text"]}>{ns.text}</p>
     ) : null
   }
-  <p class="now-box__updated">
+  <p class:list={[isBlocks ? "now-box__updated" : "now-box__updated"]}>
     データ取得: {fetchedLabel}
     {!dietPending && article.apiHits != null && <> · APIヒット {article.apiHits}件</>}
     {updatedNote} · {ns.disclaimer}
