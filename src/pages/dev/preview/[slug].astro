@@ -1,14 +1,12 @@
 ---
-import DevLayout from "../../../layouts/DevLayout.astro";
-import DevHeader from "../../../components/DevHeader.astro";
-import SiteFooter from "../../../components/SiteFooter.astro";
+import AdminShell from "../../../components/admin/AdminShell.astro";
 import CasePageContent from "../../../components/CasePageContent.astro";
 import {
   getPreviewSlugs,
   loadArticle,
   loadStanceData,
 } from "../../../lib/articles.mjs";
-import { adminNavScript } from "../../../lib/dev-nav.mjs";
+import { articleShortTitle } from "../../../lib/case-helpers.mjs";
 
 export async function getStaticPaths() {
   const slugs = await getPreviewSlugs();
@@ -18,75 +16,27 @@ export async function getStaticPaths() {
 const { slug } = Astro.params;
 const article = await loadArticle(slug);
 const stance = await loadStanceData(article);
+const title = articleShortTitle(article);
 ---
 
-<DevLayout tabTitle="·" bodyDataCase={article.slug} includeAppJs>
-  <DevHeader current="preview" />
-  <div id="preview-gate" style="display:none">
-    <CasePageContent article={article} stance={stance} preview={true} />
-  </div>
-
-  <div id="preview-lock" style="display:none">
-    <div style="min-height:60vh;display:flex;align-items:center;justify-content:center">
-      <div style="text-align:center;padding:2rem">
-        <p style="font-size:1.1rem;margin-bottom:1rem">🔒 認証が必要です</p>
-        <input
-          id="preview-pin-input"
-          type="password"
-          maxlength="8"
-          style="font-size:1.5rem;text-align:center;width:8rem;padding:0.5rem;border:2px solid var(--color-border);border-radius:0.5rem"
-          placeholder="••••"
-          autocomplete="off"
-        />
-        <br /><br />
-        <button
-          id="preview-pin-submit"
-          style="background:var(--color-primary);color:#fff;border:none;padding:0.6rem 1.5rem;border-radius:2rem;font-size:1rem;cursor:pointer"
-        >
-          入力
-        </button>
-        <p id="preview-pin-error" style="color:red;margin-top:0.5rem;display:none">認証に失敗しました</p>
-        <p style="margin-top:1.5rem;font-size:0.85rem">
-          <button type="button" data-admin-nav style="background:none;border:none;color:var(--color-primary);cursor:pointer;text-decoration:underline">
-            戻る
-          </button>
-        </p>
-      </div>
+<AdminShell
+  activeId="articles"
+  title={`プレビュー · ${title}`}
+  wide={true}
+  bodyDataCase={article.slug}
+  includeAppJs={true}
+>
+  <div class="admin-preview-bar">
+    <div>
+      <p class="admin-preview-bar__title">{title}</p>
+      <p class="admin-preview-bar__meta"><code>{article.slug}</code> · 非公開プレビュー</p>
+    </div>
+    <div class="admin-row__quick">
+      <a href="/dev/articles/" class="admin-row__btn admin-row__btn--ghost">← 記事一覧</a>
+      {article.pageReady && !article.adminHidden && (
+        <a href={`/case/${article.slug}/`} class="admin-row__btn" target="_blank" rel="noopener">本番を見る</a>
+      )}
     </div>
   </div>
-
-  <SiteFooter note="" />
-</DevLayout>
-
-<script define:vars={{ adminNavScript }}>
-const PIN = "1192";
-const KEY = "dev_auth";
-
-function show(id) {
-  document.getElementById(id).style.display = "block";
-}
-function hide(id) {
-  document.getElementById(id).style.display = "none";
-}
-
-eval(adminNavScript);
-
-if (localStorage.getItem(KEY) === PIN) {
-  show("preview-gate");
-} else {
-  show("preview-lock");
-  document.getElementById("preview-pin-submit").addEventListener("click", () => {
-    const val = document.getElementById("preview-pin-input").value;
-    if (val === PIN) {
-      localStorage.setItem(KEY, PIN);
-      hide("preview-lock");
-      show("preview-gate");
-    } else {
-      document.getElementById("preview-pin-error").style.display = "block";
-    }
-  });
-  document.getElementById("preview-pin-input").addEventListener("keydown", (e) => {
-    if (e.key === "Enter") document.getElementById("preview-pin-submit").click();
-  });
-}
-</script>
+  <CasePageContent article={article} stance={stance} preview={true} />
+</AdminShell>

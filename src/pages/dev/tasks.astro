@@ -1,8 +1,7 @@
 ---
-import BaseLayout from "../../layouts/DevLayout.astro";
-import DevHeader from "../../components/DevHeader.astro";
+import AdminShell from "../../components/admin/AdminShell.astro";
+import AdminKpiBar from "../../components/admin/AdminKpiBar.astro";
 import DevChromeOpen from "../../components/DevChromeOpen.astro";
-import SiteFooter from "../../components/SiteFooter.astro";
 import {
   loadOpsQueue,
   sliceQueue,
@@ -128,83 +127,74 @@ function projectMeta(slug) {
 }
 ---
 
-<BaseLayout tabTitle="·">
-  <DevHeader current="tasks" />
-  <div id="dev-gate" style="display:none">
-    <main class="container ops-page">
-      <p class="status-page__lead status-page__lead--dev">🔒 認証が必要です</p>
-      <h1 class="status-page__title">今日やること</h1>
-      <p class="ops-page__lead">
-        政治now · jin-log · DJ · 事業 — 横断キュー。CEO が優先度（score）順に並べ替え。
-        {queue && (
-          <>
-            {" "}
-            <span class="ops-page__meta">{queue.dayLabel} · 更新 {new Date(queue.generatedAt).toLocaleString("ja-JP")}</span>
-          </>
-        )}
-      </p>
+<AdminShell activeId="tasks" title="今日のタスク">
+  <header class="admin-page-head">
+    <h1 class="admin-page-head__title">今日のタスク</h1>
+    <p class="admin-page-head__note">
+      政治now · jin-log · DJ — 横断キュー。CEO が優先度（score）順に並べ替え。
+      {queue && (
+        <span> {queue.dayLabel} · 更新 {new Date(queue.generatedAt).toLocaleString("ja-JP")}</span>
+      )}
+    </p>
+  </header>
 
-      <aside class="dev-chrome-banner" role="note">
-        <strong>外部サイト（X・はてブ・GSC）は Chrome で開く。</strong>
-        「Chromeで開く」ボタン → URLコピー → Chromeのアドレスバー（Ctrl+L）に貼付。
-        Cursor内プレビューではログインできません。
-      </aside>
+  {
+    queue ? (
+      <AdminKpiBar items={[
+        { label: "オーナー（今日）", value: String(counts?.ownerToday ?? 0) },
+        { label: "CEO（今日）", value: String(counts?.ceoToday ?? 0) },
+        { label: "未完了", value: String(counts?.all ?? 0), tone: (counts?.all ?? 0) > 0 ? "warn" : "ok" },
+        { label: "タブ", value: "今日" },
+      ]} />
+    ) : null
+  }
 
+  <aside class="dev-chrome-banner" role="note">
+    <strong>外部サイト（X・はてブ・GSC）は Chrome で開く。</strong>
+    「Chromeで開く」→ URLコピー → Chromeのアドレスバー（Ctrl+L）に貼付。
+  </aside>
+
+  <div class="ops-page admin-page-content admin-page-content--full">
       {
         queue ? (
           <>
-            <section class="ops-summary" aria-label="サマリ">
-              <div class="ops-summary__chip">
-                <span class="ops-summary__num">{counts?.ownerToday ?? 0}</span>
-                <span class="ops-summary__lbl">オーナー（今日）</span>
+            <div class="admin-filter admin-filter--sticky">
+              <div class="admin-filter__pills" role="tablist">
+                {
+                  tabs.map((t) => (
+                    <button
+                      type="button"
+                      class:list={["admin-filter__pill", t.id === "today" && "is-active"]}
+                      role="tab"
+                      data-tab={t.id}
+                      aria-selected={t.id === "today"}
+                    >
+                      {t.label}
+                      <span class="admin-filter__pill-n">{t.count}</span>
+                    </button>
+                  ))
+                }
               </div>
-              <div class="ops-summary__chip">
-                <span class="ops-summary__num">{counts?.ceoToday ?? 0}</span>
-                <span class="ops-summary__lbl">CEO（今日）</span>
+              <div class="admin-filter__search" style="margin-top:0.65rem">
+                <label class="admin-filter__label">
+                  担当
+                  <select id="assignee-filter" class="admin-filter__input">
+                    <option value="">すべて</option>
+                    <option value="owner">オーナー</option>
+                    <option value="ceo">CEO</option>
+                  </select>
+                </label>
               </div>
-              <div class="ops-summary__chip ops-summary__chip--muted">
-                <span class="ops-summary__num">{counts?.all ?? 0}</span>
-                <span class="ops-summary__lbl">未完了 全体</span>
-              </div>
-            </section>
-
-            <div class="ops-tabs" role="tablist">
-              {
-                tabs.map((t) => (
-                  <button
-                    type="button"
-                    class="ops-tabs__btn"
-                    role="tab"
-                    data-tab={t.id}
-                    aria-selected={t.id === "today"}
-                  >
-                    {t.label}
-                    <span class="ops-tabs__count">{t.count}</span>
-                  </button>
-                ))
-              }
-            </div>
-
-            <div class="ops-filter">
-              <label>
-                担当
-                <select id="assignee-filter">
-                  <option value="">すべて</option>
-                  <option value="owner">オーナー</option>
-                  <option value="ceo">CEO</option>
-                </select>
-              </label>
             </div>
 
             {
               tabs.map((t) => (
-                <section class="ops-panel" data-panel={t.id} hidden={t.id !== "today"}>
-                  <ul class="ops-list">
+                <section class="ops-panel admin-list" data-panel={t.id} hidden={t.id !== "today"}>
                     {
                       tasksForTab(t.id).map((task) => {
                         const proj = projectMeta(task.project);
                         return (
-                          <li class="ops-card" data-assignee={task.assignee} data-task-id={task.id}>
+                          <article class="ops-card admin-row" data-assignee={task.assignee} data-task-id={task.id}>
                             <header class="ops-card__head">
                               <span
                                 class="ops-card__project"
@@ -321,17 +311,16 @@ function projectMeta(slug) {
                               <span class="ops-done-status" data-task-status={task.id} hidden></span>
                               <span class="ops-card__score" title="CEO優先度スコア">score {task.score}</span>
                             </footer>
-                          </li>
+                          </article>
                         );
                       })
                     }
-                  </ul>
-                  {
-                    tasksForTab(t.id).length === 0 && (
-                      <p class="ops-empty">該当タスクなし 🎉</p>
-                    )
-                  }
-                </section>
+                    {
+                      tasksForTab(t.id).length === 0 && (
+                        <p class="admin-list__empty">該当タスクなし 🎉</p>
+                      )
+                    }
+                  </section>
               ))
             }
 
@@ -349,68 +338,26 @@ function projectMeta(slug) {
           <p><code>data/ops-queue.json</code> がありません。</p>
         )
       }
-    </main>
   </div>
-
-  <div id="dev-lock" style="display:none">
-    <div style="min-height:60vh;display:flex;align-items:center;justify-content:center">
-      <div style="text-align:center;padding:2rem">
-        <p style="font-size:1.1rem;margin-bottom:1rem">🔒 PINを入力してください</p>
-        <input id="pin-input" type="password" maxlength="8"
-          style="font-size:1.5rem;text-align:center;width:8rem;padding:0.5rem;border:2px solid var(--color-border);border-radius:0.5rem"
-          placeholder="••••" />
-        <br><br>
-        <button id="pin-submit"
-          style="background:var(--color-primary);color:#fff;border:none;padding:0.6rem 1.5rem;border-radius:2rem;font-size:1rem;cursor:pointer">
-          入力
-        </button>
-        <p id="pin-error" style="color:red;margin-top:0.5rem;display:none">PINが違います</p>
-      </div>
-    </div>
-  </div>
-
-  <SiteFooter note="" />
-</BaseLayout>
+</AdminShell>
 
 <script>
-const PIN = "1192";
 const KEY = "dev_auth";
-
-function show(id) { document.getElementById(id).style.display = "block"; }
-function hide(id) { document.getElementById(id).style.display = "none"; }
-
-if (localStorage.getItem(KEY) === PIN) {
-  show("dev-gate");
-} else {
-  show("dev-lock");
-  document.getElementById("pin-submit").addEventListener("click", () => {
-    const val = document.getElementById("pin-input").value;
-    if (val === PIN) {
-      localStorage.setItem(KEY, PIN);
-      hide("dev-lock");
-      show("dev-gate");
-    } else {
-      document.getElementById("pin-error").style.display = "block";
-    }
-  });
-  document.getElementById("pin-input").addEventListener("keydown", (e) => {
-    if (e.key === "Enter") document.getElementById("pin-submit").click();
-  });
-}
 
 function bumpTabCounts() {
   const panel = document.querySelector(".ops-panel:not([hidden])");
   if (!panel) return;
   const n = panel.querySelectorAll(".ops-card:not(.is-removing)").length;
   const tab = panel.getAttribute("data-panel");
-  const btn = document.querySelector(`.ops-tabs__btn[data-tab="${tab}"] .ops-tabs__count`);
+  const btn = document.querySelector(`[data-tab="${tab}"] .admin-filter__pill-n`);
   if (btn) btn.textContent = String(n);
 }
 
-document.querySelectorAll(".ops-tabs__btn").forEach((btn) => {
+document.querySelectorAll("[data-tab]").forEach((btn) => {
   btn.addEventListener("click", () => {
     const tab = btn.getAttribute("data-tab");
-    document.querySelectorAll(".ops-tabs__btn").forEach((b) => {
+    document.querySelectorAll("[data-tab]").forEach((b) => {
+      b.classList.toggle("is-active", b === btn);
       b.setAttribute("aria-selected", b === btn ? "true" : "false");
     });
     document.querySelectorAll(".ops-panel").forEach((p) => {
@@ -474,12 +421,12 @@ document.querySelectorAll(".ops-done-btn").forEach((btn) => {
       setTimeout(() => {
         card?.remove();
         bumpTabCounts();
-        const list = card?.closest(".ops-list");
+        const list = card?.closest(".ops-panel");
         if (list && !list.querySelector(".ops-card")) {
           const empty = document.createElement("p");
-          empty.className = "ops-empty";
+          empty.className = "admin-list__empty";
           empty.textContent = "該当タスクなし 🎉";
-          list.after(empty);
+          list.appendChild(empty);
         }
       }, 300);
     } catch (err) {

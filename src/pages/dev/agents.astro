@@ -1,7 +1,6 @@
 ---
-import BaseLayout from "../../layouts/DevLayout.astro";
-import DevHeader from "../../components/DevHeader.astro";
-import SiteFooter from "../../components/SiteFooter.astro";
+import AdminShell from "../../components/admin/AdminShell.astro";
+import AdminKpiBar from "../../components/admin/AdminKpiBar.astro";
 import { loadAgentsReference } from "../../lib/agents-reference.mjs";
 
 const ref = await loadAgentsReference();
@@ -20,34 +19,20 @@ const AGENT_THEME: Record<string, { accent: string; bg: string; icon: string }> 
 const defaultTheme = { accent: "#64748b", bg: "#f8fafc", icon: "·" };
 ---
 
-<BaseLayout tabTitle="· エージェント">
-  <DevHeader current="agents" />
-  <main class="container agents-page">
-    <header class="agents-hero">
-      <div class="agents-hero__text">
-        <p class="agents-hero__eyebrow">kokkai-voice 制作体制</p>
-        <h1>エージェント体制</h1>
-        <p class="agents-hero__lead">
-          記事制作の役割分担とチェック項目。各エージェントが何を担当し、どの順で動くかを一覧できます。
-        </p>
-        <p class="agents-hero__updated">最終更新 {ref.updatedAt}</p>
-      </div>
-      <dl class="agents-hero__stats">
-        <div>
-          <dt>エージェント</dt>
-          <dd>{ref.agents.length}</dd>
-        </div>
-        <div>
-          <dt>ワークフロー</dt>
-          <dd>{ref.workflow.length} 段階</dd>
-        </div>
-        <div>
-          <dt>チェック項目</dt>
-          <dd>{ref.gateAgents.length}</dd>
-        </div>
-      </dl>
-    </header>
+<AdminShell activeId="agents" title="エージェント">
+  <header class="admin-page-head">
+    <h1 class="admin-page-head__title">エージェント体制</h1>
+    <p class="admin-page-head__note">記事制作の役割分担とチェック項目。最終更新 {ref.updatedAt}</p>
+  </header>
 
+  <AdminKpiBar items={[
+    { label: "エージェント", value: String(ref.agents.length) },
+    { label: "ワークフロー", value: `${ref.workflow.length}段階` },
+    { label: "チェック", value: String(ref.gateAgents.length) },
+    { label: "体制", value: "kokkai-voice" },
+  ]} />
+
+  <div class="agents-page admin-page-content admin-page-content--full">
     <nav class="agents-jump" aria-label="エージェントへジャンプ">
       {ref.agents.map((agent) => {
         const theme = AGENT_THEME[agent.id] ?? defaultTheme;
@@ -187,6 +172,5 @@ const defaultTheme = { accent: "#64748b", bg: "#f8fafc", icon: "·" };
         })}
       </ul>
     </section>
-  </main>
-  <SiteFooter />
-</BaseLayout>
+  </div>
+</AdminShell>
