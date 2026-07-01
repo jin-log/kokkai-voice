@@ -1,54 +1,20 @@
 {
-  "generatedAt": "2026-07-01T19:43:59.100Z",
-  "total": 71,
+  "generatedAt": "2026-07-01T19:50:00.975Z",
+  "total": 47,
   "byAgent": {
-    "writer": 65,
-    "ceo": 3,
+    "writer": 44,
     "x-researcher": 2,
     "legal-check": 1
   },
   "tasks": [
     {
-      "id": "boeeihi:P1_opening_template",
-      "slug": "boeeihi",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "P1_opening_template",
-      "title": "[公開] 1行目がタイトルに未回答",
-      "todo": "可決・金額・合意内容など、読者が知りたい答えを1行目に書く",
-      "command": "npm run complete:article -- --slug boeeihi --force",
-      "priority": 5
-    },
-    {
-      "id": "boeeihi:B4_conclusion",
-      "slug": "boeeihi",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "B4_conclusion",
-      "title": "[ゲート] 結論の質",
-      "todo": "重複・途中切れ・定型文なし（行数固定なし）",
-      "command": "npm run complete:article -- --slug boeeihi --force",
-      "priority": 30
-    },
-    {
-      "id": "bouka-taisaku:P1_opening_template",
+      "id": "bouka-taisaku:B3_topic",
       "slug": "bouka-taisaku",
       "agent": "writer",
       "agentLabel": "ライター",
-      "checkId": "P1_opening_template",
-      "title": "[公開] 1行目がタイトルに未回答",
-      "todo": "可決・金額・合意内容など、読者が知りたい答えを1行目に書く",
-      "command": "npm run complete:article -- --slug bouka-taisaku --force",
-      "priority": 5
-    },
-    {
-      "id": "bouka-taisaku:B4_conclusion",
-      "slug": "bouka-taisaku",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "B4_conclusion",
-      "title": "[ゲート] 結論の質",
-      "todo": "重複・途中切れ・定型文なし（行数固定なし）",
+      "checkId": "B3_topic",
+      "title": "[ゲート] 話題一致",
+      "todo": "要約が searchKeyword と一致（2行以上）",
       "command": "npm run complete:article -- --slug bouka-taisaku --force",
       "priority": 30
     },
@@ -64,102 +30,14 @@
       "priority": 30
     },
     {
-      "id": "case-mqzxj4ro:P1_opening_no_number",
-      "slug": "case-mqzxj4ro",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "P1_opening_no_number",
-      "title": "[公開] 1行目がタイトルに未回答",
-      "todo": "円・%・万人など公表数値を1行目に入れる",
-      "command": "npm run complete:article -- --slug case-mqzxj4ro --force",
-      "priority": 5
-    },
-    {
-      "id": "case-mqzxj4ro:Q1_conclusion_numbers",
-      "slug": "case-mqzxj4ro",
-      "agent": "ceo",
-      "agentLabel": "CEO",
-      "checkId": "Q1_conclusion_numbers",
-      "title": "[品質] タイトルが金額・実績を問うのに、いまの結論に公表数値がない",
-      "todo": "1行目に円・%・万人などタイトルへの直接回答を入れる（X・報道の数字を要約に反映）",
-      "command": "node scripts/run-case-pipeline.mjs --slug case-mqzxj4ro",
-      "priority": 10
-    },
-    {
-      "id": "case-mqzxj4ro:Q3_plain_no_answer",
-      "slug": "case-mqzxj4ro",
-      "agent": "ceo",
-      "agentLabel": "CEO",
-      "checkId": "Q3_plain_no_answer",
-      "title": "[品質] つまり欄の冒頭がタイトルの疑問（金額・実績）に答えていない",
-      "todo": "1段落目を「結論：〇〇万円（日付）」から始める",
-      "command": "node scripts/run-case-pipeline.mjs --slug case-mqzxj4ro",
-      "priority": 10
-    },
-    {
-      "id": "case-mqzxj4ro:Q8_x_numbers_not_in_summary",
-      "slug": "case-mqzxj4ro",
-      "agent": "ceo",
-      "agentLabel": "CEO",
-      "checkId": "Q8_x_numbers_not_in_summary",
-      "title": "[品質] X枠に金額等の数字があるのに、いまの結論に反映されていない",
-      "todo": "Xの公表数値（例: 319万円）を結論1行目へ",
-      "command": "node scripts/run-case-pipeline.mjs --slug case-mqzxj4ro",
-      "priority": 10
-    },
-    {
-      "id": "case-mr0jbdpc:P1_opening_no_outcome",
-      "slug": "case-mr0jbdpc",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "P1_opening_no_outcome",
-      "title": "[公開] 1行目がタイトルに未回答",
-      "todo": "成立/見送り/予算額など、いまどうなっているかを1行目に書く",
-      "command": "npm run complete:article -- --slug case-mr0jbdpc --force",
-      "priority": 5
-    },
-    {
-      "id": "casino-ir:P1_opening_template",
+      "id": "casino-ir:B3_topic",
       "slug": "casino-ir",
       "agent": "writer",
       "agentLabel": "ライター",
-      "checkId": "P1_opening_template",
-      "title": "[公開] 1行目がタイトルに未回答",
-      "todo": "可決・金額・合意内容など、読者が知りたい答えを1行目に書く",
+      "checkId": "B3_topic",
+      "title": "[ゲート] 話題一致",
+      "todo": "要約が searchKeyword と一致（2行以上）",
       "command": "npm run complete:article -- --slug casino-ir --force",
-      "priority": 5
-    },
-    {
-      "id": "casino-ir:B4_conclusion",
-      "slug": "casino-ir",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "B4_conclusion",
-      "title": "[ゲート] 結論の質",
-      "todo": "重複・途中切れ・定型文なし（行数固定なし）",
-      "command": "npm run complete:article -- --slug casino-ir --force",
-      "priority": 30
-    },
-    {
-      "id": "chiho-sosei:P1_opening_template",
-      "slug": "chiho-sosei",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "P1_opening_template",
-      "title": "[公開] 1行目がタイトルに未回答",
-      "todo": "可決・金額・合意内容など、読者が知りたい答えを1行目に書く",
-      "command": "npm run complete:article -- --slug chiho-sosei --force",
-      "priority": 5
-    },
-    {
-      "id": "chiho-sosei:B4_conclusion",
-      "slug": "chiho-sosei",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "B4_conclusion",
-      "title": "[ゲート] 結論の質",
-      "todo": "重複・途中切れ・定型文なし（行数固定なし）",
-      "command": "npm run complete:article -- --slug chiho-sosei --force",
       "priority": 30
     },
     {
@@ -194,17 +72,6 @@
       "todo": "根拠は結論と同文禁止",
       "command": "npm run complete:article -- --slug chingin --force",
       "priority": 30
-    },
-    {
-      "id": "fuhou-immin-trend:P1_opening_off_topic",
-      "slug": "fuhou-immin-trend",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "P1_opening_off_topic",
-      "title": "[公開] 1行目がタイトルに未回答",
-      "todo": "1行目に案件のキーワードと具体答えを入れる",
-      "command": "npm run complete:article -- --slug fuhou-immin-trend --force",
-      "priority": 5
     },
     {
       "id": "fuhou-immin-trend:B5_writer_voice",
@@ -262,61 +129,6 @@
       "priority": 30
     },
     {
-      "id": "gaikokujin-seisaku:P1_opening_no_outcome",
-      "slug": "gaikokujin-seisaku",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "P1_opening_no_outcome",
-      "title": "[公開] 1行目がタイトルに未回答",
-      "todo": "成立/見送り/予算額など、いまどうなっているかを1行目に書く",
-      "command": "npm run complete:article -- --slug gaikokujin-seisaku --force",
-      "priority": 5
-    },
-    {
-      "id": "kaigo-iryo:P1_opening_template",
-      "slug": "kaigo-iryo",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "P1_opening_template",
-      "title": "[公開] 1行目がタイトルに未回答",
-      "todo": "可決・金額・合意内容など、読者が知りたい答えを1行目に書く",
-      "command": "npm run complete:article -- --slug kaigo-iryo --force",
-      "priority": 5
-    },
-    {
-      "id": "kaigo-iryo:B4_conclusion",
-      "slug": "kaigo-iryo",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "B4_conclusion",
-      "title": "[ゲート] 結論の質",
-      "todo": "重複・途中切れ・定型文なし（行数固定なし）",
-      "command": "npm run complete:article -- --slug kaigo-iryo --force",
-      "priority": 30
-    },
-    {
-      "id": "kenpo:P1_opening_template",
-      "slug": "kenpo",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "P1_opening_template",
-      "title": "[公開] 1行目がタイトルに未回答",
-      "todo": "可決・金額・合意内容など、読者が知りたい答えを1行目に書く",
-      "command": "npm run complete:article -- --slug kenpo --force",
-      "priority": 5
-    },
-    {
-      "id": "kenpo:B4_conclusion",
-      "slug": "kenpo",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "B4_conclusion",
-      "title": "[ゲート] 結論の質",
-      "todo": "重複・途中切れ・定型文なし（行数固定なし）",
-      "command": "npm run complete:article -- --slug kenpo --force",
-      "priority": 30
-    },
-    {
       "id": "kenpo:C2_evidence_distinct",
       "slug": "kenpo",
       "agent": "writer",
@@ -328,17 +140,6 @@
       "priority": 30
     },
     {
-      "id": "kishida-resign:P1_opening_no_outcome",
-      "slug": "kishida-resign",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "P1_opening_no_outcome",
-      "title": "[公開] 1行目がタイトルに未回答",
-      "todo": "成立/見送り/予算額など、いまどうなっているかを1行目に書く",
-      "command": "npm run complete:article -- --slug kishida-resign --force",
-      "priority": 5
-    },
-    {
       "id": "komei-kokumin:B4_conclusion",
       "slug": "komei-kokumin",
       "agent": "writer",
@@ -347,28 +148,6 @@
       "title": "[ゲート] 結論の質",
       "todo": "重複・途中切れ・定型文なし（行数固定なし）",
       "command": "npm run complete:article -- --slug komei-kokumin --force",
-      "priority": 30
-    },
-    {
-      "id": "nenkin:P1_opening_template",
-      "slug": "nenkin",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "P1_opening_template",
-      "title": "[公開] 1行目がタイトルに未回答",
-      "todo": "可決・金額・合意内容など、読者が知りたい答えを1行目に書く",
-      "command": "npm run complete:article -- --slug nenkin --force",
-      "priority": 5
-    },
-    {
-      "id": "nenkin:B4_conclusion",
-      "slug": "nenkin",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "B4_conclusion",
-      "title": "[ゲート] 結論の質",
-      "todo": "重複・途中切れ・定型文なし（行数固定なし）",
-      "command": "npm run complete:article -- --slug nenkin --force",
       "priority": 30
     },
     {
@@ -655,46 +434,13 @@
       "priority": 30
     },
     {
-      "id": "seiji-shikin:P1_opening_no_outcome",
-      "slug": "seiji-shikin",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "P1_opening_no_outcome",
-      "title": "[公開] 1行目がタイトルに未回答",
-      "todo": "成立/見送り/予算額など、いまどうなっているかを1行目に書く",
-      "command": "npm run complete:article -- --slug seiji-shikin --force",
-      "priority": 5
-    },
-    {
-      "id": "shohizei-genmen:P1_opening_template",
+      "id": "shohizei-genmen:B3_topic",
       "slug": "shohizei-genmen",
       "agent": "writer",
       "agentLabel": "ライター",
-      "checkId": "P1_opening_template",
-      "title": "[公開] 1行目がタイトルに未回答",
-      "todo": "可決・金額・合意内容など、読者が知りたい答えを1行目に書く",
-      "command": "npm run complete:article -- --slug shohizei-genmen --force",
-      "priority": 5
-    },
-    {
-      "id": "shohizei-genmen:B4_conclusion",
-      "slug": "shohizei-genmen",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "B4_conclusion",
-      "title": "[ゲート] 結論の質",
-      "todo": "重複・途中切れ・定型文なし（行数固定なし）",
-      "command": "npm run complete:article -- --slug shohizei-genmen --force",
-      "priority": 30
-    },
-    {
-      "id": "shohizei-genmen:C2_evidence_distinct",
-      "slug": "shohizei-genmen",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "C2_evidence_distinct",
-      "title": "[ゲート] 根拠の独自性",
-      "todo": "根拠は結論と同文禁止",
+      "checkId": "B3_topic",
+      "title": "[ゲート] 話題一致",
+      "todo": "要約が searchKeyword と一致（2行以上）",
       "command": "npm run complete:article -- --slug shohizei-genmen --force",
       "priority": 30
     },
@@ -719,17 +465,6 @@
       "todo": "経緯3行以上が案件キーワードと一致",
       "command": "npm run complete:article -- --slug shoshika --force",
       "priority": 30
-    },
-    {
-      "id": "shussho-budget-seika:P1_opening_no_number",
-      "slug": "shussho-budget-seika",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "P1_opening_no_number",
-      "title": "[公開] 1行目がタイトルに未回答",
-      "todo": "円・%・万人など公表数値を1行目に入れる",
-      "command": "npm run complete:article -- --slug shussho-budget-seika --force",
-      "priority": 5
     },
     {
       "id": "shussho-budget-seika:G5_parties_symbol",
