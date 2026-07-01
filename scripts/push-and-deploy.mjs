@@ -114,6 +114,11 @@ export async function pushAndDeploy(opts = {}) {
 
   const msg = `patrol: sync ${status.overallGoldPct}% gold (${status.publishedCount}/${status.activeCount} live)`;
   await run("git", ["commit", "-m", msg]);
+  try {
+    await run("git", ["pull", "--rebase", "origin", "main"]);
+  } catch {
+    /* already up to date or no upstream */
+  }
   await run("git", ["push", "origin", "HEAD"]);
   console.log(`OK push: ${msg}`);
 
