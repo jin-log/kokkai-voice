@@ -11,6 +11,7 @@ import { fileURLToPath } from "node:url";
 import { spawn } from "node:child_process";
 import { checkCasePageWithFiles, root } from "../src/lib/page-ready.mjs";
 import { isPublishGate, pipelineChecks, refreshProjectStatus } from "../src/lib/project-status.mjs";
+import { recordArticleActivity } from "../src/lib/article-activity.mjs";
 import { loadArticle } from "../src/lib/articles.mjs";
 import { fetchSpeechForArticle, fetchSpeechForKeyword, pickSpeechForSummary, excerptSpeech, scoreSpeechRelevance, extractKeywordSpeechWindow, topicSpeechExcerpt, scoreSpeechTopicRelevance } from "./lib/kokkai-api.mjs";
 import { buildArticleLayers } from "./lib/article-summary.mjs";
@@ -553,6 +554,12 @@ async function main() {
     article.publishReady = true;
     article.pageReady = false;
     await writeFile(articlePath, `${JSON.stringify(article, null, 2)}\n`, "utf8");
+    await recordArticleActivity({
+      slug,
+      type: "gate.ready",
+      actor: "patrol",
+      detail: "①〜④完了。一般公開は手動のみ",
+    });
     console.log("\n✅ 公開ゲート（①〜④）OK — 非公開プレビュー可能。管理画面で「公開する」");
   } else {
     console.log("\n⚠️ 公開ゲート未達:");

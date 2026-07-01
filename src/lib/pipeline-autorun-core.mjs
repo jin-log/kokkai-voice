@@ -7,6 +7,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { assessSlug } from "../../scripts/run-case-pipeline.mjs";
 import { refreshProjectStatus } from "./project-status.mjs";
+import { recordArticleActivity } from "./article-activity.mjs";
 import { auditArticleQuality } from "./article-quality.mjs";
 import { agentForCheckId, commandForAgent, scriptForCheckId } from "./agent-tasks.mjs";
 import { loadArticle } from "./articles.mjs";
@@ -184,6 +185,13 @@ export async function processSlugAutorun(opts) {
     await log(
       `${slug}: round ${round} — ${next.agent} (${next.reason}) → ${commandForAgent(next.agent, slug, next.reason)}`,
     );
+    await recordArticleActivity({
+      slug,
+      type: "patrol.start",
+      actor: "patrol",
+      detail: `${next.agent} / ${next.reason}`,
+      meta: { agent: next.agent, reason: next.reason },
+    });
     const code = await runAgentScript(next.agent, slug, next.reason);
     await refreshProjectStatus();
     if (code !== 0) {
@@ -195,6 +203,13 @@ export async function processSlugAutorun(opts) {
   const q = auditArticleQuality(await loadArticle(slug));
   const ok = final.goldPct === 100 && q.ok;
   await log(`${slug}: done ${final.goldPct}% quality ${q.ok ? "OK" : `NG(${q.blockers.length})`}`);
+  await recordArticleActivity({
+    slug,
+    type: "patrol.done",
+    actor: "patrol",
+    detail: `完成度 ${final.goldPct}% / 品質 ${q.ok ? "OK" : "NG"}`,
+    meta: { goldPct: final.goldPct, qualityOk: q.ok },
+  });
   return { slug, ok, pct: final.goldPct };
 }
 

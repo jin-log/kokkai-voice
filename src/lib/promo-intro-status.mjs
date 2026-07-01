@@ -5,6 +5,7 @@ import { readFile, writeFile, mkdir } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { readXPostLog } from "./x-post-log.mjs";
+import { recordArticleActivity } from "./article-activity.mjs";
 
 const root = path.join(path.dirname(fileURLToPath(import.meta.url)), "../..");
 const INTRO_LOG = path.join(root, "data/promo-intro-log.json");
@@ -29,6 +30,12 @@ export async function recordPromoIntro(slug, channel) {
   log[channel][slug] = at;
   await mkdir(path.dirname(INTRO_LOG), { recursive: true });
   await writeFile(INTRO_LOG, `${JSON.stringify(log, null, 2)}\n`, "utf8");
+  await recordArticleActivity({
+    slug,
+    type: channel === "hatena" ? "promo.hatena" : "promo.note",
+    actor: "promo",
+    detail: `${channel} 投稿完了`,
+  });
   return at;
 }
 

@@ -12,6 +12,18 @@ import { citizenTitle } from "./title-format.mjs";
 import { buildPromoIntroMap } from "./promo-intro-status.mjs";
 import { loadShortStatusMap } from "./short-status.mjs";
 import { loadPatrolRuntime, buildWorkItems } from "./patrol-runtime.mjs";
+import {
+  backfillArticleActivity,
+  getArticleActivity,
+  formatActivityLine,
+  activityWhenShort,
+} from "./article-activity.mjs";
+import {
+  buildStatusExplain,
+  buildDistributionRows,
+  AUTOMATION_POLICY,
+  STATUS_DEFINITIONS,
+} from "./admin-status-guide.mjs";
 import { isXUnavailable, X_UNAVAILABLE_ADMIN_MESSAGE } from "./x-research-policy.mjs";
 
 /** @typedef {{ id: string, label: string, phase: number, preDeploy: boolean }} PipelineItemDef */
@@ -195,10 +207,23 @@ export async function computeProjectStatus() {
     const agentTasks = buildAgentTasksForArticle(article, gate);
     const fullyReady = isArticleFullyReady(article, gate);
 
+    await backfillArticleActivity(slug, article);
+    const activityRaw = await getArticleActivity(slug, 10);
+    const activity = activityRaw.map((e) => ({
+      at: e.at,
+      when: activityWhenShort(e.at),
+      type: e.type,
+      actor: e.actor,
+      line: formatActivityLine(e),
+    }));
+
     let publishState = "wip";
     if (article.adminHidden) publishState = "hidden";
     else if (pageReady) publishState = "live";
     else if (publishGateOk) publishState = "draft";
+
+    const workItems = buildWorkItems(slug, gate, quality, patrolRuntime, pipeline);
+    const runState = patrolRuntime.activeSlug === slug ? "active" : "idle";
 
     slugs.push({
       slug,
@@ -234,13 +259,35 @@ export async function computeProjectStatus() {
       gold: pipeline,
       blockers: gate.blockers.map((b) => blockerToHuman(b)),
       blockerCount: gate.blockers.length,
-      runState: patrolRuntime.activeSlug === slug ? "active" : "idle",
-      workItems: buildWorkItems(slug, gate, quality, patrolRuntime, pipeline),
+      runState,
+      workItems,
       nextAction,
       promo: promoMap.get(slug) ?? { x: null, hatena: null, note: null },
       short: shortMap.get(slug) ?? { label: "未生成", generated: false, uploaded: false },
       xUnavailable: isXUnavailable(article),
       xResearchStatus: article.xResearch?.status ?? null,
+      statusExplain: buildStatusExplain(
+        {
+          adminHidden: article.adminHidden === true,
+          publishState,
+          runState,
+          workItems,
+          needsQualityFix: !quality.ok,
+        },
+        article,
+      ),
+      publishedBy: article.publishedBy ?? null,
+      publishedAt: article.publishedAt ?? null,
+      adminHiddenBy: article.adminHiddenBy ?? null,
+      adminHiddenAt: article.adminHiddenAt ?? null,
+      patrolFixing:
+        patrolRuntime.activeSlug === slug ||
+        (patrolRuntime.running && (patrolRuntime.batchSlugs ?? []).includes(slug)),
+      activity,
+      distribution: buildDistributionRows(
+        promoMap.get(slug) ?? { x: null, hatena: null, note: null },
+        shortMap.get(slug) ?? { label: "未生成", generated: false, uploaded: false },
+      ),
     });
   }
 
@@ -267,6 +314,8 @@ export async function computeProjectStatus() {
     overallGoldPct,
     overallGatePct,
     qualityFailed,
+    automationPolicy: AUTOMATION_POLICY,
+    statusDefinitions: STATUS_DEFINITIONS,
     slugs,
   };
 }

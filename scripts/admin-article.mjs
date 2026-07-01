@@ -15,6 +15,7 @@ import { fileURLToPath } from "node:url";
 import { checkCasePageWithFiles } from "../src/lib/page-ready.mjs";
 import { refreshProjectStatus } from "../src/lib/project-status.mjs";
 import { enqueuePromoPublish } from "../src/lib/promo-publish-queue.mjs";
+import { recordArticleActivity } from "../src/lib/article-activity.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(__dirname, "..");
@@ -83,9 +84,18 @@ if (action === "update_title") {
 
 if (action === "hide") {
   const article = await loadArticle();
+  const at = new Date().toISOString();
   article.adminHidden = true;
-  article.adminHiddenAt = new Date().toISOString();
+  article.adminHiddenAt = at;
+  article.adminHiddenBy = "owner";
   await saveArticle(article);
+  await recordArticleActivity({
+    slug,
+    type: "hide.manual",
+    actor: "owner",
+    detail: "管理画面から非表示",
+  });
+  await refreshProjectStatus();
   console.log(`OK: ${slug} を非表示にしました`);
   process.exit(0);
 }
@@ -94,7 +104,15 @@ if (action === "unhide") {
   const article = await loadArticle();
   article.adminHidden = false;
   delete article.adminHiddenAt;
+  delete article.adminHiddenBy;
   await saveArticle(article);
+  await recordArticleActivity({
+    slug,
+    type: "unhide.manual",
+    actor: "owner",
+    detail: "管理画面から表示復帰",
+  });
+  await refreshProjectStatus();
   console.log(`OK: ${slug} を表示に戻しました`);
   process.exit(0);
 }
@@ -111,9 +129,23 @@ if (action === "publish") {
   article.pageReady = true;
   article.adminHidden = false;
   delete article.adminHiddenAt;
-  article.publishedAt = new Date().toISOString();
+  const at = new Date().toISOString();
+  article.publishedAt = at;
+  article.publishedBy = "owner";
   await saveArticle(article);
+  await recordArticleActivity({
+    slug,
+    type: "publish.manual",
+    actor: "owner",
+    detail: "管理画面から一般公開",
+  });
   await enqueuePromoPublish(slug);
+  await recordArticleActivity({
+    slug,
+    type: "promo.queue",
+    actor: "system",
+    detail: "はてブ/note発信キューに登録",
+  });
   await refreshProjectStatus();
   console.log(`OK: ${slug} を公開しました（/case/${slug}/）`);
   process.exit(0);
