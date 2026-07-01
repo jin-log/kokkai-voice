@@ -204,6 +204,8 @@ export async function computeProjectStatus() {
       slug,
       title: article.title ?? slug,
       shortTitle: citizenTitle(article),
+      category: article.category ?? "",
+      policyCategory: article.category ?? "",
       adminHidden: article.adminHidden === true,
       pageReady,
       publishState,
