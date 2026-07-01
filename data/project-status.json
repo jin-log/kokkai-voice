@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-07-01T20:39:21.106Z",
+  "generatedAt": "2026-07-01T20:45:24.607Z",
   "strategy": "quality-first",
   "activeCount": 39,
   "parkedCount": 0,
-  "publishedCount": 23,
-  "overallGoldPct": 75,
+  "publishedCount": 24,
+  "overallGoldPct": 76,
   "overallGatePct": 87,
   "qualityFailed": 0,
   "automationPolicy": [
@@ -96,7 +96,7 @@
     "slugStalls": [],
     "stalledCount": 0,
     "message": "停止中",
-    "analyzedAt": "2026-07-01T20:39:21.102Z",
+    "analyzedAt": "2026-07-01T20:45:24.604Z",
     "lastPatrolCycleAt": null,
     "patrolRunning": false
   },
@@ -1358,9 +1358,9 @@
       "shortTitle": "【年金繰下げ】70歳まで受取開始を遅らせると月額はいくら増える？",
       "category": "行政",
       "policyCategory": "行政",
-      "adminHidden": true,
-      "pageReady": false,
-      "publishState": "hidden",
+      "adminHidden": false,
+      "pageReady": true,
+      "publishState": "live",
       "previewUrl": "/dev/preview/pension-kuriage-70/",
       "qualityOk": true,
       "needsQualityFix": false,
@@ -1368,8 +1368,8 @@
       "qualityBlockers": [],
       "agentTasks": [],
       "gatePct": 100,
-      "goldPct": 67,
-      "published": false,
+      "goldPct": 83,
+      "published": true,
       "publishGateOk": true,
       "pipelinePreOk": true,
       "titleAnswerOk": true,
@@ -1409,7 +1409,7 @@
           "label": "⑤本番デプロイ",
           "phase": 5,
           "preDeploy": false,
-          "ok": false
+          "ok": true
         },
         {
           "id": "debug",
@@ -1453,7 +1453,7 @@
           "label": "⑤本番デプロイ",
           "phase": 5,
           "preDeploy": false,
-          "ok": false
+          "ok": true
         },
         {
           "id": "debug",
@@ -1466,8 +1466,14 @@
       "blockers": [],
       "blockerCount": 0,
       "runState": "idle",
-      "workItems": [],
-      "nextAction": "👁️ 非表示中 — 「表示に戻す」でトップに出せます",
+      "workItems": [
+        {
+          "id": "pipe:debug",
+          "label": "⑥デバッグOK",
+          "state": "blocked"
+        }
+      ],
+      "nextAction": "✅ 公開中 — /case/ に表示されています",
       "promo": {
         "x": null,
         "hatena": null,
@@ -1486,13 +1492,28 @@
       },
       "xUnavailable": true,
       "xResearchStatus": "exhausted",
-      "statusExplain": "非表示（手動）。自動では戻らない。",
-      "publishedBy": null,
-      "publishedAt": null,
+      "statusExplain": "手動公開 07/01 20:45",
+      "publishedBy": "owner",
+      "publishedAt": "2026-07-01T20:45:24.178Z",
       "adminHiddenBy": null,
       "adminHiddenAt": null,
       "patrolFixing": false,
-      "activity": [],
+      "activity": [
+        {
+          "at": "2026-07-01T20:45:24.183Z",
+          "when": "07/01 20:45",
+          "type": "promo.queue",
+          "actor": "system",
+          "line": "発信キューに登録（system） — はてブ/note発信キューに登録"
+        },
+        {
+          "at": "2026-07-01T20:45:24.180Z",
+          "when": "07/01 20:45",
+          "type": "publish.manual",
+          "actor": "owner",
+          "line": "手動で一般公開（あなた） — 管理画面から一般公開"
+        }
+      ],
       "distribution": [
         {
           "channel": "X",
@@ -8529,6 +8550,6 @@
     }
   ],
   "deltaGoldPct": 0,
-  "previousGoldPct": 75,
+  "previousGoldPct": 76,
   "deployedAt": "2026-07-01T20:34:45.108Z"
 }
