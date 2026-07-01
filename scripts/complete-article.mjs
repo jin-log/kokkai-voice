@@ -203,7 +203,7 @@ async function loadArticleJson(slug) {
   return JSON.parse(await readFile(articlePath, "utf8"));
 }
 
-async function enrichKokkai(article) {
+async function enrichKokkai(article, articleSlug) {
   const keyword = article.searchKeyword;
   const from = "2023-01-01";
   const until = new Date().toISOString().slice(0, 10);
@@ -219,7 +219,7 @@ async function enrichKokkai(article) {
   }
 
   for (const extra of [
-    ...new Set([...(EXTRA_KEYWORDS[slug] || []), ...extraKeywordsFromTitle(article)]),
+    ...new Set([...(EXTRA_KEYWORDS[articleSlug] || []), ...extraKeywordsFromTitle(article)]),
   ]) {
     const more = await fetchSpeechForKeyword(extra, { from, until, maximumRecords: 50 });
     for (const r of more.records) {
@@ -282,7 +282,7 @@ async function enrichKokkai(article) {
     }
   }
 
-  article.title = citizenTitle({ ...article, slug });
+  article.title = citizenTitle({ ...article, slug: articleSlug });
   nowBullets = finalizeNowBulletsForTitle(nowBullets, article.title, searchKeyword, {
     arcSummary: arcFromWriter,
   });
@@ -361,7 +361,7 @@ async function enrichKokkai(article) {
         excerpt,
       };
       return {
-        id: `${slug}-tl-${i}`,
+        id: `${articleSlug}-tl-${i}`,
         type: "speech",
         date,
         summaryPlain: synthesizeTimelinePlain(sn, searchKeyword),
@@ -381,12 +381,12 @@ async function enrichKokkai(article) {
       };
     });
 
-  await writePolicyMatrixKokkai(article, records, { force });
+  await writePolicyMatrixKokkai(article, records, { force, articleSlug });
   return article;
 }
 
-async function writePolicyMatrixKokkai(article, records, { force = false } = {}) {
-  const matrixPath = path.join(root, "data/policy-matrix", `${slug}.json`);
+async function writePolicyMatrixKokkai(article, records, { force = false, articleSlug } = {}) {
+  const matrixPath = path.join(root, "data/policy-matrix", `${articleSlug}.json`);
   let existing = null;
   try {
     existing = JSON.parse(await readFile(matrixPath, "utf8"));
@@ -443,9 +443,9 @@ async function writePolicyMatrixKokkai(article, records, { force = false } = {})
       }));
 
   const matrix = {
-    policySlug: slug,
-    policyLabel: article.title?.replace(/ — あの話どうなった？$/, "") ?? slug,
-    relatedArticleSlug: slug,
+    policySlug: articleSlug,
+    policyLabel: article.title?.replace(/ — あの話どうなった？$/, "") ?? articleSlug,
+    relatedArticleSlug: articleSlug,
     updatedAt: new Date().toISOString(),
     methodologyVersion: "v1-auto",
     disclaimer: "党の公式評価ではなく、公言と行動の整理表です（自動生成）。",
@@ -454,8 +454,8 @@ async function writePolicyMatrixKokkai(article, records, { force = false } = {})
   };
   await writeFile(matrixPath, `${JSON.stringify(matrix, null, 2)}\n`, "utf8");
   article.stanceMatrix = {
-    policySlug: slug,
-    dataPath: `data/policy-matrix/${slug}.json`,
+    policySlug: articleSlug,
+    dataPath: `data/policy-matrix/${articleSlug}.json`,
     disclaimer: "出典付きの事実整理です（自動生成）。",
   };
   console.log("[matrix] 作成完了");
@@ -510,7 +510,7 @@ async function completeOneSlug(targetSlug) {
     } else if (!contentOnly && !force && isTopicContentPreserved(article, policyMatrix)) {
       console.log("[国会] 話題一致済み — 本文上書きスキップ");
     } else {
-      await enrichKokkai(article);
+      await enrichKokkai(article, targetSlug);
     }
   } else if (isGeneralContentReady(article) && !force && !contentOnly) {
     console.log("[一般] 既にコンテンツあり — スキップ");
@@ -549,22 +549,22 @@ async function completeOneSlug(targetSlug) {
   } else {
     if (force || countTopicVerifiedX(article) < topicXMin) {
       console.log("[③] Xリセット（話題不一致または --force）");
-      await runNode("reset-xposts.mjs", [slug]);
+      await runNode("reset-xposts.mjs", [targetSlug]);
     }
     console.log("[③] X調査");
-    await runNode("x-research-batch.mjs", [slug]);
+    await runNode("x-research-batch.mjs", [targetSlug]);
   }
 
   console.log("[③b] タイムライン統合（X3+国会3）");
-  await runNode("enrich-timeline-all.mjs", ["--slug", slug]);
+  await runNode("enrich-timeline-all.mjs", ["--slug", targetSlug]);
 
   // ④ 法務
   console.log("[④] 法務");
-  await runNode("legal-check.mjs", ["--slug", slug, "--fix"]);
+  await runNode("legal-check.mjs", ["--slug", targetSlug, "--fix"]);
 
-  await rescorePolicyMatrix(slug);
+  await rescorePolicyMatrix(targetSlug);
 
-  article = await loadArticle(slug);
+  article = await loadArticle(targetSlug);
   const gate = await checkCasePageWithFiles(article);
   let policyMatrix = null;
   try {
@@ -581,7 +581,7 @@ async function completeOneSlug(targetSlug) {
     article.pageReady = false;
     await writeFile(articlePath, `${JSON.stringify(article, null, 2)}\n`, "utf8");
     await recordArticleActivity({
-      slug,
+      slug: targetSlug,
       type: "gate.ready",
       actor: "patrol",
       detail: "1行目がタイトルに回答済み。一般公開は手動のみ",
@@ -596,7 +596,33 @@ async function completeOneSlug(targetSlug) {
   }
 
   await refreshProjectStatus();
-  await runNode("check-case-page.mjs", ["--slug", slug]);
+  await runNode("check-case-page.mjs", ["--slug", targetSlug]);
+}
+
+async function main() {
+  if (allWip) {
+    const ps = JSON.parse(await readFile(path.join(root, "data/project-status.json"), "utf8"));
+    const targets = ps.slugs
+      .filter((s) => !s.adminHidden && s.publishState !== "live")
+      .map((s) => s.slug);
+    console.log(`\n=== rewrite non-public: ${targets.length} 件 ===\n`);
+    let ok = 0;
+    let fail = 0;
+    for (const s of targets) {
+      try {
+        await completeOneSlug(s);
+        ok++;
+      } catch (e) {
+        fail++;
+        console.error(`[FAIL] ${s}:`, e.message);
+      }
+    }
+    await refreshProjectStatus();
+    console.log(`\n完了: OK ${ok} / FAIL ${fail}`);
+    if (fail > 0) process.exit(1);
+    return;
+  }
+  await completeOneSlug(slug);
 }
 
 main().catch((e) => {
