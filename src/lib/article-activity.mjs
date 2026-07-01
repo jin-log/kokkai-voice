@@ -80,7 +80,12 @@ export async function getArticleActivity(slug, limit = 12) {
     .reverse();
 }
 
-/** @param {ActivityEvent} e */
+/**
+ * 既存フィールドから初回だけ履歴を補完
+ * @param {string} slug
+ * @param {import('./articles.mjs').Article} article
+ */
+export async function backfillArticleActivity(slug, article) {
   const log = await loadActivityLog();
   const has = (type) => log.events.some((e) => e.slug === slug && e.type === type);
   /** @type {ActivityEvent[]} */

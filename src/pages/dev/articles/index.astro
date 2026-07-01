@@ -4,6 +4,7 @@ import AdminArticleRow from "../../../components/admin/AdminArticleRow.astro";
 import { loadProjectStatus, sortSlugsForAdminPanel, adminSlugFilter } from "../../../lib/project-status.mjs";
 import { loadPatrolRuntime } from "../../../lib/patrol-runtime.mjs";
 import { policyCategoryLabel, sortPolicyCategories } from "../../../lib/article-categories.mjs";
+import { STATUS_DEFINITIONS, AUTOMATION_POLICY, automationModeLabel } from "../../../lib/admin-status-guide.mjs";
 
 const status = await loadProjectStatus().catch(() => null);
 const patrol = await loadPatrolRuntime();
@@ -40,8 +41,58 @@ const policyCategories = Object.keys(categoryCounts).sort(sortPolicyCategories);
         · ゲート <span id="stat-gate">{status.overallGatePct}%</span>
       </p>
     )}
-    <p class="admin-page-head__note">一覧・新規作成・公開はこの画面。本番同期は巡回が自動。スクショなしでも公開可。</p>
+    <p class="admin-page-head__note">一覧・新規作成・公開はこの画面。一般公開だけはあなたの操作。それ以外は巡回が自動。</p>
   </header>
+
+  <section class="admin-guide" aria-label="状態の意味と自動化">
+    <details class="admin-guide__panel" open>
+      <summary class="admin-guide__summary">状態の違い・自動化の範囲（必読）</summary>
+      <div class="admin-guide__body">
+        <table class="admin-guide__table">
+          <thead>
+            <tr>
+              <th>表示</th>
+              <th>意味</th>
+              <th>自動で直る？</th>
+              <th>自動で戻る？</th>
+            </tr>
+          </thead>
+          <tbody>
+            {STATUS_DEFINITIONS.map((d) => (
+              <tr>
+                <td><strong>{d.label}</strong></td>
+                <td>{d.meaning}</td>
+                <td>{d.autoFix}</td>
+                <td>{d.autoRevert}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <p class="admin-guide__note">
+          <strong>品質NG</strong>はタブでもバッジでも、公開状態とは別です。公開中でもNGバッジが付くことがあります。
+        </p>
+        <table class="admin-guide__table admin-guide__table--auto">
+          <caption>何が自動で、何が手動か</caption>
+          <thead>
+            <tr>
+              <th>項目</th>
+              <th>方式</th>
+              <th>補足</th>
+            </tr>
+          </thead>
+          <tbody>
+            {AUTOMATION_POLICY.map((p) => (
+              <tr>
+                <td>{p.channel}</td>
+                <td>{automationModeLabel(p.mode)}</td>
+                <td>{p.note}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </details>
+  </section>
 
   <section class="admin-dash__legend admin-dash__legend--compact" aria-label="作業状態">
     <p class="admin-dash__legend-inline">
@@ -476,6 +527,8 @@ const policyCategories = Object.keys(categoryCounts).sort(sortPolicyCategories);
         renderWorkItems(row, s.workItems);
         updateRowQuick(row, s);
         updateRowBadges(row, s);
+        const explain = row.querySelector("[data-role=status-explain]");
+        if (explain && s.statusExplain) explain.textContent = s.statusExplain;
       }
       applyFilterSort();
       if (badge) badge.hidden = false;

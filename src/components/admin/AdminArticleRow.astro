@@ -1,6 +1,7 @@
 ---
 import { promoDateShort } from "../../lib/promo-intro-status.mjs";
 import { adminSlugFilter, adminFilterLabel } from "../../lib/project-status.mjs";
+import { automationModeLabel } from "../../lib/admin-status-guide.mjs";
 
 /** @typedef {import("../../lib/project-status.mjs").SlugStatus} SlugStatus */
 
@@ -12,6 +13,8 @@ const { s } = Astro.props;
 const workItems = s.workItems ?? [];
 const adminFilter = adminSlugFilter(s);
 const filterLabel = adminFilterLabel(adminFilter);
+const activity = s.activity ?? [];
+const distribution = s.distribution ?? [];
 ---
 
 <article
@@ -64,6 +67,10 @@ const filterLabel = adminFilterLabel(adminFilter);
           {s.adminHidden && <span class="admin-row__badge">非表示</span>}
         </div>
       </header>
+
+      {s.statusExplain && (
+        <p class="admin-row__explain" data-role="status-explain">{s.statusExplain}</p>
+      )}
 
       {workItems.length > 0 ? (
         <ul class="admin-row__work" aria-label="未完了の作業">
@@ -119,6 +126,39 @@ const filterLabel = adminFilterLabel(adminFilter);
         <li class:list={s.promo?.note && "is-done"}>note {s.promo?.note ? promoDateShort(s.promo.note) : "—"}</li>
         <li>Shorts {s.short?.label ?? "未"}</li>
       </ul>
+      {distribution.length > 0 && (
+        <table class="admin-row__dist" aria-label="発信の自動化と実績">
+          <thead>
+            <tr>
+              <th>チャネル</th>
+              <th>方式</th>
+              <th>状態</th>
+            </tr>
+          </thead>
+          <tbody>
+            {distribution.map((d) => (
+              <tr class:list={[d.done && "is-done"]}>
+                <td>{d.channel}</td>
+                <td>{automationModeLabel(d.automation)}</td>
+                <td>{d.status}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
+      {activity.length > 0 && (
+        <div class="admin-row__history">
+          <p class="admin-row__history-title">操作・自動処理の履歴</p>
+          <ol class="admin-row__history-list">
+            {activity.map((e) => (
+              <li>
+                <time datetime={e.at}>{e.when}</time>
+                <span>{e.line}</span>
+              </li>
+            ))}
+          </ol>
+        </div>
+      )}
       {!s.published && s.blockers.length > 0 && (
         <div class="status-card__blockers">
           <p class="status-card__blockers-title">ゲート未達</p>

@@ -16,13 +16,15 @@ alwaysApply: true
 
 それ以外で patrol / daemon / GitHub Actions 巡回を止めない・無効化しない。
 
-## 分担
+## 分担（マシン別ではなく能力別）
 
 | 場所 | 担当 |
 |------|------|
-| GitHub Actions `品質巡回（サーバー）` | 記事・X URL・法務（15分＋main push） |
+| **ローカル** `patrol.ps1`（Mac/Win 同一） | ライター・X調査・法務 + Xスクショ（Chrome） |
+| GitHub Actions `品質巡回（サーバー）` | 同上のうち **スクショ除く**（Chromeなし・15分バックアップ） |
 | GitHub Actions `品質巡回ウォッチドッグ` | サーバー巡回が死んでいたら即再起動 |
-| ローカル `patrol.ps1` | **patrol-daemon** + **x-capture-daemon**（30秒ポーリング）+ ウォッチドッグ（1分） |
+
+**Mac専用・Win専用の作業は作らない。** どちらも `patrol.ps1` / `npm run deploy:win` / `ceosync pull` が使える。
 
 ## 実装・運用
 

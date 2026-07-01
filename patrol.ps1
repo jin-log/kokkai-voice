@@ -1,4 +1,5 @@
-# ローカル Xスクショ巡回 — 絶対停止禁止（OBS・手動pause以外）
+# ローカル品質巡回 — 絶対停止禁止（OBS・手動pause以外）
+# ライター・X調査・法務 + Xスクショ（Chrome）— Mac/Win 同一。Mac専用作業なし。
 # Usage: .\patrol.ps1
 $Root = $PSScriptRoot
 Set-Location $Root
@@ -49,9 +50,9 @@ function Start-PatrolDaemon {
   Remove-Item $PidFile -ErrorAction SilentlyContinue
   $p = Start-Process node -ArgumentList @(
     "scripts/pipeline-patrol-daemon.mjs",
-    "--agents", "debugger",
-    "--interval", "60",
-    "--batch", "3"
+    "--skip", "debugger",
+    "--interval", "120",
+    "--batch", "5"
   ) -WorkingDirectory $Root -WindowStyle Hidden -PassThru
   if ($p) { Set-Content -Path $PidFile -Value $p.Id -ErrorAction SilentlyContinue }
 }
@@ -83,7 +84,7 @@ $patrolOk = Test-ProcessHealthy $PidFile $StateFile
 $captureOk = Test-ProcessHealthy $CapturePidFile $CaptureStateFile
 
 if ($patrolOk -and $captureOk) {
-  Write-Host "Local patrol: patrol-daemon + x-capture-daemon + watchdog (never-stop)"
+  Write-Host "Local patrol: writer patrol + x-capture + watchdog (Mac/Win same)"
   Write-Host "Pause only: OBS or data/patrol-pause-until.json"
   Write-Host "Log: $LogFile"
 } else {

@@ -36,6 +36,8 @@ npm run deploy:win
 ```powershell
 cd C:\Users\bero1\Projects\ceo-sync
 .\scripts\ceosync.ps1 pull
+cd ..\kokkai-voice
+.\patrol.ps1   # ライター巡回 + スクショ（Mac と同じ。Mac 必須ではない）
 ```
 
 → ルール同期 + **kokkai-voice 含む全プロジェクト pull** + `npm ci` まで自動。
