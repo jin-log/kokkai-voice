@@ -1,7 +1,7 @@
 ---
-import AdminShell from "../../components/admin/AdminShell.astro";
-import AdminKpiBar from "../../components/admin/AdminKpiBar.astro";
-import { ADMIN_NAV_GROUPS } from "../../lib/admin-nav.mjs";
+import AdminShell from "../../../components/admin/AdminShell.astro";
+import AdminKpiBar from "../../../components/admin/AdminKpiBar.astro";
+import { ADMIN_NAV_GROUPS } from "../../../lib/admin-nav.mjs";
 
 const samples = ADMIN_NAV_GROUPS.flatMap((g) =>
   g.items.map((item) => ({ ...item, group: g.label })),
