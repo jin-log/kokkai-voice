@@ -5,6 +5,7 @@
 import { readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { auditArticleQuality, isArticleFullyReady } from "./article-quality.mjs";
+import { assessTitleOpeningAnswer } from "./publish-policy.mjs";
 import { buildAgentTasksForArticle, agentForCheckId } from "./agent-tasks.mjs";
 import { checkCasePageWithFiles, root, blockerToHuman } from "./page-ready.mjs";
 import { filterPublishable, loadArticle } from "./articles.mjs";
@@ -100,19 +101,19 @@ export function computeNextAction(article, gate, pipeline) {
     return "👁️ 非表示中 — 「表示に戻す」でトップに出せます";
   }
 
-  const preDeploy = pipeline.filter((p) => p.preDeploy);
-  const preOk = preDeploy.filter((p) => p.ok).length;
-  if (preOk === preDeploy.length && !article.pageReady) {
-    return "📋 完成・非公開 — プレビューで確認して「公開する」を押してください";
+  const titleAnswer = assessTitleOpeningAnswer(article);
+
+  if (titleAnswer.ok && !article.pageReady) {
+    return "📋 1行目OK — プレビュー確認後「公開する」を押してください";
   }
-  if (preOk === preDeploy.length && article.pageReady && gate.ok) {
+  if (titleAnswer.ok && article.pageReady) {
     return "✅ 公開中 — /case/ に表示されています";
   }
-  if (preOk === preDeploy.length && !gate.ok) {
-    return "🚀 ①〜④完了 — デプロイ後にプレビューを確認";
+  if (!titleAnswer.ok && !article.pageReady) {
+    return `✏️ 公開待ち — ${titleAnswer.detail}（①〜④は巡回が続行）`;
   }
-  if (article.pageReady && gate.ok) {
-    return "✅ 公開中";
+  if (article.pageReady && !titleAnswer.ok) {
+    return "⚠ 公開中だが1行目がタイトルに未回答 — 非表示または修正を推奨";
   }
 
   const hints = {
@@ -200,7 +201,9 @@ export async function computeProjectStatus() {
         ? { ...p, label: "③X未発見（調査完了）" }
         : p,
     );
-    const publishGateOk = isPublishGate(pipeline);
+    const pipelinePreOk = isPublishGate(pipeline);
+    const titleAnswer = assessTitleOpeningAnswer(article);
+    const publishGateOk = titleAnswer.ok;
     const pageReady = article.pageReady === true;
     const nextAction = computeNextAction(article, gate, pipeline);
 
@@ -256,6 +259,10 @@ export async function computeProjectStatus() {
       ),
       published: pageReady && !article.adminHidden,
       publishGateOk,
+      pipelinePreOk,
+      titleAnswerOk: titleAnswer.ok,
+      titleAnswerDetail: titleAnswer.detail,
+      titleAnswerTodo: titleAnswer.todo || null,
       pipeline,
       gold: pipeline,
       blockers: gate.blockers.map((b) => blockerToHuman(b)),
@@ -274,6 +281,7 @@ export async function computeProjectStatus() {
           runState,
           workItems,
           needsQualityFix: !quality.ok,
+          titleAnswerOk: titleAnswer.ok,
         },
         article,
       ),

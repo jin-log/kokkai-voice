@@ -14,6 +14,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { checkCasePageWithFiles } from "../src/lib/page-ready.mjs";
 import { refreshProjectStatus } from "../src/lib/project-status.mjs";
+import { isTitleAnsweredInOpeningLine, assessTitleOpeningAnswer } from "../src/lib/publish-policy.mjs";
 import { enqueuePromoPublish } from "../src/lib/promo-publish-queue.mjs";
 import { recordArticleActivity } from "../src/lib/article-activity.mjs";
 
@@ -119,10 +120,11 @@ if (action === "unhide") {
 
 if (action === "publish") {
   const article = await loadArticle();
-  const gate = await checkCasePageWithFiles(article);
-  if (!gate.ok) {
-    console.error(`ゲート未達のため公開できません: ${slug}`);
-    for (const b of gate.blockers) console.error(`  - ${b.id}: ${b.detail}`);
+  const titleAnswer = assessTitleOpeningAnswer(article);
+  if (!titleAnswer.ok) {
+    console.error(`公開できません（1行目がタイトルに未回答）: ${slug}`);
+    console.error(`  - ${titleAnswer.id}: ${titleAnswer.detail}`);
+    if (titleAnswer.todo) console.error(`  → ${titleAnswer.todo}`);
     process.exit(1);
   }
   article.publishReady = true;

@@ -3,6 +3,7 @@
  * ops-queue / 管理画面 / pipeline-autorun が参照
  */
 import { auditArticleQuality } from "./article-quality.mjs";
+import { assessTitleOpeningAnswer } from "./publish-policy.mjs";
 import { CHECK_LABELS } from "./page-ready.mjs";
 
 /** @type {Record<string, string>} */
@@ -18,7 +19,7 @@ export const AGENT_LABELS = {
 export function agentForCheckId(id) {
   const k = String(id || "");
   if (k === "Q9_x_screenshot" || k.startsWith("Q9_")) return "debugger";
-  if (k.startsWith("Q")) return "writer";
+  if (k.startsWith("P1_")) return "writer";
   if (k.startsWith("H1") || k.startsWith("H2")) return "x-researcher";
   if (k.startsWith("H3")) return "debugger";
   if (k.startsWith("I")) return "legal-check";
@@ -65,6 +66,21 @@ export function buildAgentTasksForArticle(article, gate) {
   const quality = auditArticleQuality(article);
   /** @type {{ id: string, slug: string, agent: string, agentLabel: string, checkId: string, title: string, todo: string, command: string, priority: number }[]} */
   const tasks = [];
+
+  const titleAnswer = assessTitleOpeningAnswer(article);
+  if (!titleAnswer.ok) {
+    tasks.push({
+      id: `${slug}:${titleAnswer.id}`,
+      slug,
+      agent: "writer",
+      agentLabel: AGENT_LABELS.writer,
+      checkId: titleAnswer.id,
+      title: "[公開] 1行目がタイトルに未回答",
+      todo: titleAnswer.todo || titleAnswer.detail,
+      command: commandForAgent("writer", slug, titleAnswer.id),
+      priority: 5,
+    });
+  }
 
   for (const b of quality.blockers) {
     const agent = agentForCheckId(b.id);

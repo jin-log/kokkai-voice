@@ -83,6 +83,10 @@ const distribution = s.distribution ?? [];
         </div>
       )}
 
+      {s.pageReady && s.titleAnswerOk === false && (
+        <p class="admin-row__title-warn">⚠ 公開中だが1行目がタイトルに未回答</p>
+      )}
+
       {workItems.length > 0 ? (
         <ul class="admin-row__work" aria-label="未完了の作業">
           {workItems.map((w) => (
@@ -113,11 +117,9 @@ const distribution = s.distribution ?? [];
         <a href={`/case/${s.slug}/`} class="admin-row__btn admin-row__btn--ghost">本番を見る</a>
       ) : (
         <span class="admin-row__gate-hint" data-role="gate-hint">
-          {adminFilter === "draft"
+          {s.publishGateOk
             ? "公開ボタンで一般公開"
-            : adminFilter === "action" && s.goldPct < 100
-              ? `完成度 ${s.goldPct}%`
-              : `ゲート ${s.gatePct}%`}
+            : s.titleAnswerTodo || s.titleAnswerDetail || `完成度 ${s.goldPct}%`}
         </span>
       )}
       <span class="deploy-slug-status" data-slug={s.slug} hidden></span>

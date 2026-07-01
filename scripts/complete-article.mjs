@@ -10,7 +10,8 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { spawn } from "node:child_process";
 import { checkCasePageWithFiles, root } from "../src/lib/page-ready.mjs";
-import { isPublishGate, pipelineChecks, refreshProjectStatus } from "../src/lib/project-status.mjs";
+import { pipelineChecks, refreshProjectStatus } from "../src/lib/project-status.mjs";
+import { isTitleAnsweredInOpeningLine, assessTitleOpeningAnswer } from "../src/lib/publish-policy.mjs";
 import { recordArticleActivity } from "../src/lib/article-activity.mjs";
 import { loadArticle } from "../src/lib/articles.mjs";
 import { fetchSpeechForArticle, fetchSpeechForKeyword, pickSpeechForSummary, excerptSpeech, scoreSpeechRelevance, extractKeywordSpeechWindow, topicSpeechExcerpt, scoreSpeechTopicRelevance } from "./lib/kokkai-api.mjs";
@@ -549,9 +550,9 @@ async function main() {
   } catch {
     /* */
   }
-  const pipeline = pipelineChecks(article, gate, policyMatrix);
+  const titleAnswer = assessTitleOpeningAnswer(article);
 
-  if (isPublishGate(pipeline)) {
+  if (titleAnswer.ok) {
     article.publishReady = true;
     article.pageReady = false;
     await writeFile(articlePath, `${JSON.stringify(article, null, 2)}\n`, "utf8");
@@ -559,12 +560,12 @@ async function main() {
       slug,
       type: "gate.ready",
       actor: "patrol",
-      detail: "①〜④完了。一般公開は手動のみ",
+      detail: "1行目がタイトルに回答済み。一般公開は手動のみ",
     });
-    console.log("\n✅ 公開ゲート（①〜④）OK — 非公開プレビュー可能。管理画面で「公開する」");
+    console.log("\n✅ 1行目OK — 非公開プレビュー可。管理画面で「公開する」");
   } else {
-    console.log("\n⚠️ 公開ゲート未達:");
-    for (const b of gate.blockers) console.log(`  - ${b.id}: ${b.detail}`);
+    console.log(`\n⚠️ 1行目がタイトルに未回答: ${titleAnswer.detail}`);
+    if (titleAnswer.todo) console.log(`  → ${titleAnswer.todo}`);
     await writeFile(articlePath, `${JSON.stringify(article, null, 2)}\n`, "utf8");
     await refreshProjectStatus();
     process.exit(2);

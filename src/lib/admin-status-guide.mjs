@@ -7,7 +7,7 @@ import { activityWhenShort } from "./article-activity.mjs";
 export const AUTOMATION_POLICY = [
   { channel: "記事生成・①〜④", mode: "auto", note: "巡回がライター/X/法務で自動処理" },
   { channel: "品質NGの修正", mode: "auto", note: "巡回が試行。直らなければ要対応のまま" },
-  { channel: "一般公開（/case/）", mode: "manual", note: "管理画面「公開する」のみ。自動公開なし" },
+  { channel: "一般公開（/case/）", mode: "manual", note: "1行目がタイトルに答えている記事のみ「公開する」" },
   { channel: "非表示", mode: "manual", note: "あなたの操作のみ。自動では戻らない" },
   { channel: "本番サイト反映", mode: "auto", note: "git push 後 Cloudflare デプロイ" },
   { channel: "X投稿", mode: "semi", note: "Buffer連携時はキュー自動。未設定なら手動" },
@@ -27,8 +27,8 @@ export const STATUS_DEFINITIONS = [
   {
     id: "draft",
     label: "公開待ち",
-    meaning: "①〜④完了。プレビュー可だが一般公開はまだ。",
-    autoFix: "巡回は内容改善のみ（公開はしない）",
+    meaning: "1行目がタイトルに回答済み。プレビュー可だが一般公開はまだ。",
+    autoFix: "巡回は①〜④の改善を継続（公開条件には含めない）",
     autoRevert: "—",
   },
   {
@@ -77,14 +77,15 @@ export function buildStatusExplain(s, article) {
   }
 
   if (s.publishState === "draft") {
-    return "①〜④完了・非公開。一般公開はあなたの「公開する」のみ（自動公開なし）";
+    return "1行目OK・非公開。一般公開はあなたの「公開する」のみ";
   }
 
   if (s.publishState === "live") {
     const when = article.publishedAt ? activityWhenShort(article.publishedAt) : "";
     const by = article.publishedBy === "owner" ? "手動公開" : "公開済";
     const q = s.needsQualityFix ? "。品質NGバッジあり（公開は継続）" : "";
-    return `${by}${when ? ` ${when}` : ""}${q}`;
+    const titleWarn = s.titleAnswerOk === false ? "。⚠ 1行目がタイトルに未回答（非表示推奨）" : "";
+    return `${by}${when ? ` ${when}` : ""}${q}${titleWarn}`;
   }
 
   const q = s.needsQualityFix ? "品質NGあり。" : "";
