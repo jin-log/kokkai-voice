@@ -2,7 +2,7 @@
 /**
  * X 投稿スクショ一括/単体取得 → public/assets/x-screenshots + 記事JSON更新
  *
- * 初回のみ: npm run browser:setup && npm run browser:login -- x
+ * chrome-profile.json（Profile 9）があればそれを使用。なければ初回のみ browser:login -- x
  *
  * Usage:
  *   node scripts/capture-x-screenshots.mjs --slug shoshika --slot 1
@@ -63,7 +63,9 @@ function pendingPosts(article) {
 
 async function listSlugs() {
   const files = await readdir(articlesDir);
-  return files.filter((f) => f.endsWith(".json") && f !== "index.json").map((f) => f.replace(/\.json$/, ""));
+  return files
+    .filter((f) => f.endsWith(".json") && f !== "index.json" && f !== "parked.json")
+    .map((f) => f.replace(/\.json$/, ""));
 }
 
 async function captureOne(articleSlug, post) {

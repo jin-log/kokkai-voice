@@ -12,6 +12,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { autorunLog, runAutorunCycle, parseAgentFilter } from "../src/lib/pipeline-autorun-core.mjs";
 import { getPatrolPauseState } from "../src/lib/patrol-pause.mjs";
+import { pushAndDeploy } from "./push-and-deploy.mjs";
 
 const root = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
 const statePath = path.join(root, "data/pipeline-patrol.json");
@@ -79,6 +80,18 @@ async function runCycle(startedAt) {
       incompleteSlugs: result.incomplete.map((r) => r.slug),
     },
   });
+
+  try {
+    const deploy = await pushAndDeploy();
+    if (deploy.pushed) {
+      await autorunLog(`patrol deploy: push OK gold ${deploy.goldPct}%`);
+    }
+  } catch (err) {
+    await autorunLog(
+      `patrol deploy skip: ${err instanceof Error ? err.message : String(err)}`,
+    );
+  }
+
   return result;
 }
 

@@ -5,8 +5,8 @@ import { createHash } from "node:crypto";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { launchBrowserContext } from "./playwright-browser.mjs";
-import { resolveBrowserLaunch } from "./chrome-profile.mjs";
+import { openCaptureContext } from "./playwright-browser.mjs";
+import { resolveCaptureLaunch } from "./chrome-profile.mjs";
 import { generateXScreenshotThumb, thumbPublicPath } from "./x-screenshot-thumb.mjs";
 import { auditScreenshotFile } from "./x-screenshot-audit.mjs";
 
@@ -33,6 +33,24 @@ const TWEET_SELECTORS = [
   'article[role="article"]',
 ];
 
+/** @param {import('playwright').Page} page @param {string} targetUrl */
+async function isXLoginWall(page, targetUrl) {
+  const url = page.url();
+  if (url.includes("/login") || url.includes("/i/flow/login")) return true;
+
+  const title = await page.title();
+  if (/status\/\d+/.test(targetUrl) && title.includes("/ X") && !title.includes("ログイン")) {
+    return false;
+  }
+
+  if ((await page.locator(TWEET_SELECTORS[0]).count()) > 0) return false;
+
+  if ((await page.locator('h1:has-text("Xにログイン")').count()) > 0) return true;
+  if ((await page.locator("text=アカウントにログイン").count()) > 0) return true;
+
+  return false;
+}
+
 /**
  * @param {string} postUrl
  * @param {{ headless?: boolean; profileDir?: string }} [opts]
@@ -42,33 +60,60 @@ export async function captureTweetScreenshot(postUrl, opts = {}) {
   if (!statusId) throw new Error(`status ID を抽出できません: ${postUrl}`);
 
   const profileDir = opts.profileDir ?? xProfileDir;
-  const headless = opts.headless ?? true;
-  const resolved = await resolveBrowserLaunch(profileDir);
+  const resolved = await resolveCaptureLaunch(profileDir);
+
+  for (let attempt = 0; attempt < 2; attempt++) {
+    try {
+      return await captureTweetScreenshotOnce(postUrl, resolved, {
+        ...opts,
+        forceSync: attempt === 1,
+      });
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err);
+      if (attempt === 0 && msg.includes("未ログイン") && resolved.shared) {
+        console.log("  Profile 再複製してリトライ…");
+        continue;
+      }
+      throw err;
+    }
+  }
+  throw new Error("Xスクショ取得に失敗しました");
+}
+
+async function captureTweetScreenshotOnce(postUrl, resolved, opts = {}) {
+  const statusId = parseXStatusId(postUrl);
+  if (!statusId) throw new Error(`status ID を抽出できません: ${postUrl}`);
+
   await mkdir(screenshotDir, { recursive: true });
   const outPath = path.join(screenshotDir, `${statusId}.png`);
   const publicPath = `/assets/x-screenshots/${statusId}.png`;
 
-  const context = await launchBrowserContext(resolved.userDataDir, {
-    headless,
+  const session = await openCaptureContext(resolved, {
+    headless: opts.headless ?? true,
     width: 620,
     height: 900,
     profileDirectory: resolved.profileDirectory,
+    forceSync: opts.forceSync === true,
   });
 
+  /** @type {import('playwright').Page | undefined} */
+  let page;
   try {
-    const page = context.pages()[0] || (await context.newPage());
+    page = session.page || (await session.context.newPage());
+    if (session.cdpPort) {
+      console.log(`  CDP 接続: 127.0.0.1:${session.cdpPort}`);
+    }
     const target = postUrl.replace("twitter.com", "x.com");
 
     await page.goto(target, { waitUntil: "domcontentloaded", timeout: 60_000 });
     await page.waitForTimeout(2500);
 
-    const loginWall =
-      (await page.locator('text=ログイン').count()) > 0 &&
-      (await page.locator(TWEET_SELECTORS[0]).count()) === 0;
+    const loginWall = await isXLoginWall(page, target);
     if (loginWall) {
-      throw new Error(
-        "X に未ログインです。先に npm run browser:login -- x を実行してください。",
-      );
+      const hint = resolved.shared
+        ? "chrome-profile.json の Profile 9 が X 未ログインか、サンドボックス複製が古いです。普段の Chrome で x.com/home を開いてから npm run x:capture を再実行してください。"
+        : "secrets/browser/chrome-profile.json を設定するか npm run browser:login -- x を実行してください。";
+      throw new Error(`X に未ログインです。${hint}`);
     }
 
     let shot = false;
@@ -105,7 +150,10 @@ export async function captureTweetScreenshot(postUrl, opts = {}) {
 
     return { statusId, outPath, publicPath, thumbPath, thumbPublic, sha256, capturedAt };
   } finally {
-    await context.close();
+    if (session.viaCdp) {
+      await page?.close().catch(() => {});
+    }
+    await session.close();
   }
 }
 

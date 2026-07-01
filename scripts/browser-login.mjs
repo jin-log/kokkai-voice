@@ -32,7 +32,8 @@ const PROFILES = {
   },
   x: {
     dir: path.join(root, "secrets/browser/profile-x"),
-    startUrl: "https://x.com/login",
+    startUrl: "https://x.com/home",
+    loginUrl: "https://x.com/login",
     isLoggedIn: (url) => {
       if (!/^https:\/\/(x\.com|twitter\.com)\//.test(url)) return false;
       if (/login|flow|onboarding|jf\/|signin|oauth|accounts\.google/i.test(url)) return false;
@@ -66,17 +67,21 @@ async function main() {
 
   if (shared) {
     console.log(
-      `\n[${service}] 既存 Chrome プロフィールを使用: ${shared.profileDirectory}` +
+      `\n[${service}] chrome-profile.json を使用: ${shared.profileDirectory}` +
         (shared.label ? ` (${shared.label})` : ""),
     );
-    console.log("⚠ 自動化開始前に、このプロフィールの Chrome をすべて閉じてください。\n");
+    if (service === "x") {
+      console.log("普段ログインしている Chrome の Profile をそのまま使います（別ウィンドウで login 画面は開きません）。\n");
+    } else {
+      console.log("⚠ 自動化開始前に、このプロフィールの Chrome をすべて閉じてください。\n");
+    }
   } else {
     await mkdir(cfg.dir, { recursive: true });
     console.log(`\n[${service}] Chrome を開きます（このウィンドウでログインしてください）`);
   }
 
   console.log(cfg.startUrl);
-  if (service === "x") {
+  if (service === "x" && !shared) {
     console.log("");
     console.log("【重要】「Googleでログイン」は使わないでください（ブロックされます）");
     console.log("  → Xのメールアドレス or ユーザー名 ＋ パスワード でログイン");
@@ -93,10 +98,15 @@ async function main() {
   );
 
   const page = context.pages()[0] || (await context.newPage());
-  await page.goto(cfg.startUrl, { waitUntil: "domcontentloaded" });
+  const startUrl = shared && service === "x" ? cfg.startUrl : (shared ? cfg.startUrl : cfg.startUrl);
+  await page.goto(startUrl, { waitUntil: "domcontentloaded" });
 
-  const doneUrl = await waitForLogin(page);
-  console.log(`ログイン検知: ${doneUrl}`);
+  if (cfg.isLoggedIn(page.url())) {
+    console.log(`既にログイン済み: ${page.url()}`);
+  } else {
+    const doneUrl = await waitForLogin(page);
+    console.log(`ログイン検知: ${doneUrl}`);
+  }
   if (service === "x" && !/^https:\/\/(x\.com|twitter\.com)\/(home|search)/.test(doneUrl)) {
     console.warn(
       "\n⚠ ホーム画面ではないURLで保存されました。ログイン完了後 x.com/home が開いているか確認してください。",

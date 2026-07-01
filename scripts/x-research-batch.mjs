@@ -640,11 +640,16 @@ async function main() {
 
   for (const file of articleFiles) {
     const slug = file.replace(/\.json$/, "");
+    if (slug === "parked") continue;
     if (only.length && !only.includes(slug)) continue;
 
     const articlePath = path.join(articlesDir, file);
     const article = JSON.parse(await readFile(articlePath, "utf8"));
-    const kw = article.searchKeyword;
+    const kw = String(article.searchKeyword || article.title || slug).trim();
+    if (!kw) {
+      console.log(`Skip ${slug}: searchKeyword なし`);
+      continue;
+    }
     const resolved = resolveTopicConfig(kw, slug);
     const config = resolved ?? {
       handles: [],

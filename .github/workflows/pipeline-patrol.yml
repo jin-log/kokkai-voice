@@ -47,7 +47,7 @@ jobs:
           node scripts/sync-agent-tasks.mjs
           git config user.email "bot@seiji1192.site"
           git config user.name "kokkai-bot"
-          git add data/articles data/policy-matrix data/agent-tasks.json data/project-status.json
+          git add data/articles data/policy-matrix data/agent-tasks.json data/project-status.json public/assets/x-screenshots
           if git diff --staged --quiet; then
             echo "committed=false" >> "$GITHUB_OUTPUT"
             echo "no changes"
