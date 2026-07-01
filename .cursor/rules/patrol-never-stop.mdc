@@ -22,12 +22,13 @@ alwaysApply: true
 |------|------|
 | GitHub Actions `品質巡回（サーバー）` | 記事・X URL・法務（15分＋main push） |
 | GitHub Actions `品質巡回ウォッチドッグ` | サーバー巡回が死んでいたら即再起動 |
-| ローカル `patrol.ps1` + デーモン + `patrol-local-watchdog.mjs` | Xスクショ（debugger）— 5分ごとに死活監視 |
+| ローカル `patrol.ps1` | **patrol-daemon** + **x-capture-daemon**（30秒ポーリング）+ ウォッチドッグ（1分） |
 
 ## 実装・運用
 
 - デーモンは **落ちたら即再起動**（fatal でも exit しない）
-- `.\patrol.ps1` — デーモン + 内蔵ウォッチドッグ（5分ごと死活監視）を起動
+- `.\patrol.ps1` — patrol-daemon + **x-capture-daemon** + ウォッチドッグ + タスクスケジューラ
+- **x-capture-daemon**: pending があれば即 capture、なければ **30秒ごと**に再チェック（止めない）
 - 手動停止は `data/patrol-pause-until.json` のみ:
   ```json
   { "until": "2026-07-01T22:00:00+09:00", "reason": "メンテ" }
