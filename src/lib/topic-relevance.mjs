@@ -118,15 +118,6 @@ export function countTopicDietTimeline(article) {
   ).length;
 }
 
-/** @param {object|null} policyMatrix @param {string} keyword */
-export function isMatrixTopicRelevant(policyMatrix, keyword) {
-  if (!policyMatrix?.parties?.length) return false;
-  const withTopic = policyMatrix.parties.filter((p) =>
-    textStronglyMatchesTopic(String(p.stance?.text || ""), keyword),
-  );
-  return withTopic.length >= 2;
-}
-
 const INCOMPLETE_END = /(今後|おりませんが|について|に対し|とは|では|が、|を、|は、|下|ともに)。$/;
 const VERBATIM_OPENERS = null;
 const DATE_PREFIX = /^\d{4}-\d{2}-\d{2}[：:]\s*/;
@@ -140,11 +131,11 @@ function conclusionBodyKey(line) {
     .slice(0, 24);
 }
 
-/** @param {string[]} bullets */
+/** @param {string[]} bullets — 1行以上で可（必ず3行ではない）。重複・途中切れ・定型のみ弾く */
 export function isConclusionQuality(bullets) {
-  if (!bullets || bullets.length < 3) return false;
+  if (!bullets?.length) return false;
   const normalized = bullets.map((b) => String(b).trim()).filter((b) => b.length >= 12);
-  if (normalized.length < 3) return false;
+  if (normalized.length < 1) return false;
 
   const keys = new Set();
   for (const b of normalized) {
@@ -159,6 +150,58 @@ export function isConclusionQuality(bullets) {
     keys.add(key);
   }
   return true;
+}
+
+/** 国会タイムライン件数（話題一致は別） */
+export function countDietTimelineEntries(article) {
+  const tl = article.timeline ?? [];
+  return tl.filter(
+    (e) =>
+      e.type === "speech" &&
+      e.speech?.speechURL?.includes("kokkai.ndl.go.jp"),
+  ).length;
+}
+
+/** いまの結論に実質1行以上あるか */
+export function hasSubstantiveConclusion(article) {
+  const bullets = article.nowSummary?.bullets ?? [];
+  return bullets.some((b) => String(b).trim().length >= 12);
+}
+
+/**
+ * 国会TLの話題一致 — ある分だけでOK。TLなしもOK。
+ * TLはあるのに話題一致ゼロで結論だけあるのはNG。
+ * @param {import('./articles.mjs').Article} article
+ */
+export function isDietTimelineTopicOk(article) {
+  const dietTotal = countDietTimelineEntries(article);
+  if (dietTotal === 0) return true;
+  const matched = countTopicDietTimeline(article);
+  if (matched >= 1) return true;
+  return !hasSubstantiveConclusion(article);
+}
+
+/**
+ * 〇×表 — 1党以上が話題一致していればOK（党データが無い場合は別チェック）
+ * @param {object|null} policyMatrix @param {string} keyword
+ */
+export function isMatrixTopicRelevant(policyMatrix, keyword) {
+  if (!policyMatrix?.parties?.length) return true;
+  const withTopic = policyMatrix.parties.filter((p) =>
+    textStronglyMatchesTopic(String(p.stance?.text || ""), keyword),
+  );
+  return withTopic.length >= 1;
+}
+
+/**
+ * 〇×に話題一致が無いのに結論だけある状態を弾く
+ * @param {import('./articles.mjs').Article} article
+ * @param {object|null} policyMatrix
+ */
+export function isMatrixTopicConsistent(article, policyMatrix) {
+  if (!policyMatrix?.parties?.length) return true;
+  if (isMatrixTopicRelevant(policyMatrix, article.searchKeyword)) return true;
+  return !hasSubstantiveConclusion(article);
 }
 
 /** @param {import('./articles.mjs').Article} article */

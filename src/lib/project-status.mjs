@@ -117,7 +117,7 @@ export function computeNextAction(article, gate, pipeline) {
 
   const hints = {
     A2_primarySpeech: "国会発言 or ソースURLを追加",
-    B1_nowSummary: "いまの結論（3行）を入力",
+    B1_nowSummary: "いまの結論（1行以上）を入力",
     C1_summaryBullets: "要点リストを追加",
     D1_arcSummary: "経緯サマリ（日付付き）を追加",
     E1_timeline_count: "タイムライン6件以上（X3+国会3）",

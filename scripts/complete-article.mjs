@@ -29,7 +29,7 @@ import {
 } from "./lib/writer-synthesize.mjs";
 import { enrichGeneralArticle, writePolicyMatrixGeneral, fetchReadable, isGeneralContentReady } from "./lib/enrich-general.mjs";
 import { citizenTitle } from "../src/lib/title-format.mjs";
-import { isTopicRelevant, textMatchesTopic, topicTerms, isConclusionQuality, countTopicArcLines, countTopicDietTimeline, isMatrixTopicRelevant, textStronglyMatchesTopic, ensureTopicInLines, isBoilerplateTopicLine } from "../src/lib/topic-relevance.mjs";
+import { isTopicRelevant, textMatchesTopic, topicTerms, isConclusionQuality, countTopicArcLines, countTopicDietTimeline, isDietTimelineTopicOk, isMatrixTopicRelevant, isMatrixTopicConsistent, textStronglyMatchesTopic, ensureTopicInLines, isBoilerplateTopicLine } from "../src/lib/topic-relevance.mjs";
 import { normalizeFactPhrase, isDietVoice, isSpeechFragment, isIncompleteBullet, isWriterReadyLine } from "../src/lib/diet-voice.mjs";
 import { scorePartySymbol, SYMBOL_METHODOLOGY } from "../src/lib/symbol-rules.mjs";
 
@@ -86,15 +86,15 @@ function isKokkaiContentReady(article, policyMatrix = null) {
   );
   return Boolean(
     article.primarySpeech?.speechFull &&
-    bullets.length >= 3 &&
     isConclusionQuality(bullets) &&
     (article.summaryBullets?.length ?? 0) >= 3 &&
     (article.glossary?.length ?? 0) >= 2 &&
     dietInTl.length >= 3 &&
     countTopicArcLines(article) >= 3 &&
-    countTopicDietTimeline(article) >= 3 &&
+    isDietTimelineTopicOk(article) &&
     isTopicRelevant(article) &&
-    isMatrixTopicRelevant(policyMatrix, article.searchKeyword),
+    isMatrixTopicRelevant(policyMatrix, article.searchKeyword) &&
+    isMatrixTopicConsistent(article, policyMatrix),
   );
 }
 
@@ -118,9 +118,10 @@ function extraKeywordsFromTitle(article) {
 function isTopicContentPreserved(article, policyMatrix = null) {
   return (
     countTopicArcLines(article) >= 3 &&
-    countTopicDietTimeline(article) >= 3 &&
+    isDietTimelineTopicOk(article) &&
     isTopicRelevant(article) &&
-    isMatrixTopicRelevant(policyMatrix, article.searchKeyword)
+    isMatrixTopicRelevant(policyMatrix, article.searchKeyword) &&
+    isMatrixTopicConsistent(article, policyMatrix)
   );
 }
 
@@ -240,12 +241,12 @@ async function enrichKokkai(article) {
     meta,
   );
   let nowBullets = primaryBullets;
-  if (nowBullets.length < 3) {
-    throw new Error(`[writer] 結論が3行未満 (${nowBullets.length}) — 原材料不足または変換失敗`);
+  if (nowBullets.length < 1) {
+    throw new Error(`[writer] 結論が空 — 原材料不足または変換失敗`);
   }
   nowBullets = ensureTopicInLines(nowBullets, searchKeyword);
-  if (nowBullets.length < 3) {
-    throw new Error(`[writer] 結論が3行未満 (${nowBullets.length}) — 話題語のある行が足りない`);
+  if (nowBullets.length < 1) {
+    throw new Error(`[writer] 結論が空 — 話題語のある行が足りない`);
   }
   let arcFromWriter = synthesizeArcSummary(factBundle);
   if (arcFromWriter.length < 3) {

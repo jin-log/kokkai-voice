@@ -2,10 +2,11 @@
 
 const CHECK_HINTS = {
   B3_topic: "要約が searchKeyword と一致（2行以上）",
-  B4_conclusion: "いまの結論が要点3行（重複・途中切れなし）",
+  B4_conclusion: "重複・途中切れ・定型なし（行数固定なし）",
   B5_writer_voice: "議事録口調を除去",
   D2_arc_topic: "経緯3行以上が案件キーワードと一致",
-  E4_timeline_diet_topic: "タイムライン国会3件が案件と一致",
+  E4_timeline_diet_topic: "国会TLはある分だけ話題一致。TLなし可",
+  G6_matrix_topic: "1党以上が話題一致。一致なし＋結論のみは不可",
   Q1_conclusion_numbers: "結論に公表数値がない",
   Q2_template_conclusion: "「国会で議論」テンプレの繰り返し",
   Q3_plain_no_answer: "要約がタイトルの疑問に答えていない",

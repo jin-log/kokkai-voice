@@ -1336,6 +1336,35 @@
       "done": false
     },
     {
+      "id": "kokkai-admin-ui-stall-banner",
+      "project": "kokkai-voice",
+      "title": "管理画面 — 進行停止バナー・ループ表示の本番安定化",
+      "assignee": "ceo",
+      "horizon": "backlog",
+      "priority": 2,
+      "score": 200,
+      "etaMin": 90,
+      "tags": [
+        "admin",
+        "UI"
+      ],
+      "content": {
+        "summary": "status-live.json と patrol-stall-state の優先順位整理。SSR赤帯の確実表示。",
+        "steps": [
+          "ビルド時は patrol-stall-state.json を snapshot 優先",
+          "ライブ更新は API を status-live より優先",
+          "デプロイ後に赤帯・ループ件数を検証"
+        ]
+      },
+      "links": [
+        {
+          "label": "記事管理",
+          "href": "https://seiji1192.site/dev/articles/"
+        }
+      ],
+      "done": false
+    },
+    {
       "id": "personal-english-log",
       "project": "personal",
       "title": "Ã¨ÂÂ±Ã¨ÂªÂÃ¥Â­Â¦Ã§Â¿Â Ã¢ÂÂ Ã¤Â»ÂÃ©ÂÂ±Ã£ÂÂ®Ã¨Â¨ÂÃ©ÂÂ²",

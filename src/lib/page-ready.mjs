@@ -7,7 +7,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { isPhaseAPublish } from "./diet-pending.mjs";
 import { isXUnavailable, X_UNAVAILABLE_ADMIN_MESSAGE } from "./x-research-policy.mjs";
-import { countTopicBullets, isTitleReady, countTopicArcLines, countTopicDietTimeline, isMatrixTopicRelevant, isConclusionQuality, textStronglyMatchesTopic } from "./topic-relevance.mjs";
+import { countTopicBullets, isTitleReady, countTopicArcLines, countTopicDietTimeline, countDietTimelineEntries, isMatrixTopicRelevant, isMatrixTopicConsistent, isConclusionQuality, isDietTimelineTopicOk, textStronglyMatchesTopic } from "./topic-relevance.mjs";
 import { isDietVoice, bulletsDistinctFrom, isSpeechFragment } from "./diet-voice.mjs";
 import { isValidSymbol } from "./symbol-rules.mjs";
 
@@ -21,10 +21,10 @@ export const CHECK_LABELS = {
   A1_title: { label: "タイトル", todo: "タイトルを入力" },
   A1b_title_placeholder: { label: "タイトル確定", todo: "仮タイトル・編集メモを除去" },
   A2_primarySpeech: { label: "一次ソース", todo: "報道URL・国会リンクを追加" },
-  B1_nowSummary: { label: "いまの結論", todo: "3行の要約を書く" },
+  B1_nowSummary: { label: "いまの結論", todo: "結論を1行以上" },
   B2_disclaimer: { label: "AI注記", todo: "disclaimer を追加" },
   B3_topic: { label: "話題一致", todo: "要約が searchKeyword と一致（2行以上）" },
-  B4_conclusion: { label: "結論の質", todo: "いまの結論が要点3行（重複・途中切れなし）" },
+  B4_conclusion: { label: "結論の質", todo: "重複・途中切れ・定型文なし（行数固定なし）" },
   B5_writer_voice: { label: "第三者目線", todo: "議事録口調（お尋ね・私自身・御党）を除去" },
   C1_summaryBullets: { label: "要点", todo: "summaryBullets を3点以上" },
   C2_evidence_distinct: { label: "根拠の独自性", todo: "根拠は結論と同文禁止" },
@@ -33,7 +33,7 @@ export const CHECK_LABELS = {
   E1_timeline_count: { label: "タイムライン", todo: "出来事を6件以上（X3+国会3）" },
   E2_timeline_x: { label: "タイムラインX", todo: "X投稿を3件以上タイムラインに" },
   E3_timeline_diet: { label: "タイムライン国会", todo: "国会発言を3件以上タイムラインに" },
-  E4_timeline_diet_topic: { label: "TL国会の話題", todo: "タイムライン国会3件が案件と一致" },
+  E4_timeline_diet_topic: { label: "TL国会の話題", todo: "国会TLはある分だけ話題一致。TLなし可。根拠なしの結論は不可" },
   A2_phaseA_source: { label: "一次ソース（国会待ち）", todo: "報道URLまたはタイムライン出典を追加" },
   J1_prosCons: { label: "メリデメ", todo: "公表数値付きメリット2・デメリット2" },
   F1_glossary: { label: "用語解説", todo: "用語を2語以上" },
@@ -42,7 +42,7 @@ export const CHECK_LABELS = {
   G3_parties_min: { label: "政党数", todo: "2党以上を登録" },
   G4_parties_source: { label: "党の出典URL", todo: "各党に sourceUrl" },
   G5_parties_symbol: { label: "◎〇▲×", todo: "各党の記号を確定（v2）" },
-  G6_matrix_topic: { label: "〇×の話題", todo: "公言と行動が案件キーワードと一致（2党）" },
+  G6_matrix_topic: { label: "〇×の話題", todo: "1党以上が案件キーワードと一致。一致なしで結論だけは不可" },
   H1_xPosts: { label: "X投稿", todo: "検証済みX URLを3件以上（x-researcher）" },
   H2_x_topic: { label: "Xの話題", todo: "X投稿本文が案件キーワードと一致（x-researcher）" },
   H3_x_screenshot: { label: "Xスクショ", todo: "npm run x:capture -- --slug <slug>（デバッガー）" },
@@ -107,7 +107,8 @@ export function checkCasePage(article, opts = {}) {
 
   // B. いまの結論
   const bullets = article.nowSummary?.bullets ?? [];
-  add("B1_nowSummary", bullets.length >= 3, `${bullets.length}/3 行`);
+  const conclusionLines = bullets.filter((b) => String(b).trim().length >= 12).length;
+  add("B1_nowSummary", conclusionLines >= 1, `${conclusionLines} 行（1行以上）`);
   add("B2_disclaimer", Boolean(article.nowSummary?.disclaimer), article.nowSummary?.disclaimer ? "あり" : "なし");
   const topicHits = countTopicBullets(article);
   add(
@@ -115,12 +116,15 @@ export function checkCasePage(article, opts = {}) {
     topicHits >= 2,
     `${topicHits}/2 行がキーワード一致（${article.searchKeyword || "—"}）`,
   );
+  const conclusionOk = isConclusionQuality(bullets);
   add(
     "B4_conclusion",
-    isConclusionQuality(bullets),
-    isConclusionQuality(bullets) ? "要点3行・重複なし" : "結論が途中切れ・重複・逐語抜粋",
+    conclusionOk,
+    conclusionOk ? "重複・途中切れなし" : "結論が途中切れ・重複・逐語抜粋",
   );
-  const voiceOk = bullets.length >= 3 && bullets.every((b) => !isDietVoice(String(b)) && !isSpeechFragment(String(b)));
+  const voiceOk =
+    conclusionLines >= 1 &&
+    bullets.filter((b) => String(b).trim().length >= 12).every((b) => !isDietVoice(String(b)) && !isSpeechFragment(String(b)));
   add("B5_writer_voice", voiceOk, voiceOk ? "第三者目線" : "議事録口調が残っている");
 
   // C. 根拠
@@ -158,13 +162,33 @@ export function checkCasePage(article, opts = {}) {
     add("E2_timeline_x", true, X_UNAVAILABLE_ADMIN_MESSAGE, false);
     add("E3_timeline_diet", dietInTl.length >= 3, `${dietInTl.length}/3 国会`);
     const dietTopic = countTopicDietTimeline(article);
-    add("E4_timeline_diet_topic", dietTopic >= 3, `${dietTopic}/3 国会が話題一致`);
+    const dietTotal = countDietTimelineEntries(article);
+    const dietTopicOk = isDietTimelineTopicOk(article);
+    add(
+      "E4_timeline_diet_topic",
+      dietTopicOk,
+      dietTotal === 0
+        ? "国会TLなし（可）"
+        : dietTopicOk
+          ? `${dietTopic}/${dietTotal} 件が話題一致`
+          : "国会TLあるが話題一致なし＋結論あり",
+    );
   } else {
     add("E1_timeline_count", tl.length >= 6, `${tl.length}/6 件`);
     add("E2_timeline_x", xInTl.length >= 3, `${xInTl.length}/3 X`);
     add("E3_timeline_diet", dietInTl.length >= 3, `${dietInTl.length}/3 国会`);
     const dietTopic = countTopicDietTimeline(article);
-    add("E4_timeline_diet_topic", dietTopic >= 3, `${dietTopic}/3 国会が話題一致`);
+    const dietTotal = countDietTimelineEntries(article);
+    const dietTopicOk = isDietTimelineTopicOk(article);
+    add(
+      "E4_timeline_diet_topic",
+      dietTopicOk,
+      dietTotal === 0
+        ? "国会TLなし（可）"
+        : dietTopicOk
+          ? `${dietTopic}/${dietTotal} 件が話題一致`
+          : "国会TLあるが話題一致なし＋結論あり",
+    );
   }
 
   // F. 用語
@@ -223,12 +247,18 @@ export function checkCasePage(article, opts = {}) {
     withSymbol.length >= 2,
     `◎▲❌ 確定 ${withSymbol.length}/2 党以上`,
   );
+  const matrixTopicOk =
+    isMatrixTopicRelevant(policyMatrix, article.searchKeyword) &&
+    isMatrixTopicConsistent(article, policyMatrix);
+  const matrixTopicCount = (policyMatrix?.parties ?? []).filter((p) =>
+    textStronglyMatchesTopic(String(p.stance?.text || ""), article.searchKeyword),
+  ).length;
   add(
     "G6_matrix_topic",
-    isMatrixTopicRelevant(policyMatrix, article.searchKeyword),
-    isMatrixTopicRelevant(policyMatrix, article.searchKeyword)
-      ? "2党とも話題一致"
-      : "公言テキストが案件と無関係",
+    matrixTopicOk,
+    matrixTopicOk
+      ? `${matrixTopicCount}党が話題一致`
+      : "〇×に話題一致なし＋結論あり",
   );
 
   // H. X — 公開前必須（未検証URL・空枠では出さない）
