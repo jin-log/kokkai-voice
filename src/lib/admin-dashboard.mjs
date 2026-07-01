@@ -45,6 +45,7 @@ function shortKeyword(item) {
  */
 function buildCardMetrics(status, patrol, agentTasks, opsCounts, topTrends, shorts) {
   const slugs = status?.slugs ?? [];
+  const patrolHealth = status?.patrolHealth ?? null;
   const actionSlugs = sortSlugsForAdminPanel(slugs).filter((s) => adminSlugFilter(s) === "action");
   const draftCount = slugs.filter((s) => s.publishState === "draft" && !s.adminHidden).length;
   const qualityNg = status?.qualityFailed ?? slugs.filter((s) => !s.qualityOk).length;
