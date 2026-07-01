@@ -87,6 +87,9 @@ function keywordFor(article) {
 }
 
 function searchTerms(article) {
+  if (Array.isArray(article.searchKeywords) && article.searchKeywords.length) {
+    return [...new Set(article.searchKeywords)].slice(0, 8);
+  }
   const kw = keywordFor(article);
   const parts = kw.split(/\s+/).filter(Boolean);
   const terms = [kw, ...parts];

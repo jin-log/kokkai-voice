@@ -12,7 +12,7 @@ import { spawn } from "node:child_process";
 import { checkCasePageWithFiles, root } from "../src/lib/page-ready.mjs";
 import { isPublishGate, pipelineChecks, refreshProjectStatus } from "../src/lib/project-status.mjs";
 import { loadArticle } from "../src/lib/articles.mjs";
-import { fetchSpeechForKeyword, pickSpeechForSummary, excerptSpeech, scoreSpeechRelevance, extractKeywordSpeechWindow, topicSpeechExcerpt, scoreSpeechTopicRelevance } from "./lib/kokkai-api.mjs";
+import { fetchSpeechForArticle, fetchSpeechForKeyword, pickSpeechForSummary, excerptSpeech, scoreSpeechRelevance, extractKeywordSpeechWindow, topicSpeechExcerpt, scoreSpeechTopicRelevance } from "./lib/kokkai-api.mjs";
 import { buildArticleLayers } from "./lib/article-summary.mjs";
 import {
   buildFactBundle,
@@ -126,14 +126,15 @@ async function enrichKokkai(article) {
   const keyword = article.searchKeyword;
   const from = "2023-01-01";
   const until = new Date().toISOString().slice(0, 10);
-  console.log(`[国会] API再取得: ${keyword}`);
-  const fetched = await fetchSpeechForKeyword(keyword, { from, until, maximumRecords: 100 });
+  console.log(`[国会] API再取得: ${keyword}${article.searchKeywords?.length ? ` (+${article.searchKeywords.length}語)` : ""}`);
+  const fetched = await fetchSpeechForArticle(article, { from, until, maximumRecords: 100 });
   let records = fetched.records;
   article.apiHits = fetched.apiHits;
-  let searchKeyword = fetched.resolvedKeyword;
-  if (searchKeyword !== keyword) {
-    console.log(`  キーワードフォールバック: "${keyword}" → "${searchKeyword}"`);
-    article.searchKeyword = searchKeyword;
+  let searchKeyword = article.searchKeyword || fetched.resolvedKeyword;
+  if (!article.searchKeywords?.length && fetched.resolvedKeyword !== keyword) {
+    console.log(`  キーワードフォールバック: "${keyword}" → "${fetched.resolvedKeyword}"`);
+    article.searchKeyword = fetched.resolvedKeyword;
+    searchKeyword = fetched.resolvedKeyword;
   }
 
   for (const extra of [

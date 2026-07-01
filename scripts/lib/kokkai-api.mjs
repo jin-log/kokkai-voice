@@ -24,6 +24,75 @@ export async function fetchSpeech(params, { delayMs = 1200 } = {}) {
 }
 
 /**
+ * 記事の searchKeywords またはフォールバック候補
+ * @param {string | { searchKeyword?: string, searchKeywords?: string[] }} input
+ */
+export function resolveSearchKeywords(input) {
+  if (Array.isArray(input)) return input.map((k) => String(k).trim()).filter((k) => k.length >= 2);
+  if (input && typeof input === "object") {
+    if (Array.isArray(input.searchKeywords) && input.searchKeywords.length) {
+      return resolveSearchKeywords(input.searchKeywords);
+    }
+    return kokkaiKeywordCandidates(input.searchKeyword || "");
+  }
+  return kokkaiKeywordCandidates(String(input ?? ""));
+}
+
+/**
+ * 複数キーワードを順に叩き speechID で重複除去してマージ
+ * @param {string[]} keywords
+ */
+export async function fetchSpeechMerged(keywords, params, opts = {}) {
+  const list = [...new Set(resolveSearchKeywords(keywords))];
+  const seen = new Set();
+  const merged = [];
+  let apiHits = 0;
+  let resolvedKeyword = list[0] || "";
+
+  for (const kw of list) {
+    const data = await fetchSpeech({ ...params, any: kw }, opts);
+    const records = data.speechRecord ?? [];
+    apiHits += parseInt(data.numberOfRecords ?? "0", 10);
+    for (const r of records) {
+      if (!r.speechID || seen.has(r.speechID)) continue;
+      seen.add(r.speechID);
+      merged.push(r);
+    }
+    if (pickSpeech(records, kw)) resolvedKeyword = kw;
+  }
+
+  return { data: {}, records: merged, apiHits, resolvedKeyword, tried: list };
+}
+
+/**
+ * 記事オブジェクトまたは単一キーワードで国会API取得
+ * @param {string | { searchKeyword?: string, searchKeywords?: string[] }} articleOrKeyword
+ */
+export async function fetchSpeechForArticle(articleOrKeyword, params, opts = {}) {
+  const keywords = resolveSearchKeywords(articleOrKeyword);
+  const primary =
+    typeof articleOrKeyword === "object" && articleOrKeyword?.searchKeyword
+      ? articleOrKeyword.searchKeyword
+      : keywords[0] || "";
+
+  if (keywords.length <= 1) {
+    return fetchSpeechForKeyword(primary || keywords[0] || "", params, opts);
+  }
+
+  const merged = await fetchSpeechMerged(keywords, params, opts);
+  merged.resolvedKeyword = primary;
+  if (!pickSpeech(merged.records, primary)) {
+    for (const kw of keywords) {
+      if (pickSpeech(merged.records, kw)) {
+        merged.resolvedKeyword = kw;
+        break;
+      }
+    }
+  }
+  return merged;
+}
+
+/**
  * 0件キーワード（例: 国旗損壊罪法案）を短縮候補で再試行
  * @param {string} keyword
  * @param {Record<string, string|number>} params

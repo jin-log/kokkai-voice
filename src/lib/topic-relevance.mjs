@@ -8,6 +8,8 @@ const TOPIC_ALIASES = {
   国会議員のボーナス: ["ボーナス", "歳費", "特別職", "期末手当", "給与法", "報酬", "議員報酬"],
   スパイ防止法: ["スパイ防止", "スパイ防止法制", "国家情報", "スパイ活動"],
   副首都構想: ["副首都", "大阪都構想", "大阪都", "首都機能", "一極集中", "副首都法案", "都構想"],
+  政権・内閣人事: ["高市内閣", "高市 内閣", "組閣", "内閣発足"],
+  高市内閣: ["高市内閣", "高市 内閣", "組閣", "内閣発足"],
   物価高対策: ["物価", "物価高", "物価高騰", "予備費", "インフレ", "生活必需品", "物価対策"],
   防衛費: ["防衛力", "防衛予算", "軍事費", "国防"],
   "大阪万博 2025 費用": ["万博", "大阪万博", "EXPO2025", "2025", "入場者", "決算"],
@@ -16,6 +18,13 @@ const TOPIC_ALIASES = {
   賃金: ["最低賃金", "賃上げ", "実質賃金", "春闘"],
   能登半島地震: ["能登", "復興", "復興予算", "被災"],
 };
+
+/** @param {{ searchKeyword?: string, searchKeywords?: string[] }} article */
+export function articleTopicTerms(article) {
+  const base = topicTerms(article?.searchKeyword);
+  const extras = (article?.searchKeywords || []).flatMap((k) => topicTerms(k));
+  return [...new Set([...base, ...extras])].filter(Boolean);
+}
 
 /** 自動生成の空行（話題語なし） */
 export const BOILERPLATE_TOPIC =
