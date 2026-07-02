@@ -1,0 +1,26 @@
+---
+import { getTermCaseLinks, splitTextWithTermLinks } from "../../lib/term-case-links.mjs";
+import TermCaseChip from "./TermCaseChip.astro";
+
+const { text, article, usedTerms } = Astro.props;
+const links = getTermCaseLinks(article);
+const used = usedTerms ?? new Set();
+const parts = splitTextWithTermLinks(String(text ?? ""), links, used);
+---
+
+{
+  parts.map((part) =>
+    part.type === "text" ? (
+      part.value
+    ) : (
+      <TermCaseChip
+        term={part.link.displayTerm}
+        title={part.link.title}
+        kicker={part.link.kicker}
+        stat={part.link.stat}
+        statLabel={part.link.statLabel}
+        href={part.link.href}
+      />
+    ),
+  )
+}

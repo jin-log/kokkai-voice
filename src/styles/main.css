@@ -51,6 +51,212 @@ a { color: var(--color-primary); }
   pointer-events: none;
 }
 
+/* 関連案件チップ（Pattern B） */
+.term-case {
+  display: inline;
+  vertical-align: baseline;
+}
+
+.term-case__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.28rem;
+  margin: 0 0.08rem;
+  padding: 0.12rem 0.5rem 0.12rem 0.42rem;
+  border: 1px solid #bfdbfe;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #f8fbff 0%, #eff6ff 100%);
+  color: #1e3a8a;
+  font: inherit;
+  font-size: 0.9em;
+  font-weight: 700;
+  line-height: 1.35;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, box-shadow 0.15s;
+  box-shadow: 0 1px 0 rgb(30 64 175 / 0.06);
+}
+
+.term-case__btn::before {
+  content: "";
+  width: 0.45rem;
+  height: 0.45rem;
+  border: 1.5px solid #3b82f6;
+  border-radius: 2px;
+  flex-shrink: 0;
+  opacity: 0.85;
+}
+
+.term-case__btn:hover,
+.term-case__btn[aria-expanded="true"] {
+  background: #dbeafe;
+  border-color: #60a5fa;
+  box-shadow: 0 2px 8px rgb(37 99 235 / 0.15);
+}
+
+.term-case__hint {
+  font-size: 0.62em;
+  font-weight: 800;
+  color: #2563eb;
+  letter-spacing: 0.06em;
+  padding: 0.1em 0.35em;
+  border-radius: 4px;
+  background: rgb(255 255 255 / 0.72);
+}
+
+.term-card {
+  position: fixed;
+  z-index: 200;
+  width: min(17.5rem, calc(100vw - 1.5rem));
+  padding: 0;
+  border: 1px solid #dbeafe;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow:
+    0 4px 6px rgb(15 23 42 / 0.04),
+    0 16px 40px rgb(30 64 175 / 0.14);
+  overflow: hidden;
+  animation: term-pop-in 0.18s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes term-pop-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.term-card__head {
+  position: relative;
+  padding: 0.9rem 2.2rem 0.75rem 1rem;
+  background: linear-gradient(135deg, #f8fbff 0%, #eff6ff 55%, #fff 100%);
+  border-bottom: 1px solid #e0e7ff;
+}
+
+.term-card__head::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: linear-gradient(180deg, #3b82f6, #1d4ed8);
+}
+
+.term-card__close {
+  position: absolute;
+  top: 0.45rem;
+  right: 0.45rem;
+  width: 1.65rem;
+  height: 1.65rem;
+  border: none;
+  border-radius: 8px;
+  background: rgb(255 255 255 / 0.85);
+  color: #64748b;
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.term-card__close:hover {
+  background: #fff;
+  color: #0f172a;
+}
+
+.term-card__title {
+  margin: 0;
+  font-size: 1.02rem;
+  font-weight: 800;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+  color: #0f172a;
+}
+
+.term-card__diff {
+  margin: 0.35rem 0 0;
+  font-size: 0.8rem;
+  font-weight: 600;
+  line-height: 1.4;
+  color: #475569;
+}
+
+.term-card__body {
+  padding: 0.75rem 1rem 0.85rem;
+}
+
+.term-card__stat {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.35rem;
+  margin: 0 0 0.75rem;
+  padding: 0.35rem 0.55rem;
+  border-radius: 8px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+}
+
+.term-card__stat-value {
+  font-size: 1.15rem;
+  font-weight: 800;
+  line-height: 1;
+  color: #1e40af;
+  letter-spacing: -0.02em;
+}
+
+.term-card__stat-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #64748b;
+}
+
+.term-card__cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  width: 100%;
+  padding: 0.62rem 0.85rem;
+  border-radius: 10px;
+  background: linear-gradient(180deg, #2563eb 0%, #1d4ed8 100%);
+  color: #fff;
+  font-size: 0.88rem;
+  font-weight: 800;
+  text-decoration: none;
+  letter-spacing: 0.01em;
+  box-shadow: 0 2px 0 #1e3a8a;
+}
+
+.term-card__cta::after {
+  content: "→";
+  font-size: 0.95em;
+}
+
+.term-card__cta:hover {
+  filter: brightness(1.05);
+}
+
+.term-card__backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 199;
+  background: rgb(15 23 42 / 0.18);
+  backdrop-filter: blur(1px);
+}
+
+@media (max-width: 640px) {
+  .term-card {
+    left: 0.65rem !important;
+    right: 0.65rem !important;
+    bottom: 0.65rem !important;
+    top: auto !important;
+    width: auto;
+    border-radius: 16px;
+  }
+}
+
 .site-header__inner {
   display: flex;
   align-items: center;

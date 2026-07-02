@@ -1,10 +1,12 @@
 ---
 import DietPendingNotice from "./DietPendingNotice.astro";
+import RichTextWithTermLinks from "./RichTextWithTermLinks.astro";
 import { showsDietPendingUI } from "../../lib/diet-pending.mjs";
 
 const { article, variant = "default" } = Astro.props;
 const ns = article.nowSummary ?? {};
 const bullets = ns.bullets ?? [];
+const termLinkUsed = new Set();
 const updatedNote = ns.updatedAt ? ` · 要約更新: ${ns.updatedAt.slice(0, 10)}` : "";
 const fetchedLabel = article.fetchedAt?.slice(0, 10) ?? "—";
 const dietPending = showsDietPendingUI(article);
@@ -20,7 +22,9 @@ const isBlocks = variant === "blocks";
     bullets.length > 0 ? (
       <ul class:list={[isBlocks ? undefined : "now-box__bullets"]}>
         {bullets.map((b) => (
-          <li>{b}</li>
+          <li>
+            <RichTextWithTermLinks text={b} article={article} usedTerms={termLinkUsed} />
+          </li>
         ))}
       </ul>
     ) : ns.text ? (

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>内部リンクUXサンプル｜関連案件カード</title>
+  <link rel="stylesheet" href="css/internal-link-ux.css" />
+</head>
+<body>
+  <div class="ilux-wrap">
+    <header class="ilux-head">
+      <h1>内部リンク UX — Pattern B</h1>
+      <p>不法滞在の動向 · 関連案件カード（情報は最小限）</p>
+      <nav class="ilux-nav" aria-label="サンプル">
+        <a href="index.html">サンプル一覧</a>
+        <a href="content-blocks/statistical.html">数値統計型</a>
+      </nav>
+    </header>
+
+    <section class="ilux-panel ilux-panel--pick">
+      <p class="ilux-panel__label">採用案</p>
+      <h2>チップ → カード → 遷移</h2>
+      <div class="ilux-article">
+        <p>
+          一方、
+          <span class="term-case">
+            <button
+              type="button"
+              class="term-case__btn"
+              data-term-popover
+              data-case-title="在留外国人の動向"
+              data-case-kicker="不法残留とは別系列"
+              data-case-stat="412万人超"
+              data-case-stat-label="2025年末"
+              data-case-href="/case/gaikokujin-seisaku/"
+              aria-expanded="false"
+            >
+              在留外国人数
+              <span class="term-case__hint">関連</span>
+            </button>
+          </span>
+          は過去最多（前年比9.5%増）。不法残留者とは別集計です。
+        </p>
+      </div>
+      <div class="ilux-legend">
+        <div><strong>カード</strong><span>タイトル1行 · 違い1行 · 数字1つ · ボタン1つだけ</span></div>
+        <div><strong>チップ</strong><span>丸枠＋「関連」で本文リンクと区別</span></div>
+      </div>
+    </section>
+
+    <details class="ilux-panel">
+      <summary style="cursor:pointer;font-weight:700">比較用（A / C）</summary>
+      <h2 style="margin-top:0.75rem;font-size:0.95rem">A — 青リンク（NG）</h2>
+      <p class="ilux-article">
+        <button
+          type="button"
+          class="ilux-link-plain"
+          data-term-popover
+          data-case-title="在留外国人の動向"
+          data-case-kicker="不法残留とは別系列"
+          data-case-stat="412万人超"
+          data-case-stat-label="2025年末"
+          data-case-href="/case/gaikokujin-seisaku/"
+        >在留外国人数</button>
+      </p>
+      <h2 style="font-size:0.95rem">C — 末尾向け1段階リンク</h2>
+      <p class="ilux-article">
+        <a class="ilux-inline-case" href="/case/gaikokujin-seisaku/">外国人政策の全体像</a>
+      </p>
+    </details>
+  </div>
+  <script src="js/internal-link-ux.js"></script>
+</body>
+</html>

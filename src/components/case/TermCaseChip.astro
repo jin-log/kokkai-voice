@@ -1,0 +1,20 @@
+---
+const { term, title, kicker, stat, statLabel, href } = Astro.props;
+---
+
+<span class="term-case">
+  <button
+    type="button"
+    class="term-case__btn"
+    data-term-popover
+    data-case-title={title}
+    data-case-kicker={kicker}
+    data-case-stat={stat || undefined}
+    data-case-stat-label={statLabel || undefined}
+    data-case-href={href}
+    aria-expanded="false"
+  >
+    {term}
+    <span class="term-case__hint">関連</span>
+  </button>
+</span>
