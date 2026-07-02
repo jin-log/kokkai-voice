@@ -176,10 +176,13 @@ export function checkCasePage(article, opts = {}) {
     }
     add("E3_timeline_diet", true, "国会待ち — 更新次第掲載", false);
   } else if (xUnavailable) {
+    const localPublic = article.category && article.category !== "国会";
     add(
       "E1_timeline_count",
-      tl.length >= 3 && dietInTl.length >= 3,
-      `${tl.length}件 · 国会${dietInTl.length}/3（X未発見）`,
+      localPublic ? tl.length >= 3 : tl.length >= 3 && dietInTl.length >= 3,
+      localPublic
+        ? `${tl.length}/3 件（報道・公開TL · X未発見）`
+        : `${tl.length}件 · 国会${dietInTl.length}/3（X未発見）`,
     );
     add("E2_timeline_x", true, X_UNAVAILABLE_ADMIN_MESSAGE, false);
     add("E3_timeline_diet", dietInTl.length >= 3, `${dietInTl.length}/3 国会`);

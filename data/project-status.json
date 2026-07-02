@@ -1,11 +1,11 @@
 {
-  "generatedAt": "2026-07-02T19:44:06.368Z",
+  "generatedAt": "2026-07-02T19:54:41.689Z",
   "strategy": "quality-first",
   "activeCount": 40,
   "parkedCount": 0,
-  "publishedCount": 25,
-  "overallGoldPct": 74,
-  "overallGatePct": 86,
+  "publishedCount": 26,
+  "overallGoldPct": 76,
+  "overallGatePct": 88,
   "qualityFailed": 0,
   "specialPublishCount": 4,
   "automationPolicy": [
@@ -104,8 +104,8 @@
     "slugStalls": [],
     "stalledCount": 0,
     "message": "手動停止中（オーナー指示：ローカル全停止 until 2026-07-03T23:59:59+09:00）",
-    "analyzedAt": "2026-07-02T19:44:06.366Z",
-    "lastPatrolCycleAt": "2026-07-02T19:43:41.415Z",
+    "analyzedAt": "2026-07-02T19:54:41.686Z",
+    "lastPatrolCycleAt": "2026-07-02T19:54:41.538Z",
     "patrolRunning": true
   },
   "slugs": [
@@ -3584,78 +3584,22 @@
       "shortTitle": "東京リコールとは — 制度と団体の動き",
       "category": "地方",
       "policyCategory": "地方",
-      "adminHidden": true,
-      "pageReady": false,
-      "publishState": "hidden",
+      "adminHidden": false,
+      "pageReady": true,
+      "publishState": "live",
       "previewUrl": "/dev/preview/tokyo-recall/",
       "qualityOk": true,
       "needsQualityFix": false,
       "qualityBlockerCount": 0,
       "qualityBlockers": [],
-      "agentTasks": [
-        {
-          "id": "tokyo-recall:H1_xPosts",
-          "slug": "tokyo-recall",
-          "agent": "x-researcher",
-          "agentLabel": "X調査",
-          "checkId": "H1_xPosts",
-          "title": "[ゲート] X投稿",
-          "todo": "検証済みX URLを3件以上（x-researcher）",
-          "command": "npm run x:research -- --slug tokyo-recall",
-          "priority": 20
-        },
-        {
-          "id": "tokyo-recall:H2_x_topic",
-          "slug": "tokyo-recall",
-          "agent": "x-researcher",
-          "agentLabel": "X調査",
-          "checkId": "H2_x_topic",
-          "title": "[ゲート] Xの話題",
-          "todo": "X投稿本文が案件キーワードと一致（x-researcher）",
-          "command": "npm run x:research -- --slug tokyo-recall",
-          "priority": 20
-        },
-        {
-          "id": "tokyo-recall:B3_topic",
-          "slug": "tokyo-recall",
-          "agent": "writer",
-          "agentLabel": "ライター",
-          "checkId": "B3_topic",
-          "title": "[ゲート] 話題一致",
-          "todo": "要約が searchKeyword と一致（2行以上）",
-          "command": "npm run complete:article -- --slug tokyo-recall --force",
-          "priority": 30
-        },
-        {
-          "id": "tokyo-recall:D2_arc_topic",
-          "slug": "tokyo-recall",
-          "agent": "writer",
-          "agentLabel": "ライター",
-          "checkId": "D2_arc_topic",
-          "title": "[ゲート] 経緯の話題",
-          "todo": "経緯3行以上が案件キーワードと一致",
-          "command": "npm run complete:article -- --slug tokyo-recall --force",
-          "priority": 30
-        },
-        {
-          "id": "tokyo-recall:I1_legal",
-          "slug": "tokyo-recall",
-          "agent": "legal-check",
-          "agentLabel": "法務",
-          "checkId": "I1_legal",
-          "title": "[ゲート] 法務",
-          "todo": "legal-check を実行",
-          "command": "npm run legal:check -- --slug tokyo-recall",
-          "priority": 30
-        }
-      ],
-      "gatePct": 25,
-      "goldPct": 17,
-      "published": false,
+      "agentTasks": [],
+      "gatePct": 100,
+      "goldPct": 83,
+      "published": true,
       "specialPublish": false,
       "specialPublishSummary": "",
       "publishGateOk": true,
-      "pipelinePreOk": false,
+      "pipelinePreOk": true,
       "titleAnswerOk": true,
       "titleAnswerDetail": "1行目がタイトルに回答している",
       "titleAnswerTodo": null,
@@ -3665,7 +3609,7 @@
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "matrix",
@@ -3676,24 +3620,24 @@
         },
         {
           "id": "x",
-          "label": "③X検証1件+",
+          "label": "③X未発見（調査完了）",
           "phase": 3,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "legal",
           "label": "④法務OK",
           "phase": 4,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "deployed",
           "label": "⑤本番デプロイ",
           "phase": 5,
           "preDeploy": false,
-          "ok": false
+          "ok": true
         },
         {
           "id": "debug",
@@ -3709,7 +3653,7 @@
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "matrix",
@@ -3720,24 +3664,24 @@
         },
         {
           "id": "x",
-          "label": "③X検証1件+",
+          "label": "③X未発見（調査完了）",
           "phase": 3,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "legal",
           "label": "④法務OK",
           "phase": 4,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "deployed",
           "label": "⑤本番デプロイ",
           "phase": 5,
           "preDeploy": false,
-          "ok": false
+          "ok": true
         },
         {
           "id": "debug",
@@ -3747,83 +3691,17 @@
           "ok": false
         }
       ],
-      "blockers": [
-        {
-          "id": "B3_topic",
-          "label": "話題一致",
-          "todo": "要約が searchKeyword と一致（2行以上）",
-          "detail": "1/2 行がキーワード一致（東京リコール）"
-        },
-        {
-          "id": "D2_arc_topic",
-          "label": "経緯の話題",
-          "todo": "経緯3行以上が案件キーワードと一致",
-          "detail": "1/3 行が話題一致"
-        },
-        {
-          "id": "H1_xPosts",
-          "label": "X投稿",
-          "todo": "検証済みX URLを3件以上（x-researcher）",
-          "detail": "検証済み 0/3 件（公開前必須）"
-        },
-        {
-          "id": "H2_x_topic",
-          "label": "Xの話題",
-          "todo": "X投稿本文が案件キーワードと一致（x-researcher）",
-          "detail": "0/3 件が話題一致"
-        },
-        {
-          "id": "I1_legal",
-          "label": "法務",
-          "todo": "legal-check を実行",
-          "detail": "pending"
-        }
-      ],
-      "blockerCount": 5,
+      "blockers": [],
+      "blockerCount": 0,
       "runState": "idle",
       "workItems": [
         {
-          "id": "B3_topic",
-          "label": "話題一致",
-          "state": "blocked"
-        },
-        {
-          "id": "D2_arc_topic",
-          "label": "経緯の話題",
-          "state": "blocked"
-        },
-        {
-          "id": "H1_xPosts",
-          "label": "X投稿",
-          "state": "blocked"
-        },
-        {
-          "id": "H2_x_topic",
-          "label": "Xの話題",
-          "state": "blocked"
-        },
-        {
-          "id": "I1_legal",
-          "label": "法務",
-          "state": "blocked"
-        },
-        {
-          "id": "pipe:content",
-          "label": "①コンテンツ",
-          "state": "blocked"
-        },
-        {
-          "id": "pipe:x",
-          "label": "③X検証1件+",
-          "state": "blocked"
-        },
-        {
-          "id": "pipe:legal",
-          "label": "④法務OK",
+          "id": "pipe:debug",
+          "label": "⑥デバッグOK",
           "state": "blocked"
         }
       ],
-      "nextAction": "👁️ 非表示中 — 「表示に戻す」でトップに出せます",
+      "nextAction": "✅ 公開中 — /case/ に表示されています",
       "promo": {
         "x": null,
         "hatena": null,
@@ -3840,15 +3718,30 @@
         "uploadedAt": null,
         "label": "未生成"
       },
-      "xUnavailable": false,
-      "xResearchStatus": "pending",
-      "statusExplain": "非表示（手動）。自動では戻らない。",
-      "publishedBy": null,
-      "publishedAt": null,
+      "xUnavailable": true,
+      "xResearchStatus": "exhausted",
+      "statusExplain": "手動公開 07/03 04:54",
+      "publishedBy": "owner",
+      "publishedAt": "2026-07-02T19:54:40.649Z",
       "adminHiddenBy": null,
       "adminHiddenAt": null,
       "patrolFixing": false,
-      "activity": [],
+      "activity": [
+        {
+          "at": "2026-07-02T19:54:40.652Z",
+          "when": "07/03 04:54",
+          "type": "promo.queue",
+          "actor": "system",
+          "line": "発信キューに登録（system） — はてブ/note発信キューに登録"
+        },
+        {
+          "at": "2026-07-02T19:54:40.651Z",
+          "when": "07/03 04:54",
+          "type": "publish.manual",
+          "actor": "owner",
+          "line": "手動で一般公開（あなた） — 管理画面から一般公開"
+        }
+      ],
       "distribution": [
         {
           "channel": "X",
@@ -7528,6 +7421,7 @@
       "stall": null
     }
   ],
-  "previousGoldPct": null,
+  "deltaGoldPct": 0,
+  "previousGoldPct": 76,
   "deployedAt": null
 }
