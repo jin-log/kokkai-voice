@@ -112,10 +112,34 @@
     });
   }
 
-  function syncHeaderOffset() {
+  function measureSiteHeader() {
     const header = document.querySelector('.site-header');
-    if (!header) return;
-    document.documentElement.style.setProperty('--header-offset', `${header.offsetHeight}px`);
+    if (!header) return null;
+
+    const caseBar = document.querySelector('[data-header-case]');
+    const isCaseHeader = header.hasAttribute('data-site-header') && caseBar;
+
+    if (!isCaseHeader) {
+      const h = header.offsetHeight;
+      document.documentElement.style.setProperty('--header-offset', `${h}px`);
+      return { expanded: h, collapsed: h, max: h };
+    }
+
+    const wasScrolled = header.classList.contains('is-scrolled');
+    header.classList.remove('is-scrolled');
+    const expanded = header.offsetHeight;
+    header.classList.add('is-scrolled');
+    const collapsed = header.offsetHeight;
+    header.classList.toggle('is-scrolled', wasScrolled);
+
+    const max = Math.max(expanded, collapsed);
+    document.documentElement.style.setProperty('--header-offset', `${max}px`);
+    document.documentElement.style.setProperty('--site-header-h', `${max}px`);
+    return { expanded, collapsed, max };
+  }
+
+  function syncHeaderOffset() {
+    measureSiteHeader();
   }
 
   function initCaseHeader() {
@@ -124,21 +148,38 @@
     const heroTitle = document.querySelector('.case-hero__title');
     if (!header || !caseBar || !heroTitle) return;
 
-    function scrollThreshold() {
-      const headerH = header.offsetHeight;
-      const titleBottom = heroTitle.getBoundingClientRect().bottom + window.scrollY;
+    let metrics = measureSiteHeader();
+    let isScrolled = header.classList.contains('is-scrolled');
+    const HYSTERESIS = 24;
+
+    function thresholdY() {
+      const headerH = metrics?.expanded ?? header.offsetHeight;
+      const titleBottom = heroTitle.getBoundingClientRect().top + window.scrollY + heroTitle.offsetHeight;
       return Math.max(48, titleBottom - headerH - 8);
     }
 
+    function applyScrolled(next) {
+      if (isScrolled === next) return;
+      isScrolled = next;
+      header.classList.toggle('is-scrolled', isScrolled);
+      caseBar.setAttribute('aria-hidden', isScrolled ? 'false' : 'true');
+    }
+
     function update() {
-      const scrolled = window.scrollY > scrollThreshold();
-      header.classList.toggle('is-scrolled', scrolled);
-      caseBar.setAttribute('aria-hidden', scrolled ? 'false' : 'true');
-      syncHeaderOffset();
+      const enter = thresholdY();
+      const y = window.scrollY;
+      if (!isScrolled && y > enter + HYSTERESIS) {
+        applyScrolled(true);
+      } else if (isScrolled && y < enter - HYSTERESIS) {
+        applyScrolled(false);
+      }
     }
 
     window.addEventListener('scroll', update, { passive: true });
-    window.addEventListener('resize', update, { passive: true });
+    window.addEventListener('resize', () => {
+      metrics = measureSiteHeader();
+      update();
+    }, { passive: true });
     update();
   }
 
@@ -359,8 +400,8 @@
   initReactions();
   initComments();
   initTerms();
-  initToc();
   initCaseHeader();
+  initToc();
   initTimeline();
   initTimelineX();
 })();

@@ -37,6 +37,12 @@ a { color: var(--color-primary); }
   background: rgb(255 255 255 / 0.92);
 }
 
+/* 案件ページ — 縮小時も外枠高さを固定し、スクロール位置の上下揺れを防ぐ */
+.site-header[data-site-header] {
+  height: var(--site-header-h, auto);
+  overflow: hidden;
+}
+
 .site-header__inner {
   display: flex;
   align-items: center;
