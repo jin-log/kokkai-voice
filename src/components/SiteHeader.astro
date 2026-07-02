@@ -11,7 +11,7 @@ interface Props {
 const { showSearch = false, searchQuery = "", caseTitle = "" } = Astro.props;
 ---
 
-<header class="site-header" data-site-header>
+<header class="site-header" {...(caseTitle ? { "data-site-header": "" } : {})}>
   <div class="container site-header__inner site-header__inner--search">
     <a class="logo" href="/">
       <img
@@ -62,3 +62,8 @@ const { showSearch = false, searchQuery = "", caseTitle = "" } = Astro.props;
     )
   }
 </header>
+{
+  caseTitle && (
+    <div class="site-header-spacer" data-header-spacer aria-hidden="true" />
+  )
+}

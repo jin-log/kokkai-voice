@@ -112,6 +112,16 @@
     });
   }
 
+  function measureCaseHeaderModes(header) {
+    const wasScrolled = header.classList.contains('is-scrolled');
+    header.classList.remove('is-scrolled');
+    const expanded = header.offsetHeight;
+    header.classList.add('is-scrolled');
+    const collapsed = header.offsetHeight;
+    header.classList.toggle('is-scrolled', wasScrolled);
+    return { expanded, collapsed };
+  }
+
   function measureSiteHeader() {
     const header = document.querySelector('.site-header');
     if (!header) return null;
@@ -122,41 +132,32 @@
     if (!isCaseHeader) {
       const h = header.offsetHeight;
       document.documentElement.style.setProperty('--header-offset', `${h}px`);
-      return { expanded: h, collapsed: h, max: h };
+      return { expanded: h, collapsed: h };
     }
 
-    const wasScrolled = header.classList.contains('is-scrolled');
-    header.classList.remove('is-scrolled');
-    const expanded = header.offsetHeight;
-    header.classList.add('is-scrolled');
-    const collapsed = header.offsetHeight;
-    header.classList.toggle('is-scrolled', wasScrolled);
-
-    const max = Math.max(expanded, collapsed);
-    document.documentElement.style.setProperty('--header-offset', `${max}px`);
-    document.documentElement.style.setProperty('--site-header-h', `${max}px`);
-    return { expanded, collapsed, max };
+    return measureCaseHeaderModes(header);
   }
 
   function syncHeaderOffset() {
-    measureSiteHeader();
+    const header = document.querySelector('.site-header');
+    const spacer = document.querySelector('[data-header-spacer]');
+    if (!header) return;
+
+    const h = header.offsetHeight;
+    document.documentElement.style.setProperty('--header-offset', `${h}px`);
+    document.documentElement.style.setProperty('--header-spacer-h', `${h}px`);
+    if (spacer) spacer.style.height = `${h}px`;
   }
 
   function initCaseHeader() {
     const header = document.querySelector('[data-site-header]');
     const caseBar = document.querySelector('[data-header-case]');
+    const spacer = document.querySelector('[data-header-spacer]');
     const heroTitle = document.querySelector('.case-hero__title');
-    if (!header || !caseBar || !heroTitle) return;
+    if (!header || !caseBar || !heroTitle || !spacer) return;
 
-    let metrics = measureSiteHeader();
+    let metrics = measureCaseHeaderModes(header);
     let isScrolled = header.classList.contains('is-scrolled');
-    const HYSTERESIS = 24;
-
-    function thresholdY() {
-      const headerH = metrics?.expanded ?? header.offsetHeight;
-      const titleBottom = heroTitle.getBoundingClientRect().top + window.scrollY + heroTitle.offsetHeight;
-      return Math.max(48, titleBottom - headerH - 8);
-    }
 
     function applyScrolled(next) {
       if (isScrolled === next) return;
@@ -165,19 +166,32 @@
       caseBar.setAttribute('aria-hidden', isScrolled ? 'false' : 'true');
     }
 
+    function syncSpacer() {
+      const h = header.offsetHeight;
+      spacer.style.height = `${h}px`;
+      document.documentElement.style.setProperty('--header-offset', `${h}px`);
+      document.documentElement.style.setProperty('--header-spacer-h', `${h}px`);
+    }
+
     function update() {
-      const enter = thresholdY();
-      const y = window.scrollY;
-      if (!isScrolled && y > enter + HYSTERESIS) {
+      const rect = heroTitle.getBoundingClientRect();
+      const enterAt = metrics.collapsed + 8;
+      const exitAt = metrics.expanded + 8;
+      if (!isScrolled && rect.bottom < enterAt) {
         applyScrolled(true);
-      } else if (isScrolled && y < enter - HYSTERESIS) {
+      } else if (isScrolled && rect.top > exitAt) {
         applyScrolled(false);
       }
     }
 
+    syncSpacer();
+    const headerResize = new ResizeObserver(syncSpacer);
+    headerResize.observe(header);
+
     window.addEventListener('scroll', update, { passive: true });
     window.addEventListener('resize', () => {
-      metrics = measureSiteHeader();
+      metrics = measureCaseHeaderModes(header);
+      syncSpacer();
       update();
     }, { passive: true });
     update();

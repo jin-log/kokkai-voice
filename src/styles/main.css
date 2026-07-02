@@ -37,10 +37,18 @@ a { color: var(--color-primary); }
   background: rgb(255 255 255 / 0.92);
 }
 
-/* 案件ページ — 縮小時も外枠高さを固定し、スクロール位置の上下揺れを防ぐ */
+/* 案件ページ — fixed + スペーサーで本文位置を同期（高さは縮小する） */
 .site-header[data-site-header] {
-  height: var(--site-header-h, auto);
-  overflow: hidden;
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+}
+
+.site-header-spacer {
+  height: var(--header-spacer-h, var(--header-offset));
+  transition: height 0.2s ease;
+  pointer-events: none;
 }
 
 .site-header__inner {
