@@ -58,16 +58,16 @@ export function ogImagePaths(slug, assetV = "") {
 export function buildOgAssetBrief(article, assetV = "") {
   const pattern = pickOgPattern(article);
   const paths = ogImagePaths(article.slug, assetV);
-  const ogImageMeta = paths[pattern] || paths.primary;
   return {
     primaryPattern: pattern,
-    recommendedForX: paths[pattern] || paths.hook,
+    recommendedForX: paths[pattern] || paths.hook || paths.primary,
     files: [
       { pattern: "title", path: paths.title, use: "汎用・フォールバック" },
       { pattern: "hook", path: paths.hook, use: "新規公開・追記告知（推奨）" },
       { pattern: "quote", path: paths.quote, use: "国会発言が強いとき" },
       { pattern: "number", path: paths.number, use: "数字・％が刺さるとき" },
     ],
-    ogImageMeta,
+    /** 主パターンは slug.png に焼き込み（generate-og-images） */
+    ogImageMeta: paths.primary,
   };
 }

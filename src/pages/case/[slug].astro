@@ -1,14 +1,17 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import SiteHeader from "../../components/SiteHeader.astro";
+import SiteFooter from "../../components/SiteFooter.astro";
 import PreReleaseBanner from "../../components/PreReleaseBanner.astro";
 import CasePageContent from "../../components/CasePageContent.astro";
 import {
   getArticleSlugs,
   loadArticle,
   loadStanceData,
+  loadAllArticles,
 } from "../../lib/articles.mjs";
 import { articleShortTitle, articleMetaDescription, ASSET_V } from "../../lib/case-helpers.mjs";
+import { pickRelatedArticles } from "../../lib/related-articles.mjs";
 import { SITE } from "../../lib/site-config.mjs";
 import { buildOgAssetBrief } from "../../lib/og-image.mjs";
 
@@ -20,6 +23,8 @@ export async function getStaticPaths() {
 const { slug } = Astro.params;
 const article = await loadArticle(slug);
 const stance = await loadStanceData(article);
+const allArticles = await loadAllArticles();
+const relatedItems = pickRelatedArticles(article, allArticles, 3);
 const shortTitle = articleShortTitle(article);
 const description = articleMetaDescription(article);
 const ogAssets = buildOgAssetBrief(article, ASSET_V);
@@ -35,5 +40,6 @@ const ogAssets = buildOgAssetBrief(article, ASSET_V);
 >
   <PreReleaseBanner />
   <SiteHeader showSearch caseTitle={shortTitle} />
-  <CasePageContent article={article} stance={stance} />
+  <CasePageContent article={article} stance={stance} relatedItems={relatedItems} />
+  <SiteFooter />
 </BaseLayout>

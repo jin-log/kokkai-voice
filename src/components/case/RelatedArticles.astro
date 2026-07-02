@@ -1,0 +1,29 @@
+---
+interface RelatedItem {
+  slug: string;
+  title: string;
+}
+
+interface Props {
+  items: RelatedItem[];
+}
+
+const { items } = Astro.props;
+---
+
+{
+  items.length > 0 && (
+    <section class="related-read" aria-labelledby="related-read-title">
+      <h2 id="related-read-title" class="related-read__title">合わせて読みたい</h2>
+      <ul class="related-read__grid">
+        {items.map((item) => (
+          <li>
+            <a class="related-read__card" href={`/case/${item.slug}/`}>
+              {item.title}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )
+}

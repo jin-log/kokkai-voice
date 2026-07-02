@@ -14,54 +14,51 @@ const turnstileKey = SITE.turnstileSiteKey;
     !live ? (
       <>
         <h2 id="comments-title">コメント（準備中）</h2>
-        <p class="comment-form__note">
-          コメント機能は実装済みですが、公開前の最終確認中です。
-          この案件へのご意見は
+        <p class="comments__prep">
+          ご意見は
           <a href={SITE.xUrl} target="_blank" rel="noopener noreferrer">{SITE.xHandle}</a>
-          までお願いします。
+          まで。
         </p>
       </>
     ) : (
       <>
         <h2 id="comments-title">コメント</h2>
-        <p class="comment-disclaimer">
-          コメントは<strong>投稿者個人の意見</strong>です。当サイトは内容について<strong>一切の責任を負いません</strong>。
-          詳細は<a href="/comment-policy/">コメント投稿規約</a>をご確認ください。
-        </p>
+
+        <div class="comment-list-wrap">
+          <ul class="comment-list" data-comment-list aria-live="polite"></ul>
+        </div>
+
         <form class="comment-form" data-comment-form>
-          <input
-            type="text"
-            name="name"
-            placeholder="ニックネーム（任意）"
-            maxlength="32"
-            aria-label="ニックネーム"
-          />
-          <textarea
-            name="body"
-            placeholder="この案件についての意見…"
-            maxlength="500"
-            required
-            aria-label="コメント"
-          ></textarea>
-          {turnstileKey && (
-            <div class="comment-form__turnstile" data-turnstile-host></div>
-          )}
-          <p class="comment-legal" data-comment-legal hidden aria-live="polite"></p>
-          <label class="comment-terms">
-            <input type="checkbox" name="terms" data-comment-terms required />
-            <span>
-              <a href="/comment-policy/" target="_blank" rel="noopener">コメント投稿規約</a>
-              に同意し、投稿内容の責任は自分が負うことを確認しました
-            </span>
+          <p class="comment-form__lead">この案件について書く</p>
+          <label class="comment-field">
+            <span class="comment-field__label">ニックネーム（任意）</span>
+            <input type="text" name="name" maxlength="32" autocomplete="nickname" />
           </label>
-          <button type="submit" class="btn btn--primary" data-comment-submit disabled>
-            投稿する
-          </button>
+          <label class="comment-field">
+            <span class="comment-field__label">コメント</span>
+            <textarea
+              name="body"
+              placeholder="賛成・反対・疑問など"
+              maxlength="500"
+              required
+            ></textarea>
+          </label>
+          <p class="comment-legal" data-comment-legal hidden aria-live="polite"></p>
+          <div class="comment-form__actions">
+            <label class="comment-terms">
+              <input type="checkbox" name="terms" data-comment-terms required />
+              <span>
+                <a href="/comment-policy/" target="_blank" rel="noopener">コメント投稿規約</a>に同意する
+              </span>
+            </label>
+            {turnstileKey && (
+              <div class="comment-form__turnstile" data-turnstile-host></div>
+            )}
+            <button type="submit" class="btn btn--primary comment-form__submit" data-comment-submit disabled>
+              投稿する
+            </button>
+          </div>
         </form>
-        <p class="comment-form__note" style="font-size:0.8rem;color:var(--color-text-muted)">
-          投稿後すぐ公開されます。卑猥な表現・殺害予告のみ自動で拒否します。それ以外は通報で対応します。
-        </p>
-        <ul class="comment-list" data-comment-list aria-live="polite"></ul>
       </>
     )
   }
@@ -209,7 +206,7 @@ const turnstileKey = SITE.turnstileSiteKey;
           const list = document.querySelector("[data-comment-list]");
           if (!list) return;
           if (!comments.length) {
-            list.innerHTML = `<li class="comment"><div class="comment__author">—</div><p class="comment__body">まだコメントはありません。</p></li>`;
+            list.innerHTML = `<li class="comment-list__empty">まだコメントはありません。</li>`;
             return;
           }
           list.innerHTML = "";
@@ -300,6 +297,9 @@ const turnstileKey = SITE.turnstileSiteKey;
           host.dataset.mounted = "1";
           window.turnstile.render(host, {
             sitekey: turnstileKey,
+            size: "compact",
+            appearance: "interaction-only",
+            feedback: false,
             callback: (token) => {
               turnstileToken = token;
             },

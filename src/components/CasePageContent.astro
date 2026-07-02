@@ -11,6 +11,7 @@ import StanceMatrix from "./case/StanceMatrix.astro";
 import Glossary from "./case/Glossary.astro";
 import Timeline from "./case/Timeline.astro";
 import Comments from "./case/Comments.astro";
+import RelatedArticles from "./case/RelatedArticles.astro";
 import ShareBar from "./case/ShareBar.astro";
 import SupportCta from "./SupportCta.astro";
 import FloatToc from "./case/FloatToc.astro";
@@ -27,7 +28,7 @@ import {
 } from "../lib/case-blocks.mjs";
 import "../styles/content-blocks.css";
 
-const { article, stance, preview = false } = Astro.props;
+const { article, stance, preview = false, relatedItems = [] } = Astro.props;
 const hasStance =
   stance &&
   (stance.matrix.parties ?? []).filter(shouldPublishParty).length > 0;
@@ -98,6 +99,7 @@ const flags = blocksMode ? blockFlags(article, stance) : null;
   <Timeline article={article} />
   {!preview && <SupportCta context={article.slug} />}
   <Comments slug={article.slug} />
+  {!preview && <RelatedArticles items={relatedItems} />}
 </main>
 
 <FloatToc article={article} hasStance={hasStance} />

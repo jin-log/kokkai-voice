@@ -42,6 +42,60 @@
   },
   "tasks": [
     {
+      "id": "ceo-kv-ogp-x-card",
+      "project": "kokkai-voice",
+      "title": "X投稿カード — 記事別OGP（数字/フック）",
+      "assignee": "ceo",
+      "horizon": "today",
+      "priority": 0,
+      "score": 950,
+      "etaMin": 15,
+      "tags": ["OGP", "X", "SEO"],
+      "content": {
+        "summary": "og:image が汎用ロゴになる不具合を修正。pickOgPattern・万人検出・qa:og-images 追加。",
+        "steps": [
+          "本番 deploy 後 X Card Validator で fuhou-immin-trend を再スクレイプ",
+          "キャッシュは ?v=ASSET_V で bust"
+        ]
+      },
+      "links": [
+        {
+          "label": "対象記事",
+          "href": "https://seiji1192.site/case/fuhou-immin-trend/"
+        }
+      ],
+      "done": true,
+      "doneAt": "2026-07-02T03:05:00.000Z"
+    },
+      "project": "kokkai-voice",
+      "title": "記事下 — 合わせて読みたい（タイトル3カード）",
+      "assignee": "ceo",
+      "horizon": "today",
+      "priority": 1,
+      "score": 820,
+      "etaMin": 20,
+      "tags": [
+        "記事UX",
+        "内部リンク"
+      ],
+      "content": {
+        "summary": "コメント欄の下に同タグ優先で関連記事3件。タイトルのみのカードリンク。",
+        "steps": [
+          "pickRelatedArticles（タグ・カテゴリスコア）",
+          "RelatedArticles.astro を CasePageContent に配置",
+          "本番デプロイ後に内部リンク導線を確認"
+        ]
+      },
+      "links": [
+        {
+          "label": "確認例",
+          "href": "https://seiji1192.site/case/case-mqzxgs3f/"
+        }
+      ],
+      "done": true,
+      "doneAt": "2026-07-02T02:15:00.000Z"
+    },
+    {
       "id": "owner-note-paid-start",
       "project": "kokkai-voice",
       "title": "noteÃ¦ÂÂÃ¦ÂÂÃ¥ÂÂ Ã¢ÂÂ Ã§ÂÂ³Ã¨Â«ÂÃ©ÂÂÃ©ÂÂÃ£ÂÂ»Ã£ÂÂ¹Ã£ÂÂ¿Ã£ÂÂ¼Ã£ÂÂ",
