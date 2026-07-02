@@ -5,7 +5,7 @@
 import { readFile, access } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { isPhaseAPublish } from "./diet-pending.mjs";
+import { hasDietSourceContent, isPhaseAPublish, isDietDisclaimerMismatch } from "./diet-pending.mjs";
 import { isXUnavailable, X_UNAVAILABLE_ADMIN_MESSAGE } from "./x-research-policy.mjs";
 import { countTopicBullets, isTitleReady, countTopicArcLines, countTopicDietTimeline, countDietTimelineEntries, isMatrixTopicRelevant, isMatrixTopicConsistent, isConclusionQuality, isDietTimelineTopicOk, textStronglyMatchesTopic } from "./topic-relevance.mjs";
 import { isDietVoice, bulletsDistinctFrom, isSpeechFragment } from "./diet-voice.mjs";
@@ -29,6 +29,7 @@ export const CHECK_LABELS = {
   B5_writer_voice: { label: "第三者目線", todo: "議事録口調（お尋ね・私自身・御党）を除去" },
   C1_summaryBullets: { label: "要点", todo: "summaryBullets を3点以上" },
   C2_evidence_distinct: { label: "根拠の独自性", todo: "根拠は結論と同文禁止" },
+  C3_source_match: { label: "出典ラベル一致", todo: "国会議事録なし案件で国会注記を除去" },
   D1_arcSummary: { label: "経緯", todo: "日付付き経緯を3行以上" },
   D2_arc_topic: { label: "経緯の話題", todo: "経緯3行以上が案件キーワードと一致" },
   E1_timeline_count: { label: "タイムライン", todo: "出来事を6件以上（X3+国会3）" },
@@ -144,6 +145,18 @@ export function checkCasePage(article, opts = {}) {
     "C2_evidence_distinct",
     bulletsDistinctFrom(bullets, sbTexts),
     bulletsDistinctFrom(bullets, sbTexts) ? "結論と別文" : "根拠が結論のコピー",
+  );
+  const sourceMatchOk = !isDietDisclaimerMismatch(article);
+  add(
+    "C3_source_match",
+    sourceMatchOk,
+    sourceMatchOk
+      ? article.category && article.category !== "国会"
+        ? "報道・公開情報（国会TLなし）"
+        : hasDietSourceContent(article)
+          ? "国会議事録あり"
+          : "注記と出典が一致"
+      : "国会議事録なしなのに disclaimer/plain に国会注記あり",
   );
 
   // D. 経緯

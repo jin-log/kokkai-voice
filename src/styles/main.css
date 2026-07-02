@@ -5079,6 +5079,11 @@ body.has-progress-strip {
 }
 
 .admin-row--live { border-left: 3px solid #22c55e; }
+.admin-row--special {
+  border-left: 3px solid #f59e0b;
+  box-shadow: inset 0 0 0 1px #fde68a;
+}
+.admin-row--live.admin-row--special { border-left-color: #f59e0b; }
 .admin-row--draft { border-left: 3px solid #3b82f6; }
 .admin-row--quality-ng { box-shadow: inset 0 0 0 1px #fecaca; }
 .admin-row--hidden { opacity: 0.7; }
@@ -5166,11 +5171,18 @@ body.has-progress-strip {
 
 .admin-row__badge--draft { background: #dbeafe; color: #1e40af; }
 .admin-row__badge--live { background: #dcfce7; color: #14532d; }
+.admin-row__badge--special {
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  color: #92400e;
+  font-weight: 800;
+  border: 1px solid #f59e0b;
+}
 .admin-row__badge--ng { background: #fee2e2; color: #991b1b; }
 .admin-row__badge--state { font-weight: 700; }
 .admin-row__badge--state-action { background: #fef3c7; color: #92400e; }
 .admin-row__badge--state-draft { background: #e0e7ff; color: #3730a3; }
 .admin-row__badge--state-live { background: #dcfce7; color: #14532d; }
+.admin-row__badge--state-special { background: #fef3c7; color: #92400e; }
 .admin-row__badge--state-hidden { background: #f3f4f6; color: #4b5563; }
 .admin-row__badge--x { background: #fef3c7; color: #92400e; }
 
@@ -6597,6 +6609,17 @@ body.has-progress-strip {
   font-size: 0.78rem;
   color: #92400e;
   background: #fffbeb;
+  border-radius: 4px;
+}
+
+.admin-row__special-note {
+  margin: 0.35rem 0 0;
+  padding: 0.35rem 0.5rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #92400e;
+  background: #fffbeb;
+  border: 1px solid #fde68a;
   border-radius: 4px;
 }
 

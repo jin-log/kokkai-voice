@@ -39,6 +39,13 @@ export const STATUS_DEFINITIONS = [
     autoRevert: "—",
   },
   {
+    id: "special",
+    label: "特別公開",
+    meaning: "公開中だがゲート×・品質NG・①〜④未完了など、完全合格ではない。",
+    autoFix: "巡回が改善を試行（公開は維持）",
+    autoRevert: "自動で非公開にはしない",
+  },
+  {
     id: "hidden",
     label: "非表示",
     meaning: "トップ・一覧から除外。データは残る。",
@@ -83,6 +90,10 @@ export function buildStatusExplain(s, article) {
   if (s.publishState === "live") {
     const when = article.publishedAt ? activityWhenShort(article.publishedAt) : "";
     const by = article.publishedBy === "owner" ? "手動公開" : "公開済";
+    if (s.specialPublish) {
+      const why = s.specialPublishSummary ? `（${s.specialPublishSummary}）` : "";
+      return `特別公開${why} — ルール未達のまま /case/ 掲載中`;
+    }
     const q = s.needsQualityFix ? "。品質NGバッジあり（公開は継続）" : "";
     const titleWarn = s.titleAnswerOk === false ? "。⚠ 1行目がタイトルに未回答（非表示推奨）" : "";
     return `${by}${when ? ` ${when}` : ""}${q}${titleWarn}`;

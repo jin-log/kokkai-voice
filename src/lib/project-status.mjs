@@ -5,6 +5,7 @@
 import { readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { auditArticleQuality, isArticleFullyReady } from "./article-quality.mjs";
+import { computeSpecialPublish } from "./special-publish.mjs";
 import { assessTitleOpeningAnswer } from "./publish-policy.mjs";
 import { buildAgentTasksForArticle, agentForCheckId } from "./agent-tasks.mjs";
 import { checkCasePageWithFiles, root, blockerToHuman } from "./page-ready.mjs";
@@ -190,7 +191,12 @@ export async function computeProjectStatus() {
   const patrolRuntime = await loadPatrolRuntime();
 
   for (const slug of activeSlugs) {
-    const article = await loadArticle(slug);
+    let article;
+    try {
+      article = await loadArticle(slug);
+    } catch {
+      continue;
+    }
     const gate = await checkCasePageWithFiles(article);
     let policyMatrix = null;
     try {
@@ -217,6 +223,11 @@ export async function computeProjectStatus() {
     const quality = auditArticleQuality(article);
     const agentTasks = buildAgentTasksForArticle(article, gate);
     const fullyReady = isArticleFullyReady(article, gate);
+    const special = computeSpecialPublish(article, gate, quality, {
+      titleAnswerOk: titleAnswer.ok,
+      pipelinePreOk,
+      fullyReady,
+    });
 
     await backfillArticleActivity(slug, article);
     const activityRaw = await getArticleActivity(slug, 10);
@@ -265,6 +276,8 @@ export async function computeProjectStatus() {
         pipeline.length,
       ),
       published: pageReady && !article.adminHidden,
+      specialPublish: special.specialPublish,
+      specialPublishSummary: special.summary,
       publishGateOk,
       pipelinePreOk,
       titleAnswerOk: titleAnswer.ok,
@@ -289,6 +302,8 @@ export async function computeProjectStatus() {
           workItems,
           needsQualityFix: !quality.ok,
           titleAnswerOk: titleAnswer.ok,
+          specialPublish: special.specialPublish,
+          specialPublishSummary: special.summary,
         },
         article,
       ),
@@ -307,7 +322,17 @@ export async function computeProjectStatus() {
     });
   }
 
-  const articles = await Promise.all(activeSlugs.map((s) => loadArticle(s)));
+  const articles = (
+    await Promise.all(
+      activeSlugs.map(async (slug) => {
+        try {
+          return await loadArticle(slug);
+        } catch {
+          return null;
+        }
+      }),
+    )
+  ).filter(Boolean);
   const published = (await filterPublishable(articles)).length;
 
   const overallGoldPct = pct(
@@ -320,6 +345,7 @@ export async function computeProjectStatus() {
   );
 
   const qualityFailed = slugs.filter((s) => !s.qualityOk).length;
+  const specialPublishCount = slugs.filter((s) => s.specialPublish).length;
 
   let patrolState = null;
   try {
@@ -353,6 +379,7 @@ export async function computeProjectStatus() {
     overallGoldPct,
     overallGatePct,
     qualityFailed,
+    specialPublishCount,
     automationPolicy: AUTOMATION_POLICY,
     statusDefinitions: STATUS_DEFINITIONS,
     patrolHealth,
@@ -363,7 +390,10 @@ export async function computeProjectStatus() {
 /** 管理画面タブ: 公開状態ベース（品質NGはバッジ表示・タブは動かさない） */
 export function sortSlugsForAdminPanel(slugs) {
   const rank = (s) => {
-    if (s.publishState === "live" && !s.adminHidden) return s.needsQualityFix ? 35 : 40;
+    if (s.publishState === "live" && !s.adminHidden) {
+      if (s.specialPublish) return 38;
+      return s.needsQualityFix ? 35 : 40;
+    }
     if (s.adminHidden) return 30;
     if (s.publishState === "draft") return 20;
     return 10;

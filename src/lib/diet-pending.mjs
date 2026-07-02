@@ -27,6 +27,30 @@ export function showsDietPendingUI(article) {
   return article.dietPending === true;
 }
 
+/** 国会議事録（kokkai.ndl.go.jp）を根拠に含む案件 */
+export function hasDietSourceContent(article) {
+  if (hasPrimaryDietSpeech(article)) return true;
+  return countDietSpeeches(article) >= 1;
+}
+
+const DIET_DISCLAIMER_RE = /国会議事録|国会で語られ|国会答弁|国会発言/;
+
+/** disclaimer / plainExplanation が国会根拠を示すのに議事録が無い */
+export function isDietDisclaimerMismatch(article) {
+  if (hasDietSourceContent(article) || article.dietPending === true) {
+    return false;
+  }
+  const texts = [
+    article.nowSummary?.disclaimer,
+    article.plainExplanation,
+  ].filter(Boolean);
+  return texts.some((t) => {
+    const s = String(t);
+    if (s.includes("国会議事録以外")) return false;
+    return DIET_DISCLAIMER_RE.test(s);
+  });
+}
+
 /** 公開ゲート緩和（国会なし先行公開） */
 export function isPhaseAPublish(article) {
   return article.dietPending === true && !isDietDataComplete(article);

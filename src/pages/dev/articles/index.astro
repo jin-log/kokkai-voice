@@ -1,12 +1,12 @@
 ---
 import AdminShell from "../../../components/admin/AdminShell.astro";
 import AdminArticleRow from "../../../components/admin/AdminArticleRow.astro";
-import { loadProjectStatus, sortSlugsForAdminPanel, adminSlugFilter } from "../../../lib/project-status.mjs";
+import { computeProjectStatus, sortSlugsForAdminPanel, adminSlugFilter } from "../../../lib/project-status.mjs";
 import { loadPatrolRuntime } from "../../../lib/patrol-runtime.mjs";
 import { policyCategoryLabel, sortPolicyCategories } from "../../../lib/article-categories.mjs";
 import { STATUS_DEFINITIONS, AUTOMATION_POLICY, automationModeLabel } from "../../../lib/admin-status-guide.mjs";
 
-const status = await loadProjectStatus().catch(() => null);
+const status = await computeProjectStatus().catch(() => null);
 const patrol = await loadPatrolRuntime();
 const adminSlugs = status ? sortSlugsForAdminPanel(status.slugs) : [];
 const activeSlug = status?.slugs?.find((s) => s.runState === "active" || s.slug === patrol.activeSlug);
@@ -15,6 +15,7 @@ const statusCounts = {
   action: 0,
   draft: 0,
   live: 0,
+  special: 0,
   hidden: 0,
   quality: 0,
   stall: 0,
@@ -25,6 +26,7 @@ const categoryCounts = {};
 for (const s of adminSlugs) {
   const f = adminSlugFilter(s);
   if (f in statusCounts) statusCounts[f] += 1;
+  if (s.specialPublish) statusCounts.special += 1;
   if (!s.qualityOk) statusCounts.quality += 1;
   if (s.stall?.stalled) statusCounts.stall += 1;
   const cat = policyCategoryLabel(s.category);
@@ -75,7 +77,8 @@ const policyCategories = Object.keys(categoryCounts).sort(sortPolicyCategories);
           </tbody>
         </table>
         <p class="admin-guide__note">
-          <strong>品質NG</strong>はタブでもバッジでも、公開状態とは別です。公開中でもNGバッジが付くことがあります。
+          <strong>品質NG</strong>はタブでもバッジでも、公開状態とは別です。
+          <strong>◎ 特別公開</strong>（琥珀色）はゲート未達のまま /case/ に載っている記事です。
         </p>
         <table class="admin-guide__table admin-guide__table--auto">
           <caption>何が自動で、何が手動か</caption>
@@ -102,6 +105,7 @@ const policyCategories = Object.keys(categoryCounts).sort(sortPolicyCategories);
 
   <section class="admin-dash__legend admin-dash__legend--compact" aria-label="作業状態">
     <p class="admin-dash__legend-inline">
+      <span class="admin-row__badge admin-row__badge--special admin-dash__legend-chip">◎ 特別公開</span>
       <span class="admin-row__work-item is-active admin-dash__legend-chip">
         <span class="admin-row__work-icon" aria-hidden="true"></span>処理中
       </span>
@@ -165,6 +169,9 @@ const policyCategories = Object.keys(categoryCounts).sort(sortPolicyCategories);
         </button>
         <button type="button" class="admin-filter__pill" data-filter="live">
           公開済み <span class="admin-filter__pill-n">{statusCounts.live}</span>
+        </button>
+        <button type="button" class="admin-filter__pill" data-filter="special">
+          特別公開 <span class="admin-filter__pill-n">{statusCounts.special}</span>
         </button>
         <button type="button" class="admin-filter__pill" data-filter="hidden">
           非表示 <span class="admin-filter__pill-n">{statusCounts.hidden}</span>
@@ -254,12 +261,21 @@ const policyCategories = Object.keys(categoryCounts).sort(sortPolicyCategories);
     return "action";
   }
 
-  const FILTER_LABELS = { action: "要対応", draft: "公開待ち", live: "公開済み", hidden: "非表示", quality: "品質NG", stall: "ループ" };
+  const FILTER_LABELS = {
+    action: "要対応",
+    draft: "公開待ち",
+    live: "公開済み",
+    special: "特別公開",
+    hidden: "非表示",
+    quality: "品質NG",
+    stall: "ループ",
+  };
 
   function updateFilterCounts(slugs) {
-    const counts = { action: 0, draft: 0, live: 0, hidden: 0, quality: 0, stall: 0, all: slugs.length };
+    const counts = { action: 0, draft: 0, live: 0, special: 0, hidden: 0, quality: 0, stall: 0, all: slugs.length };
     for (const s of slugs) {
       counts[adminSlugFilterFrom(s)] += 1;
+      if (s.specialPublish) counts.special += 1;
       if (!s.qualityOk) counts.quality += 1;
       if (s.stall?.stalled) counts.stall += 1;
     }
@@ -322,14 +338,17 @@ const policyCategories = Object.keys(categoryCounts).sort(sortPolicyCategories);
     const badges = row.querySelector(".admin-row__badges");
     if (!badges) return;
     const f = adminSlugFilterFrom(s);
+    const stateFilter = s.specialPublish ? "special" : f;
     let stateBadge = badges.querySelector(".admin-row__badge--state");
     if (!stateBadge) {
       stateBadge = document.createElement("span");
       stateBadge.className = "admin-row__badge admin-row__badge--state";
       badges.prepend(stateBadge);
     }
-    stateBadge.className = `admin-row__badge admin-row__badge--state admin-row__badge--state-${f}`;
-    stateBadge.textContent = FILTER_LABELS[f] || f;
+    stateBadge.className = `admin-row__badge admin-row__badge--state admin-row__badge--state-${stateFilter}`;
+    stateBadge.textContent = s.specialPublish ? "特別公開" : (FILTER_LABELS[f] || f);
+    row.classList.toggle("admin-row--special", Boolean(s.specialPublish));
+    row.dataset.specialPublish = s.specialPublish ? "1" : "0";
     row.classList.toggle("admin-row--quality-ng", s.qualityOk === false);
     row.classList.toggle("admin-row--stalled", Boolean(s.stall?.stalled));
     row.classList.toggle("admin-row--active", (s.workItems ?? []).some((w) => w.state === "active"));
@@ -343,6 +362,26 @@ const policyCategories = Object.keys(categoryCounts).sort(sortPolicyCategories);
         badges.appendChild(stallBadge);
       }
     } else if (stallBadge) stallBadge.remove();
+
+    let liveBadge = badges.querySelector(".admin-row__badge--live");
+    let specialBadge = badges.querySelector(".admin-row__badge--special");
+    if (s.publishState === "live" && !s.specialPublish) {
+      if (!liveBadge) {
+        liveBadge = document.createElement("span");
+        liveBadge.className = "admin-row__badge admin-row__badge--live";
+        liveBadge.textContent = "公開中";
+        badges.appendChild(liveBadge);
+      }
+    } else if (liveBadge) liveBadge.remove();
+    if (s.specialPublish) {
+      if (!specialBadge) {
+        specialBadge = document.createElement("span");
+        specialBadge.className = "admin-row__badge admin-row__badge--special";
+        specialBadge.textContent = "◎ 特別公開";
+        badges.appendChild(specialBadge);
+      }
+      specialBadge.title = s.specialPublishSummary || "ゲート未達のまま公開中";
+    } else if (specialBadge) specialBadge.remove();
   }
 
   function renderWorkItems(row, workItems) {
@@ -400,7 +439,15 @@ const policyCategories = Object.keys(categoryCounts).sort(sortPolicyCategories);
     const chips = [];
     if (q) chips.push(`検索: ${q}`);
     if (statusFilter !== "all") {
-      const labels = { action: "要対応", draft: "公開待ち", live: "公開済み", hidden: "非表示", quality: "品質NG", stall: "ループ" };
+      const labels = {
+        action: "要対応",
+        draft: "公開待ち",
+        live: "公開済み",
+        special: "特別公開",
+        hidden: "非表示",
+        quality: "品質NG",
+        stall: "ループ",
+      };
       chips.push(`状態: ${labels[statusFilter] || statusFilter}`);
     }
     if (categoryFilter) chips.push(`政策: ${categoryFilter}`);
@@ -438,6 +485,7 @@ const policyCategories = Object.keys(categoryCounts).sort(sortPolicyCategories);
       }
       if (statusFilter === "quality") show = show && qualityNg;
       else if (statusFilter === "stall") show = show && row.dataset.stall === "1";
+      else if (statusFilter === "special") show = show && row.dataset.specialPublish === "1";
       else if (statusFilter !== "all") show = show && f === statusFilter;
       if (categoryFilter && cat !== categoryFilter) show = false;
       row.hidden = !show;
