@@ -106,7 +106,7 @@ export function beatsForArticle(article) {
       telop: splitTelop(b1, 12),
       narr: b1,
     },
-    ctaBeat(article.slug, kw),
+    ctaBeat(article.slug, article.searchKeyword || article.category),
   ];
 }
 
