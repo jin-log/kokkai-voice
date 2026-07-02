@@ -4,7 +4,7 @@ import { SYMBOL_LEGEND, symbolTone, isValidSymbol, normalizeSymbol } from "./sym
 
 export { SYMBOL_LEGEND, symbolTone, isValidSymbol, normalizeSymbol };
 
-export const ASSET_V = "20260702a";
+export const ASSET_V = "20260702b";
 
 export function formatDate(iso) {
   if (!iso) return "";
