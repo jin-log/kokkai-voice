@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-02T04:32:18.735Z",
+  "generatedAt": "2026-07-02T04:33:29.630Z",
   "strategy": "quality-first",
   "activeCount": 39,
   "parkedCount": 0,
@@ -86,6 +86,34 @@
       "autoRevert": "公開/非公開は変えない"
     }
   ],
+  "patrolHealth": {
+    "status": "stalled",
+    "statusLabel": "進行停止（ループ中）",
+    "paused": false,
+    "pauseReason": null,
+    "pauseDetail": null,
+    "globalStall": null,
+    "slugStalls": [
+      {
+        "stalled": true,
+        "slug": "shoshika",
+        "shortTitle": "【少子化対策】支援策の内容と出生率の動向",
+        "goldPct": 50,
+        "checkId": "B3_topic",
+        "checkLabel": "話題一致",
+        "ownerHint": "要約が searchKeyword と一致（2行以上）",
+        "agent": "writer",
+        "attempts": 3,
+        "lastAt": "2026-07-02T04:19:39.073Z",
+        "loopLine": "writer → 話題一致 → exit 1/1/1（3回連続）"
+      }
+    ],
+    "stalledCount": 1,
+    "message": "1 記事が同じチェックで失敗ループ中（自動では越えられない壁の可能性）",
+    "analyzedAt": "2026-07-02T04:33:29.626Z",
+    "lastPatrolCycleAt": "2026-07-02T04:33:29.030Z",
+    "patrolRunning": true
+  },
   "slugs": [
     {
       "slug": "case-mr0jbdpc",
@@ -277,7 +305,8 @@
           "status": "未生成",
           "done": false
         }
-      ]
+      ],
+      "stall": null
     },
     {
       "slug": "case-mqzxj4ro",
@@ -469,7 +498,8 @@
           "status": "未生成",
           "done": false
         }
-      ]
+      ],
+      "stall": null
     },
     {
       "slug": "case-mqzxgs3f",
@@ -661,7 +691,8 @@
           "status": "YT YT非公開 07/02 12:23",
           "done": true
         }
-      ]
+      ],
+      "stall": null
     },
     {
       "slug": "zeihikaku-kojo",
@@ -847,7 +878,7 @@
         {
           "id": "D2_arc_topic",
           "label": "経緯の話題",
-          "state": "active"
+          "state": "blocked"
         },
         {
           "id": "E4_timeline_diet_topic",
@@ -936,7 +967,8 @@
           "status": "未生成",
           "done": false
         }
-      ]
+      ],
+      "stall": null
     },
     {
       "slug": "expo2025-kessan",
@@ -1122,7 +1154,7 @@
         {
           "id": "D2_arc_topic",
           "label": "経緯の話題",
-          "state": "active"
+          "state": "blocked"
         },
         {
           "id": "E4_timeline_diet_topic",
@@ -1219,7 +1251,8 @@
           "status": "未生成",
           "done": false
         }
-      ]
+      ],
+      "stall": null
     },
     {
       "slug": "minimum-wage-2026",
@@ -1472,7 +1505,8 @@
           "status": "未生成",
           "done": false
         }
-      ]
+      ],
+      "stall": null
     },
     {
       "slug": "pension-kuriage-70",
@@ -1674,6 +1708,48 @@
       "patrolFixing": true,
       "activity": [
         {
+          "at": "2026-07-02T04:33:28.493Z",
+          "when": "07/02 13:33",
+          "type": "patrol.done",
+          "actor": "patrol",
+          "line": "巡回処理完了（巡回） — 完成度 50% / 品質 OK"
+        },
+        {
+          "at": "2026-07-02T04:33:27.394Z",
+          "when": "07/02 13:33",
+          "type": "content.updated",
+          "actor": "patrol",
+          "line": "content.updated（巡回） — 巡回でコンテンツ更新（公開は維持）"
+        },
+        {
+          "at": "2026-07-02T04:32:57.129Z",
+          "when": "07/02 13:32",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — writer / G5_parties_symbol"
+        },
+        {
+          "at": "2026-07-02T04:32:56.004Z",
+          "when": "07/02 13:32",
+          "type": "content.updated",
+          "actor": "patrol",
+          "line": "content.updated（巡回） — 巡回でコンテンツ更新（公開は維持）"
+        },
+        {
+          "at": "2026-07-02T04:32:25.016Z",
+          "when": "07/02 13:32",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — writer / G5_parties_symbol"
+        },
+        {
+          "at": "2026-07-02T04:32:23.621Z",
+          "when": "07/02 13:32",
+          "type": "content.updated",
+          "actor": "patrol",
+          "line": "content.updated（巡回） — 巡回でコンテンツ更新（公開は維持）"
+        },
+        {
           "at": "2026-07-02T04:32:18.357Z",
           "when": "07/02 13:32",
           "type": "patrol.done",
@@ -1696,48 +1772,6 @@
         },
         {
           "at": "2026-07-02T04:31:49.174Z",
-          "when": "07/02 13:31",
-          "type": "content.updated",
-          "actor": "patrol",
-          "line": "content.updated（巡回） — 巡回でコンテンツ更新（公開は維持）"
-        },
-        {
-          "at": "2026-07-02T04:31:39.798Z",
-          "when": "07/02 13:31",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — writer / G5_parties_symbol"
-        },
-        {
-          "at": "2026-07-02T04:31:38.918Z",
-          "when": "07/02 13:31",
-          "type": "content.updated",
-          "actor": "patrol",
-          "line": "content.updated（巡回） — 巡回でコンテンツ更新（公開は維持）"
-        },
-        {
-          "at": "2026-07-02T04:31:18.351Z",
-          "when": "07/02 13:31",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — writer / G5_parties_symbol"
-        },
-        {
-          "at": "2026-07-02T04:31:16.978Z",
-          "when": "07/02 13:31",
-          "type": "content.updated",
-          "actor": "patrol",
-          "line": "content.updated（巡回） — 巡回でコンテンツ更新（公開は維持）"
-        },
-        {
-          "at": "2026-07-02T04:31:08.801Z",
-          "when": "07/02 13:31",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — writer / G5_parties_symbol"
-        },
-        {
-          "at": "2026-07-02T04:31:07.968Z",
           "when": "07/02 13:31",
           "type": "content.updated",
           "actor": "patrol",
@@ -1769,7 +1803,8 @@
           "status": "未生成",
           "done": false
         }
-      ]
+      ],
+      "stall": null
     },
     {
       "slug": "denki-gas-genmen",
@@ -1955,7 +1990,7 @@
         {
           "id": "B3_topic",
           "label": "話題一致",
-          "state": "blocked"
+          "state": "active"
         },
         {
           "id": "E4_timeline_diet_topic",
@@ -2044,7 +2079,8 @@
           "status": "未生成",
           "done": false
         }
-      ]
+      ],
+      "stall": null
     },
     {
       "slug": "gakushu-shien-75000",
@@ -2235,7 +2271,7 @@
         {
           "id": "D2_arc_topic",
           "label": "経緯の話題",
-          "state": "active"
+          "state": "blocked"
         },
         {
           "id": "E4_timeline_diet_topic",
@@ -2314,7 +2350,8 @@
           "status": "未生成",
           "done": false
         }
-      ]
+      ],
+      "stall": null
     },
     {
       "slug": "noto-fukko-budget",
@@ -2611,7 +2648,8 @@
           "status": "未生成",
           "done": false
         }
-      ]
+      ],
+      "stall": null
     },
     {
       "slug": "boei-tokubetsuzei",
@@ -2814,12 +2852,12 @@
         {
           "id": "B3_topic",
           "label": "話題一致",
-          "state": "blocked"
+          "state": "active"
         },
         {
           "id": "D2_arc_topic",
           "label": "経緯の話題",
-          "state": "active"
+          "state": "blocked"
         },
         {
           "id": "E4_timeline_diet_topic",
@@ -2908,7 +2946,8 @@
           "status": "未生成",
           "done": false
         }
-      ]
+      ],
+      "stall": null
     },
     {
       "slug": "invoice-menzei-2026",
@@ -3094,7 +3133,7 @@
         {
           "id": "B3_topic",
           "label": "話題一致",
-          "state": "blocked"
+          "state": "active"
         },
         {
           "id": "E4_timeline_diet_topic",
@@ -3183,7 +3222,8 @@
           "status": "未生成",
           "done": false
         }
-      ]
+      ],
+      "stall": null
     },
     {
       "slug": "teigaku-kyufu-2024",
@@ -3436,7 +3476,8 @@
           "status": "未生成",
           "done": false
         }
-      ]
+      ],
+      "stall": null
     },
     {
       "slug": "shussho-budget-seika",
@@ -3725,7 +3766,8 @@
           "status": "YT YT非公開 06/30 07:11",
           "done": true
         }
-      ]
+      ],
+      "stall": null
     },
     {
       "slug": "fukushuto-koso",
@@ -3905,6 +3947,34 @@
       "patrolFixing": false,
       "activity": [
         {
+          "at": "2026-07-02T04:33:09.813Z",
+          "when": "07/02 13:33",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — writer / G5_parties_symbol"
+        },
+        {
+          "at": "2026-07-02T04:33:08.859Z",
+          "when": "07/02 13:33",
+          "type": "content.updated",
+          "actor": "patrol",
+          "line": "content.updated（巡回） — 巡回でコンテンツ更新（公開は維持）"
+        },
+        {
+          "at": "2026-07-02T04:32:36.565Z",
+          "when": "07/02 13:32",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — writer / G5_parties_symbol"
+        },
+        {
+          "at": "2026-07-02T04:32:35.546Z",
+          "when": "07/02 13:32",
+          "type": "content.updated",
+          "actor": "patrol",
+          "line": "content.updated（巡回） — 巡回でコンテンツ更新（公開は維持）"
+        },
+        {
           "at": "2026-07-02T04:32:03.051Z",
           "when": "07/02 13:32",
           "type": "patrol.start",
@@ -3972,7 +4042,8 @@
           "status": "未生成",
           "done": false
         }
-      ]
+      ],
+      "stall": null
     },
     {
       "slug": "osaka-to-metropolis",
@@ -4119,12 +4190,12 @@
         }
       ],
       "blockerCount": 2,
-      "runState": "active",
+      "runState": "idle",
       "workItems": [
         {
           "id": "D2_arc_topic",
           "label": "経緯の話題",
-          "state": "active"
+          "state": "blocked"
         },
         {
           "id": "G5_parties_symbol",
@@ -4171,13 +4242,41 @@
       },
       "xUnavailable": true,
       "xResearchStatus": "exhausted",
-      "statusExplain": "巡回が自動修正中 — ◌ が今処理している項目",
+      "statusExplain": "公開済 06/29 15:31",
       "publishedBy": null,
       "publishedAt": "2026-06-29T06:31:08.845Z",
       "adminHiddenBy": null,
       "adminHiddenAt": null,
       "patrolFixing": true,
       "activity": [
+        {
+          "at": "2026-07-02T04:33:10.612Z",
+          "when": "07/02 13:33",
+          "type": "patrol.done",
+          "actor": "patrol",
+          "line": "巡回処理完了（巡回） — 完成度 33% / 品質 OK"
+        },
+        {
+          "at": "2026-07-02T04:33:09.356Z",
+          "when": "07/02 13:33",
+          "type": "content.updated",
+          "actor": "patrol",
+          "line": "content.updated（巡回） — 巡回でコンテンツ更新（公開は維持）"
+        },
+        {
+          "at": "2026-07-02T04:32:34.909Z",
+          "when": "07/02 13:32",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — writer / D2_arc_topic"
+        },
+        {
+          "at": "2026-07-02T04:32:33.790Z",
+          "when": "07/02 13:32",
+          "type": "content.updated",
+          "actor": "patrol",
+          "line": "content.updated（巡回） — 巡回でコンテンツ更新（公開は維持）"
+        },
         {
           "at": "2026-07-02T04:31:59.584Z",
           "when": "07/02 13:31",
@@ -4219,34 +4318,6 @@
           "type": "content.updated",
           "actor": "patrol",
           "line": "content.updated（巡回） — 巡回でコンテンツ更新（公開は維持）"
-        },
-        {
-          "at": "2026-07-02T04:31:01.878Z",
-          "when": "07/02 13:31",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — writer / D2_arc_topic"
-        },
-        {
-          "at": "2026-07-02T04:31:00.767Z",
-          "when": "07/02 13:31",
-          "type": "content.updated",
-          "actor": "patrol",
-          "line": "content.updated（巡回） — 巡回でコンテンツ更新（公開は維持）"
-        },
-        {
-          "at": "2026-07-02T04:30:44.886Z",
-          "when": "07/02 13:30",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — writer / D2_arc_topic"
-        },
-        {
-          "at": "2026-07-02T04:30:43.280Z",
-          "when": "07/02 13:30",
-          "type": "content.updated",
-          "actor": "patrol",
-          "line": "content.updated（巡回） — 巡回でコンテンツ更新（公開は維持）"
         }
       ],
       "distribution": [
@@ -4274,7 +4345,8 @@
           "status": "未生成",
           "done": false
         }
-      ]
+      ],
+      "stall": null
     },
     {
       "slug": "fuhou-immin-trend",
@@ -4482,7 +4554,7 @@
         {
           "id": "D2_arc_topic",
           "label": "経緯の話題",
-          "state": "active"
+          "state": "blocked"
         },
         {
           "id": "E4_timeline_diet_topic",
@@ -4539,7 +4611,7 @@
       },
       "xUnavailable": true,
       "xResearchStatus": "exhausted",
-      "statusExplain": "巡回が自動修正中 — ◌ が今処理している項目",
+      "statusExplain": "手動公開 07/02 05:38",
       "publishedBy": "owner",
       "publishedAt": "2026-07-01T20:38:48.641Z",
       "adminHiddenBy": null,
@@ -4642,7 +4714,8 @@
           "status": "未生成",
           "done": false
         }
-      ]
+      ],
+      "stall": null
     },
     {
       "slug": "tokyo-solar-panel",
@@ -4806,12 +4879,12 @@
         }
       ],
       "blockerCount": 3,
-      "runState": "idle",
+      "runState": "active",
       "workItems": [
         {
           "id": "B3_topic",
           "label": "話題一致",
-          "state": "blocked"
+          "state": "active"
         },
         {
           "id": "E4_timeline_diet_topic",
@@ -4863,13 +4936,48 @@
       },
       "xUnavailable": true,
       "xResearchStatus": "exhausted",
-      "statusExplain": "公開済 06/29 15:31",
+      "statusExplain": "巡回が自動修正中 — ◌ が今処理している項目",
       "publishedBy": null,
       "publishedAt": "2026-06-29T06:31:08.986Z",
       "adminHiddenBy": null,
       "adminHiddenAt": null,
       "patrolFixing": true,
       "activity": [
+        {
+          "at": "2026-07-02T04:33:20.121Z",
+          "when": "07/02 13:33",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — writer / B3_topic"
+        },
+        {
+          "at": "2026-07-02T04:33:19.043Z",
+          "when": "07/02 13:33",
+          "type": "content.updated",
+          "actor": "patrol",
+          "line": "content.updated（巡回） — 巡回でコンテンツ更新（公開は維持）"
+        },
+        {
+          "at": "2026-07-02T04:33:10.622Z",
+          "when": "07/02 13:33",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — writer / B3_topic"
+        },
+        {
+          "at": "2026-07-02T04:32:46.076Z",
+          "when": "07/02 13:32",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — writer / B3_topic"
+        },
+        {
+          "at": "2026-07-02T04:32:44.496Z",
+          "when": "07/02 13:32",
+          "type": "content.updated",
+          "actor": "patrol",
+          "line": "content.updated（巡回） — 巡回でコンテンツ更新（公開は維持）"
+        },
         {
           "at": "2026-07-02T04:32:12.360Z",
           "when": "07/02 13:32",
@@ -4904,41 +5012,6 @@
           "type": "content.updated",
           "actor": "patrol",
           "line": "content.updated（巡回） — 巡回でコンテンツ更新（公開は維持）"
-        },
-        {
-          "at": "2026-07-02T04:30:09.045Z",
-          "when": "07/02 13:30",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — writer / B3_topic"
-        },
-        {
-          "at": "2026-07-02T04:30:07.728Z",
-          "when": "07/02 13:30",
-          "type": "content.updated",
-          "actor": "patrol",
-          "line": "content.updated（巡回） — 巡回でコンテンツ更新（公開は維持）"
-        },
-        {
-          "at": "2026-07-02T04:29:36.309Z",
-          "when": "07/02 13:29",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — writer / B3_topic"
-        },
-        {
-          "at": "2026-07-02T04:29:35.021Z",
-          "when": "07/02 13:29",
-          "type": "content.updated",
-          "actor": "patrol",
-          "line": "content.updated（巡回） — 巡回でコンテンツ更新（公開は維持）"
-        },
-        {
-          "at": "2026-07-02T04:29:30.649Z",
-          "when": "07/02 13:29",
-          "type": "patrol.done",
-          "actor": "patrol",
-          "line": "巡回処理完了（巡回） — 完成度 33% / 品質 OK"
         }
       ],
       "distribution": [
@@ -4966,7 +5039,8 @@
           "status": "未生成",
           "done": false
         }
-      ]
+      ],
+      "stall": null
     },
     {
       "slug": "case-mqwdrley",
@@ -5192,7 +5266,8 @@
           "status": "未生成",
           "done": false
         }
-      ]
+      ],
+      "stall": null
     },
     {
       "slug": "bouka-taisaku",
@@ -5364,7 +5439,8 @@
           "status": "未生成",
           "done": false
         }
-      ]
+      ],
+      "stall": null
     },
     {
       "slug": "shohizei-genmen",
@@ -5536,7 +5612,8 @@
           "status": "未生成",
           "done": false
         }
-      ]
+      ],
+      "stall": null
     },
     {
       "slug": "boeeihi",
@@ -5700,7 +5777,8 @@
           "status": "未生成",
           "done": false
         }
-      ]
+      ],
+      "stall": null
     },
     {
       "slug": "chingin",
@@ -5904,7 +5982,8 @@
           "status": "未生成",
           "done": false
         }
-      ]
+      ],
+      "stall": null
     },
     {
       "slug": "nenkin",
@@ -6068,7 +6147,8 @@
           "status": "未生成",
           "done": false
         }
-      ]
+      ],
+      "stall": null
     },
     {
       "slug": "gaikokujin-seisaku",
@@ -6240,7 +6320,8 @@
           "status": "未生成",
           "done": false
         }
-      ]
+      ],
+      "stall": null
     },
     {
       "slug": "shoshika",
@@ -6426,12 +6507,12 @@
         {
           "id": "B3_topic",
           "label": "話題一致",
-          "state": "blocked"
+          "state": "active"
         },
         {
           "id": "D2_arc_topic",
           "label": "経緯の話題",
-          "state": "active"
+          "state": "blocked"
         },
         {
           "id": "E4_timeline_diet_topic",
@@ -6510,7 +6591,20 @@
           "status": "生成済・未アップ",
           "done": false
         }
-      ]
+      ],
+      "stall": {
+        "stalled": true,
+        "slug": "shoshika",
+        "shortTitle": "【少子化対策】支援策の内容と出生率の動向",
+        "goldPct": 50,
+        "checkId": "B3_topic",
+        "checkLabel": "話題一致",
+        "ownerHint": "要約が searchKeyword と一致（2行以上）",
+        "agent": "writer",
+        "attempts": 3,
+        "lastAt": "2026-07-02T04:19:39.073Z",
+        "loopLine": "writer → 話題一致 → exit 1/1/1（3回連続）"
+      }
     },
     {
       "slug": "kyoiku-mushoka",
@@ -6682,7 +6776,8 @@
           "status": "未生成",
           "done": false
         }
-      ]
+      ],
+      "stall": null
     },
     {
       "slug": "energy-policy",
@@ -6854,7 +6949,8 @@
           "status": "未生成",
           "done": false
         }
-      ]
+      ],
+      "stall": null
     },
     {
       "slug": "seiji-shikin",
@@ -7026,7 +7122,8 @@
           "status": "未生成",
           "done": false
         }
-      ]
+      ],
+      "stall": null
     },
     {
       "slug": "senkyo-kaikaku",
@@ -7198,7 +7295,8 @@
           "status": "未生成",
           "done": false
         }
-      ]
+      ],
+      "stall": null
     },
     {
       "slug": "kaigo-iryo",
@@ -7362,7 +7460,8 @@
           "status": "未生成",
           "done": false
         }
-      ]
+      ],
+      "stall": null
     },
     {
       "slug": "chiho-sosei",
@@ -7526,7 +7625,8 @@
           "status": "未生成",
           "done": false
         }
-      ]
+      ],
+      "stall": null
     },
     {
       "slug": "hosei-yosan",
@@ -7698,7 +7798,8 @@
           "status": "未生成",
           "done": false
         }
-      ]
+      ],
+      "stall": null
     },
     {
       "slug": "nichigyo",
@@ -7870,7 +7971,8 @@
           "status": "未生成",
           "done": false
         }
-      ]
+      ],
+      "stall": null
     },
     {
       "slug": "casino-ir",
@@ -8042,7 +8144,8 @@
           "status": "未生成",
           "done": false
         }
-      ]
+      ],
+      "stall": null
     },
     {
       "slug": "kenpo",
@@ -8317,7 +8420,8 @@
           "status": "未生成",
           "done": false
         }
-      ]
+      ],
+      "stall": null
     },
     {
       "slug": "tariff-us",
@@ -8481,7 +8585,8 @@
           "status": "未生成",
           "done": false
         }
-      ]
+      ],
+      "stall": null
     },
     {
       "slug": "kishida-resign",
@@ -8653,7 +8758,8 @@
           "status": "未生成",
           "done": false
         }
-      ]
+      ],
+      "stall": null
     },
     {
       "slug": "komei-kokumin",
@@ -8928,7 +9034,8 @@
           "status": "未生成",
           "done": false
         }
-      ]
+      ],
+      "stall": null
     }
   ],
   "deltaGoldPct": 0,
