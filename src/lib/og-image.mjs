@@ -6,10 +6,12 @@
 export function extractOgNumber(text) {
   const t = String(text);
   const m =
-    t.match(/(?:約|およそ)?[\d０-９]+(?:[\.．][\d０-９]+)?(?:兆|億|万)?円/) ||
-    t.match(/(?:約|およそ)?[\d０-９]+(?:[\.．][\d０-９]+)?[%％]/) ||
+    t.match(/(?:約|およそ)?[\d,，０-９]+(?:[\.．][\d,，０-９]+)?(?:兆|億|万)?円/) ||
+    t.match(/(?:約|およそ)?[\d,，０-９]+(?:[\.．][\d,，０-９]+)?万[\d,，０-９]*人/) ||
+    t.match(/(?:約|およそ)?[\d,，０-９]+(?:[\.．][\d,，０-９]+)?(?:兆|億|万)?人/) ||
+    t.match(/(?:約|およそ)?[\d,，０-９]+(?:[\.．][\d,，０-９]+)?[%％]/) ||
     t.match(/(?:約|およそ)?[一二三四五六七八九十百千万]+(?:兆|億|万)?円/);
-  return m ? m[0] : null;
+  return m ? m[0].replace(/,/g, "") : null;
 }
 
 /** @param {string} excerpt */
@@ -29,8 +31,11 @@ export function pickOgPattern(article) {
   if (article.ogPattern && ["title", "hook", "quote", "number"].includes(article.ogPattern)) {
     return article.ogPattern;
   }
-  const bullet = article.nowSummary?.bullets?.[0] || "";
-  if (extractOgNumber(bullet)) return "number";
+  const bullets = article.nowSummary?.bullets ?? [];
+  for (const line of bullets) {
+    if (extractOgNumber(line)) return "number";
+  }
+  const bullet = bullets[0] || "";
   if (bullet) return "hook";
   if (isSubstantiveQuote(article.primarySpeech?.excerpt)) return "quote";
   return "title";
@@ -53,6 +58,7 @@ export function ogImagePaths(slug, assetV = "") {
 export function buildOgAssetBrief(article, assetV = "") {
   const pattern = pickOgPattern(article);
   const paths = ogImagePaths(article.slug, assetV);
+  const ogImageMeta = paths[pattern] || paths.primary;
   return {
     primaryPattern: pattern,
     recommendedForX: paths[pattern] || paths.hook,
@@ -62,6 +68,6 @@ export function buildOgAssetBrief(article, assetV = "") {
       { pattern: "quote", path: paths.quote, use: "国会発言が強いとき" },
       { pattern: "number", path: paths.number, use: "数字・％が刺さるとき" },
     ],
-    ogImageMeta: paths.primary,
+    ogImageMeta,
   };
 }

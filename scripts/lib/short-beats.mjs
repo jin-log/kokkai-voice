@@ -4,19 +4,17 @@
  */
 import {
   commentNarration,
-  commentQuestion,
   commentTelopLines,
 } from "./short-comment-cta.mjs";
 import { buildShortHook } from "../../src/lib/headline-hooks.mjs";
 
-/** @param {string} slug @param {string} [category] */
-function ctaBeat(slug, category) {
-  const q = commentQuestion(slug, category);
+/** @param {string} _slug @param {string} [_category] */
+function ctaBeat(_slug, _category) {
   return {
     id: "cta",
     style: "cta",
     telop: commentTelopLines(),
-    narr: commentNarration(q),
+    narr: commentNarration(),
   };
 }
 
