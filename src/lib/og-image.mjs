@@ -68,6 +68,6 @@ export function buildOgAssetBrief(article, assetV = "") {
       { pattern: "number", path: paths.number, use: "数字・％が刺さるとき" },
     ],
     /** 主パターンは slug.png に焼き込み（generate-og-images） */
-    ogImageMeta: paths.primary,
+    ogImageMeta: paths[pattern] || paths.primary,
   };
 }
