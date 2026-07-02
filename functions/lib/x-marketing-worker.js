@@ -79,17 +79,33 @@ export function caseUrl(slug) {
 }
 
 export function formatDigest(picks) {
-  const lines = [`【${SITE_SHORT} 今日の3選】`, ""];
   const marks = ["①", "②", "③"];
-  picks.forEach((a, i) => {
-    const hook = (a.nowSummary?.bullets?.[0] || "").slice(0, 36);
-    lines.push(`${marks[i]} ${shortTitle(a)}`);
-    if (hook) lines.push(hook);
-    lines.push(caseUrl(a.slug));
-    lines.push("");
-  });
-  lines.push("出典付きで「あの話どうなった？」を追います");
-  return lines.join("\n").trim();
+  const footer = "出典付きで追います";
+  const header = `【${SITE_SHORT} 今日の3選】`;
+  const max = 280;
+
+  function itemHead(title, len) {
+    const m = String(title).match(/^【([^】]+)】(.+)?$/);
+    const raw = m ? `${m[1]}${m[2] ? ` ${m[2]}` : ""}` : title;
+    return raw.length <= len ? raw : `${raw.slice(0, len - 1)}…`;
+  }
+
+  function build(titleLen) {
+    const lines = [header, ""];
+    picks.forEach((a, i) => {
+      lines.push(`${marks[i]} ${itemHead(shortTitle(a), titleLen)}`);
+      lines.push(caseUrl(a.slug));
+      if (i < picks.length - 1) lines.push("");
+    });
+    lines.push("", footer);
+    return lines.join("\n").trim();
+  }
+
+  for (let titleLen = 32; titleLen >= 12; titleLen -= 2) {
+    const text = build(titleLen);
+    if (text.length <= max) return text;
+  }
+  return build(12);
 }
 
 export function formatSingle(article) {
