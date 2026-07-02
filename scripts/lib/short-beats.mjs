@@ -76,6 +76,33 @@ export const F1_BEATS = {
     },
     ctaBeat("shussho-budget-seika", "少子化"),
   ],
+  "case-mqzxgs3f": [
+    {
+      id: "hook",
+      style: "hook",
+      telop: ["スパイ防止法", "なぜまだ成立しない？"],
+      narr: "スパイ防止法、なぜ2026年もまだ成立しない？",
+    },
+    {
+      id: "status",
+      style: "number",
+      telop: ["2026年", "国会で未成立"],
+      narr: "包括的スパイ防止法は、2026年時点でも国会で成立していない。",
+    },
+    {
+      id: "bill",
+      style: "diet",
+      telop: ["国家情報会議", "設置法案は審議中"],
+      narr: "一方、国家情報会議設置法案は内閣委員会で審議に入った。",
+    },
+    {
+      id: "gap",
+      style: "body",
+      telop: ["法制化の射程", "国会で争点に"],
+      narr: "スパイ防止法制と何が別で、何がセットか。国会で争点になっている。",
+    },
+    ctaBeat("case-mqzxgs3f", "スパイ防止法"),
+  ],
 };
 
 /**
