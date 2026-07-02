@@ -1,6 +1,6 @@
 /**
  * コンテンツブロック — 案件タイプ別の表示ON/OFF
- * 非公開記事（pageReady=false または adminHidden）でブロックUIを使う。
+ * プレビュー・本番で同一。contentBlocks / caseType / statsSeries があればブロックUI。
  */
 
 /** @typedef {'policy_debate'|'statistical'|'narrative'|'mixed'} CaseType */
@@ -77,7 +77,11 @@ export function isLiveArticle(article) {
 
 /** @param {import('./articles.mjs').Article} article */
 export function usesContentBlocks(article) {
-  return !isLiveArticle(article);
+  if (article.contentBlocks === true) return true;
+  if (article.caseType && BLOCK_CONFIG[article.caseType]) return true;
+  if (article.slug && SLUG_CASE_TYPE[article.slug]) return true;
+  if (article.statsSeries?.chart?.points?.length) return true;
+  return false;
 }
 
 /**
