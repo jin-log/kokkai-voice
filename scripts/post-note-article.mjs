@@ -5,13 +5,14 @@
  *   node scripts/post-note-article.mjs --slug case-xxx
  *   node scripts/post-note-article.mjs --slug case-xxx --dry-run
  */
-import { mkdir, writeFile } from "node:fs/promises";
+import { mkdir } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { loadArticle } from "../src/lib/articles.mjs";
 import { buildNoteExcerpt } from "../src/lib/promo-generate.mjs";
 import { recordPromoIntro } from "../src/lib/promo-intro-status.mjs";
 import { closePromoBrowser, launchPromoBrowser } from "./lib/promo-browser.mjs";
+import { fillNoteEditorWithEmbeds } from "./lib/note-editor.mjs";
 
 const root = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -29,27 +30,6 @@ if (!slug) {
 }
 
 /** @param {import('playwright').Page} page */
-async function fillNoteEditor(page, note) {
-  await page.goto("https://note.com/notes/new", { waitUntil: "domcontentloaded", timeout: 60_000 });
-  await page.waitForTimeout(2500);
-
-  if (page.url().includes("/login")) {
-    throw new Error("note 未ログイン — npm run browser:login -- note");
-  }
-
-  const titleBox = page.locator(
-    'textarea[placeholder*="タイトル"], [data-testid="title-input"], [placeholder*="タイトル"]',
-  ).first();
-  await titleBox.click({ timeout: 20_000 });
-  await titleBox.fill(note.title);
-
-  const editor = page.locator('[contenteditable="true"][role="textbox"], [contenteditable="true"]').last();
-  await editor.click({ timeout: 15_000 });
-  await editor.fill(note.bodyFree);
-  await page.waitForTimeout(800);
-}
-
-/** @param {import('playwright').Page} page */
 async function clickNotePublish(page) {
   const patterns = [/公開に進む/, /^公開する$/, /投稿する/, /公開する/];
   for (const pattern of patterns) {
@@ -63,7 +43,7 @@ async function clickNotePublish(page) {
     }
   }
 
-  const linkPub = page.locator('a, button').filter({ hasText: /^公開に進む$/ });
+  const linkPub = page.locator("a, button").filter({ hasText: /^公開に進む$/ });
   if (await linkPub.count()) {
     await linkPub.first().click({ timeout: 8000 });
     await page.waitForTimeout(2000);
@@ -90,9 +70,9 @@ async function waitNotePublished(page, timeoutMs = 20_000) {
   return null;
 }
 
-/** @param {import('playwright').Page} page @param {string} slug */
+/** @param {import('playwright').Page} page @param {import('../src/lib/promo-generate.mjs').buildNoteExcerpt extends (...args: any) => infer R ? R : never} note @param {string} slug */
 async function postNoteArticle(page, note, slug) {
-  await fillNoteEditor(page, note);
+  await fillNoteEditorWithEmbeds(page, note);
   await clickNotePublish(page);
 
   const url = await waitNotePublished(page);
@@ -111,7 +91,9 @@ async function main() {
   console.log(`[note] ${slug}`);
   console.log(`タイトル: ${note.title}`);
   if (dryRun) {
-    console.log(note.bodyFree);
+    for (const seg of note.bodySegments) {
+      console.log(seg.type === "text" ? seg.value : `[OGP] ${seg.url}`);
+    }
     return;
   }
 

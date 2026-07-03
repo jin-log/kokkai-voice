@@ -1,6 +1,6 @@
 import { SITE } from "./site-config.mjs";
 import { articleShortTitle, formatDate, ASSET_V } from "./case-helpers.mjs";
-import { noteMembershipLink, noteMembershipFooterLabel } from "./note-link.mjs";
+import { noteMembershipFooterLabel } from "./note-link.mjs";
 import { buildSharePayload } from "./share.mjs";
 import { buildOgAssetBrief } from "./og-image.mjs";
 
@@ -143,35 +143,30 @@ export function buildNoteExcerpt(article) {
   const shortTitle = articleShortTitle(article);
   const plain = (article.plainExplanation || "").split("\n\n")[0] || "";
   const excerpt = clip(plain || article.nowSummary?.bullets?.join(" ") || "", 300);
-  const memberUrl =
-    SITE.noteMembershipLive && SITE.noteMembershipUrl
-      ? noteMembershipLink("note_article", article.slug || "post")
-      : null;
-  const footer = [
-    "—",
-    `${SITE.name}（${DOMAIN}）`,
+  const memberEmbedUrl =
+    SITE.noteMembershipLive && SITE.noteMembershipUrl ? SITE.noteMembershipUrl : null;
+  const footer = ["—", `${SITE.name}（${DOMAIN}）`];
+  if (memberEmbedUrl) {
+    footer.push("", `▼ noteメンバー（${noteMembershipFooterLabel()}）— 週次ダイジェスト・深掘り`);
+  }
+  /** @type {{ type: "text", value: string } | { type: "embed", url: string }}[]} */
+  const bodySegments = [
+    { type: "text", value: [`## ${shortTitle}`, "", excerpt, "", "▼ 全文（公言と行動表・タイムライン・用語）"].join("\n") },
+    { type: "embed", url: pageUrl },
+    { type: "text", value: ["", ...footer].join("\n") },
   ];
-  if (memberUrl) {
-    footer.push(
-      "",
-      `▼ noteメンバー（${noteMembershipFooterLabel()}）— 週次ダイジェスト・深掘り`,
-      memberUrl,
-    );
+  if (memberEmbedUrl) {
+    bodySegments.push({ type: "embed", url: memberEmbedUrl });
   }
   return {
     pageUrl,
     title: shortTitle,
     excerpt,
-    bodyFree: [
-      `## ${shortTitle}`,
-      "",
-      excerpt,
-      "",
-      "▼ 全文（公言と行動表・タイムライン・用語）",
-      pageUrl,
-      "",
-      ...footer,
-    ].join("\n"),
+    memberEmbedUrl,
+    bodySegments,
+    bodyFree: bodySegments
+      .map((s) => (s.type === "text" ? s.value : s.url))
+      .join("\n"),
   };
 }
 
