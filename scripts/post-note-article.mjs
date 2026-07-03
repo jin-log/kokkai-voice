@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 /**
- * 記事1本を note に公開（抜粋 + 本家リンク + メンバー導線）
+ * 記事1本を note に公開（抜粋 + 本家リンク + メンバー導線 + 見出し画像）
  *
  *   node scripts/post-note-article.mjs --slug case-xxx
- *   node scripts/post-note-article.mjs --slug case-xxx --dry-run
+ *   node scripts/post-note-article.mjs --slug case-xxx --edit n7bed88403e89
  */
 import { mkdir } from "node:fs/promises";
 import path from "node:path";
@@ -23,15 +23,16 @@ function arg(name) {
 }
 const dryRun = args.includes("--dry-run");
 const slug = arg("--slug");
+const editNoteId = arg("--edit");
 
 if (!slug) {
-  console.error("Usage: node scripts/post-note-article.mjs --slug <slug>");
+  console.error("Usage: node scripts/post-note-article.mjs --slug <slug> [--edit NOTE_ID]");
   process.exit(1);
 }
 
 /** @param {import('playwright').Page} page */
 async function clickNotePublish(page) {
-  const patterns = [/公開に進む/, /^公開する$/, /投稿する/, /公開する/];
+  const patterns = [/公開に進む/, /^公開する$/, /投稿する/, /更新する/, /公開する/];
   for (const pattern of patterns) {
     const btn = page.getByRole("button", { name: pattern });
     const n = await btn.count();
@@ -51,13 +52,19 @@ async function clickNotePublish(page) {
 }
 
 /** @param {import('playwright').Page} page */
-async function waitNotePublished(page, timeoutMs = 20_000) {
+async function waitNotePublished(page, timeoutMs = 25_000) {
   const start = Date.now();
   while (Date.now() - start < timeoutMs) {
     const url = page.url();
-    if (/\/n\/n[a-z0-9]+/i.test(url)) return url;
+    if (/\/n\/n[a-z0-9]+/i.test(url)) {
+      if (url.includes("/info/")) {
+        const m = url.match(/\/n\/(n[a-z0-9]+)/i);
+        if (m) return `https://note.com/seiji1192/n/${m[1]}`;
+      }
+      return url;
+    }
 
-    if (await page.getByText("記事が公開されました").count()) {
+    if (await page.getByText(/記事が公開されました|記事を更新しました/).count()) {
       const hrefs = await page.$$eval('a[href*="/n/n"]', (els) =>
         els.map((e) => e.href).filter(Boolean),
       );
@@ -70,9 +77,9 @@ async function waitNotePublished(page, timeoutMs = 20_000) {
   return null;
 }
 
-/** @param {import('playwright').Page} page @param {import('../src/lib/promo-generate.mjs').buildNoteExcerpt extends (...args: any) => infer R ? R : never} note @param {string} slug */
+/** @param {import('playwright').Page} page @param {ReturnType<typeof buildNoteExcerpt>} note @param {string} slug */
 async function postNoteArticle(page, note, slug) {
-  await fillNoteEditorWithEmbeds(page, note);
+  await fillNoteEditorWithEmbeds(page, note, { editNoteId: editNoteId || undefined });
   await clickNotePublish(page);
 
   const url = await waitNotePublished(page);
@@ -88,11 +95,13 @@ async function main() {
   const article = await loadArticle(slug);
   const note = buildNoteExcerpt(article);
 
-  console.log(`[note] ${slug}`);
+  console.log(`[note] ${slug}${editNoteId ? ` (更新 ${editNoteId})` : ""}`);
   console.log(`タイトル: ${note.title}`);
+  console.log(`見出し: ${note.eyecatchPath}`);
   if (dryRun) {
+    console.log("\n--- 本文 ---");
     for (const seg of note.bodySegments) {
-      console.log(seg.type === "text" ? seg.value : `[OGP] ${seg.url}`);
+      console.log(seg.type === "text" ? seg.value : `[OGPカード] ${seg.url}`);
     }
     return;
   }
@@ -103,7 +112,7 @@ async function main() {
   try {
     const url = await postNoteArticle(page, note, slug);
     await recordPromoIntro(slug, "note");
-    console.log(`OK note 公開: ${url}`);
+    console.log(`OK note ${editNoteId ? "更新" : "公開"}: ${url}`);
   } finally {
     await closePromoBrowser(launched);
   }

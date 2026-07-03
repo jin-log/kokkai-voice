@@ -141,8 +141,16 @@ export function buildHatena(article) {
 export function buildNoteExcerpt(article) {
   const { pageUrl } = buildSharePayload(article);
   const shortTitle = articleShortTitle(article);
-  const plain = (article.plainExplanation || "").split("\n\n")[0] || "";
-  const excerpt = clip(plain || article.nowSummary?.bullets?.join(" ") || "", 300);
+  const eyecatchPath = `/assets/og/${article.slug}.png`;
+
+  const intro =
+    "国会・政府出典付きで「あの話どうなった？」を整理したページです。";
+  const bullets = (article.nowSummary?.bullets || [])
+    .slice(0, 3)
+    .map((b) => oneLine(b))
+    .filter(Boolean);
+  while (bullets.length < 3) bullets.push("（詳細は案件ページ参照）");
+
   const memberEmbedUrl =
     SITE.noteMembershipLive && SITE.noteMembershipUrl ? SITE.noteMembershipUrl : null;
   const footer = ["—", `${SITE.name}（${DOMAIN}）`];
@@ -151,7 +159,12 @@ export function buildNoteExcerpt(article) {
   }
   /** @type {{ type: "text", value: string } | { type: "embed", url: string }}[]} */
   const bodySegments = [
-    { type: "text", value: [`## ${shortTitle}`, "", excerpt, "", "▼ 全文（公言と行動表・タイムライン・用語）"].join("\n") },
+    {
+      type: "text",
+      value: [intro, "", bullets[0], bullets[1], bullets[2], "", "▼ 全文（公言と行動表・タイムライン・用語）"].join(
+        "\n",
+      ),
+    },
     { type: "embed", url: pageUrl },
     { type: "text", value: ["", ...footer].join("\n") },
   ];
@@ -160,8 +173,11 @@ export function buildNoteExcerpt(article) {
   }
   return {
     pageUrl,
+    slug: article.slug,
     title: shortTitle,
-    excerpt,
+    intro,
+    bullets,
+    eyecatchPath,
     memberEmbedUrl,
     bodySegments,
     bodyFree: bodySegments
