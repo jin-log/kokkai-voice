@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-03T02:17:43.886Z",
+  "generatedAt": "2026-07-03T10:25:38.847Z",
   "strategy": "quality-first",
   "activeCount": 40,
   "parkedCount": 0,
@@ -10,103 +10,84 @@
   "specialPublishCount": 4,
   "automationPolicy": [
     {
-      "channel": "記事生成・①〜④",
+      "channel": "記事の下書きづくり",
       "mode": "auto",
-      "note": "巡回がライター/X/法務で自動処理"
+      "note": "巡回が自動で進める"
     },
     {
-      "channel": "品質NGの修正",
-      "mode": "auto",
-      "note": "巡回が試行。直らなければ要対応のまま"
-    },
-    {
-      "channel": "一般公開（/case/）",
+      "channel": "サイトへの公開",
       "mode": "manual",
-      "note": "1行目がタイトルに答えている記事のみ「公開する」"
+      "note": "あなたの「公開する」だけ"
     },
     {
       "channel": "非表示",
       "mode": "manual",
-      "note": "あなたの操作のみ。自動では戻らない"
+      "note": "あなたの操作のみ"
     },
     {
       "channel": "本番サイト反映",
       "mode": "auto",
-      "note": "git push 後 Cloudflare デプロイ"
+      "note": "公開後に自動デプロイ"
     },
     {
-      "channel": "X投稿",
-      "mode": "semi",
-      "note": "Buffer連携時はキュー自動。未設定なら手動"
+      "channel": "X（昼12時・夜19時）",
+      "mode": "auto",
+      "note": "Buffer API + 未投稿時は巡回がフォールバック"
     },
     {
       "channel": "はてブ / note",
-      "mode": "semi",
-      "note": "公開後キュー→ブラウザ半自動（要ログイン）"
+      "mode": "auto",
+      "note": "公開後キュー → GitHub Actions が消化"
     },
     {
       "channel": "ショート動画",
-      "mode": "manual",
-      "note": "オーナー手作り（生成スクリプトは別途）"
+      "mode": "semi",
+      "note": "生成は半自動・YouTube OAuth は初回のみ"
     }
   ],
   "statusDefinitions": [
     {
-      "id": "action",
-      "label": "要対応",
-      "meaning": "①〜④のゲートが未完了。記事は非公開。",
-      "autoFix": "巡回が順に自動処理（◌=今動いている項目）",
+      "id": "todo",
+      "label": "あなたがやること",
+      "meaning": "公開ボタンを押せる、または自動処理が止まっている。",
+      "autoFix": "止まっている場合は自動では直らない",
       "autoRevert": "—"
     },
     {
-      "id": "draft",
-      "label": "公開待ち",
-      "meaning": "1行目がタイトルに回答済み。プレビュー可だが一般公開はまだ。",
-      "autoFix": "巡回は①〜④の改善を継続（公開条件には含めない）",
+      "id": "prep",
+      "label": "準備中",
+      "meaning": "まだサイトに載せない。巡回が仕上げている。",
+      "autoFix": "巡回が続ける",
       "autoRevert": "—"
     },
     {
       "id": "live",
-      "label": "公開済み",
-      "meaning": "/case/ に表示中。",
-      "autoFix": "巡回で品質改善を継続",
-      "autoRevert": "—"
-    },
-    {
-      "id": "special",
-      "label": "特別公開",
-      "meaning": "公開中だがゲート×・品質NG・①〜④未完了など、完全合格ではない。",
-      "autoFix": "巡回が改善を試行（公開は維持）",
-      "autoRevert": "自動で非公開にはしない"
+      "label": "公開中",
+      "meaning": "サイトに載っている。",
+      "autoFix": "細部は巡回が改善し続ける",
+      "autoRevert": "自動では非表示にしない"
     },
     {
       "id": "hidden",
       "label": "非表示",
-      "meaning": "トップ・一覧から除外。データは残る。",
-      "autoFix": "巡回はスキップ（修正しない）",
-      "autoRevert": "自動復帰なし。「表示に戻す」が必要"
-    },
-    {
-      "id": "quality",
-      "label": "品質NG",
-      "meaning": "監査不合格のバッジ。公開状態とは別軸。",
-      "autoFix": "巡回がライター等で修正試行",
-      "autoRevert": "公開/非公開は変えない"
+      "meaning": "一覧から隠している。データは残る。",
+      "autoFix": "巡回は触らない",
+      "autoRevert": "「表示に戻す」が必要"
     }
   ],
   "patrolHealth": {
-    "status": "paused",
-    "statusLabel": "一時停止",
-    "paused": true,
-    "pauseReason": "manual",
-    "pauseDetail": "オーナー指示：ローカル全停止 until 2026-07-03T23:59:59+09:00",
+    "status": "idle",
+    "statusLabel": "停止中",
+    "paused": false,
+    "pauseReason": null,
+    "pauseDetail": null,
     "globalStall": null,
     "slugStalls": [],
     "stalledCount": 0,
-    "message": "手動停止中（オーナー指示：ローカル全停止 until 2026-07-03T23:59:59+09:00）",
-    "analyzedAt": "2026-07-03T02:17:43.884Z",
-    "lastPatrolCycleAt": "2026-07-03T02:17:43.223Z",
-    "patrolRunning": true
+    "message": "停止中",
+    "analyzedAt": "2026-07-03T10:25:38.841Z",
+    "lastPatrolCycleAt": null,
+    "patrolRunning": false
   },
   "slugs": [
     {
@@ -118,6 +99,7 @@
       "adminHidden": false,
       "pageReady": true,
       "publishState": "live",
+      "adminBucket": "live",
       "previewUrl": "/dev/preview/case-mr0jbdpc/",
       "qualityOk": true,
       "needsQualityFix": false,
@@ -235,8 +217,8 @@
       "nextAction": "✅ 公開中 — /case/ に表示されています",
       "promo": {
         "x": null,
-        "hatena": null,
-        "note": null
+        "hatena": "2026-07-03T04:46:15.620Z",
+        "note": "2026-07-03T04:59:31.953Z"
       },
       "short": {
         "slug": "case-mr0jbdpc",
@@ -251,7 +233,7 @@
       },
       "xUnavailable": false,
       "xResearchStatus": "found",
-      "statusExplain": "手動公開 07/02 02:29",
+      "statusExplain": "サイトに公開中。",
       "publishedBy": "owner",
       "publishedAt": "2026-07-01T17:29:52.342Z",
       "adminHiddenBy": null,
@@ -276,14 +258,14 @@
         {
           "channel": "はてブ",
           "automation": "semi",
-          "status": "未",
-          "done": false
+          "status": "済 07/03 13:46",
+          "done": true
         },
         {
           "channel": "note",
           "automation": "semi",
-          "status": "未",
-          "done": false
+          "status": "済 07/03 13:59",
+          "done": true
         },
         {
           "channel": "ショート",
@@ -292,7 +274,8 @@
           "done": false
         }
       ],
-      "stall": null
+      "stall": null,
+      "ownerTodo": false
     },
     {
       "slug": "case-mqzxj4ro",
@@ -303,6 +286,7 @@
       "adminHidden": false,
       "pageReady": true,
       "publishState": "live",
+      "adminBucket": "live",
       "previewUrl": "/dev/preview/case-mqzxj4ro/",
       "qualityOk": true,
       "needsQualityFix": false,
@@ -436,7 +420,7 @@
       },
       "xUnavailable": false,
       "xResearchStatus": "found",
-      "statusExplain": "手動公開 07/02 05:35",
+      "statusExplain": "サイトに公開中。",
       "publishedBy": "owner",
       "publishedAt": "2026-07-01T20:35:13.073Z",
       "adminHiddenBy": null,
@@ -477,7 +461,8 @@
           "done": false
         }
       ],
-      "stall": null
+      "stall": null,
+      "ownerTodo": false
     },
     {
       "slug": "case-mqzxgs3f",
@@ -488,6 +473,7 @@
       "adminHidden": false,
       "pageReady": true,
       "publishState": "live",
+      "adminBucket": "live",
       "previewUrl": "/dev/preview/case-mqzxgs3f/",
       "qualityOk": true,
       "needsQualityFix": false,
@@ -610,18 +596,18 @@
       },
       "short": {
         "slug": "case-mqzxgs3f",
-        "generated": true,
-        "uploaded": true,
-        "visibility": "private",
-        "videoId": "Mg0fZcOPbbE",
-        "url": "https://www.youtube.com/shorts/Mg0fZcOPbbE",
-        "studioUrl": "https://studio.youtube.com/video/Mg0fZcOPbbE/edit",
-        "uploadedAt": "2026-07-02T03:23:08.655Z",
-        "label": "YT非公開"
+        "generated": false,
+        "uploaded": false,
+        "visibility": null,
+        "videoId": null,
+        "url": null,
+        "studioUrl": null,
+        "uploadedAt": null,
+        "label": "未生成"
       },
       "xUnavailable": false,
       "xResearchStatus": "found",
-      "statusExplain": "手動公開 07/02 05:35",
+      "statusExplain": "サイトに公開中。",
       "publishedBy": "owner",
       "publishedAt": "2026-07-01T20:35:24.570Z",
       "adminHiddenBy": null,
@@ -658,11 +644,12 @@
         {
           "channel": "ショート",
           "automation": "manual",
-          "status": "YT YT非公開 07/02 12:23",
-          "done": true
+          "status": "未生成",
+          "done": false
         }
       ],
-      "stall": null
+      "stall": null,
+      "ownerTodo": false
     },
     {
       "slug": "zeihikaku-kojo",
@@ -673,6 +660,7 @@
       "adminHidden": true,
       "pageReady": false,
       "publishState": "hidden",
+      "adminBucket": "hidden",
       "previewUrl": "/dev/preview/zeihikaku-kojo/",
       "qualityOk": true,
       "needsQualityFix": false,
@@ -687,7 +675,7 @@
           "checkId": "D2_arc_topic",
           "title": "[ゲート] 経緯の話題",
           "todo": "経緯3行以上が案件キーワードと一致",
-          "command": "npm run complete:article -- --slug zeihikaku-kojo --force",
+          "command": "node scripts/complete-article.mjs --slug zeihikaku-kojo --content-only --force",
           "priority": 30
         },
         {
@@ -698,7 +686,7 @@
           "checkId": "G5_parties_symbol",
           "title": "[ゲート] ◎〇▲×",
           "todo": "各党の記号を確定（v2）",
-          "command": "npm run complete:article -- --slug zeihikaku-kojo --force",
+          "command": "node scripts/complete-article.mjs --slug zeihikaku-kojo --matrix-only --force",
           "priority": 30
         }
       ],
@@ -857,7 +845,7 @@
       },
       "xUnavailable": true,
       "xResearchStatus": "exhausted",
-      "statusExplain": "非表示（手動）。自動では戻らない。",
+      "statusExplain": "一覧から隠している。表示に戻すと再び管理対象になる。",
       "publishedBy": null,
       "publishedAt": null,
       "adminHiddenBy": null,
@@ -890,7 +878,8 @@
           "done": false
         }
       ],
-      "stall": null
+      "stall": null,
+      "ownerTodo": false
     },
     {
       "slug": "expo2025-kessan",
@@ -901,6 +890,7 @@
       "adminHidden": true,
       "pageReady": true,
       "publishState": "hidden",
+      "adminBucket": "hidden",
       "previewUrl": "/dev/preview/expo2025-kessan/",
       "qualityOk": true,
       "needsQualityFix": false,
@@ -915,7 +905,7 @@
           "checkId": "D2_arc_topic",
           "title": "[ゲート] 経緯の話題",
           "todo": "経緯3行以上が案件キーワードと一致",
-          "command": "npm run complete:article -- --slug expo2025-kessan --force",
+          "command": "node scripts/complete-article.mjs --slug expo2025-kessan --content-only --force",
           "priority": 30
         }
       ],
@@ -1058,7 +1048,7 @@
       },
       "xUnavailable": true,
       "xResearchStatus": "exhausted",
-      "statusExplain": "非表示（手動）。自動では戻らない。",
+      "statusExplain": "一覧から隠している。表示に戻すと再び管理対象になる。",
       "publishedBy": null,
       "publishedAt": "2026-06-29T04:34:44.409Z",
       "adminHiddenBy": null,
@@ -1099,7 +1089,8 @@
           "done": false
         }
       ],
-      "stall": null
+      "stall": null,
+      "ownerTodo": false
     },
     {
       "slug": "minimum-wage-2026",
@@ -1110,6 +1101,7 @@
       "adminHidden": true,
       "pageReady": false,
       "publishState": "hidden",
+      "adminBucket": "hidden",
       "previewUrl": "/dev/preview/minimum-wage-2026/",
       "qualityOk": true,
       "needsQualityFix": false,
@@ -1124,7 +1116,7 @@
           "checkId": "H2_x_topic",
           "title": "[ゲート] Xの話題",
           "todo": "X投稿本文が案件キーワードと一致（x-researcher）",
-          "command": "npm run x:research -- --slug minimum-wage-2026",
+          "command": "node scripts/complete-article.mjs --slug minimum-wage-2026 --x-only --force",
           "priority": 20
         }
       ],
@@ -1267,7 +1259,7 @@
       },
       "xUnavailable": false,
       "xResearchStatus": "found",
-      "statusExplain": "非表示（手動）。自動では戻らない。",
+      "statusExplain": "一覧から隠している。表示に戻すと再び管理対象になる。",
       "publishedBy": null,
       "publishedAt": null,
       "adminHiddenBy": null,
@@ -1300,7 +1292,8 @@
           "done": false
         }
       ],
-      "stall": null
+      "stall": null,
+      "ownerTodo": false
     },
     {
       "slug": "pension-kuriage-70",
@@ -1311,6 +1304,7 @@
       "adminHidden": false,
       "pageReady": true,
       "publishState": "live",
+      "adminBucket": "live",
       "previewUrl": "/dev/preview/pension-kuriage-70/",
       "qualityOk": true,
       "needsQualityFix": false,
@@ -1444,7 +1438,7 @@
       },
       "xUnavailable": true,
       "xResearchStatus": "exhausted",
-      "statusExplain": "手動公開 07/02 05:45",
+      "statusExplain": "サイトに公開中。",
       "publishedBy": "owner",
       "publishedAt": "2026-07-01T20:45:24.178Z",
       "adminHiddenBy": null,
@@ -1485,7 +1479,8 @@
           "done": false
         }
       ],
-      "stall": null
+      "stall": null,
+      "ownerTodo": false
     },
     {
       "slug": "denki-gas-genmen",
@@ -1496,6 +1491,7 @@
       "adminHidden": true,
       "pageReady": false,
       "publishState": "hidden",
+      "adminBucket": "hidden",
       "previewUrl": "/dev/preview/denki-gas-genmen/",
       "qualityOk": true,
       "needsQualityFix": false,
@@ -1510,7 +1506,7 @@
           "checkId": "B3_topic",
           "title": "[ゲート] 話題一致",
           "todo": "要約が searchKeyword と一致（2行以上）",
-          "command": "npm run complete:article -- --slug denki-gas-genmen --force",
+          "command": "node scripts/complete-article.mjs --slug denki-gas-genmen --content-only --force",
           "priority": 30
         },
         {
@@ -1521,7 +1517,7 @@
           "checkId": "G5_parties_symbol",
           "title": "[ゲート] ◎〇▲×",
           "todo": "各党の記号を確定（v2）",
-          "command": "npm run complete:article -- --slug denki-gas-genmen --force",
+          "command": "node scripts/complete-article.mjs --slug denki-gas-genmen --matrix-only --force",
           "priority": 30
         }
       ],
@@ -1680,7 +1676,7 @@
       },
       "xUnavailable": true,
       "xResearchStatus": "exhausted",
-      "statusExplain": "非表示（手動）。自動では戻らない。",
+      "statusExplain": "一覧から隠している。表示に戻すと再び管理対象になる。",
       "publishedBy": null,
       "publishedAt": null,
       "adminHiddenBy": null,
@@ -1713,7 +1709,8 @@
           "done": false
         }
       ],
-      "stall": null
+      "stall": null,
+      "ownerTodo": false
     },
     {
       "slug": "gakushu-shien-75000",
@@ -1724,6 +1721,7 @@
       "adminHidden": true,
       "pageReady": false,
       "publishState": "hidden",
+      "adminBucket": "hidden",
       "previewUrl": "/dev/preview/gakushu-shien-75000/",
       "qualityOk": true,
       "needsQualityFix": false,
@@ -1738,7 +1736,7 @@
           "checkId": "B4_conclusion",
           "title": "[ゲート] 結論の質",
           "todo": "重複・途中切れ・定型文なし（行数固定なし）",
-          "command": "npm run complete:article -- --slug gakushu-shien-75000 --force",
+          "command": "node scripts/complete-article.mjs --slug gakushu-shien-75000 --content-only --force",
           "priority": 30
         },
         {
@@ -1749,7 +1747,7 @@
           "checkId": "D2_arc_topic",
           "title": "[ゲート] 経緯の話題",
           "todo": "経緯3行以上が案件キーワードと一致",
-          "command": "npm run complete:article -- --slug gakushu-shien-75000 --force",
+          "command": "node scripts/complete-article.mjs --slug gakushu-shien-75000 --content-only --force",
           "priority": 30
         }
       ],
@@ -1903,7 +1901,7 @@
       },
       "xUnavailable": true,
       "xResearchStatus": "exhausted",
-      "statusExplain": "非表示（手動）。自動では戻らない。",
+      "statusExplain": "一覧から隠している。表示に戻すと再び管理対象になる。",
       "publishedBy": null,
       "publishedAt": null,
       "adminHiddenBy": null,
@@ -1936,7 +1934,8 @@
           "done": false
         }
       ],
-      "stall": null
+      "stall": null,
+      "ownerTodo": false
     },
     {
       "slug": "noto-fukko-budget",
@@ -1947,6 +1946,7 @@
       "adminHidden": false,
       "pageReady": true,
       "publishState": "live",
+      "adminBucket": "live",
       "previewUrl": "/dev/preview/noto-fukko-budget/",
       "qualityOk": true,
       "needsQualityFix": false,
@@ -2080,7 +2080,7 @@
       },
       "xUnavailable": true,
       "xResearchStatus": "exhausted",
-      "statusExplain": "手動公開 07/02 05:39",
+      "statusExplain": "サイトに公開中。",
       "publishedBy": "owner",
       "publishedAt": "2026-07-01T20:39:20.684Z",
       "adminHiddenBy": null,
@@ -2121,7 +2121,8 @@
           "done": false
         }
       ],
-      "stall": null
+      "stall": null,
+      "ownerTodo": false
     },
     {
       "slug": "boei-tokubetsuzei",
@@ -2132,6 +2133,7 @@
       "adminHidden": true,
       "pageReady": false,
       "publishState": "hidden",
+      "adminBucket": "hidden",
       "previewUrl": "/dev/preview/boei-tokubetsuzei/",
       "qualityOk": true,
       "needsQualityFix": false,
@@ -2146,7 +2148,7 @@
           "checkId": "B3_topic",
           "title": "[ゲート] 話題一致",
           "todo": "要約が searchKeyword と一致（2行以上）",
-          "command": "npm run complete:article -- --slug boei-tokubetsuzei --force",
+          "command": "node scripts/complete-article.mjs --slug boei-tokubetsuzei --content-only --force",
           "priority": 30
         },
         {
@@ -2157,7 +2159,7 @@
           "checkId": "D2_arc_topic",
           "title": "[ゲート] 経緯の話題",
           "todo": "経緯3行以上が案件キーワードと一致",
-          "command": "npm run complete:article -- --slug boei-tokubetsuzei --force",
+          "command": "node scripts/complete-article.mjs --slug boei-tokubetsuzei --content-only --force",
           "priority": 30
         }
       ],
@@ -2311,7 +2313,7 @@
       },
       "xUnavailable": true,
       "xResearchStatus": "exhausted",
-      "statusExplain": "非表示（手動）。自動では戻らない。",
+      "statusExplain": "一覧から隠している。表示に戻すと再び管理対象になる。",
       "publishedBy": null,
       "publishedAt": null,
       "adminHiddenBy": null,
@@ -2344,7 +2346,8 @@
           "done": false
         }
       ],
-      "stall": null
+      "stall": null,
+      "ownerTodo": false
     },
     {
       "slug": "invoice-menzei-2026",
@@ -2355,6 +2358,7 @@
       "adminHidden": true,
       "pageReady": false,
       "publishState": "hidden",
+      "adminBucket": "hidden",
       "previewUrl": "/dev/preview/invoice-menzei-2026/",
       "qualityOk": true,
       "needsQualityFix": false,
@@ -2369,7 +2373,7 @@
           "checkId": "B3_topic",
           "title": "[ゲート] 話題一致",
           "todo": "要約が searchKeyword と一致（2行以上）",
-          "command": "npm run complete:article -- --slug invoice-menzei-2026 --force",
+          "command": "node scripts/complete-article.mjs --slug invoice-menzei-2026 --content-only --force",
           "priority": 30
         },
         {
@@ -2380,7 +2384,7 @@
           "checkId": "G5_parties_symbol",
           "title": "[ゲート] ◎〇▲×",
           "todo": "各党の記号を確定（v2）",
-          "command": "npm run complete:article -- --slug invoice-menzei-2026 --force",
+          "command": "node scripts/complete-article.mjs --slug invoice-menzei-2026 --matrix-only --force",
           "priority": 30
         }
       ],
@@ -2539,7 +2543,7 @@
       },
       "xUnavailable": true,
       "xResearchStatus": "exhausted",
-      "statusExplain": "非表示（手動）。自動では戻らない。",
+      "statusExplain": "一覧から隠している。表示に戻すと再び管理対象になる。",
       "publishedBy": null,
       "publishedAt": null,
       "adminHiddenBy": null,
@@ -2572,7 +2576,8 @@
           "done": false
         }
       ],
-      "stall": null
+      "stall": null,
+      "ownerTodo": false
     },
     {
       "slug": "teigaku-kyufu-2024",
@@ -2583,6 +2588,7 @@
       "adminHidden": true,
       "pageReady": false,
       "publishState": "hidden",
+      "adminBucket": "hidden",
       "previewUrl": "/dev/preview/teigaku-kyufu-2024/",
       "qualityOk": true,
       "needsQualityFix": false,
@@ -2710,7 +2716,7 @@
       },
       "xUnavailable": true,
       "xResearchStatus": "exhausted",
-      "statusExplain": "非表示（手動）。自動では戻らない。",
+      "statusExplain": "一覧から隠している。表示に戻すと再び管理対象になる。",
       "publishedBy": null,
       "publishedAt": null,
       "adminHiddenBy": null,
@@ -2743,7 +2749,8 @@
           "done": false
         }
       ],
-      "stall": null
+      "stall": null,
+      "ownerTodo": false
     },
     {
       "slug": "shussho-budget-seika",
@@ -2754,6 +2761,7 @@
       "adminHidden": false,
       "pageReady": true,
       "publishState": "live",
+      "adminBucket": "live",
       "previewUrl": "/dev/preview/shussho-budget-seika/",
       "qualityOk": true,
       "needsQualityFix": false,
@@ -2768,7 +2776,7 @@
           "checkId": "G5_parties_symbol",
           "title": "[ゲート] ◎〇▲×",
           "todo": "各党の記号を確定（v2）",
-          "command": "npm run complete:article -- --slug shussho-budget-seika --force",
+          "command": "node scripts/complete-article.mjs --slug shussho-budget-seika --matrix-only --force",
           "priority": 30
         }
       ],
@@ -2900,18 +2908,18 @@
       },
       "short": {
         "slug": "shussho-budget-seika",
-        "generated": true,
-        "uploaded": true,
-        "visibility": "private",
-        "videoId": "8HPZ4sC7uck",
-        "url": "https://www.youtube.com/shorts/8HPZ4sC7uck",
-        "studioUrl": "https://studio.youtube.com/video/8HPZ4sC7uck/edit",
-        "uploadedAt": "2026-06-29T22:11:20.857Z",
-        "label": "YT非公開"
+        "generated": false,
+        "uploaded": false,
+        "visibility": null,
+        "videoId": null,
+        "url": null,
+        "studioUrl": null,
+        "uploadedAt": null,
+        "label": "未生成"
       },
       "xUnavailable": true,
       "xResearchStatus": "exhausted",
-      "statusExplain": "特別公開（ゲート1件・①〜④未完了） — ルール未達のまま /case/ 掲載中",
+      "statusExplain": "サイトに載っているが、内部チェックは全部終わっていない。",
       "publishedBy": null,
       "publishedAt": "2026-06-29T00:52:28.532Z",
       "adminHiddenBy": null,
@@ -2948,11 +2956,12 @@
         {
           "channel": "ショート",
           "automation": "manual",
-          "status": "YT YT非公開 06/30 07:11",
-          "done": true
+          "status": "未生成",
+          "done": false
         }
       ],
-      "stall": null
+      "stall": null,
+      "ownerTodo": false
     },
     {
       "slug": "fukushuto-koso",
@@ -2963,6 +2972,7 @@
       "adminHidden": false,
       "pageReady": true,
       "publishState": "live",
+      "adminBucket": "live",
       "previewUrl": "/dev/preview/fukushuto-koso/",
       "qualityOk": true,
       "needsQualityFix": false,
@@ -2977,7 +2987,7 @@
           "checkId": "G5_parties_symbol",
           "title": "[ゲート] ◎〇▲×",
           "todo": "各党の記号を確定（v2）",
-          "command": "npm run complete:article -- --slug fukushuto-koso --force",
+          "command": "node scripts/complete-article.mjs --slug fukushuto-koso --matrix-only --force",
           "priority": 30
         }
       ],
@@ -3120,7 +3130,7 @@
       },
       "xUnavailable": true,
       "xResearchStatus": "exhausted",
-      "statusExplain": "特別公開（ゲート1件・①〜④未完了） — ルール未達のまま /case/ 掲載中",
+      "statusExplain": "サイトに載っているが、内部チェックは全部終わっていない。",
       "publishedBy": null,
       "publishedAt": "2026-06-29T06:31:08.767Z",
       "adminHiddenBy": null,
@@ -3161,7 +3171,8 @@
           "done": false
         }
       ],
-      "stall": null
+      "stall": null,
+      "ownerTodo": false
     },
     {
       "slug": "osaka-to-metropolis",
@@ -3172,6 +3183,7 @@
       "adminHidden": false,
       "pageReady": true,
       "publishState": "live",
+      "adminBucket": "live",
       "previewUrl": "/dev/preview/osaka-to-metropolis/",
       "qualityOk": true,
       "needsQualityFix": false,
@@ -3186,7 +3198,7 @@
           "checkId": "D2_arc_topic",
           "title": "[ゲート] 経緯の話題",
           "todo": "経緯3行以上が案件キーワードと一致",
-          "command": "npm run complete:article -- --slug osaka-to-metropolis --force",
+          "command": "node scripts/complete-article.mjs --slug osaka-to-metropolis --content-only --force",
           "priority": 30
         },
         {
@@ -3197,7 +3209,7 @@
           "checkId": "G5_parties_symbol",
           "title": "[ゲート] ◎〇▲×",
           "todo": "各党の記号を確定（v2）",
-          "command": "npm run complete:article -- --slug osaka-to-metropolis --force",
+          "command": "node scripts/complete-article.mjs --slug osaka-to-metropolis --matrix-only --force",
           "priority": 30
         }
       ],
@@ -3356,7 +3368,7 @@
       },
       "xUnavailable": true,
       "xResearchStatus": "exhausted",
-      "statusExplain": "特別公開（ゲート2件・①〜④未完了） — ルール未達のまま /case/ 掲載中",
+      "statusExplain": "サイトに載っているが、内部チェックは全部終わっていない。",
       "publishedBy": null,
       "publishedAt": "2026-06-29T06:31:08.845Z",
       "adminHiddenBy": null,
@@ -3397,7 +3409,8 @@
           "done": false
         }
       ],
-      "stall": null
+      "stall": null,
+      "ownerTodo": false
     },
     {
       "slug": "fuhou-immin-trend",
@@ -3408,6 +3421,7 @@
       "adminHidden": false,
       "pageReady": true,
       "publishState": "live",
+      "adminBucket": "live",
       "previewUrl": "/dev/preview/fuhou-immin-trend/",
       "qualityOk": true,
       "needsQualityFix": false,
@@ -3518,7 +3532,7 @@
       "workItems": [],
       "nextAction": "✅ 公開中 — /case/ に表示されています",
       "promo": {
-        "x": null,
+        "x": "2026-07-03T03:50:50.072Z",
         "hatena": null,
         "note": null
       },
@@ -3535,7 +3549,7 @@
       },
       "xUnavailable": true,
       "xResearchStatus": "exhausted",
-      "statusExplain": "手動公開 07/02 05:38",
+      "statusExplain": "サイトに公開中。",
       "publishedBy": "owner",
       "publishedAt": "2026-07-01T20:38:48.641Z",
       "adminHiddenBy": null,
@@ -3554,8 +3568,8 @@
         {
           "channel": "X",
           "automation": "semi",
-          "status": "未",
-          "done": false
+          "status": "済 07/03 12:50",
+          "done": true
         },
         {
           "channel": "はてブ",
@@ -3576,7 +3590,8 @@
           "done": false
         }
       ],
-      "stall": null
+      "stall": null,
+      "ownerTodo": false
     },
     {
       "slug": "tokyo-solar-panel",
@@ -3587,6 +3602,7 @@
       "adminHidden": false,
       "pageReady": true,
       "publishState": "live",
+      "adminBucket": "live",
       "previewUrl": "/dev/preview/tokyo-solar-panel/",
       "qualityOk": true,
       "needsQualityFix": false,
@@ -3601,7 +3617,7 @@
           "checkId": "B3_topic",
           "title": "[ゲート] 話題一致",
           "todo": "要約が searchKeyword と一致（2行以上）",
-          "command": "npm run complete:article -- --slug tokyo-solar-panel --force",
+          "command": "node scripts/complete-article.mjs --slug tokyo-solar-panel --content-only --force",
           "priority": 30
         },
         {
@@ -3612,7 +3628,7 @@
           "checkId": "G5_parties_symbol",
           "title": "[ゲート] ◎〇▲×",
           "todo": "各党の記号を確定（v2）",
-          "command": "npm run complete:article -- --slug tokyo-solar-panel --force",
+          "command": "node scripts/complete-article.mjs --slug tokyo-solar-panel --matrix-only --force",
           "priority": 30
         }
       ],
@@ -3771,7 +3787,7 @@
       },
       "xUnavailable": true,
       "xResearchStatus": "exhausted",
-      "statusExplain": "特別公開（ゲート2件・①〜④未完了） — ルール未達のまま /case/ 掲載中",
+      "statusExplain": "サイトに載っているが、内部チェックは全部終わっていない。",
       "publishedBy": null,
       "publishedAt": "2026-06-29T06:31:08.986Z",
       "adminHiddenBy": null,
@@ -3812,7 +3828,8 @@
           "done": false
         }
       ],
-      "stall": null
+      "stall": null,
+      "ownerTodo": false
     },
     {
       "slug": "case-mqwdrley",
@@ -3823,6 +3840,7 @@
       "adminHidden": false,
       "pageReady": false,
       "publishState": "draft",
+      "adminBucket": "ready",
       "previewUrl": "/dev/preview/case-mqwdrley/",
       "qualityOk": true,
       "needsQualityFix": false,
@@ -3950,7 +3968,7 @@
       },
       "xUnavailable": true,
       "xResearchStatus": "exhausted",
-      "statusExplain": "1行目OK・非公開。一般公開はあなたの「公開する」のみ",
+      "statusExplain": "内容は読める状態。プレビュー確認後「公開する」でサイトに載る。",
       "publishedBy": "owner",
       "publishedAt": "2026-07-01T20:35:25.094Z",
       "adminHiddenBy": null,
@@ -3991,7 +4009,8 @@
           "done": false
         }
       ],
-      "stall": null
+      "stall": null,
+      "ownerTodo": true
     },
     {
       "slug": "tokyo-recall",
@@ -4002,6 +4021,7 @@
       "adminHidden": false,
       "pageReady": true,
       "publishState": "live",
+      "adminBucket": "live",
       "previewUrl": "/dev/preview/tokyo-recall/",
       "qualityOk": true,
       "needsQualityFix": false,
@@ -4118,7 +4138,7 @@
       ],
       "nextAction": "✅ 公開中 — /case/ に表示されています",
       "promo": {
-        "x": null,
+        "x": "2026-07-03T03:50:50.072Z",
         "hatena": null,
         "note": null
       },
@@ -4135,7 +4155,7 @@
       },
       "xUnavailable": true,
       "xResearchStatus": "exhausted",
-      "statusExplain": "手動公開 07/03 04:54",
+      "statusExplain": "サイトに公開中。",
       "publishedBy": "owner",
       "publishedAt": "2026-07-02T19:54:40.649Z",
       "adminHiddenBy": null,
@@ -4161,8 +4181,8 @@
         {
           "channel": "X",
           "automation": "semi",
-          "status": "未",
-          "done": false
+          "status": "済 07/03 12:50",
+          "done": true
         },
         {
           "channel": "はてブ",
@@ -4183,7 +4203,8 @@
           "done": false
         }
       ],
-      "stall": null
+      "stall": null,
+      "ownerTodo": false
     },
     {
       "slug": "bouka-taisaku",
@@ -4194,6 +4215,7 @@
       "adminHidden": false,
       "pageReady": true,
       "publishState": "live",
+      "adminBucket": "live",
       "previewUrl": "/dev/preview/bouka-taisaku/",
       "qualityOk": true,
       "needsQualityFix": false,
@@ -4304,7 +4326,7 @@
       "workItems": [],
       "nextAction": "✅ 公開中 — /case/ に表示されています",
       "promo": {
-        "x": null,
+        "x": "2026-07-03T03:50:50.072Z",
         "hatena": null,
         "note": null
       },
@@ -4321,7 +4343,7 @@
       },
       "xUnavailable": true,
       "xResearchStatus": "exhausted",
-      "statusExplain": "手動公開 07/02 05:35",
+      "statusExplain": "サイトに公開中。",
       "publishedBy": "owner",
       "publishedAt": "2026-07-01T20:35:25.627Z",
       "adminHiddenBy": null,
@@ -4340,8 +4362,8 @@
         {
           "channel": "X",
           "automation": "semi",
-          "status": "未",
-          "done": false
+          "status": "済 07/03 12:50",
+          "done": true
         },
         {
           "channel": "はてブ",
@@ -4362,7 +4384,8 @@
           "done": false
         }
       ],
-      "stall": null
+      "stall": null,
+      "ownerTodo": false
     },
     {
       "slug": "shohizei-genmen",
@@ -4373,6 +4396,7 @@
       "adminHidden": false,
       "pageReady": true,
       "publishState": "live",
+      "adminBucket": "live",
       "previewUrl": "/dev/preview/shohizei-genmen/",
       "qualityOk": true,
       "needsQualityFix": false,
@@ -4500,7 +4524,7 @@
       },
       "xUnavailable": false,
       "xResearchStatus": "found",
-      "statusExplain": "手動公開 07/02 05:35",
+      "statusExplain": "サイトに公開中。",
       "publishedBy": "owner",
       "publishedAt": "2026-07-01T20:35:26.163Z",
       "adminHiddenBy": null,
@@ -4541,7 +4565,8 @@
           "done": false
         }
       ],
-      "stall": null
+      "stall": null,
+      "ownerTodo": false
     },
     {
       "slug": "boeeihi",
@@ -4552,6 +4577,7 @@
       "adminHidden": false,
       "pageReady": true,
       "publishState": "live",
+      "adminBucket": "live",
       "previewUrl": "/dev/preview/boeeihi/",
       "qualityOk": true,
       "needsQualityFix": false,
@@ -4679,7 +4705,7 @@
       },
       "xUnavailable": true,
       "xResearchStatus": "exhausted",
-      "statusExplain": "公開済",
+      "statusExplain": "サイトに公開中。",
       "publishedBy": null,
       "publishedAt": null,
       "adminHiddenBy": null,
@@ -4712,7 +4738,8 @@
           "done": false
         }
       ],
-      "stall": null
+      "stall": null,
+      "ownerTodo": false
     },
     {
       "slug": "chingin",
@@ -4723,6 +4750,7 @@
       "adminHidden": false,
       "pageReady": false,
       "publishState": "draft",
+      "adminBucket": "ready",
       "previewUrl": "/dev/preview/chingin/",
       "qualityOk": true,
       "needsQualityFix": false,
@@ -4737,7 +4765,7 @@
           "checkId": "C2_evidence_distinct",
           "title": "[ゲート] 根拠の独自性",
           "todo": "根拠は結論と同文禁止",
-          "command": "npm run complete:article -- --slug chingin --force",
+          "command": "node scripts/complete-article.mjs --slug chingin --content-only --force",
           "priority": 30
         }
       ],
@@ -4880,7 +4908,7 @@
       },
       "xUnavailable": true,
       "xResearchStatus": "exhausted",
-      "statusExplain": "1行目OK・非公開。一般公開はあなたの「公開する」のみ",
+      "statusExplain": "内容は読める状態。プレビュー確認後「公開する」でサイトに載る。",
       "publishedBy": null,
       "publishedAt": null,
       "adminHiddenBy": null,
@@ -4913,7 +4941,8 @@
           "done": false
         }
       ],
-      "stall": null
+      "stall": null,
+      "ownerTodo": true
     },
     {
       "slug": "nenkin",
@@ -4924,6 +4953,7 @@
       "adminHidden": false,
       "pageReady": true,
       "publishState": "live",
+      "adminBucket": "live",
       "previewUrl": "/dev/preview/nenkin/",
       "qualityOk": true,
       "needsQualityFix": false,
@@ -5051,7 +5081,7 @@
       },
       "xUnavailable": true,
       "xResearchStatus": "exhausted",
-      "statusExplain": "公開済",
+      "statusExplain": "サイトに公開中。",
       "publishedBy": null,
       "publishedAt": null,
       "adminHiddenBy": null,
@@ -5084,7 +5114,8 @@
           "done": false
         }
       ],
-      "stall": null
+      "stall": null,
+      "ownerTodo": false
     },
     {
       "slug": "gaikokujin-seisaku",
@@ -5095,6 +5126,7 @@
       "adminHidden": false,
       "pageReady": true,
       "publishState": "live",
+      "adminBucket": "live",
       "previewUrl": "/dev/preview/gaikokujin-seisaku/",
       "qualityOk": true,
       "needsQualityFix": false,
@@ -5222,7 +5254,7 @@
       },
       "xUnavailable": true,
       "xResearchStatus": "exhausted",
-      "statusExplain": "手動公開 07/02 02:31",
+      "statusExplain": "サイトに公開中。",
       "publishedBy": "owner",
       "publishedAt": "2026-07-01T17:31:13.446Z",
       "adminHiddenBy": null,
@@ -5263,7 +5295,8 @@
           "done": false
         }
       ],
-      "stall": null
+      "stall": null,
+      "ownerTodo": false
     },
     {
       "slug": "shoshika",
@@ -5274,6 +5307,7 @@
       "adminHidden": false,
       "pageReady": true,
       "publishState": "live",
+      "adminBucket": "live",
       "previewUrl": "/dev/preview/shoshika/",
       "qualityOk": true,
       "needsQualityFix": false,
@@ -5390,18 +5424,18 @@
       },
       "short": {
         "slug": "shoshika",
-        "generated": true,
+        "generated": false,
         "uploaded": false,
         "visibility": null,
         "videoId": null,
         "url": null,
         "studioUrl": null,
         "uploadedAt": null,
-        "label": "生成済・未アップ"
+        "label": "未生成"
       },
       "xUnavailable": true,
       "xResearchStatus": "exhausted",
-      "statusExplain": "公開済",
+      "statusExplain": "サイトに公開中。",
       "publishedBy": null,
       "publishedAt": null,
       "adminHiddenBy": null,
@@ -5430,11 +5464,12 @@
         {
           "channel": "ショート",
           "automation": "manual",
-          "status": "生成済・未アップ",
+          "status": "未生成",
           "done": false
         }
       ],
-      "stall": null
+      "stall": null,
+      "ownerTodo": false
     },
     {
       "slug": "kyoiku-mushoka",
@@ -5445,6 +5480,7 @@
       "adminHidden": false,
       "pageReady": true,
       "publishState": "live",
+      "adminBucket": "live",
       "previewUrl": "/dev/preview/kyoiku-mushoka/",
       "qualityOk": true,
       "needsQualityFix": false,
@@ -5572,7 +5608,7 @@
       },
       "xUnavailable": true,
       "xResearchStatus": "exhausted",
-      "statusExplain": "手動公開 07/02 05:35",
+      "statusExplain": "サイトに公開中。",
       "publishedBy": "owner",
       "publishedAt": "2026-07-01T20:35:26.702Z",
       "adminHiddenBy": null,
@@ -5613,7 +5649,8 @@
           "done": false
         }
       ],
-      "stall": null
+      "stall": null,
+      "ownerTodo": false
     },
     {
       "slug": "energy-policy",
@@ -5624,6 +5661,7 @@
       "adminHidden": false,
       "pageReady": true,
       "publishState": "live",
+      "adminBucket": "live",
       "previewUrl": "/dev/preview/energy-policy/",
       "qualityOk": true,
       "needsQualityFix": false,
@@ -5751,7 +5789,7 @@
       },
       "xUnavailable": true,
       "xResearchStatus": "exhausted",
-      "statusExplain": "手動公開 07/02 05:35",
+      "statusExplain": "サイトに公開中。",
       "publishedBy": "owner",
       "publishedAt": "2026-07-01T20:35:27.253Z",
       "adminHiddenBy": null,
@@ -5792,7 +5830,8 @@
           "done": false
         }
       ],
-      "stall": null
+      "stall": null,
+      "ownerTodo": false
     },
     {
       "slug": "seiji-shikin",
@@ -5803,6 +5842,7 @@
       "adminHidden": false,
       "pageReady": true,
       "publishState": "live",
+      "adminBucket": "live",
       "previewUrl": "/dev/preview/seiji-shikin/",
       "qualityOk": true,
       "needsQualityFix": false,
@@ -5930,7 +5970,7 @@
       },
       "xUnavailable": true,
       "xResearchStatus": "exhausted",
-      "statusExplain": "手動公開 07/02 05:35",
+      "statusExplain": "サイトに公開中。",
       "publishedBy": "owner",
       "publishedAt": "2026-07-01T20:35:27.789Z",
       "adminHiddenBy": null,
@@ -5971,7 +6011,8 @@
           "done": false
         }
       ],
-      "stall": null
+      "stall": null,
+      "ownerTodo": false
     },
     {
       "slug": "senkyo-kaikaku",
@@ -5982,6 +6023,7 @@
       "adminHidden": false,
       "pageReady": true,
       "publishState": "live",
+      "adminBucket": "live",
       "previewUrl": "/dev/preview/senkyo-kaikaku/",
       "qualityOk": true,
       "needsQualityFix": false,
@@ -6109,7 +6151,7 @@
       },
       "xUnavailable": true,
       "xResearchStatus": "exhausted",
-      "statusExplain": "手動公開 07/02 05:35",
+      "statusExplain": "サイトに公開中。",
       "publishedBy": "owner",
       "publishedAt": "2026-07-01T20:35:28.349Z",
       "adminHiddenBy": null,
@@ -6150,7 +6192,8 @@
           "done": false
         }
       ],
-      "stall": null
+      "stall": null,
+      "ownerTodo": false
     },
     {
       "slug": "kaigo-iryo",
@@ -6161,6 +6204,7 @@
       "adminHidden": false,
       "pageReady": true,
       "publishState": "live",
+      "adminBucket": "live",
       "previewUrl": "/dev/preview/kaigo-iryo/",
       "qualityOk": true,
       "needsQualityFix": false,
@@ -6288,7 +6332,7 @@
       },
       "xUnavailable": true,
       "xResearchStatus": "exhausted",
-      "statusExplain": "公開済",
+      "statusExplain": "サイトに公開中。",
       "publishedBy": null,
       "publishedAt": null,
       "adminHiddenBy": null,
@@ -6321,7 +6365,8 @@
           "done": false
         }
       ],
-      "stall": null
+      "stall": null,
+      "ownerTodo": false
     },
     {
       "slug": "chiho-sosei",
@@ -6332,6 +6377,7 @@
       "adminHidden": false,
       "pageReady": true,
       "publishState": "live",
+      "adminBucket": "live",
       "previewUrl": "/dev/preview/chiho-sosei/",
       "qualityOk": true,
       "needsQualityFix": false,
@@ -6459,7 +6505,7 @@
       },
       "xUnavailable": true,
       "xResearchStatus": "exhausted",
-      "statusExplain": "公開済",
+      "statusExplain": "サイトに公開中。",
       "publishedBy": null,
       "publishedAt": null,
       "adminHiddenBy": null,
@@ -6492,7 +6538,8 @@
           "done": false
         }
       ],
-      "stall": null
+      "stall": null,
+      "ownerTodo": false
     },
     {
       "slug": "hosei-yosan",
@@ -6503,6 +6550,7 @@
       "adminHidden": false,
       "pageReady": true,
       "publishState": "live",
+      "adminBucket": "live",
       "previewUrl": "/dev/preview/hosei-yosan/",
       "qualityOk": true,
       "needsQualityFix": false,
@@ -6630,7 +6678,7 @@
       },
       "xUnavailable": true,
       "xResearchStatus": "exhausted",
-      "statusExplain": "手動公開 07/02 05:35",
+      "statusExplain": "サイトに公開中。",
       "publishedBy": "owner",
       "publishedAt": "2026-07-01T20:35:28.917Z",
       "adminHiddenBy": null,
@@ -6671,7 +6719,8 @@
           "done": false
         }
       ],
-      "stall": null
+      "stall": null,
+      "ownerTodo": false
     },
     {
       "slug": "nichigyo",
@@ -6682,6 +6731,7 @@
       "adminHidden": false,
       "pageReady": true,
       "publishState": "live",
+      "adminBucket": "live",
       "previewUrl": "/dev/preview/nichigyo/",
       "qualityOk": true,
       "needsQualityFix": false,
@@ -6809,7 +6859,7 @@
       },
       "xUnavailable": true,
       "xResearchStatus": "exhausted",
-      "statusExplain": "手動公開 07/02 05:35",
+      "statusExplain": "サイトに公開中。",
       "publishedBy": "owner",
       "publishedAt": "2026-07-01T20:35:29.501Z",
       "adminHiddenBy": null,
@@ -6850,7 +6900,8 @@
           "done": false
         }
       ],
-      "stall": null
+      "stall": null,
+      "ownerTodo": false
     },
     {
       "slug": "casino-ir",
@@ -6861,6 +6912,7 @@
       "adminHidden": false,
       "pageReady": true,
       "publishState": "live",
+      "adminBucket": "live",
       "previewUrl": "/dev/preview/casino-ir/",
       "qualityOk": true,
       "needsQualityFix": false,
@@ -6988,7 +7040,7 @@
       },
       "xUnavailable": true,
       "xResearchStatus": "exhausted",
-      "statusExplain": "手動公開 07/02 05:35",
+      "statusExplain": "サイトに公開中。",
       "publishedBy": "owner",
       "publishedAt": "2026-07-01T20:35:30.033Z",
       "adminHiddenBy": null,
@@ -7029,7 +7081,8 @@
           "done": false
         }
       ],
-      "stall": null
+      "stall": null,
+      "ownerTodo": false
     },
     {
       "slug": "kenpo",
@@ -7040,6 +7093,7 @@
       "adminHidden": false,
       "pageReady": false,
       "publishState": "draft",
+      "adminBucket": "ready",
       "previewUrl": "/dev/preview/kenpo/",
       "qualityOk": true,
       "needsQualityFix": false,
@@ -7054,7 +7108,7 @@
           "checkId": "C2_evidence_distinct",
           "title": "[ゲート] 根拠の独自性",
           "todo": "根拠は結論と同文禁止",
-          "command": "npm run complete:article -- --slug kenpo --force",
+          "command": "node scripts/complete-article.mjs --slug kenpo --content-only --force",
           "priority": 30
         }
       ],
@@ -7197,7 +7251,7 @@
       },
       "xUnavailable": true,
       "xResearchStatus": "exhausted",
-      "statusExplain": "1行目OK・非公開。一般公開はあなたの「公開する」のみ",
+      "statusExplain": "内容は読める状態。プレビュー確認後「公開する」でサイトに載る。",
       "publishedBy": null,
       "publishedAt": null,
       "adminHiddenBy": null,
@@ -7230,7 +7284,8 @@
           "done": false
         }
       ],
-      "stall": null
+      "stall": null,
+      "ownerTodo": true
     },
     {
       "slug": "tariff-us",
@@ -7241,6 +7296,7 @@
       "adminHidden": false,
       "pageReady": true,
       "publishState": "live",
+      "adminBucket": "live",
       "previewUrl": "/dev/preview/tariff-us/",
       "qualityOk": true,
       "needsQualityFix": false,
@@ -7368,7 +7424,7 @@
       },
       "xUnavailable": true,
       "xResearchStatus": "exhausted",
-      "statusExplain": "公開済",
+      "statusExplain": "サイトに公開中。",
       "publishedBy": null,
       "publishedAt": null,
       "adminHiddenBy": null,
@@ -7401,7 +7457,8 @@
           "done": false
         }
       ],
-      "stall": null
+      "stall": null,
+      "ownerTodo": false
     },
     {
       "slug": "kishida-resign",
@@ -7412,6 +7469,7 @@
       "adminHidden": false,
       "pageReady": true,
       "publishState": "live",
+      "adminBucket": "live",
       "previewUrl": "/dev/preview/kishida-resign/",
       "qualityOk": true,
       "needsQualityFix": false,
@@ -7539,7 +7597,7 @@
       },
       "xUnavailable": true,
       "xResearchStatus": "exhausted",
-      "statusExplain": "手動公開 07/02 05:35",
+      "statusExplain": "サイトに公開中。",
       "publishedBy": "owner",
       "publishedAt": "2026-07-01T20:35:30.581Z",
       "adminHiddenBy": null,
@@ -7580,7 +7638,8 @@
           "done": false
         }
       ],
-      "stall": null
+      "stall": null,
+      "ownerTodo": false
     },
     {
       "slug": "komei-kokumin",
@@ -7591,6 +7650,7 @@
       "adminHidden": false,
       "pageReady": false,
       "publishState": "draft",
+      "adminBucket": "ready",
       "previewUrl": "/dev/preview/komei-kokumin/",
       "qualityOk": true,
       "needsQualityFix": false,
@@ -7605,7 +7665,7 @@
           "checkId": "B4_conclusion",
           "title": "[ゲート] 結論の質",
           "todo": "重複・途中切れ・定型文なし（行数固定なし）",
-          "command": "npm run complete:article -- --slug komei-kokumin --force",
+          "command": "node scripts/complete-article.mjs --slug komei-kokumin --content-only --force",
           "priority": 30
         }
       ],
@@ -7748,7 +7808,7 @@
       },
       "xUnavailable": true,
       "xResearchStatus": "exhausted",
-      "statusExplain": "1行目OK・非公開。一般公開はあなたの「公開する」のみ",
+      "statusExplain": "内容は読める状態。プレビュー確認後「公開する」でサイトに載る。",
       "publishedBy": null,
       "publishedAt": null,
       "adminHiddenBy": null,
@@ -7781,10 +7841,11 @@
           "done": false
         }
       ],
-      "stall": null
+      "stall": null,
+      "ownerTodo": true
     }
   ],
-  "deltaGoldPct": 2,
-  "previousGoldPct": 75,
+  "deltaGoldPct": 0,
+  "previousGoldPct": 77,
   "deployedAt": null
 }

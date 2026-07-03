@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-03T02:18:13.579Z",
+  "generatedAt": "2026-07-03T10:25:38.916Z",
   "total": 34,
   "byAgent": {
     "writer": 31,
@@ -15,7 +15,7 @@
       "checkId": "C2_evidence_distinct",
       "title": "[ゲート] 根拠の独自性",
       "todo": "根拠は結論と同文禁止",
-      "command": "npm run complete:article -- --slug chingin --force",
+      "command": "node scripts/complete-article.mjs --slug chingin --content-only --force",
       "priority": 30
     },
     {
@@ -26,7 +26,7 @@
       "checkId": "G5_parties_symbol",
       "title": "[ゲート] ◎〇▲×",
       "todo": "各党の記号を確定（v2）",
-      "command": "npm run complete:article -- --slug fukushuto-koso --force",
+      "command": "node scripts/complete-article.mjs --slug fukushuto-koso --matrix-only --force",
       "priority": 30
     },
     {
@@ -37,7 +37,7 @@
       "checkId": "C2_evidence_distinct",
       "title": "[ゲート] 根拠の独自性",
       "todo": "根拠は結論と同文禁止",
-      "command": "npm run complete:article -- --slug kenpo --force",
+      "command": "node scripts/complete-article.mjs --slug kenpo --content-only --force",
       "priority": 30
     },
     {
@@ -48,7 +48,7 @@
       "checkId": "B4_conclusion",
       "title": "[ゲート] 結論の質",
       "todo": "重複・途中切れ・定型文なし（行数固定なし）",
-      "command": "npm run complete:article -- --slug komei-kokumin --force",
+      "command": "node scripts/complete-article.mjs --slug komei-kokumin --content-only --force",
       "priority": 30
     },
     {
@@ -59,7 +59,7 @@
       "checkId": "D2_arc_topic",
       "title": "[ゲート] 経緯の話題",
       "todo": "経緯3行以上が案件キーワードと一致",
-      "command": "npm run complete:article -- --slug osaka-to-metropolis --force",
+      "command": "node scripts/complete-article.mjs --slug osaka-to-metropolis --content-only --force",
       "priority": 30
     },
     {
@@ -70,7 +70,7 @@
       "checkId": "G5_parties_symbol",
       "title": "[ゲート] ◎〇▲×",
       "todo": "各党の記号を確定（v2）",
-      "command": "npm run complete:article -- --slug osaka-to-metropolis --force",
+      "command": "node scripts/complete-article.mjs --slug osaka-to-metropolis --matrix-only --force",
       "priority": 30
     },
     {
@@ -80,7 +80,7 @@
       "checkId": "P1_opening_missing",
       "title": "[公開] 1行目がタイトルに未回答",
       "todo": "タイトルの疑問に答える1行を先頭に書く",
-      "command": "npm run complete:article -- --slug undefined --force",
+      "command": "node scripts/complete-article.mjs --slug  --content-only --force",
       "priority": 5
     },
     {
@@ -90,7 +90,7 @@
       "checkId": "H1_xPosts",
       "title": "[ゲート] X投稿",
       "todo": "検証済みX URLを3件以上（x-researcher）",
-      "command": "npm run x:research -- --slug undefined",
+      "command": "node scripts/complete-article.mjs --slug  --x-only --force",
       "priority": 20
     },
     {
@@ -100,7 +100,7 @@
       "checkId": "H2_x_topic",
       "title": "[ゲート] Xの話題",
       "todo": "X投稿本文が案件キーワードと一致（x-researcher）",
-      "command": "npm run x:research -- --slug undefined",
+      "command": "node scripts/complete-article.mjs --slug  --x-only --force",
       "priority": 20
     },
     {
@@ -110,7 +110,7 @@
       "checkId": "A1_title",
       "title": "[ゲート] タイトル",
       "todo": "タイトルを入力",
-      "command": "npm run complete:article -- --slug undefined --force",
+      "command": "node scripts/complete-article.mjs --slug  --content-only --force",
       "priority": 30
     },
     {
@@ -120,7 +120,7 @@
       "checkId": "A1b_title_placeholder",
       "title": "[ゲート] タイトル確定",
       "todo": "仮タイトル・編集メモを除去",
-      "command": "npm run complete:article -- --slug undefined --force",
+      "command": "node scripts/complete-article.mjs --slug  --content-only --force",
       "priority": 30
     },
     {
@@ -130,7 +130,7 @@
       "checkId": "A2_primarySpeech",
       "title": "[ゲート] 一次ソース",
       "todo": "報道URL・国会リンクを追加",
-      "command": "npm run complete:article -- --slug undefined --force",
+      "command": "node scripts/complete-article.mjs --slug  --content-only --force",
       "priority": 30
     },
     {
@@ -140,7 +140,7 @@
       "checkId": "B1_nowSummary",
       "title": "[ゲート] いまの結論",
       "todo": "結論を1行以上",
-      "command": "npm run complete:article -- --slug undefined --force",
+      "command": "node scripts/complete-article.mjs --slug  --content-only --force",
       "priority": 30
     },
     {
@@ -150,7 +150,7 @@
       "checkId": "B2_disclaimer",
       "title": "[ゲート] AI注記",
       "todo": "disclaimer を追加",
-      "command": "npm run complete:article -- --slug undefined --force",
+      "command": "node scripts/complete-article.mjs --slug  --content-only --force",
       "priority": 30
     },
     {
@@ -160,7 +160,7 @@
       "checkId": "B3_topic",
       "title": "[ゲート] 話題一致",
       "todo": "要約が searchKeyword と一致（2行以上）",
-      "command": "npm run complete:article -- --slug undefined --force",
+      "command": "node scripts/complete-article.mjs --slug  --content-only --force",
       "priority": 30
     },
     {
@@ -170,7 +170,7 @@
       "checkId": "B4_conclusion",
       "title": "[ゲート] 結論の質",
       "todo": "重複・途中切れ・定型文なし（行数固定なし）",
-      "command": "npm run complete:article -- --slug undefined --force",
+      "command": "node scripts/complete-article.mjs --slug  --content-only --force",
       "priority": 30
     },
     {
@@ -180,7 +180,7 @@
       "checkId": "B5_writer_voice",
       "title": "[ゲート] 第三者目線",
       "todo": "議事録口調（お尋ね・私自身・御党）を除去",
-      "command": "npm run complete:article -- --slug undefined --force",
+      "command": "node scripts/complete-article.mjs --slug  --content-only --force",
       "priority": 30
     },
     {
@@ -190,7 +190,7 @@
       "checkId": "C1_summaryBullets",
       "title": "[ゲート] 要点",
       "todo": "summaryBullets を3点以上",
-      "command": "npm run complete:article -- --slug undefined --force",
+      "command": "node scripts/complete-article.mjs --slug  --content-only --force",
       "priority": 30
     },
     {
@@ -200,7 +200,7 @@
       "checkId": "D1_arcSummary",
       "title": "[ゲート] 経緯",
       "todo": "日付付き経緯を3行以上",
-      "command": "npm run complete:article -- --slug undefined --force",
+      "command": "node scripts/complete-article.mjs --slug  --content-only --force",
       "priority": 30
     },
     {
@@ -210,7 +210,7 @@
       "checkId": "D2_arc_topic",
       "title": "[ゲート] 経緯の話題",
       "todo": "経緯3行以上が案件キーワードと一致",
-      "command": "npm run complete:article -- --slug undefined --force",
+      "command": "node scripts/complete-article.mjs --slug  --content-only --force",
       "priority": 30
     },
     {
@@ -220,7 +220,7 @@
       "checkId": "E1_timeline_count",
       "title": "[ゲート] タイムライン",
       "todo": "出来事を6件以上（X3+国会3）",
-      "command": "npm run complete:article -- --slug undefined --force",
+      "command": "node scripts/enrich-timeline-all.mjs --slug ",
       "priority": 30
     },
     {
@@ -230,7 +230,7 @@
       "checkId": "E2_timeline_x",
       "title": "[ゲート] タイムラインX",
       "todo": "X投稿を3件以上タイムラインに",
-      "command": "npm run complete:article -- --slug undefined --force",
+      "command": "node scripts/enrich-timeline-all.mjs --slug ",
       "priority": 30
     },
     {
@@ -240,7 +240,7 @@
       "checkId": "E3_timeline_diet",
       "title": "[ゲート] タイムライン国会",
       "todo": "国会発言を3件以上タイムラインに",
-      "command": "npm run complete:article -- --slug undefined --force",
+      "command": "node scripts/enrich-timeline-all.mjs --slug ",
       "priority": 30
     },
     {
@@ -250,7 +250,7 @@
       "checkId": "F1_glossary",
       "title": "[ゲート] 用語解説",
       "todo": "用語を2語以上",
-      "command": "npm run complete:article -- --slug undefined --force",
+      "command": "node scripts/complete-article.mjs --slug  --content-only --force",
       "priority": 30
     },
     {
@@ -260,7 +260,7 @@
       "checkId": "J1_prosCons",
       "title": "[ゲート] メリデメ",
       "todo": "公表数値付きメリット2・デメリット2",
-      "command": "npm run complete:article -- --slug undefined --force",
+      "command": "node scripts/generate-proscons-auto.mjs --slug ",
       "priority": 30
     },
     {
@@ -270,7 +270,7 @@
       "checkId": "G1_stanceMatrix_ref",
       "title": "[ゲート] 〇×表リンク",
       "todo": "stanceMatrix を設定",
-      "command": "npm run complete:article -- --slug undefined --force",
+      "command": "node scripts/complete-article.mjs --slug  --matrix-only --force",
       "priority": 30
     },
     {
@@ -280,7 +280,7 @@
       "checkId": "G2_policy_matrix_file",
       "title": "[ゲート] 公言と行動ファイル",
       "todo": "policy-matrix JSON を作成",
-      "command": "npm run complete:article -- --slug undefined --force",
+      "command": "node scripts/complete-article.mjs --slug  --matrix-only --force",
       "priority": 30
     },
     {
@@ -290,7 +290,7 @@
       "checkId": "G3_parties_min",
       "title": "[ゲート] 政党数",
       "todo": "2党以上を登録",
-      "command": "npm run complete:article -- --slug undefined --force",
+      "command": "node scripts/complete-article.mjs --slug  --matrix-only --force",
       "priority": 30
     },
     {
@@ -300,7 +300,7 @@
       "checkId": "G4_parties_source",
       "title": "[ゲート] 党の出典URL",
       "todo": "各党に sourceUrl",
-      "command": "npm run complete:article -- --slug undefined --force",
+      "command": "node scripts/complete-article.mjs --slug  --matrix-only --force",
       "priority": 30
     },
     {
@@ -310,7 +310,7 @@
       "checkId": "G5_parties_symbol",
       "title": "[ゲート] ◎〇▲×",
       "todo": "各党の記号を確定（v2）",
-      "command": "npm run complete:article -- --slug undefined --force",
+      "command": "node scripts/complete-article.mjs --slug  --matrix-only --force",
       "priority": 30
     },
     {
@@ -320,7 +320,7 @@
       "checkId": "I1_legal",
       "title": "[ゲート] 法務",
       "todo": "legal-check を実行",
-      "command": "npm run legal:check -- --slug undefined",
+      "command": "node scripts/complete-article.mjs --slug  --legal-only",
       "priority": 30
     },
     {
@@ -331,7 +331,7 @@
       "checkId": "G5_parties_symbol",
       "title": "[ゲート] ◎〇▲×",
       "todo": "各党の記号を確定（v2）",
-      "command": "npm run complete:article -- --slug shussho-budget-seika --force",
+      "command": "node scripts/complete-article.mjs --slug shussho-budget-seika --matrix-only --force",
       "priority": 30
     },
     {
@@ -342,7 +342,7 @@
       "checkId": "B3_topic",
       "title": "[ゲート] 話題一致",
       "todo": "要約が searchKeyword と一致（2行以上）",
-      "command": "npm run complete:article -- --slug tokyo-solar-panel --force",
+      "command": "node scripts/complete-article.mjs --slug tokyo-solar-panel --content-only --force",
       "priority": 30
     },
     {
@@ -353,7 +353,7 @@
       "checkId": "G5_parties_symbol",
       "title": "[ゲート] ◎〇▲×",
       "todo": "各党の記号を確定（v2）",
-      "command": "npm run complete:article -- --slug tokyo-solar-panel --force",
+      "command": "node scripts/complete-article.mjs --slug tokyo-solar-panel --matrix-only --force",
       "priority": 30
     }
   ]
