@@ -1,7 +1,7 @@
 ---
 import AdminShell from "../../../components/admin/AdminShell.astro";
 import AdminArticleRow from "../../../components/admin/AdminArticleRow.astro";
-import { computeProjectStatus, sortSlugsForAdminPanel, adminSlugFilter } from "../../../lib/project-status.mjs";
+import { computeProjectStatus, sortSlugsForAdminPanel } from "../../../lib/project-status.mjs";
 import { loadPatrolRuntime } from "../../../lib/patrol-runtime.mjs";
 import { policyCategoryLabel, sortPolicyCategories } from "../../../lib/article-categories.mjs";
 import { STATUS_DEFINITIONS, AUTOMATION_POLICY, automationModeLabel } from "../../../lib/admin-status-guide.mjs";
@@ -12,23 +12,19 @@ const adminSlugs = status ? sortSlugsForAdminPanel(status.slugs) : [];
 const activeSlug = status?.slugs?.find((s) => s.runState === "active" || s.slug === patrol.activeSlug);
 
 const statusCounts = {
-  action: 0,
-  draft: 0,
+  todo: 0,
+  prep: 0,
   live: 0,
-  special: 0,
   hidden: 0,
-  quality: 0,
-  stall: 0,
   all: adminSlugs.length,
 };
 /** @type {Record<string, number>} */
 const categoryCounts = {};
 for (const s of adminSlugs) {
-  const f = adminSlugFilter(s);
-  if (f in statusCounts) statusCounts[f] += 1;
-  if (s.specialPublish) statusCounts.special += 1;
-  if (!s.qualityOk) statusCounts.quality += 1;
-  if (s.stall?.stalled) statusCounts.stall += 1;
+  if (s.ownerTodo) statusCounts.todo += 1;
+  else if (s.adminBucket === "prep") statusCounts.prep += 1;
+  else if (s.adminBucket === "live") statusCounts.live += 1;
+  else if (s.adminBucket === "hidden") statusCounts.hidden += 1;
   const cat = policyCategoryLabel(s.category);
   categoryCounts[cat] = (categoryCounts[cat] ?? 0) + 1;
 }
@@ -42,17 +38,16 @@ const policyCategories = Object.keys(categoryCounts).sort(sortPolicyCategories);
       <p class="admin-page-head__meta">
         完成度 <strong id="status-hero-pct">{status.overallGoldPct}%</strong>
         · 公開 <span id="stat-published">{status.publishedCount}/{status.activeCount}</span>
-        · ゲート <span id="stat-gate">{status.overallGatePct}%</span>
       </p>
     )}
-    <p class="admin-page-head__note">一覧・新規作成・公開はこの画面。一般公開だけはあなたの操作。それ以外は巡回が自動。</p>
+    <p class="admin-page-head__note">記事は4状態だけ。あなたが触るのは「公開する」「非表示」だけ。それ以外は巡回が自動。</p>
   </header>
 
   <section class="admin-guide" aria-label="状態の意味と自動化">
     <details class="admin-guide__panel admin-disclosure">
       <summary class="admin-disclosure__summary admin-guide__summary">
         <span class="admin-disclosure__chev" aria-hidden="true"></span>
-        <span class="admin-disclosure__label">状態の違い・自動化の範囲（必読）</span>
+        <span class="admin-disclosure__label">4つの状態の意味（タップで開く）</span>
         <span class="admin-disclosure__hint">タップで表を表示</span>
       </summary>
       <div class="admin-guide__body">
@@ -77,8 +72,8 @@ const policyCategories = Object.keys(categoryCounts).sort(sortPolicyCategories);
           </tbody>
         </table>
         <p class="admin-guide__note">
-          <strong>品質NG</strong>はタブでもバッジでも、公開状態とは別です。
-          <strong>◎ 特別公開</strong>（琥珀色）はゲート未達のまま /case/ に載っている記事です。
+          <strong>仮公開</strong>＝サイトに載っているが内部チェックが全部終わっていない記事。
+          細かいチェック一覧は各行の「詳細」を開く。
         </p>
         <table class="admin-guide__table admin-guide__table--auto">
           <caption>何が自動で、何が手動か</caption>
@@ -103,15 +98,11 @@ const policyCategories = Object.keys(categoryCounts).sort(sortPolicyCategories);
     </details>
   </section>
 
-  <section class="admin-dash__legend admin-dash__legend--compact" aria-label="作業状態">
+  <section class="admin-dash__legend admin-dash__legend--compact" aria-label="凡例">
     <p class="admin-dash__legend-inline">
-      <span class="admin-row__badge admin-row__badge--special admin-dash__legend-chip">◎ 特別公開</span>
-      <span class="admin-row__work-item is-active admin-dash__legend-chip">
-        <span class="admin-row__work-icon" aria-hidden="true"></span>処理中
-      </span>
-      <span class="admin-row__work-item is-blocked admin-dash__legend-chip">
-        <span class="admin-row__work-icon" aria-hidden="true">✕</span>未着手
-      </span>
+      <span class="admin-row__badge admin-row__badge--state admin-row__badge--bucket-todo admin-dash__legend-chip">公開できる</span>
+      <span class="admin-row__badge admin-row__badge--state admin-row__badge--bucket-live admin-dash__legend-chip">公開中</span>
+      <span class="admin-row__badge admin-row__badge--state admin-row__badge--bucket-prep admin-dash__legend-chip">準備中</span>
       {activeSlug ? (
         <span class="admin-dash__patrol-inline" id="article-patrol-active">
           今: <strong>{activeSlug.shortTitle}</strong>
@@ -161,26 +152,17 @@ const policyCategories = Object.keys(categoryCounts).sort(sortPolicyCategories);
     <div class="admin-filter__group admin-filter__group--status">
       <p class="admin-filter__label">公開状態 <span class="admin-filter__hint">いずれか1つ</span></p>
       <div class="admin-filter__pills" id="status-pills" role="group" aria-label="公開状態">
-        <button type="button" class="admin-filter__pill is-active" data-filter="action">
-          要対応 <span class="admin-filter__pill-n">{statusCounts.action}</span>
+        <button type="button" class="admin-filter__pill is-active" data-filter="todo">
+          あなたがやること <span class="admin-filter__pill-n">{statusCounts.todo}</span>
         </button>
-        <button type="button" class="admin-filter__pill" data-filter="draft">
-          公開待ち <span class="admin-filter__pill-n">{statusCounts.draft}</span>
+        <button type="button" class="admin-filter__pill" data-filter="prep">
+          準備中 <span class="admin-filter__pill-n">{statusCounts.prep}</span>
         </button>
         <button type="button" class="admin-filter__pill" data-filter="live">
-          公開済み <span class="admin-filter__pill-n">{statusCounts.live}</span>
-        </button>
-        <button type="button" class="admin-filter__pill" data-filter="special">
-          特別公開 <span class="admin-filter__pill-n">{statusCounts.special}</span>
+          公開中 <span class="admin-filter__pill-n">{statusCounts.live}</span>
         </button>
         <button type="button" class="admin-filter__pill" data-filter="hidden">
           非表示 <span class="admin-filter__pill-n">{statusCounts.hidden}</span>
-        </button>
-        <button type="button" class="admin-filter__pill" data-filter="quality">
-          品質NG <span class="admin-filter__pill-n">{statusCounts.quality}</span>
-        </button>
-        <button type="button" class="admin-filter__pill" data-filter="stall">
-          ループ <span class="admin-filter__pill-n">{statusCounts.stall}</span>
         </button>
         <button type="button" class="admin-filter__pill" data-filter="all">
           すべて <span class="admin-filter__pill-n">{statusCounts.all}</span>
@@ -207,7 +189,7 @@ const policyCategories = Object.keys(categoryCounts).sort(sortPolicyCategories);
     <div class="admin-filter__sort">
       <label class="admin-filter__label" for="article-sort">並び替え</label>
       <select id="article-sort" class="admin-filter__select">
-        <option value="priority">優先（要対応順）</option>
+        <option value="priority">優先（やること順）</option>
         <option value="gold-asc">完成度 低い順</option>
         <option value="gold-desc">完成度 高い順</option>
         <option value="title">タイトル順</option>
@@ -223,7 +205,8 @@ const policyCategories = Object.keys(categoryCounts).sort(sortPolicyCategories);
     <div id="admin-cards" class="admin-list" data-slugs={JSON.stringify(adminSlugs.map((s) => ({
       slug: s.slug,
       title: s.shortTitle,
-      filter: adminSlugFilter(s),
+      filter: s.adminBucket || "prep",
+      ownerTodo: Boolean(s.ownerTodo),
       qualityNg: !s.qualityOk,
       goldPct: s.goldPct,
       publishState: s.publishState,
@@ -254,30 +237,24 @@ const policyCategories = Object.keys(categoryCounts).sort(sortPolicyCategories);
     return data;
   }
 
-  function adminSlugFilterFrom(s) {
-    if (s.adminHidden) return "hidden";
-    if (s.publishState === "live") return "live";
-    if (s.publishState === "draft") return "draft";
-    return "action";
+  function adminBucketFrom(s) {
+    return s.adminBucket || "prep";
   }
 
   const FILTER_LABELS = {
-    action: "要対応",
-    draft: "公開待ち",
-    live: "公開済み",
-    special: "特別公開",
+    todo: "あなたがやること",
+    prep: "準備中",
+    live: "公開中",
     hidden: "非表示",
-    quality: "品質NG",
-    stall: "ループ",
   };
 
   function updateFilterCounts(slugs) {
-    const counts = { action: 0, draft: 0, live: 0, special: 0, hidden: 0, quality: 0, stall: 0, all: slugs.length };
+    const counts = { todo: 0, prep: 0, live: 0, hidden: 0, all: slugs.length };
     for (const s of slugs) {
-      counts[adminSlugFilterFrom(s)] += 1;
-      if (s.specialPublish) counts.special += 1;
-      if (!s.qualityOk) counts.quality += 1;
-      if (s.stall?.stalled) counts.stall += 1;
+      if (s.ownerTodo) counts.todo += 1;
+      else if (adminBucketFrom(s) === "prep") counts.prep += 1;
+      else if (adminBucketFrom(s) === "live") counts.live += 1;
+      else if (adminBucketFrom(s) === "hidden") counts.hidden += 1;
     }
     document.querySelectorAll("#status-pills .admin-filter__pill").forEach((btn) => {
       const f = btn.dataset.filter;
@@ -328,60 +305,37 @@ const policyCategories = Object.keys(categoryCounts).sort(sortPolicyCategories);
       hint.dataset.role = "gate-hint";
       quick.insertBefore(hint, quick.querySelector(".deploy-slug-status"));
     }
-    const f = adminSlugFilterFrom(s);
-    if (f === "draft") hint.textContent = "公開ボタンで一般公開";
-    else if (f === "action" && (s.goldPct ?? 0) < 100) hint.textContent = `完成度 ${s.goldPct ?? 0}%`;
-    else hint.textContent = `ゲート ${s.gatePct ?? 0}%`;
+    const f = adminBucketFrom(s);
+    if (f === "ready") hint.textContent = "プレビュー確認後「公開する」";
+    else if (f === "prep") hint.textContent = `完成度 ${s.goldPct ?? 0}%`;
+    else hint.textContent = "—";
   }
 
   function updateRowBadges(row, s) {
     const badges = row.querySelector(".admin-row__badges");
     if (!badges) return;
-    const f = adminSlugFilterFrom(s);
-    const stateFilter = s.specialPublish ? "special" : f;
+    const bucket = adminBucketFrom(s);
+    const badgeText =
+      s.adminHidden ? "非表示"
+      : s.pageReady ? (s.specialPublish ? "仮公開" : "公開中")
+      : s.publishGateOk ? "公開できる"
+      : s.stall?.stalled ? "自動停止"
+      : "準備中";
     let stateBadge = badges.querySelector(".admin-row__badge--state");
     if (!stateBadge) {
       stateBadge = document.createElement("span");
       stateBadge.className = "admin-row__badge admin-row__badge--state";
       badges.prepend(stateBadge);
     }
-    stateBadge.className = `admin-row__badge admin-row__badge--state admin-row__badge--state-${stateFilter}`;
-    stateBadge.textContent = s.specialPublish ? "特別公開" : (FILTER_LABELS[f] || f);
+    stateBadge.className = `admin-row__badge admin-row__badge--state admin-row__badge--bucket-${bucket}`;
+    stateBadge.textContent = badgeText;
     row.classList.toggle("admin-row--special", Boolean(s.specialPublish));
-    row.dataset.specialPublish = s.specialPublish ? "1" : "0";
-    row.classList.toggle("admin-row--quality-ng", s.qualityOk === false);
+    row.dataset.adminBucket = bucket;
+    row.dataset.ownerTodo = s.ownerTodo ? "1" : "0";
     row.classList.toggle("admin-row--stalled", Boolean(s.stall?.stalled));
     row.classList.toggle("admin-row--active", (s.workItems ?? []).some((w) => w.state === "active"));
     row.dataset.stall = s.stall?.stalled ? "1" : "0";
-    let stallBadge = badges.querySelector(".admin-row__badge--stall");
-    if (s.stall?.stalled) {
-      if (!stallBadge) {
-        stallBadge = document.createElement("span");
-        stallBadge.className = "admin-row__badge admin-row__badge--stall";
-        stallBadge.textContent = "ループ";
-        badges.appendChild(stallBadge);
-      }
-    } else if (stallBadge) stallBadge.remove();
-
-    let liveBadge = badges.querySelector(".admin-row__badge--live");
-    let specialBadge = badges.querySelector(".admin-row__badge--special");
-    if (s.publishState === "live" && !s.specialPublish) {
-      if (!liveBadge) {
-        liveBadge = document.createElement("span");
-        liveBadge.className = "admin-row__badge admin-row__badge--live";
-        liveBadge.textContent = "公開中";
-        badges.appendChild(liveBadge);
-      }
-    } else if (liveBadge) liveBadge.remove();
-    if (s.specialPublish) {
-      if (!specialBadge) {
-        specialBadge = document.createElement("span");
-        specialBadge.className = "admin-row__badge admin-row__badge--special";
-        specialBadge.textContent = "◎ 特別公開";
-        badges.appendChild(specialBadge);
-      }
-      specialBadge.title = s.specialPublishSummary || "ゲート未達のまま公開中";
-    } else if (specialBadge) specialBadge.remove();
+    badges.querySelectorAll(".admin-row__badge--live, .admin-row__badge--special, .admin-row__badge--stall, .admin-row__badge--ng, .admin-row__badge--draft").forEach((el) => el.remove());
   }
 
   function renderWorkItems(row, workItems) {
@@ -420,7 +374,7 @@ const policyCategories = Object.keys(categoryCounts).sort(sortPolicyCategories);
   }
 
   function getStatusFilter() {
-    return document.querySelector("#status-pills .admin-filter__pill.is-active")?.dataset.filter || "action";
+    return document.querySelector("#status-pills .admin-filter__pill.is-active")?.dataset.filter || "todo";
   }
 
   function getCategoryFilter() {
@@ -440,13 +394,10 @@ const policyCategories = Object.keys(categoryCounts).sort(sortPolicyCategories);
     if (q) chips.push(`検索: ${q}`);
     if (statusFilter !== "all") {
       const labels = {
-        action: "要対応",
-        draft: "公開待ち",
-        live: "公開済み",
-        special: "特別公開",
+        todo: "あなたがやること",
+        prep: "準備中",
+        live: "公開中",
         hidden: "非表示",
-        quality: "品質NG",
-        stall: "ループ",
       };
       chips.push(`状態: ${labels[statusFilter] || statusFilter}`);
     }
@@ -468,7 +419,7 @@ const policyCategories = Object.keys(categoryCounts).sort(sortPolicyCategories);
     const categoryFilter = getCategoryFilter();
     const sort = document.getElementById("article-sort")?.value || "priority";
     const rows = [...list.querySelectorAll(".admin-row")];
-    const rank = { action: 0, draft: 1, live: 2, hidden: 3 };
+    const rank = { todo: 0, prep: 1, live: 2, hidden: 3 };
     const catOrder = { 国会: 0, 行政: 1, 地方: 2, 未設定: 3 };
     let visible = 0;
 
@@ -476,17 +427,18 @@ const policyCategories = Object.keys(categoryCounts).sort(sortPolicyCategories);
       const slug = (row.dataset.slug || "").toLowerCase();
       const title = (row.dataset.title || "").toLowerCase();
       const cat = normCategory(row.dataset.category);
-      const f = row.dataset.adminFilter || "";
-      const qualityNg = row.dataset.qualityNg === "1";
+      const bucket = row.dataset.adminBucket || "";
+      const ownerTodo = row.dataset.ownerTodo === "1";
       let show = true;
       if (q) {
         const hit = slug.includes(q) || title.includes(q) || cat.toLowerCase().includes(q);
         if (!hit) show = false;
       }
-      if (statusFilter === "quality") show = show && qualityNg;
-      else if (statusFilter === "stall") show = show && row.dataset.stall === "1";
-      else if (statusFilter === "special") show = show && row.dataset.specialPublish === "1";
-      else if (statusFilter !== "all") show = show && f === statusFilter;
+      if (statusFilter === "todo") show = show && ownerTodo;
+      else if (statusFilter === "prep") show = show && bucket === "prep" && !ownerTodo;
+      else if (statusFilter === "live") show = show && bucket === "live";
+      else if (statusFilter === "hidden") show = show && bucket === "hidden";
+      else if (statusFilter !== "all") show = false;
       if (categoryFilter && cat !== categoryFilter) show = false;
       row.hidden = !show;
       if (show) visible += 1;
@@ -503,8 +455,8 @@ const policyCategories = Object.keys(categoryCounts).sort(sortPolicyCategories);
         if (ca !== cb) return ca - cb;
         return (a.dataset.title || "").localeCompare(b.dataset.title || "", "ja");
       }
-      const ra = rank[a.dataset.adminFilter] ?? 9;
-      const rb = rank[b.dataset.adminFilter] ?? 9;
+      const ra = rank[a.dataset.ownerTodo === "1" ? "todo" : (a.dataset.adminBucket || "prep")] ?? 9;
+      const rb = rank[b.dataset.ownerTodo === "1" ? "todo" : (b.dataset.adminBucket || "prep")] ?? 9;
       if (ra !== rb) return ra - rb;
       return Number(a.dataset.goldPct) - Number(b.dataset.goldPct);
     });
@@ -591,7 +543,7 @@ const policyCategories = Object.keys(categoryCounts).sort(sortPolicyCategories);
       if (explain?.nextSibling) main.insertBefore(box, explain.nextSibling);
       else main.appendChild(box);
     }
-    box.innerHTML = `<p class="admin-row__stall-title">⚠ ループ中（自動では進まない）</p><p class="admin-row__stall-line"><code>${s.stall.loopLine}</code></p>${s.stall.ownerHint ? `<p class="admin-row__stall-hint">${s.stall.ownerHint}</p>` : ""}`;
+    box.innerHTML = `<p class="admin-row__stall-title">自動処理が止まっている</p>${s.stall.ownerHint ? `<p class="admin-row__stall-hint">${s.stall.ownerHint}</p>` : ""}`;
   }
 
   async function refreshLiveStatus() {
@@ -630,7 +582,8 @@ const policyCategories = Object.keys(categoryCounts).sort(sortPolicyCategories);
         if (!row) continue;
         row.dataset.goldPct = String(s.goldPct ?? 0);
         row.dataset.qualityNg = s.qualityOk === false ? "1" : "0";
-        row.dataset.adminFilter = adminSlugFilterFrom(s);
+        row.dataset.adminBucket = s.adminBucket || "prep";
+        row.dataset.ownerTodo = s.ownerTodo ? "1" : "0";
         row.dataset.publishState = s.publishState || "";
         if (s.category != null) row.dataset.category = s.category;
         const label = row.querySelector(".admin-row__meter-label");

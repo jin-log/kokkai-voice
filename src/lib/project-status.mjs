@@ -26,6 +26,7 @@ import {
   AUTOMATION_POLICY,
   STATUS_DEFINITIONS,
 } from "./admin-status-guide.mjs";
+import { adminBucket, needsOwnerAttention, adminBucketExplain } from "./admin-buckets.mjs";
 import { analyzePatrolHealth, stallForSlug, loadPatrolHealthForAdmin } from "./patrol-stall.mjs";
 import { isXUnavailable, X_UNAVAILABLE_ADMIN_MESSAGE } from "./x-research-policy.mjs";
 import { waivedCheckIds, matrixPipelineOk, contentStatsOk } from "./case-gates.mjs";
@@ -247,6 +248,12 @@ export async function computeProjectStatus() {
     const workItems = buildWorkItems(slug, gate, quality, patrolRuntime, pipeline, article);
     const runState = patrolRuntime.activeSlug === slug ? "active" : "idle";
 
+    const bucket = adminBucket({
+      adminHidden: article.adminHidden === true,
+      pageReady,
+      publishGateOk,
+    });
+
     slugs.push({
       slug,
       title: article.title ?? slug,
@@ -256,6 +263,7 @@ export async function computeProjectStatus() {
       adminHidden: article.adminHidden === true,
       pageReady,
       publishState,
+      adminBucket: bucket,
       previewUrl: `/dev/preview/${slug}/`,
       qualityOk: quality.ok,
       needsQualityFix: !quality.ok,
@@ -368,6 +376,8 @@ export async function computeProjectStatus() {
 
   for (const s of slugs) {
     s.stall = stallForSlug(s.slug, patrolHealth);
+    s.ownerTodo = needsOwnerAttention(s);
+    s.statusExplain = adminBucketExplain(s.adminBucket, s);
   }
 
   return {
@@ -387,15 +397,13 @@ export async function computeProjectStatus() {
   };
 }
 
-/** 管理画面タブ: 公開状態ベース（品質NGはバッジ表示・タブは動かさない） */
+/** 管理画面タブ: 4分類 + あなたがやること */
 export function sortSlugsForAdminPanel(slugs) {
   const rank = (s) => {
-    if (s.publishState === "live" && !s.adminHidden) {
-      if (s.specialPublish) return 38;
-      return s.needsQualityFix ? 35 : 40;
-    }
-    if (s.adminHidden) return 30;
-    if (s.publishState === "draft") return 20;
+    if (s.ownerTodo) return 5;
+    if (s.adminBucket === "live") return 40;
+    if (s.adminBucket === "hidden") return 30;
+    if (s.adminBucket === "ready") return 20;
     return 10;
   };
   return [...slugs].sort((a, b) => {
@@ -408,8 +416,9 @@ export function sortSlugsForAdminPanel(slugs) {
   });
 }
 
-/** @param {ReturnType<typeof sortSlugsForAdminPanel>[number]} s */
+/** @deprecated 互換用 — adminBucket を正とする */
 export function adminSlugFilter(s) {
+  if (s.adminBucket) return s.adminBucket === "todo" && !s.ownerTodo ? "prep" : s.adminBucket;
   if (s.adminHidden) return "hidden";
   if (s.publishState === "live") return "live";
   if (s.publishState === "draft") return "draft";
@@ -419,10 +428,12 @@ export function adminSlugFilter(s) {
 /** @param {ReturnType<typeof adminSlugFilter>} filter */
 export function adminFilterLabel(filter) {
   const labels = {
-    action: "要対応",
-    draft: "公開待ち",
-    live: "公開済み",
+    todo: "あなたがやること",
+    prep: "準備中",
+    live: "公開中",
     hidden: "非表示",
+    action: "準備中",
+    draft: "公開できる",
   };
   return labels[filter] ?? filter;
 }
@@ -442,6 +453,8 @@ export async function enrichProjectStatusForAdmin(status) {
   status.patrolHealth = patrolHealth;
   for (const s of status.slugs) {
     s.stall = stallForSlug(s.slug, patrolHealth);
+    s.ownerTodo = needsOwnerAttention(s);
+    s.statusExplain = adminBucketExplain(s.adminBucket, s);
   }
   return status;
 }

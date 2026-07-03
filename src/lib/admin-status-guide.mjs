@@ -1,63 +1,48 @@
 /**
- * 管理画面：状態の意味・自動化ポリシー・1行説明
+ * 管理画面：状態の意味・自動化ポリシー
  */
 import { activityWhenShort } from "./article-activity.mjs";
+import { adminBucketExplain } from "./admin-buckets.mjs";
 
 /** @type {{ channel: string, mode: "auto"|"manual"|"semi", note: string }[]} */
 export const AUTOMATION_POLICY = [
-  { channel: "記事生成・①〜④", mode: "auto", note: "巡回がライター/X/法務で自動処理" },
-  { channel: "品質NGの修正", mode: "auto", note: "巡回が試行。直らなければ要対応のまま" },
-  { channel: "一般公開（/case/）", mode: "manual", note: "1行目がタイトルに答えている記事のみ「公開する」" },
-  { channel: "非表示", mode: "manual", note: "あなたの操作のみ。自動では戻らない" },
-  { channel: "本番サイト反映", mode: "auto", note: "git push 後 Cloudflare デプロイ" },
-  { channel: "X投稿", mode: "semi", note: "Buffer連携時はキュー自動。未設定なら手動" },
-  { channel: "はてブ / note", mode: "semi", note: "公開後キュー→ブラウザ半自動（要ログイン）" },
-  { channel: "ショート動画", mode: "manual", note: "オーナー手作り（生成スクリプトは別途）" },
+  { channel: "記事の下書きづくり", mode: "auto", note: "巡回が自動で進める" },
+  { channel: "サイトへの公開", mode: "manual", note: "あなたの「公開する」だけ" },
+  { channel: "非表示", mode: "manual", note: "あなたの操作のみ" },
+  { channel: "本番サイト反映", mode: "auto", note: "公開後に自動デプロイ" },
+  { channel: "X / はてブ / note", mode: "semi", note: "公開後に半自動" },
+  { channel: "ショート動画", mode: "manual", note: "手作り" },
 ];
 
 /** @type {{ id: string, label: string, meaning: string, autoFix: string, autoRevert: string }[]} */
 export const STATUS_DEFINITIONS = [
   {
-    id: "action",
-    label: "要対応",
-    meaning: "①〜④のゲートが未完了。記事は非公開。",
-    autoFix: "巡回が順に自動処理（◌=今動いている項目）",
+    id: "todo",
+    label: "あなたがやること",
+    meaning: "公開ボタンを押せる、または自動処理が止まっている。",
+    autoFix: "止まっている場合は自動では直らない",
     autoRevert: "—",
   },
   {
-    id: "draft",
-    label: "公開待ち",
-    meaning: "1行目がタイトルに回答済み。プレビュー可だが一般公開はまだ。",
-    autoFix: "巡回は①〜④の改善を継続（公開条件には含めない）",
+    id: "prep",
+    label: "準備中",
+    meaning: "まだサイトに載せない。巡回が仕上げている。",
+    autoFix: "巡回が続ける",
     autoRevert: "—",
   },
   {
     id: "live",
-    label: "公開済み",
-    meaning: "/case/ に表示中。",
-    autoFix: "巡回で品質改善を継続",
-    autoRevert: "—",
-  },
-  {
-    id: "special",
-    label: "特別公開",
-    meaning: "公開中だがゲート×・品質NG・①〜④未完了など、完全合格ではない。",
-    autoFix: "巡回が改善を試行（公開は維持）",
-    autoRevert: "自動で非公開にはしない",
+    label: "公開中",
+    meaning: "サイトに載っている。",
+    autoFix: "細部は巡回が改善し続ける",
+    autoRevert: "自動では非表示にしない",
   },
   {
     id: "hidden",
     label: "非表示",
-    meaning: "トップ・一覧から除外。データは残る。",
-    autoFix: "巡回はスキップ（修正しない）",
-    autoRevert: "自動復帰なし。「表示に戻す」が必要",
-  },
-  {
-    id: "quality",
-    label: "品質NG",
-    meaning: "監査不合格のバッジ。公開状態とは別軸。",
-    autoFix: "巡回がライター等で修正試行",
-    autoRevert: "公開/非公開は変えない",
+    meaning: "一覧から隠している。データは残る。",
+    autoFix: "巡回は触らない",
+    autoRevert: "「表示に戻す」が必要",
   },
 ];
 
@@ -66,41 +51,20 @@ export const STATUS_DEFINITIONS = [
  * @param {import('./articles.mjs').Article} article
  */
 export function buildStatusExplain(s, article) {
-  const fixing = s.runState === "active" || (s.workItems ?? []).some((w) => w.state === "active");
-
+  if (s.adminBucket) {
+    return adminBucketExplain(s.adminBucket, s);
+  }
   if (s.adminHidden) {
-    const by =
-      article.adminHiddenBy === "batch"
-        ? "一括投入"
-        : article.adminHiddenBy === "owner"
-          ? "あなたが手動"
-          : "手動";
     const when = article.adminHiddenAt ? activityWhenShort(article.adminHiddenAt) : "";
-    return `非表示（${by}）。自動では戻らない。${when ? `${when}〜` : ""}`;
+    return `非表示。${when ? `${when}〜` : ""}`;
   }
-
-  if (fixing) {
-    return "巡回が自動修正中 — ◌ が今処理している項目";
-  }
-
-  if (s.publishState === "draft") {
-    return "1行目OK・非公開。一般公開はあなたの「公開する」のみ";
-  }
-
   if (s.publishState === "live") {
-    const when = article.publishedAt ? activityWhenShort(article.publishedAt) : "";
-    const by = article.publishedBy === "owner" ? "手動公開" : "公開済";
-    if (s.specialPublish) {
-      const why = s.specialPublishSummary ? `（${s.specialPublishSummary}）` : "";
-      return `特別公開${why} — ルール未達のまま /case/ 掲載中`;
-    }
-    const q = s.needsQualityFix ? "。品質NGバッジあり（公開は継続）" : "";
-    const titleWarn = s.titleAnswerOk === false ? "。⚠ 1行目がタイトルに未回答（非表示推奨）" : "";
-    return `${by}${when ? ` ${when}` : ""}${q}${titleWarn}`;
+    return s.specialPublish ? "公開中（チェック未完了のまま載せている）" : "公開中";
   }
-
-  const q = s.needsQualityFix ? "品質NGあり。" : "";
-  return `${q}要対応 — ゲート未達。巡回が順に自動処理`;
+  if (s.publishGateOk) {
+    return "公開できる。プレビュー確認後「公開する」";
+  }
+  return "準備中。巡回が仕上げている";
 }
 
 /**

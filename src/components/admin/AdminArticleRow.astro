@@ -1,6 +1,6 @@
 ---
 import { promoDateShort } from "../../lib/promo-intro-status.mjs";
-import { adminSlugFilter, adminFilterLabel } from "../../lib/project-status.mjs";
+import { adminBucketBadge } from "../../lib/admin-buckets.mjs";
 import { automationModeLabel } from "../../lib/admin-status-guide.mjs";
 
 /** @typedef {import("../../lib/project-status.mjs").SlugStatus} SlugStatus */
@@ -10,12 +10,9 @@ interface Props {
 }
 
 const { s } = Astro.props;
-const workItems = s.workItems ?? [];
-const adminFilter = adminSlugFilter(s);
-const filterLabel = s.specialPublish ? "特別公開" : adminFilterLabel(adminFilter);
-const stateFilter = s.specialPublish ? "special" : adminFilter;
 const activity = s.activity ?? [];
 const distribution = s.distribution ?? [];
+const badge = adminBucketBadge(s);
 ---
 
 <article
@@ -31,7 +28,8 @@ const distribution = s.distribution ?? [];
   ]}
   data-slug={s.slug}
   data-publish-state={s.publishState}
-  data-admin-filter={adminSlugFilter(s)}
+  data-admin-bucket={s.adminBucket || "prep"}
+  data-owner-todo={s.ownerTodo ? "1" : "0"}
   data-special-publish={s.specialPublish ? "1" : "0"}
   data-quality-ng={!s.qualityOk ? "1" : "0"}
   data-stall={s.stall?.stalled ? "1" : "0"}
@@ -57,30 +55,14 @@ const distribution = s.distribution ?? [];
           )}
         </h3>
         <div class="admin-row__badges">
-          <span class:list={["admin-row__badge", "admin-row__badge--state", `admin-row__badge--state-${stateFilter}`]}>
-            {filterLabel}
+          <span class:list={["admin-row__badge", "admin-row__badge--state", `admin-row__badge--bucket-${s.adminBucket || "prep"}`]}>
+            {badge}
           </span>
-          {s.publishState === "draft" && <span class="admin-row__badge admin-row__badge--draft">非公開</span>}
-          {s.publishState === "live" && !s.specialPublish && (
-            <span class="admin-row__badge admin-row__badge--live">公開中</span>
-          )}
-          {s.specialPublish && (
-            <span
-              class="admin-row__badge admin-row__badge--special"
-              title={s.specialPublishSummary || "ゲート未達のまま公開中"}
-            >
-              ◎ 特別公開
-            </span>
-          )}
-          {s.needsQualityFix && <span class="admin-row__badge admin-row__badge--ng">品質NG</span>}
-          {s.stall?.stalled && <span class="admin-row__badge admin-row__badge--stall">ループ</span>}
-          {s.xUnavailable && <span class="admin-row__badge admin-row__badge--x">X未発見</span>}
           {s.category && (
             <span class:list={["admin-row__badge", "admin-row__badge--cat", `admin-row__badge--cat-${s.category}`]}>
               {s.category}
             </span>
           )}
-          {s.adminHidden && <span class="admin-row__badge">非表示</span>}
         </div>
       </header>
 
@@ -90,33 +72,17 @@ const distribution = s.distribution ?? [];
 
       {s.stall?.stalled && (
         <div class="admin-row__stall" data-role="stall-box">
-          <p class="admin-row__stall-title">⚠ ループ中（自動では進まない）</p>
-          <p class="admin-row__stall-line"><code>{s.stall.loopLine}</code></p>
+          <p class="admin-row__stall-title">自動処理が止まっている</p>
           {s.stall.ownerHint && <p class="admin-row__stall-hint">{s.stall.ownerHint}</p>}
         </div>
       )}
 
       {s.specialPublish && s.specialPublishSummary && (
-        <p class="admin-row__special-note">ルール未達: {s.specialPublishSummary}</p>
+        <p class="admin-row__special-note">未完了: {s.specialPublishSummary}</p>
       )}
 
       {s.pageReady && s.titleAnswerOk === false && (
-        <p class="admin-row__title-warn">⚠ 公開中だが1行目がタイトルに未回答</p>
-      )}
-
-      {workItems.length > 0 ? (
-        <ul class="admin-row__work" aria-label="未完了の作業">
-          {workItems.map((w) => (
-            <li class:list={["admin-row__work-item", w.state === "active" && "is-active", w.state === "blocked" && "is-blocked"]}>
-              <span class="admin-row__work-icon" aria-hidden="true">
-                {w.state === "active" ? "◌" : "✕"}
-              </span>
-              <span>{w.label}</span>
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p class="admin-row__summary admin-row__summary--ok">作業項目なし（公開可または完了）</p>
+        <p class="admin-row__title-warn">公開中だが1行目がタイトルに未回答</p>
       )}
     </div>
 
@@ -134,9 +100,7 @@ const distribution = s.distribution ?? [];
         <a href={`/case/${s.slug}/`} class="admin-row__btn admin-row__btn--ghost">本番を見る</a>
       ) : (
         <span class="admin-row__gate-hint" data-role="gate-hint">
-          {s.publishGateOk
-            ? "公開ボタンで一般公開"
-            : s.titleAnswerTodo || s.titleAnswerDetail || `完成度 ${s.goldPct}%`}
+          {s.adminBucket === "prep" ? `完成度 ${s.goldPct}%` : "—"}
         </span>
       )}
       <span class="deploy-slug-status" data-slug={s.slug} hidden></span>
@@ -151,6 +115,18 @@ const distribution = s.distribution ?? [];
     </summary>
     <div class="admin-row__details-body">
       <p class="admin-row__slug"><code>{s.slug}</code></p>
+      {(s.workItems ?? []).length > 0 && (
+        <ul class="admin-row__work" aria-label="内部チェック（詳細）">
+          {(s.workItems ?? []).map((w) => (
+            <li class:list={["admin-row__work-item", w.state === "active" && "is-active", w.state === "blocked" && "is-blocked"]}>
+              <span class="admin-row__work-icon" aria-hidden="true">
+                {w.state === "active" ? "◌" : "✕"}
+              </span>
+              <span>{w.label}</span>
+            </li>
+          ))}
+        </ul>
+      )}
       <div class="status-card__bar" role="progressbar" aria-valuenow={s.goldPct} aria-valuemin={0} aria-valuemax={100}>
         <span style={`width: ${s.goldPct}%`} />
       </div>
