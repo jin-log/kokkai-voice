@@ -93,11 +93,12 @@ export const ADMIN_NAV_GROUPS = [
 export function adminNavActiveId(path) {
   const p = path.replace(/\/$/, "") || "/dev";
   if (p === "/dev" || p === "/dev/index") return "dashboard";
-  for (const g of ADMIN_NAV_GROUPS) {
-    for (const item of g.items) {
-      const h = item.href.replace(/#.*$/, "").replace(/\/$/, "");
-      if (p === h || p.startsWith(h + "/")) return item.id;
-    }
+  const items = ADMIN_NAV_GROUPS.flatMap((g) => g.items).sort(
+    (a, b) => b.href.length - a.href.length,
+  );
+  for (const item of items) {
+    const h = item.href.replace(/#.*$/, "").replace(/\/$/, "");
+    if (p === h || p.startsWith(h + "/")) return item.id;
   }
   if (p.startsWith("/dev/preview")) return "articles";
   if (p === "/dev/status" || p === "/dev/status-v2") return "articles";

@@ -11,6 +11,7 @@
     "deploy:extras": "node scripts/notify-search-engines.mjs --live && node scripts/post-article-promo.mjs --from-queue",
     "deploy": "npm run deploy:site && npm run deploy:extras",
     "deploy:win": "node scripts/deploy-site.mjs",
+    "deploy:mac": "node scripts/deploy-handoff.mjs",
     "browser:setup": "playwright install chromium",
     "status": "node scripts/update-project-status.mjs --print",
     "rescore:symbols": "node scripts/rescore-stance-symbols.mjs",
@@ -69,7 +70,11 @@
     "x:thumbs": "node scripts/generate-x-thumbs.mjs",
     "x:audit": "node scripts/audit-x-screenshots.mjs",
     "x:recapture-bad": "node scripts/recapture-bad-x-screenshots.mjs",
-    "short:studio": "npx remotion studio remotion/index.ts"
+    "short:studio": "npx remotion studio remotion/index.ts",
+    "short:data:preview": "node scripts/prepare-remotion-preview.mjs && node scripts/generate-short-data.mjs --no-render && npx remotion studio remotion/index.ts --composition=ShortDataV1",
+    "short:data:generate": "node scripts/generate-short-data.mjs",
+    "short:data:render": "node scripts/generate-short-data.mjs",
+    "short:clips:import": "node scripts/import-short-clips.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.3",

@@ -1,0 +1,352 @@
+---
+import AdminShell from "../../../../components/admin/AdminShell.astro";
+import { getPreviewSlugs, loadArticle, loadStanceData } from "../../../../lib/articles.mjs";
+import { CHECK_LABELS } from "../../../../lib/page-ready.mjs";
+import {
+  REVISE_SECTIONS,
+  sectionContent,
+  MOCK_RULE_HISTORY,
+} from "../../../../lib/article-revise-sections.mjs";
+import "../../../../styles/admin-revise.css";
+
+export async function getStaticPaths() {
+  const slugs = await getPreviewSlugs();
+  return slugs.map((slug) => ({ params: { slug } }));
+}
+
+const { slug } = Astro.params;
+const article = await loadArticle(slug);
+const stance = await loadStanceData(article).catch(() => null);
+
+const sections = REVISE_SECTIONS.map((s) => ({
+  ...s,
+  content: sectionContent(article, s.id, stance),
+  checks: s.checkIds.map((id) => CHECK_LABELS[id]?.label ?? id),
+}));
+
+const payload = {
+  slug,
+  title: article.title,
+  sections: sections.map(({ id, label, agent, content }) => ({ id, label, agent, content })),
+  rules: MOCK_RULE_HISTORY,
+};
+---
+
+<AdminShell activeId="articles" title={`修正 · ${article.title}`} wide={true}>
+  <div class="admin-preview-ribbon">
+    <span class="admin-preview-ribbon__dot"></span>修正キューMVP — 保存は記事JSONに反映。提案生成器は簡易版
+  </div>
+
+  <header class="admin-page-head">
+    <h1 class="admin-page-head__title">{article.title}</h1>
+    <p class="admin-page-head__meta">
+      <code>{slug}</code>
+      · 指示は曖昧でOK（例:「答弁だけ並んでる」）→ ライターがこのブロックだけ読んで案を返す
+    </p>
+    <div class="admin-row__quick" style="margin-top:0.5rem">
+      <a href="/dev/articles/" class="admin-row__btn admin-row__btn--ghost">← 記事一覧</a>
+      <a href={`/dev/preview/${slug}/`} class="admin-row__btn" target="_blank" rel="noopener">プレビュー</a>
+      {article.pageReady && !article.adminHidden && (
+        <a href={`/case/${slug}/`} class="admin-row__btn admin-row__btn--ghost" target="_blank" rel="noopener">
+          本番
+        </a>
+      )}
+    </div>
+  </header>
+
+  <div class="admin-revise-mock" id="revise-root">
+    <nav class="admin-revise-mock__nav" aria-label="セクション">
+      <p class="admin-revise-mock__nav-title">セクション</p>
+      {sections.map((s, i) => (
+        <button
+          type="button"
+          class:list={["admin-revise-section", i === 0 && "is-active"]}
+          data-section={s.id}
+          data-agent={s.agent}
+        >
+          <span class="admin-revise-section__status" data-status-dot></span>
+          <span class="admin-revise-section__label">{s.label}</span>
+          <span class="admin-revise-section__agent">{s.agent}</span>
+        </button>
+      ))}
+    </nav>
+
+    <div class="admin-revise-panel">
+      {sections.map((s, i) => (
+        <section
+          class="admin-revise-block revise-panel"
+          data-panel={s.id}
+          hidden={i !== 0}
+        >
+          <div class="admin-revise-block__head">
+            <h2 class="admin-revise-block__title">{s.label}</h2>
+            <div class="admin-revise-block__checks">
+              {s.checks.map((c) => (
+                <span class="admin-revise-check">{c}</span>
+              ))}
+            </div>
+          </div>
+          <p class="admin-revise-block__desc">{s.desc}</p>
+
+          <h3 class="admin-disclosure__label" style="font-size:0.8rem;margin:0 0 0.35rem">いまの内容</h3>
+          <pre class="admin-revise-pre revise-current">{s.content}</pre>
+
+          <label>
+            <span class="admin-disclosure__label" style="font-size:0.8rem;display:block;margin:0.75rem 0 0.35rem">
+              修正指示（このセクションだけ）
+            </span>
+            <textarea
+              class="admin-revise-instruct revise-instruct"
+              placeholder="例: 答弁だけ並んでる。Xと国会を混ぜて時系列で"
+              rows={4}
+            ></textarea>
+          </label>
+
+          <div class="admin-revise-actions">
+            <button type="button" class="admin-row__btn admin-row__btn--primary revise-request">
+              ライターに依頼
+            </button>
+            <button type="button" class="admin-row__btn admin-row__btn--ghost revise-clear">指示をクリア</button>
+            <span class="admin-revise-busy revise-busy" hidden>ライター処理中…</span>
+          </div>
+
+          <div class="admin-revise-proposal revise-proposal" hidden>
+            <p class="admin-revise-proposal__note revise-proposal-note"></p>
+            <h3 class="admin-disclosure__label" style="font-size:0.8rem;margin:0 0 0.35rem">提案（差分プレビュー）</h3>
+            <pre class="admin-revise-pre admin-revise-pre--removed revise-before"></pre>
+            <pre class="admin-revise-pre admin-revise-pre--proposal revise-after" style="margin-top:0.5rem"></pre>
+            <div class="admin-revise-actions">
+              <button type="button" class="admin-row__btn admin-row__btn--primary revise-apply">保存する</button>
+              <button type="button" class="admin-row__btn admin-row__btn--ghost revise-reject">却下</button>
+            </div>
+          </div>
+        </section>
+      ))}
+    </div>
+
+    <aside class="admin-revise-mock__rules">
+      <h2>蓄積ルール</h2>
+      <p style="font-size:0.75rem;color:#92400e;margin:0 0 0.65rem;line-height:1.45">
+        採用した指示はセクション別にDBへ。将来ライターが参照。
+      </p>
+      <div id="revise-rules">
+        {MOCK_RULE_HISTORY.map((r) => {
+          const sec = REVISE_SECTIONS.find((x) => x.id === r.sectionId);
+          return (
+            <div class="admin-revise-rule">
+              <strong>{sec?.label ?? r.sectionId}</strong>
+              <br />
+              {r.instruction}
+              {r.applied && <span style="color:#15803d"> · 採用済</span>}
+            </div>
+          );
+        })}
+      </div>
+    </aside>
+  </div>
+
+  <script type="application/json" id="revise-payload" set:html={JSON.stringify(payload)} />
+
+  <script is:inline>
+    (function () {
+      const raw = document.getElementById("revise-payload");
+      if (!raw) return;
+      const data = JSON.parse(raw.textContent || "{}");
+      const root = document.getElementById("revise-root");
+      if (!root) return;
+
+      /** @type {Map<string, { instruction: string, jobId?: string, proposal?: { before: string, after: string, note: string, canApply?: boolean }, status: string }>} */
+      const state = new Map();
+      data.sections.forEach((s) => state.set(s.id, { instruction: "", status: "idle" }));
+
+      const KEY = "dev_auth";
+      function getPin() { return window.adminGetPin?.() || localStorage.getItem(KEY) || ""; }
+
+      async function api(action, extra = {}) {
+        const res = await fetch("/api/article-revisions", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ pin: getPin(), action, ...extra }),
+        });
+        const out = await res.json().catch(() => ({}));
+        if (!res.ok || !out.ok) throw new Error(out.error || "修正APIエラー");
+        return out;
+      }
+
+      function renderProposal(panel, job) {
+        const sectionId = job.sectionId;
+        const st = state.get(sectionId);
+        if (!st) return;
+        st.jobId = job.id;
+        st.instruction = job.instruction || "";
+        st.proposal = job.proposal;
+        st.status = job.status === "proposed" ? "proposal" : job.status;
+
+        panel.querySelector(".revise-proposal-note").textContent = job.proposal?.note || "";
+        panel.querySelector(".revise-before").textContent = job.proposal?.before || "";
+        panel.querySelector(".revise-after").textContent = job.proposal?.after || "";
+        panel.querySelector(".revise-proposal").hidden = job.status !== "proposed";
+        const applyBtn = panel.querySelector(".revise-apply");
+        if (applyBtn) {
+          applyBtn.disabled = !job.proposal?.canApply;
+          applyBtn.textContent = job.proposal?.canApply ? "保存する" : "保存未対応";
+        }
+        updateDots();
+      }
+
+      function updateDots() {
+        root.querySelectorAll(".admin-revise-section").forEach((btn) => {
+          const id = btn.getAttribute("data-section");
+          const st = state.get(id);
+          const dot = btn.querySelector("[data-status-dot]");
+          if (!dot || !st) return;
+          dot.className = "admin-revise-section__status";
+          if (st.status === "draft") dot.classList.add("admin-revise-section__status--draft");
+          if (st.status === "proposal") dot.classList.add("admin-revise-section__status--proposal");
+        });
+      }
+
+      function showPanel(id) {
+        root.querySelectorAll(".revise-panel").forEach((p) => {
+          p.hidden = p.getAttribute("data-panel") !== id;
+        });
+        root.querySelectorAll(".admin-revise-section").forEach((b) => {
+          b.classList.toggle("is-active", b.getAttribute("data-section") === id);
+        });
+      }
+
+      root.querySelectorAll(".admin-revise-section").forEach((btn) => {
+        btn.addEventListener("click", () => showPanel(btn.getAttribute("data-section")));
+      });
+
+      root.querySelectorAll(".revise-panel").forEach((panel) => {
+        const sectionId = panel.getAttribute("data-panel");
+        const section = data.sections.find((s) => s.id === sectionId);
+        const instruct = panel.querySelector(".revise-instruct");
+        const busy = panel.querySelector(".revise-busy");
+        const proposalBox = panel.querySelector(".revise-proposal");
+        const beforeEl = panel.querySelector(".revise-before");
+        const afterEl = panel.querySelector(".revise-after");
+        const noteEl = panel.querySelector(".revise-proposal-note");
+        const currentEl = panel.querySelector(".revise-current");
+
+        instruct.addEventListener("input", () => {
+          const st = state.get(sectionId);
+          if (!st) return;
+          st.instruction = instruct.value;
+          if (st.status === "idle" && instruct.value.trim()) st.status = "draft";
+          if (!instruct.value.trim() && st.status === "draft") st.status = "idle";
+          updateDots();
+        });
+
+        panel.querySelector(".revise-clear").addEventListener("click", () => {
+          instruct.value = "";
+          state.set(sectionId, { instruction: "", status: "idle" });
+          proposalBox.hidden = true;
+          updateDots();
+        });
+
+        panel.querySelector(".revise-request").addEventListener("click", async () => {
+          const text = instruct.value.trim();
+          if (!text) {
+            instruct.focus();
+            return;
+          }
+          busy.hidden = false;
+          busy.textContent = "修正キュー送信中…";
+          const st = state.get(sectionId);
+          st.instruction = text;
+          st.status = "draft";
+          updateDots();
+          try {
+            const out = await api("create", {
+              slug: data.slug,
+              sectionId,
+              instruction: text,
+              current: section.content,
+            });
+            renderProposal(panel, out.job);
+            proposalBox.hidden = false;
+          } catch (err) {
+            alert(err instanceof Error ? err.message : String(err));
+          } finally {
+            busy.hidden = true;
+            busy.textContent = "ライター処理中…";
+          }
+        });
+
+        panel.querySelector(".revise-apply").addEventListener("click", async () => {
+          const st = state.get(sectionId);
+          if (!st?.proposal || !st.jobId) return;
+          if (!st.proposal.canApply) {
+            alert("このブロックはまだ保存未対応です");
+            return;
+          }
+          busy.hidden = false;
+          busy.textContent = "保存中…";
+          try {
+            await api("apply", { jobId: st.jobId });
+            currentEl.textContent = st.proposal.after;
+            section.content = st.proposal.after;
+            proposalBox.hidden = true;
+            instruct.value = "";
+            state.set(sectionId, { instruction: "", status: "idle" });
+            const rules = document.getElementById("revise-rules");
+            if (rules && st.proposal) {
+              const sec = data.sections.find((s) => s.id === sectionId);
+              const div = document.createElement("div");
+              div.className = "admin-revise-rule";
+              div.innerHTML =
+                "<strong>" +
+                (sec?.label || sectionId) +
+                '</strong><br><span style="color:#15803d">· 保存済</span><br>' +
+                st.instruction.replace(/[<>&]/g, (c) => ({ "<": "&lt;", ">": "&gt;", "&": "&amp;" }[c]));
+              rules.prepend(div);
+            }
+            updateDots();
+          } catch (err) {
+            alert(err instanceof Error ? err.message : String(err));
+          } finally {
+            busy.hidden = true;
+            busy.textContent = "ライター処理中…";
+          }
+        });
+
+        panel.querySelector(".revise-reject").addEventListener("click", async () => {
+          const st = state.get(sectionId);
+          try {
+            if (st?.jobId) await api("reject", { jobId: st.jobId });
+          } catch {
+            /* local UI still closes */
+          } finally {
+            proposalBox.hidden = true;
+            if (st) st.status = instruct.value.trim() ? "draft" : "idle";
+            updateDots();
+          }
+        });
+      });
+
+      async function loadExistingJobs() {
+        try {
+          const url = `/api/article-revisions?pin=${encodeURIComponent(getPin())}&slug=${encodeURIComponent(data.slug)}`;
+          const res = await fetch(url);
+          const out = await res.json();
+          if (!res.ok || !out.ok) return;
+          for (const job of out.jobs || []) {
+            if (job.status !== "proposed") continue;
+            const panel = root.querySelector(`.revise-panel[data-panel="${job.sectionId}"]`);
+            if (!panel) continue;
+            const instruct = panel.querySelector(".revise-instruct");
+            if (instruct && !instruct.value) instruct.value = job.instruction || "";
+            renderProposal(panel, job);
+          }
+        } catch {
+          /* optional */
+        }
+      }
+
+      window.addEventListener("admin-unlocked", loadExistingJobs, { once: true });
+      if (getPin()) loadExistingJobs();
+    })();
+  </script>
+</AdminShell>

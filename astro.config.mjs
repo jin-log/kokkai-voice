@@ -2,6 +2,7 @@
 import { defineConfig } from "astro/config";
 import sitemap from "@astrojs/sitemap";
 import { opsTaskDevApi } from "./scripts/vite-ops-task-api.mjs";
+import { articleRevisionsDevApi } from "./scripts/vite-article-revisions-api.mjs";
 
 export default defineConfig({
   site: "https://seiji1192.site",
@@ -15,6 +16,6 @@ export default defineConfig({
     }),
   ],
   vite: {
-    plugins: [opsTaskDevApi()],
+    plugins: [opsTaskDevApi(), articleRevisionsDevApi()],
   },
 });

@@ -70,6 +70,10 @@ const badge = adminBucketBadge(s);
         <p class="admin-row__explain" data-role="status-explain">{s.statusExplain}</p>
       )}
 
+      <p class="admin-row__revise-link">
+        <a href={`/dev/articles/revise/${s.slug}/`}>ブロック修正</a>
+      </p>
+
       {s.stall?.stalled && (
         <div class="admin-row__stall" data-role="stall-box">
           <p class="admin-row__stall-title">自動処理が止まっている</p>
@@ -87,6 +91,9 @@ const badge = adminBucketBadge(s);
     </div>
 
     <div class="admin-row__quick">
+      <a href={`/dev/articles/revise/${s.slug}/`} class="admin-row__btn admin-row__btn--ghost">
+        ブロック修正
+      </a>
       {s.previewUrl && (
         <a href={s.previewUrl} class="admin-row__btn admin-row__btn--ghost" target="_blank" rel="noopener">
           プレビュー

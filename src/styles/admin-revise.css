@@ -1,0 +1,294 @@
+/* 記事ブロック修正 — 管理画面モック */
+
+.admin-revise-mock {
+  display: grid;
+  grid-template-columns: minmax(200px, 240px) minmax(0, 1fr) minmax(220px, 280px);
+  gap: 1rem;
+  align-items: start;
+  min-height: calc(100vh - 8rem);
+}
+
+@media (max-width: 1100px) {
+  .admin-revise-mock {
+    grid-template-columns: 1fr;
+  }
+  .admin-revise-mock__rules {
+    order: 3;
+  }
+}
+
+.admin-revise-mock__nav {
+  position: sticky;
+  top: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 0.65rem;
+  background: #fff;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+}
+
+.admin-revise-mock__nav-title {
+  margin: 0 0 0.35rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.admin-revise-section {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.55rem 0.65rem;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.12s, border-color 0.12s;
+}
+
+.admin-revise-section:hover {
+  background: #f8fafc;
+}
+
+.admin-revise-section.is-active {
+  background: #eff6ff;
+  border-color: #93c5fd;
+}
+
+.admin-revise-section__label {
+  flex: 1;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-text);
+  line-height: 1.35;
+}
+
+.admin-revise-section__agent {
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: #64748b;
+}
+
+.admin-revise-section__status {
+  flex-shrink: 0;
+  width: 0.55rem;
+  height: 0.55rem;
+  margin-top: 0.35rem;
+  border-radius: 50%;
+  background: #cbd5e1;
+}
+
+.admin-revise-section__status--draft {
+  background: #f59e0b;
+}
+
+.admin-revise-section__status--proposal {
+  background: #3b82f6;
+  animation: revise-pulse 1.2s ease-in-out infinite;
+}
+
+@keyframes revise-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.45;
+  }
+}
+
+.admin-revise-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.admin-revise-block {
+  padding: 1rem 1.1rem;
+  background: #fff;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+}
+
+.admin-revise-block__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+  margin-bottom: 0.65rem;
+}
+
+.admin-revise-block__title {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.admin-revise-block__desc {
+  margin: 0 0 0.75rem;
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  line-height: 1.5;
+}
+
+.admin-revise-block__checks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.admin-revise-check {
+  padding: 0.15rem 0.45rem;
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: #475569;
+  background: #f1f5f9;
+  border-radius: 4px;
+}
+
+.admin-revise-pre {
+  margin: 0;
+  padding: 0.75rem 0.85rem;
+  font-family: ui-monospace, "Cascadia Code", "Source Code Pro", Menlo, monospace;
+  font-size: 0.78rem;
+  line-height: 1.55;
+  white-space: pre-wrap;
+  word-break: break-word;
+  color: #1e293b;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  max-height: 280px;
+  overflow: auto;
+}
+
+.admin-revise-pre--proposal {
+  background: #f0fdf4;
+  border-color: #86efac;
+}
+
+.admin-revise-pre--removed {
+  background: #fef2f2;
+  border-color: #fecaca;
+  text-decoration: line-through;
+  opacity: 0.85;
+}
+
+.admin-revise-instruct {
+  width: 100%;
+  min-height: 5.5rem;
+  padding: 0.65rem 0.75rem;
+  font-family: inherit;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  resize: vertical;
+}
+
+.admin-revise-instruct:focus {
+  outline: 2px solid #93c5fd;
+  border-color: #3b82f6;
+}
+
+.admin-revise-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.admin-revise-actions .admin-row__btn {
+  min-height: 2.35rem;
+  padding: 0 1rem;
+  font-size: 0.85rem;
+}
+
+.admin-revise-proposal {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px dashed #cbd5e1;
+}
+
+.admin-revise-proposal__note {
+  margin: 0 0 0.5rem;
+  font-size: 0.78rem;
+  color: #0369a1;
+  font-weight: 600;
+}
+
+.admin-revise-mock__rules {
+  position: sticky;
+  top: 0.75rem;
+  padding: 0.85rem;
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  border-radius: 10px;
+}
+
+.admin-revise-mock__rules h2 {
+  margin: 0 0 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #92400e;
+}
+
+.admin-revise-rule {
+  padding: 0.5rem 0;
+  font-size: 0.78rem;
+  line-height: 1.45;
+  border-bottom: 1px solid #fde68a;
+}
+
+.admin-revise-rule:last-child {
+  border-bottom: none;
+}
+
+.admin-revise-rule strong {
+  color: #78350f;
+}
+
+.admin-revise-picker {
+  display: grid;
+  gap: 0.65rem;
+  max-width: 42rem;
+}
+
+.admin-revise-picker a {
+  display: block;
+  padding: 0.85rem 1rem;
+  color: inherit;
+  text-decoration: none;
+  background: #fff;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  transition: border-color 0.12s, box-shadow 0.12s;
+}
+
+.admin-revise-picker a:hover {
+  border-color: #93c5fd;
+  box-shadow: 0 2px 8px rgb(59 130 246 / 0.08);
+}
+
+.admin-revise-picker code {
+  font-size: 0.75rem;
+  color: #64748b;
+}
+
+.admin-revise-busy {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.8rem;
+  color: #64748b;
+}
+
+.admin-revise-busy[hidden] {
+  display: none !important;
+}
