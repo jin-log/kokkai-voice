@@ -1,14 +1,19 @@
 #!/usr/bin/env node
 /**
- * 記事1本を note に公開（抜粋 + 本家リンク）
+ * 記事1本を note に公開（抜粋 + 本家リンク + メンバー導線）
  *
  *   node scripts/post-note-article.mjs --slug case-xxx
  *   node scripts/post-note-article.mjs --slug case-xxx --dry-run
  */
+import { mkdir, writeFile } from "node:fs/promises";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { loadArticle } from "../src/lib/articles.mjs";
 import { buildNoteExcerpt } from "../src/lib/promo-generate.mjs";
 import { recordPromoIntro } from "../src/lib/promo-intro-status.mjs";
 import { closePromoBrowser, launchPromoBrowser } from "./lib/promo-browser.mjs";
+
+const root = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
 
 const args = process.argv.slice(2);
 function arg(name) {
@@ -23,31 +28,80 @@ if (!slug) {
   process.exit(1);
 }
 
-async function postNoteArticle(page, note) {
+/** @param {import('playwright').Page} page */
+async function fillNoteEditor(page, note) {
   await page.goto("https://note.com/notes/new", { waitUntil: "domcontentloaded", timeout: 60_000 });
-  await page.waitForTimeout(2000);
+  await page.waitForTimeout(2500);
 
   if (page.url().includes("/login")) {
-    throw new Error("note 未ログイン");
+    throw new Error("note 未ログイン — npm run browser:login -- note");
   }
 
-  const titleBox = page.locator('[placeholder*="タイトル"], [data-testid="title"], textarea').first();
-  await titleBox.click({ timeout: 15_000 });
+  const titleBox = page.locator(
+    'textarea[placeholder*="タイトル"], [data-testid="title-input"], [placeholder*="タイトル"]',
+  ).first();
+  await titleBox.click({ timeout: 20_000 });
   await titleBox.fill(note.title);
 
-  const editor = page.locator('[contenteditable="true"]').last();
-  await editor.click();
+  const editor = page.locator('[contenteditable="true"][role="textbox"], [contenteditable="true"]').last();
+  await editor.click({ timeout: 15_000 });
   await editor.fill(note.bodyFree);
+  await page.waitForTimeout(800);
+}
 
-  await page.waitForTimeout(1000);
-
-  const pub = page.getByRole("button", { name: /公開する|投稿する/ }).first();
-  if (!(await pub.count())) {
-    throw new Error("公開ボタンが見つかりません");
+/** @param {import('playwright').Page} page */
+async function clickNotePublish(page) {
+  const patterns = [/公開に進む/, /^公開する$/, /投稿する/, /公開する/];
+  for (const pattern of patterns) {
+    const btn = page.getByRole("button", { name: pattern });
+    const n = await btn.count();
+    for (let i = 0; i < n; i++) {
+      const el = btn.nth(i);
+      if (!(await el.isVisible().catch(() => false))) continue;
+      await el.click({ timeout: 8000 });
+      await page.waitForTimeout(2000);
+    }
   }
-  await pub.click();
-  await page.waitForTimeout(4000);
-  return page.url();
+
+  const linkPub = page.locator('a, button').filter({ hasText: /^公開に進む$/ });
+  if (await linkPub.count()) {
+    await linkPub.first().click({ timeout: 8000 });
+    await page.waitForTimeout(2000);
+  }
+}
+
+/** @param {import('playwright').Page} page */
+async function waitNotePublished(page, timeoutMs = 20_000) {
+  const start = Date.now();
+  while (Date.now() - start < timeoutMs) {
+    const url = page.url();
+    if (/\/n\/n[a-z0-9]+/i.test(url)) return url;
+
+    if (await page.getByText("記事が公開されました").count()) {
+      const hrefs = await page.$$eval('a[href*="/n/n"]', (els) =>
+        els.map((e) => e.href).filter(Boolean),
+      );
+      if (hrefs[0]) return hrefs[0];
+      return url;
+    }
+
+    await page.waitForTimeout(500);
+  }
+  return null;
+}
+
+/** @param {import('playwright').Page} page @param {string} slug */
+async function postNoteArticle(page, note, slug) {
+  await fillNoteEditor(page, note);
+  await clickNotePublish(page);
+
+  const url = await waitNotePublished(page);
+  if (url) return url;
+
+  await mkdir(path.join(root, "output/debug"), { recursive: true });
+  const shot = path.join(root, "output/debug", `note-publish-fail-${slug}.png`);
+  await page.screenshot({ path: shot, fullPage: true });
+  throw new Error(`note 公開未完了 — スクショ: ${shot}`);
 }
 
 async function main() {
@@ -57,7 +111,7 @@ async function main() {
   console.log(`[note] ${slug}`);
   console.log(`タイトル: ${note.title}`);
   if (dryRun) {
-    console.log(note.bodyFree.slice(0, 400));
+    console.log(note.bodyFree);
     return;
   }
 
@@ -65,7 +119,7 @@ async function main() {
   const page = launched.context.pages()[0] || (await launched.context.newPage());
 
   try {
-    const url = await postNoteArticle(page, note);
+    const url = await postNoteArticle(page, note, slug);
     await recordPromoIntro(slug, "note");
     console.log(`OK note 公開: ${url}`);
   } finally {

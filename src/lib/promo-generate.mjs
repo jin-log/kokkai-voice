@@ -1,5 +1,6 @@
 import { SITE } from "./site-config.mjs";
 import { articleShortTitle, formatDate, ASSET_V } from "./case-helpers.mjs";
+import { noteMembershipLink, noteMembershipFooterLabel } from "./note-link.mjs";
 import { buildSharePayload } from "./share.mjs";
 import { buildOgAssetBrief } from "./og-image.mjs";
 
@@ -142,6 +143,21 @@ export function buildNoteExcerpt(article) {
   const shortTitle = articleShortTitle(article);
   const plain = (article.plainExplanation || "").split("\n\n")[0] || "";
   const excerpt = clip(plain || article.nowSummary?.bullets?.join(" ") || "", 300);
+  const memberUrl =
+    SITE.noteMembershipLive && SITE.noteMembershipUrl
+      ? noteMembershipLink("note_article", article.slug || "post")
+      : null;
+  const footer = [
+    "—",
+    `${SITE.name}（${DOMAIN}）`,
+  ];
+  if (memberUrl) {
+    footer.push(
+      "",
+      `▼ noteメンバー（${noteMembershipFooterLabel()}）— 週次ダイジェスト・深掘り`,
+      memberUrl,
+    );
+  }
   return {
     pageUrl,
     title: shortTitle,
@@ -154,8 +170,7 @@ export function buildNoteExcerpt(article) {
       "▼ 全文（公言と行動表・タイムライン・用語）",
       pageUrl,
       "",
-      "—",
-      `${SITE.name}（${DOMAIN}）`,
+      ...footer,
     ].join("\n"),
   };
 }
