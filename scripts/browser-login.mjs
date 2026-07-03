@@ -63,21 +63,19 @@ async function waitForLogin(page, timeoutMs = 600_000) {
 }
 
 async function main() {
-  const shared = await loadChromeProfileConfig();
+  const shared = service === "x" ? await loadChromeProfileConfig() : null;
+  const userDataDir = shared?.userDataDir ?? cfg.dir;
 
-  if (shared) {
+  if (service === "x" && shared) {
     console.log(
-      `\n[${service}] chrome-profile.json を使用: ${shared.profileDirectory}` +
+      `\n[x] chrome-profile.json → ${shared.profileDirectory}` +
         (shared.label ? ` (${shared.label})` : ""),
     );
-    if (service === "x") {
-      console.log("普段ログインしている Chrome の Profile をそのまま使います（別ウィンドウで login 画面は開きません）。\n");
-    } else {
-      console.log("⚠ 自動化開始前に、このプロフィールの Chrome をすべて閉じてください。\n");
-    }
+    console.log("普段の Chrome プロフィールを使います。\n");
   } else {
     await mkdir(cfg.dir, { recursive: true });
-    console.log(`\n[${service}] Chrome を開きます（このウィンドウでログインしてください）`);
+    console.log(`\n[${service}] 専用プロファイルで開きます: ${cfg.dir}`);
+    console.log("※ X用の chrome-profile.json とは別アカウントです。\n");
   }
 
   console.log(cfg.startUrl);
@@ -91,30 +89,31 @@ async function main() {
   console.log("ログインが終わると自動でセッションを保存して閉じます。\n");
 
   const context = await launchBrowserContext(
-    shared?.userDataDir ?? cfg.dir,
-    shared
-      ? { headless: false, profileDirectory: shared.profileDirectory }
-      : { headless: false },
+    userDataDir,
+    shared ? { headless: false, profileDirectory: shared.profileDirectory } : { headless: false },
   );
 
   const page = context.pages()[0] || (await context.newPage());
-  const startUrl = shared && service === "x" ? cfg.startUrl : (shared ? cfg.startUrl : cfg.startUrl);
-  await page.goto(startUrl, { waitUntil: "domcontentloaded" });
+  await page.goto(cfg.startUrl, { waitUntil: "domcontentloaded" });
 
-  if (cfg.isLoggedIn(page.url())) {
-    console.log(`既にログイン済み: ${page.url()}`);
+  let doneUrl = page.url();
+  if (cfg.isLoggedIn(doneUrl)) {
+    console.log(`既にログイン済み: ${doneUrl}`);
   } else {
-    const doneUrl = await waitForLogin(page);
+    doneUrl = await waitForLogin(page);
     console.log(`ログイン検知: ${doneUrl}`);
   }
-  if (service === "x" && !/^https:\/\/(x\.com|twitter\.com)\/(home|search)/.test(doneUrl)) {
+  if (
+    service === "x" &&
+    !/^https:\/\/(x\.com|twitter\.com)\/(home|search)/.test(doneUrl)
+  ) {
     console.warn(
       "\n⚠ ホーム画面ではないURLで保存されました。ログイン完了後 x.com/home が開いているか確認してください。",
     );
     console.warn("確認: npm run x:verify-login\n");
   }
   if (shared) {
-    console.log(`セッション: Chrome ${shared.profileDirectory}（既存プロフィール）`);
+    console.log(`セッション: Chrome ${shared.profileDirectory}`);
   } else {
     console.log(`セッション保存先: ${cfg.dir}`);
   }

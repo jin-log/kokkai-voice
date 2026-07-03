@@ -1,5 +1,7 @@
 /**
- * はてな / note 用ブラウザ起動（Profile 9 or storageState or 隔離プロファイル）
+ * はてな / note 用ブラウザ起動
+ * - ローカル: secrets/browser/profile-{hatena|note}（Xの Profile 9 とは別）
+ * - CI: secrets/browser/state-{hatena|note}.json
  */
 import { access } from "node:fs/promises";
 import path from "node:path";
@@ -28,7 +30,16 @@ export async function launchPromoBrowser(service, opts = {}) {
   const isolatedDir = path.join(root, "secrets/browser", `profile-${service}`);
   const statePath = path.join(root, "secrets/browser", `state-${service}.json`);
 
+  if (!isCi && (await exists(isolatedDir))) {
+    console.log(`[promo] ${service} → 専用プロファイル ${isolatedDir}`);
+    return {
+      mode: "isolated",
+      context: await launchBrowserContext(isolatedDir, { headless }),
+    };
+  }
+
   if (await exists(statePath)) {
+    console.log(`[promo] ${service} → storageState（CI/エクスポート済み）`);
     const browser = isCi
       ? await chromium.launch({ headless })
       : await chromium
@@ -43,16 +54,17 @@ export async function launchPromoBrowser(service, opts = {}) {
     return { mode: "state", context, browser };
   }
 
-  if (!(await exists(isolatedDir))) {
-    throw new Error(
-      `${service} 未設定 — Profile 9（chrome-profile.json）か browser:export-state を実行`,
-    );
+  if (await exists(isolatedDir)) {
+    console.log(`[promo] ${service} → 専用プロファイル ${isolatedDir}`);
+    return {
+      mode: "isolated",
+      context: await launchBrowserContext(isolatedDir, { headless }),
+    };
   }
 
-  return {
-    mode: "isolated",
-    context: await launchBrowserContext(isolatedDir, { headless }),
-  };
+  throw new Error(
+    `${service} 未設定 — npm run browser:login -- ${service} のあと browser:export-state`,
+  );
 }
 
 /** @param {{ context: import('playwright').BrowserContext, browser?: import('playwright').Browser }} launched */

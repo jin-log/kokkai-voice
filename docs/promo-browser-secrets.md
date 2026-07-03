@@ -1,14 +1,20 @@
 # GitHub Secrets 登録（はてな・note 公開連動）
 
-**前提:** `secrets/browser/chrome-profile.json` に Profile 9 設定済み
+**はてな/note は X（Profile 9）とは別プロファイルです。**
 
-## 1. Chrome を全部閉じる
-
-## 2. エクスポート
+## 1. ログイン（各1回）
 
 ```powershell
 cd C:\Users\bero1\Projects\kokkai-voice
-npm run browser:setup
+npm run browser:login -- hatena
+npm run browser:login -- note
+```
+
+→ `secrets/browser/profile-hatena` / `profile-note` に保存（普段の Chrome とは別ウィンドウ）
+
+## 2. CI用エクスポート
+
+```powershell
 npm run browser:export-state
 ```
 
@@ -23,17 +29,10 @@ npm run browser:export-state
 | `HATENA_BROWSER_STATE` | `state-hatena.json` の**ファイル全文**をコピペ |
 | `NOTE_BROWSER_STATE` | `state-note.json` の**ファイル全文**をコピペ |
 
-（`BUFFER_API_KEY` と同じ画面。別物。）
-
-## 4. 動作確認
-
-1. 管理画面で記事を「公開する」
-2. Actions →「公開時プロモ（はてな・note）」が success か確認
-
-## ローカルだけ（Secrets 不要）
+## 4. ローカル投稿（Secrets 不要）
 
 ```powershell
-npm run deploy
+npm run promo:publish -- --from-queue --limit 3
 ```
 
-`deploy:extras` が Profile 9 で直接 `promo:publish` を実行。
+専用プロファイルがそのまま使われます。
