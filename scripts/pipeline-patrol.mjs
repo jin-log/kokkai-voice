@@ -18,6 +18,7 @@ import {
 } from "../src/lib/pipeline-autorun-core.mjs";
 import { getPatrolPauseState } from "../src/lib/patrol-pause.mjs";
 import { pushAndDeploy } from "./push-and-deploy.mjs";
+import { runMarketingPatrol } from "./marketing-patrol.mjs";
 
 const root = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
 const statePath = path.join(root, "data/pipeline-patrol.json");
@@ -94,6 +95,21 @@ async function runCycle(startedAt) {
   } catch (err) {
     await autorunLog(
       `patrol deploy skip: ${err instanceof Error ? err.message : String(err)}`,
+    );
+  }
+
+  try {
+    const mk = await runMarketingPatrol({ log: autorunLog });
+    if (mk.alerts.length) {
+      await autorunLog(`marketing alert: ${mk.alerts.join("; ")}`);
+    }
+    if (mk.needsPush) {
+      const deploy2 = await pushAndDeploy();
+      if (deploy2.pushed) await autorunLog("marketing: 投稿ログ push 済");
+    }
+  } catch (err) {
+    await autorunLog(
+      `marketing patrol skip: ${err instanceof Error ? err.message : String(err)}`,
     );
   }
 

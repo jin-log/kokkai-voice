@@ -12,7 +12,8 @@
 import { readFile, writeFile, unlink } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { checkCasePageWithFiles } from "../src/lib/page-ready.mjs";
+import { checkCasePageWithFiles, blockerToHuman } from "../src/lib/page-ready.mjs";
+import { auditArticleQuality } from "../src/lib/article-quality.mjs";
 import { refreshProjectStatus } from "../src/lib/project-status.mjs";
 import { isTitleAnsweredInOpeningLine, assessTitleOpeningAnswer } from "../src/lib/publish-policy.mjs";
 import { enqueuePromoPublish } from "../src/lib/promo-publish-queue.mjs";
@@ -125,6 +126,35 @@ if (action === "publish") {
     console.error(`公開できません（1行目がタイトルに未回答）: ${slug}`);
     console.error(`  - ${titleAnswer.id}: ${titleAnswer.detail}`);
     if (titleAnswer.todo) console.error(`  → ${titleAnswer.todo}`);
+    process.exit(1);
+  }
+
+  const gate = await checkCasePageWithFiles(article);
+  const quality = auditArticleQuality(article);
+  const PUBLISH_BLOCKERS = new Set([
+    "B3_topic",
+    "B4_conclusion",
+    "B5_writer_voice",
+    "C2_evidence_distinct",
+    "C3_source_match",
+    "A1b_title_placeholder",
+  ]);
+  const gateFails = gate.checks.filter((c) => !c.ok && PUBLISH_BLOCKERS.has(c.id));
+  if (gateFails.length) {
+    console.error(`公開できません（内容チェック未達）: ${slug}`);
+    for (const f of gateFails) {
+      const human = blockerToHuman({ id: f.id, detail: f.detail });
+      console.error(`  - ${human.label}: ${human.detail || f.detail}`);
+      if (human.todo) console.error(`    → ${human.todo}`);
+    }
+    process.exit(1);
+  }
+  if (!quality.ok) {
+    console.error(`公開できません（品質チェック未達）: ${slug}`);
+    for (const b of quality.blockers) {
+      console.error(`  - ${b.message}`);
+      console.error(`    → ${b.todo}`);
+    }
     process.exit(1);
   }
   article.publishReady = true;

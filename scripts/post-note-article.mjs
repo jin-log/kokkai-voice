@@ -61,7 +61,7 @@ async function main() {
     return;
   }
 
-  const launched = await launchPromoBrowser("note", { headless: false });
+  const launched = await launchPromoBrowser("note");
   const page = launched.context.pages()[0] || (await launched.context.newPage());
 
   try {

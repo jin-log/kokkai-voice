@@ -1,17 +1,16 @@
-name: 公開時プロモ（はてな・note）
+name: マーケ・はてなnoteキュー消化
 
 on:
-  workflow_run:
-    workflows: ["Deploy to Cloudflare Pages"]
-    types: [completed]
-    branches: [main]
+  schedule:
+    # 13:00 / 21:00 JST
+    - cron: "0 4,12 * * *"
+  workflow_dispatch:
 
 permissions:
   contents: write
 
 jobs:
-  promo-browser:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+  promo-backlog:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -32,20 +31,24 @@ jobs:
           NOTE_BROWSER_STATE: ${{ secrets.NOTE_BROWSER_STATE }}
         run: |
           mkdir -p secrets/browser
-          if [ -n "$HATENA_BROWSER_STATE" ]; then
-            printf '%s' "$HATENA_BROWSER_STATE" > secrets/browser/state-hatena.json
+          if [ -z "$HATENA_BROWSER_STATE" ] || [ -z "$NOTE_BROWSER_STATE" ]; then
+            echo "SKIP — browser secrets 未設定"
+            echo "SKIP_SECRETS=1" >> "$GITHUB_ENV"
+            exit 0
           fi
-          if [ -n "$NOTE_BROWSER_STATE" ]; then
-            printf '%s' "$NOTE_BROWSER_STATE" > secrets/browser/state-note.json
-          fi
+          printf '%s' "$HATENA_BROWSER_STATE" > secrets/browser/state-hatena.json
+          printf '%s' "$NOTE_BROWSER_STATE" > secrets/browser/state-note.json
 
-      - name: はてな + note 投稿
+      - name: キュー消化（最大3件）
+        if: env.SKIP_SECRETS != '1'
         run: node scripts/post-article-promo.mjs --from-queue --limit 3
 
       - name: ログ・キュー更新をコミット
+        if: env.SKIP_SECRETS != '1'
         run: |
           git config user.email "bot@seiji1192.site"
           git config user.name "kokkai-bot"
           git add data/promo-publish-queue.json data/promo-intro-log.json
-          git diff --staged --quiet || git commit -m "promo: はてな/note 公開連動"
-          git push
+          git diff --staged --quiet || git commit -m "marketing: はてな/note キュー消化"
+          git pull --rebase origin main || true
+          git push || true

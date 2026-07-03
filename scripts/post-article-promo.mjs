@@ -13,6 +13,7 @@ import {
   loadPromoPublishQueue,
 } from "../src/lib/promo-publish-queue.mjs";
 import { closePromoBrowser, launchPromoBrowser } from "./lib/promo-browser.mjs";
+import { promoHeadless } from "../src/lib/ci-env.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(__dirname, "..");
@@ -27,6 +28,7 @@ const force = args.includes("--force");
 const slugArg = arg("--slug");
 const recentDays = arg("--recent");
 const fromQueue = args.includes("--from-queue");
+const limitArg = arg("--limit");
 
 async function postHatena(page, article) {
   const hatena = buildHatena(article);
@@ -75,7 +77,9 @@ async function isPromoComplete(slug) {
 }
 
 async function main() {
-  const slugs = await resolveSlugs();
+  let slugs = await resolveSlugs();
+  const limit = limitArg ? Math.max(1, Number(limitArg)) : slugs.length;
+  slugs = slugs.slice(0, limit);
   if (!slugs.length) {
     console.log("SKIP — はてな/note 投稿対象なし");
     process.exit(0);
@@ -91,7 +95,7 @@ async function main() {
     process.exit(0);
   }
 
-  const launchedHatena = await launchPromoBrowser("hatena", { headless: false });
+  const launchedHatena = await launchPromoBrowser("hatena", { headless: promoHeadless() });
   const hatenaPage = launchedHatena.context.pages()[0] || (await launchedHatena.context.newPage());
 
   try {

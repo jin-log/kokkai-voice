@@ -10,8 +10,9 @@ export const AUTOMATION_POLICY = [
   { channel: "サイトへの公開", mode: "manual", note: "あなたの「公開する」だけ" },
   { channel: "非表示", mode: "manual", note: "あなたの操作のみ" },
   { channel: "本番サイト反映", mode: "auto", note: "公開後に自動デプロイ" },
-  { channel: "X / はてブ / note", mode: "semi", note: "公開後に半自動" },
-  { channel: "ショート動画", mode: "manual", note: "手作り" },
+  { channel: "X（昼12時・夜19時）", mode: "auto", note: "Buffer API + 未投稿時は巡回がフォールバック" },
+  { channel: "はてブ / note", mode: "auto", note: "公開後キュー → GitHub Actions が消化" },
+  { channel: "ショート動画", mode: "semi", note: "生成は半自動・YouTube OAuth は初回のみ" },
 ];
 
 /** @type {{ id: string, label: string, meaning: string, autoFix: string, autoRevert: string }[]} */

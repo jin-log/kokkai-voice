@@ -5,6 +5,7 @@ import { access } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { chromium } from "playwright";
+import { isCi, promoHeadless } from "../../src/lib/ci-env.mjs";
 import { launchBrowserContext } from "./playwright-browser.mjs";
 
 const root = path.join(path.dirname(fileURLToPath(import.meta.url)), "../..");
@@ -23,15 +24,16 @@ async function exists(p) {
  * @param {{ headless?: boolean }} [opts]
  */
 export async function launchPromoBrowser(service, opts = {}) {
-  const headless = opts.headless ?? false;
+  const headless = promoHeadless(opts.headless);
   const isolatedDir = path.join(root, "secrets/browser", `profile-${service}`);
   const statePath = path.join(root, "secrets/browser", `state-${service}.json`);
 
   if (await exists(statePath)) {
-    const browser = await chromium.launch({
-      headless,
-      channel: "chrome",
-    }).catch(() => chromium.launch({ headless }));
+    const browser = isCi
+      ? await chromium.launch({ headless })
+      : await chromium
+          .launch({ headless, channel: "chrome" })
+          .catch(() => chromium.launch({ headless }));
     const context = await browser.newContext({
       storageState: statePath,
       viewport: { width: 1280, height: 900 },
