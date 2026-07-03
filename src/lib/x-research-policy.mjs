@@ -30,6 +30,19 @@ export function isXUnavailable(article) {
   );
 }
 
+/** タイムラインに表示できる X 投稿が1件でもあるか */
+export function hasVisibleXPosts(article) {
+  if ((article?.xPosts || []).some((p) => p?.post_url)) return true;
+  return (article?.timeline || []).some(
+    (e) => e?.type === "x_post" && e?.xPost?.post_url,
+  );
+}
+
+/** 読者向け「見つかりませんでした」— X が1件も無いときだけ */
+export function showsXUnavailableNotice(article) {
+  return isXUnavailable(article) && !hasVisibleXPosts(article);
+}
+
 /** 段5: 既存 keywords に同義語を最大 maxAdd 語追加 */
 export function expandXKeywords(baseKeywords, searchKeyword, maxAdd = 2) {
   const base = baseKeywords ?? [];

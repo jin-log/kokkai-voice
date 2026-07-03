@@ -17,6 +17,10 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: admin-article-main
+  cancel-in-progress: false
+
 jobs:
   admin:
     runs-on: ubuntu-latest
@@ -47,4 +51,5 @@ jobs:
           git config user.name "kokkai-bot"
           git add data/
           git diff --staged --quiet || git commit -m "admin: ${{ github.event.inputs.action }} ${{ github.event.inputs.slug }}"
-          git push
+          git pull --rebase origin main
+          git push origin main

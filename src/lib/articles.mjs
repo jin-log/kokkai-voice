@@ -44,23 +44,40 @@ export async function getArticleSlugs() {
   const index = JSON.parse(
     await readFile(path.join(root, "data/articles/index.json"), "utf8"),
   );
-  const articles = await Promise.all(index.slugs.map((slug) => loadArticle(slug)));
+  const articles = (await Promise.all(index.slugs.map((slug) => tryLoadArticle(slug)))).filter(
+    Boolean,
+  );
   return (await filterPublishable(articles)).map((a) => a.slug);
 }
 
+async function tryLoadArticle(slug) {
+  try {
+    const raw = await readFile(
+      path.join(root, `data/articles/${slug}.json`),
+      "utf8",
+    );
+    return JSON.parse(raw.replace(/\u0000/g, ""));
+  } catch (err) {
+    console.warn(`[articles] skip corrupt ${slug}: ${err.message}`);
+    return null;
+  }
+}
+
 export async function loadArticle(slug) {
-  const raw = await readFile(
-    path.join(root, `data/articles/${slug}.json`),
-    "utf8",
-  );
-  return JSON.parse(raw);
+  const article = await tryLoadArticle(slug);
+  if (!article) {
+    throw new Error(`記事を読めません: ${slug}`);
+  }
+  return article;
 }
 
 export async function loadAllArticles() {
   const index = JSON.parse(
     await readFile(path.join(root, "data/articles/index.json"), "utf8"),
   );
-  const articles = await Promise.all(index.slugs.map((slug) => loadArticle(slug)));
+  const articles = (await Promise.all(index.slugs.map((slug) => tryLoadArticle(slug)))).filter(
+    Boolean,
+  );
   return filterPublishable(articles);
 }
 

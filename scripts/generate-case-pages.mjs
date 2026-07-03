@@ -4,7 +4,10 @@ import { readFile, readdir, writeFile, mkdir } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { SITE } from "../src/lib/site-config.mjs";
-import { isXUnavailable, X_UNAVAILABLE_USER_MESSAGE } from "../src/lib/x-research-policy.mjs";
+import {
+  showsXUnavailableNotice,
+  X_UNAVAILABLE_USER_MESSAGE,
+} from "../src/lib/x-research-policy.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(__dirname, "..");
@@ -353,7 +356,7 @@ function renderXUnavailableNotice(article) {
 }
 
 function renderXSlots(posts, article) {
-  if (isXUnavailable(article)) {
+  if (showsXUnavailableNotice(article)) {
     return renderXUnavailableNotice(article);
   }
   return posts.map((p) => (p.post_url ? renderXLinkCard(p) : renderXPending(p))).join("\n");

@@ -6,7 +6,7 @@ import {
   TIMELINE_INITIAL_VISIBLE,
 } from "../../lib/timeline.mjs";
 import { showsDietPendingUI } from "../../lib/diet-pending.mjs";
-import { isXUnavailable } from "../../lib/x-research-policy.mjs";
+import { showsXUnavailableNotice } from "../../lib/x-research-policy.mjs";
 import { TIMELINE_SOURCE } from "../../lib/x-post-ui.mjs";
 import DietPendingNotice from "./DietPendingNotice.astro";
 import XUnavailableNotice from "./XUnavailableNotice.astro";
@@ -16,7 +16,7 @@ const { article } = Astro.props;
 const defaultOrder = "desc";
 const events = sortTimelineEvents(getTimelineEvents(article), defaultOrder);
 const dietPending = showsDietPendingUI(article);
-const xUnavailable = isXUnavailable(article);
+const xUnavailable = showsXUnavailableNotice(article);
 
 function sourceOf(type) {
   return TIMELINE_SOURCE[type] ?? TIMELINE_SOURCE.source;

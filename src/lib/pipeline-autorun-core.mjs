@@ -7,6 +7,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { assessSlug } from "../../scripts/run-case-pipeline.mjs";
 import { refreshProjectStatus } from "./project-status.mjs";
+import { loadPatrolStallSnapshot } from "./patrol-stall.mjs";
 import { recordArticleActivity } from "./article-activity.mjs";
 import { auditArticleQuality } from "./article-quality.mjs";
 import { agentForCheckId, commandForAgent, scriptForCheckId } from "./agent-tasks.mjs";
@@ -227,8 +228,12 @@ export async function loadPatrolSlugs(opts = {}) {
 
   if (!incompleteOnly) return slugs;
 
+  const snapshot = await loadPatrolStallSnapshot();
+  const stalledSlugs = new Set((snapshot?.slugStalls ?? []).map((s) => s.slug));
+
   const pending = [];
   for (const slug of slugs) {
+    if (stalledSlugs.has(slug)) continue;
     const article = await loadArticle(slug);
     if (article.adminHidden) continue;
     if (await isSlugComplete(slug)) continue;
