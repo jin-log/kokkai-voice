@@ -31,8 +31,38 @@ export function agentForCheckId(id) {
 /** チェックID → 実行スクリプト（null なら agent デフォルト） */
 export function scriptForCheckId(checkId, slug) {
   const id = String(checkId || "");
-  if (id === "Q4_proscons_year_only") {
-    return { script: "generate-proscons-auto.mjs", args: ["--slug", slug] };
+  const s = slug;
+
+  if (id === "Q4_proscons_year_only" || id === "J1_prosCons") {
+    return { script: "generate-proscons-auto.mjs", args: ["--slug", s] };
+  }
+  if (id === "Q9_x_screenshot" || id === "H3_x_screenshot") {
+    return { script: "capture-x-screenshots.mjs", args: ["--slug", s] };
+  }
+  if (id.startsWith("H1") || id.startsWith("H2")) {
+    return { script: "complete-article.mjs", args: ["--slug", s, "--x-only", "--force"] };
+  }
+  if (id.startsWith("I")) {
+    return { script: "complete-article.mjs", args: ["--slug", s, "--legal-only"] };
+  }
+  if (id.startsWith("G")) {
+    return { script: "complete-article.mjs", args: ["--slug", s, "--matrix-only", "--force"] };
+  }
+  if (id.startsWith("E")) {
+    return { script: "enrich-timeline-all.mjs", args: ["--slug", s] };
+  }
+  if (
+    /^[ABCDF]/.test(id) ||
+    id.startsWith("P1_") ||
+    id === "Q1_conclusion_numbers" ||
+    id === "Q2_template_conclusion" ||
+    id === "Q3_plain_no_answer" ||
+    id === "Q5_stale_primary_speech" ||
+    id === "Q6_procedural_arc" ||
+    id === "Q7_procedural_evidence" ||
+    id === "Q8_x_numbers_not_in_summary"
+  ) {
+    return { script: "complete-article.mjs", args: ["--slug", s, "--content-only", "--force"] };
   }
   return null;
 }
@@ -45,7 +75,7 @@ export function commandForAgent(agent, slug, checkId) {
   }
   switch (agent) {
     case "writer":
-      return `npm run complete:article -- --slug ${slug} --force`;
+      return `npm run complete:article -- --slug ${slug} --content-only --force`;
     case "x-researcher":
       return `npm run x:research -- --slug ${slug}`;
     case "debugger":

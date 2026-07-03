@@ -46,6 +46,9 @@ function arg(name) {
 const slug = arg("slug");
 const force = process.argv.includes("--force");
 const contentOnly = process.argv.includes("--content-only");
+const matrixOnly = process.argv.includes("--matrix-only");
+const xOnly = process.argv.includes("--x-only");
+const legalOnly = process.argv.includes("--legal-only");
 const allWip = process.argv.includes("--all-wip");
 if (!slug && !allWip) {
   console.error("必須: --slug SLUG または --all-wip");
@@ -496,9 +499,61 @@ async function completeOneSlug(targetSlug) {
     await writeFile(articlePath, `${JSON.stringify(art, null, 2)}\n`, "utf8");
   }
 
+  const modeTag = [
+    contentOnly ? "content-only" : "",
+    matrixOnly ? "matrix-only" : "",
+    xOnly ? "x-only" : "",
+    legalOnly ? "legal-only" : "",
+  ]
+    .filter(Boolean)
+    .join(",");
   console.log(
-    `\n=== complete-article: ${targetSlug} (${article.category})${contentOnly ? " [content-only]" : ""}${liveLock ? " [公開維持]" : ""} ===\n`,
+    `\n=== complete-article: ${targetSlug} (${article.category})${modeTag ? ` [${modeTag}]` : ""}${liveLock ? " [公開維持]" : ""} ===\n`,
   );
+
+  if (legalOnly) {
+    console.log("[④] 法務のみ");
+    await runNode("legal-check.mjs", ["--slug", targetSlug, "--fix"]);
+    await refreshProjectStatus();
+    await runNode("check-case-page.mjs", ["--slug", targetSlug]);
+    return;
+  }
+
+  if (xOnly) {
+    article = JSON.parse(await readFile(articlePath, "utf8"));
+    const xMin = article.xPostsMinRequired ?? 3;
+    const topicXMin = Math.min(3, xMin);
+    if (force || countTopicVerifiedX(article) < topicXMin) {
+      console.log("[③] Xリセット");
+      await runNode("reset-xposts.mjs", [targetSlug]);
+    }
+    console.log("[③] X調査");
+    await runNode("x-research-batch.mjs", [targetSlug]);
+    console.log("[③b] タイムライン統合");
+    await runNode("enrich-timeline-all.mjs", ["--slug", targetSlug]);
+    await refreshProjectStatus();
+    await runNode("check-case-page.mjs", ["--slug", targetSlug]);
+    return;
+  }
+
+  if (matrixOnly) {
+    await rescorePolicyMatrix(targetSlug);
+    article = await loadArticle(targetSlug);
+    let gate = await checkCasePageWithFiles(article);
+    const gOpen = (gate.blockers ?? []).some((b) => String(b.id).startsWith("G"));
+    if (gOpen && article.category === "国会") {
+      console.log("[matrix] 〇×未達 — 再生成");
+      const from = "2023-01-01";
+      const until = new Date().toISOString().slice(0, 10);
+      const fetched = await fetchSpeechForArticle(article, { from, until, maximumRecords: 100 });
+      await writePolicyMatrixKokkai(article, fetched.records, { force: true, articleSlug: targetSlug });
+      await saveArticleJson(article);
+      await rescorePolicyMatrix(targetSlug);
+    }
+    await refreshProjectStatus();
+    await runNode("check-case-page.mjs", ["--slug", targetSlug]);
+    return;
+  }
 
   // ① コンテンツ
   if (article.category === "国会") {
