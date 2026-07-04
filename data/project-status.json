@@ -1,9 +1,9 @@
 {
-  "generatedAt": "2026-07-03T10:25:38.847Z",
+  "generatedAt": "2026-07-04T00:13:58.428Z",
   "strategy": "quality-first",
   "activeCount": 40,
   "parkedCount": 0,
-  "publishedCount": 28,
+  "publishedCount": 29,
   "overallGoldPct": 77,
   "overallGatePct": 88,
   "qualityFailed": 0,
@@ -85,7 +85,7 @@
     "slugStalls": [],
     "stalledCount": 0,
     "message": "停止中",
-    "analyzedAt": "2026-07-03T10:25:38.841Z",
+    "analyzedAt": "2026-07-04T00:13:58.426Z",
     "lastPatrolCycleAt": null,
     "patrolRunning": false
   },
@@ -3838,9 +3838,9 @@
       "category": "地方",
       "policyCategory": "地方",
       "adminHidden": false,
-      "pageReady": false,
-      "publishState": "draft",
-      "adminBucket": "ready",
+      "pageReady": true,
+      "publishState": "live",
+      "adminBucket": "live",
       "previewUrl": "/dev/preview/case-mqwdrley/",
       "qualityOk": true,
       "needsQualityFix": false,
@@ -3848,8 +3848,8 @@
       "qualityBlockers": [],
       "agentTasks": [],
       "gatePct": 100,
-      "goldPct": 83,
-      "published": false,
+      "goldPct": 100,
+      "published": true,
       "specialPublish": false,
       "specialPublishSummary": "",
       "publishGateOk": true,
@@ -3891,7 +3891,7 @@
           "label": "⑤本番デプロイ",
           "phase": 5,
           "preDeploy": false,
-          "ok": false
+          "ok": true
         },
         {
           "id": "debug",
@@ -3935,7 +3935,7 @@
           "label": "⑤本番デプロイ",
           "phase": 5,
           "preDeploy": false,
-          "ok": false
+          "ok": true
         },
         {
           "id": "debug",
@@ -3949,7 +3949,7 @@
       "blockerCount": 0,
       "runState": "idle",
       "workItems": [],
-      "nextAction": "📋 1行目OK — プレビュー確認後「公開する」を押してください",
+      "nextAction": "✅ 公開中 — /case/ に表示されています",
       "promo": {
         "x": null,
         "hatena": null,
@@ -3968,13 +3968,27 @@
       },
       "xUnavailable": true,
       "xResearchStatus": "exhausted",
-      "statusExplain": "内容は読める状態。プレビュー確認後「公開する」でサイトに載る。",
+      "statusExplain": "サイトに公開中。",
       "publishedBy": "owner",
-      "publishedAt": "2026-07-01T20:35:25.094Z",
+      "publishedAt": "2026-07-04T00:13:58.045Z",
       "adminHiddenBy": null,
       "adminHiddenAt": null,
       "patrolFixing": false,
       "activity": [
+        {
+          "at": "2026-07-04T00:13:58.048Z",
+          "when": "07/04 09:13",
+          "type": "promo.queue",
+          "actor": "system",
+          "line": "発信キューに登録（system） — はてブ/note発信キューに登録"
+        },
+        {
+          "at": "2026-07-04T00:13:58.047Z",
+          "when": "07/04 09:13",
+          "type": "publish.manual",
+          "actor": "owner",
+          "line": "手動で一般公開（あなた） — 管理画面から一般公開"
+        },
         {
           "at": "2026-07-01T20:35:25.094Z",
           "when": "07/02 05:35",
@@ -4010,7 +4024,7 @@
         }
       ],
       "stall": null,
-      "ownerTodo": true
+      "ownerTodo": false
     },
     {
       "slug": "tokyo-recall",
