@@ -43,7 +43,7 @@ export const TITLE_BRUSHUP = {
   "kenpo": "【憲法改正】9条・緊急事態条項など争点整理",
   "tariff-us": "【米国関税・貿易】日本への影響と政府の対応",
   "kishida-resign": "【政権・内閣人事】首相交代と政策の行方",
-  "komei-kokumin": "【超党派・教育法改正】学校現場への影響",
+  "komei-kokumin": "学校教育法改正とデジタル教科書",
   "case-mqwdrley": "【東京都知事】小池百合子氏・学歴巡る刑事告発の経緯",
   "tokyo-solar-panel": "【東京都】太陽光パネル設置義務とは？",
   "case-mqzxgs3f": "【スパイ防止法】なぜ成立しない？国家情報会議法案との関係",
