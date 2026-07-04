@@ -124,6 +124,21 @@ export function sectionContent(article, sectionId, stance = null) {
 export function mockProposal(sectionId, instruction, current) {
   const hint = String(instruction || "").trim();
   if (!hint) return { after: current, note: "指示が空です" };
+  const educationLaw = /学校教育法|教育法改正|デジタル教科書|教科書|学校現場/.test(`${hint}\n${current}`);
+
+  if (educationLaw && sectionId === "title_opening") {
+    const title = /狙い|意図|目的/.test(hint)
+      ? "学校教育法改正の狙いは？"
+      : /学校現場|影響/.test(hint)
+        ? "学校教育法改正、学校現場への影響"
+        : "学校教育法改正とデジタル教科書";
+    return {
+      after:
+        `タイトル: ${title}\n` +
+        "1行目候補: 学校教育法等改正の中心は、動画・音声などを含むデジタル教科書を正式な教科書に位置づけ、検定・採択・義務教育の無償給与の対象にすることです。",
+      note: "教育法改正の指示として解釈し、タイトルと冒頭1行を「何をどう改正するか」に修正（モック）",
+    };
+  }
 
   if (sectionId === "timeline" && /答弁|並んで|並び/.test(hint)) {
     const lines = String(current).split("\n").filter(Boolean);
@@ -139,6 +154,15 @@ export function mockProposal(sectionId, instruction, current) {
   }
 
   if (sectionId === "nowSummary") {
+    if (educationLaw) {
+      return {
+        after:
+          "1. 学校教育法等改正の狙いは、紙中心だった正式な教科書に、動画・音声などを含むデジタル形態や紙・デジタル併用型を含めることです。\n" +
+          "2. 改正後は、デジタル教科書も検定・採択・義務教育の無償給与の対象になります。ただし、紙の教科書を一律廃止する制度ではありません。\n" +
+          "3. 学校現場では、端末運用、教員の準備負担、教科書分量とデジタル教材の役割分担、子どもの負担軽減が今後の論点です。",
+        note: "提出・賛否ではなく「何をどう改正するか／現場影響」へ再構成（モック）",
+      };
+    }
     if (/答弁|質疑|並ん|何が明らか|分からない|タイトル/.test(hint)) {
       return {
         after:
