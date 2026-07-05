@@ -5,6 +5,8 @@ export const SITE = {
   shortLabel: "政治now",
   hashtag: "#政治now",
   domain: "https://seiji1192.site",
+  /** GA4 / AdSense / CFビーコンを載せる hostname（pages.dev 等は除外） */
+  productionHosts: ["seiji1192.site", "www.seiji1192.site"],
   xUrl: "https://x.com/seiji1192site",
   xHandle: "@seiji1192site",
   /** はてブ管理（ホットエントリー一覧） */

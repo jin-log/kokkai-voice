@@ -81,9 +81,9 @@ export const ADMIN_NAV_GROUPS = [
       { id: "trends", href: "/dev/trends/", label: "関心ワード", desc: "トレンド取得・記事ネタ" },
       {
         id: "reports",
-        href: "/dev/trends/#ga",
+        href: "/dev/reports/",
         label: "アクセスレポート",
-        desc: "GA4（今後ダッシュボードに統合予定）",
+        desc: "GA4 国内KPI・流入元",
       },
     ],
   },
