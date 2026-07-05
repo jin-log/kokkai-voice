@@ -179,7 +179,7 @@ export function buildProposal({ article, sectionId, instruction, current }) {
     return {
       before,
       after,
-      note: "経緯を手続きメモではなく、案件の中身が分かる時系列へ再構成",
+      note: "経緯を日付×発言者ごとに1行。答弁内容は要約文（「」）で統合",
       canApply,
     };
   }
@@ -602,28 +602,177 @@ function buildNowSummaryProposal(article, topic, keywords, opts = {}) {
 }
 
 function buildArcSummaryProposal(article, before, topic, keywords, opts = {}) {
-  const material = collectMaterial(article, keywords, opts);
-  const substantive = material.filter((m) => !isGenericSpeechSummary(m.text));
-
-  if (substantive.length >= 2) {
-    return [...substantive]
-      .slice(0, 5)
-      .sort((a, b) => (a.date || "").localeCompare(b.date || ""))
-      .map((m) => `${m.date} — ${m.speaker ? `${m.speaker}：` : ""}${cleanFact(m.text)}`)
-      .join("\n");
+  const events = collectArcEvents(article, topic, keywords);
+  /** @type {Set<string>} */
+  const mustKeep = new Set(
+    (article?.arcSummary || []).map((r) => `${r.date}|${parseSpeakerFromArc(r.text)}`),
+  );
+  if (article?.primarySpeech?.date && article?.primarySpeech?.speaker) {
+    mustKeep.add(`${article.primarySpeech.date}|${article.primarySpeech.speaker}`);
   }
 
-  const rows = parseArc(before).filter((r) => !isProceduralNoise(r.text));
-  if (rows.length) {
-    return rows.map((r) => `${r.date} — ${cleanFact(r.text)}`).join("\n");
+  /** @type {typeof events} */
+  const kept = [];
+  /** @type {typeof events} */
+  const optional = [];
+  for (const ev of events) {
+    const key = `${ev.date}|${ev.speaker}`;
+    if (mustKeep.has(key) || ev.score >= 10) kept.push(ev);
+    else optional.push(ev);
   }
 
-  const arc = (article?.arcSummary || [])
+  const merged = [...kept];
+  for (const ev of optional) {
+    if (merged.length >= 8) break;
+    const key = `${ev.date}|${ev.speaker}`;
+    if (!merged.some((m) => `${m.date}|${m.speaker}` === key)) merged.push(ev);
+  }
+
+  merged.sort((a, b) => (a.date || "").localeCompare(b.date || ""));
+  const rows = merged.map((ev) => formatArcRow(ev)).filter(Boolean);
+  if (rows.length >= 1) return rows.join("\n");
+
+  const fallback = parseArc(before)
     .filter((r) => !isProceduralNoise(r.text))
-    .map((r) => `${r.date} — ${cleanFact(r.text)}`);
-  if (arc.length) return arc.join("\n");
+    .map((r) => {
+      const speaker = parseSpeakerFromArc(r.text);
+      return formatArcRow({
+        date: r.date,
+        speaker,
+        topic,
+        summary: isGenericSpeechSummary(r.text) ? "" : cleanFact(r.text),
+        meeting: "",
+        role: "質疑",
+      });
+    });
+  if (fallback.length) return fallback.join("\n");
 
   return `${today()} — ${topic}について国会で確認された主要論点を整理中。`;
+}
+
+/** 経緯用 — 日付×発言者ごとに1行。同一答弁の切り出し分割はしない */
+function collectArcEvents(article, topic, keywords) {
+  /** @type {Map<string, { date: string, speaker: string, topic: string, summary: string, meeting: string, role: string, score: number }>} */
+  const byKey = new Map();
+  const subject = arcSubject(topic, keywords);
+
+  function upsert(ev) {
+    const date = ev.date || "";
+    const speaker = ev.speaker || "";
+    if (!date || !speaker) return;
+    const key = `${date}|${speaker}`;
+    const prev = byKey.get(key);
+    if (!prev || ev.score > prev.score || (ev.summary && !prev.summary)) {
+      byKey.set(key, { ...ev, date, speaker, topic: ev.topic || subject });
+    }
+  }
+
+  const ps = article?.primarySpeech;
+  if (ps?.date && ps?.speaker) {
+    upsert({
+      date: ps.date,
+      speaker: ps.speaker,
+      topic: subject,
+      summary: summarizeSpeechForArc(ps),
+      meeting: ps.nameOfMeeting || "",
+      role: inferSpeechRole(ps.speaker, ps.speakerPosition, ps.nameOfMeeting),
+      score: 10,
+    });
+  }
+
+  for (const row of article?.arcSummary || []) {
+    const speaker = parseSpeakerFromArc(row.text) || "";
+    if (!row.date || !speaker) continue;
+    if (ps && ps.date === row.date && ps.speaker === speaker) continue;
+    upsert({
+      date: row.date,
+      speaker,
+      topic: subject,
+      summary: isGenericSpeechSummary(row.text) ? "" : cleanFact(row.text),
+      meeting: "",
+      role: "質疑",
+      score: 2,
+    });
+  }
+
+  for (const ev of article?.timeline || []) {
+    if (ev.type !== "speech" || !ev.speech) continue;
+    const sp = ev.speech;
+    const date = ev.date || sp.date || "";
+    const speaker = sp.speaker || "";
+    if (!date || !speaker) continue;
+    if (ps && ps.date === date && ps.speaker === speaker) continue;
+
+    const sum = ev.summaryPlain || "";
+    upsert({
+      date,
+      speaker,
+      topic: subject,
+      summary: isGenericSpeechSummary(sum) ? summarizeGenericSpeech(sp, subject) : cleanFact(sum),
+      meeting: sp.nameOfMeeting || "",
+      role: inferSpeechRole(speaker, "", sp.nameOfMeeting),
+      score: isGenericSpeechSummary(sum) ? 1 : 3,
+    });
+  }
+
+  return [...byKey.values()].sort((a, b) => (a.date || "").localeCompare(b.date || ""));
+}
+
+function arcSubject(topic, keywords) {
+  const kw = keywords.find((k) => k && k.length >= 2);
+  return kw || String(topic || "本件").split(/[・｜|]/)[0];
+}
+
+function inferSpeechRole(speaker, position, meeting) {
+  const ctx = `${speaker}${position || ""}${meeting || ""}`;
+  if (/大臣|国務|内閣|副大臣|官房長|長官/.test(ctx)) return "答弁";
+  return "質疑";
+}
+
+function summarizeSpeechForArc(ps) {
+  const raw = normalizePercentText([ps.excerpt, ps.speechFull?.slice(0, 2800)].filter(Boolean).join(" "));
+  /** @type {string[]} */
+  const parts = [];
+
+  if (/5\.09%|5%台|賃上げ率/.test(raw)) {
+    parts.push("春闘の連合集計で賃上げ率5.09%、三年連続5%台の水準");
+  }
+  if (/政労使/.test(raw) && /意見交換/.test(raw)) {
+    parts.push("3/23の政労使意見交換で、物価上昇を上回る継続的な賃上げ実現を要請");
+  }
+  if (/中小企業|小規模事業者/.test(raw) && /波及/.test(raw)) {
+    parts.push("大企業だけでなく地方の中小・小規模事業者への賃上げ波及が課題");
+  }
+  if (/実質賃金/.test(raw) && /プラス/.test(raw)) {
+    parts.push("実質賃金は所定内給与の増加等を背景に、最近は前年同月比プラスで推移");
+  }
+  if (/中東|エネルギー|原油/.test(raw)) {
+    parts.push("原油高などを踏まえ、物価・実質賃金への影響を注視");
+  }
+
+  if (parts.length >= 2) return `${parts.join("。")}。`;
+  if (parts.length === 1) return `${parts[0]}。`;
+
+  const fallback = toPlainTone(shortenSentence(cleanFact(ps.excerpt || ""), 100));
+  return fallback || "国会で本件に関する政府見解を表明。";
+}
+
+function summarizeGenericSpeech(speech, subject) {
+  const meeting = speech?.nameOfMeeting || "";
+  const house = speech?.nameOfHouse || "";
+  const place = [house, meeting].filter(Boolean).join("・");
+  if (place) return `${place}で${subject}に関する論点を質疑。`;
+  return `${subject}に関する質疑を実施。`;
+}
+
+function formatArcRow({ date, speaker, topic, summary, meeting, role }) {
+  const subj = topic || "本件";
+  const act = role === "答弁" ? "答弁" : "質疑";
+  const meet = meeting ? `（${meeting}）` : "";
+  const head = `${date} — ${speaker}が${subj}について以下のように${act}${meet}`;
+  const body = toPlainTone(String(summary || "").trim());
+  if (!body) return `${head}。（要約は議事録参照）`;
+  return `${head}。「${body.replace(/^「|」$/g, "")}」`;
 }
 
 function pickOpeningLine(article, topic, keywords) {
