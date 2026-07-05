@@ -102,6 +102,19 @@ export function createRevisionJob({ article, slug, sectionId, instruction, curre
   };
 }
 
+/** job 作成時に store へ追記（指示は ownerInstructions にも自動保存） */
+export function attachRevisionJobToStore(store, job, article) {
+  store.jobs.unshift(job);
+  recordOwnerInstruction(store, {
+    slug: job.slug,
+    sectionId: job.sectionId,
+    text: job.instruction,
+    jobId: job.id,
+    articleTitle: article?.title,
+  });
+  store.generatedAt = new Date().toISOString();
+}
+
 export function buildProposal({ article, sectionId, instruction, current }) {
   const hint = String(instruction || "").trim();
   const before = String(current || "");
@@ -211,12 +224,12 @@ export function buildProposal({ article, sectionId, instruction, current }) {
   }
 
   if (sectionId === "timeline") {
-    const lines = before.split("\n").filter(Boolean);
-    const reordered = interleaveTimeline(lines);
+    const after = buildTimelineProposal(article, before, hint, topic, keywords);
+    const reordered = /並んで|混ぜ|交互/.test(hint) ? interleaveTimeline(after.split("\n").filter(Boolean)).join("\n") : after;
     return {
       before,
-      after: reordered.join("\n"),
-      note: "タイムラインは保存未対応。提案確認のみ（本実装で安全な差分適用を追加）",
+      after: reordered,
+      note: "「論じた」等の曖昧語を平易語（質問・答弁＋委員会名）に言い換え",
       canApply: false,
     };
   }
@@ -337,8 +350,8 @@ function tightenArcText(text, topic) {
 }
 
 function interleaveTimeline(lines) {
-  const x = lines.filter((l) => l.includes("[X]"));
-  const diet = lines.filter((l) => !l.includes("[X]"));
+  const x = lines.filter((l) => /\[X\]|\[x_post\]/i.test(l));
+  const diet = lines.filter((l) => !/\[X\]|\[x_post\]/i.test(l));
   const out = [];
   const max = Math.max(x.length, diet.length);
   for (let i = 0; i < max; i++) {
@@ -776,6 +789,65 @@ function formatArcRow({ date, speaker, topic, summary, meeting, role }) {
   const body = toPlainTone(String(summary || "").trim());
   if (!body) return `${head}。（要約は議事録参照）`;
   return `${head}。「${body.replace(/^「|」$/g, "")}」`;
+}
+
+function parseTimelineLine(line) {
+  const m = String(line || "").trim().match(/^(\d{4}-\d{2}-\d{2})\s*\[([^\]]+)\]\s*(.+)$/);
+  return m ? { date: m[1], kind: m[2], text: m[3].trim() } : null;
+}
+
+function buildTimelineProposal(article, before, hint, topic, keywords) {
+  const subject = arcSubject(topic, keywords);
+  const wantsPlain = /一般人|分かる|わかり|論じ|曖昧|平易/.test(hint);
+  /** @type {Map<string, object>} */
+  const evByKey = new Map();
+  for (const ev of article?.timeline || []) {
+    const date = ev.date || ev.speech?.date || "";
+    const speaker = ev.speech?.speaker || "";
+    if (date && speaker) evByKey.set(`${date}|${speaker}`, ev);
+  }
+
+  const lines = before.split("\n").filter(Boolean);
+  return lines
+    .map((line) => {
+      const row = parseTimelineLine(line);
+      if (!row) return line;
+
+      const isDiet = row.kind === "国会" || row.kind === "speech";
+      if (isDiet && (wantsPlain || isGenericSpeechSummary(row.text) || /論じ/.test(row.text))) {
+        const speaker = parseSpeakerFromArc(row.text) || "";
+        const ev = evByKey.get(`${row.date}|${speaker}`);
+        return rewriteTimelineSpeechRow({ date: row.date, speaker, subject, ev, article });
+      }
+
+      if ((row.kind === "X" || row.kind === "x_post") && row.text.length > 140) {
+        return `${row.date} [${row.kind}] ${shortenSentence(row.text, 110)}`;
+      }
+
+      return line;
+    })
+    .join("\n");
+}
+
+function rewriteTimelineSpeechRow({ date, speaker, subject, ev, article }) {
+  const speech = ev?.speech;
+  const meeting = speech?.nameOfMeeting || "";
+  const house = speech?.nameOfHouse || "";
+  const place = [house, meeting].filter(Boolean).join("・");
+  const role = inferSpeechRole(speaker, speech?.speakerPosition || "", meeting);
+  const act = role === "答弁" ? "答弁" : "質問";
+
+  const ps = article?.primarySpeech;
+  if (ps && ps.speaker === speaker && ps.date === date) {
+    const summary = shortenSentence(summarizeSpeechForArc(ps).replace(/^「|」$/g, ""), 80);
+    const where = place ? `${place}で` : "";
+    return `${date} [国会] ${speaker}— ${where}${subject}について${act}。「${summary}」`;
+  }
+
+  if (place) {
+    return `${date} [国会] ${speaker}— ${place}で${subject}について${act}した。`;
+  }
+  return `${date} [国会] ${speaker}— ${subject}について国会で${act}した。`;
 }
 
 function pickOpeningLine(article, topic, keywords) {

@@ -7,8 +7,11 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import {
   applyProposalToArticle,
+  attachRevisionJobToStore,
   createRevisionJob,
   normalizeRevisionStore,
+  recordOwnerInstruction,
+  resolveOwnerInstruction,
 } from "../functions/lib/article-revisions-core.js";
 
 const root = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -30,7 +33,13 @@ export function articleRevisionsDevApi() {
             const slug = url.searchParams.get("slug") || "";
             const store = await loadStore();
             const jobs = slug ? store.jobs.filter((j) => j.slug === slug) : store.jobs;
-            return send(res, { ok: true, jobs, rules: store.rules });
+            return send(res, {
+              ok: true,
+              jobs,
+              rules: store.rules,
+              ownerInstructions: store.ownerInstructions,
+              ownerPrinciples: store.ownerPrinciples,
+            });
           }
 
           if (req.method !== "POST") return send(res, { error: "Method Not Allowed" }, 405);
@@ -66,8 +75,7 @@ async function createJob(body) {
     current: body.current || "",
   });
   const store = await loadStore();
-  store.jobs.unshift(job);
-  store.generatedAt = new Date().toISOString();
+  attachRevisionJobToStore(store, job, article);
   await saveStore(store);
   return { ok: true, job };
 }
@@ -87,6 +95,7 @@ async function applyJob(body) {
   job.status = "applied";
   job.appliedAt = new Date().toISOString();
   job.updatedAt = job.appliedAt;
+  resolveOwnerInstruction(store, jobId, "applied");
   store.rules.unshift({
     id: `rule-${Date.now().toString(36)}`,
     sectionId: job.sectionId,
@@ -107,6 +116,7 @@ async function rejectJob(body) {
   job.status = "rejected";
   job.rejectedAt = new Date().toISOString();
   job.updatedAt = job.rejectedAt;
+  resolveOwnerInstruction(store, jobId, "rejected");
   await saveStore(store);
   return { ok: true, job };
 }

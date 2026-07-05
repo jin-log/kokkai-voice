@@ -1,8 +1,11 @@
 import { decodeGitHubBase64Utf8 } from "../lib/github-content.js";
 import {
   applyProposalToArticle,
+  attachRevisionJobToStore,
   createRevisionJob,
   normalizeRevisionStore,
+  recordOwnerInstruction,
+  resolveOwnerInstruction,
 } from "../lib/article-revisions-core.js";
 
 const REVISIONS_PATH = "data/article-revisions.json";
@@ -17,7 +20,13 @@ export async function onRequestGet(context) {
 
   const store = await loadStore(GH_TOKEN);
   const jobs = slug ? store.jobs.filter((j) => j.slug === slug) : store.jobs;
-  return json({ ok: true, jobs, rules: store.rules });
+  return json({
+    ok: true,
+    jobs,
+    rules: store.rules,
+    ownerInstructions: store.ownerInstructions,
+    ownerPrinciples: store.ownerPrinciples,
+  });
 }
 
 export async function onRequestPost(context) {
@@ -62,8 +71,7 @@ async function createJob(token, body) {
   });
 
   const { store, sha } = await loadStoreWithSha(token);
-  store.jobs.unshift(job);
-  store.generatedAt = new Date().toISOString();
+  attachRevisionJobToStore(store, job, article);
   await putGhFile(token, REVISIONS_PATH, store, sha, `article revision: ${slug} ${sectionId}`);
   return { ok: true, job };
 }
@@ -88,10 +96,13 @@ async function applyJob(token, body) {
   job.status = "applied";
   job.appliedAt = new Date().toISOString();
   job.updatedAt = job.appliedAt;
+  resolveOwnerInstruction(store, jobId, "applied");
   store.rules.unshift({
     id: `rule-${Date.now().toString(36)}`,
+    slug: job.slug,
     sectionId: job.sectionId,
     instruction: job.instruction,
+    adopted: true,
     createdAt: job.appliedAt,
     sourceJobId: job.id,
   });
@@ -108,6 +119,16 @@ async function rejectJob(token, body) {
   job.status = "rejected";
   job.rejectedAt = new Date().toISOString();
   job.updatedAt = job.rejectedAt;
+  resolveOwnerInstruction(store, jobId, "rejected");
+  store.rules.unshift({
+    id: `rule-${Date.now().toString(36)}`,
+    slug: job.slug,
+    sectionId: job.sectionId,
+    instruction: job.instruction,
+    adopted: false,
+    createdAt: job.rejectedAt,
+    sourceJobId: job.id,
+  });
   await putGhFile(token, REVISIONS_PATH, store, sha, `article revision rejected: ${job.slug} ${job.sectionId}`);
   return { ok: true, job };
 }
