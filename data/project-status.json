@@ -1,13 +1,13 @@
 {
-  "generatedAt": "2026-07-04T00:13:58.428Z",
+  "generatedAt": "2026-07-05T05:10:47.951Z",
   "strategy": "quality-first",
   "activeCount": 40,
   "parkedCount": 0,
-  "publishedCount": 29,
+  "publishedCount": 30,
   "overallGoldPct": 77,
   "overallGatePct": 88,
   "qualityFailed": 0,
-  "specialPublishCount": 4,
+  "specialPublishCount": 5,
   "automationPolicy": [
     {
       "channel": "記事の下書きづくり",
@@ -85,7 +85,7 @@
     "slugStalls": [],
     "stalledCount": 0,
     "message": "停止中",
-    "analyzedAt": "2026-07-04T00:13:58.426Z",
+    "analyzedAt": "2026-07-05T05:10:47.949Z",
     "lastPatrolCycleAt": null,
     "patrolRunning": false
   },
@@ -7657,14 +7657,14 @@
     },
     {
       "slug": "komei-kokumin",
-      "title": "【超党派・教育法改正】学校現場への影響",
-      "shortTitle": "【超党派・教育法改正】学校現場への影響",
-      "category": "国会",
-      "policyCategory": "国会",
+      "title": "学校教育法改正とデジタル教科書",
+      "shortTitle": "学校教育法改正とデジタル教科書",
+      "category": "教育",
+      "policyCategory": "教育",
       "adminHidden": false,
-      "pageReady": false,
-      "publishState": "draft",
-      "adminBucket": "ready",
+      "pageReady": true,
+      "publishState": "live",
+      "adminBucket": "live",
       "previewUrl": "/dev/preview/komei-kokumin/",
       "qualityOk": true,
       "needsQualityFix": false,
@@ -7672,22 +7672,33 @@
       "qualityBlockers": [],
       "agentTasks": [
         {
-          "id": "komei-kokumin:B4_conclusion",
+          "id": "komei-kokumin:H1_xPosts",
           "slug": "komei-kokumin",
-          "agent": "writer",
-          "agentLabel": "ライター",
-          "checkId": "B4_conclusion",
-          "title": "[ゲート] 結論の質",
-          "todo": "重複・途中切れ・定型文なし（行数固定なし）",
-          "command": "node scripts/complete-article.mjs --slug komei-kokumin --content-only --force",
-          "priority": 30
+          "agent": "x-researcher",
+          "agentLabel": "X調査",
+          "checkId": "H1_xPosts",
+          "title": "[ゲート] X投稿",
+          "todo": "検証済みX URLを3件以上（x-researcher）",
+          "command": "node scripts/complete-article.mjs --slug komei-kokumin --x-only --force",
+          "priority": 20
+        },
+        {
+          "id": "komei-kokumin:H2_x_topic",
+          "slug": "komei-kokumin",
+          "agent": "x-researcher",
+          "agentLabel": "X調査",
+          "checkId": "H2_x_topic",
+          "title": "[ゲート] Xの話題",
+          "todo": "X投稿本文が案件キーワードと一致（x-researcher）",
+          "command": "node scripts/complete-article.mjs --slug komei-kokumin --x-only --force",
+          "priority": 20
         }
       ],
       "gatePct": 75,
       "goldPct": 50,
-      "published": false,
-      "specialPublish": false,
-      "specialPublishSummary": "",
+      "published": true,
+      "specialPublish": true,
+      "specialPublishSummary": "ゲート2件・①〜④未完了",
       "publishGateOk": true,
       "pipelinePreOk": false,
       "titleAnswerOk": true,
@@ -7699,7 +7710,7 @@
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "matrix",
@@ -7710,10 +7721,10 @@
         },
         {
           "id": "x",
-          "label": "③X未発見（調査完了）",
+          "label": "③X検証1件+",
           "phase": 3,
           "preDeploy": true,
-          "ok": true
+          "ok": false
         },
         {
           "id": "legal",
@@ -7743,7 +7754,7 @@
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "matrix",
@@ -7754,10 +7765,10 @@
         },
         {
           "id": "x",
-          "label": "③X未発見（調査完了）",
+          "label": "③X検証1件+",
           "phase": 3,
           "preDeploy": true,
-          "ok": true
+          "ok": false
         },
         {
           "id": "legal",
@@ -7783,27 +7794,38 @@
       ],
       "blockers": [
         {
-          "id": "B4_conclusion",
-          "label": "結論の質",
-          "todo": "重複・途中切れ・定型文なし（行数固定なし）",
-          "detail": "結論が途中切れ・重複・逐語抜粋"
+          "id": "H1_xPosts",
+          "label": "X投稿",
+          "todo": "検証済みX URLを3件以上（x-researcher）",
+          "detail": "検証済み 0/3 件（公開前必須）"
+        },
+        {
+          "id": "H2_x_topic",
+          "label": "Xの話題",
+          "todo": "X投稿本文が案件キーワードと一致（x-researcher）",
+          "detail": "0/3 件が話題一致"
         }
       ],
-      "blockerCount": 1,
+      "blockerCount": 2,
       "runState": "idle",
       "workItems": [
         {
-          "id": "B4_conclusion",
-          "label": "結論の質",
+          "id": "H1_xPosts",
+          "label": "X投稿",
           "state": "blocked"
         },
         {
-          "id": "pipe:content",
-          "label": "①コンテンツ",
+          "id": "H2_x_topic",
+          "label": "Xの話題",
+          "state": "blocked"
+        },
+        {
+          "id": "pipe:x",
+          "label": "③X検証1件+",
           "state": "blocked"
         }
       ],
-      "nextAction": "📋 1行目OK — プレビュー確認後「公開する」を押してください",
+      "nextAction": "✅ 公開中 — 要対応あり（裏で修正中・URLは維持）",
       "promo": {
         "x": null,
         "hatena": null,
@@ -7820,15 +7842,30 @@
         "uploadedAt": null,
         "label": "未生成"
       },
-      "xUnavailable": true,
-      "xResearchStatus": "exhausted",
-      "statusExplain": "内容は読める状態。プレビュー確認後「公開する」でサイトに載る。",
-      "publishedBy": null,
-      "publishedAt": null,
+      "xUnavailable": false,
+      "xResearchStatus": "not_started",
+      "statusExplain": "サイトに載っているが、内部チェックは全部終わっていない。",
+      "publishedBy": "owner",
+      "publishedAt": "2026-07-05T05:10:47.621Z",
       "adminHiddenBy": null,
       "adminHiddenAt": null,
       "patrolFixing": false,
-      "activity": [],
+      "activity": [
+        {
+          "at": "2026-07-05T05:10:47.625Z",
+          "when": "07/05 14:10",
+          "type": "promo.queue",
+          "actor": "system",
+          "line": "発信キューに登録（system） — はてブ/note発信キューに登録"
+        },
+        {
+          "at": "2026-07-05T05:10:47.623Z",
+          "when": "07/05 14:10",
+          "type": "publish.manual",
+          "actor": "owner",
+          "line": "手動で一般公開（あなた） — 管理画面から一般公開"
+        }
+      ],
       "distribution": [
         {
           "channel": "X",
@@ -7856,10 +7893,10 @@
         }
       ],
       "stall": null,
-      "ownerTodo": true
+      "ownerTodo": false
     }
   ],
   "deltaGoldPct": 0,
   "previousGoldPct": 77,
-  "deployedAt": null
+  "deployedAt": "2026-07-04T01:07:18.655Z"
 }
