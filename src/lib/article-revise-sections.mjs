@@ -1,6 +1,11 @@
 /**
  * 記事ブロック修正 UI — セクション定義（モック／将来 API の正本）
  */
+import { readFileSync } from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
+const repoRoot = path.join(path.dirname(fileURLToPath(import.meta.url)), "../..");
 
 /** @typedef {{ id: string, label: string, desc: string, checkIds: string[], agent: string }} ReviseSection */
 
@@ -204,3 +209,35 @@ export const MOCK_RULE_HISTORY = [
     applied: true,
   },
 ];
+
+/** 蓄積ルール表示用 — data/article-revisions.json から読む */
+export function loadAccumulatedRules() {
+  try {
+    const store = JSON.parse(readFileSync(path.join(repoRoot, "data/article-revisions.json"), "utf8"));
+
+    /** @type {{ sectionId: string, instruction: string, applied: boolean }[]} */
+    const out = [];
+
+    for (const p of store.ownerPrinciples || []) {
+      const sec = Array.isArray(p.sectionIds) && p.sectionIds.length === 1 ? p.sectionIds[0] : "global";
+      const prefix = Array.isArray(p.sectionIds) && p.sectionIds.length > 1 ? "[共通] " : "";
+      out.push({
+        sectionId: sec,
+        instruction: `${prefix}${p.title}：${p.instruction}`,
+        applied: p.status === "codified",
+      });
+    }
+
+    for (const r of store.rules || []) {
+      out.push({
+        sectionId: r.sectionId,
+        instruction: r.instruction,
+        applied: r.adopted !== false,
+      });
+    }
+
+    return out.length ? out : MOCK_RULE_HISTORY;
+  } catch {
+    return MOCK_RULE_HISTORY;
+  }
+}

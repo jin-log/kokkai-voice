@@ -5,7 +5,7 @@ import { CHECK_LABELS } from "../../../../lib/page-ready.mjs";
 import {
   REVISE_SECTIONS,
   sectionContent,
-  MOCK_RULE_HISTORY,
+  loadAccumulatedRules,
 } from "../../../../lib/article-revise-sections.mjs";
 import "../../../../styles/admin-revise.css";
 
@@ -24,11 +24,13 @@ const sections = REVISE_SECTIONS.map((s) => ({
   checks: s.checkIds.map((id) => CHECK_LABELS[id]?.label ?? id),
 }));
 
+const accumulatedRules = loadAccumulatedRules();
+
 const payload = {
   slug,
   title: article.title,
   sections: sections.map(({ id, label, agent, content }) => ({ id, label, agent, content })),
-  rules: MOCK_RULE_HISTORY,
+  rules: accumulatedRules,
 };
 ---
 
@@ -130,11 +132,11 @@ const payload = {
         採用した指示はセクション別にDBへ。将来ライターが参照。
       </p>
       <div id="revise-rules">
-        {MOCK_RULE_HISTORY.map((r) => {
+        {accumulatedRules.map((r) => {
           const sec = REVISE_SECTIONS.find((x) => x.id === r.sectionId);
           return (
             <div class="admin-revise-rule">
-              <strong>{sec?.label ?? r.sectionId}</strong>
+              <strong>{sec?.label ?? (r.sectionId === "global" ? "共通" : r.sectionId)}</strong>
               <br />
               {r.instruction}
               {r.applied && <span style="color:#15803d"> · 採用済</span>}

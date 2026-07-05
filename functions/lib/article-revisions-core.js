@@ -12,6 +12,8 @@ export function normalizeRevisionStore(store) {
     ? store.ownerInstructions
     : [];
 
+  const ownerPrinciples = Array.isArray(store?.ownerPrinciples) ? store.ownerPrinciples : [];
+
   if (ownerInstructions.length === 0 && jobs.length > 0) {
     ownerInstructions = backfillOwnerInstructionsFromJobs(jobs);
   }
@@ -21,6 +23,7 @@ export function normalizeRevisionStore(store) {
     jobs,
     rules,
     ownerInstructions,
+    ownerPrinciples,
   };
 }
 

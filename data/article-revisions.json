@@ -232,10 +232,103 @@
   "rules": [
     {
       "id": "rule-mr81jdeb",
+      "slug": "chingin",
       "sectionId": "nowSummary",
       "instruction": "何の答弁、質疑したかが必要。\n答弁した、質疑した、だけの内容は不要。\n決定していない場合は論点をまとめる",
+      "adopted": true,
       "createdAt": "2026-07-05T17:04:06.035Z",
       "sourceJobId": "rev-mr81j242-ez53zo"
+    }
+  ],
+  "ownerInstructions": [
+    {
+      "id": "ins-owner-chingin-summary-001",
+      "slug": "chingin",
+      "sectionId": "summaryBullets",
+      "text": "タイトルが 賃上げ・最低賃金の動向なのに関係ない内容が含まれている。タイトルに即した要点をまとめて",
+      "jobId": "rev-mr81loxc-01iue6",
+      "articleTitle": "賃上げ・最低賃金の動向",
+      "outcome": "codified",
+      "ownerNote": "「○○して」と言っているのに「○○する方法」の説明が返ってくるのはNG",
+      "createdAt": "2026-07-05T17:05:54.288Z",
+      "resolvedAt": "2026-07-05T17:41:00.000Z"
+    },
+    {
+      "id": "ins-owner-chingin-now-001",
+      "slug": "chingin",
+      "sectionId": "nowSummary",
+      "text": "何の答弁、質疑したかが必要。\n答弁した、質疑した、だけの内容は不要。\n決定していない場合は論点をまとめる",
+      "jobId": "rev-mr81j242-ez53zo",
+      "articleTitle": "賃上げ・最低賃金の動向",
+      "outcome": "applied",
+      "createdAt": "2026-07-05T17:03:51.410Z",
+      "resolvedAt": "2026-07-05T17:04:06.035Z"
+    },
+    {
+      "id": "ins-owner-chingin-arc-001",
+      "slug": "chingin",
+      "sectionId": "arcSummary",
+      "text": "答弁・質疑した、だけはNG。具体的な答弁・質疑が行われた、はOK。\n部分引用を使うだけで、答弁の内容を要約していないのはNG",
+      "jobId": null,
+      "articleTitle": "賃上げ・最低賃金の動向",
+      "outcome": "codified",
+      "ownerNote": "同じ日付で4つ、一人の答弁を切り出してばらしただけは最低。日付・○○が▲▼について以下のように質疑「要約」",
+      "createdAt": "2026-07-05T17:47:00.000Z",
+      "resolvedAt": "2026-07-05T17:49:00.000Z"
+    }
+  ],
+  "ownerPrinciples": [
+    {
+      "id": "prin-revise-no-meta",
+      "scope": "global",
+      "sectionIds": ["summaryBullets", "nowSummary", "arcSummary", "title_opening"],
+      "title": "指示は実行結果を返す",
+      "instruction": "「○○して」と言ったら○○した結果（中身）を出す。やり方・手順の説明（例：〜を先に整理、〜を短く要約、〜として分ける）は提案に含めない。",
+      "badExample": "・賃上げ・最低賃金で国会上確認できた事実を先に整理",
+      "goodExample": "・2026-04-14：城内実— 春闘の連合集計で賃上げ率5.09%、三年連続5%台の水準（国会議事録）",
+      "sourceSlug": "chingin",
+      "source": "owner-chat-2026-07-06",
+      "status": "codified",
+      "createdAt": "2026-07-05T17:47:00.000Z"
+    },
+    {
+      "id": "prin-summary-topic-match",
+      "scope": "section",
+      "sectionIds": ["summaryBullets"],
+      "title": "タイトルに即した要点",
+      "instruction": "タイトルと無関係な手続きログ（起立・可決・無関係法案の審議）を除外し、記事データからタイトルに即した事実要点を出す。",
+      "badExample": "・2026-06-03：山口壯— 両件は承諾を与えるべきものと決するに賛成の諸君の起立を求めます",
+      "goodExample": "・2026-04-14：城内実— 春闘の連合集計で賃上げ率5.09%、三年連続5%台の水準（国会議事録）",
+      "sourceSlug": "chingin",
+      "source": "owner-ui-2026-07-05",
+      "status": "codified",
+      "createdAt": "2026-07-05T17:05:54.288Z"
+    },
+    {
+      "id": "prin-now-no-procedural",
+      "scope": "section",
+      "sectionIds": ["nowSummary"],
+      "title": "答弁列挙ではなく内容・論点",
+      "instruction": "「○○が答弁・質疑した」だけの行は不要。何が言われたか、未確定なら論点を要約する。",
+      "badExample": "1. 2026-06-04：築山信彦が賃上げについて国会で答弁・質疑した。",
+      "goodExample": "1. 春闘の連合集計で賃上げ率5.09%、三年連続5%台の水準。",
+      "sourceSlug": "chingin",
+      "source": "owner-ui-2026-07-05",
+      "status": "codified",
+      "createdAt": "2026-07-05T17:03:51.410Z"
+    },
+    {
+      "id": "prin-arc-one-speech-one-row",
+      "scope": "section",
+      "sectionIds": ["arcSummary"],
+      "title": "経緯は1発言1行・要約形式",
+      "instruction": "同一日付×同一人物の答弁を切り出し分割しない。形式は「YYYY-MM-DD — ○○が▲▼について以下のように質疑/答弁（委員会）。「要約文」」。部分引用の羅列ではなく要約を「」に入れる。「答弁・質疑した」だけはNG。",
+      "badExample": "2026-04-14 — 城内実：三年連続で5%台…\n2026-04-14 — 城内実：政労使意見交換…\n2026-04-14 — 城内実：中小企業へ波及…",
+      "goodExample": "2026-04-14 — 城内実が賃上げについて以下のように答弁（内閣委員会）。「春闘5.09%・政労使意見交換で物価上超え賃上げ要請・中小への波及が焦点。」",
+      "sourceSlug": "chingin",
+      "source": "owner-chat-2026-07-06",
+      "status": "codified",
+      "createdAt": "2026-07-05T17:47:00.000Z"
     }
   ]
 }
