@@ -19,12 +19,24 @@ const SITE_HOST = "seiji1192.site";
  *   tags?: string[];
  *   categoryId?: string;
  *   privacyStatus?: 'public'|'private'|'unlisted';
+ *   publishAt?: string;
  * }} meta
  */
 export async function uploadVideo(filePath, meta) {
   const accessToken = await getAccessToken();
   const size = statSync(filePath).size;
   const tags = (meta.tags ?? []).slice(0, 30).map((t) => String(t).slice(0, 30));
+  const scheduled = Boolean(meta.publishAt);
+  const privacyStatus = scheduled ? "private" : (meta.privacyStatus ?? "public");
+
+  /** @type {Record<string, unknown>} */
+  const status = {
+    privacyStatus,
+    selfDeclaredMadeForKids: false,
+  };
+  if (scheduled) {
+    status.publishAt = meta.publishAt;
+  }
 
   const initRes = await fetch(UPLOAD_INIT, {
     method: "POST",
@@ -42,10 +54,7 @@ export async function uploadVideo(filePath, meta) {
         categoryId: meta.categoryId ?? "25",
         defaultLanguage: "ja",
       },
-      status: {
-        privacyStatus: meta.privacyStatus ?? "public",
-        selfDeclaredMadeForKids: false,
-      },
+      status,
     }),
   });
 
@@ -81,6 +90,7 @@ export async function uploadVideo(filePath, meta) {
     url: `https://www.youtube.com/shorts/${videoId}`,
     watchUrl: `https://www.youtube.com/watch?v=${videoId}`,
     studioUrl: `https://studio.youtube.com/video/${videoId}/edit`,
+    publishAt: video.status?.publishAt ?? meta.publishAt ?? null,
     raw: video,
   };
 }

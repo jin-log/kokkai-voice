@@ -43,17 +43,25 @@ export const SLUG_BEAT_CLIPS = {
     penalty: "justice-gavel",
     status: "flag-waving",
   },
+  "osaka-to-metropolis": {
+    hook: "osaka-castle",
+  },
 };
 
 /** @type {{ re: RegExp, clipId: string, score: number }[]} */
 const TEXT_RULES = [
+  { re: /スパイ防止|スパイ活動|スパイ法制/, clipId: "spy-hoodie", score: 58 },
+  { re: /不法移民|不法滞在|オーバーステイ|在留外国/, clipId: "illegal-overstay", score: 55 },
+  { re: /大阪都|大阪市|副首都|都構想/, clipId: "osaka-castle", score: 55 },
+  { re: /学校教育|大学|学生|教科書|文教/, clipId: "study-school-student", score: 50 },
+  { re: /演説|政治家|選挙|知事|首相/, clipId: "politician-speech", score: 48 },
   { re: /刑事|告発|裁判|公選法|スパイ防止|司法/, clipId: "justice-gavel", score: 55 },
   { re: /学校教育|教科書|教員|文部科学|デジタル教科/, clipId: "diet-exterior-day", score: 50 },
   { re: /成立|法案|改正法|附帯決議|憲法/, clipId: "flag-waving", score: 45 },
   { re: /出生率|少子化|こども未来|出生数|合計特殊出生/, clipId: "newborn-sleeping", score: 45 },
   { re: /予算|兆円|歳出|税|給与|年金|物価|3\.6兆/, clipId: "yen-salary-envelope", score: 45 },
-  { re: /エネルギ|再エネ|ソーラ|電力|原発/, clipId: "solar-farm-aerial", score: 45 },
-  { re: /介護|高齢|医療費|福祉|社会保障/, clipId: "elderly-wheelchair", score: 45 },
+  { re: /エネルギ|再エネ|ソーラ|電力|原発|太陽光/, clipId: "solar-energy-field", score: 48 },
+  { re: /介護|高齢|医療費|福祉|社会保障/, clipId: "elderly-care", score: 48 },
   { re: /労働|賃金|雇用|最低賃金|インフラ|建設/, clipId: "worker-hardhat", score: 40 },
   { re: /地方創生|ローカル線|交通|地方/, clipId: "train-rural", score: 40 },
   { re: /経済|企業|GDP|ビジネス/, clipId: "businessman-suit", score: 35 },

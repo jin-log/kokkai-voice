@@ -11,8 +11,8 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(__dirname, "../..");
 const QUEUE_PATH = path.join(root, "data/youtube-pending-comments.json");
 
-/** 公開時刻からこの秒数後にコメント試行 */
-export const POST_BUFFER_SEC = 120;
+/** 公開時刻からこの秒数後にコメント試行（既定15分） */
+export const POST_BUFFER_SEC = 900;
 export const MAX_ATTEMPTS = 60;
 
 /** @typedef {{
@@ -57,12 +57,14 @@ export async function savePendingComments(items) {
  *   slug: string;
  *   commentText: string;
  *   publishAt: string;
+ *   postBufferSec?: number;
  * }} input
  */
 export async function enqueuePendingComment(input) {
   const { items } = await loadPendingComments();
   const publishMs = new Date(input.publishAt).getTime();
-  const postAfter = new Date(publishMs + POST_BUFFER_SEC * 1000).toISOString();
+  const bufferSec = input.postBufferSec ?? POST_BUFFER_SEC;
+  const postAfter = new Date(publishMs + bufferSec * 1000).toISOString();
 
   const existing = items.find(
     (i) => i.videoId === input.videoId && i.status !== "failed",

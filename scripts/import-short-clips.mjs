@@ -75,6 +75,48 @@ const KNOWN = {
     tags: ["交通", "地方"],
     use: "地方創生・インフラ（政治色は薄め）",
   },
+  "study-school-student": {
+    slug: "study-school-student",
+    label: "勉強・学校・学生",
+    tags: ["教育", "学校", "学生", "大学"],
+    use: "教育政策・無償化・教科書",
+  },
+  "solar-energy-field": {
+    slug: "solar-energy-field",
+    label: "太陽光・エネルギー",
+    tags: ["エネルギー", "太陽光", "再エネ", "環境"],
+    use: "エネルギー政策・再エネ",
+  },
+  "elderly-care": {
+    slug: "elderly-care",
+    label: "介護・高齢",
+    tags: ["介護", "高齢化", "福祉", "社会保障"],
+    use: "介護・年金・医療",
+  },
+  "osaka-castle": {
+    slug: "osaka-castle",
+    label: "大阪城",
+    tags: ["大阪", "大阪都構想", "地方", "都市"],
+    use: "大阪都構想・関西",
+  },
+  "spy-hoodie": {
+    slug: "spy-hoodie",
+    label: "スパイ・フード",
+    tags: ["スパイ", "スパイ防止法", "治安", "司法"],
+    use: "スパイ防止法・治安",
+  },
+  "politician-speech": {
+    slug: "politician-speech",
+    label: "演説・政治家",
+    tags: ["国会", "政治家", "演説", "選挙"],
+    use: "政治・選挙・演説",
+  },
+  "illegal-overstay": {
+    slug: "illegal-overstay",
+    label: "不法滞在・入管",
+    tags: ["不法移民", "入管", "在留外国人", "移民"],
+    use: "入管・在留政策",
+  },
 };
 
 /**

@@ -22,6 +22,12 @@ const SHORT_COPY = {
     summaryEn: "80% hope to marry by 35, but Japan's birth rate keeps falling — the gap explained.",
     tagsExtra: ["結婚", "未婚化", "晩婚化", "国会"],
   },
+  "osaka-to-metropolis": {
+    title: "【大阪都構想】1100億削減？218億増？どっちが本当 #shorts",
+    summaryJa: "大阪都構想 — 賛成側の年間1100億円削減 vs 反対側の218億円増、庁舎241億/637億の試算を整理。",
+    summaryEn: "Osaka metropolis plan — ¥110B cut vs ¥21.8B rise; city hall cost estimates compared.",
+    tagsExtra: ["大阪都構想", "大阪", "地方分権", "試算"],
+  },
 };
 
 const BASE_TAGS = [
