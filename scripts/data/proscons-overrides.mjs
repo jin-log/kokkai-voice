@@ -330,6 +330,22 @@ export const MERITS_DEMERITS_OVERRIDES = {
         sourceLabel: "朝日新聞",
         sourceDate: "2025-12-03",
       },
+      {
+        headline: "庁舎配置と防災懸念（2020年制度案）",
+        text: "区役所だけでは執務室が足りず、中央区職員の一部を住之江区のATC（湾岸埋立地）に配置する想定が報じられた。研究者130人の所見は、災害時の行政運営と住民利便性の観点から批判している。",
+        figure: "ATC配置",
+        sourceUrl: "https://www.zenshoren.or.jp/2020/10/26/post-6117",
+        sourceLabel: "全国商工新聞",
+        sourceDate: "2020-10-26",
+      },
+      {
+        headline: "庁舎整備費の試算差",
+        text: "府・市事務局試算では、既存庁舎活用＋不足分新設で341億円、各区に中核市並みの総合庁舎を建てると637億円。反対側は改修・民間賃借・分散配置で実コストはさらに増えると指摘した。",
+        figure: "341億/637億",
+        sourceUrl: "https://mainichi.jp/articles/20180818/k00/00m/040/187000c",
+        sourceLabel: "毎日新聞",
+        sourceDate: "2018-08-17",
+      },
     ],
   },
 };

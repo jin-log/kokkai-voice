@@ -4,7 +4,7 @@ import path from "node:path";
 /**
  * @param {{ root: string, propsFile: string, outputMp4: string }} opts
  */
-export function renderRemotionShort({ root, propsFile, outputMp4 }) {
+function renderComposition({ root, propsFile, outputMp4, compositionId }) {
   const entry = path.join(root, "remotion", "index.ts");
   const propsPath = propsFile.replace(/\\/g, "/");
 
@@ -15,7 +15,7 @@ export function renderRemotionShort({ root, propsFile, outputMp4 }) {
         "remotion",
         "render",
         entry,
-        "ShortF1",
+        compositionId,
         outputMp4,
         `--props=${propsPath}`,
         "--codec=h264",
@@ -29,4 +29,14 @@ export function renderRemotionShort({ root, propsFile, outputMp4 }) {
       else reject(new Error(`remotion render exit ${code}`));
     });
   });
+}
+
+/** @param {{ root: string, propsFile: string, outputMp4: string }} opts */
+export function renderRemotionShort(opts) {
+  return renderComposition({ ...opts, compositionId: "ShortF1" });
+}
+
+/** @param {{ root: string, propsFile: string, outputMp4: string }} opts */
+export function renderRemotionShortData(opts) {
+  return renderComposition({ ...opts, compositionId: "ShortDataV1" });
 }
