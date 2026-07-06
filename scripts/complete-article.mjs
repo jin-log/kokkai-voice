@@ -584,14 +584,10 @@ async function completeOneSlug(targetSlug) {
     } else {
       await enrichKokkai(article, targetSlug);
     }
-  } else if (isGeneralContentReady(article) && !force && !contentOnly) {
-    console.log("[一般] 既にコンテンツあり — スキップ");
-  } else if (
-    article.category !== "国会" &&
-    hasGeneralMeritPool(article) &&
-    generalSummaryIsBad(article)
-  ) {
-    console.log("[一般] メリデメ・出典から要約を再構成（Jina上書き回避）");
+  } else if (!generalSummaryIsBad(article) && isGeneralContentReady(article)) {
+    console.log("[一般] 要約良好 — スキップ");
+  } else if (hasGeneralMeritPool(article)) {
+    console.log("[一般] メリデメ・出典から要約を再構成（報道スクレイプ回避）");
     rebuildGeneralSummaryFromMerits(article);
     const sources = (article.timeline ?? [])
       .filter((t) => t.sourceUrl)

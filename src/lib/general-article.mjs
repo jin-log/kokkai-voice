@@ -24,6 +24,9 @@ export function isGeneralBoilerplateLine(text) {
   if (/を登録$/.test(t)) return true;
   if (/について報道・公開情報を整理中/.test(t)) return true;
   if (/ソースURLを追加してください/.test(t)) return true;
+  if (/^\*\s*\[/.test(t)) return true;
+  if (/^\[.+\]\(https?:\/\//.test(t)) return true;
+  if (/^https?:\/\//.test(t)) return true;
   return false;
 }
 

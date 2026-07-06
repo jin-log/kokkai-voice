@@ -40,7 +40,7 @@ const JINA_META_LINE =
 function firstParagraph(md) {
   const lines = md.split("\n").map((l) => l.trim()).filter(Boolean);
   for (const line of lines) {
-    if (line.startsWith("#") || line.startsWith("!") || line.startsWith("[")) continue;
+    if (line.startsWith("#") || line.startsWith("!") || line.startsWith("[") || line.startsWith("*")) continue;
     if (JINA_META_LINE.test(line)) continue;
     const cleaned = stripJinaGarbage(line.replace(/\s+/g, " "));
     if (cleaned.length < 20 || isGeneralBoilerplateLine(cleaned)) continue;

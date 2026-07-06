@@ -1,9 +1,9 @@
 {
-  "generatedAt": "2026-07-06T20:35:04.406Z",
-  "total": 76,
+  "generatedAt": "2026-07-06T20:38:40.185Z",
+  "total": 73,
   "byAgent": {
     "ceo": 10,
-    "writer": 63,
+    "writer": 60,
     "x-researcher": 2,
     "legal-check": 1
   },
@@ -251,17 +251,6 @@
       "priority": 30
     },
     {
-      "id": "osaka-to-metropolis:P1_opening_no_outcome",
-      "slug": "osaka-to-metropolis",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "P1_opening_no_outcome",
-      "title": "[公開] 1行目がタイトルに未回答",
-      "todo": "成立/見送り/予算額など、いまどうなっているかを1行目に書く",
-      "command": "node scripts/complete-article.mjs --slug osaka-to-metropolis --content-only --force",
-      "priority": 5
-    },
-    {
       "id": "osaka-to-metropolis:B3_topic",
       "slug": "osaka-to-metropolis",
       "agent": "writer",
@@ -269,28 +258,6 @@
       "checkId": "B3_topic",
       "title": "[ゲート] 話題一致",
       "todo": "要約が searchKeyword と一致（2行以上）",
-      "command": "node scripts/complete-article.mjs --slug osaka-to-metropolis --content-only --force",
-      "priority": 30
-    },
-    {
-      "id": "osaka-to-metropolis:C1_summaryBullets",
-      "slug": "osaka-to-metropolis",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "C1_summaryBullets",
-      "title": "[ゲート] 要点",
-      "todo": "summaryBullets を3点以上",
-      "command": "node scripts/complete-article.mjs --slug osaka-to-metropolis --content-only --force",
-      "priority": 30
-    },
-    {
-      "id": "osaka-to-metropolis:D1_arcSummary",
-      "slug": "osaka-to-metropolis",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "D1_arcSummary",
-      "title": "[ゲート] 経緯",
-      "todo": "日付付き経緯を3行以上",
       "command": "node scripts/complete-article.mjs --slug osaka-to-metropolis --content-only --force",
       "priority": 30
     },
@@ -306,14 +273,14 @@
       "priority": 30
     },
     {
-      "id": "osaka-to-metropolis:E1_timeline_count",
+      "id": "osaka-to-metropolis:G6_matrix_topic",
       "slug": "osaka-to-metropolis",
       "agent": "writer",
       "agentLabel": "ライター",
-      "checkId": "E1_timeline_count",
-      "title": "[ゲート] タイムライン",
-      "todo": "出来事を6件以上（X3+国会3）",
-      "command": "node scripts/enrich-timeline-all.mjs --slug osaka-to-metropolis",
+      "checkId": "G6_matrix_topic",
+      "title": "[ゲート] 〇×の話題",
+      "todo": "1党以上が案件キーワードと一致。一致なしで結論だけは不可",
+      "command": "node scripts/complete-article.mjs --slug osaka-to-metropolis --matrix-only --force",
       "priority": 30
     },
     {
