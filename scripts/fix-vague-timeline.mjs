@@ -77,11 +77,18 @@ function isBadNowBullet(text) {
 }
 
 function topSpeechLines(article, limit = 3) {
-  return (article.timeline || [])
-    .filter((e) => e.type === "speech" && e.summaryPlain && !isVague(e.summaryPlain))
-    .sort((a, b) => (b.date || "").localeCompare(a.date || ""))
-    .slice(0, limit)
-    .map((e) => `${e.date}：${e.summaryPlain}`);
+  const seen = new Set();
+  const lines = [];
+  for (const e of (article.timeline || [])
+    .filter((ev) => ev.type === "speech" && ev.summaryPlain && !isVague(ev.summaryPlain))
+    .sort((a, b) => (b.date || "").localeCompare(a.date || ""))) {
+    const key = `${e.date}:${e.speech?.speaker || e.summaryPlain}`;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    lines.push(`${e.date}：${e.summaryPlain}`);
+    if (lines.length >= limit) break;
+  }
+  return lines;
 }
 
 function syncDerivedSummaries(article) {
@@ -232,7 +239,8 @@ async function main() {
     const fp = path.join(articlesDir, `${slug}.json`);
     const raw = await readFile(fp, "utf8");
     const needsFix =
-      /国会で答弁|が国会で論じた|を国会で論じた|に関する.*での論点/.test(raw);
+      /国会で答弁|が国会で論じた|を国会で論じた|に関する.*での論点/.test(raw) ||
+      /"bullets":\s*\[[\s\S]*?"(?!20\d{2}-\d{2}-\d{2}：)[^"]{36,}/.test(raw);
     if (!needsFix) continue;
     const n = await fixArticle(slug);
     if (n > 0) {
