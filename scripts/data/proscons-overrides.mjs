@@ -304,6 +304,14 @@ export const MERITS_DEMERITS_OVERRIDES = {
         sourceLabel: "日本経済新聞",
         sourceDate: "2020-10-26",
       },
+      {
+        headline: "庁舎整備費の抑制案（賛成側）",
+        text: "2020年投票前の制度案では、新設600億円級の庁舎を既存区役所・市役所本庁の流用で241億円まで抑えると説明。北区本庁＝市役所本庁（中之島）、中央区本庁＝西成区役所など4か所を本庁候補に据えた。",
+        figure: "241億円",
+        sourceUrl: "https://www.nikkei.com/article/DGXMZO65532100X21C20A0AC8000/",
+        sourceLabel: "日本経済新聞",
+        sourceDate: "2020-10-26",
+      },
     ],
     demerits: [
       {
