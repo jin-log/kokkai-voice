@@ -1,9 +1,9 @@
 {
-  "generatedAt": "2026-07-06T19:41:10.964Z",
-  "total": 74,
+  "generatedAt": "2026-07-06T19:46:07.802Z",
+  "total": 75,
   "byAgent": {
     "ceo": 10,
-    "writer": 61,
+    "writer": 62,
     "x-researcher": 2,
     "legal-check": 1
   },
@@ -741,6 +741,17 @@
       "todo": "1党以上が案件キーワードと一致。一致なしで結論だけは不可",
       "command": "node scripts/complete-article.mjs --slug shussho-budget-seika --matrix-only --force",
       "priority": 30
+    },
+    {
+      "id": "tokyo-recall:P1_opening_off_topic",
+      "slug": "tokyo-recall",
+      "agent": "writer",
+      "agentLabel": "ライター",
+      "checkId": "P1_opening_off_topic",
+      "title": "[公開] 1行目がタイトルに未回答",
+      "todo": "1行目に案件のキーワードと具体答えを入れる",
+      "command": "node scripts/complete-article.mjs --slug tokyo-recall --content-only --force",
+      "priority": 5
     },
     {
       "id": "tokyo-recall:B3_topic",
