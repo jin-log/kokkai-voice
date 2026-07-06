@@ -75,6 +75,9 @@ export function getGlossary(article) {
 export function getFloatTocItems(article, hasStance) {
   const items = [{ href: "#sec-now", label: "いまの結論" }];
   if (article.meritsDemerits?.merits?.length || article.meritsDemerits?.demerits?.length) {
+    if (usesContentBlocks(article) && (article.prosCons?.merits?.length || article.prosCons?.demerits?.length)) {
+      items.push({ href: "#sec-impact", label: "利害整理" });
+    }
     items.push({ href: "#sec-proscons", label: "メリット・デメリット" });
   } else if (article.prosCons?.merits?.length || article.prosCons?.demerits?.length) {
     const blocks = usesContentBlocks(article);

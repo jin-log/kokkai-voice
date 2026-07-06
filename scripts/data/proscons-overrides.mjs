@@ -280,6 +280,10 @@ export const OVERRIDES = {
       },
     ],
   },
+};
+
+/** メリット・デメリット専用枠（prosCons＝利害整理と併存） */
+export const MERITS_DEMERITS_OVERRIDES = {
   "osaka-to-metropolis": {
     disclaimer:
       "公表・試算・報道に基づく整理です。賛否それぞれの主張であり、当サイトは賛成・反対を断定しません。",
