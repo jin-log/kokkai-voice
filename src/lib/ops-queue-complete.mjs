@@ -30,6 +30,8 @@ export async function completeOpsTask(taskId, opts = {}) {
   task.doneAt = new Date().toISOString();
   queue.generatedAt = new Date().toISOString();
   await writeFile(queuePath, `${JSON.stringify(queue, null, 2)}\n`, "utf8");
+  const publicPath = path.join(root, "public/data/ops-queue.json");
+  await writeFile(publicPath, `${JSON.stringify(queue, null, 2)}\n`, "utf8").catch(() => {});
 
   const logLine = JSON.stringify({
     taskId: id,
