@@ -92,7 +92,7 @@ export function isCompleteSummary(text) {
     return false;
   }
   if (isDietVoice(t) || FIRST_PERSON.test(t)) return false;
-  if (/おりません|ございます|まいります|けれども、|について伺う|聴取しないこととし、議長/.test(t)) {
+  if (/おりません|ございます|まいります|けれども、|について伺う|聴取しないこととし、議長|訴えます|承知している|考えてある|、これ。$|唯一。$|だから生活|財投債。$/.test(t)) {
     return false;
   }
   return /した|する|ない|ある|いる|表明|答弁|提出|可決|成立|見込|実施|盛り込|求め|訴え|認め|廃止|増|減|継続|検討|予定|方針|懸念|反対|支持|推進|説明|停止|禁止|義務|開始|終了|含め|据え置|引上げ|削減|拡大/.test(
@@ -257,24 +257,12 @@ export function sanitizeMeritText(text) {
   return isBadSummaryLine(t) ? null : t;
 }
 
-/** nowSummary.bullets — primary 議事録から完全文（不足時のみタイムライン要約） */
+/** nowSummary.bullets — primary 議事録から完全文のみ */
 export function rebuildNowBullets(article) {
   const kw = article.searchKeyword || article.slug;
-  const lines = [];
   const speech = article.primarySpeech?.speechFull || article.primarySpeech?.excerpt;
-  if (speech) {
-    for (const b of extractConclusionBullets(speech, kw)) {
-      if (!isBadSummaryLine(b)) lines.push(b);
-    }
-  }
-  if (lines.length < 2) {
-    for (const ev of (article.timeline || [])
-      .filter((e) => e.type === "speech" && e.summaryPlain && !isBadSummaryLine(e.summaryPlain))
-      .sort((a, b) => (b.date || "").localeCompare(a.date || ""))) {
-      let body = ev.summaryPlain.replace(/^[^—]+—\s*/, "").replace(/^[^：]+：/, "");
-      if (isCompleteSummary(body) && !isBadSummaryLine(body)) lines.push(body);
-      if (lines.length >= 3) break;
-    }
-  }
-  return [...new Set(lines)].slice(0, 3);
+  if (!speech) return [];
+  return extractConclusionBullets(speech, kw)
+    .filter((b) => !isBadSummaryLine(b, kw))
+    .slice(0, 2);
 }

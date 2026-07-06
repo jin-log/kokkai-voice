@@ -76,8 +76,13 @@ function sanitizeMeritsDemerits(article) {
 }
 
 function rebuildArcSummary(article) {
+  const kw = article.searchKeyword || article.slug;
   const lines = (article.timeline || [])
-    .filter((e) => e.type === "speech" && e.summaryPlain && !isBadSummaryLine(e.summaryPlain))
+    .filter((e) => e.type === "speech" && e.summaryPlain && !isBadSummaryLine(e.summaryPlain, kw))
+    .filter((e) => {
+      const body = e.summaryPlain.replace(/^[^—]+—\s*/, "");
+      return isCompleteSummary(body);
+    })
     .sort((a, b) => (b.date || "").localeCompare(a.date || ""))
     .slice(0, 3)
     .map((e) => ({
@@ -124,14 +129,14 @@ async function fixArticle(slug) {
 
   for (const ev of article.timeline || []) {
     if (ev.type !== "speech") continue;
-    if (!forceAll && ev.summaryPlain && !isBadSummaryLine(ev.summaryPlain)) continue;
+    if (!forceAll && ev.summaryPlain && !isBadSummaryLine(ev.summaryPlain, kw)) continue;
     const speechID = ev.speech?.speechID;
     if (!speechID) continue;
     try {
       const r = await fetchRecord(speechID);
       if (!r) continue;
       const plain = summarizeSpeechRecord(r, kw);
-      if (!plain || isBadSummaryLine(plain)) continue;
+      if (!plain || isBadSummaryLine(plain, kw)) continue;
       if (plain !== ev.summaryPlain) {
         ev.summaryPlain = plain;
         fixed++;
