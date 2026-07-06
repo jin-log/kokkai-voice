@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-07-06T18:20:36.773Z",
-  "total": 133,
+  "generatedAt": "2026-07-06T18:24:31.943Z",
+  "total": 120,
   "byAgent": {
-    "writer": 115,
+    "writer": 102,
     "ceo": 15,
     "x-researcher": 2,
     "legal-check": 1
@@ -306,28 +306,6 @@
       "priority": 30
     },
     {
-      "id": "energy-policy:Q7_procedural_evidence",
-      "slug": "energy-policy",
-      "agent": "ceo",
-      "agentLabel": "CEO",
-      "checkId": "Q7_procedural_evidence",
-      "title": "[品質] 要点が議事手続き・発言断片の羅列",
-      "todo": "論点・数値・可決結果が分かる第三者要約に差し替え",
-      "command": "node scripts/complete-article.mjs --slug energy-policy --content-only --force",
-      "priority": 10
-    },
-    {
-      "id": "energy-policy:J1_prosCons",
-      "slug": "energy-policy",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "J1_prosCons",
-      "title": "[ゲート] メリデメ",
-      "todo": "公表数値付きメリット2・デメリット2",
-      "command": "node scripts/generate-proscons-auto.mjs --slug energy-policy",
-      "priority": 30
-    },
-    {
       "id": "fukushuto-koso:B3_topic",
       "slug": "fukushuto-koso",
       "agent": "writer",
@@ -370,61 +348,6 @@
       "todo": "可決・金額・合意内容など、読者が知りたい答えを1行目に書く",
       "command": "node scripts/complete-article.mjs --slug gaikokujin-seisaku --content-only --force",
       "priority": 5
-    },
-    {
-      "id": "gaikokujin-seisaku:B3_topic",
-      "slug": "gaikokujin-seisaku",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "B3_topic",
-      "title": "[ゲート] 話題一致",
-      "todo": "要約が searchKeyword と一致（2行以上）",
-      "command": "node scripts/complete-article.mjs --slug gaikokujin-seisaku --content-only --force",
-      "priority": 30
-    },
-    {
-      "id": "gaikokujin-seisaku:C1_summaryBullets",
-      "slug": "gaikokujin-seisaku",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "C1_summaryBullets",
-      "title": "[ゲート] 要点",
-      "todo": "summaryBullets を3点以上",
-      "command": "node scripts/complete-article.mjs --slug gaikokujin-seisaku --content-only --force",
-      "priority": 30
-    },
-    {
-      "id": "gaikokujin-seisaku:D1_arcSummary",
-      "slug": "gaikokujin-seisaku",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "D1_arcSummary",
-      "title": "[ゲート] 経緯",
-      "todo": "日付付き経緯を3行以上",
-      "command": "node scripts/complete-article.mjs --slug gaikokujin-seisaku --content-only --force",
-      "priority": 30
-    },
-    {
-      "id": "gaikokujin-seisaku:D2_arc_topic",
-      "slug": "gaikokujin-seisaku",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "D2_arc_topic",
-      "title": "[ゲート] 経緯の話題",
-      "todo": "経緯3行以上が案件キーワードと一致",
-      "command": "node scripts/complete-article.mjs --slug gaikokujin-seisaku --content-only --force",
-      "priority": 30
-    },
-    {
-      "id": "gaikokujin-seisaku:J1_prosCons",
-      "slug": "gaikokujin-seisaku",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "J1_prosCons",
-      "title": "[ゲート] メリデメ",
-      "todo": "公表数値付きメリット2・デメリット2",
-      "command": "node scripts/generate-proscons-auto.mjs --slug gaikokujin-seisaku",
-      "priority": 30
     },
     {
       "id": "hosei-yosan:Q7_procedural_evidence",
@@ -647,102 +570,25 @@
       "priority": 30
     },
     {
-      "id": "kyoiku-mushoka:C1_summaryBullets",
+      "id": "kyoiku-mushoka:Q7_procedural_evidence",
       "slug": "kyoiku-mushoka",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "C1_summaryBullets",
-      "title": "[ゲート] 要点",
-      "todo": "summaryBullets を3点以上",
+      "agent": "ceo",
+      "agentLabel": "CEO",
+      "checkId": "Q7_procedural_evidence",
+      "title": "[品質] 要点が議事手続き・発言断片の羅列",
+      "todo": "論点・数値・可決結果が分かる第三者要約に差し替え",
       "command": "node scripts/complete-article.mjs --slug kyoiku-mushoka --content-only --force",
-      "priority": 30
+      "priority": 10
     },
     {
-      "id": "kyoiku-mushoka:D1_arcSummary",
+      "id": "kyoiku-mushoka:E4_timeline_diet_topic",
       "slug": "kyoiku-mushoka",
       "agent": "writer",
       "agentLabel": "ライター",
-      "checkId": "D1_arcSummary",
-      "title": "[ゲート] 経緯",
-      "todo": "日付付き経緯を3行以上",
-      "command": "node scripts/complete-article.mjs --slug kyoiku-mushoka --content-only --force",
-      "priority": 30
-    },
-    {
-      "id": "kyoiku-mushoka:D2_arc_topic",
-      "slug": "kyoiku-mushoka",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "D2_arc_topic",
-      "title": "[ゲート] 経緯の話題",
-      "todo": "経緯3行以上が案件キーワードと一致",
-      "command": "node scripts/complete-article.mjs --slug kyoiku-mushoka --content-only --force",
-      "priority": 30
-    },
-    {
-      "id": "kyoiku-mushoka:J1_prosCons",
-      "slug": "kyoiku-mushoka",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "J1_prosCons",
-      "title": "[ゲート] メリデメ",
-      "todo": "公表数値付きメリット2・デメリット2",
-      "command": "node scripts/generate-proscons-auto.mjs --slug kyoiku-mushoka",
-      "priority": 30
-    },
-    {
-      "id": "nenkin:B3_topic",
-      "slug": "nenkin",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "B3_topic",
-      "title": "[ゲート] 話題一致",
-      "todo": "要約が searchKeyword と一致（2行以上）",
-      "command": "node scripts/complete-article.mjs --slug nenkin --content-only --force",
-      "priority": 30
-    },
-    {
-      "id": "nenkin:C1_summaryBullets",
-      "slug": "nenkin",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "C1_summaryBullets",
-      "title": "[ゲート] 要点",
-      "todo": "summaryBullets を3点以上",
-      "command": "node scripts/complete-article.mjs --slug nenkin --content-only --force",
-      "priority": 30
-    },
-    {
-      "id": "nenkin:D1_arcSummary",
-      "slug": "nenkin",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "D1_arcSummary",
-      "title": "[ゲート] 経緯",
-      "todo": "日付付き経緯を3行以上",
-      "command": "node scripts/complete-article.mjs --slug nenkin --content-only --force",
-      "priority": 30
-    },
-    {
-      "id": "nenkin:D2_arc_topic",
-      "slug": "nenkin",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "D2_arc_topic",
-      "title": "[ゲート] 経緯の話題",
-      "todo": "経緯3行以上が案件キーワードと一致",
-      "command": "node scripts/complete-article.mjs --slug nenkin --content-only --force",
-      "priority": 30
-    },
-    {
-      "id": "nenkin:J1_prosCons",
-      "slug": "nenkin",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "J1_prosCons",
-      "title": "[ゲート] メリデメ",
-      "todo": "公表数値付きメリット2・デメリット2",
-      "command": "node scripts/generate-proscons-auto.mjs --slug nenkin",
+      "checkId": "E4_timeline_diet_topic",
+      "title": "[ゲート] TL国会の話題",
+      "todo": "国会TLはある分だけ話題一致。TLなし可。根拠なしの結論は不可",
+      "command": "node scripts/enrich-timeline-all.mjs --slug kyoiku-mushoka",
       "priority": 30
     },
     {
@@ -1346,6 +1192,17 @@
       "todo": "論点・数値・可決結果が分かる第三者要約に差し替え",
       "command": "node scripts/complete-article.mjs --slug shoshika --content-only --force",
       "priority": 10
+    },
+    {
+      "id": "shoshika:E4_timeline_diet_topic",
+      "slug": "shoshika",
+      "agent": "writer",
+      "agentLabel": "ライター",
+      "checkId": "E4_timeline_diet_topic",
+      "title": "[ゲート] TL国会の話題",
+      "todo": "国会TLはある分だけ話題一致。TLなし可。根拠なしの結論は不可",
+      "command": "node scripts/enrich-timeline-all.mjs --slug shoshika",
+      "priority": 30
     },
     {
       "id": "shussho-budget-seika:B3_topic",
