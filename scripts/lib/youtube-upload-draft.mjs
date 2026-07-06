@@ -27,6 +27,7 @@ const SHORT_COPY = {
     summaryJa: "大阪都構想 — 賛成側の年間1100億円削減 vs 反対側の218億円増、庁舎241億/637億の試算を整理。",
     summaryEn: "Osaka metropolis plan — ¥110B cut vs ¥21.8B rise; city hall cost estimates compared.",
     tagsExtra: ["大阪都構想", "大阪", "地方分権", "試算"],
+    commentQuestion: "どの試算を信じますか？",
   },
 };
 
@@ -61,7 +62,7 @@ export function buildYoutubeUploadDraft(article, opts = {}) {
     copy?.summaryEn ??
     `Japanese politics explainer — sourced facts on ${category}. Not a government channel.`;
 
-  const question = commentQuestion(slug, category);
+  const question = copy?.commentQuestion ?? commentQuestion(slug, category);
 
   const description = [
     summaryJa,
