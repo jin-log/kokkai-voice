@@ -15,6 +15,7 @@ import {
   sanitizeMeritText,
   formatDatedBullet,
   isCompleteSummary,
+  extractConclusionBullets,
 } from "./lib/speech-summary.mjs";
 
 const root = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -89,7 +90,11 @@ function rebuildArcSummary(article) {
       date: e.date,
       text: e.summaryPlain.endsWith("。") ? e.summaryPlain : `${e.summaryPlain}。`,
     }));
-  if (!lines.length) return false;
+  if (!lines.length) {
+    const had = (article.arcSummary || []).length > 0;
+    article.arcSummary = [];
+    return had;
+  }
   article.arcSummary = lines;
   return true;
 }
@@ -135,7 +140,14 @@ async function fixArticle(slug) {
     try {
       const r = await fetchRecord(speechID);
       if (!r) continue;
-      const plain = summarizeSpeechRecord(r, kw);
+      let plain = summarizeSpeechRecord(r, kw);
+      if (!plain || isBadSummaryLine(plain, kw)) {
+        const bullets = extractConclusionBullets(r.speech, kw);
+        if (bullets[0]) {
+          const grp = r.speakerGroup ? `（${r.speakerGroup}）` : "";
+          plain = `${r.speaker || "議員"}${grp}— ${bullets[0].replace(/。$/, "")}。`;
+        }
+      }
       if (!plain || isBadSummaryLine(plain, kw)) continue;
       if (plain !== ev.summaryPlain) {
         ev.summaryPlain = plain;

@@ -39,7 +39,7 @@ export function isBadSummaryLine(text, keyword = "") {
     return true;
   }
   if (/について論点を表明—|について答弁—/.test(body)) return true;
-  if (/委員会で|ところである|あわせて、|おきまして|見られています|入らず。$/.test(body)) return true;
+  if (/委員会で|ところである|あわせて、|おきまして|見られています|入らず。$|、これ。$/.test(body)) return true;
   if (kw && /外国人/.test(kw) && /スパイ防止/.test(body)) return true;
   if (/高市内閣は危機管理・成長投資/.test(body) && !/物価|予備費|賃上げ/.test(body)) return true;
   if (isDietVoice(body) || isSpeechFragment(body) || isIncompleteBullet(body)) return true;

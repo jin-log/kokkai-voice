@@ -1,9 +1,9 @@
 {
-  "generatedAt": "2026-07-06T18:13:48.259Z",
-  "total": 76,
+  "generatedAt": "2026-07-06T18:20:36.773Z",
+  "total": 133,
   "byAgent": {
-    "writer": 68,
-    "ceo": 5,
+    "writer": 115,
+    "ceo": 15,
     "x-researcher": 2,
     "legal-check": 1
   },
@@ -62,28 +62,6 @@
       "todo": "論点・数値・可決結果が分かる第三者要約に差し替え",
       "command": "node scripts/complete-article.mjs --slug bouka-taisaku --content-only --force",
       "priority": 10
-    },
-    {
-      "id": "bouka-taisaku:B3_topic",
-      "slug": "bouka-taisaku",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "B3_topic",
-      "title": "[ゲート] 話題一致",
-      "todo": "要約が searchKeyword と一致（2行以上）",
-      "command": "node scripts/complete-article.mjs --slug bouka-taisaku --content-only --force",
-      "priority": 30
-    },
-    {
-      "id": "bouka-taisaku:J1_prosCons",
-      "slug": "bouka-taisaku",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "J1_prosCons",
-      "title": "[ゲート] メリデメ",
-      "todo": "公表数値付きメリット2・デメリット2",
-      "command": "node scripts/generate-proscons-auto.mjs --slug bouka-taisaku",
-      "priority": 30
     },
     {
       "id": "case-mqzxgs3f:D2_arc_topic",
@@ -207,6 +185,116 @@
       "priority": 30
     },
     {
+      "id": "casino-ir:Q7_procedural_evidence",
+      "slug": "casino-ir",
+      "agent": "ceo",
+      "agentLabel": "CEO",
+      "checkId": "Q7_procedural_evidence",
+      "title": "[品質] 要点が議事手続き・発言断片の羅列",
+      "todo": "論点・数値・可決結果が分かる第三者要約に差し替え",
+      "command": "node scripts/complete-article.mjs --slug casino-ir --content-only --force",
+      "priority": 10
+    },
+    {
+      "id": "casino-ir:B3_topic",
+      "slug": "casino-ir",
+      "agent": "writer",
+      "agentLabel": "ライター",
+      "checkId": "B3_topic",
+      "title": "[ゲート] 話題一致",
+      "todo": "要約が searchKeyword と一致（2行以上）",
+      "command": "node scripts/complete-article.mjs --slug casino-ir --content-only --force",
+      "priority": 30
+    },
+    {
+      "id": "casino-ir:D1_arcSummary",
+      "slug": "casino-ir",
+      "agent": "writer",
+      "agentLabel": "ライター",
+      "checkId": "D1_arcSummary",
+      "title": "[ゲート] 経緯",
+      "todo": "日付付き経緯を3行以上",
+      "command": "node scripts/complete-article.mjs --slug casino-ir --content-only --force",
+      "priority": 30
+    },
+    {
+      "id": "casino-ir:D2_arc_topic",
+      "slug": "casino-ir",
+      "agent": "writer",
+      "agentLabel": "ライター",
+      "checkId": "D2_arc_topic",
+      "title": "[ゲート] 経緯の話題",
+      "todo": "経緯3行以上が案件キーワードと一致",
+      "command": "node scripts/complete-article.mjs --slug casino-ir --content-only --force",
+      "priority": 30
+    },
+    {
+      "id": "casino-ir:J1_prosCons",
+      "slug": "casino-ir",
+      "agent": "writer",
+      "agentLabel": "ライター",
+      "checkId": "J1_prosCons",
+      "title": "[ゲート] メリデメ",
+      "todo": "公表数値付きメリット2・デメリット2",
+      "command": "node scripts/generate-proscons-auto.mjs --slug casino-ir",
+      "priority": 30
+    },
+    {
+      "id": "chiho-sosei:Q7_procedural_evidence",
+      "slug": "chiho-sosei",
+      "agent": "ceo",
+      "agentLabel": "CEO",
+      "checkId": "Q7_procedural_evidence",
+      "title": "[品質] 要点が議事手続き・発言断片の羅列",
+      "todo": "論点・数値・可決結果が分かる第三者要約に差し替え",
+      "command": "node scripts/complete-article.mjs --slug chiho-sosei --content-only --force",
+      "priority": 10
+    },
+    {
+      "id": "chiho-sosei:D1_arcSummary",
+      "slug": "chiho-sosei",
+      "agent": "writer",
+      "agentLabel": "ライター",
+      "checkId": "D1_arcSummary",
+      "title": "[ゲート] 経緯",
+      "todo": "日付付き経緯を3行以上",
+      "command": "node scripts/complete-article.mjs --slug chiho-sosei --content-only --force",
+      "priority": 30
+    },
+    {
+      "id": "chiho-sosei:D2_arc_topic",
+      "slug": "chiho-sosei",
+      "agent": "writer",
+      "agentLabel": "ライター",
+      "checkId": "D2_arc_topic",
+      "title": "[ゲート] 経緯の話題",
+      "todo": "経緯3行以上が案件キーワードと一致",
+      "command": "node scripts/complete-article.mjs --slug chiho-sosei --content-only --force",
+      "priority": 30
+    },
+    {
+      "id": "chingin:D1_arcSummary",
+      "slug": "chingin",
+      "agent": "writer",
+      "agentLabel": "ライター",
+      "checkId": "D1_arcSummary",
+      "title": "[ゲート] 経緯",
+      "todo": "日付付き経緯を3行以上",
+      "command": "node scripts/complete-article.mjs --slug chingin --content-only --force",
+      "priority": 30
+    },
+    {
+      "id": "chingin:D2_arc_topic",
+      "slug": "chingin",
+      "agent": "writer",
+      "agentLabel": "ライター",
+      "checkId": "D2_arc_topic",
+      "title": "[ゲート] 経緯の話題",
+      "todo": "経緯3行以上が案件キーワードと一致",
+      "command": "node scripts/complete-article.mjs --slug chingin --content-only --force",
+      "priority": 30
+    },
+    {
       "id": "chingin:J1_prosCons",
       "slug": "chingin",
       "agent": "writer",
@@ -237,6 +325,28 @@
       "title": "[ゲート] メリデメ",
       "todo": "公表数値付きメリット2・デメリット2",
       "command": "node scripts/generate-proscons-auto.mjs --slug energy-policy",
+      "priority": 30
+    },
+    {
+      "id": "fukushuto-koso:B3_topic",
+      "slug": "fukushuto-koso",
+      "agent": "writer",
+      "agentLabel": "ライター",
+      "checkId": "B3_topic",
+      "title": "[ゲート] 話題一致",
+      "todo": "要約が searchKeyword と一致（2行以上）",
+      "command": "node scripts/complete-article.mjs --slug fukushuto-koso --content-only --force",
+      "priority": 30
+    },
+    {
+      "id": "fukushuto-koso:C1_summaryBullets",
+      "slug": "fukushuto-koso",
+      "agent": "writer",
+      "agentLabel": "ライター",
+      "checkId": "C1_summaryBullets",
+      "title": "[ゲート] 要点",
+      "todo": "summaryBullets を3点以上",
+      "command": "node scripts/complete-article.mjs --slug fukushuto-koso --content-only --force",
       "priority": 30
     },
     {
@@ -317,6 +427,127 @@
       "priority": 30
     },
     {
+      "id": "hosei-yosan:Q7_procedural_evidence",
+      "slug": "hosei-yosan",
+      "agent": "ceo",
+      "agentLabel": "CEO",
+      "checkId": "Q7_procedural_evidence",
+      "title": "[品質] 要点が議事手続き・発言断片の羅列",
+      "todo": "論点・数値・可決結果が分かる第三者要約に差し替え",
+      "command": "node scripts/complete-article.mjs --slug hosei-yosan --content-only --force",
+      "priority": 10
+    },
+    {
+      "id": "hosei-yosan:B3_topic",
+      "slug": "hosei-yosan",
+      "agent": "writer",
+      "agentLabel": "ライター",
+      "checkId": "B3_topic",
+      "title": "[ゲート] 話題一致",
+      "todo": "要約が searchKeyword と一致（2行以上）",
+      "command": "node scripts/complete-article.mjs --slug hosei-yosan --content-only --force",
+      "priority": 30
+    },
+    {
+      "id": "hosei-yosan:D1_arcSummary",
+      "slug": "hosei-yosan",
+      "agent": "writer",
+      "agentLabel": "ライター",
+      "checkId": "D1_arcSummary",
+      "title": "[ゲート] 経緯",
+      "todo": "日付付き経緯を3行以上",
+      "command": "node scripts/complete-article.mjs --slug hosei-yosan --content-only --force",
+      "priority": 30
+    },
+    {
+      "id": "hosei-yosan:D2_arc_topic",
+      "slug": "hosei-yosan",
+      "agent": "writer",
+      "agentLabel": "ライター",
+      "checkId": "D2_arc_topic",
+      "title": "[ゲート] 経緯の話題",
+      "todo": "経緯3行以上が案件キーワードと一致",
+      "command": "node scripts/complete-article.mjs --slug hosei-yosan --content-only --force",
+      "priority": 30
+    },
+    {
+      "id": "hosei-yosan:J1_prosCons",
+      "slug": "hosei-yosan",
+      "agent": "writer",
+      "agentLabel": "ライター",
+      "checkId": "J1_prosCons",
+      "title": "[ゲート] メリデメ",
+      "todo": "公表数値付きメリット2・デメリット2",
+      "command": "node scripts/generate-proscons-auto.mjs --slug hosei-yosan",
+      "priority": 30
+    },
+    {
+      "id": "kaigo-iryo:Q7_procedural_evidence",
+      "slug": "kaigo-iryo",
+      "agent": "ceo",
+      "agentLabel": "CEO",
+      "checkId": "Q7_procedural_evidence",
+      "title": "[品質] 要点が議事手続き・発言断片の羅列",
+      "todo": "論点・数値・可決結果が分かる第三者要約に差し替え",
+      "command": "node scripts/complete-article.mjs --slug kaigo-iryo --content-only --force",
+      "priority": 10
+    },
+    {
+      "id": "kaigo-iryo:B3_topic",
+      "slug": "kaigo-iryo",
+      "agent": "writer",
+      "agentLabel": "ライター",
+      "checkId": "B3_topic",
+      "title": "[ゲート] 話題一致",
+      "todo": "要約が searchKeyword と一致（2行以上）",
+      "command": "node scripts/complete-article.mjs --slug kaigo-iryo --content-only --force",
+      "priority": 30
+    },
+    {
+      "id": "kaigo-iryo:D1_arcSummary",
+      "slug": "kaigo-iryo",
+      "agent": "writer",
+      "agentLabel": "ライター",
+      "checkId": "D1_arcSummary",
+      "title": "[ゲート] 経緯",
+      "todo": "日付付き経緯を3行以上",
+      "command": "node scripts/complete-article.mjs --slug kaigo-iryo --content-only --force",
+      "priority": 30
+    },
+    {
+      "id": "kaigo-iryo:D2_arc_topic",
+      "slug": "kaigo-iryo",
+      "agent": "writer",
+      "agentLabel": "ライター",
+      "checkId": "D2_arc_topic",
+      "title": "[ゲート] 経緯の話題",
+      "todo": "経緯3行以上が案件キーワードと一致",
+      "command": "node scripts/complete-article.mjs --slug kaigo-iryo --content-only --force",
+      "priority": 30
+    },
+    {
+      "id": "kaigo-iryo:J1_prosCons",
+      "slug": "kaigo-iryo",
+      "agent": "writer",
+      "agentLabel": "ライター",
+      "checkId": "J1_prosCons",
+      "title": "[ゲート] メリデメ",
+      "todo": "公表数値付きメリット2・デメリット2",
+      "command": "node scripts/generate-proscons-auto.mjs --slug kaigo-iryo",
+      "priority": 30
+    },
+    {
+      "id": "kenpo:Q7_procedural_evidence",
+      "slug": "kenpo",
+      "agent": "ceo",
+      "agentLabel": "CEO",
+      "checkId": "Q7_procedural_evidence",
+      "title": "[品質] 要点が議事手続き・発言断片の羅列",
+      "todo": "論点・数値・可決結果が分かる第三者要約に差し替え",
+      "command": "node scripts/complete-article.mjs --slug kenpo --content-only --force",
+      "priority": 10
+    },
+    {
       "id": "kishida-resign:Q7_procedural_evidence",
       "slug": "kishida-resign",
       "agent": "ceo",
@@ -326,6 +557,94 @@
       "todo": "論点・数値・可決結果が分かる第三者要約に差し替え",
       "command": "node scripts/complete-article.mjs --slug kishida-resign --content-only --force",
       "priority": 10
+    },
+    {
+      "id": "kishida-resign:B3_topic",
+      "slug": "kishida-resign",
+      "agent": "writer",
+      "agentLabel": "ライター",
+      "checkId": "B3_topic",
+      "title": "[ゲート] 話題一致",
+      "todo": "要約が searchKeyword と一致（2行以上）",
+      "command": "node scripts/complete-article.mjs --slug kishida-resign --content-only --force",
+      "priority": 30
+    },
+    {
+      "id": "kishida-resign:C1_summaryBullets",
+      "slug": "kishida-resign",
+      "agent": "writer",
+      "agentLabel": "ライター",
+      "checkId": "C1_summaryBullets",
+      "title": "[ゲート] 要点",
+      "todo": "summaryBullets を3点以上",
+      "command": "node scripts/complete-article.mjs --slug kishida-resign --content-only --force",
+      "priority": 30
+    },
+    {
+      "id": "kishida-resign:D1_arcSummary",
+      "slug": "kishida-resign",
+      "agent": "writer",
+      "agentLabel": "ライター",
+      "checkId": "D1_arcSummary",
+      "title": "[ゲート] 経緯",
+      "todo": "日付付き経緯を3行以上",
+      "command": "node scripts/complete-article.mjs --slug kishida-resign --content-only --force",
+      "priority": 30
+    },
+    {
+      "id": "kishida-resign:D2_arc_topic",
+      "slug": "kishida-resign",
+      "agent": "writer",
+      "agentLabel": "ライター",
+      "checkId": "D2_arc_topic",
+      "title": "[ゲート] 経緯の話題",
+      "todo": "経緯3行以上が案件キーワードと一致",
+      "command": "node scripts/complete-article.mjs --slug kishida-resign --content-only --force",
+      "priority": 30
+    },
+    {
+      "id": "kishida-resign:J1_prosCons",
+      "slug": "kishida-resign",
+      "agent": "writer",
+      "agentLabel": "ライター",
+      "checkId": "J1_prosCons",
+      "title": "[ゲート] メリデメ",
+      "todo": "公表数値付きメリット2・デメリット2",
+      "command": "node scripts/generate-proscons-auto.mjs --slug kishida-resign",
+      "priority": 30
+    },
+    {
+      "id": "komei-kokumin:Q7_procedural_evidence",
+      "slug": "komei-kokumin",
+      "agent": "ceo",
+      "agentLabel": "CEO",
+      "checkId": "Q7_procedural_evidence",
+      "title": "[品質] 要点が議事手続き・発言断片の羅列",
+      "todo": "論点・数値・可決結果が分かる第三者要約に差し替え",
+      "command": "node scripts/complete-article.mjs --slug komei-kokumin --content-only --force",
+      "priority": 10
+    },
+    {
+      "id": "komei-kokumin:D1_arcSummary",
+      "slug": "komei-kokumin",
+      "agent": "writer",
+      "agentLabel": "ライター",
+      "checkId": "D1_arcSummary",
+      "title": "[ゲート] 経緯",
+      "todo": "日付付き経緯を3行以上",
+      "command": "node scripts/complete-article.mjs --slug komei-kokumin --content-only --force",
+      "priority": 30
+    },
+    {
+      "id": "komei-kokumin:D2_arc_topic",
+      "slug": "komei-kokumin",
+      "agent": "writer",
+      "agentLabel": "ライター",
+      "checkId": "D2_arc_topic",
+      "title": "[ゲート] 経緯の話題",
+      "todo": "経緯3行以上が案件キーワードと一致",
+      "command": "node scripts/complete-article.mjs --slug komei-kokumin --content-only --force",
+      "priority": 30
     },
     {
       "id": "kyoiku-mushoka:C1_summaryBullets",
@@ -438,6 +757,94 @@
       "priority": 10
     },
     {
+      "id": "nichigyo:B3_topic",
+      "slug": "nichigyo",
+      "agent": "writer",
+      "agentLabel": "ライター",
+      "checkId": "B3_topic",
+      "title": "[ゲート] 話題一致",
+      "todo": "要約が searchKeyword と一致（2行以上）",
+      "command": "node scripts/complete-article.mjs --slug nichigyo --content-only --force",
+      "priority": 30
+    },
+    {
+      "id": "nichigyo:D2_arc_topic",
+      "slug": "nichigyo",
+      "agent": "writer",
+      "agentLabel": "ライター",
+      "checkId": "D2_arc_topic",
+      "title": "[ゲート] 経緯の話題",
+      "todo": "経緯3行以上が案件キーワードと一致",
+      "command": "node scripts/complete-article.mjs --slug nichigyo --content-only --force",
+      "priority": 30
+    },
+    {
+      "id": "nichigyo:J1_prosCons",
+      "slug": "nichigyo",
+      "agent": "writer",
+      "agentLabel": "ライター",
+      "checkId": "J1_prosCons",
+      "title": "[ゲート] メリデメ",
+      "todo": "公表数値付きメリット2・デメリット2",
+      "command": "node scripts/generate-proscons-auto.mjs --slug nichigyo",
+      "priority": 30
+    },
+    {
+      "id": "noto-fukko-budget:C1_summaryBullets",
+      "slug": "noto-fukko-budget",
+      "agent": "writer",
+      "agentLabel": "ライター",
+      "checkId": "C1_summaryBullets",
+      "title": "[ゲート] 要点",
+      "todo": "summaryBullets を3点以上",
+      "command": "node scripts/complete-article.mjs --slug noto-fukko-budget --content-only --force",
+      "priority": 30
+    },
+    {
+      "id": "noto-fukko-budget:D1_arcSummary",
+      "slug": "noto-fukko-budget",
+      "agent": "writer",
+      "agentLabel": "ライター",
+      "checkId": "D1_arcSummary",
+      "title": "[ゲート] 経緯",
+      "todo": "日付付き経緯を3行以上",
+      "command": "node scripts/complete-article.mjs --slug noto-fukko-budget --content-only --force",
+      "priority": 30
+    },
+    {
+      "id": "noto-fukko-budget:D2_arc_topic",
+      "slug": "noto-fukko-budget",
+      "agent": "writer",
+      "agentLabel": "ライター",
+      "checkId": "D2_arc_topic",
+      "title": "[ゲート] 経緯の話題",
+      "todo": "経緯3行以上が案件キーワードと一致",
+      "command": "node scripts/complete-article.mjs --slug noto-fukko-budget --content-only --force",
+      "priority": 30
+    },
+    {
+      "id": "osaka-to-metropolis:P1_opening_no_outcome",
+      "slug": "osaka-to-metropolis",
+      "agent": "writer",
+      "agentLabel": "ライター",
+      "checkId": "P1_opening_no_outcome",
+      "title": "[公開] 1行目がタイトルに未回答",
+      "todo": "成立/見送り/予算額など、いまどうなっているかを1行目に書く",
+      "command": "node scripts/complete-article.mjs --slug osaka-to-metropolis --content-only --force",
+      "priority": 5
+    },
+    {
+      "id": "osaka-to-metropolis:B3_topic",
+      "slug": "osaka-to-metropolis",
+      "agent": "writer",
+      "agentLabel": "ライター",
+      "checkId": "B3_topic",
+      "title": "[ゲート] 話題一致",
+      "todo": "要約が searchKeyword と一致（2行以上）",
+      "command": "node scripts/complete-article.mjs --slug osaka-to-metropolis --content-only --force",
+      "priority": 30
+    },
+    {
       "id": "osaka-to-metropolis:C1_summaryBullets",
       "slug": "osaka-to-metropolis",
       "agent": "writer",
@@ -445,6 +852,17 @@
       "checkId": "C1_summaryBullets",
       "title": "[ゲート] 要点",
       "todo": "summaryBullets を3点以上",
+      "command": "node scripts/complete-article.mjs --slug osaka-to-metropolis --content-only --force",
+      "priority": 30
+    },
+    {
+      "id": "osaka-to-metropolis:C3_source_match",
+      "slug": "osaka-to-metropolis",
+      "agent": "writer",
+      "agentLabel": "ライター",
+      "checkId": "C3_source_match",
+      "title": "[ゲート] 出典ラベル一致",
+      "todo": "国会議事録なし案件で国会注記を除去",
       "command": "node scripts/complete-article.mjs --slug osaka-to-metropolis --content-only --force",
       "priority": 30
     },
@@ -732,6 +1150,94 @@
       "priority": 30
     },
     {
+      "id": "pension-kuriage-70:B3_topic",
+      "slug": "pension-kuriage-70",
+      "agent": "writer",
+      "agentLabel": "ライター",
+      "checkId": "B3_topic",
+      "title": "[ゲート] 話題一致",
+      "todo": "要約が searchKeyword と一致（2行以上）",
+      "command": "node scripts/complete-article.mjs --slug pension-kuriage-70 --content-only --force",
+      "priority": 30
+    },
+    {
+      "id": "pension-kuriage-70:C1_summaryBullets",
+      "slug": "pension-kuriage-70",
+      "agent": "writer",
+      "agentLabel": "ライター",
+      "checkId": "C1_summaryBullets",
+      "title": "[ゲート] 要点",
+      "todo": "summaryBullets を3点以上",
+      "command": "node scripts/complete-article.mjs --slug pension-kuriage-70 --content-only --force",
+      "priority": 30
+    },
+    {
+      "id": "pension-kuriage-70:D1_arcSummary",
+      "slug": "pension-kuriage-70",
+      "agent": "writer",
+      "agentLabel": "ライター",
+      "checkId": "D1_arcSummary",
+      "title": "[ゲート] 経緯",
+      "todo": "日付付き経緯を3行以上",
+      "command": "node scripts/complete-article.mjs --slug pension-kuriage-70 --content-only --force",
+      "priority": 30
+    },
+    {
+      "id": "pension-kuriage-70:D2_arc_topic",
+      "slug": "pension-kuriage-70",
+      "agent": "writer",
+      "agentLabel": "ライター",
+      "checkId": "D2_arc_topic",
+      "title": "[ゲート] 経緯の話題",
+      "todo": "経緯3行以上が案件キーワードと一致",
+      "command": "node scripts/complete-article.mjs --slug pension-kuriage-70 --content-only --force",
+      "priority": 30
+    },
+    {
+      "id": "seiji-shikin:Q6_procedural_arc",
+      "slug": "seiji-shikin",
+      "agent": "ceo",
+      "agentLabel": "CEO",
+      "checkId": "Q6_procedural_arc",
+      "title": "[品質] 経緯に採決手続き・委員長報告など中身のない行が混ざっている",
+      "todo": "可決内容・支給額・法案名など事実行に差し替え",
+      "command": "node scripts/complete-article.mjs --slug seiji-shikin --content-only --force",
+      "priority": 10
+    },
+    {
+      "id": "seiji-shikin:Q7_procedural_evidence",
+      "slug": "seiji-shikin",
+      "agent": "ceo",
+      "agentLabel": "CEO",
+      "checkId": "Q7_procedural_evidence",
+      "title": "[品質] 要点が議事手続き・発言断片の羅列",
+      "todo": "論点・数値・可決結果が分かる第三者要約に差し替え",
+      "command": "node scripts/complete-article.mjs --slug seiji-shikin --content-only --force",
+      "priority": 10
+    },
+    {
+      "id": "seiji-shikin:D1_arcSummary",
+      "slug": "seiji-shikin",
+      "agent": "writer",
+      "agentLabel": "ライター",
+      "checkId": "D1_arcSummary",
+      "title": "[ゲート] 経緯",
+      "todo": "日付付き経緯を3行以上",
+      "command": "node scripts/complete-article.mjs --slug seiji-shikin --content-only --force",
+      "priority": 30
+    },
+    {
+      "id": "seiji-shikin:D2_arc_topic",
+      "slug": "seiji-shikin",
+      "agent": "writer",
+      "agentLabel": "ライター",
+      "checkId": "D2_arc_topic",
+      "title": "[ゲート] 経緯の話題",
+      "todo": "経緯3行以上が案件キーワードと一致",
+      "command": "node scripts/complete-article.mjs --slug seiji-shikin --content-only --force",
+      "priority": 30
+    },
+    {
       "id": "seiji-shikin:J1_prosCons",
       "slug": "seiji-shikin",
       "agent": "writer",
@@ -761,6 +1267,28 @@
       "checkId": "B3_topic",
       "title": "[ゲート] 話題一致",
       "todo": "要約が searchKeyword と一致（2行以上）",
+      "command": "node scripts/complete-article.mjs --slug senkyo-kaikaku --content-only --force",
+      "priority": 30
+    },
+    {
+      "id": "senkyo-kaikaku:D1_arcSummary",
+      "slug": "senkyo-kaikaku",
+      "agent": "writer",
+      "agentLabel": "ライター",
+      "checkId": "D1_arcSummary",
+      "title": "[ゲート] 経緯",
+      "todo": "日付付き経緯を3行以上",
+      "command": "node scripts/complete-article.mjs --slug senkyo-kaikaku --content-only --force",
+      "priority": 30
+    },
+    {
+      "id": "senkyo-kaikaku:D2_arc_topic",
+      "slug": "senkyo-kaikaku",
+      "agent": "writer",
+      "agentLabel": "ライター",
+      "checkId": "D2_arc_topic",
+      "title": "[ゲート] 経緯の話題",
+      "todo": "経緯3行以上が案件キーワードと一致",
       "command": "node scripts/complete-article.mjs --slug senkyo-kaikaku --content-only --force",
       "priority": 30
     },
@@ -809,6 +1337,61 @@
       "priority": 30
     },
     {
+      "id": "shoshika:Q7_procedural_evidence",
+      "slug": "shoshika",
+      "agent": "ceo",
+      "agentLabel": "CEO",
+      "checkId": "Q7_procedural_evidence",
+      "title": "[品質] 要点が議事手続き・発言断片の羅列",
+      "todo": "論点・数値・可決結果が分かる第三者要約に差し替え",
+      "command": "node scripts/complete-article.mjs --slug shoshika --content-only --force",
+      "priority": 10
+    },
+    {
+      "id": "shussho-budget-seika:B3_topic",
+      "slug": "shussho-budget-seika",
+      "agent": "writer",
+      "agentLabel": "ライター",
+      "checkId": "B3_topic",
+      "title": "[ゲート] 話題一致",
+      "todo": "要約が searchKeyword と一致（2行以上）",
+      "command": "node scripts/complete-article.mjs --slug shussho-budget-seika --content-only --force",
+      "priority": 30
+    },
+    {
+      "id": "shussho-budget-seika:D1_arcSummary",
+      "slug": "shussho-budget-seika",
+      "agent": "writer",
+      "agentLabel": "ライター",
+      "checkId": "D1_arcSummary",
+      "title": "[ゲート] 経緯",
+      "todo": "日付付き経緯を3行以上",
+      "command": "node scripts/complete-article.mjs --slug shussho-budget-seika --content-only --force",
+      "priority": 30
+    },
+    {
+      "id": "shussho-budget-seika:D2_arc_topic",
+      "slug": "shussho-budget-seika",
+      "agent": "writer",
+      "agentLabel": "ライター",
+      "checkId": "D2_arc_topic",
+      "title": "[ゲート] 経緯の話題",
+      "todo": "経緯3行以上が案件キーワードと一致",
+      "command": "node scripts/complete-article.mjs --slug shussho-budget-seika --content-only --force",
+      "priority": 30
+    },
+    {
+      "id": "shussho-budget-seika:J1_prosCons",
+      "slug": "shussho-budget-seika",
+      "agent": "writer",
+      "agentLabel": "ライター",
+      "checkId": "J1_prosCons",
+      "title": "[ゲート] メリデメ",
+      "todo": "公表数値付きメリット2・デメリット2",
+      "command": "node scripts/generate-proscons-auto.mjs --slug shussho-budget-seika",
+      "priority": 30
+    },
+    {
       "id": "shussho-budget-seika:G5_parties_symbol",
       "slug": "shussho-budget-seika",
       "agent": "writer",
@@ -817,6 +1400,50 @@
       "title": "[ゲート] ◎〇▲×",
       "todo": "各党の記号を確定（v2）",
       "command": "node scripts/complete-article.mjs --slug shussho-budget-seika --matrix-only --force",
+      "priority": 30
+    },
+    {
+      "id": "tariff-us:Q7_procedural_evidence",
+      "slug": "tariff-us",
+      "agent": "ceo",
+      "agentLabel": "CEO",
+      "checkId": "Q7_procedural_evidence",
+      "title": "[品質] 要点が議事手続き・発言断片の羅列",
+      "todo": "論点・数値・可決結果が分かる第三者要約に差し替え",
+      "command": "node scripts/complete-article.mjs --slug tariff-us --content-only --force",
+      "priority": 10
+    },
+    {
+      "id": "tariff-us:J1_prosCons",
+      "slug": "tariff-us",
+      "agent": "writer",
+      "agentLabel": "ライター",
+      "checkId": "J1_prosCons",
+      "title": "[ゲート] メリデメ",
+      "todo": "公表数値付きメリット2・デメリット2",
+      "command": "node scripts/generate-proscons-auto.mjs --slug tariff-us",
+      "priority": 30
+    },
+    {
+      "id": "tokyo-recall:P1_opening_off_topic",
+      "slug": "tokyo-recall",
+      "agent": "writer",
+      "agentLabel": "ライター",
+      "checkId": "P1_opening_off_topic",
+      "title": "[公開] 1行目がタイトルに未回答",
+      "todo": "1行目に案件のキーワードと具体答えを入れる",
+      "command": "node scripts/complete-article.mjs --slug tokyo-recall --content-only --force",
+      "priority": 5
+    },
+    {
+      "id": "tokyo-recall:B3_topic",
+      "slug": "tokyo-recall",
+      "agent": "writer",
+      "agentLabel": "ライター",
+      "checkId": "B3_topic",
+      "title": "[ゲート] 話題一致",
+      "todo": "要約が searchKeyword と一致（2行以上）",
+      "command": "node scripts/complete-article.mjs --slug tokyo-recall --content-only --force",
       "priority": 30
     }
   ]
