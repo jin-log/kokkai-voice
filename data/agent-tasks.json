@@ -1,12 +1,35 @@
 {
-  "generatedAt": "2026-07-06T16:45:59.739Z",
-  "total": 32,
+  "generatedAt": "2026-07-06T16:51:27.440Z",
+  "total": 34,
   "byAgent": {
-    "writer": 29,
+    "ceo": 1,
+    "writer": 30,
     "x-researcher": 2,
     "legal-check": 1
   },
   "tasks": [
+    {
+      "id": "boeeihi:Q7_procedural_evidence",
+      "slug": "boeeihi",
+      "agent": "ceo",
+      "agentLabel": "CEO",
+      "checkId": "Q7_procedural_evidence",
+      "title": "[品質] 要点が議事手続き・発言断片の羅列",
+      "todo": "論点・数値・可決結果が分かる第三者要約に差し替え",
+      "command": "node scripts/complete-article.mjs --slug boeeihi --content-only --force",
+      "priority": 10
+    },
+    {
+      "id": "boeeihi:C2_evidence_distinct",
+      "slug": "boeeihi",
+      "agent": "writer",
+      "agentLabel": "ライター",
+      "checkId": "C2_evidence_distinct",
+      "title": "[ゲート] 根拠の独自性",
+      "todo": "根拠は結論と同文禁止",
+      "command": "node scripts/complete-article.mjs --slug boeeihi --content-only --force",
+      "priority": 30
+    },
     {
       "id": "fukushuto-koso:G5_parties_symbol",
       "slug": "fukushuto-koso",
