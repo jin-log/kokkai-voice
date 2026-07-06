@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-07-06T00:49:52.140Z",
-  "total": 29,
+  "generatedAt": "2026-07-06T00:53:15.843Z",
+  "total": 32,
   "byAgent": {
-    "writer": 26,
+    "writer": 29,
     "x-researcher": 2,
     "legal-check": 1
   },
@@ -30,6 +30,28 @@
       "priority": 30
     },
     {
+      "id": "osaka-to-metropolis:C1_summaryBullets",
+      "slug": "osaka-to-metropolis",
+      "agent": "writer",
+      "agentLabel": "ライター",
+      "checkId": "C1_summaryBullets",
+      "title": "[ゲート] 要点",
+      "todo": "summaryBullets を3点以上",
+      "command": "node scripts/complete-article.mjs --slug osaka-to-metropolis --content-only --force",
+      "priority": 30
+    },
+    {
+      "id": "osaka-to-metropolis:D1_arcSummary",
+      "slug": "osaka-to-metropolis",
+      "agent": "writer",
+      "agentLabel": "ライター",
+      "checkId": "D1_arcSummary",
+      "title": "[ゲート] 経緯",
+      "todo": "日付付き経緯を3行以上",
+      "command": "node scripts/complete-article.mjs --slug osaka-to-metropolis --content-only --force",
+      "priority": 30
+    },
+    {
       "id": "osaka-to-metropolis:D2_arc_topic",
       "slug": "osaka-to-metropolis",
       "agent": "writer",
@@ -38,6 +60,17 @@
       "title": "[ゲート] 経緯の話題",
       "todo": "経緯3行以上が案件キーワードと一致",
       "command": "node scripts/complete-article.mjs --slug osaka-to-metropolis --content-only --force",
+      "priority": 30
+    },
+    {
+      "id": "osaka-to-metropolis:E1_timeline_count",
+      "slug": "osaka-to-metropolis",
+      "agent": "writer",
+      "agentLabel": "ライター",
+      "checkId": "E1_timeline_count",
+      "title": "[ゲート] タイムライン",
+      "todo": "出来事を6件以上（X3+国会3）",
+      "command": "node scripts/enrich-timeline-all.mjs --slug osaka-to-metropolis",
       "priority": 30
     },
     {
