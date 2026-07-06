@@ -1,9 +1,9 @@
 {
-  "generatedAt": "2026-07-06T20:15:58.080Z",
-  "total": 73,
+  "generatedAt": "2026-07-06T20:21:18.873Z",
+  "total": 77,
   "byAgent": {
     "ceo": 10,
-    "writer": 60,
+    "writer": 64,
     "x-researcher": 2,
     "legal-check": 1
   },
@@ -784,6 +784,50 @@
       "title": "[ゲート] 話題一致",
       "todo": "要約が searchKeyword と一致（2行以上）",
       "command": "node scripts/complete-article.mjs --slug tokyo-recall --content-only --force",
+      "priority": 30
+    },
+    {
+      "id": "tokyo-recall:C1_summaryBullets",
+      "slug": "tokyo-recall",
+      "agent": "writer",
+      "agentLabel": "ライター",
+      "checkId": "C1_summaryBullets",
+      "title": "[ゲート] 要点",
+      "todo": "summaryBullets を3点以上",
+      "command": "node scripts/complete-article.mjs --slug tokyo-recall --content-only --force",
+      "priority": 30
+    },
+    {
+      "id": "tokyo-recall:D1_arcSummary",
+      "slug": "tokyo-recall",
+      "agent": "writer",
+      "agentLabel": "ライター",
+      "checkId": "D1_arcSummary",
+      "title": "[ゲート] 経緯",
+      "todo": "日付付き経緯を3行以上",
+      "command": "node scripts/complete-article.mjs --slug tokyo-recall --content-only --force",
+      "priority": 30
+    },
+    {
+      "id": "tokyo-recall:D2_arc_topic",
+      "slug": "tokyo-recall",
+      "agent": "writer",
+      "agentLabel": "ライター",
+      "checkId": "D2_arc_topic",
+      "title": "[ゲート] 経緯の話題",
+      "todo": "経緯3行以上が案件キーワードと一致",
+      "command": "node scripts/complete-article.mjs --slug tokyo-recall --content-only --force",
+      "priority": 30
+    },
+    {
+      "id": "tokyo-recall:E1_timeline_count",
+      "slug": "tokyo-recall",
+      "agent": "writer",
+      "agentLabel": "ライター",
+      "checkId": "E1_timeline_count",
+      "title": "[ゲート] タイムライン",
+      "todo": "出来事を6件以上（X3+国会3）",
+      "command": "node scripts/enrich-timeline-all.mjs --slug tokyo-recall",
       "priority": 30
     }
   ]
