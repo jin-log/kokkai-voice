@@ -7,7 +7,6 @@ import { readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { fetchSpeech } from "./lib/kokkai-api.mjs";
-import { finalizeNowBulletsForTitle } from "./lib/writer-synthesize.mjs";
 import {
   isBadSummaryLine,
   summarizeSpeechRecord,
@@ -142,24 +141,14 @@ async function fixArticle(slug) {
 
   const rebuilt = rebuildNowBullets(article);
   if (rebuilt.length) {
-    const finalized = finalizeNowBulletsForTitle(
-      rebuilt,
-      article.title || "",
-      kw,
-      { arcSummary: article.arcSummary },
-    );
-    if (
-      JSON.stringify(finalized) !== JSON.stringify(article.nowSummary?.bullets || [])
-    ) {
-      article.nowSummary = article.nowSummary || {
-        label: "いまの結論（AI・平易語）",
-        disclaimer:
-          "AI補助による平易語要約です。解釈を含みます。数字・引用・発言内容の正本は primarySpeech.speechFull（国会議事録原文）をご確認ください。",
-      };
-      article.nowSummary.bullets = finalized;
-      article.nowSummary.updatedAt = new Date().toISOString();
-      fixed++;
-    }
+    article.nowSummary = article.nowSummary || {
+      label: "いまの結論（AI・平易語）",
+      disclaimer:
+        "AI補助による平易語要約です。解釈を含みます。数字・引用・発言内容の正本は primarySpeech.speechFull（国会議事録原文）をご確認ください。",
+    };
+    article.nowSummary.bullets = rebuilt;
+    article.nowSummary.updatedAt = new Date().toISOString();
+    fixed++;
   }
 
   if (rebuildArcSummary(article)) fixed++;
