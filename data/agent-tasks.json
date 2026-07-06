@@ -1,9 +1,9 @@
 {
-  "generatedAt": "2026-07-06T18:28:27.190Z",
-  "total": 111,
+  "generatedAt": "2026-07-06T18:32:36.090Z",
+  "total": 97,
   "byAgent": {
-    "ceo": 15,
-    "writer": 93,
+    "ceo": 12,
+    "writer": 82,
     "x-researcher": 2,
     "legal-check": 1
   },
@@ -336,61 +336,6 @@
       "title": "[ゲート] メリデメ",
       "todo": "公表数値付きメリット2・デメリット2",
       "command": "node scripts/generate-proscons-auto.mjs --slug hosei-yosan",
-      "priority": 30
-    },
-    {
-      "id": "kaigo-iryo:Q7_procedural_evidence",
-      "slug": "kaigo-iryo",
-      "agent": "ceo",
-      "agentLabel": "CEO",
-      "checkId": "Q7_procedural_evidence",
-      "title": "[品質] 要点が議事手続き・発言断片の羅列",
-      "todo": "論点・数値・可決結果が分かる第三者要約に差し替え",
-      "command": "node scripts/complete-article.mjs --slug kaigo-iryo --content-only --force",
-      "priority": 10
-    },
-    {
-      "id": "kaigo-iryo:B3_topic",
-      "slug": "kaigo-iryo",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "B3_topic",
-      "title": "[ゲート] 話題一致",
-      "todo": "要約が searchKeyword と一致（2行以上）",
-      "command": "node scripts/complete-article.mjs --slug kaigo-iryo --content-only --force",
-      "priority": 30
-    },
-    {
-      "id": "kaigo-iryo:D1_arcSummary",
-      "slug": "kaigo-iryo",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "D1_arcSummary",
-      "title": "[ゲート] 経緯",
-      "todo": "日付付き経緯を3行以上",
-      "command": "node scripts/complete-article.mjs --slug kaigo-iryo --content-only --force",
-      "priority": 30
-    },
-    {
-      "id": "kaigo-iryo:D2_arc_topic",
-      "slug": "kaigo-iryo",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "D2_arc_topic",
-      "title": "[ゲート] 経緯の話題",
-      "todo": "経緯3行以上が案件キーワードと一致",
-      "command": "node scripts/complete-article.mjs --slug kaigo-iryo --content-only --force",
-      "priority": 30
-    },
-    {
-      "id": "kaigo-iryo:J1_prosCons",
-      "slug": "kaigo-iryo",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "J1_prosCons",
-      "title": "[ゲート] メリデメ",
-      "todo": "公表数値付きメリット2・デメリット2",
-      "command": "node scripts/generate-proscons-auto.mjs --slug kaigo-iryo",
       "priority": 30
     },
     {
@@ -974,61 +919,6 @@
       "priority": 30
     },
     {
-      "id": "seiji-shikin:Q6_procedural_arc",
-      "slug": "seiji-shikin",
-      "agent": "ceo",
-      "agentLabel": "CEO",
-      "checkId": "Q6_procedural_arc",
-      "title": "[品質] 経緯に採決手続き・委員長報告など中身のない行が混ざっている",
-      "todo": "可決内容・支給額・法案名など事実行に差し替え",
-      "command": "node scripts/complete-article.mjs --slug seiji-shikin --content-only --force",
-      "priority": 10
-    },
-    {
-      "id": "seiji-shikin:Q7_procedural_evidence",
-      "slug": "seiji-shikin",
-      "agent": "ceo",
-      "agentLabel": "CEO",
-      "checkId": "Q7_procedural_evidence",
-      "title": "[品質] 要点が議事手続き・発言断片の羅列",
-      "todo": "論点・数値・可決結果が分かる第三者要約に差し替え",
-      "command": "node scripts/complete-article.mjs --slug seiji-shikin --content-only --force",
-      "priority": 10
-    },
-    {
-      "id": "seiji-shikin:D1_arcSummary",
-      "slug": "seiji-shikin",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "D1_arcSummary",
-      "title": "[ゲート] 経緯",
-      "todo": "日付付き経緯を3行以上",
-      "command": "node scripts/complete-article.mjs --slug seiji-shikin --content-only --force",
-      "priority": 30
-    },
-    {
-      "id": "seiji-shikin:D2_arc_topic",
-      "slug": "seiji-shikin",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "D2_arc_topic",
-      "title": "[ゲート] 経緯の話題",
-      "todo": "経緯3行以上が案件キーワードと一致",
-      "command": "node scripts/complete-article.mjs --slug seiji-shikin --content-only --force",
-      "priority": 30
-    },
-    {
-      "id": "seiji-shikin:J1_prosCons",
-      "slug": "seiji-shikin",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "J1_prosCons",
-      "title": "[ゲート] メリデメ",
-      "todo": "公表数値付きメリット2・デメリット2",
-      "command": "node scripts/generate-proscons-auto.mjs --slug seiji-shikin",
-      "priority": 30
-    },
-    {
       "id": "senkyo-kaikaku:Q7_procedural_evidence",
       "slug": "senkyo-kaikaku",
       "agent": "ceo",
@@ -1038,50 +928,6 @@
       "todo": "論点・数値・可決結果が分かる第三者要約に差し替え",
       "command": "node scripts/complete-article.mjs --slug senkyo-kaikaku --content-only --force",
       "priority": 10
-    },
-    {
-      "id": "senkyo-kaikaku:B3_topic",
-      "slug": "senkyo-kaikaku",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "B3_topic",
-      "title": "[ゲート] 話題一致",
-      "todo": "要約が searchKeyword と一致（2行以上）",
-      "command": "node scripts/complete-article.mjs --slug senkyo-kaikaku --content-only --force",
-      "priority": 30
-    },
-    {
-      "id": "senkyo-kaikaku:D1_arcSummary",
-      "slug": "senkyo-kaikaku",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "D1_arcSummary",
-      "title": "[ゲート] 経緯",
-      "todo": "日付付き経緯を3行以上",
-      "command": "node scripts/complete-article.mjs --slug senkyo-kaikaku --content-only --force",
-      "priority": 30
-    },
-    {
-      "id": "senkyo-kaikaku:D2_arc_topic",
-      "slug": "senkyo-kaikaku",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "D2_arc_topic",
-      "title": "[ゲート] 経緯の話題",
-      "todo": "経緯3行以上が案件キーワードと一致",
-      "command": "node scripts/complete-article.mjs --slug senkyo-kaikaku --content-only --force",
-      "priority": 30
-    },
-    {
-      "id": "senkyo-kaikaku:J1_prosCons",
-      "slug": "senkyo-kaikaku",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "J1_prosCons",
-      "title": "[ゲート] メリデメ",
-      "todo": "公表数値付きメリット2・デメリット2",
-      "command": "node scripts/generate-proscons-auto.mjs --slug senkyo-kaikaku",
-      "priority": 30
     },
     {
       "id": "shoshika:Q7_procedural_evidence",

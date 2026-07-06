@@ -36,6 +36,7 @@ import { isTopicRelevant, textMatchesTopic, topicTerms, isConclusionQuality, cou
 import { normalizeFactPhrase, isDietVoice, isSpeechFragment, isIncompleteBullet, isWriterReadyLine } from "../src/lib/diet-voice.mjs";
 import { isBadSummaryLine } from "./lib/speech-summary.mjs";
 import { scorePartySymbol, SYMBOL_METHODOLOGY } from "../src/lib/symbol-rules.mjs";
+import { mergeInternalLinks } from "../src/lib/internal-link-graph.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -310,6 +311,7 @@ async function enrichKokkai(article, articleSlug) {
         })();
   article.plainExplanation = synthesizePlainExplanation(article.nowSummary.bullets, article.title, meta);
   article.glossary = glossary;
+  mergeInternalLinks(article);
   article.primarySpeech = {
     speechID: best.speechID ?? null,
     issueID: best.issueID ?? null,

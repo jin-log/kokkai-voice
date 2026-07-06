@@ -159,6 +159,8 @@ export async function enrichGeneralArticle(article, root) {
     { term: kw[0] || "争点", definition: "この記事で追っているテーマの核心" },
     { term: "公選法", definition: "選挙の公正を守る法律。虚偽の経歴記載などが問題になることがある" },
   ].slice(0, 4);
+  const { mergeInternalLinks } = await import("../../src/lib/internal-link-graph.mjs");
+  mergeInternalLinks(article);
 
   article.fetchedAt = new Date().toISOString();
   return article;
