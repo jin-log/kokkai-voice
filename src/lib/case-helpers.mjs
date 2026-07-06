@@ -72,9 +72,25 @@ export function getGlossary(article) {
   return article.glossary ?? article.nowSummary?.glossary ?? [];
 }
 
+/** meritsDemerits と prosCons をマージ（片側だけ空のときフォールバック） */
+export function resolveProsCons(article) {
+  const md = article.meritsDemerits;
+  const pc = article.prosCons;
+  if (!md && !pc) return null;
+  const merits = md?.merits?.length ? md.merits : (pc?.merits ?? []);
+  const demerits = md?.demerits?.length ? md.demerits : (pc?.demerits ?? []);
+  if (!merits.length && !demerits.length) return null;
+  return {
+    disclaimer: md?.disclaimer || pc?.disclaimer || "",
+    merits,
+    demerits,
+  };
+}
+
 export function getFloatTocItems(article, hasStance) {
   const items = [{ href: "#sec-now", label: "いまの結論" }];
-  if (article.meritsDemerits?.merits?.length || article.meritsDemerits?.demerits?.length) {
+  const resolved = resolveProsCons(article);
+  if (resolved) {
     if (usesContentBlocks(article) && (article.prosCons?.merits?.length || article.prosCons?.demerits?.length)) {
       items.push({ href: "#sec-impact", label: "利害整理" });
     }

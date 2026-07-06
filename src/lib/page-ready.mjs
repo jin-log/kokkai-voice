@@ -11,6 +11,7 @@ import { countTopicBullets, isTitleReady, countTopicArcLines, countTopicDietTime
 import { isDietVoice, bulletsDistinctFrom, isSpeechFragment } from "./diet-voice.mjs";
 import { isValidSymbol } from "./symbol-rules.mjs";
 import { waivedCheckIds } from "./case-gates.mjs";
+import { resolveProsCons } from "./case-helpers.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 export const root = path.join(__dirname, "../..");
@@ -38,6 +39,7 @@ export const CHECK_LABELS = {
   E4_timeline_diet_topic: { label: "TL国会の話題", todo: "国会TLはある分だけ話題一致。TLなし可。根拠なしの結論は不可" },
   A2_phaseA_source: { label: "一次ソース（国会待ち）", todo: "報道URLまたはタイムライン出典を追加" },
   J1_prosCons: { label: "メリデメ", todo: "公表数値付きメリット2・デメリット2" },
+  J1b_meritsDemerits_split: { label: "メリデメ整合", todo: "meritsDemerits のメリット欄が空" },
   F1_glossary: { label: "用語解説", todo: "用語を2語以上" },
   G1_stanceMatrix_ref: { label: "〇×表リンク", todo: "stanceMatrix を設定" },
   G2_policy_matrix_file: { label: "公言と行動ファイル", todo: "policy-matrix JSON を作成" },
@@ -221,9 +223,9 @@ export function checkCasePage(article, opts = {}) {
   add("F1_glossary", gloss.length >= 2, `${gloss.length}/2 語`);
 
   // J. メリット・デメリット（公表数値必須）
-  const pc = article.prosCons;
-  const merits = pc?.merits ?? [];
-  const demerits = pc?.demerits ?? [];
+  const resolved = resolveProsCons(article);
+  const merits = resolved?.merits ?? [];
+  const demerits = resolved?.demerits ?? [];
   const meritOk =
     merits.length >= 2 &&
     merits.every((m) => m.text && m.figure && m.sourceUrl);
@@ -236,6 +238,17 @@ export function checkCasePage(article, opts = {}) {
     meritOk && demeritOk
       ? `メリ${merits.length}・デメ${demerits.length}`
       : `メリ${merits.length}/2・デメ${demerits.length}/2（各 figure+sourceUrl 必須）`,
+  );
+  const md = article.meritsDemerits;
+  const splitBroken =
+    md &&
+    !(md.merits?.length) &&
+    (md.demerits?.length ?? 0) > 0 &&
+    (article.prosCons?.merits?.length ?? 0) > 0;
+  add(
+    "J1b_meritsDemerits_split",
+    !splitBroken,
+    splitBroken ? "meritsDemerits.merits が空（本番でメリット欄欠落）" : "OK",
   );
 
   // G. 公言と行動（〇×）— 必須
