@@ -1,6 +1,7 @@
 /** Shared helpers — patterns from scripts/generate-case-pages.mjs */
 import { citizenTitle } from "./title-format.mjs";
 import { SYMBOL_LEGEND, symbolTone, isValidSymbol, normalizeSymbol } from "./symbol-rules.mjs";
+import { usesContentBlocks } from "./case-blocks.mjs";
 
 export { SYMBOL_LEGEND, symbolTone, isValidSymbol, normalizeSymbol };
 
@@ -74,7 +75,12 @@ export function getGlossary(article) {
 export function getFloatTocItems(article, hasStance) {
   const items = [{ href: "#sec-now", label: "いまの結論" }];
   if (article.prosCons?.merits?.length || article.prosCons?.demerits?.length) {
-    items.push({ href: "#sec-proscons", label: "メリデメ" });
+    const classic = article.prosConsClassic === true;
+    const blocks = usesContentBlocks(article) && !classic;
+    items.push({
+      href: blocks ? "#sec-impact" : "#sec-proscons",
+      label: "メリット・デメリット",
+    });
   }
   if (article.arcSummary?.length) {
     items.push({ href: "#sec-arc", label: "経緯" });

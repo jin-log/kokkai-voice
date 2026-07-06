@@ -280,4 +280,44 @@ export const OVERRIDES = {
       },
     ],
   },
+  "osaka-to-metropolis": {
+    disclaimer:
+      "公表・試算・報道に基づく整理です。賛否それぞれの主張であり、当サイトは賛成・反対を断定しません。",
+    merits: [
+      {
+        headline: "二重行政の整理",
+        text: "大阪府と大阪市が重複する事務を特別区に再編し、府の政策を政令指定都市の枠を超えて進めやすくするのが構想の骨子。2026年5月、維新市議団が3度目の住民投票に向け法定協議会設置議案への賛成を全会一致で決定した。",
+        figure: "3度目投票へ",
+        sourceUrl: "https://mainichi.jp/articles/20260520/k00/00m/010/263000c",
+        sourceLabel: "毎日新聞",
+        sourceDate: "2026-05-20",
+      },
+      {
+        headline: "歳出削減の試算（賛成側）",
+        text: "府・市委託の嘉悦学園分析では、人口60万〜75万人規模の特別区に分割すれば年間約1100億円の歳出削減が可能と試算。維新は「規模の適正化で行政が効率化される」と説明し、この数字を賛成論拠に据えた（2020年投票時の公表試算）。",
+        figure: "約1100億円/年",
+        sourceUrl: "https://www.nikkei.com/article/DGXMZO65532100X21C20A0AC8000/",
+        sourceLabel: "日本経済新聞",
+        sourceDate: "2020-10-26",
+      },
+    ],
+    demerits: [
+      {
+        headline: "行政コスト増の試算（反対側）",
+        text: "大阪市財政局の試算では、市を4分割すると基準財政需要額が現行より約218億円増える。スケールメリットが失われ行政コストが上がるとして、反対派は住民サービスの低下を懸念した。",
+        figure: "218億円増",
+        sourceUrl: "https://mainichi.jp/articles/20201026/k00/00m/040/061000c",
+        sourceLabel: "毎日新聞",
+        sourceDate: "2020-10-26",
+      },
+      {
+        headline: "過去2回の住民投票は否決",
+        text: "2015年・2020年の住民投票はいずれも否決。2020年は賛成約49.2%で再び僅差否決となり、当時の制度案は廃案に。吉村知事は2020年否決後「再挑戦しない」と述べていたが、2026年に再始動している。",
+        figure: "2回否決・49.2%",
+        sourceUrl: "https://www.asahi.com/articles/ASTD30GM0TD3PTIL00RM.html",
+        sourceLabel: "朝日新聞",
+        sourceDate: "2025-12-03",
+      },
+    ],
+  },
 };
