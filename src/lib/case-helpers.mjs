@@ -74,12 +74,13 @@ export function getGlossary(article) {
 
 export function getFloatTocItems(article, hasStance) {
   const items = [{ href: "#sec-now", label: "いまの結論" }];
-  if (article.prosCons?.merits?.length || article.prosCons?.demerits?.length) {
-    const classic = article.prosConsClassic === true;
-    const blocks = usesContentBlocks(article) && !classic;
+  if (article.meritsDemerits?.merits?.length || article.meritsDemerits?.demerits?.length) {
+    items.push({ href: "#sec-proscons", label: "メリット・デメリット" });
+  } else if (article.prosCons?.merits?.length || article.prosCons?.demerits?.length) {
+    const blocks = usesContentBlocks(article);
     items.push({
       href: blocks ? "#sec-impact" : "#sec-proscons",
-      label: "メリット・デメリット",
+      label: blocks ? "利害整理" : "メリット・デメリット",
     });
   }
   if (article.arcSummary?.length) {
