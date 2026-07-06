@@ -19,6 +19,15 @@ function sleep(ms) {
   return new Promise((r) => setTimeout(r, ms));
 }
 
+async function exists(p) {
+  try {
+    await access(p);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 async function resolveChromeExecutable() {
   if (process.platform !== "win32") return null;
   for (const p of [WIN_CHROME, WIN_CHROME_X86]) {
@@ -40,21 +49,31 @@ async function waitForCdpPort(port, timeoutMs = 45_000) {
     await sleep(500);
   }
   throw new Error(
-    `CDP ポート ${port} が開きません。Chrome をすべて閉じてから再実行してください。`,
+    `CDP ポート ${port} が開きません。専用 Chrome の起動に失敗した可能性があります。`,
   );
 }
 
-/** Chrome 136+ 対策: 通常の User Data では CDP が無効になるため、起動前に終了 */
-async function killChromeForCapture() {
+/** 専用 X スクショ Chrome（CDP ポート）だけ終了 — 普段の Chrome は触らない */
+async function killCaptureChromeOnly(port = DEFAULT_CAPTURE_CDP_PORT) {
   if (process.platform !== "win32") return;
   const { execFile } = await import("node:child_process");
   const { promisify } = await import("node:util");
   const execFileAsync = promisify(execFile);
   try {
-    await execFileAsync("taskkill", ["/F", "/IM", "chrome.exe", "/T"], { windowsHide: true });
-    await sleep(2500);
+    const { stdout } = await execFileAsync("netstat", ["-ano"], { windowsHide: true, encoding: "utf8" });
+    const pids = new Set();
+    for (const line of stdout.split(/\r?\n/)) {
+      if (!line.includes(`:${port}`) || !line.includes("LISTENING")) continue;
+      const parts = line.trim().split(/\s+/);
+      const pid = parts[parts.length - 1];
+      if (/^\d+$/.test(pid) && pid !== "0") pids.add(pid);
+    }
+    for (const pid of pids) {
+      await execFileAsync("taskkill", ["/F", "/PID", pid, "/T"], { windowsHide: true }).catch(() => {});
+    }
+    if (pids.size) await sleep(800);
   } catch {
-    /* 未起動 */
+    /* ignore */
   }
 }
 
@@ -64,9 +83,12 @@ async function syncCaptureSandboxWithRetry(cfg, opts = {}) {
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
     if (!msg.includes("使用中")) throw err;
-    console.log("  Profile 9 が使用中 — Chrome を終了して複製…");
-    await killChromeForCapture();
-    return syncCaptureSandbox(cfg, { force: true });
+    const destProfile = path.join(xCaptureSandboxDir, cfg.profileDirectory);
+    if (await exists(destProfile)) {
+      console.log("  Profile 使用中 — 既存サンドボックスで続行（cookie は前回複製時点）");
+      return xCaptureSandboxDir;
+    }
+    throw err;
   }
 }
 
@@ -127,11 +149,10 @@ export async function ensureCaptureCdpReady(cfg, opts = {}) {
     throw new Error("Google Chrome が見つかりません");
   }
 
-  await killChromeForCapture();
   const sandboxUserData = await syncCaptureSandboxWithRetry(cfg, { force: opts.forceSync === true });
 
   const label = cfg.label ? `${cfg.label} (${cfg.profileDirectory})` : cfg.profileDirectory;
-  console.log(`  Xスクショ用 Chrome を自動起動 (${label}, CDP ${port})…`);
+  console.log(`  Xスクショ専用 Chrome を起動 (${label}, CDP ${port}・普段の Chrome とは別)`);
 
   spawn(
     chromeExe,
@@ -139,10 +160,13 @@ export async function ensureCaptureCdpReady(cfg, opts = {}) {
       `--remote-debugging-port=${port}`,
       `--user-data-dir=${sandboxUserData}`,
       `--profile-directory=${cfg.profileDirectory}`,
+      "--headless=new",
       "--no-first-run",
       "--no-default-browser-check",
       "--remote-allow-origins=*",
-      "https://x.com/home",
+      "--disable-gpu",
+      "--window-size=620,900",
+      "about:blank",
     ],
     { detached: true, stdio: "ignore" },
   );
@@ -150,17 +174,15 @@ export async function ensureCaptureCdpReady(cfg, opts = {}) {
   return waitForCdpPort(port, opts.timeoutMs ?? 60_000);
 }
 
-async function exists(p) {
-  try {
-    await access(p);
-    return true;
-  } catch {
-    return false;
-  }
+/** 専用 Chrome を再起動（普段の Chrome には触らない） */
+export async function restartCaptureCdp(cfg, opts = {}) {
+  const port = cfg.cdpPort ?? DEFAULT_CAPTURE_CDP_PORT;
+  await killCaptureChromeOnly(port);
+  return ensureCaptureCdpReady(cfg, { ...opts, forceSync: opts.forceSync === true });
 }
 
 export const X_CAPTURE_CDP_HINT =
-  "x:capture が Profile 9 を専用フォルダへ複製して Chrome を自動起動します。普段の Chrome が開いていると一度終了します。";
+  "Xスクショは secrets/browser/x-capture-sandbox の専用 Chrome（CDP 9333）で動作。普段の Chrome アカウントとは別プロセスです。";
 
 /**
  * @param {{ userDataDir: string, profileDirectory: string, label?: string }} cfg
@@ -198,9 +220,7 @@ export async function syncCaptureSandbox(cfg, opts = {}) {
   } catch (err) {
     const code = err && typeof err === "object" && "code" in err ? err.code : "";
     if (code === "EBUSY") {
-      throw new Error(
-        `Profile 9 のクッキーが使用中です（Chrome 起動中）。\n${X_CAPTURE_CDP_HINT}`,
-      );
+      throw new Error("Profile のクッキーが使用中（普段の Chrome 起動中）");
     }
     throw err;
   }

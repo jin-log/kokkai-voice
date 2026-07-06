@@ -13,6 +13,7 @@ import {
 } from "../src/lib/pipeline-autorun-core.mjs";
 import { getPatrolPauseState } from "../src/lib/patrol-pause.mjs";
 import { getXCapturePauseState } from "../src/lib/x-capture-pause.mjs";
+import { ensureCaptureCdpReady, loadChromeProfileConfig } from "./lib/chrome-profile.mjs";
 
 const root = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
 const statePath = path.join(root, "data/x-capture-daemon.json");
@@ -86,6 +87,15 @@ async function mainLoop() {
   }
 
   await log(`daemon start pid=${process.pid} poll=${pollSec}s limit=${captureLimit}`);
+  const chromeCfg = await loadChromeProfileConfig();
+  if (chromeCfg) {
+    try {
+      const port = await ensureCaptureCdpReady(chromeCfg);
+      await log(`dedicated Chrome ready CDP ${port} (普段の Chrome とは別)`);
+    } catch (err) {
+      await log(`dedicated Chrome start warn: ${err instanceof Error ? err.message : String(err)}`);
+    }
+  }
   await writeState({ running: true });
 
   process.on("SIGINT", () => {

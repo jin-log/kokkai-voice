@@ -71,7 +71,9 @@ export async function captureTweetScreenshot(postUrl, opts = {}) {
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err);
       if (attempt === 0 && msg.includes("未ログイン") && resolved.shared) {
-        console.log("  Profile 再複製してリトライ…");
+        console.log("  専用 Chrome 再起動 + Profile 再複製…");
+        const { restartCaptureCdp } = await import("./chrome-profile.mjs");
+        await restartCaptureCdp(resolved.shared, { forceSync: true });
         continue;
       }
       throw err;
@@ -152,8 +154,9 @@ async function captureTweetScreenshotOnce(postUrl, resolved, opts = {}) {
   } finally {
     if (session.viaCdp) {
       await page?.close().catch(() => {});
+    } else {
+      await session.close();
     }
-    await session.close();
   }
 }
 

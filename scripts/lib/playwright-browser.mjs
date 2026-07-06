@@ -154,15 +154,16 @@ export async function openCaptureContext(resolved, opts = {}) {
   if (cdpPort) {
     const browser = await chromium.connectOverCDP(`http://127.0.0.1:${cdpPort}`);
     const context = browser.contexts()[0] ?? (await browser.newContext());
-    console.log(`  起動中 Chrome に CDP 接続 (${cdpPort})`);
+    console.log(`  専用 Chrome に CDP 接続 (${cdpPort})`);
     return {
       context,
       page: null,
       viaCdp: true,
+      persistentCdp: true,
       cdpPort,
       profileLabel: shared?.label ?? shared?.profileDirectory ?? "CDP",
       async close() {
-        await browser.close();
+        /* 常駐 — タブだけ閉じる（browser は x-capture デーモンが管理） */
       },
     };
   }
