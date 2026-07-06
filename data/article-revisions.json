@@ -1,6 +1,36 @@
 {
-  "generatedAt": "2026-07-05T18:26:34.746Z",
+  "generatedAt": "2026-07-06T18:43:51.584Z",
   "jobs": [
+    {
+      "id": "rev-mr9kjiaz-74s42n",
+      "slug": "zeihikaku-kojo",
+      "sectionId": "title_opening",
+      "instruction": "【消費税ゼロ公約】代替案は給付付き税額控除？\nに変更してくれ",
+      "status": "proposed",
+      "createdAt": "2026-07-06T18:43:51.275Z",
+      "updatedAt": "2026-07-06T18:43:51.275Z",
+      "proposal": {
+        "before": "タイトル: \"【給付付き税額控除】どうなってる？\"\n1行目候補: 2026-03-26：原田秀一（国民民主党・新緑風会）— 制度の対象者や受益構造、政治的な受け止めまで含めれば両者の間にはかなり大きなずれがあり。（国会議事録）",
+        "after": "タイトル: \"【給付付き税額控除】どうなってる？\"\n1行目候補: 消費税・手取り",
+        "note": "タイトルに対応する冒頭1文を記事データから生成",
+        "canApply": true
+      }
+    },
+    {
+      "id": "rev-mr9kj8yq-hu7xej",
+      "slug": "zeihikaku-kojo",
+      "sectionId": "title_opening",
+      "instruction": "【消費税ゼロ公約】代替案は給付付き税額控除？\nに変更してくれ",
+      "status": "proposed",
+      "createdAt": "2026-07-06T18:43:39.170Z",
+      "updatedAt": "2026-07-06T18:43:39.170Z",
+      "proposal": {
+        "before": "タイトル: \"【給付付き税額控除】どうなってる？\"\n1行目候補: 2026-03-26：原田秀一（国民民主党・新緑風会）— 制度の対象者や受益構造、政治的な受け止めまで含めれば両者の間にはかなり大きなずれがあり。（国会議事録）",
+        "after": "タイトル: \"【給付付き税額控除】どうなってる？\"\n1行目候補: 消費税・手取り",
+        "note": "タイトルに対応する冒頭1文を記事データから生成",
+        "canApply": true
+      }
+    },
     {
       "id": "rev-mr84h9bh-gzs28u",
       "slug": "chingin",
@@ -511,6 +541,28 @@
   ],
   "ownerInstructions": [
     {
+      "id": "ins-mr9kjijk-nu47fk",
+      "slug": "zeihikaku-kojo",
+      "sectionId": "title_opening",
+      "text": "【消費税ゼロ公約】代替案は給付付き税額控除？\nに変更してくれ",
+      "jobId": "rev-mr9kjiaz-74s42n",
+      "articleTitle": "\"【給付付き税額控除】どうなってる？\"",
+      "outcome": "submitted",
+      "createdAt": "2026-07-06T18:43:51.584Z",
+      "resolvedAt": null
+    },
+    {
+      "id": "ins-mr9kj96g-xkqvr7",
+      "slug": "zeihikaku-kojo",
+      "sectionId": "title_opening",
+      "text": "【消費税ゼロ公約】代替案は給付付き税額控除？\nに変更してくれ",
+      "jobId": "rev-mr9kj8yq-hu7xej",
+      "articleTitle": "\"【給付付き税額控除】どうなってる？\"",
+      "outcome": "submitted",
+      "createdAt": "2026-07-06T18:43:39.448Z",
+      "resolvedAt": null
+    },
+    {
       "id": "ins-owner-chingin-timeline-001",
       "slug": "chingin",
       "sectionId": "timeline",
@@ -574,7 +626,12 @@
     {
       "id": "prin-revise-no-meta",
       "scope": "global",
-      "sectionIds": ["summaryBullets", "nowSummary", "arcSummary", "title_opening"],
+      "sectionIds": [
+        "summaryBullets",
+        "nowSummary",
+        "arcSummary",
+        "title_opening"
+      ],
       "title": "指示は実行結果を返す",
       "instruction": "「○○して」と言ったら○○した結果（中身）を出す。やり方・手順の説明（例：〜を先に整理、〜を短く要約、〜として分ける）は提案に含めない。",
       "badExample": "・賃上げ・最低賃金で国会上確認できた事実を先に整理",
@@ -587,7 +644,9 @@
     {
       "id": "prin-summary-topic-match",
       "scope": "section",
-      "sectionIds": ["summaryBullets"],
+      "sectionIds": [
+        "summaryBullets"
+      ],
       "title": "タイトルに即した要点",
       "instruction": "タイトルと無関係な手続きログ（起立・可決・無関係法案の審議）を除外し、記事データからタイトルに即した事実要点を出す。",
       "badExample": "・2026-06-03：山口壯— 両件は承諾を与えるべきものと決するに賛成の諸君の起立を求めます",
@@ -600,7 +659,9 @@
     {
       "id": "prin-now-no-procedural",
       "scope": "section",
-      "sectionIds": ["nowSummary"],
+      "sectionIds": [
+        "nowSummary"
+      ],
       "title": "答弁列挙ではなく内容・論点",
       "instruction": "「○○が答弁・質疑した」だけの行は不要。何が言われたか、未確定なら論点を要約する。",
       "badExample": "1. 2026-06-04：築山信彦が賃上げについて国会で答弁・質疑した。",
@@ -613,7 +674,9 @@
     {
       "id": "prin-arc-one-speech-one-row",
       "scope": "section",
-      "sectionIds": ["arcSummary"],
+      "sectionIds": [
+        "arcSummary"
+      ],
       "title": "経緯は1発言1行・要約形式",
       "instruction": "同一日付×同一人物の答弁を切り出し分割しない。形式は「YYYY-MM-DD — ○○が▲▼について以下のように質疑/答弁（委員会）。「要約文」」。部分引用の羅列ではなく要約を「」に入れる。「答弁・質疑した」だけはNG。",
       "badExample": "2026-04-14 — 城内実：三年連続で5%台…\n2026-04-14 — 城内実：政労使意見交換…\n2026-04-14 — 城内実：中小企業へ波及…",
@@ -626,7 +689,9 @@
     {
       "id": "prin-timeline-plain-language",
       "scope": "section",
-      "sectionIds": ["timeline"],
+      "sectionIds": [
+        "timeline"
+      ],
       "title": "タイムラインは平易語",
       "instruction": "「論じた」「質問した」だけはNG。何を聞いた／答えたかを「」で具体化する。",
       "badExample": "2026-05-20 [国会] 山崎正恭— 衆議院・文部科学委員会で賃上げについて質問した。",
