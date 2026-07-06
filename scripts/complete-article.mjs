@@ -31,6 +31,11 @@ import {
   finalizeNowBulletsForTitle,
 } from "./lib/writer-synthesize.mjs";
 import { enrichGeneralArticle, writePolicyMatrixGeneral, fetchReadable, isGeneralContentReady } from "./lib/enrich-general.mjs";
+import {
+  generalSummaryIsBad,
+  hasGeneralMeritPool,
+  rebuildGeneralSummaryFromMerits,
+} from "../src/lib/general-article.mjs";
 import { citizenTitle } from "../src/lib/title-format.mjs";
 import { isTopicRelevant, textMatchesTopic, topicTerms, isConclusionQuality, countTopicArcLines, countTopicDietTimeline, isDietTimelineTopicOk, isMatrixTopicRelevant, isMatrixTopicConsistent, textStronglyMatchesTopic, ensureTopicInLines, isBoilerplateTopicLine } from "../src/lib/topic-relevance.mjs";
 import { normalizeFactPhrase, isDietVoice, isSpeechFragment, isIncompleteBullet, isWriterReadyLine } from "../src/lib/diet-voice.mjs";
@@ -581,6 +586,19 @@ async function completeOneSlug(targetSlug) {
     }
   } else if (isGeneralContentReady(article) && !force && !contentOnly) {
     console.log("[一般] 既にコンテンツあり — スキップ");
+  } else if (
+    article.category !== "国会" &&
+    hasGeneralMeritPool(article) &&
+    generalSummaryIsBad(article)
+  ) {
+    console.log("[一般] メリデメ・出典から要約を再構成（Jina上書き回避）");
+    rebuildGeneralSummaryFromMerits(article);
+    const sources = (article.timeline ?? [])
+      .filter((t) => t.sourceUrl)
+      .map((t) => ({ url: t.sourceUrl, snippet: t.summaryPlain, date: t.date }));
+    if (sources.length >= 2) {
+      await writePolicyMatrixGeneral(article, root, sources);
+    }
   } else {
     console.log("[一般] ソース取得・要約");
     await enrichGeneralArticle(article, root);

@@ -8,6 +8,13 @@ import {
   discoverSourceUrls as discoverUrls,
   pickReadableSources,
 } from "../../functions/lib/article-prepare.js";
+import {
+  stripJinaGarbage,
+  isGeneralBoilerplateLine,
+  rebuildGeneralSummaryFromMerits,
+  generalSummaryIsBad,
+  hasGeneralMeritPool,
+} from "../../src/lib/general-article.mjs";
 
 const JINA_HEADERS = {
   Accept: "text/plain",
@@ -27,12 +34,17 @@ export async function discoverSourceUrls(keyword, limit = 4) {
   return discoverUrls(keyword, { tavilyApiKey, limit });
 }
 
+const JINA_META_LINE =
+  /^(Title|URL|URL Source|Published Time|Markdown Content|Warning|Images?):/i;
+
 function firstParagraph(md) {
   const lines = md.split("\n").map((l) => l.trim()).filter(Boolean);
   for (const line of lines) {
     if (line.startsWith("#") || line.startsWith("!") || line.startsWith("[")) continue;
-    if (line.length < 20) continue;
-    return line.replace(/\s+/g, " ").slice(0, 180);
+    if (JINA_META_LINE.test(line)) continue;
+    const cleaned = stripJinaGarbage(line.replace(/\s+/g, " "));
+    if (cleaned.length < 20 || isGeneralBoilerplateLine(cleaned)) continue;
+    return cleaned.slice(0, 180);
   }
   return null;
 }
@@ -47,7 +59,10 @@ function guessDate(md, url) {
 
 function titleFromMd(md, fallback) {
   const h1 = md.match(/^#\s+(.+)$/m);
-  return h1 ? h1[1].trim().slice(0, 80) : fallback;
+  if (h1) return stripJinaGarbage(h1[1].trim()).slice(0, 80);
+  const titleLine = md.split("\n").find((l) => /^Title:\s*/i.test(l.trim()));
+  if (titleLine) return stripJinaGarbage(titleLine).slice(0, 80);
+  return stripJinaGarbage(fallback);
 }
 
 /** 手動完成済みか（再エンリッチで上書きしない） */
@@ -56,6 +71,7 @@ export function isGeneralContentReady(article) {
   const linked = tl.filter((e) => e.sourceUrl || e.speech?.speechURL);
   const bullets = article.nowSummary?.bullets ?? [];
   const sb = article.summaryBullets ?? [];
+  if (bullets.some((b) => isGeneralBoilerplateLine(String(b)))) return false;
   if (
     bullets.some((b) =>
       /ソースURL|追加してください|整理中|順次整理|整理します|登録済み/.test(String(b)),
@@ -112,12 +128,23 @@ export async function enrichGeneralArticle(article, root) {
 
   sources.sort((a, b) => b.date.localeCompare(a.date));
 
-  const arcSummary = sources.slice(0, 5).map((s) => ({
+  const goodSources = sources.filter((s) => !isGeneralBoilerplateLine(s.snippet));
+  if (goodSources.length < 2 && hasGeneralMeritPool(article)) {
+    rebuildGeneralSummaryFromMerits(article);
+    article.sourceUrls = sourceUrls;
+    article.fetchedAt = new Date().toISOString();
+    const { mergeInternalLinks } = await import("../../src/lib/internal-link-graph.mjs");
+    mergeInternalLinks(article);
+    return article;
+  }
+
+  const useSources = goodSources.length >= 1 ? goodSources : sources;
+  const arcSummary = useSources.slice(0, 5).map((s) => ({
     date: s.date,
     text: s.snippet,
   }));
 
-  const timeline = sources.slice(0, 5).map((s, i) => ({
+  const timeline = useSources.slice(0, 5).map((s, i) => ({
     id: `${article.slug}-src-${i}`,
     type: "source",
     date: s.date,
@@ -125,7 +152,7 @@ export async function enrichGeneralArticle(article, root) {
     sourceUrl: s.url,
   }));
 
-  const primary = sources[0];
+  const primary = useSources[0];
   article.sourceUrls = sourceUrls;
   article.arcSummary = arcSummary;
   article.timeline = timeline;
@@ -140,13 +167,25 @@ export async function enrichGeneralArticle(article, root) {
     speechFull: null,
   };
 
+  /** @type {string[]} */
+  const nowBullets = [];
+  for (const row of arcSummary) {
+    if (!row?.text || isGeneralBoilerplateLine(row.text)) continue;
+    if (!nowBullets.includes(row.text)) nowBullets.push(row.text);
+    if (nowBullets.length >= 3) break;
+  }
+  if (nowBullets.length < 2 && hasGeneralMeritPool(article)) {
+    rebuildGeneralSummaryFromMerits(article);
+    article.sourceUrls = sourceUrls;
+    article.fetchedAt = new Date().toISOString();
+    const { mergeInternalLinks } = await import("../../src/lib/internal-link-graph.mjs");
+    mergeInternalLinks(article);
+    return article;
+  }
+
   article.nowSummary = {
     label: "いまの結論",
-    bullets: [
-      arcSummary[0]?.text ?? `${keyword}について報道・公開情報を整理中`,
-      arcSummary[1]?.text ?? `出典 ${sources.length} 件を登録`,
-      `${sources[0].date} 時点の公開情報に基づく整理（最新の司法判断・選挙結果は各出典を確認）`,
-    ].slice(0, 3),
+    bullets: nowBullets.slice(0, 3),
     disclaimer: `${AI_DISCLAIMER} 国会議事録以外の案件です。正本は各出典リンクをご確認ください。`,
     updatedAt: new Date().toISOString(),
   };
