@@ -23,8 +23,9 @@ const RAW_EXCERPT_START =
 const FIRST_PERSON = /私たち|私が|私の|我が党|我が国の|私は|私自身/;
 
 /** 掲載不可の空文案・切り出し・システムメモ */
-export function isBadSummaryLine(text) {
+export function isBadSummaryLine(text, keyword = "") {
   const t = String(text || "").trim();
+  const kw = String(keyword || "");
   if (!t || t.length < 10) return true;
   if (BAD_PATTERNS.test(t)) return true;
   if (isBoilerplateTopicLine(t)) return true;
@@ -38,6 +39,8 @@ export function isBadSummaryLine(text) {
     return true;
   }
   if (/について論点を表明—|について答弁—/.test(body)) return true;
+  if (/委員会で|ところである|あわせて、|おきまして|見られています|入らず。$/.test(body)) return true;
+  if (kw && /外国人/.test(kw) && /スパイ防止/.test(body)) return true;
   if (/高市内閣は危機管理・成長投資/.test(body) && !/物価|予備費|賃上げ/.test(body)) return true;
   if (isDietVoice(body) || isSpeechFragment(body) || isIncompleteBullet(body)) return true;
   if (!/^\d{4}-\d{2}-\d{2}：/.test(t) && t.length > 96) return true;
@@ -81,7 +84,7 @@ function shorten(s, max = 52) {
   return "";
 }
 
-function isCompleteSummary(text) {
+export function isCompleteSummary(text) {
   const t = String(text).replace(/。$/, "").trim();
   if (t.length < 16 || t.length > 80) return false;
   if (/^[,、]|^は|^が|^を/.test(t)) return false;
@@ -89,6 +92,9 @@ function isCompleteSummary(text) {
     return false;
   }
   if (isDietVoice(t) || FIRST_PERSON.test(t)) return false;
+  if (/おりません|ございます|まいります|けれども、|について伺う|聴取しないこととし、議長/.test(t)) {
+    return false;
+  }
   return /した|する|ない|ある|いる|表明|答弁|提出|可決|成立|見込|実施|盛り込|求め|訴え|認め|廃止|増|減|継続|検討|予定|方針|懸念|反対|支持|推進|説明|停止|禁止|義務|開始|終了|含め|据え置|引上げ|削減|拡大/.test(
     t,
   );
@@ -123,6 +129,8 @@ export function extractConclusionBullets(speech, keyword) {
   sentences.sort((a, b) => scoreSentence(b, keyword) - scoreSentence(a, keyword));
   return sentences.slice(0, 3).map((s) => (s.endsWith("。") ? s : `${s}。`));
 }
+
+function describeAction(sentence) {
   if (/反対|慎重|懸念|批判|問題/.test(sentence)) return "懸念を表明";
   if (/賛成|支持|前向き|推進/.test(sentence)) return "推進を表明";
   if (/提出|発議/.test(sentence)) return "法案提出";
@@ -173,6 +181,16 @@ function summarizeWindow(win, keyword, meta = {}) {
   const speaker = meta.speaker || "議員";
   const group = meta.speakerGroup ? `（${meta.speakerGroup}）` : "";
   const meeting = meta.nameOfMeeting || meta.meeting || "";
+
+  const normalizedBest = best ? normalizeFactPhrase(best) : "";
+  if (normalizedBest && isCompleteSummary(normalizedBest)) {
+    let core = normalizedBest.endsWith("。") ? normalizedBest : `${normalizedBest}。`;
+    if (nums.length) core = core.replace(/。$/, "") + `（${nums.join("・")}）。`;
+    const line = meeting
+      ? `${speaker}${group}— ${meeting}で${core}`
+      : `${speaker}${group}— ${core}`;
+    if (!isBadSummaryLine(line)) return line;
+  }
 
   let core = "";
   if (question && best) {
@@ -239,38 +257,24 @@ export function sanitizeMeritText(text) {
   return isBadSummaryLine(t) ? null : t;
 }
 
-/** nowSummary.bullets をタイムライン・primary から再構築 */
+/** nowSummary.bullets — primary 議事録から完全文（不足時のみタイムライン要約） */
 export function rebuildNowBullets(article) {
   const kw = article.searchKeyword || article.slug;
   const lines = [];
-  const seen = new Set();
-
-  const push = (line) => {
-    const t = String(line || "").trim();
-    if (!t || isBadSummaryLine(t)) return;
-    const key = t.replace(/[、。…\s]/g, "").slice(0, 24);
-    if (seen.has(key)) return;
-    seen.add(key);
-    lines.push(t.endsWith("。") ? t : `${t}。`);
-  };
-
-  if (article.primarySpeech?.speechFull || article.primarySpeech?.excerpt) {
-    for (const b of extractConclusionBullets(
-      article.primarySpeech.speechFull || article.primarySpeech.excerpt,
-      kw,
-    )) {
-      push(b);
+  const speech = article.primarySpeech?.speechFull || article.primarySpeech?.excerpt;
+  if (speech) {
+    for (const b of extractConclusionBullets(speech, kw)) {
+      if (!isBadSummaryLine(b)) lines.push(b);
     }
   }
-
-  for (const ev of (article.timeline || [])
-    .filter((e) => e.type === "speech" && e.summaryPlain && !isBadSummaryLine(e.summaryPlain))
-    .sort((a, b) => (b.date || "").localeCompare(a.date || ""))) {
-    let body = ev.summaryPlain.replace(/^[^—]+—\s*/, "");
-    body = body.replace(/^[^：]+：/, "");
-    if (isCompleteSummary(body)) push(body);
-    if (lines.length >= 3) break;
+  if (lines.length < 2) {
+    for (const ev of (article.timeline || [])
+      .filter((e) => e.type === "speech" && e.summaryPlain && !isBadSummaryLine(e.summaryPlain))
+      .sort((a, b) => (b.date || "").localeCompare(a.date || ""))) {
+      let body = ev.summaryPlain.replace(/^[^—]+—\s*/, "").replace(/^[^：]+：/, "");
+      if (isCompleteSummary(body) && !isBadSummaryLine(body)) lines.push(body);
+      if (lines.length >= 3) break;
+    }
   }
-
-  return lines.slice(0, 3);
+  return [...new Set(lines)].slice(0, 3);
 }

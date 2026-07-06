@@ -15,6 +15,7 @@ import {
   summarizeFromExcerpt,
   isBadSummaryLine,
   sanitizeMeritText,
+  extractConclusionBullets,
 } from "./speech-summary.mjs";
 import { isDietVoice, isIncompleteBullet, isSpeechFragment, normalizeFactPhrase, toThirdPersonBullet, isWriterReadyLine, isMatrixActionReady } from "../../src/lib/diet-voice.mjs";
 import { scorePartySymbol } from "../../src/lib/symbol-rules.mjs";
@@ -153,7 +154,11 @@ export function finalizeNowBulletsForTitle(bullets, title, keyword, hints = {}) 
   const crafted = craftOpeningFromTitle(title, keyword, hints);
   const pool = dedupeLines(
     (bullets || []).filter(
-      (b) => !OPENING_TEMPLATE_LINE.test(b) && !isBoilerplateTopicLine(b) && !isQuestionBullet(b),
+      (b) =>
+        !OPENING_TEMPLATE_LINE.test(b) &&
+        !isBoilerplateTopicLine(b) &&
+        !isQuestionBullet(b) &&
+        !isBadSummaryLine(b),
     ),
   );
 
@@ -195,6 +200,34 @@ function craftOpeningFromTitle(title, keyword, hints = {}) {
 
   if (/選挙制度/.test(t)) {
     return "選挙制度の見直し（選挙区・議席配分など）をめぐり、与野党が国会でそれぞれ法案・修正案を提示している。";
+  }
+
+  if (/物価高/.test(t) || kw === "物価高対策") {
+    return "高市内閣は物価高対策を最優先とし、補正予算でガソリン暫定税率廃止・電気ガス支援等を盛り込み、一世帯当たり年8万円超の支援を実施と国会で表明した。";
+  }
+
+  if (/消費税/.test(t) || /食料品/.test(kw)) {
+    return "食料品の消費税減税は給付つき税額控除との同時並行議論が国民会議で続き、二年間限定のつなぎ策として検討される方針が国会で示されている。";
+  }
+
+  if (/カジノ|IR/.test(t) || kw === "カジノ") {
+    return "オンラインカジノ誘導の規制強化が国会で審議され、改正ギャンブル等依存症対策基本法に基づく取締りとアクセス抑止の在り方が論点になっている。";
+  }
+
+  if (/年金/.test(t) || kw === "年金") {
+    return "年金制度の持続可能性と給付水準をめぐり、国会各委員会で財源・積立金運用・実質給付の議論が続いている。";
+  }
+
+  if (/外国人/.test(t) || kw === "外国人") {
+    return "外国人の受入れと秩序ある共生をめぐる総合対応策が閣僚会議で決定され、不法就労・不適正事業者対策が国会で審議されている。";
+  }
+
+  if (/防衛費|安保/.test(t) || kw === "防衛費") {
+    return "防衛力強化に必要な予算と財源の在り方が国会で議論され、財政の持続可能性に配慮しつつ安保三文書の方針に沿った議論が続いている。";
+  }
+
+  if (/ボーナス|期末手当/.test(t) || /ボーナス|歳費/.test(kw)) {
+    return "国会議員の期末手当（ボーナス）は歳費法改正で支給割合が議論され、特別職給与法改正と連動して据え置きか引上げかが争点になっている。";
   }
 
   if (/補正予算/.test(t)) {
@@ -295,7 +328,7 @@ function composeFromPrimary(sn, meta, keyword = "") {
       );
     }
   }
-  if (/スパイ防止法制|スパイ防止法/.test(ex)) {
+  if (/スパイ防止法制|スパイ防止法/.test(ex) && /スパイ防止/.test(kw)) {
     lines.push(
       `政府・与党はスパイ防止法制の制定に向けた検討を国会で示している${date ? `（${date}）` : ""}。`,
     );

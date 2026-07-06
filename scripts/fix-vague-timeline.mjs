@@ -7,12 +7,14 @@ import { readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { fetchSpeech } from "./lib/kokkai-api.mjs";
+import { finalizeNowBulletsForTitle } from "./lib/writer-synthesize.mjs";
 import {
   isBadSummaryLine,
   summarizeSpeechRecord,
   rebuildNowBullets,
   sanitizeMeritText,
   formatDatedBullet,
+  isCompleteSummary,
 } from "./lib/speech-summary.mjs";
 
 const root = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -140,13 +142,25 @@ async function fixArticle(slug) {
   }
 
   const rebuilt = rebuildNowBullets(article);
-  if (rebuilt.length) {
+  const finalized = finalizeNowBulletsForTitle(
+    rebuilt,
+    article.title || "",
+    kw,
+    { arcSummary: article.arcSummary },
+  );
+  const [first, ...rest] = finalized;
+  const goodRest = rest.filter((b) => !isBadSummaryLine(b, kw) && isCompleteSummary(b));
+  const bullets = [first, ...goodRest]
+    .filter(Boolean)
+    .filter((b, i) => i === 0 || !isBadSummaryLine(b, kw))
+    .slice(0, 3);
+  if (bullets.length) {
     article.nowSummary = article.nowSummary || {
       label: "いまの結論（AI・平易語）",
       disclaimer:
         "AI補助による平易語要約です。解釈を含みます。数字・引用・発言内容の正本は primarySpeech.speechFull（国会議事録原文）をご確認ください。",
     };
-    article.nowSummary.bullets = rebuilt;
+    article.nowSummary.bullets = bullets;
     article.nowSummary.updatedAt = new Date().toISOString();
     fixed++;
   }
