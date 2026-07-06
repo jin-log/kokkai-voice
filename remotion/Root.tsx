@@ -1,7 +1,17 @@
 import React from "react";
 import { Composition } from "remotion";
+import { ShortDataV1, type ShortDataV1Props } from "./ShortDataV1";
 import { ShortF1, type ShortF1Props } from "./ShortF1";
+import { shortDataDurationInFrames } from "./lib/short-data-timing";
 import { BEAT_GAP_FRAMES, FPS } from "./theme";
+
+const shortDataDefaultProps: ShortDataV1Props = {
+  hook: "プレビュー",
+  hookTelop: ["プレビュー", "ショート"],
+  slides: [{ text: "スライド1", number: "100" }],
+  bgVideoSrc: "remotion/bg-diet.mp4",
+  logoSrc: "assets/logo-header-nihon-seiji-naw.png",
+};
 
 const defaultProps: ShortF1Props = {
   slug: "shoshika",
@@ -35,6 +45,24 @@ export const RemotionRoot: React.FC = () => {
               sum + b.durationInFrames + (i < beats.length - 1 ? BEAT_GAP_FRAMES : 0),
             0,
           );
+          return {
+            durationInFrames: Math.max(durationInFrames, FPS),
+            fps: FPS,
+            width: 1080,
+            height: 1920,
+          };
+        }}
+      />
+      <Composition
+        id="ShortDataV1"
+        component={ShortDataV1}
+        durationInFrames={300}
+        fps={FPS}
+        width={1080}
+        height={1920}
+        defaultProps={shortDataDefaultProps}
+        calculateMetadata={({ props }) => {
+          const durationInFrames = shortDataDurationInFrames(props);
           return {
             durationInFrames: Math.max(durationInFrames, FPS),
             fps: FPS,

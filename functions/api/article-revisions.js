@@ -107,7 +107,16 @@ async function applyJob(token, body) {
     sourceJobId: job.id,
   });
   await putGhFile(token, REVISIONS_PATH, store, sha, `article revision applied: ${job.slug} ${job.sectionId}`);
-  return { ok: true, job };
+
+  const deployTriggered = await triggerDeployWorkflow(token);
+  return {
+    ok: true,
+    job,
+    deployTriggered,
+    message: deployTriggered
+      ? "記事JSONを保存しました。サイト反映はデプロイ完了後（約3〜5分）。"
+      : "記事JSONを保存しました。サイト反映は次のデプロイまで待ちます。",
+  };
 }
 
 async function rejectJob(token, body) {
@@ -187,6 +196,26 @@ function ghHeaders(token) {
     "X-GitHub-Api-Version": "2022-11-28",
     "User-Agent": "kokkai-voice-pages/1.0",
   };
+}
+
+/** 保存後すぐ本番HTMLを更新するため deploy.yml を起動 */
+async function triggerDeployWorkflow(token) {
+  try {
+    const res = await fetch(
+      "https://api.github.com/repos/jin-log/kokkai-voice/actions/workflows/deploy.yml/dispatches",
+      {
+        method: "POST",
+        headers: ghHeaders(token),
+        body: JSON.stringify({ ref: "main" }),
+      },
+    );
+    if (res.status === 204) return true;
+    console.warn(`deploy dispatch ${res.status}: ${await res.text()}`);
+    return false;
+  } catch (err) {
+    console.warn("deploy dispatch failed:", err);
+    return false;
+  }
 }
 
 function json(data, status = 200) {

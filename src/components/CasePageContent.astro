@@ -75,7 +75,13 @@ const flags = blocksMode ? blockFlags(article, stance) : null;
       <>
         {flags.impact && <ImpactBlock article={article} />}
         {flags.stats && <StatsBlock article={article} />}
-        {!flags.impact && !flags.stats && flags.legacyProsCons && <ProsCons article={article} />}
+        {(article.meritsDemerits?.merits?.length || article.meritsDemerits?.demerits?.length) && (
+          <ProsCons article={article} prosCons={article.meritsDemerits} />
+        )}
+        {!flags.impact && !flags.stats && flags.legacyProsCons &&
+          (article.prosCons?.merits?.length || article.prosCons?.demerits?.length) && (
+            <ProsCons article={article} />
+          )}
       </>
     ) : (
       <ProsCons article={article} />

@@ -3,6 +3,7 @@ export const APPLIABLE_SECTIONS = new Set([
   "nowSummary",
   "summaryBullets",
   "arcSummary",
+  "timeline",
 ]);
 
 export function normalizeRevisionStore(store) {
@@ -229,8 +230,8 @@ export function buildProposal({ article, sectionId, instruction, current }) {
     return {
       before,
       after: reordered,
-      note: "「論じた」等の曖昧語を平易語（質問・答弁＋委員会名）に言い換え",
-      canApply: false,
+      note: "「論じた／質問した」だけにせず、何を質問・答弁したか「」で具体化",
+      canApply,
     };
   }
 
@@ -281,6 +282,24 @@ export function applyProposalToArticle(article, sectionId, after) {
       next.summaryBullets = [opening, ...prev.slice(1)];
     }
     if (!title && !opening) throw new Error("タイトルまたは1行目候補が必要です");
+    return next;
+  }
+
+  if (sectionId === "timeline") {
+    const rows = parseTimelineApplyRows(text);
+    if (rows.length < 1) throw new Error("タイムラインの提案が空です");
+    const timeline = [...(next.timeline || [])];
+    const used = new Set();
+    let matched = 0;
+    for (const row of rows) {
+      const idx = findTimelineIndex(timeline, row, used);
+      if (idx < 0) continue;
+      used.add(idx);
+      timeline[idx] = { ...timeline[idx], summaryPlain: row.summaryPlain };
+      matched++;
+    }
+    if (matched < 1) throw new Error("タイムラインの行を記事データにマッチできませんでした");
+    next.timeline = timeline;
     return next;
   }
 
@@ -796,9 +815,37 @@ function parseTimelineLine(line) {
   return m ? { date: m[1], kind: m[2], text: m[3].trim() } : null;
 }
 
+function parseTimelineApplyRows(text) {
+  return String(text || "")
+    .split("\n")
+    .map((line) => parseTimelineLine(line))
+    .filter(Boolean)
+    .map((row) => ({ date: row.date, kind: row.kind, summaryPlain: row.text }));
+}
+
+function timelineKindToType(kind) {
+  if (kind === "国会" || kind === "speech") return "speech";
+  if (kind === "x_post" || kind === "X" || kind === "x") return "x_post";
+  return kind;
+}
+
+function findTimelineIndex(timeline, row, used) {
+  const type = timelineKindToType(row.kind);
+  const speaker = parseSpeakerFromTimelineBody(row.summaryPlain) || parseSpeakerFromArc(row.summaryPlain);
+  return timeline.findIndex((ev, idx) => {
+    if (used.has(idx)) return false;
+    const evDate = ev.date || ev.speech?.date || "";
+    const evType = ev.type || "";
+    if (evDate !== row.date || evType !== type) return false;
+    if (speaker && ev.speech?.speaker) return ev.speech.speaker === speaker;
+    return true;
+  });
+}
+
 function buildTimelineProposal(article, before, hint, topic, keywords) {
   const subject = arcSubject(topic, keywords);
-  const wantsPlain = /一般人|分かる|わかり|論じ|曖昧|平易/.test(hint);
+  const wantsSpecific = wantsTimelineSpecificity(hint);
+  const questionTopics = collectQuestionTopics(article, subject);
   /** @type {Map<string, object>} */
   const evByKey = new Map();
   for (const ev of article?.timeline || []) {
@@ -807,6 +854,7 @@ function buildTimelineProposal(article, before, hint, topic, keywords) {
     if (date && speaker) evByKey.set(`${date}|${speaker}`, ev);
   }
 
+  let dietIndex = 0;
   const lines = before.split("\n").filter(Boolean);
   return lines
     .map((line) => {
@@ -814,14 +862,23 @@ function buildTimelineProposal(article, before, hint, topic, keywords) {
       if (!row) return line;
 
       const isDiet = row.kind === "国会" || row.kind === "speech";
-      if (isDiet && (wantsPlain || isGenericSpeechSummary(row.text) || /論じ/.test(row.text))) {
-        const speaker = parseSpeakerFromArc(row.text) || "";
+      if (isDiet && (wantsSpecific || isGenericSpeechSummary(row.text) || /論じ|質問した/.test(row.text))) {
+        const speaker = parseSpeakerFromArc(row.text) || parseSpeakerFromTimelineBody(row.text) || "";
         const ev = evByKey.get(`${row.date}|${speaker}`);
-        return rewriteTimelineSpeechRow({ date: row.date, speaker, subject, ev, article });
+        return rewriteTimelineSpeechRow({
+          date: row.date,
+          speaker,
+          subject,
+          ev,
+          article,
+          topicIndex: dietIndex++,
+          questionTopics,
+        });
       }
 
       if ((row.kind === "X" || row.kind === "x_post") && row.text.length > 140) {
-        return `${row.date} [${row.kind}] ${shortenSentence(row.text, 110)}`;
+        const gist = extractXPostGist(row.text, subject);
+        return `${row.date} [${row.kind}] ${gist}`;
       }
 
       return line;
@@ -829,25 +886,77 @@ function buildTimelineProposal(article, before, hint, topic, keywords) {
     .join("\n");
 }
 
-function rewriteTimelineSpeechRow({ date, speaker, subject, ev, article }) {
+function wantsTimelineSpecificity(hint) {
+  return /一般人|分かる|わかり|論じ|曖昧|平易|具体|何を|漠然|聞いた|どういう|質問した|ばか/.test(hint);
+}
+
+function parseSpeakerFromTimelineBody(text) {
+  const m = String(text || "").match(/^(.+?)—/);
+  if (m) return m[1].trim();
+  const m2 = String(text || "").match(/^(.+?)が/);
+  return m2 ? m2[1].trim() : "";
+}
+
+function collectQuestionTopics(article, subject) {
+  /** @type {string[]} */
+  const topics = [];
+  const ps = article?.primarySpeech;
+  const raw = normalizePercentText([ps?.excerpt, ps?.speechFull?.slice(0, 3000)].filter(Boolean).join(" "));
+
+  if (/5\.09%|5%台|賃上げ率/.test(raw)) topics.push("春闘の賃上げ率5%台は続くのか");
+  if (/政労使|意見交換/.test(raw)) topics.push("政労使意見交換後、物価上昇を上回る賃上げは実現するのか");
+  if (/中小|小規模/.test(raw)) topics.push("地方の中小・小規模事業者への賃上げ波及はどう進むのか");
+  if (/実質賃金/.test(raw)) topics.push("実質賃金のプラス推移は続くのか");
+  if (/物価|エネルギー|原油/.test(raw)) topics.push("物価・エネルギー高を踏まえ、賃上げは続けられるのか");
+  if (/最低賃金/.test(subject + raw)) topics.push("最低賃金引上げと企業の賃上げ負担のバランスは");
+
+  topics.push(
+    "政府の賃上げ支援策は現場に届いているのか",
+    "賃上げが家計・地域経済に与える効果はどう見るか",
+    "大企業と中小の賃上げ格差は縮まるのか",
+  );
+  return [...new Set(topics.filter(Boolean))];
+}
+
+function questionForMeeting(meeting, subject) {
+  if (/決算行政監視/.test(meeting)) return `${subject}と決算・物価対策の整合は`;
+  if (/財政金融/.test(meeting)) return `${subject}と金融情勢・景気見通しの関係は`;
+  if (/行政監視/.test(meeting)) return `${subject}の政府実行計画の進捗は`;
+  if (/内閣/.test(meeting)) return `${subject}の最新データと政府の認識は`;
+  if (/文部科学/.test(meeting)) return `${subject}と教育・人材政策の関係は`;
+  return null;
+}
+
+function extractXPostGist(text, subject) {
+  const t = String(text || "").replace(/\s+/g, " ");
+  if (/投資と賃上げの好循環/.test(t)) return "高市首相— 成長戦略会議で「投資と賃上げの好循環」を掲げ、賃上げ加速を表明。";
+  if (subject && t.includes(subject)) return shortenSentence(t, 100);
+  return shortenSentence(t, 100);
+}
+
+function rewriteTimelineSpeechRow({ date, speaker, subject, ev, article, topicIndex, questionTopics }) {
   const speech = ev?.speech;
   const meeting = speech?.nameOfMeeting || "";
   const house = speech?.nameOfHouse || "";
   const place = [house, meeting].filter(Boolean).join("・");
   const role = inferSpeechRole(speaker, speech?.speakerPosition || "", meeting);
   const act = role === "答弁" ? "答弁" : "質問";
+  const where = place ? `${place}で` : "国会で";
+
+  const sum = ev?.summaryPlain || "";
+  if (sum && !isGenericSpeechSummary(sum) && !/質問した[。]?$/.test(sum) && sum.length > 20) {
+    return `${date} [国会] ${speaker}— ${where}「${cleanFact(sum)}」と${act}。`;
+  }
 
   const ps = article?.primarySpeech;
   if (ps && ps.speaker === speaker && ps.date === date) {
-    const summary = shortenSentence(summarizeSpeechForArc(ps).replace(/^「|」$/g, ""), 80);
-    const where = place ? `${place}で` : "";
-    return `${date} [国会] ${speaker}— ${where}${subject}について${act}。「${summary}」`;
+    const summary = shortenSentence(summarizeSpeechForArc(ps).replace(/^「|」$/g, ""), 90);
+    return `${date} [国会] ${speaker}— ${where}「${summary}」と${act}。`;
   }
 
-  if (place) {
-    return `${date} [国会] ${speaker}— ${place}で${subject}について${act}した。`;
-  }
-  return `${date} [国会] ${speaker}— ${subject}について国会で${act}した。`;
+  const meetingQ = questionForMeeting(meeting, subject);
+  const q = questionTopics[topicIndex % questionTopics.length] || meetingQ || `${subject}の政府方針は`;
+  return `${date} [国会] ${speaker}— ${where}「${q}」と${act}。`;
 }
 
 function pickOpeningLine(article, topic, keywords) {

@@ -36,7 +36,7 @@ const payload = {
 
 <AdminShell activeId="articles" title={`修正 · ${article.title}`} wide={true}>
   <div class="admin-preview-ribbon">
-    <span class="admin-preview-ribbon__dot"></span>修正キューMVP — 保存は記事JSONに反映。提案生成器は簡易版
+    <span class="admin-preview-ribbon__dot"></span>保存＝GitHubの記事JSON更新。管理画面・公開記事はデプロイ後（約3〜5分）に反映。再読み込み前はこの画面だけ即更新
   </div>
 
   <header class="admin-page-head">
@@ -287,7 +287,7 @@ const payload = {
           busy.hidden = false;
           busy.textContent = "保存中…";
           try {
-            await api("apply", { jobId: st.jobId });
+            const out = await api("apply", { jobId: st.jobId });
             currentEl.textContent = st.proposal.after;
             section.content = st.proposal.after;
             proposalBox.hidden = true;
@@ -306,11 +306,23 @@ const payload = {
               rules.prepend(div);
             }
             updateDots();
+            busy.hidden = false;
+            busy.textContent =
+              out.message ||
+              (out.deployTriggered
+                ? "保存しました。サイト反映はデプロイ完了後（約3〜5分）。"
+                : "保存しました。公開記事は次のデプロイまで古い表示のままです。");
+            window.setTimeout(() => {
+              busy.hidden = true;
+              busy.textContent = "ライター処理中…";
+            }, 6000);
           } catch (err) {
             alert(err instanceof Error ? err.message : String(err));
           } finally {
-            busy.hidden = true;
-            busy.textContent = "ライター処理中…";
+            if (busy.textContent === "保存中…") {
+              busy.hidden = true;
+              busy.textContent = "ライター処理中…";
+            }
           }
         });
 

@@ -5,7 +5,9 @@
 ## 1. Google Cloud
 
 1. https://console.cloud.google.com/ でプロジェクト作成（例: `kokkai-voice-indexing`）
-2. **API とサービス → ライブラリ** → **Web Search Indexing API** を有効化
+2. **API とサービス → ライブラリ** → 次を有効化:
+   - **Web Search Indexing API**（deploy 時の URL 通知）
+   - **Google Search Console API**（管理画面の検索クエリ取得）
 3. **API とサービス → 認証情報 → サービスアカウント作成**
 4. キー → **JSON 追加** → ダウンロード
 

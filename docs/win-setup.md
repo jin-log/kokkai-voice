@@ -107,7 +107,7 @@ node scripts/fix-dns.mjs
 |------|----------|
 | Playwright 初回セットアップ | `npm run browser:setup` |
 | note / はてな ログイン保存（1回） | `npm run browser:login -- note` / `hatena` |
-| **既存 Chrome プロフィール** | `secrets/browser/chrome-profile.json`（例: `docs/chrome-profile.example.json`）に Profile 9 等を指定すると、seiji1192 のログイン状態をそのまま利用。**自動化前にそのプロフィールの Chrome を閉じる** |
+| **既存 Chrome プロフィール** | `secrets/browser/chrome-profile.json`（例: `docs/chrome-profile.example.json`）に Profile 9 等を指定。`x-capture-sandbox` に複製した **専用 headless Chrome（CDP 9333）** で取得。**普段の Chrome は閉じなくてよい** |
 | **はてな・note CI用** | `npm run browser:export-state` → GitHub Secrets `HATENA_BROWSER_STATE` / `NOTE_BROWSER_STATE`。詳細 `docs/promo-browser-secrets.md` |
 | はてブ登録 | `npm run post:hatena` |
 | note 初回（要 `content/note/01-site-intro.md`） | `npm run post:note:intro` |

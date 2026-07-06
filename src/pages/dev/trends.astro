@@ -2,7 +2,6 @@
 import AdminShell from "../../components/admin/AdminShell.astro";
 import AdminKpiBar from "../../components/admin/AdminKpiBar.astro";
 import { loadTrendingTopics } from "../../lib/trending-topics.mjs";
-import { SITE } from "../../lib/site-config.mjs";
 
 const data = await loadTrendingTopics();
 const fetchedAt = data?.fetchedAt
@@ -28,25 +27,6 @@ const unpublished = evergreen.filter((e) => !e.published).length;
     { label: "未公開", value: String(unpublished), tone: unpublished ? "warn" : undefined },
     { label: "更新", value: "deploy時" },
   ]} />
-
-  <section class="admin-surface" id="ga">
-    <header class="admin-surface__head">
-      <div>
-        <h2 class="admin-surface__title">政治なうのアクセス（GA4）</h2>
-        <p class="admin-surface__meta">「腎ログ」ではない。ブックマーク推奨。</p>
-      </div>
-    </header>
-    <div class="admin-surface__body">
-      <div class="admin-toolbar__row">
-        <a class="admin-row__btn admin-row__btn--primary" href={SITE.gaRealtimeUrl} target="_blank" rel="noopener noreferrer">
-          いま誰が見てる？（リアルタイム）
-        </a>
-        <a class="admin-row__btn" href={SITE.gaPagesUrl} target="_blank" rel="noopener noreferrer">
-          記事別レポート
-        </a>
-      </div>
-    </div>
-  </section>
 
   {!data && (
     <p class="admin-list__empty">データを読み込めませんでした。次回デプロイで自動取得されます。</p>

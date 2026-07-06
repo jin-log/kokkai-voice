@@ -1,0 +1,458 @@
+---
+import AdminShell from "../../components/admin/AdminShell.astro";
+import { SITE } from "../../lib/site-config.mjs";
+---
+
+<AdminShell activeId="reports" title="アクセスレポート">
+  <header class="admin-page-head">
+    <h1 class="admin-page-head__title">アクセスレポート</h1>
+    <p class="admin-page-head__note">
+      seiji1192.site 本番のみ · 取得: <span id="ga-fetched">—</span>
+    </p>
+  </header>
+
+  <section class="admin-surface">
+    <header class="admin-surface__head">
+      <div>
+        <h2 class="admin-surface__title">GA4</h2>
+        <p class="admin-surface__meta">pages.dev は計測対象外</p>
+      </div>
+      <div class="admin-toolbar__row ga-toolbar">
+        <div class="ga-toggle" role="group" aria-label="期間">
+          <button type="button" class="admin-row__btn ga-range is-active" data-days="7">7日</button>
+          <button type="button" class="admin-row__btn ga-range" data-days="28">28日</button>
+        </div>
+        <div class="ga-toggle" role="group" aria-label="地域">
+          <button type="button" class="admin-row__btn ga-country is-active" data-country="Japan">国内</button>
+          <button type="button" class="admin-row__btn ga-country" data-country="all">全体</button>
+        </div>
+        <button type="button" class="admin-row__btn" id="ga-refresh">更新</button>
+        <a class="admin-row__btn admin-row__btn--ghost" href={SITE.gaRealtimeUrl} target="_blank" rel="noopener noreferrer">GA4リアルタイム</a>
+      </div>
+    </header>
+    <div class="admin-surface__body">
+      <p id="ga-status" class="admin-page-head__note" hidden></p>
+      <div id="ga-kpis" class="ga-kpis" hidden></div>
+      <div id="ga-insights" class="ga-insights" hidden></div>
+
+      <div class="ga-chart-block" id="ga-monthly-wrap" hidden>
+        <h3 class="ga-panel__title">月次推移（直近12ヶ月）</h3>
+        <div class="ga-chart-legend">
+          <span><i class="ga-dot ga-dot--users"></i>ユーザー</span>
+          <span><i class="ga-dot ga-dot--sessions"></i>セッション</span>
+          <span><i class="ga-dot ga-dot--pv"></i>PV</span>
+        </div>
+        <div id="ga-monthly-chart" class="ga-monthly-chart"></div>
+      </div>
+
+      <div class="ga-chart-block" id="ga-daily-wrap" hidden>
+        <h3 class="ga-panel__title">日次推移（選択期間）</h3>
+        <div id="ga-daily-chart" class="ga-daily-chart"></div>
+      </div>
+
+      <div class="ga-grid" id="ga-panels" hidden>
+        <div class="ga-panel ga-panel--wide">
+          <h3 class="ga-panel__title">オーガニック検索ワード</h3>
+          <p class="ga-panel__note" id="ga-kw-note">Search Console の検索クエリ（クリック順）</p>
+          <table class="ga-table ga-table--rank" id="ga-organic-kw"><tbody></tbody></table>
+        </div>
+        <div class="ga-panel">
+          <h3 class="ga-panel__title">オーガニック着陸ページ</h3>
+          <p class="ga-panel__note" id="ga-land-note">Search Console のページ別クリック</p>
+          <table class="ga-table" id="ga-organic-land"><tbody></tbody></table>
+        </div>
+        <div class="ga-panel">
+          <h3 class="ga-panel__title">流入元</h3>
+          <table class="ga-table" id="ga-sources"><tbody></tbody></table>
+        </div>
+        <div class="ga-panel">
+          <h3 class="ga-panel__title">記事ページ TOP</h3>
+          <table class="ga-table" id="ga-pages"><tbody></tbody></table>
+        </div>
+        <div class="ga-panel" id="ga-countries-wrap" hidden>
+          <h3 class="ga-panel__title">国別</h3>
+          <table class="ga-table" id="ga-countries"><tbody></tbody></table>
+        </div>
+        <div class="ga-panel">
+          <h3 class="ga-panel__title">チャネル</h3>
+          <table class="ga-table" id="ga-channels"><tbody></tbody></table>
+        </div>
+        <div class="ga-panel">
+          <h3 class="ga-panel__title">デバイス</h3>
+          <div id="ga-devices" class="ga-devices"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</AdminShell>
+
+<style>
+  .ga-toolbar { flex-wrap: wrap; gap: 0.5rem; align-items: center; }
+  .ga-toggle { display: inline-flex; gap: 0.25rem; }
+  .ga-toggle .is-active { background: var(--color-accent, #1d4ed8); color: #fff; border-color: transparent; }
+  .ga-kpis {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(6.5rem, 1fr));
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+  .ga-kpi {
+    background: #f8fafc;
+    border: 1px solid var(--color-border);
+    border-radius: 0.5rem;
+    padding: 0.65rem 0.75rem;
+  }
+  .ga-kpi__label { font-size: 0.72rem; color: #64748b; }
+  .ga-kpi__value { font-size: 1.2rem; font-weight: 700; line-height: 1.2; }
+  .ga-kpi__sub { font-size: 0.68rem; color: #94a3b8; margin-top: 0.15rem; }
+  .ga-insights {
+    margin-bottom: 1rem;
+    padding: 0.75rem 1rem;
+    background: #fffbeb;
+    border: 1px solid #fde68a;
+    border-radius: 0.5rem;
+    font-size: 0.88rem;
+    line-height: 1.6;
+  }
+  .ga-insights ul { margin: 0; padding-left: 1.1rem; }
+  .ga-chart-block {
+    margin-bottom: 1rem;
+    padding: 0.85rem;
+    background: #fff;
+    border: 1px solid var(--color-border);
+    border-radius: 0.65rem;
+  }
+  .ga-chart-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    font-size: 0.78rem;
+    color: #64748b;
+    margin-bottom: 0.65rem;
+  }
+  .ga-dot {
+    display: inline-block;
+    width: 0.55rem;
+    height: 0.55rem;
+    border-radius: 999px;
+    margin-right: 0.25rem;
+    vertical-align: middle;
+  }
+  .ga-dot--users { background: #2563eb; }
+  .ga-dot--sessions { background: #16a34a; }
+  .ga-dot--pv { background: #9333ea; }
+  .ga-monthly-chart {
+    display: flex;
+    align-items: flex-end;
+    gap: 0.35rem;
+    min-height: 9rem;
+    padding-top: 0.5rem;
+    overflow-x: auto;
+  }
+  .ga-month-col {
+    flex: 1 0 2.4rem;
+    min-width: 2.4rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.2rem;
+  }
+  .ga-month-bars {
+    display: flex;
+    align-items: flex-end;
+    gap: 2px;
+    height: 7rem;
+    width: 100%;
+    justify-content: center;
+  }
+  .ga-bar {
+    width: 0.45rem;
+    border-radius: 2px 2px 0 0;
+    min-height: 2px;
+  }
+  .ga-bar--users { background: #2563eb; }
+  .ga-bar--sessions { background: #16a34a; }
+  .ga-bar--pv { background: #9333ea; }
+  .ga-month-label { font-size: 0.65rem; color: #64748b; white-space: nowrap; }
+  .ga-month-val { font-size: 0.6rem; color: #94a3b8; }
+  .ga-daily-chart {
+    display: flex;
+    align-items: flex-end;
+    gap: 1px;
+    height: 4.5rem;
+    overflow-x: auto;
+    padding-bottom: 1.1rem;
+    position: relative;
+  }
+  .ga-day-col {
+    flex: 1 0 0.55rem;
+    min-width: 0.55rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    justify-content: flex-end;
+    position: relative;
+  }
+  .ga-day-bar {
+    width: 100%;
+    background: #3b82f6;
+    border-radius: 1px 1px 0 0;
+    min-height: 2px;
+  }
+  .ga-day-label {
+    position: absolute;
+    bottom: -1rem;
+    font-size: 0.55rem;
+    color: #94a3b8;
+    transform: rotate(-45deg);
+    transform-origin: top left;
+    white-space: nowrap;
+  }
+  .ga-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+    gap: 0.75rem;
+  }
+  .ga-panel {
+    background: #fff;
+    border: 1px solid var(--color-border);
+    border-radius: 0.65rem;
+    padding: 0.75rem;
+  }
+  .ga-panel--wide { grid-column: 1 / -1; }
+  .ga-panel__title { margin: 0 0 0.35rem; font-size: 0.92rem; font-weight: 700; }
+  .ga-panel__note { margin: 0 0 0.5rem; font-size: 0.75rem; color: #94a3b8; }
+  .ga-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+  .ga-table td { padding: 0.35rem 0.25rem; border-bottom: 1px solid #f1f5f9; vertical-align: top; }
+  .ga-table td:last-child { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .ga-table tr:last-child td { border-bottom: none; }
+  .ga-table--rank td:first-child { width: 1.8rem; color: #94a3b8; font-weight: 700; text-align: center; }
+  .ga-table--rank td:nth-child(2) { word-break: break-word; }
+  .ga-rank-muted { color: #94a3b8; font-style: italic; }
+  .ga-path { word-break: break-all; font-size: 0.8rem; color: #334155; }
+  .ga-devices { display: flex; flex-direction: column; gap: 0.45rem; }
+  .ga-device-row { display: grid; grid-template-columns: 4rem 1fr 2rem; gap: 0.35rem; align-items: center; font-size: 0.82rem; }
+  .ga-device-bar-wrap { background: #f1f5f9; border-radius: 999px; height: 0.45rem; overflow: hidden; }
+  .ga-device-bar { height: 100%; background: #2563eb; border-radius: 999px; min-width: 2px; }
+</style>
+
+<script>
+const KEY = "dev_auth";
+function getPin() { return window.adminGetPin?.() || localStorage.getItem(KEY) || ""; }
+
+let gaDays = 7;
+let gaCountry = "Japan";
+
+function esc(s) {
+  return String(s).replace(/[<>&]/g, (c) => ({ "<": "&lt;", ">": "&gt;", "&": "&amp;" }[c]));
+}
+
+function fillTable(id, rows, renderRow) {
+  const tbody = document.querySelector(`#${id} tbody`);
+  if (!tbody) return;
+  tbody.innerHTML = rows.length
+    ? rows.map(renderRow).join("")
+    : '<tr><td colspan="3" style="color:#94a3b8">データなし</td></tr>';
+}
+
+function fmtDuration(sec) {
+  const s = Number(sec) || 0;
+  if (s < 60) return `${s}秒`;
+  return `${Math.floor(s / 60)}分${s % 60}秒`;
+}
+
+function renderMonthlyChart(months) {
+  const el = document.getElementById("ga-monthly-chart");
+  if (!el || !months.length) return;
+  const max = Math.max(...months.flatMap((m) => [m.activeUsers, m.sessions, m.pageViews]), 1);
+  el.innerHTML = months.map((m) => {
+    const hu = Math.round((m.activeUsers / max) * 100);
+    const hs = Math.round((m.sessions / max) * 100);
+    const hp = Math.round((m.pageViews / max) * 100);
+    return `<div class="ga-month-col" title="${esc(m.label)}: U${m.activeUsers} S${m.sessions} PV${m.pageViews}">
+      <div class="ga-month-bars">
+        <div class="ga-bar ga-bar--users" style="height:${hu}%"></div>
+        <div class="ga-bar ga-bar--sessions" style="height:${hs}%"></div>
+        <div class="ga-bar ga-bar--pv" style="height:${hp}%"></div>
+      </div>
+      <div class="ga-month-val">${m.sessions}</div>
+      <div class="ga-month-label">${esc(m.label.replace(/^\d{4}年/, "").replace(/月$/, "月"))}</div>
+    </div>`;
+  }).join("");
+}
+
+function renderDailyChart(days) {
+  const el = document.getElementById("ga-daily-chart");
+  if (!el || !days.length) return;
+  const max = Math.max(...days.map((d) => d.sessions), 1);
+  el.innerHTML = days.map((d, i) => {
+    const h = Math.max(2, Math.round((d.sessions / max) * 100));
+    const showLabel = i === 0 || i === days.length - 1 || i % Math.ceil(days.length / 6) === 0;
+    return `<div class="ga-day-col" title="${esc(d.label)}: ${d.sessions}セッション">
+      <div class="ga-day-bar" style="height:${h}%"></div>
+      ${showLabel ? `<span class="ga-day-label">${esc(d.label)}</span>` : ""}
+    </div>`;
+  }).join("");
+}
+
+function renderDevices(devices) {
+  const el = document.getElementById("ga-devices");
+  if (!el) return;
+  if (!devices.length) { el.innerHTML = '<span style="color:#94a3b8;font-size:0.85rem">データなし</span>'; return; }
+  const max = Math.max(...devices.map((d) => d.sessions), 1);
+  el.innerHTML = devices.map((d) => {
+    const pct = Math.round((d.sessions / max) * 100);
+    return `<div class="ga-device-row">
+      <span>${esc(d.device)}</span>
+      <div class="ga-device-bar-wrap"><div class="ga-device-bar" style="width:${pct}%"></div></div>
+      <span>${d.sessions}</span>
+    </div>`;
+  }).join("");
+}
+
+async function loadGa4() {
+  const status = document.getElementById("ga-status");
+  const pin = getPin();
+  if (!pin) {
+    if (status) { status.hidden = false; status.textContent = "PIN 入力後に表示されます"; }
+    return;
+  }
+  if (status) { status.hidden = false; status.textContent = "GA4 取得中…"; }
+  try {
+    const url = `/api/ga4-report?pin=${encodeURIComponent(pin)}&days=${gaDays}&country=${encodeURIComponent(gaCountry)}`;
+    const res = await fetch(url);
+    const data = await res.json();
+    if (!res.ok || !data.ok) throw new Error(data.error || data.hint || `HTTP ${res.status}`);
+
+    const fetched = document.getElementById("ga-fetched");
+    if (fetched) {
+      fetched.textContent = new Date(data.fetchedAt).toLocaleString("ja-JP", { timeZone: "Asia/Tokyo" });
+    }
+
+    const eng = data.engagement || {};
+    const gsc = data.gsc || {};
+    const kwSource = data.organicKeywordSource || "ga4";
+    const kpis = document.getElementById("ga-kpis");
+    if (kpis) {
+      kpis.hidden = false;
+      const kpiRows = [
+        ["ユーザー", data.summary.activeUsers],
+        ["セッション", data.summary.sessions],
+        ["PV", data.summary.pageViews],
+        ["記事PV", data.summary.casePageViews],
+        ["オーガニック", data.summary.organicSessions ?? 0],
+      ];
+      if (gsc.summary) {
+        kpiRows.push(
+          ["GSCクリック", gsc.summary.clicks ?? 0],
+          ["GSC表示", gsc.summary.impressions ?? 0],
+          ["平均順位", gsc.summary.position ? gsc.summary.position.toFixed(1) : "—"],
+        );
+      }
+      kpiRows.push(
+        ["新規", eng.newUsers ?? 0],
+        ["エンゲージ", eng.engagementRate ? `${Math.round(eng.engagementRate * 100)}%` : "—"],
+        ["平均滞在", eng.avgSessionSeconds ? fmtDuration(eng.avgSessionSeconds) : "—"],
+      );
+      kpis.innerHTML = kpiRows.map(([label, val]) =>
+        `<div class="ga-kpi"><div class="ga-kpi__label">${esc(label)}</div><div class="ga-kpi__value">${esc(val)}</div></div>`,
+      ).join("");
+    }
+
+    const ins = document.getElementById("ga-insights");
+    if (ins && data.insights?.length) {
+      ins.hidden = false;
+      ins.innerHTML = `<ul>${data.insights.map((t) => `<li>${esc(t)}</li>`).join("")}</ul>`;
+    }
+
+    const monthlyWrap = document.getElementById("ga-monthly-wrap");
+    if (monthlyWrap && data.monthlyTrend?.length) {
+      monthlyWrap.hidden = false;
+      renderMonthlyChart(data.monthlyTrend);
+    }
+    const dailyWrap = document.getElementById("ga-daily-wrap");
+    if (dailyWrap && data.dailyTrend?.length) {
+      dailyWrap.hidden = false;
+      renderDailyChart(data.dailyTrend);
+    }
+
+    document.getElementById("ga-panels")?.removeAttribute("hidden");
+
+    const kwNote = document.getElementById("ga-kw-note");
+    const landNote = document.getElementById("ga-land-note");
+    if (kwSource === "gsc") {
+      if (kwNote) kwNote.textContent = "Search Console の検索クエリ（クリック順）";
+      if (landNote) landNote.textContent = "Search Console のページ別クリック";
+    } else {
+      if (kwNote) kwNote.textContent = "GA4 searchTerm（多くは not provided）。GSC 連携を確認";
+      if (landNote) landNote.textContent = "GA4 オーガニック着陸ページ";
+    }
+
+    const kwRows = data.organicKeywords || [];
+    if (kwSource === "gsc") {
+      fillTable("ga-organic-kw", kwRows, (r, i) =>
+        `<tr><td>${i + 1}</td><td>${esc(r.keyword)}</td><td>${r.clicks}</td><td>${r.impressions}</td><td>${r.position ? r.position.toFixed(1) : "—"}</td></tr>`,
+      );
+      fillTable("ga-organic-land", data.organicLandingPages || [], (r) =>
+        `<tr><td class="ga-path">${esc(r.path)}</td><td>${r.clicks ?? 0}</td><td>${r.impressions ?? 0}</td></tr>`,
+      );
+    } else {
+      fillTable("ga-organic-kw", kwRows, (r, i) => {
+        const muted = r.keyword === "(not provided)" ? " ga-rank-muted" : "";
+        return `<tr><td>${i + 1}</td><td class="${muted.trim()}">${esc(r.keyword)}</td><td>${r.sessions}</td></tr>`;
+      });
+      fillTable("ga-organic-land", data.organicLandingPages || [], (r) =>
+        `<tr><td class="ga-path">${esc(r.path)}</td><td>${r.sessions}</td></tr>`,
+      );
+    }
+    fillTable("ga-sources", data.sources || [], (r) =>
+      `<tr><td>${esc(r.label)}<br><span style="color:#94a3b8;font-size:0.75rem">${esc(r.channel)}</span></td><td>${r.sessions}</td></tr>`,
+    );
+    fillTable("ga-pages", (data.pages || []).filter((p) => String(p.path).startsWith("/case/")).slice(0, 8), (r) =>
+      `<tr><td class="ga-path">${esc(r.path)}</td><td>${r.pageViews}</td></tr>`,
+    );
+    fillTable("ga-channels", data.channels || [], (r) =>
+      `<tr><td>${esc(r.channel)}</td><td>${r.sessions}</td></tr>`,
+    );
+    renderDevices(data.devices || []);
+
+    const cw = document.getElementById("ga-countries-wrap");
+    if (gaCountry === "all" && cw) {
+      cw.hidden = false;
+      fillTable("ga-countries", data.countries || [], (r) =>
+        `<tr><td>${esc(r.country)}</td><td>${r.activeUsers}</td></tr>`,
+      );
+    } else if (cw) {
+      cw.hidden = true;
+    }
+
+    if (status) status.hidden = true;
+  } catch (err) {
+    if (status) {
+      status.hidden = false;
+      status.textContent = err instanceof Error ? err.message : String(err);
+    }
+  }
+}
+
+document.querySelectorAll(".ga-range").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".ga-range").forEach((b) => b.classList.remove("is-active"));
+    btn.classList.add("is-active");
+    gaDays = Number(btn.getAttribute("data-days") || 7);
+    loadGa4();
+  });
+});
+document.querySelectorAll(".ga-country").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".ga-country").forEach((b) => b.classList.remove("is-active"));
+    btn.classList.add("is-active");
+    gaCountry = btn.getAttribute("data-country") || "Japan";
+    loadGa4();
+  });
+});
+document.getElementById("ga-refresh")?.addEventListener("click", loadGa4);
+window.addEventListener("admin-unlocked", loadGa4, { once: true });
+if (getPin()) loadGa4();
+</script>
