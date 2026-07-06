@@ -19,6 +19,7 @@ import {
 import { getPatrolPauseState } from "../src/lib/patrol-pause.mjs";
 import { pushAndDeploy } from "./push-and-deploy.mjs";
 import { runMarketingPatrol } from "./marketing-patrol.mjs";
+import { processPendingComments } from "./lib/youtube-pending-comments.mjs";
 
 const root = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
 const statePath = path.join(root, "data/pipeline-patrol.json");
@@ -95,6 +96,24 @@ async function runCycle(startedAt) {
   } catch (err) {
     await autorunLog(
       `patrol deploy skip: ${err instanceof Error ? err.message : String(err)}`,
+    );
+  }
+
+  try {
+    const ytComments = await processPendingComments({ log: autorunLog });
+    if (ytComments.actions.length) {
+      await autorunLog(`youtube-comment: ${ytComments.actions.join(", ")}`);
+    }
+    if (ytComments.alerts.length) {
+      await autorunLog(`youtube-comment alert: ${ytComments.alerts.join("; ")}`);
+    }
+    if (ytComments.needsPush) {
+      const deployYt = await pushAndDeploy();
+      if (deployYt.pushed) await autorunLog("youtube-comment: queue push 済");
+    }
+  } catch (err) {
+    await autorunLog(
+      `youtube-comment skip: ${err instanceof Error ? err.message : String(err)}`,
     );
   }
 

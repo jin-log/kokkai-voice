@@ -7,6 +7,7 @@
  *   npm run short:comment-pending -- --force --video-id UwHYlpVELbU
  */
 import { processPendingComments, tryPostPendingComment, loadPendingComments, savePendingComments } from "./lib/youtube-pending-comments.mjs";
+import { backfillYoutubeComments, syncPendingCommentQueue } from "./lib/youtube-comment-backfill.mjs";
 
 const args = process.argv.slice(2);
 function arg(name) {
@@ -15,9 +16,17 @@ function arg(name) {
 }
 
 const force = args.includes("--force");
+const backfill = args.includes("--backfill");
 const videoId = arg("--video-id");
 
 async function main() {
+  if (backfill) {
+    await syncPendingCommentQueue();
+    const result = await backfillYoutubeComments({ force, onlyVideoId: videoId ?? undefined });
+    console.log(JSON.stringify(result, null, 2));
+    process.exit(result.errors.length ? 1 : 0);
+  }
+
   if (videoId) {
     const { items } = await loadPendingComments();
     const item = items.find((i) => i.videoId === videoId);
