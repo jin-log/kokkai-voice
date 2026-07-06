@@ -1,9 +1,9 @@
 {
-  "generatedAt": "2026-07-06T18:50:06.040Z",
-  "total": 76,
+  "generatedAt": "2026-07-06T18:55:14.560Z",
+  "total": 67,
   "byAgent": {
-    "ceo": 6,
-    "writer": 67,
+    "ceo": 8,
+    "writer": 56,
     "x-researcher": 2,
     "legal-check": 1
   },
@@ -20,124 +20,47 @@
       "priority": 10
     },
     {
-      "id": "case-mqzxgs3f:D2_arc_topic",
+      "id": "case-mqzxgs3f:B4_conclusion",
       "slug": "case-mqzxgs3f",
       "agent": "writer",
       "agentLabel": "ライター",
-      "checkId": "D2_arc_topic",
-      "title": "[ゲート] 経緯の話題",
-      "todo": "経緯3行以上が案件キーワードと一致",
+      "checkId": "B4_conclusion",
+      "title": "[ゲート] 結論の質",
+      "todo": "重複・途中切れ・定型文なし（行数固定なし）",
       "command": "node scripts/complete-article.mjs --slug case-mqzxgs3f --content-only --force",
       "priority": 30
     },
     {
-      "id": "case-mqzxgs3f:J1_prosCons",
+      "id": "case-mqzxgs3f:E2_timeline_x",
       "slug": "case-mqzxgs3f",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "J1_prosCons",
-      "title": "[ゲート] メリデメ",
-      "todo": "公表数値付きメリット2・デメリット2",
-      "command": "node scripts/generate-proscons-auto.mjs --slug case-mqzxgs3f",
-      "priority": 30
-    },
-    {
-      "id": "case-mqzxj4ro:B3_topic",
-      "slug": "case-mqzxj4ro",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "B3_topic",
-      "title": "[ゲート] 話題一致",
-      "todo": "要約が searchKeyword と一致（2行以上）",
-      "command": "node scripts/complete-article.mjs --slug case-mqzxj4ro --content-only --force",
-      "priority": 30
-    },
-    {
-      "id": "case-mqzxj4ro:C1_summaryBullets",
-      "slug": "case-mqzxj4ro",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "C1_summaryBullets",
-      "title": "[ゲート] 要点",
-      "todo": "summaryBullets を3点以上",
-      "command": "node scripts/complete-article.mjs --slug case-mqzxj4ro --content-only --force",
-      "priority": 30
-    },
-    {
-      "id": "case-mqzxj4ro:D1_arcSummary",
-      "slug": "case-mqzxj4ro",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "D1_arcSummary",
-      "title": "[ゲート] 経緯",
-      "todo": "日付付き経緯を3行以上",
-      "command": "node scripts/complete-article.mjs --slug case-mqzxj4ro --content-only --force",
-      "priority": 30
-    },
-    {
-      "id": "case-mqzxj4ro:D2_arc_topic",
-      "slug": "case-mqzxj4ro",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "D2_arc_topic",
-      "title": "[ゲート] 経緯の話題",
-      "todo": "経緯3行以上が案件キーワードと一致",
-      "command": "node scripts/complete-article.mjs --slug case-mqzxj4ro --content-only --force",
-      "priority": 30
-    },
-    {
-      "id": "case-mqzxj4ro:E2_timeline_x",
-      "slug": "case-mqzxj4ro",
       "agent": "writer",
       "agentLabel": "ライター",
       "checkId": "E2_timeline_x",
       "title": "[ゲート] タイムラインX",
       "todo": "X投稿を3件以上タイムラインに",
-      "command": "node scripts/enrich-timeline-all.mjs --slug case-mqzxj4ro",
+      "command": "node scripts/enrich-timeline-all.mjs --slug case-mqzxgs3f",
       "priority": 30
     },
     {
-      "id": "case-mqzxj4ro:J1_prosCons",
-      "slug": "case-mqzxj4ro",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "J1_prosCons",
-      "title": "[ゲート] メリデメ",
-      "todo": "公表数値付きメリット2・デメリット2",
-      "command": "node scripts/generate-proscons-auto.mjs --slug case-mqzxj4ro",
-      "priority": 30
-    },
-    {
-      "id": "case-mr0jbdpc:B3_topic",
+      "id": "case-mr0jbdpc:C2_evidence_distinct",
       "slug": "case-mr0jbdpc",
       "agent": "writer",
       "agentLabel": "ライター",
-      "checkId": "B3_topic",
-      "title": "[ゲート] 話題一致",
-      "todo": "要約が searchKeyword と一致（2行以上）",
+      "checkId": "C2_evidence_distinct",
+      "title": "[ゲート] 根拠の独自性",
+      "todo": "根拠は結論と同文禁止",
       "command": "node scripts/complete-article.mjs --slug case-mr0jbdpc --content-only --force",
       "priority": 30
     },
     {
-      "id": "case-mr0jbdpc:D1_arcSummary",
+      "id": "case-mr0jbdpc:E2_timeline_x",
       "slug": "case-mr0jbdpc",
       "agent": "writer",
       "agentLabel": "ライター",
-      "checkId": "D1_arcSummary",
-      "title": "[ゲート] 経緯",
-      "todo": "日付付き経緯を3行以上",
-      "command": "node scripts/complete-article.mjs --slug case-mr0jbdpc --content-only --force",
-      "priority": 30
-    },
-    {
-      "id": "case-mr0jbdpc:D2_arc_topic",
-      "slug": "case-mr0jbdpc",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "D2_arc_topic",
-      "title": "[ゲート] 経緯の話題",
-      "todo": "経緯3行以上が案件キーワードと一致",
-      "command": "node scripts/complete-article.mjs --slug case-mr0jbdpc --content-only --force",
+      "checkId": "E2_timeline_x",
+      "title": "[ゲート] タイムラインX",
+      "todo": "X投稿を3件以上タイムラインに",
+      "command": "node scripts/enrich-timeline-all.mjs --slug case-mr0jbdpc",
       "priority": 30
     },
     {
@@ -149,39 +72,6 @@
       "title": "[ゲート] メリデメ",
       "todo": "公表数値付きメリット2・デメリット2",
       "command": "node scripts/generate-proscons-auto.mjs --slug chingin",
-      "priority": 30
-    },
-    {
-      "id": "fukushuto-koso:B3_topic",
-      "slug": "fukushuto-koso",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "B3_topic",
-      "title": "[ゲート] 話題一致",
-      "todo": "要約が searchKeyword と一致（2行以上）",
-      "command": "node scripts/complete-article.mjs --slug fukushuto-koso --content-only --force",
-      "priority": 30
-    },
-    {
-      "id": "fukushuto-koso:C1_summaryBullets",
-      "slug": "fukushuto-koso",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "C1_summaryBullets",
-      "title": "[ゲート] 要点",
-      "todo": "summaryBullets を3点以上",
-      "command": "node scripts/complete-article.mjs --slug fukushuto-koso --content-only --force",
-      "priority": 30
-    },
-    {
-      "id": "fukushuto-koso:G5_parties_symbol",
-      "slug": "fukushuto-koso",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "G5_parties_symbol",
-      "title": "[ゲート] ◎〇▲×",
-      "todo": "各党の記号を確定（v2）",
-      "command": "node scripts/complete-article.mjs --slug fukushuto-koso --matrix-only --force",
       "priority": 30
     },
     {
@@ -633,6 +523,39 @@
       "priority": 30
     },
     {
+      "id": "pension-kuriage-70:P1_opening_no_number",
+      "slug": "pension-kuriage-70",
+      "agent": "writer",
+      "agentLabel": "ライター",
+      "checkId": "P1_opening_no_number",
+      "title": "[公開] 1行目がタイトルに未回答",
+      "todo": "円・%・万人など公表数値を1行目に入れる",
+      "command": "node scripts/complete-article.mjs --slug pension-kuriage-70 --content-only --force",
+      "priority": 5
+    },
+    {
+      "id": "pension-kuriage-70:Q1_conclusion_numbers",
+      "slug": "pension-kuriage-70",
+      "agent": "ceo",
+      "agentLabel": "CEO",
+      "checkId": "Q1_conclusion_numbers",
+      "title": "[品質] タイトルが金額・実績を問うのに、いまの結論に公表数値がない",
+      "todo": "1行目に円・%・万人などタイトルへの直接回答を入れる（X・報道の数字を要約に反映）",
+      "command": "node scripts/complete-article.mjs --slug pension-kuriage-70 --content-only --force",
+      "priority": 10
+    },
+    {
+      "id": "pension-kuriage-70:Q3_plain_no_answer",
+      "slug": "pension-kuriage-70",
+      "agent": "ceo",
+      "agentLabel": "CEO",
+      "checkId": "Q3_plain_no_answer",
+      "title": "[品質] つまり欄の冒頭がタイトルの疑問（金額・実績）に答えていない",
+      "todo": "1段落目を「結論：〇〇万円（日付）」から始める",
+      "command": "node scripts/complete-article.mjs --slug pension-kuriage-70 --content-only --force",
+      "priority": 10
+    },
+    {
       "id": "pension-kuriage-70:B3_topic",
       "slug": "pension-kuriage-70",
       "agent": "writer",
@@ -640,28 +563,6 @@
       "checkId": "B3_topic",
       "title": "[ゲート] 話題一致",
       "todo": "要約が searchKeyword と一致（2行以上）",
-      "command": "node scripts/complete-article.mjs --slug pension-kuriage-70 --content-only --force",
-      "priority": 30
-    },
-    {
-      "id": "pension-kuriage-70:C1_summaryBullets",
-      "slug": "pension-kuriage-70",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "C1_summaryBullets",
-      "title": "[ゲート] 要点",
-      "todo": "summaryBullets を3点以上",
-      "command": "node scripts/complete-article.mjs --slug pension-kuriage-70 --content-only --force",
-      "priority": 30
-    },
-    {
-      "id": "pension-kuriage-70:D1_arcSummary",
-      "slug": "pension-kuriage-70",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "D1_arcSummary",
-      "title": "[ゲート] 経緯",
-      "todo": "日付付き経緯を3行以上",
       "command": "node scripts/complete-article.mjs --slug pension-kuriage-70 --content-only --force",
       "priority": 30
     },
