@@ -1,9 +1,9 @@
 {
-  "generatedAt": "2026-07-06T17:00:54.928Z",
+  "generatedAt": "2026-07-06T17:04:57.425Z",
   "total": 50,
   "byAgent": {
-    "ceo": 6,
-    "writer": 41,
+    "ceo": 5,
+    "writer": 42,
     "x-researcher": 2,
     "legal-check": 1
   },
@@ -64,25 +64,25 @@
       "priority": 10
     },
     {
-      "id": "case-mqzxj4ro:Q7_procedural_evidence",
-      "slug": "case-mqzxj4ro",
-      "agent": "ceo",
-      "agentLabel": "CEO",
-      "checkId": "Q7_procedural_evidence",
-      "title": "[品質] 要点が議事手続き・発言断片の羅列",
-      "todo": "論点・数値・可決結果が分かる第三者要約に差し替え",
-      "command": "node scripts/complete-article.mjs --slug case-mqzxj4ro --content-only --force",
-      "priority": 10
-    },
-    {
-      "id": "case-mqzxj4ro:C2_evidence_distinct",
+      "id": "case-mqzxj4ro:B4_conclusion",
       "slug": "case-mqzxj4ro",
       "agent": "writer",
       "agentLabel": "ライター",
-      "checkId": "C2_evidence_distinct",
-      "title": "[ゲート] 根拠の独自性",
-      "todo": "根拠は結論と同文禁止",
+      "checkId": "B4_conclusion",
+      "title": "[ゲート] 結論の質",
+      "todo": "重複・途中切れ・定型文なし（行数固定なし）",
       "command": "node scripts/complete-article.mjs --slug case-mqzxj4ro --content-only --force",
+      "priority": 30
+    },
+    {
+      "id": "case-mqzxj4ro:E2_timeline_x",
+      "slug": "case-mqzxj4ro",
+      "agent": "writer",
+      "agentLabel": "ライター",
+      "checkId": "E2_timeline_x",
+      "title": "[ゲート] タイムラインX",
+      "todo": "X投稿を3件以上タイムラインに",
+      "command": "node scripts/enrich-timeline-all.mjs --slug case-mqzxj4ro",
       "priority": 30
     },
     {
