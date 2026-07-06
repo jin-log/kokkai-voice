@@ -29,7 +29,29 @@ const slugArg = (() => {
 const dryRun = process.argv.includes("--dry-run");
 
 function isVague(text) {
-  return isBoilerplateTopicLine(String(text || ""));
+  const t = String(text || "");
+  return (
+    isBoilerplateTopicLine(t) ||
+    /に関する.*での論点/.test(t) ||
+    t.length > 160
+  );
+}
+
+function shortenExcerpt(excerpt, maxLen = 96) {
+  const body = String(excerpt || "")
+    .replace(/\s+/g, " ")
+    .replace(/○[^　]+（[^）]+）\s*/g, "")
+    .trim();
+  const sentences = body
+    .split(/。/)
+    .map((s) => s.trim())
+    .filter((s) => s.length >= 10 && !/^はい$|^そうです/.test(s));
+  for (const s of sentences) {
+    if (s.length <= maxLen) return `${s}。`;
+  }
+  const first = sentences[0] || body;
+  if (first.length <= maxLen) return first.endsWith("。") ? first : `${first}。`;
+  return `${first.slice(0, maxLen - 1)}…。`;
 }
 
 function formatBullet(date, speaker, group, body) {
@@ -50,10 +72,10 @@ async function fetchRecord(speechID) {
 
 async function plainFromRecord(r, keyword) {
   const terms = topicTerms(keyword);
-  const excerpt = normalizeFactPhrase(topicSpeechExcerpt(r.speech, terms, 200));
+  const excerpt = normalizeFactPhrase(topicSpeechExcerpt(r.speech, terms, 240));
   if (!excerpt || excerpt.length < 16) return null;
   if (!textStronglyMatchesTopic(excerpt, keyword)) return null;
-  return excerpt;
+  return shortenExcerpt(excerpt);
 }
 
 async function fixArticle(slug) {
@@ -78,10 +100,6 @@ async function fixArticle(slug) {
         plain,
       );
       if (!bullet || isVague(bullet)) continue;
-      ev.summaryPlain = bullet.replace(/^\d{4}-\d{2}-\d{2}：/, "").includes("—")
-        ? bullet.replace(/^\d{4}-\d{2}-\d{2}：/, `${ev.date || r.date}：`)
-        : `${ev.date || r.date}：${r.speaker}— ${plain}`;
-      // summaryPlain は日付なしで speaker— 形式（サイト表示用）
       ev.summaryPlain = `${r.speaker}${r.speakerGroup ? `（${r.speakerGroup}）` : ""}— ${plain}`;
       fixed++;
     } catch (err) {
@@ -96,11 +114,17 @@ async function fixArticle(slug) {
         newBullets.push(b);
         continue;
       }
-      const m = b.match(/^(\d{4}-\d{2}-\d{2})：([^：]+)が/);
-      const date = m?.[1];
-      const speaker = m?.[1] ? b.match(/：(.+?)が/)?.[1] : null;
+      const dated = b.match(/^(\d{4}-\d{2}-\d{2})：(.+)$/);
+      const date = dated?.[1];
+      const rest = dated?.[2] || b;
+      const speaker =
+        rest.match(/^(.+?)が/)?.[1] ||
+        rest.match(/^([^—（]+)/)?.[1]?.trim();
       const tl = (article.timeline || []).find(
-        (e) => e.type === "speech" && e.date === date && (!speaker || e.speech?.speaker === speaker),
+        (e) =>
+          e.type === "speech" &&
+          e.date === date &&
+          (!speaker || e.speech?.speaker === speaker || rest.startsWith(speaker)),
       );
       if (tl && !isVague(tl.summaryPlain)) {
         newBullets.push(`${tl.date}：${tl.summaryPlain}`);
@@ -148,7 +172,9 @@ async function main() {
   for (const slug of slugs) {
     const fp = path.join(articlesDir, `${slug}.json`);
     const raw = await readFile(fp, "utf8");
-    if (!/国会で答弁|が国会で論じた|を国会で論じた/.test(raw)) continue;
+    const needsFix =
+      /国会で答弁|が国会で論じた|を国会で論じた|に関する.*での論点/.test(raw);
+    if (!needsFix) continue;
     const n = await fixArticle(slug);
     if (n > 0) {
       console.log(`${slug}: ${n} 件修正${dryRun ? " (dry-run)" : ""}`);

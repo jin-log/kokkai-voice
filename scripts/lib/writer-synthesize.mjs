@@ -747,8 +747,8 @@ export function synthesizeTimelinePlain(sn, keyword) {
     }
   }
   const topic = topicShort(keyword);
-  const fallback = `${sn.date}：${sn.speaker || "国会"}— ${topic}に関する${sn.meeting || "国会"}での論点`;
-  return ensureTopicInLine(fallback, keyword);
+  // 具体抜粋が取れないときは空文案を書かない（巡回スクリプト fix-vague-timeline が API で補完）
+  return `${sn.speaker || "国会"}— ${topic}（${sn.meeting || "国会"}・議事録要確認）`;
 }
 
 const PROSCONS_DISCLAIMER =
