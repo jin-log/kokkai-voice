@@ -48,6 +48,12 @@ export const ADMIN_NAV_GROUPS = [
         desc: "はてブ投稿文",
       },
       {
+        id: "press-release",
+        href: "/dev/press-release/",
+        label: "プレスリリース",
+        desc: "無料PR文案・投稿チェックリスト",
+      },
+      {
         id: "shorts",
         href: "/dev/shorts/",
         label: "ショート動画",

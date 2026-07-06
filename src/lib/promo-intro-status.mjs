@@ -18,7 +18,7 @@ export async function loadPromoIntroLog() {
   try {
     return JSON.parse(await readFile(INTRO_LOG, "utf8"));
   } catch {
-    return { hatena: {}, note: {}, noteSiteIntroAt: null };
+    return { hatena: {}, note: {}, noteSiteIntroAt: null, pressReleases: {} };
   }
 }
 

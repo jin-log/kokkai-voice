@@ -45,6 +45,22 @@ try {
   /* optional */
 }
 
+const introSrc = path.join(root, "data/promo-intro-log.json");
+const introDest = path.join(outDir, "promo-intro-log.json");
+try {
+  await copyFile(introSrc, introDest);
+} catch {
+  await writeFile(introDest, '{"hatena":{},"note":{},"pressReleases":{}}\n');
+}
+
+const prSrc = path.join(root, "data/press-release.json");
+const prDest = path.join(outDir, "press-release.json");
+try {
+  await copyFile(prSrc, prDest);
+} catch {
+  /* optional */
+}
+
 const shortsSrc = path.join(root, "data/shorts-benchmarks.json");
 const shortsDest = path.join(outDir, "shorts-benchmarks.json");
 try {
