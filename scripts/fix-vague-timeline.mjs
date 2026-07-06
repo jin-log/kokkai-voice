@@ -45,13 +45,70 @@ function shortenExcerpt(excerpt, maxLen = 96) {
   const sentences = body
     .split(/。/)
     .map((s) => s.trim())
-    .filter((s) => s.length >= 10 && !/^はい$|^そうです/.test(s));
-  for (const s of sentences) {
+    .filter(
+      (s) =>
+        s.length >= 10 &&
+        !/^はい$|^そうです/.test(s) &&
+        !/^[、，]/.test(s) &&
+        !/^[ぁ-んァ-ヶ]{1,3}$/.test(s),
+    );
+  const ranked = [
+    ...sentences.filter((s) => /[？?]|御質問|お尋ね|質問|お伺い/.test(s)),
+    ...sentences,
+  ];
+  const seen = new Set();
+  for (const s of ranked) {
+    if (seen.has(s)) continue;
+    seen.add(s);
     if (s.length <= maxLen) return `${s}。`;
   }
-  const first = sentences[0] || body;
+  const first = ranked[0] || body;
   if (first.length <= maxLen) return first.endsWith("。") ? first : `${first}。`;
   return `${first.slice(0, maxLen - 1)}…。`;
+}
+
+function isBadNowBullet(text) {
+  const t = String(text || "").trim();
+  if (isVague(t)) return true;
+  // 日付なし長文・断片（旧AI要約の残骸）
+  if (!/^\d{4}-\d{2}-\d{2}：/.test(t) && t.length > 40) return true;
+  if (/^[ぁ-んァ-ヶ]{0,3}[、，]/.test(t.replace(/^\d{4}-\d{2}-\d{2}：/, ""))) return true;
+  return false;
+}
+
+function topSpeechLines(article, limit = 3) {
+  return (article.timeline || [])
+    .filter((e) => e.type === "speech" && e.summaryPlain && !isVague(e.summaryPlain))
+    .sort((a, b) => (b.date || "").localeCompare(a.date || ""))
+    .slice(0, limit)
+    .map((e) => `${e.date}：${e.summaryPlain}`);
+}
+
+function syncDerivedSummaries(article) {
+  const lines = topSpeechLines(article, 3);
+  if (!lines.length) return false;
+  let changed = false;
+  if ((article.nowSummary?.bullets || []).some(isBadNowBullet)) {
+    article.nowSummary = article.nowSummary || {
+      label: "いまの結論（AI・平易語）",
+      disclaimer:
+        "AI補助による平易語要約です。解釈を含みます。数字・引用・発言内容の正本は primarySpeech.speechFull（国会議事録原文）をご確認ください。",
+    };
+    article.nowSummary.bullets = lines;
+    article.nowSummary.updatedAt = new Date().toISOString();
+    changed = true;
+  }
+  if (Array.isArray(article.arcSummary)) {
+    const next = lines.map((text) => {
+      const m = text.match(/^(\d{4}-\d{2}-\d{2})：(.+)$/);
+      return { date: m?.[1] || "", text };
+    });
+    if (JSON.stringify(next) !== JSON.stringify(article.arcSummary)) {
+      article.arcSummary = next;
+      changed = true;
+    }
+  }
+  return changed;
 }
 
 function formatBullet(date, speaker, group, body) {
@@ -156,6 +213,8 @@ async function fixArticle(slug) {
     const meeting = article.primarySpeech?.nameOfMeeting || "";
     article.plainExplanation = `${house}${meeting ? `（${meeting}）` : ""}の発言等をもとに整理しています。\n\n結論から言うと、${dietLines.join(" ")}\n\nここでの整理は国会議事録・公表資料に基づく事実の要約です。政府・与党・野党の主張の優劣は断定しません。数字・引用の正本は下の議事録リンクで確認できます。`;
   }
+
+  if (syncDerivedSummaries(article)) fixed++;
 
   if (fixed > 0 && !dryRun) {
     await writeFile(fp, `${JSON.stringify(article, null, 2)}\n`, "utf8");

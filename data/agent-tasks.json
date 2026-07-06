@@ -1,9 +1,9 @@
 {
-  "generatedAt": "2026-07-06T16:54:03.747Z",
-  "total": 41,
+  "generatedAt": "2026-07-06T16:57:23.827Z",
+  "total": 53,
   "byAgent": {
-    "ceo": 6,
-    "writer": 32,
+    "ceo": 10,
+    "writer": 40,
     "x-researcher": 2,
     "legal-check": 1
   },
@@ -18,6 +18,28 @@
       "todo": "論点・数値・可決結果が分かる第三者要約に差し替え",
       "command": "node scripts/complete-article.mjs --slug boeeihi --content-only --force",
       "priority": 10
+    },
+    {
+      "id": "boeeihi:B4_conclusion",
+      "slug": "boeeihi",
+      "agent": "writer",
+      "agentLabel": "ライター",
+      "checkId": "B4_conclusion",
+      "title": "[ゲート] 結論の質",
+      "todo": "重複・途中切れ・定型文なし（行数固定なし）",
+      "command": "node scripts/complete-article.mjs --slug boeeihi --content-only --force",
+      "priority": 30
+    },
+    {
+      "id": "boeeihi:B5_writer_voice",
+      "slug": "boeeihi",
+      "agent": "writer",
+      "agentLabel": "ライター",
+      "checkId": "B5_writer_voice",
+      "title": "[ゲート] 第三者目線",
+      "todo": "議事録口調（お尋ね・私自身・御党）を除去",
+      "command": "node scripts/complete-article.mjs --slug boeeihi --content-only --force",
+      "priority": 30
     },
     {
       "id": "boeeihi:C2_evidence_distinct",
@@ -64,6 +86,17 @@
       "priority": 30
     },
     {
+      "id": "chiho-sosei:D2_arc_topic",
+      "slug": "chiho-sosei",
+      "agent": "writer",
+      "agentLabel": "ライター",
+      "checkId": "D2_arc_topic",
+      "title": "[ゲート] 経緯の話題",
+      "todo": "経緯3行以上が案件キーワードと一致",
+      "command": "node scripts/complete-article.mjs --slug chiho-sosei --content-only --force",
+      "priority": 30
+    },
+    {
       "id": "chingin:Q7_procedural_evidence",
       "slug": "chingin",
       "agent": "ceo",
@@ -83,6 +116,28 @@
       "title": "[ゲート] 根拠の独自性",
       "todo": "根拠は結論と同文禁止",
       "command": "node scripts/complete-article.mjs --slug chingin --content-only --force",
+      "priority": 30
+    },
+    {
+      "id": "energy-policy:Q7_procedural_evidence",
+      "slug": "energy-policy",
+      "agent": "ceo",
+      "agentLabel": "CEO",
+      "checkId": "Q7_procedural_evidence",
+      "title": "[品質] 要点が議事手続き・発言断片の羅列",
+      "todo": "論点・数値・可決結果が分かる第三者要約に差し替え",
+      "command": "node scripts/complete-article.mjs --slug energy-policy --content-only --force",
+      "priority": 10
+    },
+    {
+      "id": "energy-policy:D2_arc_topic",
+      "slug": "energy-policy",
+      "agent": "writer",
+      "agentLabel": "ライター",
+      "checkId": "D2_arc_topic",
+      "title": "[ゲート] 経緯の話題",
+      "todo": "経緯3行以上が案件キーワードと一致",
+      "command": "node scripts/complete-article.mjs --slug energy-policy --content-only --force",
       "priority": 30
     },
     {
@@ -108,6 +163,28 @@
       "priority": 10
     },
     {
+      "id": "kaigo-iryo:Q7_procedural_evidence",
+      "slug": "kaigo-iryo",
+      "agent": "ceo",
+      "agentLabel": "CEO",
+      "checkId": "Q7_procedural_evidence",
+      "title": "[品質] 要点が議事手続き・発言断片の羅列",
+      "todo": "論点・数値・可決結果が分かる第三者要約に差し替え",
+      "command": "node scripts/complete-article.mjs --slug kaigo-iryo --content-only --force",
+      "priority": 10
+    },
+    {
+      "id": "kaigo-iryo:D2_arc_topic",
+      "slug": "kaigo-iryo",
+      "agent": "writer",
+      "agentLabel": "ライター",
+      "checkId": "D2_arc_topic",
+      "title": "[ゲート] 経緯の話題",
+      "todo": "経緯3行以上が案件キーワードと一致",
+      "command": "node scripts/complete-article.mjs --slug kaigo-iryo --content-only --force",
+      "priority": 30
+    },
+    {
       "id": "kenpo:B4_conclusion",
       "slug": "kenpo",
       "agent": "writer",
@@ -116,6 +193,17 @@
       "title": "[ゲート] 結論の質",
       "todo": "重複・途中切れ・定型文なし（行数固定なし）",
       "command": "node scripts/complete-article.mjs --slug kenpo --content-only --force",
+      "priority": 30
+    },
+    {
+      "id": "kyoiku-mushoka:D2_arc_topic",
+      "slug": "kyoiku-mushoka",
+      "agent": "writer",
+      "agentLabel": "ライター",
+      "checkId": "D2_arc_topic",
+      "title": "[ゲート] 経緯の話題",
+      "todo": "経緯3行以上が案件キーワードと一致",
+      "command": "node scripts/complete-article.mjs --slug kyoiku-mushoka --content-only --force",
       "priority": 30
     },
     {
@@ -128,6 +216,17 @@
       "todo": "論点・数値・可決結果が分かる第三者要約に差し替え",
       "command": "node scripts/complete-article.mjs --slug nenkin --content-only --force",
       "priority": 10
+    },
+    {
+      "id": "nenkin:D2_arc_topic",
+      "slug": "nenkin",
+      "agent": "writer",
+      "agentLabel": "ライター",
+      "checkId": "D2_arc_topic",
+      "title": "[ゲート] 経緯の話題",
+      "todo": "経緯3行以上が案件キーワードと一致",
+      "command": "node scripts/complete-article.mjs --slug nenkin --content-only --force",
+      "priority": 30
     },
     {
       "id": "osaka-to-metropolis:C1_summaryBullets",
@@ -422,6 +521,39 @@
       "todo": "legal-check を実行",
       "command": "node scripts/complete-article.mjs --slug  --legal-only",
       "priority": 30
+    },
+    {
+      "id": "seiji-shikin:Q7_procedural_evidence",
+      "slug": "seiji-shikin",
+      "agent": "ceo",
+      "agentLabel": "CEO",
+      "checkId": "Q7_procedural_evidence",
+      "title": "[品質] 要点が議事手続き・発言断片の羅列",
+      "todo": "論点・数値・可決結果が分かる第三者要約に差し替え",
+      "command": "node scripts/complete-article.mjs --slug seiji-shikin --content-only --force",
+      "priority": 10
+    },
+    {
+      "id": "seiji-shikin:C2_evidence_distinct",
+      "slug": "seiji-shikin",
+      "agent": "writer",
+      "agentLabel": "ライター",
+      "checkId": "C2_evidence_distinct",
+      "title": "[ゲート] 根拠の独自性",
+      "todo": "根拠は結論と同文禁止",
+      "command": "node scripts/complete-article.mjs --slug seiji-shikin --content-only --force",
+      "priority": 30
+    },
+    {
+      "id": "senkyo-kaikaku:Q7_procedural_evidence",
+      "slug": "senkyo-kaikaku",
+      "agent": "ceo",
+      "agentLabel": "CEO",
+      "checkId": "Q7_procedural_evidence",
+      "title": "[品質] 要点が議事手続き・発言断片の羅列",
+      "todo": "論点・数値・可決結果が分かる第三者要約に差し替え",
+      "command": "node scripts/complete-article.mjs --slug senkyo-kaikaku --content-only --force",
+      "priority": 10
     },
     {
       "id": "shussho-budget-seika:G5_parties_symbol",

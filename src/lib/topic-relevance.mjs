@@ -28,7 +28,7 @@ export function articleTopicTerms(article) {
 
 /** 自動生成の空行（話題語なし） */
 export const BOILERPLATE_TOPIC =
-  /について国会で答弁・質疑を行った|が国会で答弁・質疑を行った|国会で答弁・質疑が継続|が国会で論じた。?$|を国会で論じた。?$|国会で答弁・質疑を行った。?$|に関する.*での論点/;
+  /について国会で答弁・質疑を行った|が国会で答弁・質疑を行った|国会で答弁・質疑が継続|が国会で論じた。?$|を国会で論じた。?$|国会で答弁・質疑を行った。?$|国会で答弁・質疑した。?$|に関する.*での論点/;
 
 export function isBoilerplateTopicLine(text) {
   return BOILERPLATE_TOPIC.test(String(text || "").trim());

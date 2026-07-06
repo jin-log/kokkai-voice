@@ -19,7 +19,19 @@ export async function loadOpsQueue() {
   for (const p of opsQueuePaths()) {
     try {
       const raw = await readFile(p, "utf8");
-      return JSON.parse(raw);
+      const data = JSON.parse(raw);
+      if (!data || typeof data !== "object") {
+        throw new Error("ops-queue: root must be object");
+      }
+      if (!Array.isArray(data.tasks)) {
+        throw new Error("ops-queue: tasks must be array");
+      }
+      for (const t of data.tasks) {
+        if (!t?.id || !t?.title) {
+          throw new Error(`ops-queue: task missing id/title (${p})`);
+        }
+      }
+      return data;
     } catch (e) {
       lastErr = e;
     }
