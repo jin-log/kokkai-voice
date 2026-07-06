@@ -28,7 +28,7 @@ export function articleTopicTerms(article) {
 
 /** 自動生成の空行（話題語なし） */
 export const BOILERPLATE_TOPIC =
-  /について国会で答弁・質疑を行った|が国会で答弁・質疑を行った|国会で答弁・質疑が継続|が国会で論じた。?$|を国会で論じた。?$|国会で答弁・質疑を行った。?$|国会で答弁・質疑した。?$|に関する.*での論点/;
+  /について国会で答弁・質疑を行った|が国会で答弁・質疑を行った|国会で答弁・質疑が継続|が国会で論じた。?$|を国会で論じた。?$|国会で答弁・質疑を行った。?$|国会で答弁・質疑した。?$|に関する.*での論点|議事録要確認|判断材料になる|が高市内閣の政策方針を国会答弁|関連法案が可決・成立|法制化・法案審議の継続を表明/;
 
 export function isBoilerplateTopicLine(text) {
   return BOILERPLATE_TOPIC.test(String(text || "").trim());

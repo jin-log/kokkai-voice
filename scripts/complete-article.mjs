@@ -34,6 +34,7 @@ import { enrichGeneralArticle, writePolicyMatrixGeneral, fetchReadable, isGenera
 import { citizenTitle } from "../src/lib/title-format.mjs";
 import { isTopicRelevant, textMatchesTopic, topicTerms, isConclusionQuality, countTopicArcLines, countTopicDietTimeline, isDietTimelineTopicOk, isMatrixTopicRelevant, isMatrixTopicConsistent, textStronglyMatchesTopic, ensureTopicInLines, isBoilerplateTopicLine } from "../src/lib/topic-relevance.mjs";
 import { normalizeFactPhrase, isDietVoice, isSpeechFragment, isIncompleteBullet, isWriterReadyLine } from "../src/lib/diet-voice.mjs";
+import { isBadSummaryLine } from "./lib/speech-summary.mjs";
 import { scorePartySymbol, SYMBOL_METHODOLOGY } from "../src/lib/symbol-rules.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -150,7 +151,7 @@ function mergeUniqueBullets(target, source, max = 3) {
 
 function isGoodNowBullet(text) {
   const b = String(text || "").trim();
-  if (!b || b.length < 12 || isBoilerplateTopicLine(b)) return false;
+  if (!b || b.length < 12 || isBoilerplateTopicLine(b) || isBadSummaryLine(b)) return false;
   if (/お尋ねがございました|についてお尋ね|受け止めとジェンダー/.test(b)) return false;
   if (isSpeechFragment(b) || isIncompleteBullet(b)) return false;
   if (isDietVoice(b) && !/閣議|発足|予算|法案|賃上げ|投資|歳出|消費税|高市内閣/.test(b)) {

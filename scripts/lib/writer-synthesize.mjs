@@ -11,6 +11,11 @@ import {
   ensureTopicInLines,
 } from "../../src/lib/topic-relevance.mjs";
 import { topicSpeechExcerpt } from "./kokkai-api.mjs";
+import {
+  summarizeFromExcerpt,
+  isBadSummaryLine,
+  sanitizeMeritText,
+} from "./speech-summary.mjs";
 import { isDietVoice, isIncompleteBullet, isSpeechFragment, normalizeFactPhrase, toThirdPersonBullet, isWriterReadyLine, isMatrixActionReady } from "../../src/lib/diet-voice.mjs";
 import { scorePartySymbol } from "../../src/lib/symbol-rules.mjs";
 
@@ -94,25 +99,33 @@ export function synthesizeNowSummary(bundle, meta = {}) {
   const primary = bundle.snippets.find((s) => s.speechURL === meta.speechURL) || bundle.snippets[0];
   const fallback = composeAllFallback(bundle, meta);
 
+  if (primary?.excerpt) {
+    const summarized = summarizeFromExcerpt(primary.excerpt, kw, { ...primary, ...meta });
+    if (summarized) {
+      const body = summarized.replace(/^[^—]+—\s*/, "");
+      if (!isBadSummaryLine(body)) lines.push(body);
+    }
+  }
+
   for (const sn of bundle.snippets.slice(0, 8)) {
-    const parts = sn.excerpt
-      .split(/。/)
-      .map((p) => p.trim())
-      .filter((p) => p.length >= 16);
-    for (const part of parts) {
-      const line = toThirdPersonBullet(part, sn);
-      if (!line || isDietVoice(line) || isIncompleteBullet(line) || isSpeechFragment(line)) continue;
-      if (!textStronglyMatchesTopic(line, kw)) continue;
-      lines.push(line);
-      if (lines.length >= 5) break;
+    const summarized = summarizeFromExcerpt(sn.excerpt, kw, sn);
+    if (summarized) {
+      const body = summarized.replace(/^[^—]+—\s*/, "");
+      if (!isBadSummaryLine(body)) lines.push(body);
     }
     if (lines.length >= 5) break;
   }
 
   const picked = pickConclusionTriple(lines, bundle, primary, meta);
-  const good = picked.filter((l) => !isDietVoice(l) && !isSpeechFragment(l) && !isIncompleteBullet(l));
+  const good = picked.filter(
+    (l) =>
+      !isBadSummaryLine(l) &&
+      !isDietVoice(l) &&
+      !isSpeechFragment(l) &&
+      !isIncompleteBullet(l),
+  );
   const merged = dedupeLines(
-    [...fallback, ...good].filter((l) => !isBoilerplateTopicLine(l)),
+    [...fallback, ...good].filter((l) => !isBoilerplateTopicLine(l) && !isBadSummaryLine(l)),
   );
   return ensureTopicInLines(merged, kw).slice(0, 3);
 }
@@ -360,6 +373,11 @@ function isOppositionTone(ex, speakerGroup = "", keyword = "") {
 
 /** 日付ごとに異なる「出来事」1文（経緯用） */
 function extractEventText(sn, keyword) {
+  const fromSpeech = summarizeFromExcerpt(sn.excerpt, keyword, sn);
+  if (fromSpeech && !isBadSummaryLine(fromSpeech)) {
+    return fromSpeech.replace(/^[^—]+—\s*/, "");
+  }
+
   const ex = normalizeFactPhrase(sn.excerpt);
   const who = sn.speakerGroup?.split("・")[0] || "会派";
   const sp = sn.speaker || who;
@@ -400,16 +418,14 @@ function extractEventText(sn, keyword) {
 
   /** @type {[RegExp, string][]} */
   const rules = [
-    [/閣議決定|閣議に上程|閣議で決定/, `${sp}が関連法案の閣議決定を国会で説明`],
+    [/閣議決定|閣議に上程|閣議で決定/, `${sp}が${topic}関連法案の閣議決定を国会で説明`],
     [/事前説明せず|国会に説明.*ない|国会を無視/, `野党が高市内閣の国会説明不足を追及`],
     [/賃上げ.*実質賃金|実質賃金.*プラス/, `高市内閣は賃上げ・実質賃金のプラス転換を重点目標に据える`],
     [/危機管理投資|成長投資/, `高市内閣は危機管理・成長投資で強い経済実現を掲げる`],
     [/見直し.*歳出|重点化.*一方|効果が乏しい施策/, `高市内閣は歳出の重点化と施策見直しを国会で説明`],
-    [/食料品.*消費税|給付つき税額控除/, `高市内閣が食料品消費税・減税策を国会答弁`],
     [/一般会計.*兆|歳出総額.*兆/, `高市内閣下の予算・歳出規模が国会で説明`],
     [/女性.*大臣|女性閣僚|片山大臣/, `高市内閣の閣僚人事（女性大臣起用）が国会で論点に`],
     [/組閣|内閣発足|新内閣/, `高市内閣の発足・人事が国会で論点に`],
-    [/内閣総理大臣.*答弁|総理.*お答え|高市総理/, `${sp}が高市内閣の政策方針を国会答弁`],
     [/連立政権合意|政策の実現に向け/, `与党合意に基づく高市内閣の政策実施が国会で説明`],
     [/スパイ防止.*発議|スパイ防止法.*提出|スパイ防止.*法案.*提出/, `${sp}がスパイ防止法案を国会に提出`],
     [/インテリジェンス.*法案.*提出|インテリジェンス態勢/, `国民民主党がインテリジェンス関連法案を提出`],
@@ -419,14 +435,10 @@ function extractEventText(sn, keyword) {
     [/含まれるんでしょうか|政府提出予定法案には入って/, `${sp}が今国会提出予定法案への${topic}収載を質疑`],
     [/提出予定法案.*含まれていない|入っておりません/, `政府が今国会提出予定法案に${topic}を含めないと答弁`],
     [/据え置き.*ボーナス|ボーナス.*据え置|歳費.*据え置/, `議員ボーナス据え置きの歳費法改正が国会で可決・提出`],
-    [/期末手当|冬のボーナス|夏のボーナス/, `国会議員の期末手当支給をめぐる歳費法改正が審議`],
     [/特別職.*給与.*反対|議員.*報酬.*反対|引上げに反対/, `${sp}が特別職・議員報酬の引上げに反対を表明`],
     [/人権|表現の自由.*懸念|報道.*懸念/, `${sp}が人権・表現の自由への懸念を国会で表明`],
-    [/検討を進め|法制化.*検討|整備.*進め|両党間で具体/, `${sp}が法制化・法案審議の継続を表明`],
     [/スパイ防止.*前向き|包括的.*法整備/, `${sp}がスパイ防止法制化への前向き姿勢を表明`],
     [/刑法九十二条|刑法92条/, `${sp}が刑法第92条改正案の起草・提出経験を国会で説明`],
-    [/可決|成立|採決.*可決/, `${mt}で関連法案が可決・成立`],
-    [/(?:を|に)提出|発議/, `${sp}が関連法案を国会に提出`],
   ];
 
   for (const [re, text] of rules) {
@@ -735,20 +747,27 @@ export function synthesizeArcSummary(bundle) {
 
 /** タイムライン国会行の要約（抜粋禁止） */
 export function synthesizeTimelinePlain(sn, keyword) {
+  const fromSpeech = summarizeFromExcerpt(sn.excerpt, keyword, sn);
+  if (fromSpeech && !isBadSummaryLine(fromSpeech)) return fromSpeech;
+
   const text = extractEventText(sn, keyword);
-  if (text && isWriterReadyLine(text) && !isBoilerplateTopicLine(text)) {
+  if (text && isWriterReadyLine(text) && !isBoilerplateTopicLine(text) && !isBadSummaryLine(text)) {
     const line = text.endsWith("。") ? text : `${text}。`;
-    return ensureTopicInLine(line, keyword) ?? line;
+    const speaker = sn.speaker || "国会";
+    const grp = sn.speakerGroup ? `（${sn.speakerGroup}）` : "";
+    const prefixed = line.startsWith(speaker) ? line : `${speaker}${grp}— ${line}`;
+    return ensureTopicInLine(prefixed, keyword) ?? prefixed;
   }
   for (const f of composeFromPrimary(sn, { date: sn.date, speaker: sn.speaker }, keyword)) {
-    if (isWriterReadyLine(f) && !isBoilerplateTopicLine(f)) {
+    if (isWriterReadyLine(f) && !isBoilerplateTopicLine(f) && !isBadSummaryLine(f)) {
       const line = f.endsWith("。") ? f : `${f}。`;
-      return ensureTopicInLine(line, keyword) ?? line;
+      const speaker = sn.speaker || "国会";
+      const grp = sn.speakerGroup ? `（${sn.speakerGroup}）` : "";
+      const prefixed = `${speaker}${grp}— ${line}`;
+      return ensureTopicInLine(prefixed, keyword) ?? prefixed;
     }
   }
-  const topic = topicShort(keyword);
-  // 具体抜粋が取れないときは空文案を書かない（巡回スクリプト fix-vague-timeline が API で補完）
-  return `${sn.speaker || "国会"}— ${topic}（${sn.meeting || "国会"}・議事録要確認）`;
+  return "";
 }
 
 const PROSCONS_DISCLAIMER =
@@ -798,25 +817,30 @@ export function sanitizeProsCons(pc) {
 
 function meritCandidateFromText(text, kw) {
   const t = String(text || "").replace(/。$/, "");
-  if (!t || BAD_MERIT_TEXT.test(t) || isSpeechFragment(t) || isDietVoice(t)) return null;
+  if (!t || BAD_MERIT_TEXT.test(t) || isSpeechFragment(t) || isDietVoice(t) || isBadSummaryLine(t)) {
+    return null;
+  }
+  const clean = sanitizeMeritText(t);
+  if (!clean) return null;
+  const body = clean.replace(/。$/, "");
   if (/前向き|推進|法制化|連立.*合意|整備を進め|答弁|合意書|具体策/.test(t)) {
     return {
       headline: "法制化へ前進",
-      text: `${t}。国会での方針・動きが読者の判断材料になる。`,
+      text: clean,
       figure: "国会答弁",
     };
   }
   if (/質疑|提出|収載/.test(t)) {
     return {
       headline: "国会で論点具体化",
-      text: `${t}。法案の行方を追いやすい。`,
+      text: clean,
       figure: "国会質疑",
     };
   }
   if (/提出|発議/.test(t)) {
     return {
       headline: "法案・修正案提出",
-      text: `${t}。国会での動きとして論点が具体化している。`,
+      text: clean,
       figure: "法案提出",
     };
   }
