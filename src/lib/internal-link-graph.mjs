@@ -79,7 +79,7 @@ export const INTERNAL_LINK_GRAPH = {
         relatedStatLabel: "2024年",
       },
     ],
-    relatedArticles: ["shoshika", "kyoiku-mushoka", "teigaku-kyufu-2024"],
+    relatedArticles: ["shoshika", "kyoiku-mushoka", "shohizei-genmen"],
   },
   shoshika: {
     glossaryLinks: [
