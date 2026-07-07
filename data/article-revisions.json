@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-07T10:55:00.000Z",
+  "generatedAt": "2026-07-07T11:26:45.459Z",
   "jobs": [
     {
       "id": "rev-mr9o7vy0-4liufb",
@@ -248,15 +248,16 @@
       "slug": "chingin",
       "sectionId": "nowSummary",
       "instruction": "何の答弁、質疑したかが必要。\n答弁した、質疑した、だけの内容は不要。",
-      "status": "proposed",
+      "status": "applied",
       "createdAt": "2026-07-05T17:43:24.123Z",
-      "updatedAt": "2026-07-05T17:43:24.123Z",
+      "updatedAt": "2026-07-07T11:26:46.959Z",
       "proposal": {
         "before": "1. 賃上げ・最低賃金について、国会で複数の質疑・答弁が出ているが、現時点で読者に示せる確定事項は限定的です。\n2. 答弁は政府の認識や検討状況を確認する内容が中心で、「何が決まったのか」は未確定のままです。\n3. この記事では、答弁の列挙ではなく、国会で確認された点と残っている論点を整理します。",
         "after": "1. 春闘の連合集計で賃上げ率5.09%、三年連続5%台の水準\n2. 3/23に高市内閣で政労使意見交換を開き、物価上昇を上回る賃上げ実現を要請。最低賃金の改定額は未確定。\n3. 賃上げの勢いを地方の中小企業・小規模事業者へ波及させることが重要",
         "note": "記事データ（答弁抜粋・経緯）から読者向けの結論文を生成",
         "canApply": true
-      }
+      },
+      "appliedAt": "2026-07-07T11:26:46.959Z"
     },
     {
       "id": "rev-mr82xa3h-pd1tfq",
@@ -550,6 +551,15 @@
   ],
   "rules": [
     {
+      "id": "rule-mrakda5r",
+      "slug": "chingin",
+      "sectionId": "nowSummary",
+      "instruction": "何の答弁、質疑したかが必要。\n答弁した、質疑した、だけの内容は不要。",
+      "adopted": true,
+      "createdAt": "2026-07-07T11:26:46.959Z",
+      "sourceJobId": "rev-mr82xwwr-cmk3c5"
+    },
+    {
       "id": "rule-mr84hgsq",
       "slug": "chingin",
       "sectionId": "timeline",
@@ -793,7 +803,10 @@
     {
       "id": "prin-timeline-no-raw-diet",
       "scope": "section",
-      "sectionIds": ["timeline", "summaryBullets"],
+      "sectionIds": [
+        "timeline",
+        "summaryBullets"
+      ],
       "title": "議事録生文禁止",
       "instruction": "○国務大臣（○○君）形式の生切り出しは掲載しない。何を答えたかを平易語で「」に入れる。",
       "badExample": "上野賢一郎— ○国務大臣（上野賢一郎君） もう委員、専門でありますので…",
@@ -806,7 +819,9 @@
     {
       "id": "prin-timeline-x-topic",
       "scope": "section",
-      "sectionIds": ["timeline"],
+      "sectionIds": [
+        "timeline"
+      ],
       "title": "タイムラインXは話題一致",
       "instruction": "記事タイトル・searchKeywordと無関係なX投稿はタイムラインに載せない。",
       "badExample": "2026-06-29 [x_post] ナフサ供給不足に価格高騰",
