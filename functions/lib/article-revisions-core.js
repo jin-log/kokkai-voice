@@ -1,3 +1,6 @@
+import { sanitizeTimelineArticle, formatTimelineReviseText } from "./timeline-sanitize.js";
+import { lintArticle } from "./editorial-rules.js";
+
 export const APPLIABLE_SECTIONS = new Set([
   "title_opening",
   "nowSummary",
@@ -141,6 +144,15 @@ export function buildProposal({ article, sectionId, instruction, current }) {
         canApply,
       };
     }
+    const ownerBullets = parseOwnerInstructionBullets(hint);
+    if (ownerBullets.length >= 1) {
+      return {
+        before,
+        after: numbered(ownerBullets),
+        note: `オーナー指示の${ownerBullets.length}行をそのまま反映`,
+        canApply,
+      };
+    }
     const after = guardMetaOutput(buildNowSummaryProposal(article, topic, keywords), () =>
       buildNowSummaryProposal(article, topic, keywords, { strict: true }),
     );
@@ -225,12 +237,19 @@ export function buildProposal({ article, sectionId, instruction, current }) {
   }
 
   if (sectionId === "timeline") {
-    const after = buildTimelineProposal(article, before, hint, topic, keywords);
-    const reordered = /並んで|混ぜ|交互/.test(hint) ? interleaveTimeline(after.split("\n").filter(Boolean)).join("\n") : after;
+    const sanitized = sanitizeTimelineArticle(article);
+    let lines = formatTimelineReviseText(sanitized).split("\n").filter(Boolean);
+    if (/並んで|混ぜ|交互/.test(hint)) {
+      lines = interleaveTimeline(lines);
+    }
+    const after = lines.join("\n");
+    const lint = lintArticle(sanitized);
     return {
       before,
-      after: reordered,
-      note: "「論じた／質問した」だけにせず、何を質問・答弁したか「」で具体化",
+      after,
+      note: lint.ok
+        ? "editorial-rules.json 適用済み（議事録生文の平易語化・話題外X除外）"
+        : `editorial-rules 自動修正後も blocker ${lint.blockers.length} 件`,
       canApply,
     };
   }
@@ -300,7 +319,7 @@ export function applyProposalToArticle(article, sectionId, after) {
     }
     if (matched < 1) throw new Error("タイムラインの行を記事データにマッチできませんでした");
     next.timeline = timeline;
-    return next;
+    return sanitizeTimelineArticle(next);
   }
 
   throw new Error("このブロックはまだ保存未対応です");
@@ -394,7 +413,18 @@ const META_INSTRUCTION_RE =
 const PROCEDURAL_NOISE_RE =
   /両件は承諾|起立を求め|法制化・法案審議の継続|関連法案が可決|特別委員会で関連|閲覧を求め|採決|可決・成立/;
 
+const RAW_DIET_DUMP_RE =
+  /○[^\r\n（]+（[^）]+君）|御質問にお答え|御答弁申し上げ|塩川委員におかれましては/;
+
 const GENERIC_SPEECH_RE = /が.+?(について|を)国会で(答弁・質疑|論じ)/;
+
+function isRawDietDump(text) {
+  const t = String(text || "").trim();
+  if (!t) return true;
+  if (RAW_DIET_DUMP_RE.test(t)) return true;
+  if (t.length > 110 && !/「[^」]{8,}」/.test(t)) return true;
+  return false;
+}
 
 function topicKeywords(article, hint) {
   const parts = [
@@ -520,6 +550,7 @@ function collectMaterial(article, keywords, { strict = false } = {}) {
 
   for (const b of article?.nowSummary?.bullets || []) {
     if (isProceduralNoise(b) || isGenericSpeechSummary(b)) continue;
+    if (/^Title:\s*/i.test(b) || /出典\s*\d+\s*件|時点の公開情報/.test(b)) continue;
     const speaker = parseSpeakerFromBullet(b);
     const body = b.replace(/^\d{4}-\d{2}-\d{2}[：:]\s*/, "").replace(/^[^が]+が/, "").trim();
     if (!body || isGenericSpeechSummary(body)) continue;
@@ -541,7 +572,17 @@ function collectMaterial(article, keywords, { strict = false } = {}) {
   for (const m of article?.prosCons?.merits || []) {
     const t = m.text || m.headline || "";
     if (/読者の判断|判断材料/.test(t)) continue;
-    if (!isProceduralNoise(t) && isTopicRelevant(t, keywords)) add(m.sourceDate, "", t, 2);
+    if (!isProceduralNoise(t) && isTopicRelevant(t, keywords)) add(m.sourceDate, "", t, 3);
+  }
+
+  for (const m of article?.meritsDemerits?.merits || []) {
+    const t = m.text || m.headline || "";
+    if (!isProceduralNoise(t) && isTopicRelevant(t, keywords)) add(m.sourceDate, "", t, 4);
+  }
+
+  for (const d of article?.meritsDemerits?.demerits || []) {
+    const t = d.text || d.headline || "";
+    if (isTopicRelevant(t, keywords)) add(d.sourceDate, "", t, 2);
   }
 
   for (const d of article?.prosCons?.demerits || []) {
@@ -565,10 +606,35 @@ function collectMaterial(article, keywords, { strict = false } = {}) {
 
 function cleanFact(text) {
   return String(text || "")
+    .replace(/^Title:\s*/i, "")
     .replace(/（国会議事録）\.?$/g, "")
     .replace(/国会で答弁・質疑した\.?$/g, "")
     .replace(/国会で答弁・質疑を行った\.?$/g, "")
     .trim();
+}
+
+/** オーナーが「この2点でいい」等と指示した行を抽出 */
+function parseOwnerInstructionBullets(hint) {
+  const raw = String(hint || "").trim();
+  if (!raw) return [];
+  const countMatch = raw.match(/この\s*(\d+)\s*点/);
+  const maxItems = countMatch ? Math.min(3, parseInt(countMatch[1], 10)) : 3;
+  const skipRe = /^(この|それ|以下|上記|例[:：]|修正指示)/;
+  /** @type {string[]} */
+  const bullets = [];
+
+  for (const line of raw.split("\n")) {
+    let t = line.trim();
+    if (!t || skipRe.test(t)) continue;
+    t = t.replace(/^(?:\d+[.)．、]\s*)/, "").trim();
+    if (/^Title:\s*/i.test(t)) continue;
+    if (t.length < 12) continue;
+    if (/時点の公開情報|出典\s*\d+\s*件/.test(t)) continue;
+    if (!t.endsWith("。")) t += "。";
+    if (!bullets.includes(t)) bullets.push(t);
+    if (bullets.length >= maxItems) break;
+  }
+  return bullets;
 }
 
 function formatSummaryBullet({ date, speaker, text }) {
@@ -862,8 +928,34 @@ function buildTimelineProposal(article, before, hint, topic, keywords) {
       if (!row) return line;
 
       const isDiet = row.kind === "国会" || row.kind === "speech";
-      if (isDiet && (wantsSpecific || isGenericSpeechSummary(row.text) || /論じ|質問した/.test(row.text))) {
+      const isX = row.kind === "X" || row.kind === "x_post";
+      const offTopicX =
+        isX && !keywords.some((k) => row.text.includes(k)) && !/賃上げ|最低賃金|時給/.test(row.text);
+
+      if (offTopicX) return null;
+
+      if (
+        isDiet &&
+        (wantsSpecific ||
+          isGenericSpeechSummary(row.text) ||
+          isRawDietDump(row.text) ||
+          /論じ|質問した/.test(row.text))
+      ) {
         const speaker = parseSpeakerFromArc(row.text) || parseSpeakerFromTimelineBody(row.text) || "";
+        const ev = evByKey.get(`${row.date}|${speaker}`);
+        return rewriteTimelineSpeechRow({
+          date: row.date,
+          speaker,
+          subject,
+          ev,
+          article,
+          topicIndex: dietIndex++,
+          questionTopics,
+        });
+      }
+
+      if (isDiet && isRawDietDump(row.text)) {
+        const speaker = parseSpeakerFromTimelineBody(row.text) || "";
         const ev = evByKey.get(`${row.date}|${speaker}`);
         return rewriteTimelineSpeechRow({
           date: row.date,
@@ -883,6 +975,7 @@ function buildTimelineProposal(article, before, hint, topic, keywords) {
 
       return line;
     })
+    .filter(Boolean)
     .join("\n");
 }
 
@@ -908,7 +1001,8 @@ function collectQuestionTopics(article, subject) {
   if (/中小|小規模/.test(raw)) topics.push("地方の中小・小規模事業者への賃上げ波及はどう進むのか");
   if (/実質賃金/.test(raw)) topics.push("実質賃金のプラス推移は続くのか");
   if (/物価|エネルギー|原油/.test(raw)) topics.push("物価・エネルギー高を踏まえ、賃上げは続けられるのか");
-  if (/最低賃金/.test(subject + raw)) topics.push("最低賃金引上げと企業の賃上げ負担のバランスは");
+  if (/最低賃金/.test(subject + raw)) topics.push("2026年度の最低賃金改定額はいつ・いくらになるのか");
+  if (/最低賃金/.test(subject + raw)) topics.push("特定最低賃金と地域別最低賃金の役割分担は");
 
   topics.push(
     "政府の賃上げ支援策は現場に届いているのか",
@@ -944,7 +1038,14 @@ function rewriteTimelineSpeechRow({ date, speaker, subject, ev, article, topicIn
   const where = place ? `${place}で` : "国会で";
 
   const sum = ev?.summaryPlain || "";
-  if (sum && !isGenericSpeechSummary(sum) && !/質問した[。]?$/.test(sum) && sum.length > 20) {
+  if (
+    sum &&
+    !isGenericSpeechSummary(sum) &&
+    !isRawDietDump(sum) &&
+    !/質問した[。]?$/.test(sum) &&
+    sum.length > 20 &&
+    sum.length <= 110
+  ) {
     return `${date} [国会] ${speaker}— ${where}「${cleanFact(sum)}」と${act}。`;
   }
 

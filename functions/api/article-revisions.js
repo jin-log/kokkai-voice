@@ -89,7 +89,7 @@ async function applyJob(token, body) {
   const articleMeta = await fetchGhFile(token, articlePath);
   if (!articleMeta?.content) throw new Error("記事JSONが見つかりません");
   const article = JSON.parse(decodeGitHubBase64Utf8(articleMeta.content));
-  const next = applyProposalToArticle(article, job.sectionId, job.proposal?.after || "");
+  let next = applyProposalToArticle(article, job.sectionId, job.proposal?.after || "");
 
   await putGhFile(token, articlePath, next, articleMeta.sha, `article revise apply: ${job.slug} ${job.sectionId}`);
 

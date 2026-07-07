@@ -1,0 +1,124 @@
+{
+  "version": 1,
+  "generatedAt": "2026-07-07T05:30:00.000Z",
+  "source": "data/article-revisions.json ownerPrinciples + article-quality patterns",
+  "rules": [
+    {
+      "id": "prin-revise-no-meta",
+      "sectionIds": ["summaryBullets", "nowSummary", "arcSummary", "title_opening"],
+      "title": "指示は実行結果を返す",
+      "instruction": "「○○して」と言ったら○○した結果（中身）を出す。やり方・手順の説明は出力に含めない。",
+      "severity": "blocker",
+      "detect": {
+        "lineRegex": [
+          "を先に整理",
+          "を短く要約",
+          "として分ける",
+          "列挙ではなく",
+          "読者にとって",
+          "この記事では",
+          "整理します",
+          "要約する",
+          "論点として分",
+          "確認できた事実を",
+          "^Title:\\s",
+          "出典\\s*\\d+\\s*件"
+        ]
+      }
+    },
+    {
+      "id": "prin-summary-topic-match",
+      "sectionIds": ["summaryBullets"],
+      "title": "タイトルに即した要点",
+      "instruction": "タイトルと無関係な手続きログを除外し、タイトルに即した事実要点を出す。",
+      "severity": "blocker",
+      "detect": {
+        "lineRegex": [
+          "起立を求め",
+          "両件は承諾",
+          "御異議ありませんか",
+          "採決いたしまして",
+          "委員長が報告"
+        ]
+      }
+    },
+    {
+      "id": "prin-now-no-procedural",
+      "sectionIds": ["nowSummary", "summaryBullets"],
+      "title": "答弁列挙ではなく内容・論点",
+      "instruction": "「○○が答弁・質疑した」だけの行は不要。何が言われたか、未確定なら論点を要約する。",
+      "severity": "blocker",
+      "detect": {
+        "lineRegex": [
+          "が.+国会で(答弁|質疑)した[。．]?$",
+          "が.+について国会で(答弁|質疑)",
+          "国会で議論された",
+          "国会で論じられた"
+        ]
+      }
+    },
+    {
+      "id": "prin-arc-one-speech-one-row",
+      "sectionIds": ["arcSummary"],
+      "title": "経緯は1発言1行・要約形式",
+      "instruction": "同一日付×同一人物の答弁を切り出し分割しない。要約を「」に入れる。",
+      "severity": "warn",
+      "detect": { "arcDuplicateSpeakerDate": true }
+    },
+    {
+      "id": "prin-timeline-plain-language",
+      "sectionIds": ["timeline"],
+      "title": "タイムラインは平易語",
+      "instruction": "「論じた」「質問した」だけはNG。何を聞いた／答えたかを「」で具体化する。",
+      "severity": "blocker",
+      "detect": {
+        "lineRegex": [
+          "について(質問|論じ)した[。．]?$",
+          "について質疑した[。．]?$"
+        ],
+        "unless": ["「.+」"]
+      }
+    },
+    {
+      "id": "prin-timeline-no-raw-diet",
+      "sectionIds": ["timeline", "summaryBullets"],
+      "title": "議事録生文禁止",
+      "instruction": "○国務大臣（○○君）形式の生切り出しは掲載しない。何を答えたかを平易語で「」に入れる。",
+      "severity": "blocker",
+      "detect": {
+        "lineRegex": [
+          "○[^\\r\\n（]+（[^）]+君）",
+          "御質問にお答え",
+          "御答弁申し上げ",
+          "かねて御答弁申し上げ",
+          "塩川委員におかれましては"
+        ]
+      }
+    },
+    {
+      "id": "prin-timeline-x-topic",
+      "sectionIds": ["timeline"],
+      "title": "タイムラインXは話題一致",
+      "instruction": "記事タイトル・searchKeywordと無関係なX投稿はタイムラインに載せない。",
+      "severity": "blocker",
+      "detect": {
+        "lineRegex": ["ナフサ供給|所得連動型の支援が必要"]
+      }
+    },
+    {
+      "id": "prin-general-no-jina",
+      "sectionIds": ["nowSummary", "summaryBullets", "arcSummary"],
+      "title": "Jinaゴミ・定型プレースホルダ禁止",
+      "instruction": "Title:/出典N件/報道整理中などのゴミ行を出さない。",
+      "severity": "blocker",
+      "detect": {
+        "lineRegex": [
+          "^Title:\\s",
+          "^URL\\s*(Source)?:",
+          "時点の公開情報に基づく整理",
+          "について報道・公開情報を整理中"
+        ]
+      }
+    }
+  ]
+}
