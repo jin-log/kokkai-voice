@@ -49,7 +49,9 @@ function summarizeSpeechRow(ev, article) {
   else if (/千五百円|1500円|骨太方針/.test(raw)) gist = "骨太方針の全国平均1500円目標を継続する方針を表明";
   else gist = sentences.find((s) => s.length <= 90) || "";
   if (!gist) gist = shorten(sentences[0] || raw, 80);
-  if (/御質問|おかれましては/.test(gist)) gist = "最低賃金引上げの政府方針を説明";
+  if (/御質問|おかれましては/.test(gist) || isRawDietDump(gist)) {
+    gist = /最低賃金/.test(raw) ? "最低賃金に関する政府方針を説明" : "本件に関する政府方針を説明";
+  }
 
   return `${speaker}${group}— ${where}「${gist.replace(/^「|」$/g, "")}」と答弁。`;
 }

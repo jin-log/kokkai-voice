@@ -42,7 +42,7 @@ import { normalizeFactPhrase, isDietVoice, isSpeechFragment, isIncompleteBullet,
 import { isBadSummaryLine } from "./lib/speech-summary.mjs";
 import { scorePartySymbol, SYMBOL_METHODOLOGY } from "../src/lib/symbol-rules.mjs";
 import { mergeInternalLinks } from "../src/lib/internal-link-graph.mjs";
-import { sanitizeArticleTimeline } from "../src/lib/timeline-sanitize.mjs";
+import { assertEditorialRules } from "../src/lib/editorial-enforce.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -505,8 +505,14 @@ async function completeOneSlug(targetSlug) {
 
   async function saveArticleJson(art) {
     enforceLivePublishLock(art, liveLock);
-    const cleaned = sanitizeArticleTimeline(art);
-    await writeFile(articlePath, `${JSON.stringify(cleaned, null, 2)}\n`, "utf8");
+    let fixed;
+    try {
+      fixed = assertEditorialRules(art, { force });
+    } catch (err) {
+      console.error(`[editorial] 保存拒否: ${err.message}`);
+      throw err;
+    }
+    await writeFile(articlePath, `${JSON.stringify(fixed, null, 2)}\n`, "utf8");
   }
 
   if (!force && (article.editorialRulesAppliedAt || article.contentLocked) && contentOnly) {
