@@ -37,23 +37,36 @@ function formatCategory(category, subCategory) {
 function mapRow(store) {
   const addr = store.address ?? {};
   return {
-    url: `${SITE}/${store.id}`,
+    ownerName: store.ownerName ?? "",
     name: store.name ?? "",
     category: formatCategory(store.category, store.subCategory),
+    link: store.storeUrl ?? "",
+    xTag: store.hashtag ?? "",
+    url: `${SITE}/${store.id}`,
     dc: store.dataCenter ?? "",
     server: store.world ?? "",
     residentialArea: [addr.city, addr.ward].filter(Boolean).join(" ").trim(),
     lot: [addr.streetAddress, addr.roomNumber].filter(Boolean).join(" ").trim(),
-    ownerName: store.ownerName ?? "",
   };
 }
 
 function writeCsv(rows, outPath) {
   mkdirSync(path.dirname(outPath), { recursive: true });
-  const header = "URL,店名,種類,DC,サーバー,居住区,番地,オーナー名";
+  const header = "オーナー名,店名,種類,リンク,Xタグ,URL（情報元）,DC,サーバー,居住区,番地";
   const body = rows
     .map((row) =>
-      [row.url, row.name, row.category, row.dc, row.server, row.residentialArea, row.lot, row.ownerName]
+      [
+        row.ownerName,
+        row.name,
+        row.category,
+        row.link,
+        row.xTag,
+        row.url,
+        row.dc,
+        row.server,
+        row.residentialArea,
+        row.lot,
+      ]
         .map(csvEscape)
         .join(","),
     )
