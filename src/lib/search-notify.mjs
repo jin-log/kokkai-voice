@@ -1,9 +1,9 @@
 /**
  * 検索エンジンへの更新通知（IndexNow + Google Indexing API）
  */
-import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { readFile } from "node:fs/promises";
 import { pingGoogleIndexing } from "./google-indexing.mjs";
 import { SITE } from "./site-config.mjs";
 import { loadAllArticles } from "./articles.mjs";
@@ -15,6 +15,7 @@ const root = path.join(__dirname, "../..");
 export const INDEXNOW_KEY = "a7f3c2e19b4d4f6a8e2d1c0b5a9e3f72";
 
 const HOST = new URL(SITE.domain).host;
+const GOOGLE_INDEX_LOG = path.join(root, "data/google-index-log.json");
 
 const INDEXNOW_ENDPOINTS = [
   { name: "IndexNow.org", url: "https://api.indexnow.org/indexnow" },
@@ -72,6 +73,23 @@ export async function collectNotifyUrls(opts = {}) {
   }
 
   return [...urls].slice(0, 10_000);
+}
+
+/** @returns {Promise<Record<string, string>>} */
+export async function readGoogleIndexLog() {
+  try {
+    return JSON.parse(await readFile(GOOGLE_INDEX_LOG, "utf8"));
+  } catch {
+    return {};
+  }
+}
+
+/** 公開中URLのうち Google Indexing API 未送信 */
+export async function missingGoogleIndexUrls(opts = {}) {
+  const collectOpts = opts.slug ? { slug: opts.slug } : { allLive: true };
+  const expected = await collectNotifyUrls(collectOpts);
+  const log = await readGoogleIndexLog();
+  return expected.filter((url) => !log[url]);
 }
 
 /** @param {string[]} urlList @param {{ dryRun?: boolean }} opts */
@@ -146,10 +164,23 @@ export async function pingSitemaps(opts = {}) {
  */
 export async function notifySearchEngines(opts = {}) {
   const urlList = await collectNotifyUrls(opts);
+  const missing = await missingGoogleIndexUrls({
+    slug: opts.slug,
+    allLive: opts.allLive,
+  });
+  const mustSubmitUrls =
+    opts.ensureAll || opts.mustSubmitMissing ? missing : opts.mustSubmitUrls;
   const indexNow = await pingIndexNow(urlList, opts);
   const sitemaps = await pingSitemaps(opts);
-  const google = await pingGoogleIndexing(urlList, opts);
-  return { urlList, indexNow, sitemaps, google };
+  const google = await pingGoogleIndexing(urlList, {
+    ...opts,
+    mustSubmitUrls: mustSubmitUrls?.length ? mustSubmitUrls : undefined,
+  });
+  const stillMissing =
+    opts.ensureAll && !opts.dryRun
+      ? await missingGoogleIndexUrls(opts.slug ? { slug: opts.slug } : {})
+      : [];
+  return { urlList, indexNow, sitemaps, google, missingBefore: missing, stillMissing };
 }
 
 /** IndexNow キーファイル本文（デプロイ前に public/ に置く） */

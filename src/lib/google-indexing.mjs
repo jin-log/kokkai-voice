@@ -113,9 +113,11 @@ export async function pingGoogleIndexing(urlList, opts = {}) {
 
   const log = await readLog();
   const since = Date.now() - minHours * 3600 * 1000;
+  const mustSubmit = new Set(opts.mustSubmitUrls ?? []);
   const targets = opts.force
     ? urlList
     : urlList.filter((url) => {
+        if (mustSubmit.has(url)) return true;
         const last = log[url];
         return !last || new Date(last).getTime() < since;
       });

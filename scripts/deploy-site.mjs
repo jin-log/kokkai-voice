@@ -47,4 +47,5 @@ run("npx", [
   "--branch=main",
 ]);
 run("node", ["scripts/update-project-status.mjs", "--deployed"]);
+run("node", ["scripts/notify-search-engines.mjs", "--live", "--ensure-all"]);
 console.log("OK deploy:site");

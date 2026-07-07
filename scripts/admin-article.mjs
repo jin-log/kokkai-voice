@@ -12,6 +12,7 @@
 import { readFile, writeFile, unlink } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { spawnSync } from "node:child_process";
 import { checkCasePageWithFiles, blockerToHuman } from "../src/lib/page-ready.mjs";
 import { auditArticleQuality } from "../src/lib/article-quality.mjs";
 import { refreshProjectStatus } from "../src/lib/project-status.mjs";
@@ -178,6 +179,14 @@ if (action === "publish") {
     actor: "system",
     detail: "はてブ/note発信キューに登録",
   });
+  const notify = spawnSync(
+    process.execPath,
+    ["scripts/notify-search-engines.mjs", "--slug", slug, "--ensure-all"],
+    { cwd: root, stdio: "inherit", shell: false },
+  );
+  if (notify.status !== 0) {
+    console.error(`警告: 検索エンジン通知に失敗（公開は完了）: exit ${notify.status}`);
+  }
   await refreshProjectStatus();
   console.log(`OK: ${slug} を公開しました（/case/${slug}/）`);
   process.exit(0);
