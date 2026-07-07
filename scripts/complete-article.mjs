@@ -42,6 +42,7 @@ import { normalizeFactPhrase, isDietVoice, isSpeechFragment, isIncompleteBullet,
 import { isBadSummaryLine } from "./lib/speech-summary.mjs";
 import { scorePartySymbol, SYMBOL_METHODOLOGY } from "../src/lib/symbol-rules.mjs";
 import { mergeInternalLinks } from "../src/lib/internal-link-graph.mjs";
+import { sanitizeArticleTimeline } from "../src/lib/timeline-sanitize.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -504,7 +505,14 @@ async function completeOneSlug(targetSlug) {
 
   async function saveArticleJson(art) {
     enforceLivePublishLock(art, liveLock);
-    await writeFile(articlePath, `${JSON.stringify(art, null, 2)}\n`, "utf8");
+    const cleaned = sanitizeArticleTimeline(art);
+    await writeFile(articlePath, `${JSON.stringify(cleaned, null, 2)}\n`, "utf8");
+  }
+
+  if (!force && (article.editorialRulesAppliedAt || article.contentLocked) && contentOnly) {
+    console.log("[skip] editorial/content ロック — content-only 上書き禁止（--force で解除）");
+    await refreshProjectStatus();
+    return;
   }
 
   const modeTag = [
