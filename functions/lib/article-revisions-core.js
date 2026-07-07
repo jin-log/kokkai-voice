@@ -274,24 +274,15 @@ export function applyProposalToArticle(article, sectionId, after) {
       bullets,
       updatedAt: new Date().toISOString(),
     };
-    return next;
-  }
-
-  if (sectionId === "summaryBullets") {
+  } else if (sectionId === "summaryBullets") {
     const bullets = parseTextItems(text);
     if (bullets.length < 1) throw new Error("要点の提案が空です");
     next.summaryBullets = bullets;
-    return next;
-  }
-
-  if (sectionId === "arcSummary") {
+  } else if (sectionId === "arcSummary") {
     const rows = parseArc(text);
     if (rows.length < 1) throw new Error("経緯は `YYYY-MM-DD — 内容` の形式が必要です");
     next.arcSummary = rows;
-    return next;
-  }
-
-  if (sectionId === "title_opening") {
+  } else if (sectionId === "title_opening") {
     const lines = text.split("\n").map((l) => l.trim()).filter(Boolean);
     const title = stripLabel(lines.find((l) => /^タイトル[:：]/.test(l)) || "", "タイトル");
     const opening = stripLabel(lines.find((l) => /^1行目候補[:：]|^冒頭[:：]/.test(l)) || "", "1行目候補");
@@ -301,10 +292,7 @@ export function applyProposalToArticle(article, sectionId, after) {
       next.summaryBullets = [opening, ...prev.slice(1)];
     }
     if (!title && !opening) throw new Error("タイトルまたは1行目候補が必要です");
-    return next;
-  }
-
-  if (sectionId === "timeline") {
+  } else if (sectionId === "timeline") {
     const rows = parseTimelineApplyRows(text);
     if (rows.length < 1) throw new Error("タイムラインの提案が空です");
     const timeline = [...(next.timeline || [])];
@@ -319,10 +307,24 @@ export function applyProposalToArticle(article, sectionId, after) {
     }
     if (matched < 1) throw new Error("タイムラインの行を記事データにマッチできませんでした");
     next.timeline = timeline;
-    return sanitizeTimelineArticle(next);
+  } else {
+    throw new Error("このブロックはまだ保存未対応です");
   }
 
-  throw new Error("このブロックはまだ保存未対応です");
+  return finalizeRevisionArticle(next);
+}
+
+/** 管理画面保存 — 全セクション共通でサニタイズ＋lint */
+function finalizeRevisionArticle(article) {
+  const next = sanitizeTimelineArticle(article);
+  const lint = lintArticle(next);
+  if (!lint.ok) {
+    const detail = lint.blockers
+      .map((b) => `${b.ruleId} ${b.field}: ${b.line}`)
+      .join(" | ");
+    throw new Error(`編集ルール違反のため保存できません: ${detail}`);
+  }
+  return next;
 }
 
 function inferTopic(article) {
