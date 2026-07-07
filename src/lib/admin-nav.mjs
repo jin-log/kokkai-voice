@@ -28,6 +28,12 @@ export const ADMIN_NAV_GROUPS = [
         label: "記事",
         desc: "一覧・検索・新規作成・公開",
       },
+      {
+        id: "recommendations",
+        href: "/dev/recommendations/",
+        label: "回遊・レコメンド",
+        desc: "次に読む3選の自動判定と差し替え",
+      },
     ],
   },
   {
@@ -75,7 +81,7 @@ export const ADMIN_NAV_GROUPS = [
       { id: "tasks", href: "/dev/tasks/", label: "今日のタスク", desc: "CEOキュー・優先作業" },
       { id: "automation", href: "/dev/automation/", label: "自動化ログ", desc: "deploy・生成の履歴" },
       { id: "agents", href: "/dev/agents/", label: "エージェント", desc: "担当とコマンド一覧" },
-      { id: "links", href: "/dev/links/", label: "リンク", desc: "内部リンク管理" },
+      { id: "links", href: "/dev/links/", label: "外部リンク", desc: "note・支援CTAの設定確認" },
       { id: "comments", href: "/dev/comments/", label: "コメント", desc: "読者コメント管理" },
     ],
   },
@@ -107,6 +113,7 @@ export function adminNavActiveId(path) {
     if (p === h || p.startsWith(h + "/")) return item.id;
   }
   if (p.startsWith("/dev/preview")) return "articles";
+  if (p.startsWith("/dev/recommendations")) return "recommendations";
   if (p === "/dev/status" || p === "/dev/status-v2") return "articles";
   return "";
 }
