@@ -59,7 +59,7 @@ export function waivedCheckIds(article, opts = {}) {
  */
 export function matrixPipelineOk(article, opts = {}) {
   const caseType = resolveCaseType(article, opts.policyMatrix);
-  if (caseType === "statistical" || caseType === "narrative") return true;
+  if (caseType === "statistical" || caseType === "narrative" || caseType === "policy_retrospective") return true;
   const parties = opts.policyMatrix?.parties ?? [];
   const symbolsOk = parties.filter(
     (p) => p.symbol && p.symbol !== "？" && p.symbol !== "?",
