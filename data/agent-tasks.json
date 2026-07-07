@@ -1,11 +1,11 @@
 {
-  "generatedAt": "2026-07-07T05:27:01.427Z",
-  "total": 57,
+  "generatedAt": "2026-07-07T05:31:11.300Z",
+  "total": 62,
   "byAgent": {
     "ceo": 7,
-    "writer": 47,
-    "x-researcher": 2,
-    "legal-check": 1
+    "writer": 49,
+    "x-researcher": 4,
+    "legal-check": 2
   },
   "tasks": [
     {
@@ -116,6 +116,61 @@
       "title": "[ゲート] メリデメ",
       "todo": "公表数値付きメリット2・デメリット2",
       "command": "node scripts/generate-proscons-auto.mjs --slug hosei-yosan",
+      "priority": 30
+    },
+    {
+      "id": "kishida-seiken-jisshi:H1_xPosts",
+      "slug": "kishida-seiken-jisshi",
+      "agent": "x-researcher",
+      "agentLabel": "X調査",
+      "checkId": "H1_xPosts",
+      "title": "[ゲート] X投稿",
+      "todo": "検証済みX URLを3件以上（x-researcher）",
+      "command": "node scripts/complete-article.mjs --slug kishida-seiken-jisshi --x-only --force",
+      "priority": 20
+    },
+    {
+      "id": "kishida-seiken-jisshi:H2_x_topic",
+      "slug": "kishida-seiken-jisshi",
+      "agent": "x-researcher",
+      "agentLabel": "X調査",
+      "checkId": "H2_x_topic",
+      "title": "[ゲート] Xの話題",
+      "todo": "X投稿本文が案件キーワードと一致（x-researcher）",
+      "command": "node scripts/complete-article.mjs --slug kishida-seiken-jisshi --x-only --force",
+      "priority": 20
+    },
+    {
+      "id": "kishida-seiken-jisshi:E2_timeline_x",
+      "slug": "kishida-seiken-jisshi",
+      "agent": "writer",
+      "agentLabel": "ライター",
+      "checkId": "E2_timeline_x",
+      "title": "[ゲート] タイムラインX",
+      "todo": "X投稿を3件以上タイムラインに",
+      "command": "node scripts/enrich-timeline-all.mjs --slug kishida-seiken-jisshi",
+      "priority": 30
+    },
+    {
+      "id": "kishida-seiken-jisshi:F1_glossary",
+      "slug": "kishida-seiken-jisshi",
+      "agent": "writer",
+      "agentLabel": "ライター",
+      "checkId": "F1_glossary",
+      "title": "[ゲート] 用語解説",
+      "todo": "用語を2語以上",
+      "command": "node scripts/complete-article.mjs --slug kishida-seiken-jisshi --content-only --force",
+      "priority": 30
+    },
+    {
+      "id": "kishida-seiken-jisshi:I1_legal",
+      "slug": "kishida-seiken-jisshi",
+      "agent": "legal-check",
+      "agentLabel": "法務",
+      "checkId": "I1_legal",
+      "title": "[ゲート] 法務",
+      "todo": "legal-check を実行",
+      "command": "node scripts/complete-article.mjs --slug kishida-seiken-jisshi --legal-only",
       "priority": 30
     },
     {
