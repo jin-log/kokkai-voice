@@ -584,17 +584,22 @@ async function completeOneSlug(targetSlug) {
     } else {
       await enrichKokkai(article, targetSlug);
     }
+  } else if (hasGeneralMeritPool(article)) {
+    const needsRebuild = generalSummaryIsBad(article) || !isGeneralContentReady(article);
+    if (!needsRebuild) {
+      console.log("[一般] メリデメ済み・要約良好 — スキップ");
+    } else {
+      console.log("[一般] メリデメ・出典から要約を再構成（Jina禁止）");
+      rebuildGeneralSummaryFromMerits(article);
+      const sources = (article.timeline ?? [])
+        .filter((t) => t.sourceUrl)
+        .map((t) => ({ url: t.sourceUrl, snippet: t.summaryPlain, date: t.date }));
+      if (sources.length >= 2) {
+        await writePolicyMatrixGeneral(article, root, sources);
+      }
+    }
   } else if (!generalSummaryIsBad(article) && isGeneralContentReady(article)) {
     console.log("[一般] 要約良好 — スキップ");
-  } else if (hasGeneralMeritPool(article)) {
-    console.log("[一般] メリデメ・出典から要約を再構成（報道スクレイプ回避）");
-    rebuildGeneralSummaryFromMerits(article);
-    const sources = (article.timeline ?? [])
-      .filter((t) => t.sourceUrl)
-      .map((t) => ({ url: t.sourceUrl, snippet: t.summaryPlain, date: t.date }));
-    if (sources.length >= 2) {
-      await writePolicyMatrixGeneral(article, root, sources);
-    }
   } else {
     console.log("[一般] ソース取得・要約");
     await enrichGeneralArticle(article, root);

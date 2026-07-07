@@ -87,6 +87,17 @@ export function isGeneralContentReady(article) {
 
 /** @param {Record<string, unknown>} article */
 export async function enrichGeneralArticle(article, root) {
+  if (hasGeneralMeritPool(article)) {
+    if (!generalSummaryIsBad(article) && isGeneralContentReady(article)) {
+      return article;
+    }
+    rebuildGeneralSummaryFromMerits(article);
+    article.fetchedAt = new Date().toISOString();
+    const { mergeInternalLinks } = await import("../../src/lib/internal-link-graph.mjs");
+    mergeInternalLinks(article);
+    return article;
+  }
+
   const keyword = article.searchKeyword || article.title || "";
   let sourceUrls = [...(article.sourceUrls ?? [])];
 
@@ -190,7 +201,10 @@ export async function enrichGeneralArticle(article, root) {
     updatedAt: new Date().toISOString(),
   };
 
-  article.summaryBullets = arcSummary.slice(0, 3).map((a) => `${a.date}：${a.text}`);
+  article.summaryBullets = arcSummary
+    .filter((a) => a?.text && !isGeneralBoilerplateLine(a.text))
+    .slice(0, 3)
+    .map((a) => `${a.date}：${a.text}`);
   article.plainExplanation = `${keyword}について、公開されている報道・声明を時系列で整理しています。\n\n${sources.map((s) => `・${s.date}：${s.snippet}`).join("\n")}\n\nここでの要約は出典の見出し・リード文を平易に並べたものです。事実認定や有罪・無罪の判断はしていません。`;
 
   const kw = keyword.split(/[\s　]+/).filter(Boolean);

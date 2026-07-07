@@ -9,6 +9,7 @@ export function stripJinaGarbage(text) {
   t = t.replace(/^URL\s*(Source)?:\s*\S+\s*/i, "");
   t = t.replace(/^Published\s+Time:\s*[^\n]+\s*/i, "");
   t = t.replace(/^[-–—]\s*/, "");
+  t = t.replace(/\s*\|\s*[^|]{2,80}$/, "").trim();
   return t.trim();
 }
 
@@ -44,8 +45,13 @@ export function generalSummaryIsBad(article) {
 
 /** @param {Record<string, unknown>} article */
 export function hasGeneralMeritPool(article) {
-  const merits = article?.meritsDemerits?.merits ?? article?.prosCons?.merits ?? [];
-  return merits.filter((m) => String(m?.text || m?.headline || "").length >= 16).length >= 2;
+  const pool = [
+    ...(article?.meritsDemerits?.merits ?? []),
+    ...(article?.meritsDemerits?.demerits ?? []),
+    ...(article?.prosCons?.merits ?? []),
+    ...(article?.prosCons?.demerits ?? []),
+  ];
+  return pool.filter((m) => String(m?.text || m?.headline || "").length >= 16).length >= 2;
 }
 
 /**

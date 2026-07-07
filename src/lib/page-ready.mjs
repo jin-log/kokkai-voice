@@ -12,6 +12,7 @@ import { isDietVoice, bulletsDistinctFrom, isSpeechFragment } from "./diet-voice
 import { isValidSymbol } from "./symbol-rules.mjs";
 import { waivedCheckIds } from "./case-gates.mjs";
 import { resolveProsCons } from "./case-helpers.mjs";
+import { generalSummaryIsBad, isGeneralBoilerplateLine } from "./general-article.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 export const root = path.join(__dirname, "../..");
@@ -24,6 +25,7 @@ export const CHECK_LABELS = {
   A1b_title_placeholder: { label: "タイトル確定", todo: "仮タイトル・編集メモを除去" },
   A2_primarySpeech: { label: "一次ソース", todo: "報道URL・国会リンクを追加" },
   B1_nowSummary: { label: "いまの結論", todo: "結論を1行以上" },
+  B1c_general_boilerplate: { label: "要約の品質", todo: "Title:/出典N件などのゴミ行を除去" },
   B2_disclaimer: { label: "AI注記", todo: "disclaimer を追加" },
   B3_topic: { label: "話題一致", todo: "要約が searchKeyword と一致（2行以上）" },
   B4_conclusion: { label: "結論の質", todo: "重複・途中切れ・定型文なし（行数固定なし）" },
@@ -142,6 +144,16 @@ export function checkCasePage(article, opts = {}) {
   // C. 根拠
   const sb = article.summaryBullets ?? [];
   const sbTexts = sb.map((b) => (typeof b === "string" ? b : b.text));
+  if (article.category && article.category !== "国会") {
+    const boilerplateHit = bullets.some(isGeneralBoilerplateLine)
+      || sbTexts.some(isGeneralBoilerplateLine)
+      || generalSummaryIsBad(article);
+    add(
+      "B1c_general_boilerplate",
+      !boilerplateHit,
+      boilerplateHit ? "Title:/出典N件/定型文が混入" : "事実ベース要約",
+    );
+  }
   add("C1_summaryBullets", sbTexts.length >= 3, `${sbTexts.length}/3 点`);
   add(
     "C2_evidence_distinct",
