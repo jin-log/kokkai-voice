@@ -44,12 +44,21 @@ function autoRankArticles(article, allArticles, count, exclude = new Set()) {
   const hub = findHubForArticle(article.slug);
   exclude.add(article.slug);
 
-  return allArticles
+  const ranked = allArticles
     .filter((a) => !exclude.has(a.slug) && a.pageReady && !a.adminHidden)
     .map((a) => ({ article: a, score: scoreArticlePair(article, a, hub) }))
     .filter((x) => x.score > 0)
-    .sort((a, b) => b.score - a.score || a.article.slug.localeCompare(b.article.slug))
-    .slice(0, count);
+    .sort((a, b) => b.score - a.score || a.article.slug.localeCompare(b.article.slug));
+
+  if (hub) {
+    const inHub = ranked.filter((x) => hub.articleSlugs.includes(x.article.slug));
+    const outHub = ranked.filter((x) => !hub.articleSlugs.includes(x.article.slug));
+    const merged = [...inHub, ...outHub];
+    if (inHub.length >= count) return merged.slice(0, count);
+    return merged.slice(0, count);
+  }
+
+  return ranked.slice(0, count);
 }
 
 /** @param {import('./articles.mjs').Article} target @param {{ headline?: string, kicker?: string }} [override] */
