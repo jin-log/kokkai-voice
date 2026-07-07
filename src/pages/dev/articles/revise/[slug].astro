@@ -29,7 +29,13 @@ const accumulatedRules = loadAccumulatedRules();
 const payload = {
   slug,
   title: article.title,
-  sections: sections.map(({ id, label, agent, content }) => ({ id, label, agent, content })),
+  sections: sections.map(({ id, label, agent, content, template }) => ({
+    id,
+    label,
+    agent,
+    content,
+    template,
+  })),
   rules: accumulatedRules,
 };
 ---
@@ -90,7 +96,14 @@ const payload = {
           </div>
           <p class="admin-revise-block__desc">{s.desc}</p>
 
-          <h3 class="admin-disclosure__label" style="font-size:0.8rem;margin:0 0 0.35rem">いまの内容</h3>
+          <details class="admin-revise-template">
+            <summary class="admin-disclosure__label" style="font-size:0.8rem;cursor:pointer">
+              ブロックテンプレ（記入例）
+            </summary>
+            <pre class="admin-revise-pre admin-revise-pre--template">{s.template}</pre>
+          </details>
+
+          <h3 class="admin-disclosure__label" style="font-size:0.8rem;margin:0.75rem 0 0.35rem">いまの内容</h3>
           <pre class="admin-revise-pre revise-current">{s.content}</pre>
 
           <label>
@@ -114,7 +127,8 @@ const payload = {
 
           <div class="admin-revise-proposal revise-proposal" hidden>
             <p class="admin-revise-proposal__note revise-proposal-note"></p>
-            <h3 class="admin-disclosure__label" style="font-size:0.8rem;margin:0 0 0.35rem">提案（差分プレビュー）</h3>
+            <p class="admin-revise-proposal__unchanged revise-proposal-unchanged" hidden></p>
+            <h3 class="admin-disclosure__label revise-diff-label" style="font-size:0.8rem;margin:0 0 0.35rem">提案（差分プレビュー）</h3>
             <pre class="admin-revise-pre admin-revise-pre--removed revise-before"></pre>
             <pre class="admin-revise-pre admin-revise-pre--proposal revise-after" style="margin-top:0.5rem"></pre>
             <div class="admin-revise-actions">
@@ -184,9 +198,32 @@ const payload = {
         st.proposal = job.proposal;
         st.status = job.status === "proposed" ? "proposal" : job.status;
 
+        const unchanged =
+          job.proposal?.unchanged === true ||
+          (job.proposal?.before === job.proposal?.after && !job.proposal?.canApply);
+
         panel.querySelector(".revise-proposal-note").textContent = job.proposal?.note || "";
-        panel.querySelector(".revise-before").textContent = job.proposal?.before || "";
-        panel.querySelector(".revise-after").textContent = job.proposal?.after || "";
+        const unchangedEl = panel.querySelector(".revise-proposal-unchanged");
+        const diffLabel = panel.querySelector(".revise-diff-label");
+        const beforeEl = panel.querySelector(".revise-before");
+        const afterEl = panel.querySelector(".revise-after");
+
+        if (unchanged) {
+          unchangedEl.hidden = false;
+          unchangedEl.textContent =
+            "変更案はまだ生成されていません（保存未対応ブロック、またはデータ不足）。上のメモを確認してください。";
+          diffLabel.hidden = true;
+          beforeEl.hidden = true;
+          afterEl.hidden = true;
+        } else {
+          unchangedEl.hidden = true;
+          diffLabel.hidden = false;
+          beforeEl.hidden = false;
+          afterEl.hidden = false;
+          beforeEl.textContent = job.proposal?.before || "";
+          afterEl.textContent = job.proposal?.after || "";
+        }
+
         panel.querySelector(".revise-proposal").hidden = job.status !== "proposed";
         const applyBtn = panel.querySelector(".revise-apply");
         if (applyBtn) {

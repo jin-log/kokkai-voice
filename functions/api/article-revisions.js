@@ -6,6 +6,7 @@ import {
   normalizeRevisionStore,
   recordOwnerInstruction,
   resolveOwnerInstruction,
+  applyStanceProposal,
 } from "../lib/article-revisions-core.js";
 
 const REVISIONS_PATH = "data/article-revisions.json";
@@ -62,12 +63,15 @@ async function createJob(token, body) {
   const articleMeta = await fetchGhFile(token, `data/articles/${slug}.json`);
   if (!articleMeta?.content) throw new Error("記事JSONが見つかりません");
   const article = JSON.parse(decodeGitHubBase64Utf8(articleMeta.content));
+  const matrix =
+    sectionId === "stance" ? await loadPolicyMatrix(token, slug, article) : null;
   const job = createRevisionJob({
     article,
     slug,
     sectionId,
     instruction,
     current: body.current || "",
+    matrix,
   });
 
   const { store, sha } = await loadStoreWithSha(token);
@@ -89,9 +93,25 @@ async function applyJob(token, body) {
   const articleMeta = await fetchGhFile(token, articlePath);
   if (!articleMeta?.content) throw new Error("記事JSONが見つかりません");
   const article = JSON.parse(decodeGitHubBase64Utf8(articleMeta.content));
-  let next = applyProposalToArticle(article, job.sectionId, job.proposal?.after || "");
+  let next = article;
 
-  await putGhFile(token, articlePath, next, articleMeta.sha, `article revise apply: ${job.slug} ${job.sectionId}`);
+  if (job.sectionId === "stance") {
+    const matrixPath = policyMatrixPath(article, job.slug);
+    const matrixMeta = await fetchGhFile(token, matrixPath);
+    if (!matrixMeta?.content) throw new Error("policy-matrix JSON が見つかりません");
+    const matrix = JSON.parse(decodeGitHubBase64Utf8(matrixMeta.content));
+    const nextMatrix = applyStanceProposal(matrix, job.proposal?.after || "");
+    await putGhFile(
+      token,
+      matrixPath,
+      nextMatrix,
+      matrixMeta.sha,
+      `article revise apply stance: ${job.slug}`,
+    );
+  } else {
+    next = applyProposalToArticle(article, job.sectionId, job.proposal?.after || "");
+    await putGhFile(token, articlePath, next, articleMeta.sha, `article revise apply: ${job.slug} ${job.sectionId}`);
+  }
 
   job.status = "applied";
   job.appliedAt = new Date().toISOString();
@@ -140,6 +160,20 @@ async function rejectJob(token, body) {
   });
   await putGhFile(token, REVISIONS_PATH, store, sha, `article revision rejected: ${job.slug} ${job.sectionId}`);
   return { ok: true, job };
+}
+
+async function loadPolicyMatrix(token, slug, article) {
+  const matrixPath = policyMatrixPath(article, slug);
+  const meta = await fetchGhFile(token, matrixPath);
+  if (!meta?.content) return null;
+  return JSON.parse(decodeGitHubBase64Utf8(meta.content));
+}
+
+function policyMatrixPath(article, slug) {
+  const sm = article?.stanceMatrix;
+  if (sm?.dataPath) return sm.dataPath.replace(/^\//, "");
+  if (sm?.policySlug) return `data/policy-matrix/${sm.policySlug}.json`;
+  return `data/policy-matrix/${slug}.json`;
 }
 
 async function loadStore(token) {

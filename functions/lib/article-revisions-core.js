@@ -1,5 +1,7 @@
 import { sanitizeTimelineArticle, formatTimelineReviseText } from "./timeline-sanitize.js";
 import { lintArticle } from "./editorial-rules.js";
+import { buildStanceProposalText, applyStanceProposal } from "./revise-stance-format.js";
+import { getSectionTemplate } from "./revise-section-templates.js";
 
 export const APPLIABLE_SECTIONS = new Set([
   "title_opening",
@@ -7,7 +9,13 @@ export const APPLIABLE_SECTIONS = new Set([
   "summaryBullets",
   "arcSummary",
   "timeline",
+  "stance",
+  "xPosts",
+  "glossary",
+  "prosCons",
 ]);
+
+export { getSectionTemplate, applyStanceProposal };
 
 export function normalizeRevisionStore(store) {
   const jobs = Array.isArray(store?.jobs) ? store.jobs : [];
@@ -91,9 +99,9 @@ function backfillOwnerInstructionsFromJobs(jobs) {
   return out;
 }
 
-export function createRevisionJob({ article, slug, sectionId, instruction, current }) {
+export function createRevisionJob({ article, slug, sectionId, instruction, current, matrix = null }) {
   const now = new Date().toISOString();
-  const proposal = buildProposal({ article, sectionId, instruction, current });
+  const proposal = buildProposal({ article, sectionId, instruction, current, matrix });
   return {
     id: `rev-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`,
     slug,
@@ -119,7 +127,7 @@ export function attachRevisionJobToStore(store, job, article) {
   store.generatedAt = new Date().toISOString();
 }
 
-export function buildProposal({ article, sectionId, instruction, current }) {
+export function buildProposal({ article, sectionId, instruction, current, matrix = null }) {
   const hint = String(instruction || "").trim();
   const before = String(current || "");
   const topic = inferTopic(article);
@@ -251,14 +259,54 @@ export function buildProposal({ article, sectionId, instruction, current }) {
         ? "editorial-rules.json 適用済み（議事録生文の平易語化・話題外X除外）"
         : `editorial-rules 自動修正後も blocker ${lint.blockers.length} 件`,
       canApply,
+      unchanged: before === after,
+    };
+  }
+
+  if (sectionId === "stance") {
+    const result = buildStanceProposalText(matrix, hint, before);
+    return { ...result, unchanged: result.before === result.after };
+  }
+
+  if (sectionId === "xPosts") {
+    const after = formatXPostsReviseText(article);
+    return {
+      before,
+      after,
+      note: after === before ? "X投稿データなし、または変更なし" : "X投稿を話題一致・平易語で整形",
+      canApply: after !== before,
+      unchanged: before === after,
+    };
+  }
+
+  if (sectionId === "glossary") {
+    const after = formatGlossaryReviseText(article, hint);
+    return {
+      before,
+      after,
+      note: "用語解説を2語以上・平易語で整形",
+      canApply: after !== before,
+      unchanged: before === after,
+    };
+  }
+
+  if (sectionId === "prosCons") {
+    const after = formatProsConsReviseText(article);
+    return {
+      before,
+      after,
+      note: "メリデメを公表数値付きで整形",
+      canApply: after !== before,
+      unchanged: before === after,
     };
   }
 
   return {
     before,
     after: before,
-    note: "このブロックは提案確認のみ。保存対応は次フェーズで追加",
+    note: "このブロックは未対応です",
     canApply: false,
+    unchanged: true,
   };
 }
 
@@ -307,11 +355,90 @@ export function applyProposalToArticle(article, sectionId, after) {
     }
     if (matched < 1) throw new Error("タイムラインの行を記事データにマッチできませんでした");
     next.timeline = timeline;
+  } else if (sectionId === "xPosts") {
+    throw new Error("xPosts は記事JSONへの直接保存は未対応（次フェーズ）");
+  } else if (sectionId === "glossary") {
+    const terms = parseGlossaryApplyText(text);
+    if (terms.length < 1) throw new Error("用語解説の提案が空です");
+    next.glossary = terms;
+  } else if (sectionId === "prosCons") {
+    const pc = parseProsConsApplyText(text);
+    if (!pc.merits.length && !pc.demerits.length) throw new Error("メリデメの提案が空です");
+    next.prosCons = {
+      ...(next.prosCons || {}),
+      merits: pc.merits,
+      demerits: pc.demerits,
+    };
+  } else if (sectionId === "stance") {
+    throw new Error("stance は policy-matrix JSON へ別途保存します");
   } else {
     throw new Error("このブロックはまだ保存未対応です");
   }
 
   return finalizeRevisionArticle(next);
+}
+
+function formatXPostsReviseText(article) {
+  const posts = article?.xPosts ?? [];
+  if (!posts.length) return "(X投稿なし)";
+  return posts
+    .map((p, i) => {
+      const author = p.author || p.xPost?.account_label || "?";
+      const body = shortenSentence((p.text || p.xPost?.text || "").replace(/\s+/g, " "), 100);
+      return `${i + 1}. ${author} — ${body || "（本文なし）"}`;
+    })
+    .join("\n");
+}
+
+function formatGlossaryReviseText(article, hint) {
+  const existing = (article?.glossary ?? []).map((g) => `${g.term}: ${g.definition}`);
+  if (existing.length >= 2) return existing.join("\n");
+  const kw = String(article?.searchKeyword || article?.title || "").trim();
+  const fallback = kw
+    ? [`${kw}: ${kw}に関する制度・論点（平易語で定義）`, "国会: 法律を制定し、政府の施策を審議する場"]
+    : ["{用語1}: {定義}", "{用語2}: {定義}"];
+  return [...existing, ...fallback].slice(0, Math.max(2, existing.length)).join("\n");
+}
+
+function formatProsConsReviseText(article) {
+  const merits = [
+    ...(article?.prosCons?.merits ?? []),
+    ...(article?.meritsDemerits?.merits ?? []),
+  ];
+  const demerits = [
+    ...(article?.prosCons?.demerits ?? []),
+    ...(article?.meritsDemerits?.demerits ?? []),
+  ];
+  const m = merits.map((x) => `＋ ${x.point || x.text || x.headline || "—"}（${x.figure || x.sourceDate || "—"}）`);
+  const d = demerits.map((x) => `− ${x.point || x.text || x.headline || "—"}（${x.figure || x.sourceDate || "—"}）`);
+  return [...m, ...d].join("\n") || "(メリデメなし)";
+}
+
+function parseGlossaryApplyText(text) {
+  return String(text || "")
+    .split("\n")
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .map((line) => {
+      const m = line.match(/^([^:：]+)[:：]\s*(.+)$/);
+      return m ? { term: m[1].trim(), definition: m[2].trim() } : null;
+    })
+    .filter(Boolean);
+}
+
+function parseProsConsApplyText(text) {
+  /** @type {{ point: string, figure: string }[]} */
+  const merits = [];
+  /** @type {{ point: string, figure: string }[]} */
+  const demerits = [];
+  for (const line of String(text || "").split("\n")) {
+    const t = line.trim();
+    const m = t.match(/^[＋+]\s*(.+?)（([^）]+)）$/);
+    const d = t.match(/^[−\-]\s*(.+?)（([^）]+)）$/);
+    if (m) merits.push({ point: m[1].trim(), figure: m[2].trim() });
+    if (d) demerits.push({ point: d[1].trim(), figure: d[2].trim() });
+  }
+  return { merits, demerits };
 }
 
 /** 管理画面保存 — 全セクション共通でサニタイズ＋lint */
