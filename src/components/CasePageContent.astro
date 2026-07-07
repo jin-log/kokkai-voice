@@ -15,10 +15,18 @@ import RelatedArticles from "./case/RelatedArticles.astro";
 import ShareBar from "./case/ShareBar.astro";
 import SupportCta from "./SupportCta.astro";
 import FloatToc from "./case/FloatToc.astro";
+import CaseSidebar from "./case/CaseSidebar.astro";
+import MidArticleReads from "./case/MidArticleReads.astro";
+import PrerequisiteStrip from "./case/PrerequisiteStrip.astro";
 import FloatReact from "./case/FloatReact.astro";
 import ImpactBlock from "./case/blocks/ImpactBlock.astro";
 import StatsBlock from "./case/blocks/StatsBlock.astro";
 import { articleShortTitle, shouldPublishParty } from "../lib/case-helpers.mjs";
+import {
+  hasDisplayableProsCons,
+  hasDisplayableImpact,
+  hasDisplayableStats,
+} from "../lib/analytical-blocks.mjs";
 import { dietPendingBadgeLabel } from "../lib/diet-pending.mjs";
 import {
   usesContentBlocks,
@@ -28,7 +36,14 @@ import {
 } from "../lib/case-blocks.mjs";
 import "../styles/content-blocks.css";
 
-const { article, stance, preview = false, relatedItems = [] } = Astro.props;
+const {
+  article,
+  stance,
+  preview = false,
+  relatedItems = [],
+  recBundle = null,
+} = Astro.props;
+const termLinkUsed = new Set();
 const hasStance =
   stance &&
   (stance.matrix.parties ?? []).filter(shouldPublishParty).length > 0;
@@ -38,6 +53,18 @@ const sourceTag =
 const dietBadge = dietPendingBadgeLabel(article);
 const blocksMode = usesContentBlocks(article);
 const flags = blocksMode ? blockFlags(article, stance) : null;
+const showProsCons = hasDisplayableProsCons(article);
+const showImpact = hasDisplayableImpact(article);
+const showStats = hasDisplayableStats(article);
+
+const bottomRelated = (recBundle?.nextReads?.length ? recBundle.nextReads : relatedItems).map((item) => ({
+  slug: item.slug,
+  title: item.title,
+  headline: item.headline || item.title,
+  kicker: item.kicker || "",
+  stat: item.stat || "",
+  statLabel: item.statLabel || "",
+}));
 ---
 
 {preview && (
@@ -50,65 +77,87 @@ const flags = blocksMode ? blockFlags(article, stance) : null;
   </div>
 )}
 
-<main class:list={["container", blocksMode && "case-blocks"]}>
-  <header class:list={["case-hero", blocksMode && "cb-hero"]}>
-    <div class="case-hero__tags">
-      {article.tags.map((t) => (
-        <span class="tag">{t}</span>
-      ))}
-      <span class="tag tag--source">{sourceTag}</span>
-      {dietBadge && <span class="tag tag--diet-pending">{dietBadge}</span>}
-      {preview && <span class="tag tag--preview">非公開プレビュー</span>}
-      {blocksMode && flags && (
-        <span class:list={["cb-type-badge", caseTypeBadgeClass(flags.caseType)]}>
-          {caseTypeLabel(flags.caseType)}
-        </span>
-      )}
-    </div>
-    <h1 class="case-hero__title">{shortTitle}</h1>
-
-    {!preview && <ShareBar article={article} />}
-
-    <NowBox article={article} variant={blocksMode ? "blocks" : "default"} />
-
-    {blocksMode && flags ? (
-      <>
-        {flags.impact && <ImpactBlock article={article} />}
-        {flags.stats && <StatsBlock article={article} />}
-        {(article.meritsDemerits?.merits?.length || article.meritsDemerits?.demerits?.length) && (
-          <ProsCons article={article} prosCons={article.meritsDemerits} />
+<div class="case-layout">
+  <main class:list={["case-layout__main", "container", blocksMode && "case-blocks"]}>
+    <header class:list={["case-hero", blocksMode && "cb-hero"]}>
+      <div class="case-hero__tags">
+        {article.tags.map((t) => (
+          <span class="tag">{t}</span>
+        ))}
+        <span class="tag tag--source">{sourceTag}</span>
+        {dietBadge && <span class="tag tag--diet-pending">{dietBadge}</span>}
+        {preview && <span class="tag tag--preview">非公開プレビュー</span>}
+        {blocksMode && flags && (
+          <span class:list={["cb-type-badge", caseTypeBadgeClass(flags.caseType)]}>
+            {caseTypeLabel(flags.caseType)}
+          </span>
         )}
-        {!flags.impact && !flags.stats && flags.legacyProsCons &&
-          (article.prosCons?.merits?.length || article.prosCons?.demerits?.length) && (
-            <ProsCons article={article} />
-          )}
-      </>
-    ) : (
-      <ProsCons article={article} />
-    )}
-
-    {(!blocksMode || flags?.narrativeArc) && <ArcSummary article={article} />}
-    {(!blocksMode || flags?.caseType !== "statistical") && <ReactionSummary article={article} />}
-    {(!blocksMode || flags?.caseType !== "statistical") && <SummaryLayers article={article} />}
-  </header>
-
-  {hasStance && flags?.stance !== false && (
-    blocksMode ? (
-      <div class="cb-block cb-block--stance">
-        <StanceMatrix article={article} stance={stance} />
       </div>
-    ) : (
-      <StanceMatrix article={article} stance={stance} />
-    )
-  )}
-  <Glossary article={article} />
-  <Timeline article={article} />
-  {!preview && <SupportCta context={article.slug} />}
-  <Comments slug={article.slug} />
-  {!preview && <RelatedArticles items={relatedItems} />}
-</main>
+      <h1 class="case-hero__title">{shortTitle}</h1>
 
-<FloatToc article={article} hasStance={hasStance} />
+      {!preview && <ShareBar article={article} />}
+
+      {
+        !preview && recBundle?.prerequisite && (
+          <PrerequisiteStrip
+            label={recBundle.prerequisite.label}
+            headline={recBundle.prerequisite.headline}
+            href={recBundle.prerequisite.href}
+          />
+        )
+      }
+
+      <NowBox article={article} variant={blocksMode ? "blocks" : "default"} usedTerms={termLinkUsed} />
+
+      {blocksMode ? (
+        <>
+          {showImpact && <ImpactBlock article={article} />}
+          {showStats && <StatsBlock article={article} />}
+          {showProsCons && <ProsCons article={article} prosCons={article.prosCons} />}
+        </>
+      ) : (
+        showProsCons && <ProsCons article={article} prosCons={article.prosCons} />
+      )}
+
+      {!preview && recBundle?.midReads?.length > 0 && (
+        <MidArticleReads items={recBundle.midReads} />
+      )}
+
+      {(!blocksMode || flags?.narrativeArc) && <ArcSummary article={article} />}
+      {(!blocksMode || flags?.caseType !== "statistical") && <ReactionSummary article={article} />}
+      {(!blocksMode || flags?.caseType !== "statistical") && <SummaryLayers article={article} usedTerms={termLinkUsed} />}
+    </header>
+
+    {hasStance && flags?.stance !== false && (
+      blocksMode ? (
+        <div class="cb-block cb-block--stance">
+          <StanceMatrix article={article} stance={stance} />
+        </div>
+      ) : (
+        <StanceMatrix article={article} stance={stance} />
+      )
+    )}
+    <Glossary article={article} />
+    <Timeline article={article} />
+    {!preview && <SupportCta context={article.slug} />}
+    <Comments slug={article.slug} />
+    {!preview && (
+      <RelatedArticles
+        items={bottomRelated}
+        title="次に読むべき3選"
+        variant="bottom"
+      />
+    )}
+  </main>
+
+  {!preview && recBundle && (
+    <CaseSidebar article={article} hasStance={hasStance} bundle={recBundle} />
+  )}
+</div>
+
+<div class="float-toc-mobile">
+  <FloatToc article={article} hasStance={hasStance} />
+</div>
 <FloatReact article={article} />
 
 <style>

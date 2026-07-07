@@ -2,6 +2,11 @@
 import { citizenTitle } from "./title-format.mjs";
 import { SYMBOL_LEGEND, symbolTone, isValidSymbol, normalizeSymbol } from "./symbol-rules.mjs";
 import { usesContentBlocks } from "./case-blocks.mjs";
+import {
+  hasDisplayableProsCons,
+  hasDisplayableImpact,
+  hasDisplayableStats,
+} from "./analytical-blocks.mjs";
 
 export { SYMBOL_LEGEND, symbolTone, isValidSymbol, normalizeSymbol };
 
@@ -89,17 +94,18 @@ export function resolveProsCons(article) {
 
 export function getFloatTocItems(article, hasStance) {
   const items = [{ href: "#sec-now", label: "いまの結論" }];
-  const resolved = resolveProsCons(article);
-  if (resolved) {
-    if (usesContentBlocks(article) && (article.prosCons?.merits?.length || article.prosCons?.demerits?.length)) {
-      items.push({ href: "#sec-impact", label: "利害整理" });
-    }
+  if (hasDisplayableImpact(article)) {
+    items.push({ href: "#sec-impact", label: "利害整理" });
+  }
+  if (hasDisplayableStats(article)) {
+    items.push({ href: "#sec-stats", label: "数値統計" });
+  }
+  if (hasDisplayableProsCons(article)) {
     items.push({ href: "#sec-proscons", label: "メリット・デメリット" });
   } else if (article.prosCons?.merits?.length || article.prosCons?.demerits?.length) {
-    const blocks = usesContentBlocks(article);
     items.push({
-      href: blocks ? "#sec-impact" : "#sec-proscons",
-      label: blocks ? "利害整理" : "メリット・デメリット",
+      href: usesContentBlocks(article) ? "#sec-impact" : "#sec-proscons",
+      label: usesContentBlocks(article) ? "利害整理" : "メリット・デメリット",
     });
   }
   if (article.arcSummary?.length) {

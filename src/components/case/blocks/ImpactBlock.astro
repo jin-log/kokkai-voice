@@ -1,8 +1,9 @@
 ---
 import { formatDate } from "../../../lib/case-helpers.mjs";
+import { resolveImpact } from "../../../lib/analytical-blocks.mjs";
 
 const { article } = Astro.props;
-const pc = article.prosCons;
+const pc = resolveImpact(article);
 const merits = pc?.merits ?? [];
 const demerits = pc?.demerits ?? [];
 if (!merits.length && !demerits.length) return null;

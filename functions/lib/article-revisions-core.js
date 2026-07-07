@@ -2,6 +2,14 @@ import { sanitizeTimelineArticle, formatTimelineReviseText } from "./timeline-sa
 import { lintArticle } from "./editorial-rules.js";
 import { buildStanceProposalText, applyStanceProposal } from "./revise-stance-format.js";
 import { getSectionTemplate } from "./revise-section-templates.js";
+import {
+  buildImpactProposalText,
+  buildStatsProposalText,
+  formatImpactReviseText,
+  formatStatsReviseText,
+  parseImpactApplyText,
+  parseStatsApplyText,
+} from "./revise-analytical-format.js";
 
 export const APPLIABLE_SECTIONS = new Set([
   "title_opening",
@@ -13,6 +21,8 @@ export const APPLIABLE_SECTIONS = new Set([
   "xPosts",
   "glossary",
   "prosCons",
+  "impact",
+  "statsSeries",
 ]);
 
 export { getSectionTemplate, applyStanceProposal };
@@ -295,10 +305,20 @@ export function buildProposal({ article, sectionId, instruction, current, matrix
     return {
       before,
       after,
-      note: "メリデメを公表数値付きで整形",
+      note: after === before ? "メリデメデータなし" : "メリデメを公表数値付きで整形",
       canApply: after !== before,
       unchanged: before === after,
     };
+  }
+
+  if (sectionId === "impact") {
+    const result = buildImpactProposalText(article, before);
+    return { ...result, unchanged: result.before === result.after };
+  }
+
+  if (sectionId === "statsSeries") {
+    const result = buildStatsProposalText(article, before);
+    return { ...result, unchanged: result.before === result.after };
   }
 
   return {
@@ -369,6 +389,18 @@ export function applyProposalToArticle(article, sectionId, after) {
       merits: pc.merits,
       demerits: pc.demerits,
     };
+  } else if (sectionId === "impact") {
+    const impact = parseImpactApplyText(text);
+    if (!impact) throw new Error("利害整理の形式が不正です");
+    next.meritsDemerits = {
+      disclaimer: impact.disclaimer || next.meritsDemerits?.disclaimer || "",
+      merits: impact.merits,
+      demerits: impact.demerits,
+    };
+  } else if (sectionId === "statsSeries") {
+    const stats = parseStatsApplyText(text);
+    if (!stats) throw new Error("数値統計はポイント2点以上が必要です");
+    next.statsSeries = stats;
   } else if (sectionId === "stance") {
     throw new Error("stance は policy-matrix JSON へ別途保存します");
   } else {
@@ -427,16 +459,16 @@ function parseGlossaryApplyText(text) {
 }
 
 function parseProsConsApplyText(text) {
-  /** @type {{ point: string, figure: string }[]} */
+  /** @type {{ point: string, figure: string, text?: string, sourceUrl?: string }[]} */
   const merits = [];
-  /** @type {{ point: string, figure: string }[]} */
+  /** @type {{ point: string, figure: string, text?: string, sourceUrl?: string }[]} */
   const demerits = [];
   for (const line of String(text || "").split("\n")) {
     const t = line.trim();
     const m = t.match(/^[＋+]\s*(.+?)（([^）]+)）$/);
     const d = t.match(/^[−\-]\s*(.+?)（([^）]+)）$/);
-    if (m) merits.push({ point: m[1].trim(), figure: m[2].trim() });
-    if (d) demerits.push({ point: d[1].trim(), figure: d[2].trim() });
+    if (m) merits.push({ point: m[1].trim(), figure: m[2].trim(), text: m[1].trim() });
+    if (d) demerits.push({ point: d[1].trim(), figure: d[2].trim(), text: d[1].trim() });
   }
   return { merits, demerits };
 }

@@ -12,6 +12,7 @@ import { isDietVoice, bulletsDistinctFrom, isSpeechFragment } from "./diet-voice
 import { isValidSymbol } from "./symbol-rules.mjs";
 import { waivedCheckIds } from "./case-gates.mjs";
 import { resolveProsCons } from "./case-helpers.mjs";
+import { analyticalBlocksStatus } from "./analytical-blocks.mjs";
 import { generalSummaryIsBad, isGeneralBoilerplateLine } from "./general-article.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -40,7 +41,10 @@ export const CHECK_LABELS = {
   E3_timeline_diet: { label: "タイムライン国会", todo: "国会発言を3件以上タイムラインに" },
   E4_timeline_diet_topic: { label: "TL国会の話題", todo: "国会TLはある分だけ話題一致。TLなし可。根拠なしの結論は不可" },
   A2_phaseA_source: { label: "一次ソース（国会待ち）", todo: "報道URLまたはタイムライン出典を追加" },
+  J1_analytical_blocks: { label: "分析ブロック", todo: "メリデメ・利害・数値統計のいずれか1〜3種（0種NG）" },
   J1_prosCons: { label: "メリデメ", todo: "公表数値付きメリット2・デメリット2" },
+  J2_impact: { label: "利害整理", todo: "視点別の得失2件以上（出典URL必須）" },
+  J3_stats: { label: "数値統計", todo: "グラフ用ポイント2点以上（statsSeries）" },
   J1b_meritsDemerits_split: { label: "メリデメ整合", todo: "meritsDemerits のメリット欄が空" },
   F1_glossary: { label: "用語解説", todo: "用語を2語以上" },
   G1_stanceMatrix_ref: { label: "〇×表リンク", todo: "stanceMatrix を設定" },
@@ -234,23 +238,55 @@ export function checkCasePage(article, opts = {}) {
   const gloss = article.glossary ?? article.nowSummary?.glossary ?? [];
   add("F1_glossary", gloss.length >= 2, `${gloss.length}/2 語`);
 
-  // J. メリット・デメリット（公表数値必須）
+  // J. 分析ブロック（メリデメ / 利害 / 数値統計 — 1〜3種必須）
+  const ab = analyticalBlocksStatus(article);
+  add("J1_analytical_blocks", ab.ok, ab.detail);
+
+  const merits = article.prosCons?.merits ?? [];
+  const demerits = article.prosCons?.demerits ?? [];
+  if (ab.pros.present) {
+    const meritOk =
+      merits.length >= 2 &&
+      merits.every((m) => (m.text || m.point) && m.figure && m.sourceUrl);
+    const demeritOk =
+      demerits.length >= 2 &&
+      demerits.every((m) => (m.text || m.point) && m.figure && m.sourceUrl);
+    add(
+      "J1_prosCons",
+      meritOk && demeritOk,
+      meritOk && demeritOk
+        ? `メリ${merits.length}・デメ${demerits.length}`
+        : `メリ${merits.length}/2・デメ${demerits.length}/2（各 figure+sourceUrl 必須）`,
+    );
+  } else {
+    add("J1_prosCons", true, "メリデメなし（他ブロックで充足）", false);
+  }
+
+  if (ab.impact.present) {
+    add(
+      "J2_impact",
+      ab.impact.valid,
+      ab.impact.valid
+        ? `利害${ab.impact.count}件`
+        : `利害${ab.impact.count}件 — 支持・懸念各1以上・出典必須`,
+    );
+  } else {
+    add("J2_impact", true, "利害整理なし", false);
+  }
+
+  if (ab.stats.present) {
+    add(
+      "J3_stats",
+      ab.stats.valid,
+      ab.stats.valid
+        ? `グラフ${ab.stats.points}点`
+        : `ポイント${ab.stats.points}/2 — 棒グラフ用に2点以上`,
+    );
+  } else {
+    add("J3_stats", true, "数値統計なし", false);
+  }
+
   const resolved = resolveProsCons(article);
-  const merits = resolved?.merits ?? [];
-  const demerits = resolved?.demerits ?? [];
-  const meritOk =
-    merits.length >= 2 &&
-    merits.every((m) => m.text && m.figure && m.sourceUrl);
-  const demeritOk =
-    demerits.length >= 2 &&
-    demerits.every((m) => m.text && m.figure && m.sourceUrl);
-  add(
-    "J1_prosCons",
-    meritOk && demeritOk,
-    meritOk && demeritOk
-      ? `メリ${merits.length}・デメ${demerits.length}`
-      : `メリ${merits.length}/2・デメ${demerits.length}/2（各 figure+sourceUrl 必須）`,
-  );
   const md = article.meritsDemerits;
   const splitBroken =
     md &&

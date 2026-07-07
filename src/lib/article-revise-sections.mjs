@@ -6,6 +6,10 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { formatStanceReviseText } from "../../functions/lib/revise-stance-format.js";
 import {
+  formatImpactReviseText,
+  formatStatsReviseText,
+} from "../../functions/lib/revise-analytical-format.js";
+import {
   REVISE_SECTION_TEMPLATES,
   getSectionTemplate,
 } from "../../functions/lib/revise-section-templates.js";
@@ -85,10 +89,26 @@ export const REVISE_SECTIONS = [
   {
     id: "prosCons",
     label: "メリデメ",
-    desc: "公表数値付きメリット・デメリット",
-    checkIds: ["J1_prosCons"],
+    desc: "賛否を＋／−で整理（prosCons）。利害・数値と併用可（1〜3種）",
+    checkIds: ["J1_analytical_blocks", "J1_prosCons"],
     agent: "writer",
     template: REVISE_SECTION_TEMPLATES.prosCons,
+  },
+  {
+    id: "impact",
+    label: "利害整理",
+    desc: "メリデメでくくれない視点差・得失（meritsDemerits）",
+    checkIds: ["J1_analytical_blocks", "J2_impact"],
+    agent: "writer",
+    template: REVISE_SECTION_TEMPLATES.impact,
+  },
+  {
+    id: "statsSeries",
+    label: "数値統計",
+    desc: "公表数値の推移（statsSeries・棒グラフ自動描画）",
+    checkIds: ["J1_analytical_blocks", "J3_stats"],
+    agent: "writer",
+    template: REVISE_SECTION_TEMPLATES.statsSeries,
   },
 ];
 
@@ -130,10 +150,18 @@ export function sectionContent(article, sectionId, stance = null) {
         .map((g) => `${g.term}: ${g.definition}`)
         .join("\n") || "(用語なし)";
     case "prosCons": {
-      const m = (article.prosCons?.merits ?? []).map((x) => `＋ ${x.point}（${x.figure || "—"}）`);
-      const d = (article.prosCons?.demerits ?? []).map((x) => `− ${x.point}（${x.figure || "—"}）`);
+      const m = (article.prosCons?.merits ?? []).map(
+        (x) => `＋ ${x.point || x.text || x.headline || "—"}（${x.figure || "—"}）`,
+      );
+      const d = (article.prosCons?.demerits ?? []).map(
+        (x) => `− ${x.point || x.text || x.headline || "—"}（${x.figure || "—"}）`,
+      );
       return [...m, ...d].join("\n") || "(メリデメなし)";
     }
+    case "impact":
+      return formatImpactReviseText(article.meritsDemerits);
+    case "statsSeries":
+      return formatStatsReviseText(article.statsSeries);
     default:
       return "";
   }
