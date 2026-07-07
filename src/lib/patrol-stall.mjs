@@ -114,7 +114,7 @@ function detectSlugStallFromRounds(rounds) {
   return {
     checkId,
     checkLabel: meta?.label ?? checkId,
-    ownerHint: meta?.todo ?? "",
+    ownerHint: "巡回が自動修正中（オーナー作業不要）",
     agent,
     attempts: tail.length,
     lastAt: tail[tail.length - 1].at,

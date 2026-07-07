@@ -43,7 +43,7 @@ export function adminBucketBadge(s) {
  */
 export function needsOwnerAttention(s) {
   if (s.adminHidden) return false;
-  if (s.stall?.stalled) return true;
+  // 巡回ループ（B3_topic等）はCEOが直す。オーナーの「やること」に入れない
   if (s.publishGateOk && !s.pageReady) return true;
   return false;
 }

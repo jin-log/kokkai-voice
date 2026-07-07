@@ -591,13 +591,11 @@ async function completeOneSlug(targetSlug) {
     } else {
       console.log("[一般] メリデメ・出典から要約を再構成（Jina禁止）");
       rebuildGeneralSummaryFromMerits(article);
-      const sources = (article.timeline ?? [])
-        .filter((t) => t.sourceUrl)
-        .map((t) => ({ url: t.sourceUrl, snippet: t.summaryPlain, date: t.date }));
-      if (sources.length >= 2) {
-        await writePolicyMatrixGeneral(article, root, sources);
-      }
     }
+    const sources = (article.timeline ?? [])
+      .filter((t) => t.sourceUrl)
+      .map((t) => ({ url: t.sourceUrl, snippet: t.summaryPlain, date: t.date }));
+    await writePolicyMatrixGeneral(article, root, sources);
   } else if (!generalSummaryIsBad(article) && isGeneralContentReady(article)) {
     console.log("[一般] 要約良好 — スキップ");
   } else {
@@ -606,9 +604,7 @@ async function completeOneSlug(targetSlug) {
     const sources = (article.timeline ?? [])
       .filter((t) => t.sourceUrl)
       .map((t) => ({ url: t.sourceUrl, snippet: t.summaryPlain, date: t.date }));
-    if (sources.length >= 2) {
-      await writePolicyMatrixGeneral(article, root, sources);
-    }
+    await writePolicyMatrixGeneral(article, root, sources);
     article.title = citizenTitle({ ...article, slug: targetSlug });
   }
 

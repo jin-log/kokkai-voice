@@ -37,6 +37,14 @@ try {
   await writeFile(logDest, '{"digest":[],"hot":[]}\n');
 }
 
+const createLogSrc = path.join(root, "data/article-create-log.json");
+const createLogDest = path.join(outDir, "article-create-log.json");
+try {
+  await copyFile(createLogSrc, createLogDest);
+} catch {
+  await writeFile(createLogDest, '{"entries":[]}\n');
+}
+
 const queueSrc = path.join(root, "data/ops-queue.json");
 const queueDest = path.join(outDir, "ops-queue.json");
 try {

@@ -1,6 +1,7 @@
 /**
  * 一般記事（国会以外）— Jina ゴミ検出・メリデメから要約再構成
  */
+import { textMatchesTopic, topicTerms } from "./topic-relevance.mjs";
 
 /** @param {string} text */
 export function stripJinaGarbage(text) {
@@ -148,4 +149,98 @@ export function rebuildGeneralSummaryFromMerits(article) {
   };
   article.plainExplanation = `${keyword}について、公開されている報道・試算を時系列で整理しています。\n\n${nowBullets.map((b) => `・${b}`).join("\n")}\n\nここでの要約は出典の見出し・リード文を平易に並べたものです。事実認定や有罪・無罪の判断はしていません。`;
   return true;
+}
+
+/**
+ * 一般記事の〇×表をメリデメ・出典から再構成（Jinaゴミ・定型文禁止）
+ * @param {Record<string, unknown>} article
+ * @param {{ url: string, snippet?: string, date?: string }[]} [sources]
+ * @returns {object|null}
+ */
+export function buildGeneralPolicyMatrix(article, sources = []) {
+  const merits = [
+    ...(article.meritsDemerits?.merits ?? []),
+    ...(article.prosCons?.merits ?? []),
+  ];
+  const demerits = [
+    ...(article.meritsDemerits?.demerits ?? []),
+    ...(article.prosCons?.demerits ?? []),
+  ];
+
+  const factText = (item) => {
+    const t = stripJinaGarbage(String(item?.text || item?.headline || ""));
+    return t && !isGeneralBoilerplateLine(t) ? (t.endsWith("。") ? t : `${t}。`) : "";
+  };
+
+  const keyword = String(article.searchKeyword || "").trim();
+  const terms = topicTerms(keyword);
+  const withTopic = (text) => {
+    if (!text) return "";
+    if (keyword && !textMatchesTopic(text, terms)) {
+      return `${keyword}：${text}`;
+    }
+    return text;
+  };
+
+  const pro = withTopic(merits.map(factText).find((t) => t.length >= 20));
+  const proAction = withTopic(merits.map(factText).filter((t) => t.length >= 20)[1] || pro);
+  const con = withTopic(demerits.map(factText).find((t) => t.length >= 20));
+  const conAction = withTopic(demerits.map(factText).filter((t) => t.length >= 20)[1] || con);
+
+  const src = (item, i) => ({
+    url: String(item?.sourceUrl || sources[i]?.url || ""),
+    date: String(item?.sourceDate || sources[i]?.date || "").slice(0, 10),
+  });
+
+  if (!pro || !con) return null;
+
+  const proRef = merits.find((m) => factText(m) === pro) || merits[0];
+  const conRef = demerits.find((m) => factText(m) === con) || demerits[0];
+  const proSrc = src(proRef, 0);
+  const conSrc = src(conRef, 1);
+
+  const today = new Date().toISOString().slice(0, 10);
+  return {
+    policySlug: article.slug,
+    policyLabel: String(article.title || article.slug).replace(/ — あの話どうなった？$/, ""),
+    relatedArticleSlug: article.slug,
+    updatedAt: new Date().toISOString(),
+    methodologyVersion: "v2-merits",
+    disclaimer: "報道・公表資料に基づく整理表です。党・団体の公式評価ではありません。",
+    excerpt: { parties: "メリデメ・出典から自動構成（2立場）", politicians: "" },
+    parties: [
+      {
+        partyLabel: "推進・賛成側",
+        stance: {
+          text: pro,
+          sourceUrl: proSrc.url,
+          sourceType: "報道",
+          capturedAt: proSrc.date || today,
+        },
+        action: {
+          text: proAction || pro,
+          speechUrl: proSrc.url,
+          capturedAt: proSrc.date || today,
+        },
+        symbol: "▲",
+        symbolReason: "推進側の公表・報道に基づく整理（進行中）",
+      },
+      {
+        partyLabel: "慎重・反対側",
+        stance: {
+          text: con,
+          sourceUrl: conSrc.url,
+          sourceType: "報道",
+          capturedAt: conSrc.date || today,
+        },
+        action: {
+          text: conAction || con,
+          speechUrl: conSrc.url,
+          capturedAt: conSrc.date || today,
+        },
+        symbol: "×",
+        symbolReason: "反対・懸念の公表・試算に基づく整理",
+      },
+    ],
+  };
 }

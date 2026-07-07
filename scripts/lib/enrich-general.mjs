@@ -14,6 +14,7 @@ import {
   rebuildGeneralSummaryFromMerits,
   generalSummaryIsBad,
   hasGeneralMeritPool,
+  buildGeneralPolicyMatrix,
 } from "../../src/lib/general-article.mjs";
 
 const JINA_HEADERS = {
@@ -226,62 +227,14 @@ function sleep(ms) {
 export async function writePolicyMatrixGeneral(article, root, sources) {
   const slug = article.slug;
   const matrixPath = path.join(root, "data/policy-matrix", `${slug}.json`);
-  const parties =
-    sources.length >= 2
-      ? [
-          {
-            partyLabel: "当事者・公表側",
-            stance: {
-              text: sources[0].snippet,
-              sourceUrl: sources[0].url,
-              sourceType: "報道",
-              capturedAt: new Date().toISOString().slice(0, 10),
-            },
-            action: {
-              text: "公開情報・報道に基づく立場（詳細は出典参照）",
-              speechUrl: sources[0].url,
-              capturedAt: new Date().toISOString().slice(0, 10),
-            },
-            symbol: "▲",
-            symbolReason: "自動生成（報道ベース）。内容確認後に更新推奨",
-          },
-          {
-            partyLabel: "当事者・追及側",
-            stance: {
-              text: sources[1].snippet,
-              sourceUrl: sources[1].url,
-              sourceType: "報道",
-              capturedAt: new Date().toISOString().slice(0, 10),
-            },
-            action: {
-              text: "公開情報・報道に基づく立場（詳細は出典参照）",
-              speechUrl: sources[1].url,
-              capturedAt: new Date().toISOString().slice(0, 10),
-            },
-            symbol: "▲",
-            symbolReason: "自動生成（報道ベース）。内容確認後に更新推奨",
-          },
-        ]
-      : [];
-
-  if (parties.length < 2) return false;
-
-  const matrix = {
-    policySlug: slug,
-    policyLabel: article.title?.replace(/ — あの話どうなった？$/, "") ?? slug,
-    relatedArticleSlug: slug,
-    updatedAt: new Date().toISOString(),
-    methodologyVersion: "v1-auto",
-    disclaimer: "自動生成の整理表です。党・個人の公式評価ではありません。",
-    excerpt: { parties: "報道ソースから自動選定（2件）", politicians: "" },
-    parties,
-  };
+  const matrix = buildGeneralPolicyMatrix(article, sources);
+  if (!matrix?.parties?.length) return false;
 
   await writeFile(matrixPath, `${JSON.stringify(matrix, null, 2)}\n`, "utf8");
   article.stanceMatrix = {
     policySlug: slug,
     dataPath: `data/policy-matrix/${slug}.json`,
-    disclaimer: "出典付きの事実整理です（自動生成）。",
+    disclaimer: "出典付きの事実整理です（メリデメベース）。",
   };
   return true;
 }

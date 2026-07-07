@@ -65,6 +65,15 @@ jobs:
       - name: index登録
         run: node scripts/register-article-index.mjs --slug "${{ github.event.inputs.slug }}"
 
+      - name: 作成ログ
+        run: |
+          node scripts/log-article-create.mjs \
+            --slug "${{ github.event.inputs.slug }}" \
+            --keyword "${{ github.event.inputs.keyword }}" \
+            --title "${{ github.event.inputs.title }}" \
+            --category "${{ github.event.inputs.category }}" \
+            --via github-actions
+
       - name: 記事完成（①〜④ 自動）
         id: complete
         continue-on-error: true
