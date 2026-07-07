@@ -7,6 +7,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { isGeneralBoilerplateLine } from "./general-article.mjs";
 import { articleTopicTerms, textMatchesTopic } from "./topic-relevance.mjs";
+import { isXPostOnTopic } from "./timeline-sanitize.mjs";
 
 const root = path.join(path.dirname(fileURLToPath(import.meta.url)), "../..");
 
@@ -80,7 +81,36 @@ function sectionLines(article, sectionId) {
       text: String(e.summaryPlain || e.event || e.label || ""),
     }));
   }
+  if (sectionId === "xPosts") {
+    return (article.xPosts ?? []).map((p, i) => ({
+      field: `xPosts[${i}]`,
+      text: String(p.post_text || ""),
+    }));
+  }
   return [];
+}
+
+function offTopicXViolations(article) {
+  /** @type {object[]} */
+  const hits = [];
+  const seen = new Set();
+  for (const { field, text } of [
+    ...sectionLines(article, "xPosts"),
+    ...(article.timeline ?? [])
+      .filter((e) => e.type === "x_post")
+      .map((e, i) => ({
+        field: `timeline[x${i}]`,
+        text: String(e.xPost?.post_text || e.summaryPlain || ""),
+      })),
+  ]) {
+    const t = String(text || "").trim();
+    if (!t || seen.has(t)) continue;
+    seen.add(t);
+    if (!isXPostOnTopic(article, t)) {
+      hits.push({ field, text: t });
+    }
+  }
+  return hits;
 }
 
 /**
@@ -121,6 +151,19 @@ export function lintArticle(article) {
           sectionId: "arcSummary",
           field: "arcSummary",
           line: `${dup.date} ${dup.speaker} ×${dup.count}`,
+          title: rule.title,
+          instruction: rule.instruction,
+        });
+      }
+    }
+    if (rule.id === "prin-timeline-x-topic") {
+      for (const { field, text } of offTopicXViolations(article)) {
+        violations.push({
+          ruleId: rule.id,
+          severity: rule.severity || "blocker",
+          sectionId: "xPosts",
+          field,
+          line: text.slice(0, 120),
           title: rule.title,
           instruction: rule.instruction,
         });

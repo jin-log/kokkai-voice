@@ -1,4 +1,5 @@
 /** Merge article.timeline with legacy primarySpeech + xPosts. */
+import { isXPostOnTopic } from "./timeline-sanitize.mjs";
 
 export const TIMELINE_INITIAL_VISIBLE = 7;
 
@@ -23,7 +24,7 @@ function legacySpeechEvent(article) {
 
 function legacyXEvents(article) {
   return (article.xPosts || [])
-    .filter((p) => p.post_url)
+    .filter((p) => p.post_url && isXPostOnTopic(article, p.post_text || ""))
     .map((p) => ({
       id: `x-slot-${p.slot}`,
       type: "x_post",

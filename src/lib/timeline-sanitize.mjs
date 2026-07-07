@@ -16,6 +16,11 @@ export function isRawDietDump(text) {
   return false;
 }
 
+/** X投稿が記事話題と一致するか（表示マージ含む） */
+export function isXPostOnTopic(article, text) {
+  return textMatchesTopic(String(text || ""), articleTopicTerms(article));
+}
+
 function shorten(text, max = 88) {
   const t = String(text || "").replace(/\s+/g, " ").trim();
   if (t.length <= max) return t;
@@ -28,8 +33,6 @@ function summarizeSpeechRow(ev, article) {
   const group = sp.speakerGroup ? `（${sp.speakerGroup}）` : "";
   const meeting = [sp.nameOfHouse, sp.nameOfMeeting].filter(Boolean).join("・");
   const where = meeting ? `${meeting}で` : "国会で";
-  const kw = article?.searchKeyword || article?.title || "";
-
   const raw = normalizeFactPhrase(String(ev.summaryPlain || "").replace(/^[^—]+—\s*/, ""));
   const terms = articleTopicTerms(article);
   const sentences = raw
@@ -69,13 +72,10 @@ function summarizeXRow(ev, article) {
  */
 export function sanitizeTimelineEntry(ev, article) {
   if (!ev) return null;
-  const terms = articleTopicTerms(article);
 
   if (ev.type === "x_post") {
     const text = ev.xPost?.post_text || ev.summaryPlain || "";
-    if (!textMatchesTopic(text, terms) && !/賃上げ|最低賃金|時給/.test(text)) {
-      return null;
-    }
+    if (!isXPostOnTopic(article, text)) return null;
     if (isRawDietDump(ev.summaryPlain)) {
       return { ...ev, summaryPlain: summarizeXRow(ev, article) };
     }
@@ -93,9 +93,23 @@ export function sanitizeTimelineEntry(ev, article) {
 }
 
 /** @param {object} article */
-export function sanitizeArticleTimeline(article) {
+function sanitizeXPostsArray(article) {
+  const xPosts = (article.xPosts ?? []).filter((p) => {
+    if (!p?.post_url) return false;
+    return isXPostOnTopic(article, p.post_text || "");
+  });
+  return xPosts;
+}
+
+/** @param {object} article @param {{ markApplied?: boolean }} [opts] */
+export function sanitizeArticleTimeline(article, opts = {}) {
   const timeline = (article.timeline ?? [])
     .map((ev) => sanitizeTimelineEntry(ev, article))
     .filter(Boolean);
-  return { ...article, timeline };
+  const xPosts = sanitizeXPostsArray(article);
+  const next = { ...article, timeline, xPosts };
+  if (opts.markApplied !== false) {
+    next.editorialRulesAppliedAt = new Date().toISOString();
+  }
+  return next;
 }

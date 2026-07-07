@@ -6,16 +6,32 @@ const RAW_DIET_DUMP_RE =
 const DIET_VOICE =
   /お尋ねがありました|ございました|ございます|であります|いたします|おります|御質問|御答弁/;
 
-function articleTopicTerms(article) {
-  const base = String(article?.searchKeyword || "").trim();
+const TOPIC_ALIASES = {
+  賃金: ["最低賃金", "賃上げ", "実質賃金", "春闘"],
+  最低賃金: ["賃上げ", "時給", "地域別最低賃金", "審議会"],
+  "最低賃金 2026 全国平均": ["最低賃金", "賃上げ", "時給", "全国平均"],
+};
+
+function topicTerms(keyword) {
+  const base = String(keyword || "").trim();
   const parts = base.split(/[\s　]+/).filter((p) => p.length >= 2);
-  const extras = (article?.searchKeywords || []).flatMap((k) => String(k).split(/[\s　]+/));
-  return [...new Set([base, ...parts, ...extras])].filter(Boolean);
+  const aliases = TOPIC_ALIASES[base] || [];
+  return [...new Set([base, ...parts, ...aliases])].filter(Boolean);
+}
+
+function articleTopicTerms(article) {
+  const base = topicTerms(article?.searchKeyword);
+  const extras = (article?.searchKeywords || []).flatMap((k) => topicTerms(k));
+  return [...new Set([...base, ...extras])].filter(Boolean);
 }
 
 function textMatchesTopic(text, terms) {
   const t = String(text || "");
   return terms.some((term) => term.length >= 2 && t.includes(term));
+}
+
+export function isXPostOnTopic(article, text) {
+  return textMatchesTopic(text, articleTopicTerms(article));
 }
 
 export function isRawDietDump(text) {
@@ -66,14 +82,13 @@ function summarizeSpeech(ev, article) {
   return `${speaker}${group}— ${where}「${gist.replace(/^「|」$/g, "")}」と答弁。`;
 }
 
-export function sanitizeTimelineArticle(article) {
-  const terms = articleTopicTerms(article);
+export function sanitizeTimelineArticle(article, opts = {}) {
   const next = JSON.parse(JSON.stringify(article));
   next.timeline = (next.timeline || [])
     .map((ev) => {
       if (ev.type === "x_post") {
         const text = ev.xPost?.post_text || ev.summaryPlain || "";
-        if (!textMatchesTopic(text, terms) && !/賃上げ|最低賃金|時給/.test(text)) return null;
+        if (!isXPostOnTopic(article, text)) return null;
         return ev;
       }
       if (ev.type === "speech" && isRawDietDump(ev.summaryPlain)) {
@@ -82,6 +97,13 @@ export function sanitizeTimelineArticle(article) {
       return ev;
     })
     .filter(Boolean);
+  next.xPosts = (next.xPosts || []).filter((p) => {
+    if (!p?.post_url) return false;
+    return isXPostOnTopic(article, p.post_text || "");
+  });
+  if (opts.markApplied !== false) {
+    next.editorialRulesAppliedAt = new Date().toISOString();
+  }
   return next;
 }
 

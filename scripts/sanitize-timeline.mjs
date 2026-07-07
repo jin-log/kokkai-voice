@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/** タイムライン summaryPlain 一括サニタイズ */
+/** タイムライン summaryPlain + xPosts 一括サニタイズ */
 import { readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -17,11 +17,17 @@ const slugs = slugArg ? [slugArg] : index.slugs.filter((s) => s !== "test");
 for (const slug of slugs) {
   const fp = path.join(root, "data/articles", `${slug}.json`);
   const article = JSON.parse(await readFile(fp, "utf8"));
-  const before = article.timeline?.length ?? 0;
+  const tlBefore = article.timeline?.length ?? 0;
+  const xBefore = article.xPosts?.length ?? 0;
   const next = sanitizeArticleTimeline(article);
-  const after = next.timeline?.length ?? 0;
-  if (JSON.stringify(article.timeline) !== JSON.stringify(next.timeline)) {
+  const tlAfter = next.timeline?.length ?? 0;
+  const xAfter = next.xPosts?.length ?? 0;
+  const changed =
+    JSON.stringify(article.timeline) !== JSON.stringify(next.timeline) ||
+    JSON.stringify(article.xPosts) !== JSON.stringify(next.xPosts) ||
+    article.editorialRulesAppliedAt !== next.editorialRulesAppliedAt;
+  if (changed) {
     await writeFile(fp, `${JSON.stringify(next, null, 2)}\n`, "utf8");
-    console.log(`${slug}: timeline ${before} → ${after} 件`);
+    console.log(`${slug}: timeline ${tlBefore}→${tlAfter}, xPosts ${xBefore}→${xAfter}`);
   }
 }

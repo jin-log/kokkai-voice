@@ -38,6 +38,52 @@ function textMatchesTopic(text, terms) {
   return terms.some((term) => term.length >= 2 && t.includes(term));
 }
 
+const TOPIC_ALIASES = {
+  賃金: ["最低賃金", "賃上げ", "実質賃金", "春闘"],
+  最低賃金: ["賃上げ", "時給", "地域別最低賃金", "審議会"],
+  "最低賃金 2026 全国平均": ["最低賃金", "賃上げ", "時給", "全国平均"],
+};
+
+function topicTerms(keyword) {
+  const base = String(keyword || "").trim();
+  const parts = base.split(/[\s　]+/).filter((p) => p.length >= 2);
+  const aliases = TOPIC_ALIASES[base] || [];
+  return [...new Set([base, ...parts, ...aliases])].filter(Boolean);
+}
+
+function articleTopicTermsFull(article) {
+  const base = topicTerms(article?.searchKeyword);
+  const extras = (article?.searchKeywords || []).flatMap((k) => topicTerms(k));
+  return [...new Set([...base, ...extras])].filter(Boolean);
+}
+
+function isXPostOnTopic(article, text) {
+  return textMatchesTopic(text, articleTopicTermsFull(article));
+}
+
+function offTopicXViolations(article) {
+  const hits = [];
+  const seen = new Set();
+  for (const p of article.xPosts ?? []) {
+    const text = String(p.post_text || "").trim();
+    if (!text || seen.has(text)) continue;
+    seen.add(text);
+    if (!isXPostOnTopic(article, text)) {
+      hits.push({ field: `xPosts[${p.slot}]`, text });
+    }
+  }
+  for (const [i, e] of (article.timeline ?? []).entries()) {
+    if (e.type !== "x_post") continue;
+    const text = String(e.xPost?.post_text || e.summaryPlain || "").trim();
+    if (!text || seen.has(text)) continue;
+    seen.add(text);
+    if (!isXPostOnTopic(article, text)) {
+      hits.push({ field: `timeline[${i}]`, text });
+    }
+  }
+  return hits;
+}
+
 function sectionLines(article, sectionId) {
   if (sectionId === "nowSummary") {
     return (article.nowSummary?.bullets ?? []).map((b) => ({ field: "nowSummary", text: String(b) }));
@@ -60,6 +106,12 @@ function sectionLines(article, sectionId) {
       text: String(e.summaryPlain || ""),
     }));
   }
+  if (sectionId === "xPosts") {
+    return (article.xPosts ?? []).map((p, i) => ({
+      field: `xPosts[${i}]`,
+      text: String(p.post_text || ""),
+    }));
+  }
   return [];
 }
 
@@ -79,6 +131,18 @@ export function lintArticle(article) {
           ruleId: rule.id,
           severity: rule.severity || "blocker",
           sectionId,
+          field,
+          line: text.slice(0, 120),
+          title: rule.title,
+        });
+      }
+    }
+    if (rule.id === "prin-timeline-x-topic") {
+      for (const { field, text } of offTopicXViolations(article)) {
+        violations.push({
+          ruleId: rule.id,
+          severity: rule.severity || "blocker",
+          sectionId: "xPosts",
           field,
           line: text.slice(0, 120),
           title: rule.title,
