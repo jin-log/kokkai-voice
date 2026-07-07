@@ -4,10 +4,17 @@
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { formatStanceReviseText } from "../../functions/lib/revise-stance-format.js";
+import {
+  REVISE_SECTION_TEMPLATES,
+  getSectionTemplate,
+} from "../../functions/lib/revise-section-templates.js";
 
 const repoRoot = path.join(path.dirname(fileURLToPath(import.meta.url)), "../..");
 
-/** @typedef {{ id: string, label: string, desc: string, checkIds: string[], agent: string }} ReviseSection */
+export { REVISE_SECTION_TEMPLATES, getSectionTemplate };
+
+/** @typedef {{ id: string, label: string, desc: string, checkIds: string[], agent: string, template: string }} ReviseSection */
 
 /** @type {ReviseSection[]} */
 export const REVISE_SECTIONS = [
@@ -17,6 +24,7 @@ export const REVISE_SECTIONS = [
     desc: "タイトルと冒頭1行（タイトルの疑問に答える行）",
     checkIds: ["A1_title", "A1b_title_placeholder", "P1_opening_missing"],
     agent: "writer",
+    template: REVISE_SECTION_TEMPLATES.title_opening,
   },
   {
     id: "nowSummary",
@@ -24,6 +32,7 @@ export const REVISE_SECTIONS = [
     desc: "nowSummary 3行・話題一致・第三者目線",
     checkIds: ["B1_nowSummary", "B3_topic", "B4_conclusion", "B5_writer_voice"],
     agent: "writer",
+    template: REVISE_SECTION_TEMPLATES.nowSummary,
   },
   {
     id: "summaryBullets",
@@ -31,6 +40,7 @@ export const REVISE_SECTIONS = [
     desc: "summaryBullets・根拠の独自性",
     checkIds: ["C1_summaryBullets", "C2_evidence_distinct"],
     agent: "writer",
+    template: REVISE_SECTION_TEMPLATES.summaryBullets,
   },
   {
     id: "arcSummary",
@@ -38,6 +48,7 @@ export const REVISE_SECTIONS = [
     desc: "日付付き経緯・案件キーワード一致",
     checkIds: ["D1_arcSummary", "D2_arc_topic"],
     agent: "writer",
+    template: REVISE_SECTION_TEMPLATES.arcSummary,
   },
   {
     id: "timeline",
@@ -45,6 +56,7 @@ export const REVISE_SECTIONS = [
     desc: "国会・X の出来事並び。答弁だけ並んでないか",
     checkIds: ["E1_timeline_count", "E2_timeline_x", "E3_timeline_diet", "E4_timeline_diet_topic"],
     agent: "writer",
+    template: REVISE_SECTION_TEMPLATES.timeline,
   },
   {
     id: "stance",
@@ -52,6 +64,7 @@ export const REVISE_SECTIONS = [
     desc: "各党の立場・記号・出典",
     checkIds: ["G1_stanceMatrix_ref", "G3_parties_min", "G4_parties_source", "G5_parties_symbol", "G6_matrix_topic"],
     agent: "writer",
+    template: REVISE_SECTION_TEMPLATES.stance,
   },
   {
     id: "xPosts",
@@ -59,6 +72,7 @@ export const REVISE_SECTIONS = [
     desc: "検証済み URL・話題一致",
     checkIds: ["H1_xPosts", "H2_x_topic"],
     agent: "x-researcher",
+    template: REVISE_SECTION_TEMPLATES.xPosts,
   },
   {
     id: "glossary",
@@ -66,6 +80,7 @@ export const REVISE_SECTIONS = [
     desc: "glossary 2語以上",
     checkIds: ["F1_glossary"],
     agent: "writer",
+    template: REVISE_SECTION_TEMPLATES.glossary,
   },
   {
     id: "prosCons",
@@ -73,6 +88,7 @@ export const REVISE_SECTIONS = [
     desc: "公表数値付きメリット・デメリット",
     checkIds: ["J1_prosCons"],
     agent: "writer",
+    template: REVISE_SECTION_TEMPLATES.prosCons,
   },
 ];
 
@@ -102,11 +118,8 @@ export function sectionContent(article, sectionId, stance = null) {
         })
         .join("\n") || "(空)";
     case "stance": {
-      const parties = stance?.matrix?.parties ?? [];
-      if (!parties.length) return "(〇×表なし)";
-      return parties
-        .map((p) => `${p.symbol || "—"} ${p.partyLabel}: ${p.stanceLabel || p.summary || ""}`)
-        .join("\n");
+      const matrix = stance?.matrix ?? null;
+      return formatStanceReviseText(matrix);
     }
     case "xPosts":
       return (article.xPosts ?? [])
