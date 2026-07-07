@@ -1,13 +1,7 @@
 /**
  * 編集ルール lint（Functions — data/editorial-rules.json と同期）
  */
-import { readFileSync } from "node:fs";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
-
-const rulesPayload = JSON.parse(
-  readFileSync(path.join(path.dirname(fileURLToPath(import.meta.url)), "../data/editorial-rules.json"), "utf8"),
-);
+import rulesPayload from "../data/editorial-rules.json";
 
 const PROCEDURAL_TOPIC =
   /起立を求め|両件は承諾|御異議ありませんか|採決いたしまして|委員長が報告/;
