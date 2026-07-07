@@ -24,7 +24,7 @@ export function waivedCheckIds(article, opts = {}) {
   /** @type {Set<string>} */
   const waived = new Set();
 
-  if (caseType === "statistical") {
+  if (caseType === "statistical" || caseType === "policy_retrospective") {
     for (const id of G_CHECKS) waived.add(id);
     if (article.statsSeries?.chart?.points?.length) {
       waived.add("J1_prosCons");

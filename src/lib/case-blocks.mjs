@@ -3,7 +3,7 @@
  * プレビュー・本番で同一。contentBlocks / caseType / statsSeries があればブロックUI。
  */
 
-/** @typedef {'policy_debate'|'statistical'|'narrative'|'mixed'} CaseType */
+/** @typedef {'policy_debate'|'statistical'|'narrative'|'mixed'|'policy_retrospective'} CaseType */
 
 /** @type {Record<CaseType, { stance: boolean, impact: boolean, stats: boolean, legacyProsCons: boolean, narrativeArc: boolean }>} */
 export const BLOCK_CONFIG = {
@@ -34,6 +34,13 @@ export const BLOCK_CONFIG = {
     stats: true,
     legacyProsCons: false,
     narrativeArc: false,
+  },
+  policy_retrospective: {
+    stance: false,
+    impact: false,
+    stats: true,
+    legacyProsCons: false,
+    narrativeArc: true,
   },
 };
 
@@ -68,6 +75,7 @@ export const SLUG_CASE_TYPE = {
   "boei-tokubetsuzei": "statistical",
   "invoice-menzei-2026": "policy_debate",
   "teigaku-kyufu-2024": "statistical",
+  "kishida-seiken-jisshi": "policy_retrospective",
 };
 
 /** @param {import('./articles.mjs').Article} article */
@@ -125,6 +133,7 @@ export function caseTypeLabel(caseType) {
     statistical: "数値統計型",
     narrative: "経過・結末型",
     mixed: "複合型",
+    policy_retrospective: "政策振り返り型",
   };
   return labels[caseType] || caseType;
 }
@@ -136,6 +145,7 @@ export function caseTypeBadgeClass(caseType) {
     statistical: "cb-type-badge--stat",
     narrative: "cb-type-badge--narrative",
     mixed: "cb-type-badge--mixed",
+    policy_retrospective: "cb-type-badge--narrative",
   };
   return map[caseType] || "";
 }
