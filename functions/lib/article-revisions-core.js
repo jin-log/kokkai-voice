@@ -283,8 +283,11 @@ export function buildProposal({ article, sectionId, instruction, current, matrix
     return {
       before,
       after,
-      note: after === before ? "X投稿データなし、または変更なし" : "X投稿を話題一致・平易語で整形",
-      canApply: after !== before,
+      note:
+        after === before
+          ? "X投稿データなし、または変更なし（保存は次フェーズ）"
+          : "X投稿を話題一致・平易語で整形（保存は次フェーズ）",
+      canApply: false,
       unchanged: before === after,
     };
   }

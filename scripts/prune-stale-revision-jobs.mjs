@@ -21,7 +21,7 @@ function isBrokenProposal(job) {
   if (job.status !== "proposed") return false;
 
   if (p.before === p.after) return true;
-  if (p.canApply === false && STALE_NOTE_RE.test(String(p.note || ""))) return true;
+  if (p.canApply === false) return true;
 
   if (job.sectionId === "stance") {
     const before = String(p.before || "");
@@ -30,6 +30,33 @@ function isBrokenProposal(job) {
   }
 
   return false;
+}
+
+/** slug+sectionId ごとに最新1件だけ残す */
+function dedupeProposed(jobs) {
+  /** @type {Map<string, object>} */
+  const latest = new Map();
+  for (const job of jobs) {
+    if (job.status !== "proposed") continue;
+    const key = `${job.slug}|${job.sectionId}`;
+    const prev = latest.get(key);
+    if (!prev || String(job.createdAt) > String(prev.createdAt)) {
+      latest.set(key, job);
+    }
+  }
+  let dupes = 0;
+  for (const job of jobs) {
+    if (job.status !== "proposed") continue;
+    const key = `${job.slug}|${job.sectionId}`;
+    if (latest.get(key)?.id !== job.id) {
+      job.status = "rejected";
+      job.rejectedAt = new Date().toISOString();
+      job.updatedAt = job.rejectedAt;
+      job.pruneReason = "duplicate-proposed-superseded";
+      dupes++;
+    }
+  }
+  return dupes;
 }
 
 const raw = JSON.parse(await readFile(storePath, "utf8"));
@@ -44,6 +71,8 @@ for (const job of jobs) {
   job.pruneReason = "stale-noop-or-pre-fix-stance-display";
   pruned++;
 }
+
+pruned += dedupeProposed(jobs);
 
 if (pruned === 0) {
   console.log("OK 却下対象の proposed job なし");

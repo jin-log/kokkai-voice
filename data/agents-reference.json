@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-27",
+  "updatedAt": "2026-07-07",
   "workflow": [
     {
       "order": 1,
@@ -39,6 +39,12 @@
     },
     {
       "order": 7,
+      "label": "⑦ブロック修正（オーナー）",
+      "agentId": "ceo",
+      "summary": "管理画面 /dev/articles/revise/{slug}/ でセクション単位に指示→提案→保存。GitHub main 更新後 deploy.yml で本番反映。正本 docs/admin-article-revise.md・スキル kokkai-article-revise。"
+    },
+    {
+      "order": 8,
       "label": "⑥最終QA",
       "agentId": "debugger",
       "summary": "本番URLの表示・リンク・品質・スクショを再確認。すべて合格するまで公開完了扱いにしない。"
@@ -53,6 +59,7 @@
         "オーナーの指示を専門エージェントへ割り当て、進捗とブロッカーを集約する",
         "品質NG・ゲート未達を検出したら担当エージェントへ自動でやり直しを回す",
         "本番反映のタイミングと公開ゲートを管理する",
+        "オーナーのブロック修正指示を管理画面API経由でGitHub→デプロイまで回す（docs/admin-article-revise.md）",
         "品質巡回（ローカル・サーバー）は常時稼働。止めてよいのはOBS起動中と patrol-pause-until.json のみ",
         "契約・支払い・ドメイン取得・最終公開GOなど、オーナーしかできないことだけ依頼する"
       ],
@@ -293,6 +300,7 @@
     { "label": "X URL・本文・話題一致", "agentId": "x-researcher" },
     { "label": "Xスクショ", "agentId": "debugger" },
     { "label": "法務スキャン", "agentId": "legal-check" },
-    { "label": "デプロイ・全体指揮", "agentId": "ceo" }
+    { "label": "デプロイ・全体指揮", "agentId": "ceo" },
+    { "label": "ブロック修正UI（オーナー指示）", "agentId": "ceo" }
   ]
 }
