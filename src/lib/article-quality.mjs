@@ -66,7 +66,7 @@ export function auditArticleQuality(article) {
   const pcItems = [...(article.prosCons?.merits ?? []), ...(article.prosCons?.demerits ?? [])];
   const weakFigures = pcItems.filter((m) => m?.figure && YEAR_ONLY.test(String(m.figure).trim()));
   const hasStatsBlock = (article.statsSeries?.chart?.points?.length ?? 0) >= 2;
-  if (!hasStatsBlock && weakFigures.length >= 2) {
+  if (!hasStatsBlock && weakFigures.length >= 2 && !article.meritsDemerits) {
     issues.push({
       id: "Q4_proscons_year_only",
       severity: "blocker",

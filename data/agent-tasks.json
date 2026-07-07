@@ -1,9 +1,9 @@
 {
-  "generatedAt": "2026-07-07T12:37:30.866Z",
-  "total": 56,
+  "generatedAt": "2026-07-07T12:42:34.726Z",
+  "total": 58,
   "byAgent": {
     "ceo": 7,
-    "writer": 46,
+    "writer": 48,
     "x-researcher": 2,
     "legal-check": 1
   },
@@ -95,6 +95,17 @@
       "todo": "可決・金額・合意内容など、読者が知りたい答えを1行目に書く",
       "command": "node scripts/complete-article.mjs --slug gaikokujin-seisaku --content-only --force",
       "priority": 5
+    },
+    {
+      "id": "hosei-yosan:J1_analytical_blocks",
+      "slug": "hosei-yosan",
+      "agent": "writer",
+      "agentLabel": "ライター",
+      "checkId": "J1_analytical_blocks",
+      "title": "[ゲート] 分析ブロック",
+      "todo": "メリデメ・利害・数値統計のいずれか1〜3種（0種NG）",
+      "command": "npm run complete:article -- --slug hosei-yosan --content-only --force",
+      "priority": 30
     },
     {
       "id": "hosei-yosan:J1_prosCons",
@@ -398,13 +409,13 @@
       "priority": 30
     },
     {
-      "id": "undefined:J1_prosCons",
+      "id": "undefined:J1_analytical_blocks",
       "agent": "writer",
       "agentLabel": "ライター",
-      "checkId": "J1_prosCons",
-      "title": "[ゲート] メリデメ",
-      "todo": "公表数値付きメリット2・デメリット2",
-      "command": "node scripts/generate-proscons-auto.mjs --slug ",
+      "checkId": "J1_analytical_blocks",
+      "title": "[ゲート] 分析ブロック",
+      "todo": "メリデメ・利害・数値統計のいずれか1〜3種（0種NG）",
+      "command": "npm run complete:article -- --slug undefined --content-only --force",
       "priority": 30
     },
     {
@@ -531,6 +542,17 @@
       "title": "[ゲート] 経緯の話題",
       "todo": "経緯3行以上が案件キーワードと一致",
       "command": "node scripts/complete-article.mjs --slug shussho-budget-seika --content-only --force",
+      "priority": 30
+    },
+    {
+      "id": "shussho-budget-seika:J1_analytical_blocks",
+      "slug": "shussho-budget-seika",
+      "agent": "writer",
+      "agentLabel": "ライター",
+      "checkId": "J1_analytical_blocks",
+      "title": "[ゲート] 分析ブロック",
+      "todo": "メリデメ・利害・数値統計のいずれか1〜3種（0種NG）",
+      "command": "npm run complete:article -- --slug shussho-budget-seika --content-only --force",
       "priority": 30
     },
     {
