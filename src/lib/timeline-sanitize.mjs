@@ -2,7 +2,7 @@
  * タイムライン summaryPlain の品質ガード（議事録生文・話題外Xを弾く）
  */
 import { isDietVoice, isSpeechFragment, normalizeFactPhrase } from "./diet-voice.mjs";
-import { textMatchesTopic } from "./topic-relevance.mjs";
+import { articleTopicTerms, textMatchesTopic } from "./topic-relevance.mjs";
 
 /** 議事録の生切り出し（○国務大臣…） */
 export function isRawDietDump(text) {
@@ -31,20 +31,25 @@ function summarizeSpeechRow(ev, article) {
   const kw = article?.searchKeyword || article?.title || "";
 
   const raw = normalizeFactPhrase(String(ev.summaryPlain || "").replace(/^[^—]+—\s*/, ""));
+  const terms = articleTopicTerms(article);
   const sentences = raw
     .replace(/○[^\r\n（]+（[^）]+君）\s*/g, "")
     .split(/。/)
     .map((s) => s.trim())
-    .filter((s) => s.length >= 12 && textMatchesTopic(s, article));
+    .filter(
+      (s) =>
+        s.length >= 12 &&
+        textMatchesTopic(s, terms) &&
+        !/御質問|おかれましては|ありがとうございます|お答えします/.test(s),
+    );
 
-  let gist = sentences.find((s) => s.length <= 90);
-  if (!gist && /最低賃金|地域別最低賃金|特定最低賃金/.test(raw)) {
-    if (/特定最低賃金/.test(raw)) gist = "特定最低賃金は労使の上乗せ選択肢として機能すると説明";
-    else if (/セーフティーネット|地域別最低賃金/.test(raw)) gist = "地域別最低賃金のセーフティーネット機能は変わらないと説明";
-    else if (/千五百円|1500円|骨太方針/.test(raw)) gist = "骨太方針の全国平均1500円目標を継続する方針を表明";
-    else gist = shorten(sentences[0] || raw, 80);
-  }
-  if (!gist) gist = `${kw || "本件"}に関する政府見解を表明`;
+  let gist = "";
+  if (/特定最低賃金/.test(raw)) gist = "特定最低賃金は労使の上乗せ選択肢として機能すると説明";
+  else if (/地域別最低賃金|セーフティーネット/.test(raw)) gist = "地域別最低賃金のセーフティーネット機能は変わらないと説明";
+  else if (/千五百円|1500円|骨太方針/.test(raw)) gist = "骨太方針の全国平均1500円目標を継続する方針を表明";
+  else gist = sentences.find((s) => s.length <= 90) || "";
+  if (!gist) gist = shorten(sentences[0] || raw, 80);
+  if (/御質問|おかれましては/.test(gist)) gist = "最低賃金引上げの政府方針を説明";
 
   return `${speaker}${group}— ${where}「${gist.replace(/^「|」$/g, "")}」と答弁。`;
 }
@@ -62,10 +67,11 @@ function summarizeXRow(ev, article) {
  */
 export function sanitizeTimelineEntry(ev, article) {
   if (!ev) return null;
+  const terms = articleTopicTerms(article);
 
   if (ev.type === "x_post") {
     const text = ev.xPost?.post_text || ev.summaryPlain || "";
-    if (!textMatchesTopic(text, article) && !/賃上げ|最低賃金|時給/.test(text)) {
+    if (!textMatchesTopic(text, terms) && !/賃上げ|最低賃金|時給/.test(text)) {
       return null;
     }
     if (isRawDietDump(ev.summaryPlain)) {

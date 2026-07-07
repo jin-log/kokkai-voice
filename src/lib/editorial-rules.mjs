@@ -6,7 +6,7 @@ import { readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { isGeneralBoilerplateLine } from "./general-article.mjs";
-import { textMatchesTopic } from "./topic-relevance.mjs";
+import { articleTopicTerms, textMatchesTopic } from "./topic-relevance.mjs";
 
 const root = path.join(path.dirname(fileURLToPath(import.meta.url)), "../..");
 
@@ -98,7 +98,7 @@ export function lintArticle(article) {
         if (!lineMatchesRule(text, rule)) continue;
         if (
           rule.id === "prin-summary-topic-match" &&
-          textMatchesTopic(text, article)
+          textMatchesTopic(text, articleTopicTerms(article))
         ) {
           continue;
         }

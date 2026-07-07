@@ -96,7 +96,8 @@ export function sectionContent(article, sectionId, stance = null) {
     case "timeline":
       return (article.timeline ?? [])
         .map((row) => {
-          const kind = row.type === "x" ? "X" : row.type === "speech" ? "国会" : row.type || "?";
+          const kind =
+            row.type === "x_post" ? "X" : row.type === "speech" ? "国会" : row.type || "?";
           return `${row.date} [${kind}] ${row.summaryPlain || row.summary || ""}`;
         })
         .join("\n") || "(空)";
