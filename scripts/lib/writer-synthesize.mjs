@@ -529,8 +529,13 @@ function extractEvidenceText(sn, keyword, nowKeys) {
   if ([...nowKeys].some((k) => key.startsWith(k.slice(0, 14)) || k.startsWith(key.slice(0, 14)))) {
     return "";
   }
-  if (isSpeechFragment(event)) return "";
-  return `${sn.date}：${who}— ${event}（国会議事録）。`;
+  const header = `${sn.date}：${who}— `;
+  const footer = "（国会議事録）。";
+  const maxEvent = 88 - header.length - footer.length;
+  const eventTrimmed = maxEvent > 0 ? event.slice(0, maxEvent) : event;
+  const result = `${header}${eventTrimmed}${footer}`;
+  if (isSpeechFragment(result)) return "";
+  return result;
 }
 
 function policyFromEvent(ev, who, topic) {
