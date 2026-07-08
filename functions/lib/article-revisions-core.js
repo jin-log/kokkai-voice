@@ -192,17 +192,19 @@ export function buildProposal({ article, sectionId, instruction, current, matrix
       return {
         before,
         after: numbered(ownerBullets),
-        note: `オーナー指示の${ownerBullets.length}行をそのまま反映`,
+        note: `オーナー指示の${ownerBullets.length}行を採用（事実文として判定）`,
         canApply,
       };
     }
-    const after = guardMetaOutput(buildNowSummaryProposal(article, topic, keywords), () =>
-      buildNowSummaryProposal(article, topic, keywords, { strict: true }),
+    // hint に指示動詞が含まれる場合は方向指示として keywords を補強して生成
+    const dirKeywords = [...keywords, ...hint.split(/[\s、。「」]/g).filter(w => w.length >= 2)].slice(0, 10);
+    const after = guardMetaOutput(buildNowSummaryProposal(article, topic, dirKeywords), () =>
+      buildNowSummaryProposal(article, topic, dirKeywords, { strict: true }),
     );
     return {
       before,
       after,
-      note: "記事データ（答弁抜粋・経緯）から読者向けの結論文を生成",
+      note: "オーナーの指示方向を踏まえ、記事データ（国会答弁・経緯）から結論を再構成",
       canApply,
     };
   }
@@ -880,12 +882,15 @@ function parseOwnerInstructionBullets(hint) {
   const countMatch = raw.match(/この\s*(\d+)\s*点/);
   const maxItems = countMatch ? Math.min(3, parseInt(countMatch[1], 10)) : 3;
   const skipRe = /^(この|それ|以下|上記|例[:：]|修正指示)/;
+  // 指示動詞で終わる行は「要望・指示文」なので除外（記事内容ではない）
+  const instructionVerbRe = /(?:作る|書く|作って|書いて|提案|生成|まとめ|整理|確認|記載|表示|にして|変えて|変更して|してほしい|してくれ|お願い)[。]?$/;
   /** @type {string[]} */
   const bullets = [];
 
   for (const line of raw.split("\n")) {
     let t = line.trim();
     if (!t || skipRe.test(t)) continue;
+    if (instructionVerbRe.test(t)) continue;
     t = t.replace(/^(?:\d+[.)．、]\s*)/, "").trim();
     if (/^Title:\s*/i.test(t)) continue;
     if (t.length < 12) continue;
