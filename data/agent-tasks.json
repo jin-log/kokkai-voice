@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-07-08T20:46:34.856Z",
-  "total": 42,
+  "generatedAt": "2026-07-08T20:51:00.056Z",
+  "total": 50,
   "byAgent": {
-    "writer": 37,
+    "writer": 45,
     "ceo": 2,
     "x-researcher": 2,
     "legal-check": 1
@@ -72,6 +72,94 @@
       "title": "[ゲート] メリデメ",
       "todo": "公表数値付きメリット2・デメリット2",
       "command": "node scripts/generate-proscons-auto.mjs --slug hosei-yosan",
+      "priority": 30
+    },
+    {
+      "id": "kokumin-kaigi:B5_writer_voice",
+      "slug": "kokumin-kaigi",
+      "agent": "writer",
+      "agentLabel": "ライター",
+      "checkId": "B5_writer_voice",
+      "title": "[ゲート] 第三者目線",
+      "todo": "議事録口調（お尋ね・私自身・御党）を除去",
+      "command": "node scripts/complete-article.mjs --slug kokumin-kaigi --content-only --force",
+      "priority": 30
+    },
+    {
+      "id": "kokumin-kaigi:C1_summaryBullets",
+      "slug": "kokumin-kaigi",
+      "agent": "writer",
+      "agentLabel": "ライター",
+      "checkId": "C1_summaryBullets",
+      "title": "[ゲート] 要点",
+      "todo": "summaryBullets を3点以上",
+      "command": "node scripts/complete-article.mjs --slug kokumin-kaigi --content-only --force",
+      "priority": 30
+    },
+    {
+      "id": "kokumin-kaigi:F1_glossary",
+      "slug": "kokumin-kaigi",
+      "agent": "writer",
+      "agentLabel": "ライター",
+      "checkId": "F1_glossary",
+      "title": "[ゲート] 用語解説",
+      "todo": "用語を2語以上",
+      "command": "node scripts/complete-article.mjs --slug kokumin-kaigi --content-only --force",
+      "priority": 30
+    },
+    {
+      "id": "kokumin-kaigi:J1_analytical_blocks",
+      "slug": "kokumin-kaigi",
+      "agent": "writer",
+      "agentLabel": "ライター",
+      "checkId": "J1_analytical_blocks",
+      "title": "[ゲート] 分析ブロック",
+      "todo": "メリデメ・利害・数値統計のいずれか1〜3種（0種NG）",
+      "command": "npm run complete:article -- --slug kokumin-kaigi --content-only --force",
+      "priority": 30
+    },
+    {
+      "id": "kokumin-kaigi:G2_policy_matrix_file",
+      "slug": "kokumin-kaigi",
+      "agent": "writer",
+      "agentLabel": "ライター",
+      "checkId": "G2_policy_matrix_file",
+      "title": "[ゲート] 公言と行動ファイル",
+      "todo": "policy-matrix JSON を作成",
+      "command": "node scripts/complete-article.mjs --slug kokumin-kaigi --matrix-only --force",
+      "priority": 30
+    },
+    {
+      "id": "kokumin-kaigi:G3_parties_min",
+      "slug": "kokumin-kaigi",
+      "agent": "writer",
+      "agentLabel": "ライター",
+      "checkId": "G3_parties_min",
+      "title": "[ゲート] 政党数",
+      "todo": "2党以上を登録",
+      "command": "node scripts/complete-article.mjs --slug kokumin-kaigi --matrix-only --force",
+      "priority": 30
+    },
+    {
+      "id": "kokumin-kaigi:G4_parties_source",
+      "slug": "kokumin-kaigi",
+      "agent": "writer",
+      "agentLabel": "ライター",
+      "checkId": "G4_parties_source",
+      "title": "[ゲート] 党の出典URL",
+      "todo": "各党に sourceUrl",
+      "command": "node scripts/complete-article.mjs --slug kokumin-kaigi --matrix-only --force",
+      "priority": 30
+    },
+    {
+      "id": "kokumin-kaigi:G5_parties_symbol",
+      "slug": "kokumin-kaigi",
+      "agent": "writer",
+      "agentLabel": "ライター",
+      "checkId": "G5_parties_symbol",
+      "title": "[ゲート] ◎〇▲×",
+      "todo": "各党の記号を確定（v2）",
+      "command": "node scripts/complete-article.mjs --slug kokumin-kaigi --matrix-only --force",
       "priority": 30
     },
     {
