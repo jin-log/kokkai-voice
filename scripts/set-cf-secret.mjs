@@ -42,24 +42,7 @@ if (!token) {
 const url = `https://api.cloudflare.com/client/v4/accounts/${ACCOUNT_ID}/pages/projects/${PROJECT_NAME}`;
 
 // まず現在の設定を取得
-const getRes = await fetch(url, {
-  headers: { Authorization: `Bearer ${token}` },
-});
-const project = await getRes.json();
-
-if (!project.success) {
-  console.error("プロジェクト取得失敗:", JSON.stringify(project.errors));
-  process.exit(1);
-}
-
-const current = project.result?.deployment_configs?.production?.env_vars ?? {};
-
-// SECRET として追加/更新
-const updated = {
-  ...current,
-  [KEY]: { type: "secret_text", value: VALUE },
-};
-
+// 追加/更新するキーだけをPATCHする（既存シークレットをPATCHに含めると値が空になる）
 const patchRes = await fetch(url, {
   method: "PATCH",
   headers: {
@@ -68,7 +51,11 @@ const patchRes = await fetch(url, {
   },
   body: JSON.stringify({
     deployment_configs: {
-      production: { env_vars: updated },
+      production: {
+        env_vars: {
+          [KEY]: { type: "secret_text", value: VALUE },
+        },
+      },
     },
   }),
 });
