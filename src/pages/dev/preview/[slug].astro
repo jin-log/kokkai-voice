@@ -5,7 +5,9 @@ import {
   getPreviewSlugs,
   loadArticle,
   loadStanceData,
+  loadAllArticles,
 } from "../../../lib/articles.mjs";
+import { buildRecommendationBundle } from "../../../lib/content-recommendations.mjs";
 import { articleShortTitle } from "../../../lib/case-helpers.mjs";
 
 export async function getStaticPaths() {
@@ -16,6 +18,8 @@ export async function getStaticPaths() {
 const { slug } = Astro.params;
 const article = await loadArticle(slug);
 const stance = await loadStanceData(article);
+const allArticles = await loadAllArticles();
+const recBundle = buildRecommendationBundle(article, allArticles);
 const title = articleShortTitle(article);
 ---
 
@@ -33,10 +37,69 @@ const title = articleShortTitle(article);
     </div>
     <div class="admin-row__quick">
       <a href="/dev/articles/" class="admin-row__btn admin-row__btn--ghost">← 記事一覧</a>
-      {article.pageReady && !article.adminHidden && (
+      {article.pageReady && !article.adminHidden ? (
         <a href={`/case/${article.slug}/`} class="admin-row__btn" target="_blank" rel="noopener">本番を見る</a>
+      ) : !article.adminHidden && (
+        <button
+          type="button"
+          id="preview-publish-btn"
+          class="admin-row__btn admin-row__btn--primary"
+          data-slug={article.slug}
+        >
+          公開する
+        </button>
       )}
+      <span id="preview-publish-status" hidden></span>
     </div>
   </div>
-  <CasePageContent article={article} stance={stance} preview={true} />
+  <CasePageContent article={article} stance={stance} preview={true} recBundle={recBundle} relatedItems={recBundle.relatedItems} />
 </AdminShell>
+
+<script is:inline>
+(function () {
+  const KEY = "dev_auth";
+  function getPin() { return window.adminGetPin?.() || localStorage.getItem(KEY) || ""; }
+
+  const btn = document.getElementById("preview-publish-btn");
+  if (!btn) return;
+
+  btn.addEventListener("click", async () => {
+    const slug = btn.dataset.slug;
+    const statusEl = document.getElementById("preview-publish-status");
+    if (!confirm(`「${slug}」を一般公開しますか？`)) return;
+    btn.disabled = true;
+    if (statusEl) { statusEl.hidden = false; statusEl.textContent = "公開処理を起動中…"; }
+    try {
+      const pin = getPin();
+      const res = await fetch("/api/dispatch", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ pin, action: "deploy_article", slug }),
+      });
+      const data = await res.json();
+      if (!res.ok || !data.ok) throw new Error(data.error || data.detail || "エラー");
+      if (statusEl) statusEl.textContent = "✅ 起動済み — 1〜2分待って更新します…";
+      let done = false;
+      for (let i = 0; i < 18 && pin; i++) {
+        await new Promise((r) => setTimeout(r, 10000));
+        try {
+          const r = await fetch(`/api/project-status?pin=${encodeURIComponent(pin)}&t=${Date.now()}`);
+          if (!r.ok) continue;
+          const d = await r.json();
+          const row = d.status?.slugs?.find((s) => s.slug === slug);
+          if (row?.pageReady || row?.publishState === "live") { done = true; break; }
+        } catch { /* retry */ }
+      }
+      if (statusEl) {
+        statusEl.textContent = done
+          ? "✅ 公開反映を確認しました"
+          : "⚠ まだ反映されていません。しばらく後に再読み込みしてください";
+      }
+      if (done) setTimeout(() => location.href = `/case/${slug}/`, 1500);
+    } catch (err) {
+      if (statusEl) statusEl.textContent = "❌ " + err.message;
+      btn.disabled = false;
+    }
+  });
+})();
+</script>
