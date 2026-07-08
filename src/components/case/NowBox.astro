@@ -3,10 +3,10 @@ import DietPendingNotice from "./DietPendingNotice.astro";
 import RichTextWithTermLinks from "./RichTextWithTermLinks.astro";
 import { showsDietPendingUI } from "../../lib/diet-pending.mjs";
 
-const { article, variant = "default" } = Astro.props;
+const { article, variant = "default", usedTerms } = Astro.props;
 const ns = article.nowSummary ?? {};
 const bullets = ns.bullets ?? [];
-const termLinkUsed = new Set();
+const termLinkUsed = usedTerms ?? new Set();
 const updatedNote = ns.updatedAt ? ` · 要約更新: ${ns.updatedAt.slice(0, 10)}` : "";
 const fetchedLabel = article.fetchedAt?.slice(0, 10) ?? "—";
 const dietPending = showsDietPendingUI(article);

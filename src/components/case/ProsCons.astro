@@ -1,8 +1,8 @@
 ---
-import { formatDate } from "../../lib/case-helpers.mjs";
+import { formatDate, resolveProsCons } from "../../lib/case-helpers.mjs";
 
 const { article, prosCons: prosConsProp } = Astro.props;
-const pc = prosConsProp ?? article.meritsDemerits ?? article.prosCons;
+const pc = prosConsProp ?? resolveProsCons(article);
 if (!pc?.merits?.length && !pc?.demerits?.length) return null;
 
 const merits = pc.merits ?? [];

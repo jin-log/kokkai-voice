@@ -104,7 +104,7 @@ const badge = adminBucketBadge(s);
           公開する
         </button>
       ) : s.publishState === "live" ? (
-        <a href={`/case/${s.slug}/`} class="admin-row__btn admin-row__btn--ghost">本番を見る</a>
+        <a href={`/case/${s.slug}/`} class="admin-row__btn admin-row__btn--ghost" data-role="live-link">本番を見る</a>
       ) : (
         <span class="admin-row__gate-hint" data-role="gate-hint">
           {s.adminBucket === "prep" ? `完成度 ${s.goldPct}%` : "—"}

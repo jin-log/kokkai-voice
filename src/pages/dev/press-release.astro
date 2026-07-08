@@ -1,0 +1,387 @@
+---
+import AdminShell from "../../components/admin/AdminShell.astro";
+import DevChromeOpen from "../../components/DevChromeOpen.astro";
+import { loadPressRelease, loadPressReleaseLog, pressChannelStatus } from "../../lib/press-release.mjs";
+
+const pr = await loadPressRelease();
+const posted = await loadPressReleaseLog();
+const allChannels = pr.channelGroups.flatMap((g) =>
+  g.channels.map((c) => ({ ...c, groupLabel: g.label })),
+);
+const doneCount = allChannels.filter((c) => pressChannelStatus(posted, c.id).done).length;
+---
+
+<AdminShell activeId="press-release" title="プレスリリース">
+  <header class="admin-page-head">
+    <h1 class="admin-page-head__title">プレスリリース</h1>
+    <p class="admin-page-head__note">
+      無料配信先の文案・チェックリスト。投稿記録は <code>data/promo-intro-log.json</code> に保存。
+      更新: {pr.updatedAt}
+    </p>
+  </header>
+
+  <section class="pr-kpi admin-toolbar" aria-label="進捗">
+    <p class="pr-kpi__stat">
+      投稿済 <strong id="pr-done-count">{doneCount}</strong> / {allChannels.length}
+    </p>
+    <p class="pr-kpi__policy">{pr.policy}</p>
+  </section>
+
+  <section class="admin-hub__section" aria-labelledby="pr-checklist-title">
+    <h2 id="pr-checklist-title" class="admin-hub__heading">投稿チェックリスト</h2>
+    {
+      pr.channelGroups.map((group) => (
+        <div class="pr-channel-group">
+          <h3 class="pr-channel-group__title">{group.label}</h3>
+          <div class="admin-list">
+            {group.channels.map((ch) => {
+              const st = pressChannelStatus(posted, ch.id);
+              return (
+                <article
+                  class:list={["admin-row", "pr-channel-row", st.done && "pr-channel-row--done"]}
+                  data-channel={ch.id}
+                >
+                  <div class="admin-row__grid admin-row__grid--fluid">
+                    <div class="admin-row__main">
+                      <header class="admin-row__head">
+                        <h4 class="admin-row__title">{ch.label}</h4>
+                        <span class:list={["pr-status", st.done && "pr-status--done"]} data-status>
+                          {st.done ? "投稿済" : "未投稿"}
+                        </span>
+                      </header>
+                      {ch.note && <p class="admin-row__summary">{ch.note}</p>}
+                      {st.done && st.postedAt && (
+                        <p class="pr-posted-at" data-posted-at>
+                          投稿日: {st.postedAt.slice(0, 10)}
+                          {st.publishedUrl && (
+                            <>
+                              {" "}
+                              ·{" "}
+                              <a href={st.publishedUrl} target="_blank" rel="noopener noreferrer">
+                                公開URL ↗
+                              </a>
+                            </>
+                          )}
+                        </p>
+                      )}
+                      <label class="pr-url-field">
+                        <span class="pr-url-field__label">公開URL（任意）</span>
+                        <input
+                          type="url"
+                          class="pr-url-field__input"
+                          data-published-url
+                          placeholder="https://..."
+                          value={st.publishedUrl || ""}
+                        />
+                      </label>
+                    </div>
+                    <div class="admin-row__quick pr-channel-row__actions">
+                      {ch.url && (
+                        <DevChromeOpen url={ch.url} label="投稿フォームを開く" compact />
+                      )}
+                      <button type="button" class="admin-row__btn admin-row__btn--primary" data-mark-done>
+                        投稿済にする
+                      </button>
+                    </div>
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+        </div>
+      ))
+    }
+  </section>
+
+  <section class="admin-hub__section" aria-labelledby="pr-titles-title">
+    <h2 id="pr-titles-title" class="admin-hub__heading">タイトル案</h2>
+    <div class="admin-list">
+      {
+        pr.titles.map((title, i) => (
+          <article class="admin-row">
+            <div class="admin-row__grid admin-row__grid--stack">
+              <div class="admin-row__main">
+                <header class="admin-row__head">
+                  <h3 class="admin-row__title">案 {i + 1}</h3>
+                  <button type="button" class="ops-copy-btn" data-copy={title}>
+                    コピー
+                  </button>
+                </header>
+                <p class="pr-copy-preview">{title}</p>
+              </div>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="admin-hub__section" aria-labelledby="pr-body-title">
+    <h2 id="pr-body-title" class="admin-hub__heading">本文（フル）</h2>
+    <div class="ops-copy-block">
+      <div class="ops-copy-block__head">
+        <span class="ops-copy-block__label">約800字 · PR-FREE / PRESSNOW / ぷれりり</span>
+        <button type="button" class="ops-copy-btn" data-copy={pr.copies.body}>
+          コピー
+        </button>
+      </div>
+      <pre class="ops-copy-block__text">{pr.copies.body}</pre>
+    </div>
+  </section>
+
+  <section class="admin-hub__section" aria-labelledby="pr-short-title">
+    <h2 id="pr-short-title" class="admin-hub__heading">短縮版</h2>
+    <div class="ops-copy-block">
+      <div class="ops-copy-block__head">
+        <span class="ops-copy-block__label">約400字 · リンクプレス等</span>
+        <button type="button" class="ops-copy-btn" data-copy={pr.copies.short}>
+          コピー
+        </button>
+      </div>
+      <pre class="ops-copy-block__text">{pr.copies.short}</pre>
+    </div>
+  </section>
+
+  <section class="admin-hub__section" aria-labelledby="pr-prone-title">
+    <h2 id="pr-prone-title" class="admin-hub__heading">PRONE 記者向けネタ</h2>
+    <div class="ops-copy-block">
+      <div class="ops-copy-block__head">
+        <span class="ops-copy-block__label">タイトル</span>
+        <button type="button" class="ops-copy-btn" data-copy={pr.copies.prone.title}>
+          コピー
+        </button>
+      </div>
+      <pre class="ops-copy-block__text">{pr.copies.prone.title}</pre>
+    </div>
+    <div class="ops-copy-block">
+      <div class="ops-copy-block__head">
+        <span class="ops-copy-block__label">ネタ概要</span>
+        <button type="button" class="ops-copy-btn" data-copy={pr.copies.prone.body}>
+          コピー
+        </button>
+      </div>
+      <pre class="ops-copy-block__text">{pr.copies.prone.body}</pre>
+    </div>
+  </section>
+
+  <section class="admin-hub__section" aria-labelledby="pr-x-title">
+    <h2 id="pr-x-title" class="admin-hub__heading">X 告知</h2>
+    <div class="ops-copy-block">
+      <div class="ops-copy-block__head">
+        <span class="ops-copy-block__label">単発投稿</span>
+        <button type="button" class="ops-copy-btn" data-copy={pr.copies.x}>
+          コピー
+        </button>
+      </div>
+      <pre class="ops-copy-block__text">{pr.copies.x}</pre>
+    </div>
+  </section>
+
+  <section class="admin-hub__section" aria-labelledby="pr-hatena-title">
+    <h2 id="pr-hatena-title" class="admin-hub__heading">はてブ用（背景3行）</h2>
+    <div class="ops-copy-block">
+      <div class="ops-copy-block__head">
+        <span class="ops-copy-block__label">コメント欄に貼付</span>
+        <button type="button" class="ops-copy-btn" data-copy={pr.copies.hatena}>
+          コピー
+        </button>
+      </div>
+      <pre class="ops-copy-block__text">{pr.copies.hatena}</pre>
+    </div>
+  </section>
+
+  <section class="admin-hub__section" aria-labelledby="pr-ph-title">
+    <h2 id="pr-ph-title" class="admin-hub__heading">Product Hunt（英語・任意）</h2>
+    <div class="ops-copy-block">
+      <div class="ops-copy-block__head">
+        <span class="ops-copy-block__label">Title</span>
+        <button type="button" class="ops-copy-btn" data-copy={pr.copies.productHunt.title}>
+          コピー
+        </button>
+      </div>
+      <pre class="ops-copy-block__text">{pr.copies.productHunt.title}</pre>
+    </div>
+    <div class="ops-copy-block">
+      <div class="ops-copy-block__head">
+        <span class="ops-copy-block__label">Tagline</span>
+        <button type="button" class="ops-copy-btn" data-copy={pr.copies.productHunt.tagline}>
+          コピー
+        </button>
+      </div>
+      <pre class="ops-copy-block__text">{pr.copies.productHunt.tagline}</pre>
+    </div>
+    <div class="ops-copy-block">
+      <div class="ops-copy-block__head">
+        <span class="ops-copy-block__label">Description</span>
+        <button type="button" class="ops-copy-btn" data-copy={pr.copies.productHunt.description}>
+          コピー
+        </button>
+      </div>
+      <pre class="ops-copy-block__text">{pr.copies.productHunt.description}</pre>
+    </div>
+  </section>
+
+  <section class="ops-legend">
+    <h2>使い方</h2>
+    <ol>
+      <li>タイトル案を1つ選び、本文（フル）をコピーして配信先へ投稿</li>
+      <li>文字数制限があるサイトは短縮版を使う</li>
+      <li>投稿後「投稿済にする」— 公開URLがあれば入力してから押す</li>
+      <li>PRONE は記者向けネタ欄にタイトル＋概要を別途登録</li>
+    </ol>
+  </section>
+</AdminShell>
+
+<script>
+const KEY = "dev_auth";
+
+function getPin() {
+  return window.adminGetPin?.() || localStorage.getItem(KEY) || "";
+}
+
+document.querySelectorAll("[data-copy]").forEach((btn) => {
+  btn.addEventListener("click", async () => {
+    const text = btn.getAttribute("data-copy") || "";
+    try {
+      await navigator.clipboard.writeText(text);
+      const prev = btn.textContent;
+      btn.textContent = "コピー済";
+      setTimeout(() => { btn.textContent = prev; }, 1200);
+    } catch {
+      btn.textContent = "失敗";
+    }
+  });
+});
+
+function updateDoneCount() {
+  const done = document.querySelectorAll(".pr-channel-row--done").length;
+  const el = document.getElementById("pr-done-count");
+  if (el) el.textContent = String(done);
+}
+
+document.querySelectorAll("[data-mark-done]").forEach((btn) => {
+  btn.addEventListener("click", async () => {
+    const row = btn.closest("[data-channel]");
+    const channelId = row?.getAttribute("data-channel");
+    if (!channelId) return;
+    const pin = getPin();
+    if (!pin) {
+      alert("PINを入力してください");
+      return;
+    }
+    const urlInput = row.querySelector("[data-published-url]");
+    const publishedUrl = urlInput?.value?.trim() || "";
+    btn.disabled = true;
+    btn.textContent = "保存中…";
+    try {
+      const res = await fetch("/api/press-release-record", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ pin, channelId, publishedUrl }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || res.statusText);
+      row.classList.add("pr-channel-row--done");
+      const status = row.querySelector("[data-status]");
+      if (status) {
+        status.textContent = "投稿済";
+        status.classList.add("pr-status--done");
+      }
+      const postedEl = row.querySelector("[data-posted-at]");
+      if (postedEl) {
+        const date = data.record?.postedAt?.slice(0, 10) || new Date().toISOString().slice(0, 10);
+        postedEl.textContent = publishedUrl
+          ? `投稿日: ${date} · 公開URL: ${publishedUrl}`
+          : `投稿日: ${date}`;
+        postedEl.hidden = false;
+      }
+      btn.textContent = "保存済";
+      updateDoneCount();
+    } catch (err) {
+      btn.disabled = false;
+      btn.textContent = "投稿済にする";
+      alert(err instanceof Error ? err.message : "保存に失敗しました");
+    }
+  });
+});
+</script>
+
+<style>
+  .pr-kpi {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.75rem 1.5rem;
+    margin-bottom: 1.25rem;
+  }
+  .pr-kpi__stat {
+    margin: 0;
+    font-size: 0.95rem;
+  }
+  .pr-kpi__policy {
+    margin: 0;
+    font-size: 0.82rem;
+    color: var(--color-text-muted);
+  }
+  .pr-channel-group {
+    margin-bottom: 1.25rem;
+  }
+  .pr-channel-group__title {
+    margin: 0 0 0.5rem;
+    font-size: 0.88rem;
+    font-weight: 800;
+    color: var(--color-text-muted);
+  }
+  .pr-channel-row--done {
+    border-color: #86efac;
+    background: linear-gradient(180deg, #f0fdf4 0%, #fff 100%);
+  }
+  .pr-status {
+    font-size: 0.72rem;
+    font-weight: 800;
+    padding: 0.12rem 0.45rem;
+    border-radius: 999px;
+    background: #fef3c7;
+    color: #92400e;
+  }
+  .pr-status--done {
+    background: #dcfce7;
+    color: #166534;
+  }
+  .pr-posted-at {
+    margin: 0.35rem 0 0;
+    font-size: 0.78rem;
+    color: var(--color-text-muted);
+  }
+  .pr-url-field {
+    display: block;
+    margin-top: 0.5rem;
+  }
+  .pr-url-field__label {
+    display: block;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--color-text-muted);
+    margin-bottom: 0.2rem;
+  }
+  .pr-url-field__input {
+    width: 100%;
+    max-width: 28rem;
+    font: inherit;
+    font-size: 0.82rem;
+    padding: 0.35rem 0.5rem;
+    border: 1px solid var(--color-border);
+    border-radius: 0.35rem;
+  }
+  .pr-channel-row__actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    align-items: stretch;
+  }
+  .pr-copy-preview {
+    margin: 0.35rem 0 0;
+    font-size: 0.88rem;
+    line-height: 1.55;
+  }
+</style>

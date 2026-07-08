@@ -22,7 +22,7 @@ export type ShortDataSlide = {
 
 export type ShortDataV1Props = {
   hook: string;
-  /** 2行フック（パンチ用。未指定時は hook から自動分割） */
+  /** フックテロップ（1〜3行。1行目に案件名を入れる） */
   hookTelop?: string[];
   hookNarr?: string;
   hookAudioSrc?: string;

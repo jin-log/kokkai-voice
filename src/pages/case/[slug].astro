@@ -11,7 +11,7 @@ import {
   loadAllArticles,
 } from "../../lib/articles.mjs";
 import { articleShortTitle, articleMetaDescription, ASSET_V } from "../../lib/case-helpers.mjs";
-import { pickRelatedArticles } from "../../lib/related-articles.mjs";
+import { buildRecommendationBundle } from "../../lib/content-recommendations.mjs";
 import { SITE } from "../../lib/site-config.mjs";
 import { buildOgAssetBrief } from "../../lib/og-image.mjs";
 
@@ -24,7 +24,8 @@ const { slug } = Astro.params;
 const article = await loadArticle(slug);
 const stance = await loadStanceData(article);
 const allArticles = await loadAllArticles();
-const relatedItems = pickRelatedArticles(article, allArticles, 3);
+const recBundle = buildRecommendationBundle(article, allArticles);
+const relatedItems = recBundle.relatedItems;
 const shortTitle = articleShortTitle(article);
 const description = articleMetaDescription(article);
 const ogAssets = buildOgAssetBrief(article, ASSET_V);
@@ -40,6 +41,6 @@ const ogAssets = buildOgAssetBrief(article, ASSET_V);
 >
   <PreReleaseBanner />
   <SiteHeader showSearch caseTitle={shortTitle} />
-  <CasePageContent article={article} stance={stance} relatedItems={relatedItems} />
+  <CasePageContent article={article} stance={stance} relatedItems={relatedItems} recBundle={recBundle} />
   <SiteFooter />
 </BaseLayout>

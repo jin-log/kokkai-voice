@@ -2,24 +2,38 @@
 interface RelatedItem {
   slug: string;
   title: string;
+  headline?: string;
+  kicker?: string;
+  stat?: string;
+  statLabel?: string;
 }
 
 interface Props {
   items: RelatedItem[];
+  title?: string;
+  variant?: "bottom" | "default";
 }
 
-const { items } = Astro.props;
+const { items, title = "あわせて深掘り", variant = "default" } = Astro.props;
 ---
 
 {
   items.length > 0 && (
-    <section class="related-read" aria-labelledby="related-read-title">
-      <h2 id="related-read-title" class="related-read__title">合わせて読みたい</h2>
+    <section class:list={["related-read", variant === "bottom" && "related-read--bottom"]} aria-labelledby="related-read-title">
+      <h2 id="related-read-title" class="related-read__title">{title}</h2>
       <ul class="related-read__grid">
         {items.map((item) => (
           <li>
             <a class="related-read__card" href={`/case/${item.slug}/`}>
-              {item.title}
+              <span class="related-read__card-headline">{item.headline || item.title}</span>
+              {item.kicker && <span class="related-read__card-kicker">{item.kicker}</span>}
+              {item.stat && (
+                <span class="related-read__card-stat">
+                  <strong>{item.stat}</strong>
+                  {item.statLabel && <span class="related-read__card-stat-label">{item.statLabel}</span>}
+                </span>
+              )}
+              <span class="related-read__card-cta">案件を見る →</span>
             </a>
           </li>
         ))}

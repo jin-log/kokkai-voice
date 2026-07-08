@@ -1,0 +1,30 @@
+---
+interface ReadCard {
+  slug: string;
+  title: string;
+  headline: string;
+  kicker?: string;
+  stat?: string;
+  statLabel?: string;
+  href: string;
+}
+
+interface Props {
+  item: ReadCard;
+  compact?: boolean;
+}
+
+const { item, compact = false } = Astro.props;
+---
+
+<a class:list={["read-rail-card", compact && "read-rail-card--compact"]} href={item.href}>
+  {item.kicker && <span class="read-rail-card__kicker">{item.kicker}</span>}
+  <span class="read-rail-card__headline">{item.headline}</span>
+  {item.stat && (
+    <span class="read-rail-card__stat">
+      <strong>{item.stat}</strong>
+      {item.statLabel && <span>{item.statLabel}</span>}
+    </span>
+  )}
+  <span class="read-rail-card__cta">読む →</span>
+</a>

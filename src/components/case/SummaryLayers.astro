@@ -1,12 +1,14 @@
 ---
+import RichTextWithTermLinks from "./RichTextWithTermLinks.astro";
 import {
   hasDietSourceContent,
   showsDietPendingUI,
 } from "../../lib/diet-pending.mjs";
 
-const { article } = Astro.props;
+const { article, usedTerms } = Astro.props;
 const bullets = article.summaryBullets || [];
 const hasBullets = bullets.length > 0;
+const termLinkUsed = usedTerms ?? new Set();
 const dietPending = showsDietPendingUI(article);
 const dietSourced = hasDietSourceContent(article);
 const publicSourced = dietPending || !dietSourced;
@@ -37,7 +39,13 @@ const aiDisclaimer =
         </p>
         <ul class="summary-bullets">
           {bullets.map((b) => (
-            <li>{typeof b === "string" ? b : b.text}</li>
+            <li>
+              <RichTextWithTermLinks
+                text={typeof b === "string" ? b : b.text}
+                article={article}
+                usedTerms={termLinkUsed}
+              />
+            </li>
           ))}
         </ul>
       </div>

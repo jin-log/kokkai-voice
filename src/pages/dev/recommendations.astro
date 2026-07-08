@@ -1,0 +1,159 @@
+---
+import AdminShell from "../../components/admin/AdminShell.astro";
+import { loadAllArticles } from "../../lib/articles.mjs";
+import { articleShortTitle } from "../../lib/case-helpers.mjs";
+import { buildRecommendationBundle } from "../../lib/content-recommendations.mjs";
+import { findHubForArticle } from "../../lib/content-hubs.mjs";
+
+const allArticles = await loadAllArticles();
+const published = allArticles.filter((a) => a.pageReady && !a.adminHidden);
+const rows = published.map((article) => {
+  const bundle = buildRecommendationBundle(article, allArticles);
+  const hub = findHubForArticle(article.slug);
+  return {
+    slug: article.slug,
+    title: articleShortTitle(article),
+    hub: hub?.title || "—",
+    autoNext: bundle.nextReads.map((r) => r.headline).join(" / "),
+    overrideCount: (article.nextReads || []).length,
+    nextReads: article.nextReads || [],
+    midReads: article.midReads || [],
+    prerequisiteRead: article.prerequisiteRead || null,
+  };
+});
+---
+
+<AdminShell activeId="recommendations" title="回遊・レコメンド">
+  <header class="admin-page-head">
+    <h1 class="admin-page-head__title">回遊・レコメンド</h1>
+    <p class="admin-page-head__note">
+      未設定の記事はタグ・テーマハブから自動判定。下の「次に読む3選」を編集して保存すると上書きされます。
+    </p>
+  </header>
+
+  <div class="admin-page-content admin-page-content--full">
+    <div class="admin-list" id="rec-list">
+      {
+        rows.map((row) => (
+          <article class="admin-row rec-row" data-slug={row.slug}>
+            <div class="admin-row__grid admin-row__grid--fluid">
+              <div class="admin-row__main">
+                <header class="admin-row__head">
+                  <h2 class="admin-row__title">{row.title}</h2>
+                  <span class="admin-row__meta">
+                    <code>{row.slug}</code> · テーマ: {row.hub}
+                    {row.overrideCount > 0 ? ` · 手動${row.overrideCount}件` : " · 自動"}
+                  </span>
+                </header>
+                <p class="admin-row__summary rec-auto">{row.autoNext}</p>
+                <details class="rec-edit">
+                  <summary>次に読む3選を編集</summary>
+                  <div class="rec-edit__body">
+                    <label class="rec-edit__label">
+                      nextReads（JSON: slug, headline?, kicker?）
+                      <textarea class="rec-edit__json" rows="5" data-next-reads>{JSON.stringify(row.nextReads, null, 2)}</textarea>
+                    </label>
+                    <label class="rec-edit__label">
+                      midReads（本文途中・スマホ用）
+                      <textarea class="rec-edit__json" rows="3" data-mid-reads>{JSON.stringify(row.midReads, null, 2)}</textarea>
+                    </label>
+                    <label class="rec-edit__label">
+                      prerequisiteRead（前提知識）
+                      <textarea class="rec-edit__json" rows="3" data-prereq>{JSON.stringify(row.prerequisiteRead, null, 2)}</textarea>
+                    </label>
+                    <div class="admin-revise-actions">
+                      <button type="button" class="admin-row__btn admin-row__btn--primary rec-save">保存する</button>
+                      <button type="button" class="admin-row__btn admin-row__btn--ghost rec-clear">手動をクリア（自動に戻す）</button>
+                      <span class="rec-status" hidden></span>
+                    </div>
+                  </div>
+                </details>
+              </div>
+              <div class="admin-row__quick">
+                <a href={`/case/${row.slug}/`} class="admin-row__btn" target="_blank" rel="noopener">本番</a>
+                <a href={`/dev/preview/${row.slug}/`} class="admin-row__btn admin-row__btn--ghost">プレビュー</a>
+              </div>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+
+  <script>
+    function getPin() {
+      return sessionStorage.getItem("adminPin") || localStorage.getItem("adminPin") || "";
+    }
+
+    function parseJson(text, fallback) {
+      const t = text.trim();
+      if (!t || t === "null") return fallback;
+      return JSON.parse(t);
+    }
+
+    document.querySelectorAll(".rec-row").forEach((row) => {
+      const slug = row.dataset.slug;
+      const status = row.querySelector(".rec-status");
+
+      row.querySelector(".rec-save")?.addEventListener("click", async () => {
+        status.hidden = false;
+        status.textContent = "保存中…";
+        try {
+          const nextReads = parseJson(row.querySelector("[data-next-reads]").value, []);
+          const midReads = parseJson(row.querySelector("[data-mid-reads]").value, []);
+          const prerequisiteRead = parseJson(row.querySelector("[data-prereq]").value, null);
+          const res = await fetch("/api/article-recommendations", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ pin: getPin(), slug, nextReads, midReads, prerequisiteRead }),
+          });
+          const data = await res.json();
+          if (!res.ok) throw new Error(data.error || res.statusText);
+          status.textContent = "保存しました（デプロイ後に本番反映）";
+        } catch (e) {
+          status.textContent = `エラー: ${e.message}`;
+        }
+      });
+
+      row.querySelector(".rec-clear")?.addEventListener("click", async () => {
+        row.querySelector("[data-next-reads]").value = "[]";
+        row.querySelector("[data-mid-reads]").value = "[]";
+        row.querySelector("[data-prereq]").value = "null";
+        row.querySelector(".rec-save")?.click();
+      });
+    });
+  </script>
+</AdminShell>
+
+<style>
+  .rec-auto {
+    font-size: 0.82rem;
+    color: var(--color-text-muted);
+    line-height: 1.5;
+  }
+  .rec-edit {
+    margin-top: 0.65rem;
+    font-size: 0.88rem;
+  }
+  .rec-edit__body {
+    margin-top: 0.65rem;
+    display: grid;
+    gap: 0.65rem;
+  }
+  .rec-edit__label {
+    display: grid;
+    gap: 0.35rem;
+    font-weight: 700;
+  }
+  .rec-edit__json {
+    font-family: ui-monospace, monospace;
+    font-size: 0.78rem;
+    padding: 0.5rem;
+    border: 1px solid var(--color-border);
+    border-radius: 0.45rem;
+  }
+  .rec-status {
+    font-size: 0.82rem;
+    color: var(--color-primary);
+  }
+</style>

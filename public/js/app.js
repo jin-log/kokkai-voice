@@ -217,9 +217,12 @@
     syncHeaderOffset();
     window.addEventListener('resize', syncHeaderOffset, { passive: true });
     const toc = document.querySelector('[data-float-toc]');
+    const railToc = document.querySelector('[data-rail-toc]');
     const tocToggle = document.querySelector('[data-float-toc-toggle]');
     const tocPanel = document.getElementById('float-toc-panel');
-    const tocLinks = document.querySelectorAll('.float-toc__link');
+    const tocLinks = document.querySelectorAll(
+      '[data-float-toc] .float-toc__link, [data-rail-toc] .float-toc__link',
+    );
     const desktopMq = window.matchMedia('(min-width: 900px)');
 
     function isDesktopToc() {

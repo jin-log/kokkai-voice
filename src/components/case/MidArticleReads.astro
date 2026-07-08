@@ -1,0 +1,33 @@
+---
+import ReadRailCard from "./ReadRailCard.astro";
+
+interface ReadCard {
+  slug: string;
+  title: string;
+  headline: string;
+  kicker?: string;
+  stat?: string;
+  statLabel?: string;
+  href: string;
+}
+
+interface Props {
+  items: ReadCard[];
+  title?: string;
+}
+
+const { items, title = "この記事も読まれています" } = Astro.props;
+---
+
+{
+  items.length > 0 && (
+    <section class="mid-reads" aria-labelledby="mid-reads-title">
+      <h2 id="mid-reads-title" class="mid-reads__title">{title}</h2>
+      <div class="mid-reads__track">
+        {items.map((item) => (
+          <ReadRailCard item={item} />
+        ))}
+      </div>
+    </section>
+  )
+}

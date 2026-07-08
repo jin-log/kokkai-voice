@@ -58,11 +58,12 @@ export const HookPunch: React.FC<Props> = ({ hook, hookTelop }) => {
 
   const lines =
     hookTelop && hookTelop.length >= 1
-      ? hookTelop.filter(Boolean).slice(0, 2)
+      ? hookTelop.filter(Boolean).slice(0, 3)
       : splitHookTelop(hook);
 
   const line1 = lines[0] ?? hook;
   const line2 = lines[1];
+  const line3 = lines[2];
 
   const flash = interpolate(frame, [0, 4, 10], [0.85, 0.35, 0], {
     extrapolateRight: "clamp",
@@ -83,6 +84,14 @@ export const HookPunch: React.FC<Props> = ({ hook, hookTelop }) => {
   });
   const scale2 = interpolate(slam2, [0, 1], [1.3, 1]);
   const y2 = interpolate(slam2, [0, 1], [40, 0]);
+
+  const slam3 = spring({
+    frame: frame - 26,
+    fps,
+    config: { damping: 10, stiffness: 260, mass: 0.62 },
+  });
+  const scale3 = interpolate(slam3, [0, 1], [1.22, 1]);
+  const y3 = interpolate(slam3, [0, 1], [32, 0]);
 
   const panelPulse = interpolate(Math.sin(frame / 8), [-1, 1], [0.92, 1]);
 
@@ -134,20 +143,26 @@ export const HookPunch: React.FC<Props> = ({ hook, hookTelop }) => {
             style={{
               opacity: slam1,
               transform: `translateY(${y1}px) scale(${scale1})`,
-              fontSize: fontSizeForLine(line1, 144),
+              fontSize: fontSizeForLine(line1, lines.length >= 3 ? 120 : 144),
               fontWeight: 900,
               fontFamily: THEME.font,
               textAlign: "center",
               lineHeight: 1.08,
               letterSpacing: "-0.03em",
-              color: "#ffffff",
+              color: PUNCH_COLOR,
               textShadow: `0 4px 28px rgba(0,0,0,0.7), 0 0 20px ${cfg.glow}`,
             }}
           >
             {splitNumberSpans(line1).map((p, i) => (
               <span
                 key={i}
-                style={{ color: p.isNumber ? NUMBER_COLOR : "#ffffff" }}
+                style={{
+                  color: p.isNumber
+                    ? NUMBER_COLOR
+                    : lines.length >= 3
+                      ? PUNCH_COLOR
+                      : "#ffffff",
+                }}
               >
                 {p.text}
               </span>
@@ -157,10 +172,10 @@ export const HookPunch: React.FC<Props> = ({ hook, hookTelop }) => {
           {line2 ? (
             <div
               style={{
-                marginTop: 18,
+                marginTop: lines.length >= 3 ? 14 : 18,
                 opacity: slam2,
                 transform: `translateY(${y2}px) scale(${scale2})`,
-                fontSize: fontSizeForLine(line2, 132),
+                fontSize: fontSizeForLine(line2, lines.length >= 3 ? 120 : 132),
                 fontWeight: 900,
                 fontFamily: THEME.font,
                 textAlign: "center",
@@ -187,6 +202,39 @@ export const HookPunch: React.FC<Props> = ({ hook, hookTelop }) => {
             </div>
           ) : null}
 
+          {line3 ? (
+            <div
+              style={{
+                marginTop: 12,
+                opacity: slam3,
+                transform: `translateY(${y3}px) scale(${scale3})`,
+                fontSize: fontSizeForLine(line3, 120),
+                fontWeight: 900,
+                fontFamily: THEME.font,
+                textAlign: "center",
+                lineHeight: 1.08,
+                letterSpacing: "-0.02em",
+                color: line3.includes("？") ? PUNCH_COLOR : "#ffffff",
+                textShadow: `0 4px 24px rgba(0,0,0,0.65), 0 0 16px ${cfg.glow}`,
+              }}
+            >
+              {splitNumberSpans(line3).map((p, i) => (
+                <span
+                  key={i}
+                  style={{
+                    color: p.isNumber
+                      ? NUMBER_COLOR
+                      : line3.includes("？")
+                        ? PUNCH_COLOR
+                        : "#ffffff",
+                  }}
+                >
+                  {p.text}
+                </span>
+              ))}
+            </div>
+          ) : null}
+
           <div
             style={{
               marginTop: 20,
@@ -196,7 +244,7 @@ export const HookPunch: React.FC<Props> = ({ hook, hookTelop }) => {
               height: 6,
               borderRadius: 4,
               background: `linear-gradient(90deg, ${cfg.accent}, ${NUMBER_COLOR}, transparent)`,
-              opacity: slam2,
+              opacity: line3 ? slam3 : slam2,
             }}
           />
         </div>

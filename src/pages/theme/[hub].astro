@@ -1,0 +1,58 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import SiteHeader from "../../components/SiteHeader.astro";
+import SiteFooter from "../../components/SiteFooter.astro";
+import PreReleaseBanner from "../../components/PreReleaseBanner.astro";
+import { loadContentHubs, getHubBySlug } from "../../lib/content-hubs.mjs";
+import { loadAllArticles } from "../../lib/articles.mjs";
+import { articleShortTitle } from "../../lib/case-helpers.mjs";
+import { SITE } from "../../lib/site-config.mjs";
+
+export async function getStaticPaths() {
+  return loadContentHubs().map((hub) => ({ params: { hub: hub.slug } }));
+}
+
+const { hub: hubSlug } = Astro.params;
+const hub = getHubBySlug(hubSlug);
+if (!hub) throw new Error(`hub not found: ${hubSlug}`);
+
+const allArticles = await loadAllArticles();
+const bySlug = new Map(allArticles.map((a) => [a.slug, a]));
+const articles = hub.articleSlugs.map((slug) => bySlug.get(slug)).filter((a) => a && a.pageReady && !a.adminHidden);
+const title = `${hub.title}｜テーマまとめ`;
+const description = hub.intro;
+---
+
+<BaseLayout title={`${title}｜${SITE.name}`} description={description} includeAppJs>
+  <PreReleaseBanner />
+  <SiteHeader showSearch />
+  <main class="container theme-hub">
+    <header class="theme-hub__hero">
+      <p class="theme-hub__eyebrow">テーマまとめ</p>
+      <h1 class="theme-hub__title">{hub.title}</h1>
+      <p class="theme-hub__tagline">{hub.tagline}</p>
+      <p class="theme-hub__intro">{hub.intro}</p>
+    </header>
+
+    <section class="theme-hub__list" aria-label="関連案件一覧">
+      <ul class="theme-hub__grid">
+        {
+          articles.map((article) => (
+            <li>
+              <a class="theme-hub__card" href={`/case/${article.slug}/`}>
+                <span class="theme-hub__card-tags">
+                  {(article.tags || []).slice(0, 2).map((t) => (
+                    <span class="tag">{t}</span>
+                  ))}
+                </span>
+                <span class="theme-hub__card-title">{articleShortTitle(article)}</span>
+                <span class="theme-hub__card-cta">案件を読む →</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+  </main>
+  <SiteFooter />
+</BaseLayout>

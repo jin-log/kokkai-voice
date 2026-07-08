@@ -1,0 +1,63 @@
+---
+import { getFloatTocItems } from "../../lib/case-helpers.mjs";
+import ReadRailCard from "./ReadRailCard.astro";
+
+const { article, hasStance, bundle } = Astro.props;
+const items = getFloatTocItems(article, hasStance);
+const { prerequisite, nextReads, hub, hubHref } = bundle;
+---
+
+<aside class="case-rail" aria-label="目次と関連記事">
+  <nav class="case-rail__toc" data-rail-toc aria-label="ページ目次">
+    <div class="case-rail__toc-panel">
+      <p class="float-toc__title">このページ</p>
+      <ol class="float-toc__list">
+        {
+          items.map((item) => (
+            <li>
+              <a class="float-toc__link" href={item.href}>
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </nav>
+
+  {
+    prerequisite && (
+      <section class="case-rail__block" aria-label="前提知識">
+        <p class="case-rail__heading">{prerequisite.label}</p>
+        <a class="case-rail__prereq" href={prerequisite.href}>
+          {prerequisite.headline}
+        </a>
+      </section>
+    )
+  }
+
+  {
+    hub && hubHref && (
+      <section class="case-rail__block" aria-label="テーマまとめ">
+        <p class="case-rail__heading">テーマまとめ</p>
+        <a class="case-rail__hub" href={hubHref}>
+          <span class="case-rail__hub-title">{hub.title}</span>
+          <span class="case-rail__hub-tagline">{hub.tagline}</span>
+        </a>
+      </section>
+    )
+  }
+
+  {
+    nextReads.length > 0 && (
+      <section class="case-rail__block" aria-labelledby="case-rail-next">
+        <h2 id="case-rail-next" class="case-rail__heading">次に読むべき3選</h2>
+        <div class="case-rail__reads">
+          {nextReads.map((item) => (
+            <ReadRailCard item={item} compact />
+          ))}
+        </div>
+      </section>
+    )
+  }
+</aside>

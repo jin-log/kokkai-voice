@@ -1,0 +1,15 @@
+---
+interface Props {
+  label?: string;
+  headline: string;
+  href: string;
+}
+
+const { label = "前提知識", headline, href } = Astro.props;
+---
+
+<a class="prereq-strip" href={href}>
+  <span class="prereq-strip__label">{label}</span>
+  <span class="prereq-strip__text">{headline}</span>
+  <span class="prereq-strip__cta" aria-hidden="true">→</span>
+</a>
