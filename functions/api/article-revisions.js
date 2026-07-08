@@ -31,7 +31,7 @@ export async function onRequestGet(context) {
 }
 
 export async function onRequestPost(context) {
-  const { GH_TOKEN, ADMIN_PIN } = context.env;
+  const { GH_TOKEN, ADMIN_PIN, OPENAI_API_KEY } = context.env;
   if (!GH_TOKEN) return json({ error: "GH_TOKEN 未設定" }, 500);
 
   let body;
@@ -45,7 +45,7 @@ export async function onRequestPost(context) {
 
   try {
     const action = body.action || "create";
-    if (action === "create") return json(await createJob(GH_TOKEN, body));
+    if (action === "create") return json(await createJob(GH_TOKEN, body, OPENAI_API_KEY));
     if (action === "apply") return json(await applyJob(GH_TOKEN, body));
     if (action === "reject") return json(await rejectJob(GH_TOKEN, body));
     return json({ error: `unknown action: ${action}` }, 400);
@@ -54,7 +54,7 @@ export async function onRequestPost(context) {
   }
 }
 
-async function createJob(token, body) {
+async function createJob(token, body, openaiKey) {
   const slug = String(body.slug || "").trim();
   const sectionId = String(body.sectionId || "").trim();
   const instruction = String(body.instruction || "").trim();
@@ -74,10 +74,99 @@ async function createJob(token, body) {
     matrix,
   });
 
+  // AI生成が有効で「指定モード」以外の場合はOpenAIで提案を上書き
+  if (openaiKey && job.proposal && !job.proposal.note?.includes("オーナー指定")) {
+    try {
+      const aiAfter = await generateWithAI(openaiKey, {
+        article,
+        sectionId,
+        instruction,
+        current: body.current || "",
+      });
+      if (aiAfter) {
+        job.proposal.after = aiAfter;
+        job.proposal.note = "AI生成（gpt-4o-mini）: オーナー指示と記事データをもとに再構成";
+      }
+    } catch (e) {
+      // AI失敗時はルールベース提案のまま続行
+      job.proposal.note = (job.proposal.note || "") + "（AI生成失敗・ルールベース提案）";
+    }
+  }
+
   const { store, sha } = await loadStoreWithSha(token);
   attachRevisionJobToStore(store, job, article);
   await putGhFile(token, REVISIONS_PATH, store, sha, `article revision: ${slug} ${sectionId}`);
   return { ok: true, job };
+}
+
+/**
+ * OpenAI gpt-4o-mini でセクション内容を生成する
+ */
+async function generateWithAI(apiKey, { article, sectionId, instruction, current }) {
+  const ps = article?.primarySpeech ?? {};
+  const tl = (article?.timeline ?? []).slice(0, 5).map(t => `${t.date} ${t.event || ""}`.slice(0, 80)).join("\n");
+  const excerpt = (ps.excerpt || "").slice(0, 400);
+  const speaker = ps.speaker || "";
+  const party = ps.speakerGroup || "";
+  const date = ps.date || "";
+  const title = article?.title || "";
+
+  const sectionFormats = {
+    nowSummary: "番号付きリスト3行（1. 〜\n2. 〜\n3. 〜）。各行は事実文で終わる。",
+    summaryBullets: "番号付きリスト3行（1. 〜\n2. 〜\n3. 〜）。数値・主体・法案など根拠となる事実。",
+    arcSummary: "日付付き経緯（YYYY-MM-DD — 出来事）を3〜6行。",
+    title_opening: "タイトル: {新タイトル}\n1行目候補: {疑問に答える1文}",
+    glossary: "用語: 説明（20字以内）の形式で2〜4語。",
+  };
+  const format = sectionFormats[sectionId] || "適切な形式で3〜5行。";
+
+  const systemPrompt = `あなたは「日本の政治なう」（seiji1192.site）の政治記事ライターです。
+国会審議・政策案件を事実ベース・中立の第三者目線で読者向けに整理します。
+ルール:
+- 断定的な評価語を避ける（「悪い」「問題だ」等は使わない）
+- 事実と出典（国会・日付・発言者）を必ず明示する
+- 議事録の生テキストをそのまま使わない（平易語で要約して「」に入れる）
+- 日本語のみで出力する
+- 指示された出力形式のみを返す（説明文・前置き不要）`;
+
+  const userPrompt = `記事「${title}」の【${sectionId}】セクションを修正してください。
+
+【オーナーの指示】
+${instruction}
+
+【記事データ】
+- タイトル: ${title}
+- 主要答弁: ${speaker}（${party}）${date}「${excerpt}」
+- タイムライン:
+${tl}
+- 現在の内容:
+${current || "（未入力）"}
+
+【出力形式】
+${format}
+形式通りに出力してください。余計な説明は不要です。`;
+
+  const res = await fetch("https://api.openai.com/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${apiKey}`,
+    },
+    body: JSON.stringify({
+      model: "gpt-4o-mini",
+      messages: [
+        { role: "system", content: systemPrompt },
+        { role: "user", content: userPrompt },
+      ],
+      max_tokens: 600,
+      temperature: 0.3,
+    }),
+  });
+
+  if (!res.ok) throw new Error(`OpenAI API error: ${res.status}`);
+  const data = await res.json();
+  const text = data.choices?.[0]?.message?.content?.trim();
+  return text || null;
 }
 
 async function applyJob(token, body) {
