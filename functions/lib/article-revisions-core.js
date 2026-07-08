@@ -149,6 +149,31 @@ export function buildProposal({ article, sectionId, instruction, current, matrix
     return { before, after: before, note: "指示が空です", canApply: false };
   }
 
+  // ── インテント判定 ─────────────────────────────────────────
+  const intent = detectRevisionIntent(hint, sectionId);
+
+  // 「指定」モード: オーナーが値を直接指定 → そのまま保存可にする
+  if (intent.mode === "specify" && intent.specifiedValue) {
+    if (sectionId === "title_opening") {
+      const opening = pickOpeningLine(article, topic, keywords);
+      const after = [`タイトル: ${intent.specifiedValue}`, `1行目候補: ${opening}`].join("\n");
+      return {
+        before,
+        after,
+        note: `オーナー指定タイトル「${intent.specifiedValue}」を採用`,
+        canApply: APPLIABLE_SECTIONS.has(sectionId),
+      };
+    }
+    // その他セクション: 指定テキストをそのまま after に
+    return {
+      before,
+      after: intent.specifiedValue,
+      note: "オーナーが直接指定（即保存可）",
+      canApply: APPLIABLE_SECTIONS.has(sectionId),
+    };
+  }
+  // ─────────────────────────────────────────────────────────
+
   if (sectionId === "nowSummary") {
     if (educationLaw) {
       return {
@@ -518,6 +543,53 @@ function normalizeEducationTitle(title) {
     .replace(/^教育法改正/, "学校教育法改正")
     .replace(/^デジタル教科書改正/, "学校教育法改正")
     .trim();
+}
+
+/**
+ * hint からオーナーの意図モードを判定する。
+ *
+ * - specify: 値を直接指定（「〇〇にタイトルを指定」「タイトル: 〇〇」等）→ そのまま保存可
+ * - suggest: 提案を求めている（「提案して」「案を出して」等）→ 記事データから生成
+ * - fix:     修正指示（既存の挙動。hint を制約として使って生成）
+ *
+ * @param {string} hint
+ * @param {string} [sectionId]
+ * @returns {{ mode: 'specify'|'suggest'|'fix', specifiedValue: string }}
+ */
+function detectRevisionIntent(hint, sectionId) {
+  const text = String(hint || "").trim();
+
+  // 「タイトル: 〇〇」「タイトル：〇〇」で始まる行
+  const titleColon = text.match(/^タイトル[：:]\s*(.+)$/m);
+  if (titleColon) {
+    return { mode: "specify", specifiedValue: titleColon[1].trim() };
+  }
+
+  // 「〇〇 にタイトルを指定」「〇〇をタイトルに指定」パターン
+  const titleSpecify = text.match(/^(.+?)\s*(?:に|を)タイトル(?:を|に)?指定/);
+  if (titleSpecify) {
+    return { mode: "specify", specifiedValue: titleSpecify[1].trim() };
+  }
+
+  // 「〇〇 に指定」「〇〇として指定」「〇〇を指定」（汎用）
+  const generalSpecify = text.match(/^(.+?)\s*(?:に|として|を)指定(?:する)?$/);
+  if (generalSpecify) {
+    return { mode: "specify", specifiedValue: generalSpecify[1].trim() };
+  }
+
+  // 「〇〇に変更して」「〇〇に変えて」「〇〇にして」（短い値の直接指定）
+  const changeToMatch = text.match(/^(.{3,40}?)(?:に変更して?|に変えて?|にして?)$/);
+  if (changeToMatch) {
+    return { mode: "specify", specifiedValue: changeToMatch[1].trim() };
+  }
+
+  // 提案モード
+  if (/提案(?:して|くれ|お願い)|案を出|候補を/.test(text)) {
+    return { mode: "suggest", specifiedValue: "" };
+  }
+
+  // デフォルト: 従来の修正指示モード
+  return { mode: "fix", specifiedValue: "" };
 }
 
 /**
