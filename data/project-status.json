@@ -1,13 +1,13 @@
 {
-  "generatedAt": "2026-07-08T16:46:52.058Z",
+  "generatedAt": "2026-07-08T16:51:06.262Z",
   "strategy": "quality-first",
   "activeCount": 41,
   "parkedCount": 0,
   "publishedCount": 30,
-  "overallGoldPct": 72,
-  "overallGatePct": 87,
-  "qualityFailed": 5,
-  "specialPublishCount": 15,
+  "overallGoldPct": 73,
+  "overallGatePct": 88,
+  "qualityFailed": 4,
+  "specialPublishCount": 14,
   "automationPolicy": [
     {
       "channel": "記事の下書きづくり",
@@ -76,23 +76,17 @@
     }
   ],
   "patrolHealth": {
-    "status": "stalled",
-    "statusLabel": "進行停止（ループ中）",
+    "status": "progressing",
+    "statusLabel": "進行中",
     "paused": false,
     "pauseReason": null,
     "pauseDetail": null,
-    "globalStall": {
-      "goldPct": 72,
-      "cycles": 3,
-      "since": "2026-07-08T16:39:40.897Z",
-      "lastAt": "2026-07-08T16:46:50.826Z",
-      "message": "完成度 72% が 3 サイクル連続で変わらず、1本も完成していません"
-    },
+    "globalStall": null,
     "slugStalls": [],
     "stalledCount": 0,
-    "message": "完成度 72% が 3 サイクル連続で変わらず、1本も完成していません",
-    "analyzedAt": "2026-07-08T16:46:52.056Z",
-    "lastPatrolCycleAt": "2026-07-08T16:46:50.827Z",
+    "message": "完成度・公開数が更新されていれば進行中です",
+    "analyzedAt": "2026-07-08T16:51:06.260Z",
+    "lastPatrolCycleAt": "2026-07-08T16:51:04.927Z",
     "patrolRunning": true
   },
   "slugs": [
@@ -2475,7 +2469,7 @@
         {
           "id": "Q1_conclusion_numbers",
           "label": "タイトルが金額・実績を問うのに、いまの結論に公表数値がない",
-          "state": "active"
+          "state": "blocked"
         },
         {
           "id": "Q3_plain_no_answer",
@@ -2522,7 +2516,7 @@
       "publishedAt": "2026-07-01T20:39:20.684Z",
       "adminHiddenBy": null,
       "adminHiddenAt": null,
-      "patrolFixing": true,
+      "patrolFixing": false,
       "activity": [
         {
           "at": "2026-07-08T16:46:00.572Z",
@@ -3459,7 +3453,7 @@
         {
           "id": "D2_arc_topic",
           "label": "経緯の話題",
-          "state": "active"
+          "state": "blocked"
         },
         {
           "id": "J1_prosCons",
@@ -3496,7 +3490,7 @@
       "publishedAt": "2026-06-29T00:52:28.532Z",
       "adminHiddenBy": null,
       "adminHiddenAt": null,
-      "patrolFixing": true,
+      "patrolFixing": false,
       "activity": [
         {
           "at": "2026-07-08T16:46:12.888Z",
@@ -4298,7 +4292,7 @@
         {
           "id": "B3_topic",
           "label": "話題一致",
-          "state": "active"
+          "state": "blocked"
         },
         {
           "id": "D2_arc_topic",
@@ -4335,7 +4329,7 @@
       "publishedAt": "2026-06-29T06:31:08.986Z",
       "adminHiddenBy": null,
       "adminHiddenAt": null,
-      "patrolFixing": true,
+      "patrolFixing": false,
       "activity": [
         {
           "at": "2026-07-08T16:46:25.132Z",
@@ -4594,7 +4588,7 @@
         {
           "id": "B3_topic",
           "label": "話題一致",
-          "state": "active"
+          "state": "blocked"
         },
         {
           "id": "D2_arc_topic",
@@ -4631,7 +4625,7 @@
       "publishedAt": "2026-07-04T00:13:58.045Z",
       "adminHiddenBy": null,
       "adminHiddenAt": null,
-      "patrolFixing": true,
+      "patrolFixing": false,
       "activity": [
         {
           "at": "2026-07-08T16:46:37.346Z",
@@ -4901,7 +4895,7 @@
         {
           "id": "B3_topic",
           "label": "話題一致",
-          "state": "active"
+          "state": "blocked"
         },
         {
           "id": "D2_arc_topic",
@@ -4938,7 +4932,7 @@
       "publishedAt": "2026-07-02T19:54:40.649Z",
       "adminHiddenBy": null,
       "adminHiddenAt": null,
-      "patrolFixing": true,
+      "patrolFixing": false,
       "activity": [
         {
           "at": "2026-07-08T16:46:49.508Z",
@@ -5180,7 +5174,7 @@
         {
           "id": "Q7_procedural_evidence",
           "label": "要点が議事手続き・発言断片の羅列",
-          "state": "blocked"
+          "state": "active"
         },
         {
           "id": "pipe:content",
@@ -5212,8 +5206,50 @@
       "publishedAt": "2026-07-01T20:35:25.627Z",
       "adminHiddenBy": null,
       "adminHiddenAt": null,
-      "patrolFixing": false,
+      "patrolFixing": true,
       "activity": [
+        {
+          "at": "2026-07-08T16:50:14.004Z",
+          "when": "07/09 01:50",
+          "type": "patrol.done",
+          "actor": "patrol",
+          "line": "巡回処理完了（巡回） — 完成度 50% / 品質 NG"
+        },
+        {
+          "at": "2026-07-08T16:50:04.510Z",
+          "when": "07/09 01:50",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — ceo / Q7_procedural_evidence"
+        },
+        {
+          "at": "2026-07-08T16:49:55.749Z",
+          "when": "07/09 01:49",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — ceo / Q7_procedural_evidence"
+        },
+        {
+          "at": "2026-07-08T16:49:47.529Z",
+          "when": "07/09 01:49",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — ceo / Q7_procedural_evidence"
+        },
+        {
+          "at": "2026-07-08T16:49:38.253Z",
+          "when": "07/09 01:49",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — ceo / Q7_procedural_evidence"
+        },
+        {
+          "at": "2026-07-08T16:49:27.695Z",
+          "when": "07/09 01:49",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — ceo / Q7_procedural_evidence"
+        },
         {
           "at": "2026-07-08T16:34:16.013Z",
           "when": "07/09 01:34",
@@ -5238,48 +5274,6 @@
         {
           "at": "2026-07-08T16:33:51.333Z",
           "when": "07/09 01:33",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — ceo / Q7_procedural_evidence"
-        },
-        {
-          "at": "2026-07-08T16:33:43.198Z",
-          "when": "07/09 01:33",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — ceo / Q7_procedural_evidence"
-        },
-        {
-          "at": "2026-07-08T16:33:34.666Z",
-          "when": "07/09 01:33",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — ceo / Q7_procedural_evidence"
-        },
-        {
-          "at": "2026-07-08T16:18:29.715Z",
-          "when": "07/09 01:18",
-          "type": "patrol.done",
-          "actor": "patrol",
-          "line": "巡回処理完了（巡回） — 完成度 50% / 品質 NG"
-        },
-        {
-          "at": "2026-07-08T16:18:21.686Z",
-          "when": "07/09 01:18",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — ceo / Q7_procedural_evidence"
-        },
-        {
-          "at": "2026-07-08T16:18:13.274Z",
-          "when": "07/09 01:18",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — ceo / Q7_procedural_evidence"
-        },
-        {
-          "at": "2026-07-08T16:18:05.114Z",
-          "when": "07/09 01:18",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — ceo / Q7_procedural_evidence"
@@ -6436,7 +6430,7 @@
         {
           "id": "Q7_procedural_evidence",
           "label": "要点が議事手続き・発言断片の羅列",
-          "state": "blocked"
+          "state": "active"
         },
         {
           "id": "E4_timeline_diet_topic",
@@ -6473,8 +6467,50 @@
       "publishedAt": null,
       "adminHiddenBy": null,
       "adminHiddenAt": null,
-      "patrolFixing": false,
+      "patrolFixing": true,
       "activity": [
+        {
+          "at": "2026-07-08T16:50:43.561Z",
+          "when": "07/09 01:50",
+          "type": "patrol.done",
+          "actor": "patrol",
+          "line": "巡回処理完了（巡回） — 完成度 50% / 品質 NG"
+        },
+        {
+          "at": "2026-07-08T16:50:38.156Z",
+          "when": "07/09 01:50",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — ceo / Q7_procedural_evidence"
+        },
+        {
+          "at": "2026-07-08T16:50:32.257Z",
+          "when": "07/09 01:50",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — ceo / Q7_procedural_evidence"
+        },
+        {
+          "at": "2026-07-08T16:50:26.924Z",
+          "when": "07/09 01:50",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — ceo / Q7_procedural_evidence"
+        },
+        {
+          "at": "2026-07-08T16:50:20.413Z",
+          "when": "07/09 01:50",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — ceo / Q7_procedural_evidence"
+        },
+        {
+          "at": "2026-07-08T16:50:14.017Z",
+          "when": "07/09 01:50",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — ceo / Q7_procedural_evidence"
+        },
         {
           "at": "2026-07-08T16:34:43.184Z",
           "when": "07/09 01:34",
@@ -6499,48 +6535,6 @@
         {
           "at": "2026-07-08T16:34:27.048Z",
           "when": "07/09 01:34",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — ceo / Q7_procedural_evidence"
-        },
-        {
-          "at": "2026-07-08T16:34:21.751Z",
-          "when": "07/09 01:34",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — ceo / Q7_procedural_evidence"
-        },
-        {
-          "at": "2026-07-08T16:34:16.028Z",
-          "when": "07/09 01:34",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — ceo / Q7_procedural_evidence"
-        },
-        {
-          "at": "2026-07-08T16:18:56.493Z",
-          "when": "07/09 01:18",
-          "type": "patrol.done",
-          "actor": "patrol",
-          "line": "巡回処理完了（巡回） — 完成度 50% / 品質 NG"
-        },
-        {
-          "at": "2026-07-08T16:18:51.133Z",
-          "when": "07/09 01:18",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — ceo / Q7_procedural_evidence"
-        },
-        {
-          "at": "2026-07-08T16:18:45.732Z",
-          "when": "07/09 01:18",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — ceo / Q7_procedural_evidence"
-        },
-        {
-          "at": "2026-07-08T16:18:40.443Z",
-          "when": "07/09 01:18",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — ceo / Q7_procedural_evidence"
@@ -6747,8 +6741,50 @@
       "publishedAt": "2026-07-01T20:35:26.702Z",
       "adminHiddenBy": null,
       "adminHiddenAt": null,
-      "patrolFixing": false,
+      "patrolFixing": true,
       "activity": [
+        {
+          "at": "2026-07-08T16:50:49.927Z",
+          "when": "07/09 01:50",
+          "type": "patrol.done",
+          "actor": "patrol",
+          "line": "巡回処理完了（巡回） — 完成度 50% / 品質 OK"
+        },
+        {
+          "at": "2026-07-08T16:50:48.666Z",
+          "when": "07/09 01:50",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — writer / E4_timeline_diet_topic"
+        },
+        {
+          "at": "2026-07-08T16:50:47.458Z",
+          "when": "07/09 01:50",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — writer / E4_timeline_diet_topic"
+        },
+        {
+          "at": "2026-07-08T16:50:46.170Z",
+          "when": "07/09 01:50",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — writer / E4_timeline_diet_topic"
+        },
+        {
+          "at": "2026-07-08T16:50:44.894Z",
+          "when": "07/09 01:50",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — writer / E4_timeline_diet_topic"
+        },
+        {
+          "at": "2026-07-08T16:50:43.572Z",
+          "when": "07/09 01:50",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — writer / E4_timeline_diet_topic"
+        },
         {
           "at": "2026-07-08T16:34:50.081Z",
           "when": "07/09 01:34",
@@ -6773,48 +6809,6 @@
         {
           "at": "2026-07-08T16:34:46.047Z",
           "when": "07/09 01:34",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — writer / E4_timeline_diet_topic"
-        },
-        {
-          "at": "2026-07-08T16:34:44.502Z",
-          "when": "07/09 01:34",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — writer / E4_timeline_diet_topic"
-        },
-        {
-          "at": "2026-07-08T16:34:43.200Z",
-          "when": "07/09 01:34",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — writer / E4_timeline_diet_topic"
-        },
-        {
-          "at": "2026-07-08T16:19:02.994Z",
-          "when": "07/09 01:19",
-          "type": "patrol.done",
-          "actor": "patrol",
-          "line": "巡回処理完了（巡回） — 完成度 50% / 品質 OK"
-        },
-        {
-          "at": "2026-07-08T16:19:01.702Z",
-          "when": "07/09 01:19",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — writer / E4_timeline_diet_topic"
-        },
-        {
-          "at": "2026-07-08T16:19:00.430Z",
-          "when": "07/09 01:19",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — writer / E4_timeline_diet_topic"
-        },
-        {
-          "at": "2026-07-08T16:18:59.069Z",
-          "when": "07/09 01:18",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / E4_timeline_diet_topic"
@@ -7222,37 +7216,18 @@
       "publishState": "live",
       "adminBucket": "live",
       "previewUrl": "/dev/preview/senkyo-kaikaku/",
-      "qualityOk": false,
-      "needsQualityFix": true,
-      "qualityBlockerCount": 1,
-      "qualityBlockers": [
-        {
-          "id": "Q7_procedural_evidence",
-          "message": "要点が議事手続き・発言断片の羅列",
-          "todo": "論点・数値・可決結果が分かる第三者要約に差し替え",
-          "agent": "ceo"
-        }
-      ],
-      "agentTasks": [
-        {
-          "id": "senkyo-kaikaku:Q7_procedural_evidence",
-          "slug": "senkyo-kaikaku",
-          "agent": "ceo",
-          "agentLabel": "CEO",
-          "checkId": "Q7_procedural_evidence",
-          "title": "[品質] 要点が議事手続き・発言断片の羅列",
-          "todo": "論点・数値・可決結果が分かる第三者要約に差し替え",
-          "command": "node scripts/complete-article.mjs --slug senkyo-kaikaku --content-only --force",
-          "priority": 10
-        }
-      ],
-      "gatePct": 75,
-      "goldPct": 50,
+      "qualityOk": true,
+      "needsQualityFix": false,
+      "qualityBlockerCount": 0,
+      "qualityBlockers": [],
+      "agentTasks": [],
+      "gatePct": 100,
+      "goldPct": 100,
       "published": true,
-      "specialPublish": true,
-      "specialPublishSummary": "品質NG・①〜④未完了",
+      "specialPublish": false,
+      "specialPublishSummary": "",
       "publishGateOk": true,
-      "pipelinePreOk": false,
+      "pipelinePreOk": true,
       "titleAnswerOk": true,
       "titleAnswerDetail": "1行目がタイトルに回答している",
       "titleAnswerTodo": null,
@@ -7262,7 +7237,7 @@
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "matrix",
@@ -7290,14 +7265,14 @@
           "label": "⑤本番デプロイ",
           "phase": 5,
           "preDeploy": false,
-          "ok": false
+          "ok": true
         },
         {
           "id": "debug",
           "label": "⑥デバッグOK",
           "phase": 6,
           "preDeploy": false,
-          "ok": false
+          "ok": true
         }
       ],
       "gold": [
@@ -7306,7 +7281,7 @@
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "matrix",
@@ -7334,32 +7309,27 @@
           "label": "⑤本番デプロイ",
           "phase": 5,
           "preDeploy": false,
-          "ok": false
+          "ok": true
         },
         {
           "id": "debug",
           "label": "⑥デバッグOK",
           "phase": 6,
           "preDeploy": false,
-          "ok": false
+          "ok": true
         }
       ],
       "blockers": [],
       "blockerCount": 0,
-      "runState": "idle",
+      "runState": "active",
       "workItems": [
         {
           "id": "Q7_procedural_evidence",
-          "label": "要点が議事手続き・発言断片の羅列",
-          "state": "blocked"
-        },
-        {
-          "id": "pipe:content",
-          "label": "①コンテンツ",
-          "state": "blocked"
+          "label": "Q7_procedural_evidence",
+          "state": "active"
         }
       ],
-      "nextAction": "✅ 公開中 — 要対応あり（裏で修正中・URLは維持）",
+      "nextAction": "✅ 公開中 — /case/ に表示されています",
       "promo": {
         "x": null,
         "hatena": null,
@@ -7378,13 +7348,20 @@
       },
       "xUnavailable": true,
       "xResearchStatus": "exhausted",
-      "statusExplain": "サイトに載っているが、内部チェックは全部終わっていない。",
+      "statusExplain": "サイトに公開中。",
       "publishedBy": "owner",
       "publishedAt": "2026-07-01T20:35:28.349Z",
       "adminHiddenBy": null,
       "adminHiddenAt": null,
-      "patrolFixing": false,
+      "patrolFixing": true,
       "activity": [
+        {
+          "at": "2026-07-08T16:50:49.943Z",
+          "when": "07/09 01:50",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — ceo / Q7_procedural_evidence"
+        },
         {
           "at": "2026-07-08T16:35:17.732Z",
           "when": "07/09 01:35",
@@ -7443,13 +7420,6 @@
         },
         {
           "at": "2026-07-08T16:21:57.048Z",
-          "when": "07/09 01:21",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — ceo / Q7_procedural_evidence"
-        },
-        {
-          "at": "2026-07-08T16:21:51.599Z",
           "when": "07/09 01:21",
           "type": "patrol.start",
           "actor": "patrol",
@@ -8003,8 +7973,50 @@
       "publishedAt": "2026-07-01T20:35:28.917Z",
       "adminHiddenBy": null,
       "adminHiddenAt": null,
-      "patrolFixing": false,
+      "patrolFixing": true,
       "activity": [
+        {
+          "at": "2026-07-08T16:51:03.625Z",
+          "when": "07/09 01:51",
+          "type": "patrol.done",
+          "actor": "patrol",
+          "line": "巡回処理完了（巡回） — 完成度 50% / 品質 OK"
+        },
+        {
+          "at": "2026-07-08T16:51:02.339Z",
+          "when": "07/09 01:51",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — writer / J1_prosCons"
+        },
+        {
+          "at": "2026-07-08T16:51:01.099Z",
+          "when": "07/09 01:51",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — writer / J1_prosCons"
+        },
+        {
+          "at": "2026-07-08T16:50:59.808Z",
+          "when": "07/09 01:50",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — writer / J1_prosCons"
+        },
+        {
+          "at": "2026-07-08T16:50:58.523Z",
+          "when": "07/09 01:50",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — writer / J1_prosCons"
+        },
+        {
+          "at": "2026-07-08T16:50:57.186Z",
+          "when": "07/09 01:50",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — writer / J1_prosCons"
+        },
         {
           "at": "2026-07-08T16:38:04.360Z",
           "when": "07/09 01:38",
@@ -8029,48 +8041,6 @@
         {
           "at": "2026-07-08T16:38:00.419Z",
           "when": "07/09 01:38",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — writer / J1_prosCons"
-        },
-        {
-          "at": "2026-07-08T16:37:59.114Z",
-          "when": "07/09 01:37",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — writer / J1_prosCons"
-        },
-        {
-          "at": "2026-07-08T16:37:57.760Z",
-          "when": "07/09 01:37",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — writer / J1_prosCons"
-        },
-        {
-          "at": "2026-07-08T16:22:14.768Z",
-          "when": "07/09 01:22",
-          "type": "patrol.done",
-          "actor": "patrol",
-          "line": "巡回処理完了（巡回） — 完成度 50% / 品質 OK"
-        },
-        {
-          "at": "2026-07-08T16:22:13.419Z",
-          "when": "07/09 01:22",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — writer / J1_prosCons"
-        },
-        {
-          "at": "2026-07-08T16:22:12.132Z",
-          "when": "07/09 01:22",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — writer / J1_prosCons"
-        },
-        {
-          "at": "2026-07-08T16:22:10.853Z",
-          "when": "07/09 01:22",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / J1_prosCons"
@@ -8245,7 +8215,7 @@
         {
           "id": "Q7_procedural_evidence",
           "label": "要点が議事手続き・発言断片の羅列",
-          "state": "blocked"
+          "state": "active"
         },
         {
           "id": "pipe:content",
@@ -9752,6 +9722,6 @@
     }
   ],
   "deltaGoldPct": 0,
-  "previousGoldPct": 72,
-  "deployedAt": "2026-07-08T16:43:44.245Z"
+  "previousGoldPct": 73,
+  "deployedAt": "2026-07-08T16:47:23.675Z"
 }
