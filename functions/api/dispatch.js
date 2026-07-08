@@ -1,17 +1,23 @@
 /**
  * Cloudflare Pages Function: /api/dispatch
- * 開発者用 — 記事生成・本番反映ワークフローをトリガーする
+ * 開発者用 — 記事操作・本番反映ワークフローをトリガーする
  *
  * 必要な Cloudflare Pages 環境変数:
- *   GH_TOKEN        : GitHub PAT (workflow 権限)
+ *   GH_TOKEN        : GitHub PAT (contents:write 権限で動作。workflow権限は不要)
  *   ADMIN_PIN       : 管理者PIN (例: 1192)
  *   TAVILY_API_KEY  : 任意（ソースURL自動取得の精度向上）
  *
  * POST body:
  *   { pin, action?, slug?, keyword?, title? }
  *   action: "create" | "deploy" | "deploy_article" | "publish" | "update_title" | "hide" | "unhide" | "delete_article"
+ *
+ * deploy_article / update_title / hide / unhide は GitHub Contents API で直書き
+ * → workflow_dispatch 権限不要・push トリガーで deploy.yml が自動起動
  */
 import { prepareArticleCreate } from "../lib/article-prepare.js";
+import { decodeGitHubBase64Utf8, encodeGitHubBase64Utf8 } from "../lib/github-content.js";
+
+const REPO = "jin-log/kokkai-voice";
 
 export async function onRequestPost(context) {
   const { GH_TOKEN, ADMIN_PIN, TAVILY_API_KEY } = context.env;
@@ -45,50 +51,55 @@ export async function onRequestPost(context) {
 
   if (action === "deploy_article") {
     const slug = slugIn?.trim();
-    if (!slug) {
-      return json({ error: "slug は必須です" }, 400);
-    }
-    return dispatchWorkflow(
-      GH_TOKEN,
-      "admin-article.yml",
-      { action: "publish", slug, title: "" },
-      `「${slug}」を公開処理に送りました。GitHubで反映後、デプロイで本番に載ります（合計1〜3分）。`,
-    );
+    if (!slug) return json({ error: "slug は必須です" }, 400);
+    const now = new Date().toISOString();
+    const result = await updateArticleJson(GH_TOKEN, slug, (article) => {
+      article.pageReady = true;
+      article.publishReady = true;
+      article.adminHidden = false;
+      delete article.adminHiddenAt;
+      delete article.adminHiddenBy;
+      article.publishedAt = now;
+      article.publishedBy = "owner";
+    }, `admin: publish ${slug}`);
+    if (!result.ok) return json({ error: result.error, detail: result.detail }, result.status ?? 500);
+    return json({ ok: true, message: `「${slug}」を公開しました。1〜2分後に本番に反映されます。` });
   }
 
   if (action === "update_title") {
     const slug = slugIn?.trim();
     const title = titleIn?.trim();
-    if (!slug || !title) {
-      return json({ error: "slug と title は必須です" }, 400);
-    }
-    return dispatchWorkflow(
-      GH_TOKEN,
-      "admin-article.yml",
-      { action: "update_title", slug, title },
-      `タイトルを更新しました。1〜2分後に本番へ反映されます（deploy 自動）。`,
-    );
+    if (!slug || !title) return json({ error: "slug と title は必須です" }, 400);
+    const result = await updateArticleJson(GH_TOKEN, slug, (article) => {
+      article.title = title;
+    }, `admin: update_title ${slug}`);
+    if (!result.ok) return json({ error: result.error, detail: result.detail }, result.status ?? 500);
+    return json({ ok: true, message: `タイトルを更新しました。1〜2分後に本番へ反映されます。` });
   }
 
   if (action === "hide" || action === "unhide") {
     const slug = slugIn?.trim();
-    if (!slug) {
-      return json({ error: "slug は必須です" }, 400);
-    }
-    const label = action === "hide" ? "非表示" : "表示";
-    return dispatchWorkflow(
-      GH_TOKEN,
-      "admin-article.yml",
-      { action, slug, title: "" },
-      `「${slug}」を${label}にしました。`,
-    );
+    if (!slug) return json({ error: "slug は必須です" }, 400);
+    const isHide = action === "hide";
+    const now = new Date().toISOString();
+    const result = await updateArticleJson(GH_TOKEN, slug, (article) => {
+      article.adminHidden = isHide;
+      if (isHide) {
+        article.adminHiddenAt = now;
+        article.adminHiddenBy = "owner";
+      } else {
+        delete article.adminHiddenAt;
+        delete article.adminHiddenBy;
+      }
+    }, `admin: ${action} ${slug}`);
+    if (!result.ok) return json({ error: result.error, detail: result.detail }, result.status ?? 500);
+    const label = isHide ? "非表示" : "表示";
+    return json({ ok: true, message: `「${slug}」を${label}にしました。1〜2分後に反映されます。` });
   }
 
   if (action === "delete_article") {
     const slug = slugIn?.trim();
-    if (!slug) {
-      return json({ error: "slug は必須です" }, 400);
-    }
+    if (!slug) return json({ error: "slug は必須です" }, 400);
     return dispatchWorkflow(
       GH_TOKEN,
       "admin-article.yml",
@@ -127,9 +138,49 @@ export async function onRequestPost(context) {
   );
 }
 
+/**
+ * GitHub Contents API で記事 JSON を取得→更新→プッシュ
+ * contents:write 権限のみで動作（workflow 権限不要）
+ * push → deploy.yml が自動起動してサイト再ビルド
+ */
+async function updateArticleJson(token, slug, updateFn, commitMsg) {
+  const filePath = `data/articles/${slug}.json`;
+  const apiBase = `https://api.github.com/repos/${REPO}/contents/${filePath}`;
+
+  const getRes = await fetch(`${apiBase}?ref=main`, { headers: ghHeaders(token) });
+  if (!getRes.ok) {
+    const detail = await getRes.text();
+    return { ok: false, error: `記事取得エラー: ${getRes.status}`, detail, status: getRes.status === 404 ? 404 : 500 };
+  }
+  const meta = await getRes.json();
+
+  let article;
+  try {
+    article = JSON.parse(decodeGitHubBase64Utf8(meta.content));
+  } catch {
+    return { ok: false, error: "記事 JSON のパースに失敗しました", status: 500 };
+  }
+
+  updateFn(article);
+
+  const newContent = encodeGitHubBase64Utf8(JSON.stringify(article, null, 2) + "\n");
+  const putRes = await fetch(apiBase, {
+    method: "PUT",
+    headers: ghHeaders(token),
+    body: JSON.stringify({ message: commitMsg, content: newContent, sha: meta.sha, branch: "main" }),
+  });
+
+  if (!putRes.ok) {
+    const detail = await putRes.text();
+    return { ok: false, error: `保存エラー: ${putRes.status}`, detail, status: 500 };
+  }
+
+  return { ok: true };
+}
+
 async function dispatchWorkflow(token, workflowFile, inputs, successMessage, extra = {}) {
   const res = await fetch(
-    `https://api.github.com/repos/jin-log/kokkai-voice/actions/workflows/${workflowFile}/dispatches`,
+    `https://api.github.com/repos/${REPO}/actions/workflows/${workflowFile}/dispatches`,
     {
       method: "POST",
       headers: ghHeaders(token),

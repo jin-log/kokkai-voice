@@ -1,11 +1,11 @@
 {
-  "generatedAt": "2026-07-08T19:49:51.846Z",
+  "generatedAt": "2026-07-08T19:50:28.897Z",
   "strategy": "quality-first",
   "activeCount": 41,
   "parkedCount": 0,
   "publishedCount": 31,
   "overallGoldPct": 78,
-  "overallGatePct": 90,
+  "overallGatePct": 91,
   "qualityFailed": 1,
   "specialPublishCount": 11,
   "automationPolicy": [
@@ -85,7 +85,7 @@
     "slugStalls": [],
     "stalledCount": 0,
     "message": "完成度・公開数が更新されていれば進行中です",
-    "analyzedAt": "2026-07-08T19:49:51.844Z",
+    "analyzedAt": "2026-07-08T19:50:28.895Z",
     "lastPatrolCycleAt": "2026-07-08T19:49:50.185Z",
     "patrolRunning": true
   },
@@ -7596,6 +7596,17 @@
       "qualityBlockers": [],
       "agentTasks": [
         {
+          "id": "hosei-yosan:J1_analytical_blocks",
+          "slug": "hosei-yosan",
+          "agent": "writer",
+          "agentLabel": "ライター",
+          "checkId": "J1_analytical_blocks",
+          "title": "[ゲート] 分析ブロック",
+          "todo": "メリデメ・利害・数値統計のいずれか1〜3種（0種NG）",
+          "command": "npm run complete:article -- --slug hosei-yosan --content-only --force",
+          "priority": 30
+        },
+        {
           "id": "hosei-yosan:J1_prosCons",
           "slug": "hosei-yosan",
           "agent": "writer",
@@ -7611,7 +7622,7 @@
       "goldPct": 50,
       "published": true,
       "specialPublish": true,
-      "specialPublishSummary": "ゲート1件・①〜④未完了",
+      "specialPublishSummary": "ゲート2件・①〜④未完了",
       "publishGateOk": true,
       "pipelinePreOk": false,
       "titleAnswerOk": true,
@@ -7707,15 +7718,26 @@
       ],
       "blockers": [
         {
+          "id": "J1_analytical_blocks",
+          "label": "分析ブロック",
+          "todo": "メリデメ・利害・数値統計のいずれか1〜3種（0種NG）",
+          "detail": "メリデメ — 内容不足（有効0種・1種以上必要）"
+        },
+        {
           "id": "J1_prosCons",
           "label": "メリデメ",
           "todo": "公表数値付きメリット2・デメリット2",
           "detail": "メリ1/2・デメ2/2（各 figure+sourceUrl 必須）"
         }
       ],
-      "blockerCount": 1,
+      "blockerCount": 2,
       "runState": "idle",
       "workItems": [
+        {
+          "id": "J1_analytical_blocks",
+          "label": "分析ブロック",
+          "state": "blocked"
+        },
         {
           "id": "J1_prosCons",
           "label": "メリデメ",
@@ -8897,37 +8919,14 @@
       "needsQualityFix": false,
       "qualityBlockerCount": 0,
       "qualityBlockers": [],
-      "agentTasks": [
-        {
-          "id": "kishida-seiken-jisshi:D2_arc_topic",
-          "slug": "kishida-seiken-jisshi",
-          "agent": "writer",
-          "agentLabel": "ライター",
-          "checkId": "D2_arc_topic",
-          "title": "[ゲート] 経緯の話題",
-          "todo": "経緯3行以上が案件キーワードと一致",
-          "command": "node scripts/complete-article.mjs --slug kishida-seiken-jisshi --content-only --force",
-          "priority": 30
-        },
-        {
-          "id": "kishida-seiken-jisshi:E4_timeline_diet_topic",
-          "slug": "kishida-seiken-jisshi",
-          "agent": "writer",
-          "agentLabel": "ライター",
-          "checkId": "E4_timeline_diet_topic",
-          "title": "[ゲート] TL国会の話題",
-          "todo": "国会TLはある分だけ話題一致。TLなし可。根拠なしの結論は不可",
-          "command": "node scripts/enrich-timeline-all.mjs --slug kishida-seiken-jisshi",
-          "priority": 30
-        }
-      ],
-      "gatePct": 75,
-      "goldPct": 50,
+      "agentTasks": [],
+      "gatePct": 100,
+      "goldPct": 67,
       "published": false,
       "specialPublish": false,
       "specialPublishSummary": "",
       "publishGateOk": true,
-      "pipelinePreOk": false,
+      "pipelinePreOk": true,
       "titleAnswerOk": true,
       "titleAnswerDetail": "1行目がタイトルに回答している",
       "titleAnswerTodo": null,
@@ -8937,7 +8936,7 @@
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "matrix",
@@ -8981,7 +8980,7 @@
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "matrix",
@@ -9019,39 +9018,10 @@
           "ok": false
         }
       ],
-      "blockers": [
-        {
-          "id": "D2_arc_topic",
-          "label": "経緯の話題",
-          "todo": "経緯3行以上が案件キーワードと一致",
-          "detail": "0/3 行が話題一致"
-        },
-        {
-          "id": "E4_timeline_diet_topic",
-          "label": "TL国会の話題",
-          "todo": "国会TLはある分だけ話題一致。TLなし可。根拠なしの結論は不可",
-          "detail": "国会TLあるが話題一致なし＋結論あり"
-        }
-      ],
-      "blockerCount": 2,
+      "blockers": [],
+      "blockerCount": 0,
       "runState": "idle",
-      "workItems": [
-        {
-          "id": "D2_arc_topic",
-          "label": "経緯の話題",
-          "state": "blocked"
-        },
-        {
-          "id": "E4_timeline_diet_topic",
-          "label": "TL国会の話題",
-          "state": "blocked"
-        },
-        {
-          "id": "pipe:content",
-          "label": "①コンテンツ",
-          "state": "blocked"
-        }
-      ],
+      "workItems": [],
       "nextAction": "📋 1行目OK — プレビュー確認後「公開する」を押してください",
       "promo": {
         "x": null,
@@ -9455,5 +9425,5 @@
   ],
   "deltaGoldPct": 0,
   "previousGoldPct": 78,
-  "deployedAt": "2026-07-08T19:44:42.117Z"
+  "deployedAt": "2026-07-08T19:50:28.901Z"
 }
