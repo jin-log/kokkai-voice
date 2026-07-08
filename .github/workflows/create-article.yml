@@ -24,6 +24,8 @@ on:
         description: "ソースURL (カンマ区切り・任意)"
         required: false
         default: ""
+  repository_dispatch:
+    types: [create-article]
 
 permissions:
   contents: write
@@ -31,6 +33,13 @@ permissions:
 jobs:
   create:
     runs-on: ubuntu-latest
+    env:
+      ART_SLUG:     ${{ github.event.inputs.slug     || github.event.client_payload.slug }}
+      ART_KEYWORD:  ${{ github.event.inputs.keyword  || github.event.client_payload.keyword }}
+      ART_TITLE:    ${{ github.event.inputs.title    || github.event.client_payload.title }}
+      ART_CATEGORY: ${{ github.event.inputs.category || github.event.client_payload.category || '国会' }}
+      ART_TAGS:     ${{ github.event.inputs.tags     || github.event.client_payload.tags || '' }}
+      ART_SOURCES:  ${{ github.event.inputs.sources  || github.event.client_payload.sources || '' }}
     steps:
       - uses: actions/checkout@v4
 
@@ -43,54 +52,56 @@ jobs:
 
       - name: 骨組み生成
         run: |
-          if [ "${{ github.event.inputs.category }}" = "国会" ]; then
+          if [ "$ART_CATEGORY" = "国会" ]; then
             node scripts/init-article.mjs \
-              --slug "${{ github.event.inputs.slug }}" \
-              --keyword "${{ github.event.inputs.keyword }}" \
-              --title "${{ github.event.inputs.title }}" \
-              --category "${{ github.event.inputs.category }}" \
-              --tags "${{ github.event.inputs.tags }}" \
+              --slug "$ART_SLUG" \
+              --keyword "$ART_KEYWORD" \
+              --title "$ART_TITLE" \
+              --category "$ART_CATEGORY" \
+              --tags "$ART_TAGS" \
               --force
           else
             node scripts/init-article-general.mjs \
-              --slug "${{ github.event.inputs.slug }}" \
-              --keyword "${{ github.event.inputs.keyword }}" \
-              --title "${{ github.event.inputs.title }}" \
-              --category "${{ github.event.inputs.category }}" \
-              --tags "${{ github.event.inputs.tags }}" \
-              --sources "${{ github.event.inputs.sources }}" \
+              --slug "$ART_SLUG" \
+              --keyword "$ART_KEYWORD" \
+              --title "$ART_TITLE" \
+              --category "$ART_CATEGORY" \
+              --tags "$ART_TAGS" \
+              --sources "$ART_SOURCES" \
               --force
           fi
 
       - name: index登録
-        run: node scripts/register-article-index.mjs --slug "${{ github.event.inputs.slug }}"
+        run: node scripts/register-article-index.mjs --slug "$ART_SLUG"
 
       - name: 作成ログ
         run: |
           node scripts/log-article-create.mjs \
-            --slug "${{ github.event.inputs.slug }}" \
-            --keyword "${{ github.event.inputs.keyword }}" \
-            --title "${{ github.event.inputs.title }}" \
-            --category "${{ github.event.inputs.category }}" \
-            --via github-actions
+            --slug "$ART_SLUG" \
+            --keyword "$ART_KEYWORD" \
+            --title "$ART_TITLE" \
+            --category "$ART_CATEGORY" \
+            --via github-actions \
+            --status done
 
       - name: 記事完成（①〜④ 自動）
         id: complete
         continue-on-error: true
         env:
           TAVILY_API_KEY: ${{ secrets.TAVILY_API_KEY }}
-        run: node scripts/complete-article.mjs --slug "${{ github.event.inputs.slug }}"
+        run: node scripts/complete-article.mjs --slug "$ART_SLUG"
 
       - name: コミット & プッシュ
         run: |
           git config user.email "bot@seiji1192.site"
           git config user.name "kokkai-bot"
           git add data/
-          git diff --staged --quiet || git commit -m "article: ${{ github.event.inputs.slug }} 自動完成"
+          git diff --staged --quiet || git commit -m "article: $ART_SLUG 自動完成"
+          git pull --rebase origin main
           git push
 
       - name: 公開ゲート確認
         if: steps.complete.outcome != 'success'
         run: |
-          echo "①〜④のいずれかが未達です。管理画面 /dev/status/ で未了項目を確認してください。"
+          echo "①〜④のいずれかが未達です。管理画面で未了項目を確認してください。"
           exit 1

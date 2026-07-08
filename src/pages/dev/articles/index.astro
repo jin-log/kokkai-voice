@@ -130,6 +130,10 @@ const policyCategories = Object.keys(categoryCounts).sort(sortPolicyCategories);
       <button type="button" id="new-generate" class="admin-create__btn">生成する</button>
     </div>
     <div id="new-status" class="admin-create__status" hidden></div>
+    <div id="create-log" class="admin-create__log" hidden>
+      <p class="admin-create__log-title">最近作成したキーワード</p>
+      <ul id="create-log-list" class="admin-create__log-list"></ul>
+    </div>
   </section>
 
   <section class="admin-filter" aria-label="絞り込み・並び替え">
@@ -287,12 +291,15 @@ const policyCategories = Object.keys(categoryCounts).sort(sortPolicyCategories);
     if (pubBtn) pubBtn.remove();
     if (s.publishState === "live" && !s.adminHidden) {
       if (!liveLink) {
-        const a = document.createElement("a");
-        a.href = `/case/${s.slug}/`;
-        a.className = "admin-row__btn admin-row__btn--ghost";
-        a.dataset.role = "live-link";
-        a.textContent = "本番を見る";
-        quick.insertBefore(a, quick.querySelector(".deploy-slug-status"));
+        const existing = quick.querySelector(`a[href="/case/${s.slug}/"]`);
+        if (!existing) {
+          const a = document.createElement("a");
+          a.href = `/case/${s.slug}/`;
+          a.className = "admin-row__btn admin-row__btn--ghost";
+          a.dataset.role = "live-link";
+          a.textContent = "本番を見る";
+          quick.insertBefore(a, quick.querySelector(".deploy-slug-status"));
+        }
       }
       if (hint) hint.remove();
       return;
@@ -641,11 +648,67 @@ const policyCategories = Object.keys(categoryCounts).sort(sortPolicyCategories);
     try {
       const data = await callDispatch("create", { keyword, title: titleIn });
       if (statusEl) { statusEl.className = "admin-create__status is-ok"; statusEl.textContent = "✅ " + data.message; }
+      // 生成中ログを即時表示に反映
+      if (data.slug) addPendingLogEntry(data.slug, keyword, titleIn || keyword);
+      // 3〜5分後に記事が追加されたかポーリング
+      if (data.slug) pollForNewArticle(data.slug);
     } catch (e) {
       if (statusEl) { statusEl.className = "admin-create__status is-error"; statusEl.textContent = "❌ " + e.message; }
       alert(e.message);
     } finally { if (btn) btn.disabled = false; }
   });
+
+  /** 生成中エントリを create-log リストに即時追加 */
+  function addPendingLogEntry(slug, keyword, title) {
+    const box = document.getElementById("create-log");
+    const list = document.getElementById("create-log-list");
+    if (!box || !list) return;
+    box.hidden = false;
+    const li = document.createElement("li");
+    li.dataset.pendingSlug = slug;
+    li.className = "is-pending";
+    li.innerHTML = `<time>${new Date().toISOString().slice(0,10)}</time> <strong>${String(title||keyword).replace(/</g,"&lt;")}</strong> <span>— ${String(keyword).replace(/</g,"&lt;")}</span> <code>${slug}</code> <span class="create-log__badge create-log__badge--pending">⏳ 生成中</span>`;
+    list.prepend(li);
+  }
+
+  /** 記事が index.json に追加されるまでポーリング（最大10分）*/
+  async function pollForNewArticle(slug) {
+    const list = document.getElementById("create-log-list");
+    for (let i = 0; i < 40; i++) {
+      await new Promise((r) => setTimeout(r, 15000));
+      try {
+        const r = await fetch(`/data/article-create-log.json?t=${Date.now()}`);
+        if (!r.ok) continue;
+        const log = await r.json();
+        const entry = (log.entries || []).find((e) => e.slug === slug);
+        const li = list?.querySelector(`[data-pending-slug="${slug}"]`);
+        if (entry?.status === "done") {
+          if (li) li.innerHTML = li.innerHTML.replace(/<span class="create-log__badge[^<]*<\/span>/, '<span class="create-log__badge create-log__badge--done">✅ 完了</span>');
+          // 管理画面をリロードして新記事を表示
+          setTimeout(() => location.reload(), 1500);
+          return;
+        }
+        if (entry?.status === "failed") {
+          if (li) li.innerHTML = li.innerHTML.replace(/<span class="create-log__badge[^<]*<\/span>/, '<span class="create-log__badge create-log__badge--failed">❌ 失敗</span>');
+          return;
+        }
+      } catch { /* retry */ }
+    }
+    // タイムアウト（10分）
+    const li = list?.querySelector(`[data-pending-slug="${slug}"]`);
+    if (li) li.innerHTML = li.innerHTML.replace(/<span class="create-log__badge[^<]*<\/span>/, '<span class="create-log__badge create-log__badge--failed">⚠ タイムアウト</span>');
+  }
+
+  // 起動時：生成中エントリがあれば自動ポーリング再開
+  fetch("/data/article-create-log.json?t=" + Date.now())
+    .then((r) => (r.ok ? r.json() : null))
+    .then((log) => {
+      if (!log?.entries?.length) return;
+      for (const e of log.entries) {
+        if (e.status === "pending") pollForNewArticle(e.slug);
+      }
+    })
+    .catch(() => {});
 
   document.getElementById("admin-cards")?.addEventListener("click", async (e) => {
     const t = e.target;
@@ -729,5 +792,32 @@ const policyCategories = Object.keys(categoryCounts).sort(sortPolicyCategories);
   window.addEventListener("admin-live-start", startLivePoll);
   window.addEventListener("admin-unlocked", startLivePoll);
   if (localStorage.getItem(KEY) === "1192") queueMicrotask(startLivePoll);
+
+  const STATUS_BADGE = {
+    pending: '<span class="create-log__badge create-log__badge--pending">⏳ 生成中</span>',
+    done:    '<span class="create-log__badge create-log__badge--done">✅ 完了</span>',
+    failed:  '<span class="create-log__badge create-log__badge--failed">❌ 失敗</span>',
+  };
+  fetch("/data/article-create-log.json?t=" + Date.now())
+    .then((r) => (r.ok ? r.json() : null))
+    .then((log) => {
+      const box = document.getElementById("create-log");
+      const list = document.getElementById("create-log-list");
+      if (!box || !list || !log?.entries?.length) return;
+      box.hidden = false;
+      list.innerHTML = log.entries.slice(0, 8).map((e) => {
+        const when = (e.at || "").slice(0, 10);
+        const title = String(e.title || e.slug).replace(/</g, "&lt;");
+        const kw = String(e.keyword || "").replace(/</g, "&lt;");
+        const badge = STATUS_BADGE[e.status] || "";
+        const cls = e.status === "pending" ? " is-pending" : "";
+        return `<li data-pending-slug="${e.slug}"${cls ? ` class="${cls.trim()}"` : ""}><time>${when}</time> <strong>${title}</strong> <span>— ${kw}</span> <code>${e.slug}</code>${badge}</li>`;
+      }).join("");
+      // 生成中エントリは自動ポーリング（上書きせずポーリングだけ起動）
+      for (const e of log.entries) {
+        if (e.status === "pending") pollForNewArticle(e.slug);
+      }
+    })
+    .catch(() => {});
 })();
 </script>

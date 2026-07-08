@@ -129,13 +129,74 @@ export async function onRequestPost(context) {
 
   const { slug, title, keyword: keywordClean, category, tags, sources, plan } = prepared;
 
-  return dispatchWorkflow(
-    GH_TOKEN,
-    "create-article.yml",
-    { slug, keyword: keywordClean, title, category, tags, sources },
-    `記事生成を開始しました（${plan}）。3〜5分後にプレビューを確認してください。`,
-    { slug, category, plan },
+  // 1) 即時: article-create-log.json に pending エントリを書き込む（管理画面に「生成中」表示）
+  await appendCreateLog(GH_TOKEN, { slug, keyword: keywordClean, title, category, status: "pending" });
+
+  // 2) repository_dispatch で create-article.yml を起動（contents:write 権限のみで動作）
+  const dispatchRes = await fetch(
+    `https://api.github.com/repos/${REPO}/dispatches`,
+    {
+      method: "POST",
+      headers: ghHeaders(GH_TOKEN),
+      body: JSON.stringify({
+        event_type: "create-article",
+        client_payload: { slug, keyword: keywordClean, title, category, tags, sources },
+      }),
+    },
   );
+
+  if (dispatchRes.status !== 204) {
+    const detail = await dispatchRes.text();
+    return json({ error: `GitHub dispatch エラー: ${dispatchRes.status}`, detail }, 500);
+  }
+
+  return json({
+    ok: true,
+    message: `記事生成を開始しました（${plan}）。3〜5分後にプレビューを確認してください。`,
+    slug,
+    category,
+    plan,
+  });
+}
+
+/**
+ * article-create-log.json に pending/done エントリを追記
+ * 管理画面の「生成中」表示に使う
+ */
+async function appendCreateLog(token, { slug, keyword, title, category, status }) {
+  const filePath = "data/article-create-log.json";
+  const apiBase = `https://api.github.com/repos/${REPO}/contents/${filePath}`;
+  const now = new Date().toISOString();
+
+  let log = { entries: [] };
+  let sha = null;
+  try {
+    const getRes = await fetch(`${apiBase}?ref=main`, { headers: ghHeaders(token) });
+    if (getRes.ok) {
+      const meta = await getRes.json();
+      sha = meta.sha;
+      log = JSON.parse(decodeGitHubBase64Utf8(meta.content));
+    }
+  } catch { /* new log */ }
+
+  const existing = (log.entries ?? []).find((e) => e.slug === slug);
+  log.entries = (log.entries ?? []).filter((e) => e.slug !== slug);
+  log.entries.unshift({
+    slug,
+    keyword,
+    title: title || existing?.title || "",
+    category,
+    status,
+    at: existing?.at || now,
+    updatedAt: now,
+  });
+  log.entries = log.entries.slice(0, 50);
+  log.updatedAt = now;
+
+  const newContent = encodeGitHubBase64Utf8(JSON.stringify(log, null, 2) + "\n");
+  const body = { message: `create-log: ${status} ${slug}`, content: newContent, branch: "main" };
+  if (sha) body.sha = sha;
+  await fetch(apiBase, { method: "PUT", headers: ghHeaders(token), body: JSON.stringify(body) });
 }
 
 /**

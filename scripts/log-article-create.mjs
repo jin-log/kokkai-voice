@@ -17,9 +17,10 @@ const keyword = arg("keyword");
 const title = arg("title");
 const category = arg("category") || "国会";
 const via = arg("via") || "workflow";
+const status = arg("status") || "done";
 
 if (!slug || !keyword) {
-  console.error("Usage: node scripts/log-article-create.mjs --slug X --keyword Y [--title] [--category] [--via]");
+  console.error("Usage: node scripts/log-article-create.mjs --slug X --keyword Y [--title] [--category] [--via] [--status pending|done|failed]");
   process.exit(1);
 }
 
@@ -31,17 +32,20 @@ try {
   /* new */
 }
 
+const existing = log.entries.find((e) => e.slug === slug);
 log.entries = log.entries.filter((e) => e.slug !== slug);
 log.entries.unshift({
   slug,
   keyword,
-  title: title || "",
+  title: title || existing?.title || "",
   category,
   via,
-  at: new Date().toISOString(),
+  status,
+  at: existing?.at || new Date().toISOString(),
+  updatedAt: new Date().toISOString(),
 });
 log.entries = log.entries.slice(0, 50);
 log.updatedAt = new Date().toISOString();
 
 await writeFile(logPath, `${JSON.stringify(log, null, 2)}\n`, "utf8");
-console.log(`[log] ${slug} — ${keyword}`);
+console.log(`[log] ${slug} — ${keyword} [${status}]`);
