@@ -704,6 +704,7 @@ export function synthesizeEvidence(bundle, nowBullets, meta = {}, arcLines = [])
     for (const sn of bundle.snippets) {
       const line = extractEvidenceText(sn, kw, nowKeys);
       if (!line) continue;
+      if (isSpeechFragment(line)) continue;
       const key = textKey(line);
       if (used.has(key)) continue;
       const eventKey = textKey(

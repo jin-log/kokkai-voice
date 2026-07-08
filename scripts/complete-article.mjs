@@ -37,7 +37,7 @@ import {
   rebuildGeneralSummaryFromMerits,
 } from "../src/lib/general-article.mjs";
 import { citizenTitle } from "../src/lib/title-format.mjs";
-import { isTopicRelevant, textMatchesTopic, topicTerms, isConclusionQuality, countTopicArcLines, countTopicDietTimeline, isDietTimelineTopicOk, isMatrixTopicRelevant, isMatrixTopicConsistent, textStronglyMatchesTopic, ensureTopicInLines, isBoilerplateTopicLine } from "../src/lib/topic-relevance.mjs";
+import { isTopicRelevant, textMatchesTopic, topicTerms, isConclusionQuality, countTopicArcLines, countTopicDietTimeline, isDietTimelineTopicOk, isMatrixTopicRelevant, isMatrixTopicConsistent, textStronglyMatchesTopic, ensureTopicInLine, ensureTopicInLines, isBoilerplateTopicLine } from "../src/lib/topic-relevance.mjs";
 import { normalizeFactPhrase, isDietVoice, isSpeechFragment, isIncompleteBullet, isWriterReadyLine } from "../src/lib/diet-voice.mjs";
 import { isBadSummaryLine } from "./lib/speech-summary.mjs";
 import { scorePartySymbol, SYMBOL_METHODOLOGY } from "../src/lib/symbol-rules.mjs";
@@ -620,6 +620,16 @@ async function completeOneSlug(targetSlug) {
       .map((t) => ({ url: t.sourceUrl, snippet: t.summaryPlain, date: t.date }));
     await writePolicyMatrixGeneral(article, root, sources);
     article.title = citizenTitle({ ...article, slug: targetSlug });
+  }
+
+  // D2_arc_topic 補正: 話題語のない arcSummary 行にキーワードを注入
+  if (countTopicArcLines(article) < 3 && (article.arcSummary?.length ?? 0) >= 1) {
+    article.arcSummary = article.arcSummary.map((item) => {
+      if (!item?.text) return item;
+      if (textStronglyMatchesTopic(item.text, article.searchKeyword)) return item;
+      const fixed = ensureTopicInLine(item.text, article.searchKeyword);
+      return fixed ? { ...item, text: fixed } : item;
+    });
   }
 
   await saveArticleJson(article);
