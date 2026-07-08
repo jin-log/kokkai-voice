@@ -245,11 +245,16 @@ export function buildProposal({ article, sectionId, instruction, current, matrix
         canApply,
       };
     }
+    // オーナーが指示でタイトル案を提示した場合はそれを優先する
+    const hintTitle = extractTitleFromHint(hint);
+    const resolvedTitle = hintTitle || article?.title || topic;
     const opening = pickOpeningLine(article, topic, keywords);
     return {
       before,
-      after: [`タイトル: ${article?.title || topic}`, `1行目候補: ${opening}`].join("\n"),
-      note: "タイトルに対応する冒頭1文を記事データから生成",
+      after: [`タイトル: ${resolvedTitle}`, `1行目候補: ${opening}`].join("\n"),
+      note: hintTitle
+        ? `オーナー指示のタイトル案「${hintTitle}」を採用。冒頭1行は記事データから生成`
+        : "タイトルに対応する冒頭1文を記事データから生成",
       canApply,
     };
   }
@@ -513,6 +518,25 @@ function normalizeEducationTitle(title) {
     .replace(/^教育法改正/, "学校教育法改正")
     .replace(/^デジタル教科書改正/, "学校教育法改正")
     .trim();
+}
+
+/**
+ * オーナーの修正指示文からタイトル候補を抽出する。
+ * 「〇〇は△△？」「〇〇とは何か」「タイトル：〇〇」形式に対応。
+ */
+function extractTitleFromHint(hint) {
+  const text = String(hint || "").trim();
+  if (!text) return "";
+  // 「タイトル：○○」「タイトル: ○○」形式
+  const explicit = text.match(/タイトル[：:]\s*(.+)/);
+  if (explicit) return explicit[1].trim();
+  // 「【〇〇】は△△？」形式 — 全体をタイトルとして使う
+  const bracketQ = text.match(/^【[^】]+】.{0,30}[？?]$/);
+  if (bracketQ) return text.replace(/[？?]$/, "？").trim();
+  // 末尾が「？」で終わる短い文
+  const q = text.match(/^([^。\n]{3,40}[？?])$/);
+  if (q) return q[1].replace(/[？?]$/, "？").trim();
+  return "";
 }
 
 function numbered(items) {
