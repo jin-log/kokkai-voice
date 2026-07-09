@@ -622,10 +622,16 @@ const policyCategories = Object.keys(categoryCounts).sort(sortPolicyCategories);
     setInterval(refreshLiveStatus, 15000);
   }
 
-  // ブラウザの自動補完でフィルターが誤作動しないよう、ロード時に明示クリア
-  const searchEl = document.getElementById("article-search");
-  if (searchEl) searchEl.value = "";
-  searchEl?.addEventListener("input", applyFilterSort);
+  // ブラウザの自動補完・bfcacheでフィルターが誤作動しないよう明示クリア
+  function clearSearchField() {
+    const searchEl = document.getElementById("article-search");
+    if (searchEl) { (searchEl as HTMLInputElement).value = ""; }
+  }
+  clearSearchField();
+  window.addEventListener("pageshow", (e) => {
+    if (e.persisted) { clearSearchField(); applyFilterSort(); }
+  });
+  document.getElementById("article-search")?.addEventListener("input", applyFilterSort);
   document.getElementById("article-sort")?.addEventListener("change", applyFilterSort);
   applyFilterSort();
 
