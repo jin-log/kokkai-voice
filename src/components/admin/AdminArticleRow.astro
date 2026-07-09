@@ -47,7 +47,7 @@ const badge = adminBucketBadge(s);
       <header class="admin-row__head">
         <h3 class="admin-row__title">
           {s.previewUrl ? (
-            <a href={s.previewUrl} target="_blank" rel="noopener">{s.shortTitle}</a>
+            <a href={s.previewUrl}>{s.shortTitle}</a>
           ) : s.publishState === "live" && !s.adminHidden ? (
             <a href={`/case/${s.slug}/`}>{s.shortTitle}</a>
           ) : (

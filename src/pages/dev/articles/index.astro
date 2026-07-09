@@ -622,7 +622,10 @@ const policyCategories = Object.keys(categoryCounts).sort(sortPolicyCategories);
     setInterval(refreshLiveStatus, 15000);
   }
 
-  document.getElementById("article-search")?.addEventListener("input", applyFilterSort);
+  // ブラウザの自動補完でフィルターが誤作動しないよう、ロード時に明示クリア
+  const searchEl = document.getElementById("article-search");
+  if (searchEl) searchEl.value = "";
+  searchEl?.addEventListener("input", applyFilterSort);
   document.getElementById("article-sort")?.addEventListener("change", applyFilterSort);
   applyFilterSort();
 
