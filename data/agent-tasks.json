@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-07-09T15:48:52.180Z",
-  "total": 42,
+  "generatedAt": "2026-07-09T15:53:17.109Z",
+  "total": 43,
   "byAgent": {
-    "writer": 37,
+    "writer": 38,
     "ceo": 2,
     "x-researcher": 2,
     "legal-check": 1
@@ -72,6 +72,17 @@
       "title": "[ゲート] メリデメ",
       "todo": "公表数値付きメリット2・デメリット2",
       "command": "node scripts/generate-proscons-auto.mjs --slug hosei-yosan",
+      "priority": 30
+    },
+    {
+      "id": "kishida-seiken-jisshi:E4_timeline_diet_topic",
+      "slug": "kishida-seiken-jisshi",
+      "agent": "writer",
+      "agentLabel": "ライター",
+      "checkId": "E4_timeline_diet_topic",
+      "title": "[ゲート] TL国会の話題",
+      "todo": "国会TLはある分だけ話題一致。TLなし可。根拠なしの結論は不可",
+      "command": "node scripts/enrich-timeline-all.mjs --slug kishida-seiken-jisshi",
       "priority": 30
     },
     {
