@@ -1,11 +1,11 @@
 {
-  "generatedAt": "2026-07-10T02:52:05.368Z",
-  "total": 43,
+  "generatedAt": "2026-07-10T02:56:33.477Z",
+  "total": 47,
   "byAgent": {
-    "writer": 38,
-    "ceo": 2,
-    "x-researcher": 2,
-    "legal-check": 1
+    "writer": 39,
+    "x-researcher": 4,
+    "legal-check": 2,
+    "ceo": 2
   },
   "tasks": [
     {
@@ -83,6 +83,50 @@
       "title": "[ゲート] TL国会の話題",
       "todo": "国会TLはある分だけ話題一致。TLなし可。根拠なしの結論は不可",
       "command": "node scripts/enrich-timeline-all.mjs --slug kishida-seiken-jisshi",
+      "priority": 30
+    },
+    {
+      "id": "kokumin-futan-suii:H1_xPosts",
+      "slug": "kokumin-futan-suii",
+      "agent": "x-researcher",
+      "agentLabel": "X調査",
+      "checkId": "H1_xPosts",
+      "title": "[ゲート] X投稿",
+      "todo": "検証済みX URLを3件以上（x-researcher）",
+      "command": "node scripts/complete-article.mjs --slug kokumin-futan-suii --x-only --force",
+      "priority": 20
+    },
+    {
+      "id": "kokumin-futan-suii:H2_x_topic",
+      "slug": "kokumin-futan-suii",
+      "agent": "x-researcher",
+      "agentLabel": "X調査",
+      "checkId": "H2_x_topic",
+      "title": "[ゲート] Xの話題",
+      "todo": "X投稿本文が案件キーワードと一致（x-researcher）",
+      "command": "node scripts/complete-article.mjs --slug kokumin-futan-suii --x-only --force",
+      "priority": 20
+    },
+    {
+      "id": "kokumin-futan-suii:E2_timeline_x",
+      "slug": "kokumin-futan-suii",
+      "agent": "writer",
+      "agentLabel": "ライター",
+      "checkId": "E2_timeline_x",
+      "title": "[ゲート] タイムラインX",
+      "todo": "X投稿を3件以上タイムラインに",
+      "command": "node scripts/enrich-timeline-all.mjs --slug kokumin-futan-suii",
+      "priority": 30
+    },
+    {
+      "id": "kokumin-futan-suii:I1_legal",
+      "slug": "kokumin-futan-suii",
+      "agent": "legal-check",
+      "agentLabel": "法務",
+      "checkId": "I1_legal",
+      "title": "[ゲート] 法務",
+      "todo": "legal-check を実行",
+      "command": "node scripts/complete-article.mjs --slug kokumin-futan-suii --legal-only",
       "priority": 30
     },
     {
