@@ -587,16 +587,20 @@ async function completeOneSlug(targetSlug) {
     } catch {
       /* */
     }
-    const shouldEnrich =
-      contentOnly ||
-      force ||
-      (!isKokkaiContentReady(article, policyMatrix) && !isTopicContentPreserved(article, policyMatrix));
-    if (!shouldEnrich) {
-      console.log("[国会] 既にコンテンツあり — スキップ");
-    } else if (!contentOnly && !force && isTopicContentPreserved(article, policyMatrix)) {
-      console.log("[国会] 話題一致済み — 本文上書きスキップ");
+    if (!force && article.contentLocked) {
+      console.log("[国会] contentLocked — 本文上書きスキップ（--force で解除）");
     } else {
-      await enrichKokkai(article, targetSlug);
+      const shouldEnrich =
+        contentOnly ||
+        force ||
+        (!isKokkaiContentReady(article, policyMatrix) && !isTopicContentPreserved(article, policyMatrix));
+      if (!shouldEnrich) {
+        console.log("[国会] 既にコンテンツあり — スキップ");
+      } else if (!contentOnly && !force && isTopicContentPreserved(article, policyMatrix)) {
+        console.log("[国会] 話題一致済み — 本文上書きスキップ");
+      } else {
+        await enrichKokkai(article, targetSlug);
+      }
     }
   } else if (hasGeneralMeritPool(article)) {
     const needsRebuild = generalSummaryIsBad(article) || !isGeneralContentReady(article);
