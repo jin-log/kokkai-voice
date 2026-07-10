@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-07-10T03:17:31.212Z",
-  "total": 47,
+  "generatedAt": "2026-07-10T03:21:25.907Z",
+  "total": 48,
   "byAgent": {
-    "writer": 39,
+    "writer": 40,
     "x-researcher": 4,
     "legal-check": 2,
     "ceo": 2
@@ -106,6 +106,17 @@
       "todo": "X投稿本文が案件キーワードと一致（x-researcher）",
       "command": "node scripts/complete-article.mjs --slug kokumin-futan-suii --x-only --force",
       "priority": 20
+    },
+    {
+      "id": "kokumin-futan-suii:C2_evidence_distinct",
+      "slug": "kokumin-futan-suii",
+      "agent": "writer",
+      "agentLabel": "ライター",
+      "checkId": "C2_evidence_distinct",
+      "title": "[ゲート] 根拠の独自性",
+      "todo": "根拠は結論と同文禁止",
+      "command": "node scripts/complete-article.mjs --slug kokumin-futan-suii --content-only --force",
+      "priority": 30
     },
     {
       "id": "kokumin-futan-suii:E2_timeline_x",
