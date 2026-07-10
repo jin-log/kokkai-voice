@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-10T05:38:34.026Z",
+  "generatedAt": "2026-07-10T05:38:51.329Z",
   "strategy": "quality-first",
   "activeCount": 43,
   "parkedCount": 0,
@@ -91,7 +91,7 @@
     "slugStalls": [],
     "stalledCount": 0,
     "message": "完成度 76% が 3 サイクル連続で変わらず、1本も完成していません",
-    "analyzedAt": "2026-07-10T05:38:34.023Z",
+    "analyzedAt": "2026-07-10T05:38:51.327Z",
     "lastPatrolCycleAt": "2026-07-10T05:38:32.633Z",
     "patrolRunning": true
   },
@@ -471,7 +471,7 @@
     {
       "slug": "kokumin-kaigi",
       "title": "【国民会議】は民主主義の否定か？",
-      "shortTitle": "国民会議の動向",
+      "shortTitle": "【国民会議】は民主主義の否定か？",
       "category": "国会",
       "policyCategory": "国会",
       "adminHidden": false,
@@ -7972,6 +7972,17 @@
       "qualityBlockers": [],
       "agentTasks": [
         {
+          "id": "hosei-yosan:J1_analytical_blocks",
+          "slug": "hosei-yosan",
+          "agent": "writer",
+          "agentLabel": "ライター",
+          "checkId": "J1_analytical_blocks",
+          "title": "[ゲート] 分析ブロック",
+          "todo": "メリデメ・利害・数値統計のいずれか1〜3種（0種NG）",
+          "command": "npm run complete:article -- --slug hosei-yosan --content-only --force",
+          "priority": 30
+        },
+        {
           "id": "hosei-yosan:J1_prosCons",
           "slug": "hosei-yosan",
           "agent": "writer",
@@ -7987,7 +7998,7 @@
       "goldPct": 50,
       "published": true,
       "specialPublish": true,
-      "specialPublishSummary": "ゲート1件・①〜④未完了",
+      "specialPublishSummary": "ゲート2件・①〜④未完了",
       "publishGateOk": true,
       "pipelinePreOk": false,
       "titleAnswerOk": true,
@@ -8083,15 +8094,26 @@
       ],
       "blockers": [
         {
+          "id": "J1_analytical_blocks",
+          "label": "分析ブロック",
+          "todo": "メリデメ・利害・数値統計のいずれか1〜3種（0種NG）",
+          "detail": "メリデメ — 内容不足（有効0種・1種以上必要）"
+        },
+        {
           "id": "J1_prosCons",
           "label": "メリデメ",
           "todo": "公表数値付きメリット2・デメリット2",
           "detail": "メリ1/2・デメ2/2（各 figure+sourceUrl 必須）"
         }
       ],
-      "blockerCount": 1,
+      "blockerCount": 2,
       "runState": "idle",
       "workItems": [
+        {
+          "id": "J1_analytical_blocks",
+          "label": "分析ブロック",
+          "state": "blocked"
+        },
         {
           "id": "J1_prosCons",
           "label": "メリデメ",
@@ -9206,17 +9228,6 @@
       "qualityBlockers": [],
       "agentTasks": [
         {
-          "id": "kishida-seiken-jisshi:D2_arc_topic",
-          "slug": "kishida-seiken-jisshi",
-          "agent": "writer",
-          "agentLabel": "ライター",
-          "checkId": "D2_arc_topic",
-          "title": "[ゲート] 経緯の話題",
-          "todo": "経緯3行以上が案件キーワードと一致",
-          "command": "node scripts/complete-article.mjs --slug kishida-seiken-jisshi --content-only --force",
-          "priority": 30
-        },
-        {
           "id": "kishida-seiken-jisshi:E4_timeline_diet_topic",
           "slug": "kishida-seiken-jisshi",
           "agent": "writer",
@@ -9328,26 +9339,15 @@
       ],
       "blockers": [
         {
-          "id": "D2_arc_topic",
-          "label": "経緯の話題",
-          "todo": "経緯3行以上が案件キーワードと一致",
-          "detail": "0/3 行が話題一致"
-        },
-        {
           "id": "E4_timeline_diet_topic",
           "label": "TL国会の話題",
           "todo": "国会TLはある分だけ話題一致。TLなし可。根拠なしの結論は不可",
           "detail": "国会TLあるが話題一致なし＋結論あり"
         }
       ],
-      "blockerCount": 2,
+      "blockerCount": 1,
       "runState": "idle",
       "workItems": [
-        {
-          "id": "D2_arc_topic",
-          "label": "経緯の話題",
-          "state": "blocked"
-        },
         {
           "id": "E4_timeline_diet_topic",
           "label": "TL国会の話題",
@@ -9385,6 +9385,13 @@
       "adminHiddenAt": null,
       "patrolFixing": false,
       "activity": [
+        {
+          "at": "2026-07-10T05:38:50.139Z",
+          "when": "07/10 14:38",
+          "type": "gate.ready",
+          "actor": "patrol",
+          "line": "公開ゲート到達（まだ非公開）（巡回） — 1行目がタイトルに回答済み。一般公開は手動のみ"
+        },
         {
           "at": "2026-07-10T05:35:34.129Z",
           "when": "07/10 14:35",
@@ -9443,13 +9450,6 @@
         },
         {
           "at": "2026-07-10T05:23:26.211Z",
-          "when": "07/10 14:23",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — writer / D2_arc_topic"
-        },
-        {
-          "at": "2026-07-10T05:23:13.001Z",
           "when": "07/10 14:23",
           "type": "patrol.start",
           "actor": "patrol",
