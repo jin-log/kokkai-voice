@@ -1,15 +1,40 @@
 ---
 /**
  * 時系列折れ線グラフ + 所得別スナップショット
- * article.timeSeriesData があれば表示
+ * article.timeSeriesData / timeSeriesData2 があれば表示
  */
 const { article } = Astro.props;
 const data = article.timeSeriesData;
 if (!data?.series?.length) return null;
 
+// ── Chart2 (timeSeriesData2) geometry ──────────────────────────────────
+const data2 = article.timeSeriesData2 ?? null;
+let chart2 = null;
+if (data2?.series?.length) {
+  const W2 = 780, H2 = 300;
+  const PAD2 = { top: 28, right: 60, bottom: 52, left: 52 };
+  const CW2 = W2 - PAD2.left - PAD2.right;
+  const CH2 = H2 - PAD2.top - PAD2.bottom;
+  const pts2all = data2.series.flatMap((s) => s.points);
+  const yrs2 = [...new Set(pts2all.map((p) => p.y))].sort((a, b) => a - b);
+  const vals2 = pts2all.map((p) => p.v);
+  const minY2 = yrs2[0], maxY2 = yrs2[yrs2.length - 1];
+  const minV2 = Math.floor(Math.min(...vals2) / 5) * 5;
+  const maxV2 = Math.ceil(Math.max(...vals2) / 5) * 5;
+  const sx2 = (y) => PAD2.left + ((y - minY2) / (maxY2 - minY2)) * CW2;
+  const sy2 = (v) => PAD2.top  + ((maxV2 - v) / (maxV2 - minV2)) * CH2;
+  const yTicks2 = [];
+  for (let v = minV2; v <= maxV2; v += 5) yTicks2.push(v);
+  const xLabels2 = yrs2.filter((y) => y % 10 === 0 || y === minY2 || y === maxY2);
+  const poly2 = (pts) => pts.map((p) => `${sx2(p.y).toFixed(1)},${sy2(p.v).toFixed(1)}`).join(" ");
+  const govY2 = H2 - 30;
+  const govH2 = 16;
+  chart2 = { W2, H2, PAD2, sx2, sy2, yTicks2, xLabels2, poly2, minY2, maxY2, govY2, govH2 };
+}
+
 // ── Chart geometry ──────────────────────────────────────────
-const W = 780, H = 280;
-const PAD = { top: 20, right: 16, bottom: 52, left: 46 };
+const W = 780, H = 300;
+const PAD = { top: 28, right: 60, bottom: 52, left: 52 };
 const CW = W - PAD.left - PAD.right;
 const CH = H - PAD.top - PAD.bottom;
 
@@ -40,17 +65,17 @@ const inc = article.incomeBreakdownData;
 const incMax = inc ? Math.max(...inc.bars.map((b) => b.value)) + 2 : 0;
 ---
 
-<section class="cb-ts-block" id="sec-ts">
+<section class="cb-ts-block" id="sec-ts" style="color:#f1f5f9">
   <div class="cb-block__head">
-    <h2 class="cb-block__title">{data.title}</h2>
+    <h2 class="cb-block__title" style="color:#f1f5f9">{data.title}</h2>
     <span class="cb-block__tag">推移グラフ</span>
   </div>
-  {data.note && <p class="cb-block__note">{data.note}</p>}
+  {data.note && <p class="cb-block__note" style="color:#94a3b8">{data.note}</p>}
 
   <!-- 凡例 -->
   <div class="ts-legend">
     {data.series.map((s) => (
-      <span class="ts-legend__item">
+      <span class="ts-legend__item" style="color:#cbd5e1">
         <span class="ts-legend__dot" style={`background:${s.color}`}></span>
         {s.label}
       </span>
@@ -60,16 +85,19 @@ const incMax = inc ? Math.max(...inc.bars.map((b) => b.value)) + 2 : 0;
   <!-- Line chart SVG -->
   <div class="ts-chart-wrap" role="img" aria-label={data.title}>
     <svg viewBox={`0 0 ${W} ${H}`} class="ts-svg" aria-hidden="true">
+      <!-- 背景 -->
+      <rect x="0" y="0" width={W} height={H} fill="#0f172a" rx="6"/>
+
       <!-- Grid lines -->
       {yTicks.map((v) => (
         <>
           <line
             x1={PAD.left} y1={sy(v)}
             x2={W - PAD.right} y2={sy(v)}
-            stroke="var(--color-border)" stroke-width="0.5" stroke-dasharray="4,4"
+            stroke="#334155" stroke-width="0.8" stroke-dasharray="4,4"
           />
-          <text x={PAD.left - 4} y={sy(v) + 4} text-anchor="end"
-            class="ts-axis-label">{v}</text>
+          <text x={PAD.left - 6} y={sy(v) + 5} text-anchor="end"
+            fill="#ffffff" font-size="14" font-family="monospace">{v}</text>
         </>
       ))}
 
@@ -79,10 +107,10 @@ const incMax = inc ? Math.max(...inc.bars.map((b) => b.value)) + 2 : 0;
           <line
             x1={sx(m.year)} y1={PAD.top}
             x2={sx(m.year)} y2={H - PAD.bottom}
-            stroke="#f59e0b" stroke-width="1" stroke-dasharray="3,3" opacity="0.7"
+            stroke="#fbbf24" stroke-width="1" stroke-dasharray="3,3" opacity="0.6"
           />
-          <text x={sx(m.year)} y={PAD.top - 4} text-anchor="middle"
-            class="ts-milestone-label">{m.label}</text>
+          <text x={sx(m.year)} y={PAD.top + 14} text-anchor="middle"
+            fill="#fbbf24" font-size="11" font-weight="700">{m.label}</text>
         </>
       ))}
 
@@ -94,18 +122,18 @@ const incMax = inc ? Math.max(...inc.bars.map((b) => b.value)) + 2 : 0;
             fill="none"
             stroke={s.color}
             stroke-width={s.bold ? "2.5" : "1.8"}
+            stroke-dasharray={s.dashed ? "6,4" : undefined}
             stroke-linejoin="round"
             stroke-linecap="round"
             opacity="0.92"
           />
-          <!-- Last value label -->
           {(() => {
             const last = s.points[s.points.length - 1];
             return (
               <text
                 x={sx(last.y) + 4} y={sy(last.v) + 4}
-                class="ts-val-label" fill={s.color}
-              >{last.v}%</text>
+                fill={s.color} font-size="13" font-weight="700"
+              >{last.v}%{s.dashed ? "見通し" : ""}</text>
             );
           })()}
         </>
@@ -113,18 +141,18 @@ const incMax = inc ? Math.max(...inc.bars.map((b) => b.value)) + 2 : 0;
 
       <!-- X-axis labels -->
       {xLabels.map((y) => (
-        <text x={sx(y)} y={H - PAD.bottom + 16} text-anchor="middle"
-          class="ts-axis-label">{y}</text>
+        <text x={sx(y)} y={H - PAD.bottom + 20} text-anchor="middle"
+          fill="#ffffff" font-size="14" font-family="monospace">{y}</text>
       ))}
 
       <!-- Y-axis unit -->
-      <text x={PAD.left - 6} y={PAD.top - 6} text-anchor="middle"
-        class="ts-unit-label">%</text>
+      <text x={PAD.left - 6} y={PAD.top - 8} text-anchor="middle"
+        fill="#ffffff" font-size="13">%</text>
     </svg>
   </div>
 
-  <p class="cb-block__note ts-source">
-    出典: <a href={data.sourceUrl} target="_blank" rel="noopener">{data.source}</a>
+  <p class="cb-block__note ts-source" style="color:#64748b">
+    出典: <a href={data.sourceUrl} target="_blank" rel="noopener" style="color:#94a3b8">{data.source}</a>
     {data.unit && <> ／ {data.unit}</>}
   </p>
 
@@ -132,15 +160,15 @@ const incMax = inc ? Math.max(...inc.bars.map((b) => b.value)) + 2 : 0;
   {inc && (
     <div class="ts-income-section">
       <div class="cb-block__head">
-        <h3 class="cb-block__title ts-income-title">{inc.title}</h3>
+        <h3 class="cb-block__title ts-income-title" style="color:#f1f5f9">{inc.title}</h3>
         <span class="cb-block__tag">所得別比較</span>
       </div>
-      {inc.note && <p class="cb-block__note">{inc.note}</p>}
+      {inc.note && <p class="cb-block__note" style="color:#94a3b8">{inc.note}</p>}
 
       <div class="ts-income-bars">
         {inc.bars.map((b) => (
           <div class="ts-income-row">
-            <span class="ts-income-label">{b.label}</span>
+            <span class="ts-income-label" style="color:#cbd5e1">{b.label}</span>
             <div class="ts-income-bar-wrap">
               <div
                 class:list={["ts-income-bar", b.highlight && "ts-income-bar--hi"]}
@@ -149,15 +177,76 @@ const incMax = inc ? Math.max(...inc.bars.map((b) => b.value)) + 2 : 0;
                 <span class="ts-income-val">{b.value}%</span>
               </div>
             </div>
-            {b.sub && <span class="ts-income-sub">{b.sub}</span>}
+            {b.sub && <span class="ts-income-sub" style="color:#94a3b8">{b.sub}</span>}
           </div>
         ))}
       </div>
 
-      {inc.insight && <p class="ts-income-insight">{inc.insight}</p>}
+      {inc.insight && <p class="ts-income-insight" style="color:#e2e8f0">{inc.insight}</p>}
 
-      <p class="cb-block__note ts-source">
-        出典: <a href={inc.sourceUrl} target="_blank" rel="noopener">{inc.source}</a>
+      <p class="cb-block__note ts-source" style="color:#64748b">
+        出典: <a href={inc.sourceUrl} target="_blank" rel="noopener" style="color:#94a3b8">{inc.source}</a>
+      </p>
+    </div>
+  )}
+
+  <!-- 2枚目チャート (timeSeriesData2) -->
+  {chart2 && (
+    <div class="ts-chart2-section">
+      <div class="cb-block__head">
+        <h3 class="cb-block__title ts-income-title" style="color:#f1f5f9">{data2.title}</h3>
+        <span class="cb-block__tag">内訳グラフ</span>
+      </div>
+      {data2.note && <p class="cb-block__note" style="color:#94a3b8">{data2.note}</p>}
+      <div class="ts-legend">
+        {data2.series.map((s) => (
+          <span class="ts-legend__item">
+            <span class="ts-legend__dot" style={`background:${s.color}`}></span>
+            {s.label}
+          </span>
+        ))}
+      </div>
+      <div class="ts-chart-wrap" role="img" aria-label={data2.title}>
+        <svg viewBox={`0 0 ${chart2.W2} ${chart2.H2}`} class="ts-svg" aria-hidden="true">
+          <rect x="0" y="0" width={chart2.W2} height={chart2.H2} fill="#0f172a" rx="6"/>
+          {chart2.yTicks2.map((v) => (
+            <Fragment>
+              <line x1={chart2.PAD2.left} y1={chart2.sy2(v)} x2={chart2.W2 - chart2.PAD2.right} y2={chart2.sy2(v)}
+                stroke="#334155" stroke-width="0.8" stroke-dasharray="4,4"/>
+              <text x={chart2.PAD2.left - 6} y={chart2.sy2(v) + 5} text-anchor="end"
+                fill="#ffffff" font-size="14" font-family="monospace">{v}</text>
+            </Fragment>
+          ))}
+          {(data2.milestones ?? []).map((m) => (
+            <Fragment>
+              <line x1={chart2.sx2(m.year)} y1={chart2.PAD2.top} x2={chart2.sx2(m.year)} y2={chart2.H2 - chart2.PAD2.bottom}
+                stroke="#fbbf24" stroke-width="1" stroke-dasharray="3,3" opacity="0.6"/>
+              <text x={chart2.sx2(m.year)} y={chart2.PAD2.top + 14} text-anchor="middle"
+                fill="#fbbf24" font-size="11" font-weight="700">{m.label}</text>
+            </Fragment>
+          ))}
+          {data2.series.map((s) => {
+            const last = s.points[s.points.length - 1];
+            return (
+              <Fragment>
+                <polyline points={chart2.poly2(s.points)} fill="none" stroke={s.color}
+                  stroke-width={s.bold ? "2.5" : "1.8"} stroke-linejoin="round" stroke-linecap="round" opacity="0.92"/>
+                <text x={chart2.sx2(last.y) + 4} y={chart2.sy2(last.v) + 4}
+                  fill={s.color} font-size="13" font-weight="700">{last.v}%</text>
+              </Fragment>
+            );
+          })}
+          {chart2.xLabels2.map((y) => (
+            <text x={chart2.sx2(y)} y={chart2.H2 - chart2.PAD2.bottom + 20} text-anchor="middle"
+              fill="#ffffff" font-size="14" font-family="monospace">{y}</text>
+          ))}
+          <text x={chart2.PAD2.left - 6} y={chart2.PAD2.top - 8} text-anchor="middle"
+            fill="#ffffff" font-size="13">%</text>
+        </svg>
+      </div>
+      <p class="cb-block__note ts-source" style="color:#64748b">
+        出典: <a href={data2.sourceUrl} target="_blank" rel="noopener" style="color:#94a3b8">{data2.source}</a>
+        {data2.unit && <Fragment> ／ {data2.unit}</Fragment>}
       </p>
     </div>
   )}
@@ -205,22 +294,27 @@ const incMax = inc ? Math.max(...inc.bars.map((b) => b.value)) + 2 : 0;
   }
 
   .ts-axis-label {
-    font-size: 10px;
-    fill: var(--color-text-muted, #94a3b8);
+    font-size: 13px;
+    fill: #e2e8f0;
     font-family: var(--font-mono, monospace);
   }
   .ts-milestone-label {
-    font-size: 8.5px;
-    fill: #f59e0b;
-    font-weight: 600;
+    font-size: 10px;
+    fill: #fbbf24;
+    font-weight: 700;
   }
   .ts-val-label {
-    font-size: 9px;
+    font-size: 12px;
     font-weight: 700;
   }
   .ts-unit-label {
-    font-size: 9px;
-    fill: var(--color-text-muted, #94a3b8);
+    font-size: 12px;
+    fill: #cbd5e1;
+  }
+  .ts-gov-label {
+    font-size: 10px;
+    fill: #f1f5f9;
+    font-weight: 600;
   }
 
   .ts-source {
@@ -288,6 +382,12 @@ const incMax = inc ? Math.max(...inc.bars.map((b) => b.value)) + 2 : 0;
     color: var(--color-text-muted);
     white-space: nowrap;
   }
+  .ts-chart2-section {
+    margin-top: 1.5rem;
+    padding-top: 1.25rem;
+    border-top: 1px dashed var(--color-border);
+  }
+
   .ts-income-insight {
     font-size: 0.82rem;
     color: var(--color-text-secondary);
