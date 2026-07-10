@@ -4,7 +4,7 @@ on:
   push:
     branches: [main]
   schedule:
-    - cron: "*/30 * * * *"
+    - cron: "0 */6 * * *"
   workflow_run:
     workflows: ["新規記事作成", "記事を本番反映", "記事管理", "品質巡回（サーバー）"]
     types: [completed]
