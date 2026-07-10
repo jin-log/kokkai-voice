@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-07-10T00:25:01.062Z",
-  "total": 43,
+  "generatedAt": "2026-07-10T00:31:27.897Z",
+  "total": 44,
   "byAgent": {
-    "writer": 38,
+    "writer": 39,
     "ceo": 2,
     "x-researcher": 2,
     "legal-check": 1
@@ -83,6 +83,17 @@
       "title": "[ゲート] TL国会の話題",
       "todo": "国会TLはある分だけ話題一致。TLなし可。根拠なしの結論は不可",
       "command": "node scripts/enrich-timeline-all.mjs --slug kishida-seiken-jisshi",
+      "priority": 30
+    },
+    {
+      "id": "kokumin-kaigi:B3_topic",
+      "slug": "kokumin-kaigi",
+      "agent": "writer",
+      "agentLabel": "ライター",
+      "checkId": "B3_topic",
+      "title": "[ゲート] 話題一致",
+      "todo": "要約が searchKeyword と一致（2行以上）",
+      "command": "node scripts/complete-article.mjs --slug kokumin-kaigi --content-only --force",
       "priority": 30
     },
     {
