@@ -4,14 +4,9 @@ import { ShortDataV1, type ShortDataV1Props } from "./ShortDataV1";
 import { ShortF1, type ShortF1Props } from "./ShortF1";
 import { shortDataDurationInFrames } from "./lib/short-data-timing";
 import { BEAT_GAP_FRAMES, FPS } from "./theme";
+import renderProps from "./props/short-data-render.json";
 
-const shortDataDefaultProps: ShortDataV1Props = {
-  hook: "プレビュー",
-  hookTelop: ["プレビュー", "ショート"],
-  slides: [{ text: "スライド1", number: "100" }],
-  bgVideoSrc: "remotion/bg-diet.mp4",
-  logoSrc: "assets/logo-header-nihon-seiji-naw.png",
-};
+const shortDataDefaultProps: ShortDataV1Props = renderProps as unknown as ShortDataV1Props;
 
 const defaultProps: ShortF1Props = {
   slug: "shoshika",
