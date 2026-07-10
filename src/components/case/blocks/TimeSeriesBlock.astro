@@ -1,0 +1,309 @@
+---
+/**
+ * 時系列折れ線グラフ + 所得別スナップショット
+ * article.timeSeriesData があれば表示
+ */
+const { article } = Astro.props;
+const data = article.timeSeriesData;
+if (!data?.series?.length) return null;
+
+// ── Chart geometry ──────────────────────────────────────────
+const W = 780, H = 280;
+const PAD = { top: 20, right: 16, bottom: 52, left: 46 };
+const CW = W - PAD.left - PAD.right;
+const CH = H - PAD.top - PAD.bottom;
+
+const allPoints = data.series.flatMap((s) => s.points);
+const allYears  = [...new Set(allPoints.map((p) => p.y))].sort((a, b) => a - b);
+const allValues = allPoints.map((p) => p.v);
+
+const minYear = allYears[0];
+const maxYear = allYears[allYears.length - 1];
+const rawMin  = Math.min(...allValues);
+const rawMax  = Math.max(...allValues);
+const minV    = Math.floor(rawMin / 5) * 5;
+const maxV    = Math.ceil(rawMax  / 5) * 5;
+
+const sx = (y) => PAD.left + ((y - minYear) / (maxYear - minYear)) * CW;
+const sy = (v) => PAD.top  + ((maxV - v)   / (maxV - minV))       * CH;
+
+const yTicks = [];
+for (let v = minV; v <= maxV; v += 5) yTicks.push(v);
+
+const xLabels = allYears.filter((y) => y % 10 === 0 || y === minYear || y === maxYear);
+
+const polyline = (points) =>
+  points.map((p) => `${sx(p.y).toFixed(1)},${sy(p.v).toFixed(1)}`).join(" ");
+
+// ── Income breakdown (optional) ──────────────────────────────
+const inc = article.incomeBreakdownData;
+const incMax = inc ? Math.max(...inc.bars.map((b) => b.value)) + 2 : 0;
+---
+
+<section class="cb-ts-block" id="sec-ts">
+  <div class="cb-block__head">
+    <h2 class="cb-block__title">{data.title}</h2>
+    <span class="cb-block__tag">推移グラフ</span>
+  </div>
+  {data.note && <p class="cb-block__note">{data.note}</p>}
+
+  <!-- 凡例 -->
+  <div class="ts-legend">
+    {data.series.map((s) => (
+      <span class="ts-legend__item">
+        <span class="ts-legend__dot" style={`background:${s.color}`}></span>
+        {s.label}
+      </span>
+    ))}
+  </div>
+
+  <!-- Line chart SVG -->
+  <div class="ts-chart-wrap" role="img" aria-label={data.title}>
+    <svg viewBox={`0 0 ${W} ${H}`} class="ts-svg" aria-hidden="true">
+      <!-- Grid lines -->
+      {yTicks.map((v) => (
+        <>
+          <line
+            x1={PAD.left} y1={sy(v)}
+            x2={W - PAD.right} y2={sy(v)}
+            stroke="var(--color-border)" stroke-width="0.5" stroke-dasharray="4,4"
+          />
+          <text x={PAD.left - 4} y={sy(v) + 4} text-anchor="end"
+            class="ts-axis-label">{v}</text>
+        </>
+      ))}
+
+      <!-- Milestone markers -->
+      {(data.milestones ?? []).map((m) => (
+        <>
+          <line
+            x1={sx(m.year)} y1={PAD.top}
+            x2={sx(m.year)} y2={H - PAD.bottom}
+            stroke="#f59e0b" stroke-width="1" stroke-dasharray="3,3" opacity="0.7"
+          />
+          <text x={sx(m.year)} y={PAD.top - 4} text-anchor="middle"
+            class="ts-milestone-label">{m.label}</text>
+        </>
+      ))}
+
+      <!-- Series polylines -->
+      {data.series.map((s) => (
+        <>
+          <polyline
+            points={polyline(s.points)}
+            fill="none"
+            stroke={s.color}
+            stroke-width={s.bold ? "2.5" : "1.8"}
+            stroke-linejoin="round"
+            stroke-linecap="round"
+            opacity="0.92"
+          />
+          <!-- Last value label -->
+          {(() => {
+            const last = s.points[s.points.length - 1];
+            return (
+              <text
+                x={sx(last.y) + 4} y={sy(last.v) + 4}
+                class="ts-val-label" fill={s.color}
+              >{last.v}%</text>
+            );
+          })()}
+        </>
+      ))}
+
+      <!-- X-axis labels -->
+      {xLabels.map((y) => (
+        <text x={sx(y)} y={H - PAD.bottom + 16} text-anchor="middle"
+          class="ts-axis-label">{y}</text>
+      ))}
+
+      <!-- Y-axis unit -->
+      <text x={PAD.left - 6} y={PAD.top - 6} text-anchor="middle"
+        class="ts-unit-label">%</text>
+    </svg>
+  </div>
+
+  <p class="cb-block__note ts-source">
+    出典: <a href={data.sourceUrl} target="_blank" rel="noopener">{data.source}</a>
+    {data.unit && <> ／ {data.unit}</>}
+  </p>
+
+  <!-- Income breakdown section -->
+  {inc && (
+    <div class="ts-income-section">
+      <div class="cb-block__head">
+        <h3 class="cb-block__title ts-income-title">{inc.title}</h3>
+        <span class="cb-block__tag">所得別比較</span>
+      </div>
+      {inc.note && <p class="cb-block__note">{inc.note}</p>}
+
+      <div class="ts-income-bars">
+        {inc.bars.map((b) => (
+          <div class="ts-income-row">
+            <span class="ts-income-label">{b.label}</span>
+            <div class="ts-income-bar-wrap">
+              <div
+                class:list={["ts-income-bar", b.highlight && "ts-income-bar--hi"]}
+                style={`width:${Math.round((b.value / incMax) * 100)}%`}
+              >
+                <span class="ts-income-val">{b.value}%</span>
+              </div>
+            </div>
+            {b.sub && <span class="ts-income-sub">{b.sub}</span>}
+          </div>
+        ))}
+      </div>
+
+      {inc.insight && <p class="ts-income-insight">{inc.insight}</p>}
+
+      <p class="cb-block__note ts-source">
+        出典: <a href={inc.sourceUrl} target="_blank" rel="noopener">{inc.source}</a>
+      </p>
+    </div>
+  )}
+</section>
+
+<style>
+  .cb-ts-block {
+    margin: 1.5rem 0;
+    padding: 1.25rem;
+    background: var(--color-bg-card, #1a1f2e);
+    border: 1px solid var(--color-border);
+    border-radius: 0.75rem;
+  }
+
+  .ts-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin: 0.5rem 0 0.75rem;
+  }
+  .ts-legend__item {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+  }
+  .ts-legend__dot {
+    width: 12px;
+    height: 4px;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+
+  .ts-chart-wrap {
+    width: 100%;
+    overflow-x: auto;
+  }
+  .ts-svg {
+    width: 100%;
+    min-width: 320px;
+    max-width: 780px;
+    height: auto;
+    display: block;
+  }
+
+  .ts-axis-label {
+    font-size: 10px;
+    fill: var(--color-text-muted, #94a3b8);
+    font-family: var(--font-mono, monospace);
+  }
+  .ts-milestone-label {
+    font-size: 8.5px;
+    fill: #f59e0b;
+    font-weight: 600;
+  }
+  .ts-val-label {
+    font-size: 9px;
+    font-weight: 700;
+  }
+  .ts-unit-label {
+    font-size: 9px;
+    fill: var(--color-text-muted, #94a3b8);
+  }
+
+  .ts-source {
+    margin-top: 0.5rem;
+    font-size: 0.72rem;
+  }
+  .ts-source a {
+    color: var(--color-text-muted);
+  }
+
+  /* Income breakdown */
+  .ts-income-section {
+    margin-top: 1.5rem;
+    padding-top: 1.25rem;
+    border-top: 1px dashed var(--color-border);
+  }
+  .ts-income-title {
+    font-size: 0.95rem !important;
+  }
+  .ts-income-bars {
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+    margin: 0.75rem 0;
+  }
+  .ts-income-row {
+    display: grid;
+    grid-template-columns: 7rem 1fr auto;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .ts-income-label {
+    font-size: 0.78rem;
+    color: var(--color-text-muted);
+    text-align: right;
+    white-space: nowrap;
+  }
+  .ts-income-bar-wrap {
+    background: var(--color-border);
+    border-radius: 3px;
+    height: 22px;
+    overflow: hidden;
+  }
+  .ts-income-bar {
+    height: 100%;
+    background: #3b82f6;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    padding: 0 0.4rem;
+    transition: width 0.3s ease;
+    min-width: 2rem;
+  }
+  .ts-income-bar--hi {
+    background: #ef4444;
+  }
+  .ts-income-val {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #fff;
+    white-space: nowrap;
+  }
+  .ts-income-sub {
+    font-size: 0.7rem;
+    color: var(--color-text-muted);
+    white-space: nowrap;
+  }
+  .ts-income-insight {
+    font-size: 0.82rem;
+    color: var(--color-text-secondary);
+    background: var(--color-bg-subtle, #0f1623);
+    padding: 0.6rem 0.8rem;
+    border-left: 3px solid #f59e0b;
+    border-radius: 0 4px 4px 0;
+    margin: 0.75rem 0 0.5rem;
+  }
+
+  @media (max-width: 480px) {
+    .ts-income-row {
+      grid-template-columns: 5.5rem 1fr auto;
+    }
+    .ts-income-label {
+      font-size: 0.72rem;
+    }
+  }
+</style>

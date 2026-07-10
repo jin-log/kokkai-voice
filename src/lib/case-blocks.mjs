@@ -76,6 +76,7 @@ export const SLUG_CASE_TYPE = {
   "invoice-menzei-2026": "policy_debate",
   "teigaku-kyufu-2024": "statistical",
   "kishida-seiken-jisshi": "policy_retrospective",
+  "kokumin-futan-suii": "statistical",
 };
 
 /** @param {import('./articles.mjs').Article} article */

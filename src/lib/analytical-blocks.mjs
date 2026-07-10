@@ -84,6 +84,12 @@ export function hasDisplayableStats(article) {
 }
 
 /** @param {import('./articles.mjs').Article} article */
+export function hasDisplayableTimeSeries(article) {
+  return (article.timeSeriesData?.series?.length ?? 0) >= 1 &&
+    (article.timeSeriesData?.series?.[0]?.points?.length ?? 0) >= 2;
+}
+
+/** @param {import('./articles.mjs').Article} article */
 export function resolveImpact(article) {
   const md = article.meritsDemerits;
   if (!md) return null;

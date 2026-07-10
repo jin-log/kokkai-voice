@@ -21,11 +21,13 @@ import PrerequisiteStrip from "./case/PrerequisiteStrip.astro";
 import FloatReact from "./case/FloatReact.astro";
 import ImpactBlock from "./case/blocks/ImpactBlock.astro";
 import StatsBlock from "./case/blocks/StatsBlock.astro";
+import TimeSeriesBlock from "./case/blocks/TimeSeriesBlock.astro";
 import { articleShortTitle, shouldPublishParty } from "../lib/case-helpers.mjs";
 import {
   hasDisplayableProsCons,
   hasDisplayableImpact,
   hasDisplayableStats,
+  hasDisplayableTimeSeries,
 } from "../lib/analytical-blocks.mjs";
 import { dietPendingBadgeLabel } from "../lib/diet-pending.mjs";
 import {
@@ -56,6 +58,7 @@ const flags = blocksMode ? blockFlags(article, stance) : null;
 const showProsCons = hasDisplayableProsCons(article);
 const showImpact = hasDisplayableImpact(article);
 const showStats = hasDisplayableStats(article);
+const showTimeSeries = hasDisplayableTimeSeries(article);
 
 const bottomRelated = (recBundle?.nextReads?.length ? recBundle.nextReads : relatedItems).map((item) => ({
   slug: item.slug,
@@ -112,6 +115,7 @@ const bottomRelated = (recBundle?.nextReads?.length ? recBundle.nextReads : rela
       {blocksMode ? (
         <>
           {showImpact && <ImpactBlock article={article} />}
+          {showTimeSeries && <TimeSeriesBlock article={article} />}
           {showStats && <StatsBlock article={article} />}
           {showProsCons && <ProsCons article={article} prosCons={article.prosCons} />}
         </>
