@@ -42,6 +42,7 @@ jobs:
           fi
 
       - name: はてな + note 投稿
+        continue-on-error: true
         run: node scripts/post-article-promo.mjs --from-queue --limit 3
 
       - name: ログ・キュー更新をコミット
