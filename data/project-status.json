@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-11T07:47:45.649Z",
+  "generatedAt": "2026-07-11T07:49:16.199Z",
   "strategy": "quality-first",
   "activeCount": 43,
   "parkedCount": 0,
@@ -76,24 +76,18 @@
     }
   ],
   "patrolHealth": {
-    "status": "stalled",
-    "statusLabel": "進行停止（ループ中）",
+    "status": "idle",
+    "statusLabel": "停止中",
     "paused": false,
     "pauseReason": null,
     "pauseDetail": null,
-    "globalStall": {
-      "goldPct": 76,
-      "cycles": 3,
-      "since": "2026-07-11T07:40:53.333Z",
-      "lastAt": "2026-07-11T07:47:44.320Z",
-      "message": "完成度 76% が 3 サイクル連続で変わらず、1本も完成していません"
-    },
+    "globalStall": null,
     "slugStalls": [],
     "stalledCount": 0,
-    "message": "完成度 76% が 3 サイクル連続で変わらず、1本も完成していません",
-    "analyzedAt": "2026-07-11T07:47:45.647Z",
-    "lastPatrolCycleAt": "2026-07-11T07:47:44.321Z",
-    "patrolRunning": true
+    "message": "停止中",
+    "analyzedAt": "2026-07-11T07:49:16.197Z",
+    "lastPatrolCycleAt": "2026-07-11T07:49:15.031Z",
+    "patrolRunning": false
   },
   "slugs": [
     {
@@ -304,7 +298,7 @@
         {
           "id": "C2_evidence_distinct",
           "label": "根拠の独自性",
-          "state": "active"
+          "state": "blocked"
         },
         {
           "id": "E2_timeline_x",
@@ -366,53 +360,39 @@
       "publishedAt": null,
       "adminHiddenBy": null,
       "adminHiddenAt": null,
-      "patrolFixing": true,
+      "patrolFixing": false,
       "activity": [
         {
-          "at": "2026-07-11T07:47:42.884Z",
-          "when": "07/11 16:47",
+          "at": "2026-07-11T07:48:20.245Z",
+          "when": "07/11 07:48",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 17% / 品質 OK"
         },
         {
-          "at": "2026-07-11T07:47:40.351Z",
-          "when": "07/11 16:47",
+          "at": "2026-07-11T07:48:18.278Z",
+          "when": "07/11 07:48",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / C2_evidence_distinct"
         },
         {
-          "at": "2026-07-11T07:47:37.808Z",
-          "when": "07/11 16:47",
+          "at": "2026-07-11T07:48:16.308Z",
+          "when": "07/11 07:48",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / C2_evidence_distinct"
         },
         {
-          "at": "2026-07-11T07:47:35.277Z",
-          "when": "07/11 16:47",
+          "at": "2026-07-11T07:48:14.302Z",
+          "when": "07/11 07:48",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / C2_evidence_distinct"
         },
         {
-          "at": "2026-07-11T07:47:32.676Z",
-          "when": "07/11 16:47",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — writer / C2_evidence_distinct"
-        },
-        {
-          "at": "2026-07-11T07:47:30.038Z",
-          "when": "07/11 16:47",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — writer / C2_evidence_distinct"
-        },
-        {
-          "at": "2026-07-11T07:36:42.008Z",
-          "when": "07/11 16:36",
+          "at": "2026-07-10T05:27:02.385Z",
+          "when": "07/10 05:27",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 17% / 品質 OK"
@@ -433,6 +413,20 @@
         },
         {
           "at": "2026-07-10T05:26:52.235Z",
+          "when": "07/10 05:26",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — writer / C2_evidence_distinct"
+        },
+        {
+          "at": "2026-07-10T05:26:48.828Z",
+          "when": "07/10 05:26",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — writer / C2_evidence_distinct"
+        },
+        {
+          "at": "2026-07-10T05:26:45.503Z",
           "when": "07/10 05:26",
           "type": "patrol.start",
           "actor": "patrol",
@@ -471,7 +465,7 @@
     {
       "slug": "kokumin-kaigi",
       "title": "【国民会議】は民主主義の否定か？",
-      "shortTitle": "国民会議の動向",
+      "shortTitle": "【国民会議】は民主主義の否定か？",
       "category": "国会",
       "policyCategory": "国会",
       "adminHidden": false,
@@ -619,13 +613,6 @@
       "patrolFixing": false,
       "activity": [
         {
-          "at": "2026-07-11T07:46:49.279Z",
-          "when": "07/11 07:46",
-          "type": "patrol.done",
-          "actor": "patrol",
-          "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
-        },
-        {
           "at": "2026-07-10T05:38:31.130Z",
           "when": "07/10 05:38",
           "type": "patrol.done",
@@ -633,57 +620,43 @@
           "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
         },
         {
-          "at": "2026-07-11T07:22:48.568Z",
-          "when": "07/11 16:22",
+          "at": "2026-07-10T05:24:04.476Z",
+          "when": "07/10 05:24",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
         },
         {
-          "at": "2026-07-11T07:11:39.359Z",
-          "when": "07/11 16:11",
+          "at": "2026-07-10T05:12:05.684Z",
+          "when": "07/10 05:12",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
         },
         {
-          "at": "2026-07-11T07:01:04.838Z",
-          "when": "07/11 16:01",
+          "at": "2026-07-10T05:00:23.060Z",
+          "when": "07/10 05:00",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
         },
         {
-          "at": "2026-07-11T06:47:10.193Z",
-          "when": "07/11 15:47",
+          "at": "2026-07-10T04:48:28.842Z",
+          "when": "07/10 04:48",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
         },
         {
-          "at": "2026-07-11T04:35:46.789Z",
-          "when": "07/11 13:35",
+          "at": "2026-07-10T04:36:58.416Z",
+          "when": "07/10 04:36",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
         },
         {
-          "at": "2026-07-11T04:24:48.627Z",
-          "when": "07/11 13:24",
-          "type": "patrol.done",
-          "actor": "patrol",
-          "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
-        },
-        {
-          "at": "2026-07-11T04:13:39.955Z",
-          "when": "07/11 13:13",
-          "type": "patrol.done",
-          "actor": "patrol",
-          "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
-        },
-        {
-          "at": "2026-07-11T04:03:11.362Z",
-          "when": "07/11 13:03",
+          "at": "2026-07-10T04:22:23.029Z",
+          "when": "07/10 04:22",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
@@ -698,6 +671,13 @@
         {
           "at": "2026-07-10T03:58:43.991Z",
           "when": "07/10 03:58",
+          "type": "patrol.done",
+          "actor": "patrol",
+          "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
+        },
+        {
+          "at": "2026-07-10T03:46:59.745Z",
+          "when": "07/10 03:46",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
@@ -910,14 +890,14 @@
       },
       "short": {
         "slug": "case-mr0jbdpc",
-        "generated": true,
-        "uploaded": true,
-        "visibility": "scheduled",
-        "videoId": "UwHYlpVELbU",
-        "url": "https://www.youtube.com/shorts/UwHYlpVELbU",
-        "studioUrl": "https://studio.youtube.com/video/UwHYlpVELbU/edit",
-        "uploadedAt": "2026-07-05T16:47:48.411Z",
-        "label": "YTアップ済"
+        "generated": false,
+        "uploaded": false,
+        "visibility": null,
+        "videoId": null,
+        "url": null,
+        "studioUrl": null,
+        "uploadedAt": null,
+        "label": "未生成"
       },
       "xUnavailable": false,
       "xResearchStatus": "found",
@@ -928,6 +908,34 @@
       "adminHiddenAt": null,
       "patrolFixing": false,
       "activity": [
+        {
+          "at": "2026-07-11T07:48:42.867Z",
+          "when": "07/11 07:48",
+          "type": "patrol.done",
+          "actor": "patrol",
+          "line": "巡回処理完了（巡回） — 完成度 50% / 品質 OK"
+        },
+        {
+          "at": "2026-07-11T07:48:35.796Z",
+          "when": "07/11 07:48",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — writer / C2_evidence_distinct"
+        },
+        {
+          "at": "2026-07-11T07:48:28.570Z",
+          "when": "07/11 07:48",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — writer / C2_evidence_distinct"
+        },
+        {
+          "at": "2026-07-11T07:48:20.262Z",
+          "when": "07/11 07:48",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — writer / C2_evidence_distinct"
+        },
         {
           "at": "2026-07-10T05:30:20.779Z",
           "when": "07/10 05:30",
@@ -969,60 +977,32 @@
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / C2_evidence_distinct"
-        },
-        {
-          "at": "2026-07-10T05:15:51.895Z",
-          "when": "07/10 05:15",
-          "type": "patrol.done",
-          "actor": "patrol",
-          "line": "巡回処理完了（巡回） — 完成度 50% / 品質 OK"
-        },
-        {
-          "at": "2026-07-10T05:15:43.685Z",
-          "when": "07/10 05:15",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — writer / C2_evidence_distinct"
-        },
-        {
-          "at": "2026-07-10T05:15:35.189Z",
-          "when": "07/10 05:15",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — writer / C2_evidence_distinct"
-        },
-        {
-          "at": "2026-07-10T05:15:27.318Z",
-          "when": "07/10 05:15",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — writer / C2_evidence_distinct"
         }
       ],
       "distribution": [
         {
           "channel": "X",
           "automation": "semi",
-          "status": "済 07/09 12:32",
+          "status": "済 07/09 03:32",
           "done": true
         },
         {
           "channel": "はてブ",
           "automation": "semi",
-          "status": "済 07/03 13:46",
+          "status": "済 07/03 04:46",
           "done": true
         },
         {
           "channel": "note",
           "automation": "semi",
-          "status": "済 07/03 13:59",
+          "status": "済 07/03 04:59",
           "done": true
         },
         {
           "channel": "ショート",
           "automation": "manual",
-          "status": "YT YTアップ済 07/06 01:47",
-          "done": true
+          "status": "未生成",
+          "done": false
         }
       ],
       "stall": null,
@@ -1149,7 +1129,7 @@
         {
           "id": "pipe:debug",
           "label": "⑥デバッグOK",
-          "state": "active"
+          "state": "blocked"
         }
       ],
       "nextAction": "✅ 公開中 — /case/ に表示されています",
@@ -1176,25 +1156,11 @@
       "publishedAt": "2026-07-01T20:35:13.073Z",
       "adminHiddenBy": null,
       "adminHiddenAt": null,
-      "patrolFixing": true,
+      "patrolFixing": false,
       "activity": [
         {
-          "at": "2026-07-11T07:47:29.977Z",
-          "when": "07/11 16:47",
-          "type": "patrol.done",
-          "actor": "patrol",
-          "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
-        },
-        {
-          "at": "2026-07-11T07:33:49.588Z",
-          "when": "07/11 16:33",
-          "type": "patrol.done",
-          "actor": "patrol",
-          "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
-        },
-        {
-          "at": "2026-07-11T07:22:48.585Z",
-          "when": "07/11 16:22",
+          "at": "2026-07-10T05:38:31.145Z",
+          "when": "07/10 05:38",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
@@ -1222,14 +1188,14 @@
         },
         {
           "at": "2026-07-01T20:35:13.073Z",
-          "when": "07/02 05:35",
+          "when": "07/01 20:35",
           "type": "publish.manual",
           "actor": "owner",
           "line": "手動で一般公開（あなた） — 履歴補完（公開日時から）"
         },
         {
-          "at": "2026-07-11T04:24:48.641Z",
-          "when": "07/11 13:24",
+          "at": "2026-07-10T04:48:28.858Z",
+          "when": "07/10 04:48",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
@@ -1237,6 +1203,27 @@
         {
           "at": "2026-07-10T04:36:58.435Z",
           "when": "07/10 04:36",
+          "type": "patrol.done",
+          "actor": "patrol",
+          "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
+        },
+        {
+          "at": "2026-07-10T04:25:04.174Z",
+          "when": "07/10 04:25",
+          "type": "patrol.done",
+          "actor": "patrol",
+          "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
+        },
+        {
+          "at": "2026-07-10T04:10:41.792Z",
+          "when": "07/10 04:10",
+          "type": "patrol.done",
+          "actor": "patrol",
+          "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
+        },
+        {
+          "at": "2026-07-10T03:58:44.007Z",
+          "when": "07/10 03:58",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
@@ -1392,7 +1379,7 @@
         {
           "id": "pipe:debug",
           "label": "⑥デバッグOK",
-          "state": "active"
+          "state": "blocked"
         }
       ],
       "nextAction": "✅ 公開中 — /case/ に表示されています",
@@ -1403,14 +1390,14 @@
       },
       "short": {
         "slug": "case-mqzxgs3f",
-        "generated": true,
-        "uploaded": true,
-        "visibility": "private",
-        "videoId": "Mg0fZcOPbbE",
-        "url": "https://www.youtube.com/shorts/Mg0fZcOPbbE",
-        "studioUrl": "https://studio.youtube.com/video/Mg0fZcOPbbE/edit",
-        "uploadedAt": "2026-07-02T03:23:08.655Z",
-        "label": "YT非公開"
+        "generated": false,
+        "uploaded": false,
+        "visibility": null,
+        "videoId": null,
+        "url": null,
+        "studioUrl": null,
+        "uploadedAt": null,
+        "label": "未生成"
       },
       "xUnavailable": false,
       "xResearchStatus": "found",
@@ -1419,22 +1406,8 @@
       "publishedAt": "2026-07-01T20:35:24.570Z",
       "adminHiddenBy": null,
       "adminHiddenAt": null,
-      "patrolFixing": true,
+      "patrolFixing": false,
       "activity": [
-        {
-          "at": "2026-07-11T07:47:29.993Z",
-          "when": "07/11 16:47",
-          "type": "patrol.done",
-          "actor": "patrol",
-          "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
-        },
-        {
-          "at": "2026-07-11T07:36:28.986Z",
-          "when": "07/11 16:36",
-          "type": "patrol.done",
-          "actor": "patrol",
-          "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
-        },
         {
           "at": "2026-07-10T05:38:31.162Z",
           "when": "07/10 05:38",
@@ -1465,14 +1438,14 @@
         },
         {
           "at": "2026-07-01T20:35:24.570Z",
-          "when": "07/02 05:35",
+          "when": "07/01 20:35",
           "type": "publish.manual",
           "actor": "owner",
           "line": "手動で一般公開（あなた） — 履歴補完（公開日時から）"
         },
         {
-          "at": "2026-07-11T04:24:48.656Z",
-          "when": "07/11 13:24",
+          "at": "2026-07-10T04:48:28.873Z",
+          "when": "07/10 04:48",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
@@ -1480,6 +1453,27 @@
         {
           "at": "2026-07-10T04:36:58.454Z",
           "when": "07/10 04:36",
+          "type": "patrol.done",
+          "actor": "patrol",
+          "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
+        },
+        {
+          "at": "2026-07-10T04:25:04.198Z",
+          "when": "07/10 04:25",
+          "type": "patrol.done",
+          "actor": "patrol",
+          "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
+        },
+        {
+          "at": "2026-07-10T04:13:26.494Z",
+          "when": "07/10 04:13",
+          "type": "patrol.done",
+          "actor": "patrol",
+          "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
+        },
+        {
+          "at": "2026-07-10T03:58:44.025Z",
+          "when": "07/10 03:58",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
@@ -1507,8 +1501,8 @@
         {
           "channel": "ショート",
           "automation": "manual",
-          "status": "YT YT非公開 07/02 12:23",
-          "done": true
+          "status": "未生成",
+          "done": false
         }
       ],
       "stall": null,
@@ -1839,7 +1833,7 @@
       "activity": [
         {
           "at": "2026-06-29T04:34:44.409Z",
-          "when": "06/29 13:34",
+          "when": "06/29 04:34",
           "type": "publish.manual",
           "actor": "owner",
           "line": "手動で一般公開（あなた） — 履歴補完（公開日時から）"
@@ -2247,7 +2241,7 @@
         {
           "id": "pipe:debug",
           "label": "⑥デバッグOK",
-          "state": "active"
+          "state": "blocked"
         }
       ],
       "nextAction": "✅ 公開中 — /case/ に表示されています",
@@ -2274,22 +2268,8 @@
       "publishedAt": "2026-07-01T20:45:24.178Z",
       "adminHiddenBy": null,
       "adminHiddenAt": null,
-      "patrolFixing": true,
+      "patrolFixing": false,
       "activity": [
-        {
-          "at": "2026-07-11T07:47:30.007Z",
-          "when": "07/11 16:47",
-          "type": "patrol.done",
-          "actor": "patrol",
-          "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
-        },
-        {
-          "at": "2026-07-11T07:36:29.002Z",
-          "when": "07/11 16:36",
-          "type": "patrol.done",
-          "actor": "patrol",
-          "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
-        },
         {
           "at": "2026-07-10T05:38:31.176Z",
           "when": "07/10 05:38",
@@ -2320,14 +2300,14 @@
         },
         {
           "at": "2026-07-01T20:45:24.178Z",
-          "when": "07/02 05:45",
+          "when": "07/01 20:45",
           "type": "publish.manual",
           "actor": "owner",
           "line": "手動で一般公開（あなた） — 履歴補完（公開日時から）"
         },
         {
-          "at": "2026-07-11T04:27:28.040Z",
-          "when": "07/11 13:27",
+          "at": "2026-07-10T04:48:28.889Z",
+          "when": "07/10 04:48",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
@@ -2338,13 +2318,34 @@
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
+        },
+        {
+          "at": "2026-07-10T04:25:04.216Z",
+          "when": "07/10 04:25",
+          "type": "patrol.done",
+          "actor": "patrol",
+          "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
+        },
+        {
+          "at": "2026-07-10T04:13:26.511Z",
+          "when": "07/10 04:13",
+          "type": "patrol.done",
+          "actor": "patrol",
+          "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
+        },
+        {
+          "at": "2026-07-10T04:01:26.938Z",
+          "when": "07/10 04:01",
+          "type": "patrol.done",
+          "actor": "patrol",
+          "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
         }
       ],
       "distribution": [
         {
           "channel": "X",
           "automation": "semi",
-          "status": "済 07/08 12:30",
+          "status": "済 07/08 03:30",
           "done": true
         },
         {
@@ -3094,71 +3095,57 @@
       "patrolFixing": false,
       "activity": [
         {
-          "at": "2026-07-11T07:40:06.052Z",
-          "when": "07/11 16:40",
+          "at": "2026-07-11T07:48:48.865Z",
+          "when": "07/11 07:48",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 50% / 品質 NG"
         },
         {
-          "at": "2026-07-11T07:40:03.506Z",
-          "when": "07/11 16:40",
+          "at": "2026-07-11T07:48:46.906Z",
+          "when": "07/11 07:48",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — ceo / Q1_conclusion_numbers"
         },
         {
-          "at": "2026-07-11T07:40:00.885Z",
-          "when": "07/11 16:40",
+          "at": "2026-07-11T07:48:44.954Z",
+          "when": "07/11 07:48",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — ceo / Q1_conclusion_numbers"
         },
         {
-          "at": "2026-07-11T07:39:58.357Z",
-          "when": "07/11 16:39",
+          "at": "2026-07-11T07:48:42.886Z",
+          "when": "07/11 07:48",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — ceo / Q1_conclusion_numbers"
         },
         {
-          "at": "2026-07-11T07:39:55.714Z",
-          "when": "07/11 16:39",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — ceo / Q1_conclusion_numbers"
-        },
-        {
-          "at": "2026-07-11T07:39:53.010Z",
-          "when": "07/11 16:39",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — ceo / Q1_conclusion_numbers"
-        },
-        {
-          "at": "2026-07-11T07:26:27.346Z",
-          "when": "07/11 16:26",
+          "at": "2026-07-10T05:30:34.600Z",
+          "when": "07/10 05:30",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 50% / 品質 NG"
         },
         {
-          "at": "2026-07-11T07:26:24.613Z",
-          "when": "07/11 16:26",
+          "at": "2026-07-10T05:30:31.860Z",
+          "when": "07/10 05:30",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — ceo / Q1_conclusion_numbers"
         },
         {
-          "at": "2026-07-11T07:26:22.020Z",
-          "when": "07/11 16:26",
+          "at": "2026-07-10T05:30:29.212Z",
+          "when": "07/10 05:30",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — ceo / Q1_conclusion_numbers"
         },
         {
-          "at": "2026-07-11T07:26:19.417Z",
-          "when": "07/11 16:26",
+          "at": "2026-07-10T05:30:26.375Z",
+          "when": "07/10 05:30",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — ceo / Q1_conclusion_numbers"
@@ -3176,41 +3163,13 @@
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — ceo / Q1_conclusion_numbers"
-        },
-        {
-          "at": "2026-07-10T05:18:54.725Z",
-          "when": "07/10 05:18",
-          "type": "patrol.done",
-          "actor": "patrol",
-          "line": "巡回処理完了（巡回） — 完成度 50% / 品質 NG"
-        },
-        {
-          "at": "2026-07-10T05:18:51.827Z",
-          "when": "07/10 05:18",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — ceo / Q1_conclusion_numbers"
-        },
-        {
-          "at": "2026-07-10T05:18:48.916Z",
-          "when": "07/10 05:18",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — ceo / Q1_conclusion_numbers"
-        },
-        {
-          "at": "2026-07-10T05:18:45.918Z",
-          "when": "07/10 05:18",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — ceo / Q1_conclusion_numbers"
         }
       ],
       "distribution": [
         {
           "channel": "X",
           "automation": "semi",
-          "status": "済 07/08 12:30",
+          "status": "済 07/08 03:30",
           "done": true
         },
         {
@@ -4034,20 +3993,20 @@
       "workItems": [],
       "nextAction": "⚠ 公開中だが1行目がタイトルに未回答 — 非表示または修正を推奨",
       "promo": {
-        "x": "2026-07-11T03:30:48.138Z",
+        "x": null,
         "hatena": null,
         "note": null
       },
       "short": {
         "slug": "shussho-budget-seika",
-        "generated": true,
-        "uploaded": true,
-        "visibility": "private",
-        "videoId": "8HPZ4sC7uck",
-        "url": "https://www.youtube.com/shorts/8HPZ4sC7uck",
-        "studioUrl": "https://studio.youtube.com/video/8HPZ4sC7uck/edit",
-        "uploadedAt": "2026-06-29T22:11:20.857Z",
-        "label": "YT非公開"
+        "generated": false,
+        "uploaded": false,
+        "visibility": null,
+        "videoId": null,
+        "url": null,
+        "studioUrl": null,
+        "uploadedAt": null,
+        "label": "未生成"
       },
       "xUnavailable": true,
       "xResearchStatus": "exhausted",
@@ -4060,7 +4019,7 @@
       "activity": [
         {
           "at": "2026-06-29T00:52:28.532Z",
-          "when": "06/29 09:52",
+          "when": "06/29 00:52",
           "type": "publish.manual",
           "actor": "owner",
           "line": "手動で一般公開（あなた） — 履歴補完（公開日時から）"
@@ -4070,8 +4029,8 @@
         {
           "channel": "X",
           "automation": "semi",
-          "status": "済 07/11 12:30",
-          "done": true
+          "status": "未",
+          "done": false
         },
         {
           "channel": "はてブ",
@@ -4088,8 +4047,8 @@
         {
           "channel": "ショート",
           "automation": "manual",
-          "status": "YT YT非公開 06/30 07:11",
-          "done": true
+          "status": "未生成",
+          "done": false
         }
       ],
       "stall": null,
@@ -4215,7 +4174,7 @@
       "workItems": [],
       "nextAction": "✅ 公開中 — /case/ に表示されています",
       "promo": {
-        "x": "2026-07-11T03:30:48.138Z",
+        "x": null,
         "hatena": null,
         "note": null
       },
@@ -4241,7 +4200,7 @@
       "activity": [
         {
           "at": "2026-06-29T06:31:08.767Z",
-          "when": "06/29 15:31",
+          "when": "06/29 06:31",
           "type": "publish.manual",
           "actor": "owner",
           "line": "手動で一般公開（あなた） — 履歴補完（公開日時から）"
@@ -4251,8 +4210,8 @@
         {
           "channel": "X",
           "automation": "semi",
-          "status": "済 07/11 12:30",
-          "done": true
+          "status": "未",
+          "done": false
         },
         {
           "channel": "はてブ",
@@ -4422,7 +4381,7 @@
       "activity": [
         {
           "at": "2026-06-29T06:31:08.845Z",
-          "when": "06/29 15:31",
+          "when": "06/29 06:31",
           "type": "publish.manual",
           "actor": "owner",
           "line": "手動で一般公開（あなた） — 履歴補完（公開日時から）"
@@ -4432,7 +4391,7 @@
         {
           "channel": "X",
           "automation": "semi",
-          "status": "済 07/06 12:32",
+          "status": "済 07/06 03:32",
           "done": true
         },
         {
@@ -4577,7 +4536,7 @@
       "workItems": [],
       "nextAction": "✅ 公開中 — /case/ に表示されています",
       "promo": {
-        "x": "2026-07-11T03:30:48.138Z",
+        "x": "2026-07-03T03:50:50.072Z",
         "hatena": null,
         "note": null
       },
@@ -4603,7 +4562,7 @@
       "activity": [
         {
           "at": "2026-07-01T20:38:48.641Z",
-          "when": "07/02 05:38",
+          "when": "07/01 20:38",
           "type": "publish.manual",
           "actor": "owner",
           "line": "手動で一般公開（あなた） — 履歴補完（公開日時から）"
@@ -4613,7 +4572,7 @@
         {
           "channel": "X",
           "automation": "semi",
-          "status": "済 07/11 12:30",
+          "status": "済 07/03 03:50",
           "done": true
         },
         {
@@ -4813,50 +4772,36 @@
       "patrolFixing": false,
       "activity": [
         {
-          "at": "2026-07-11T07:40:19.041Z",
-          "when": "07/11 16:40",
+          "at": "2026-07-11T07:48:54.806Z",
+          "when": "07/11 07:48",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 50% / 品質 OK"
         },
         {
-          "at": "2026-07-11T07:40:16.454Z",
-          "when": "07/11 16:40",
+          "at": "2026-07-11T07:48:52.816Z",
+          "when": "07/11 07:48",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / B3_topic"
         },
         {
-          "at": "2026-07-11T07:40:13.904Z",
-          "when": "07/11 16:40",
+          "at": "2026-07-11T07:48:50.845Z",
+          "when": "07/11 07:48",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / B3_topic"
         },
         {
-          "at": "2026-07-11T07:40:11.313Z",
-          "when": "07/11 16:40",
+          "at": "2026-07-11T07:48:48.884Z",
+          "when": "07/11 07:48",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / B3_topic"
         },
         {
-          "at": "2026-07-11T07:40:08.729Z",
-          "when": "07/11 16:40",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — writer / B3_topic"
-        },
-        {
-          "at": "2026-07-11T07:40:06.072Z",
-          "when": "07/11 16:40",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — writer / B3_topic"
-        },
-        {
-          "at": "2026-07-11T07:29:16.305Z",
-          "when": "07/11 16:29",
+          "at": "2026-07-10T05:30:48.359Z",
+          "when": "07/10 05:30",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 50% / 品質 OK"
@@ -4876,36 +4821,22 @@
           "line": "巡回処理開始（巡回） — writer / B3_topic"
         },
         {
-          "at": "2026-07-11T07:29:08.279Z",
-          "when": "07/11 16:29",
+          "at": "2026-07-10T05:30:40.015Z",
+          "when": "07/10 05:30",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / B3_topic"
         },
         {
-          "at": "2026-07-10T05:19:09.330Z",
-          "when": "07/10 05:19",
-          "type": "patrol.done",
-          "actor": "patrol",
-          "line": "巡回処理完了（巡回） — 完成度 50% / 品質 OK"
-        },
-        {
-          "at": "2026-07-10T05:19:06.444Z",
-          "when": "07/10 05:19",
+          "at": "2026-07-10T05:30:37.315Z",
+          "when": "07/10 05:30",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / B3_topic"
         },
         {
-          "at": "2026-07-10T05:19:03.555Z",
-          "when": "07/10 05:19",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — writer / B3_topic"
-        },
-        {
-          "at": "2026-07-10T05:19:00.629Z",
-          "when": "07/10 05:19",
+          "at": "2026-07-10T05:30:34.615Z",
+          "when": "07/10 05:30",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / B3_topic"
@@ -4915,7 +4846,7 @@
         {
           "channel": "X",
           "automation": "semi",
-          "status": "済 07/06 12:32",
+          "status": "済 07/06 03:32",
           "done": true
         },
         {
@@ -5115,99 +5046,71 @@
       "patrolFixing": false,
       "activity": [
         {
-          "at": "2026-07-11T07:40:32.086Z",
-          "when": "07/11 16:40",
+          "at": "2026-07-11T07:49:00.764Z",
+          "when": "07/11 07:49",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 50% / 品質 OK"
         },
         {
-          "at": "2026-07-11T07:40:29.469Z",
-          "when": "07/11 16:40",
+          "at": "2026-07-11T07:48:58.786Z",
+          "when": "07/11 07:48",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / B3_topic"
         },
         {
-          "at": "2026-07-11T07:40:26.807Z",
-          "when": "07/11 16:40",
+          "at": "2026-07-11T07:48:56.820Z",
+          "when": "07/11 07:48",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / B3_topic"
         },
         {
-          "at": "2026-07-11T07:40:24.215Z",
-          "when": "07/11 16:40",
+          "at": "2026-07-11T07:48:54.824Z",
+          "when": "07/11 07:48",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / B3_topic"
         },
         {
-          "at": "2026-07-11T07:40:21.634Z",
-          "when": "07/11 16:40",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — writer / B3_topic"
-        },
-        {
-          "at": "2026-07-11T07:40:19.059Z",
-          "when": "07/11 16:40",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — writer / B3_topic"
-        },
-        {
-          "at": "2026-07-11T07:29:29.510Z",
-          "when": "07/11 16:29",
+          "at": "2026-07-10T05:31:02.429Z",
+          "when": "07/10 05:31",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 50% / 品質 OK"
         },
         {
-          "at": "2026-07-11T07:29:26.858Z",
-          "when": "07/11 16:29",
+          "at": "2026-07-10T05:30:59.689Z",
+          "when": "07/10 05:30",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / B3_topic"
         },
         {
-          "at": "2026-07-11T07:29:24.232Z",
-          "when": "07/11 16:29",
+          "at": "2026-07-10T05:30:56.683Z",
+          "when": "07/10 05:30",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / B3_topic"
         },
         {
-          "at": "2026-07-11T07:29:21.649Z",
-          "when": "07/11 16:29",
+          "at": "2026-07-10T05:30:53.882Z",
+          "when": "07/10 05:30",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / B3_topic"
         },
         {
-          "at": "2026-07-10T05:19:23.994Z",
-          "when": "07/10 05:19",
-          "type": "patrol.done",
-          "actor": "patrol",
-          "line": "巡回処理完了（巡回） — 完成度 50% / 品質 OK"
-        },
-        {
-          "at": "2026-07-10T05:19:21.051Z",
-          "when": "07/10 05:19",
+          "at": "2026-07-10T05:30:51.090Z",
+          "when": "07/10 05:30",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / B3_topic"
         },
         {
-          "at": "2026-07-10T05:19:18.215Z",
-          "when": "07/10 05:19",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — writer / B3_topic"
-        },
-        {
-          "at": "2026-07-10T05:19:15.283Z",
-          "when": "07/10 05:19",
+          "at": "2026-07-10T05:30:48.375Z",
+          "when": "07/10 05:30",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / B3_topic"
@@ -5217,7 +5120,7 @@
         {
           "channel": "X",
           "automation": "semi",
-          "status": "済 07/07 12:32",
+          "status": "済 07/07 03:32",
           "done": true
         },
         {
@@ -5428,50 +5331,36 @@
       "patrolFixing": false,
       "activity": [
         {
-          "at": "2026-07-11T07:40:44.963Z",
-          "when": "07/11 16:40",
+          "at": "2026-07-11T07:49:06.721Z",
+          "when": "07/11 07:49",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 50% / 品質 OK"
         },
         {
-          "at": "2026-07-11T07:40:42.419Z",
-          "when": "07/11 16:40",
+          "at": "2026-07-11T07:49:04.732Z",
+          "when": "07/11 07:49",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / B3_topic"
         },
         {
-          "at": "2026-07-11T07:40:39.838Z",
-          "when": "07/11 16:40",
+          "at": "2026-07-11T07:49:02.762Z",
+          "when": "07/11 07:49",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / B3_topic"
         },
         {
-          "at": "2026-07-11T07:40:37.251Z",
-          "when": "07/11 16:40",
+          "at": "2026-07-11T07:49:00.782Z",
+          "when": "07/11 07:49",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / B3_topic"
         },
         {
-          "at": "2026-07-11T07:40:34.655Z",
-          "when": "07/11 16:40",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — writer / B3_topic"
-        },
-        {
-          "at": "2026-07-11T07:40:32.098Z",
-          "when": "07/11 16:40",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — writer / B3_topic"
-        },
-        {
-          "at": "2026-07-11T07:29:42.925Z",
-          "when": "07/11 16:29",
+          "at": "2026-07-10T05:31:16.228Z",
+          "when": "07/10 05:31",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 50% / 品質 OK"
@@ -5496,13 +5385,27 @@
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / B3_topic"
+        },
+        {
+          "at": "2026-07-10T05:31:05.239Z",
+          "when": "07/10 05:31",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — writer / B3_topic"
+        },
+        {
+          "at": "2026-07-10T05:31:02.442Z",
+          "when": "07/10 05:31",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — writer / B3_topic"
         }
       ],
       "distribution": [
         {
           "channel": "X",
           "automation": "semi",
-          "status": "済 07/03 12:50",
+          "status": "済 07/03 03:50",
           "done": true
         },
         {
@@ -5673,7 +5576,7 @@
       "activity": [
         {
           "at": "2026-07-01T20:35:25.627Z",
-          "when": "07/02 05:35",
+          "when": "07/01 20:35",
           "type": "publish.manual",
           "actor": "owner",
           "line": "手動で一般公開（あなた） — 履歴補完（公開日時から）"
@@ -5683,7 +5586,7 @@
         {
           "channel": "X",
           "automation": "semi",
-          "status": "済 07/09 12:32",
+          "status": "済 07/09 03:32",
           "done": true
         },
         {
@@ -5854,7 +5757,7 @@
       "activity": [
         {
           "at": "2026-07-01T20:35:26.163Z",
-          "when": "07/02 05:35",
+          "when": "07/01 20:35",
           "type": "publish.manual",
           "actor": "owner",
           "line": "手動で一般公開（あなた） — 履歴補完（公開日時から）"
@@ -5864,7 +5767,7 @@
         {
           "channel": "X",
           "automation": "semi",
-          "status": "済 07/08 12:30",
+          "status": "済 07/08 03:30",
           "done": true
         },
         {
@@ -6208,7 +6111,7 @@
       "activity": [
         {
           "at": "2026-07-08T19:48:22.239Z",
-          "when": "07/09 04:48",
+          "when": "07/08 19:48",
           "type": "publish.manual",
           "actor": "owner",
           "line": "手動で一般公開（あなた） — 履歴補完（公開日時から）"
@@ -6218,7 +6121,7 @@
         {
           "channel": "X",
           "automation": "semi",
-          "status": "済 07/10 12:33",
+          "status": "済 07/10 03:33",
           "done": true
         },
         {
@@ -6574,7 +6477,7 @@
       "activity": [
         {
           "at": "2026-07-01T17:31:13.446Z",
-          "when": "07/02 02:31",
+          "when": "07/01 17:31",
           "type": "publish.manual",
           "actor": "owner",
           "line": "手動で一般公開（あなた） — 履歴補完（公開日時から）"
@@ -6590,7 +6493,7 @@
         {
           "channel": "はてブ",
           "automation": "semi",
-          "status": "済 07/11 09:31",
+          "status": "済 07/11 00:31",
           "done": true
         },
         {
@@ -6765,14 +6668,14 @@
       },
       "short": {
         "slug": "shoshika",
-        "generated": true,
+        "generated": false,
         "uploaded": false,
         "visibility": null,
         "videoId": null,
         "url": null,
         "studioUrl": null,
         "uploadedAt": null,
-        "label": "生成済・未アップ"
+        "label": "未生成"
       },
       "xUnavailable": true,
       "xResearchStatus": "exhausted",
@@ -6784,50 +6687,36 @@
       "patrolFixing": false,
       "activity": [
         {
-          "at": "2026-07-11T07:40:51.933Z",
-          "when": "07/11 16:40",
+          "at": "2026-07-11T07:49:09.704Z",
+          "when": "07/11 07:49",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 50% / 品質 OK"
         },
         {
-          "at": "2026-07-11T07:40:50.513Z",
-          "when": "07/11 16:40",
+          "at": "2026-07-11T07:49:08.703Z",
+          "when": "07/11 07:49",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / E4_timeline_diet_topic"
         },
         {
-          "at": "2026-07-11T07:40:49.119Z",
-          "when": "07/11 16:40",
+          "at": "2026-07-11T07:49:07.719Z",
+          "when": "07/11 07:49",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / E4_timeline_diet_topic"
         },
         {
-          "at": "2026-07-11T07:40:47.778Z",
-          "when": "07/11 16:40",
+          "at": "2026-07-11T07:49:06.739Z",
+          "when": "07/11 07:49",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / E4_timeline_diet_topic"
         },
         {
-          "at": "2026-07-11T07:40:46.311Z",
-          "when": "07/11 16:40",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — writer / E4_timeline_diet_topic"
-        },
-        {
-          "at": "2026-07-11T07:40:44.976Z",
-          "when": "07/11 16:40",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — writer / E4_timeline_diet_topic"
-        },
-        {
-          "at": "2026-07-11T07:29:50.065Z",
-          "when": "07/11 16:29",
+          "at": "2026-07-10T05:34:04.850Z",
+          "when": "07/10 05:34",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 50% / 品質 OK"
@@ -6849,6 +6738,20 @@
         {
           "at": "2026-07-10T05:34:00.012Z",
           "when": "07/10 05:34",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — writer / E4_timeline_diet_topic"
+        },
+        {
+          "at": "2026-07-10T05:33:58.439Z",
+          "when": "07/10 05:33",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — writer / E4_timeline_diet_topic"
+        },
+        {
+          "at": "2026-07-10T05:33:56.708Z",
+          "when": "07/10 05:33",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / E4_timeline_diet_topic"
@@ -6876,7 +6779,7 @@
         {
           "channel": "ショート",
           "automation": "manual",
-          "status": "生成済・未アップ",
+          "status": "未生成",
           "done": false
         }
       ],
@@ -7058,6 +6961,34 @@
       "patrolFixing": false,
       "activity": [
         {
+          "at": "2026-07-11T07:49:12.684Z",
+          "when": "07/11 07:49",
+          "type": "patrol.done",
+          "actor": "patrol",
+          "line": "巡回処理完了（巡回） — 完成度 50% / 品質 OK"
+        },
+        {
+          "at": "2026-07-11T07:49:11.683Z",
+          "when": "07/11 07:49",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — writer / E4_timeline_diet_topic"
+        },
+        {
+          "at": "2026-07-11T07:49:10.705Z",
+          "when": "07/11 07:49",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — writer / E4_timeline_diet_topic"
+        },
+        {
+          "at": "2026-07-11T07:49:09.722Z",
+          "when": "07/11 07:49",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — writer / E4_timeline_diet_topic"
+        },
+        {
           "at": "2026-07-10T05:34:12.884Z",
           "when": "07/10 05:34",
           "type": "patrol.done",
@@ -7098,34 +7029,6 @@
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / E4_timeline_diet_topic"
-        },
-        {
-          "at": "2026-07-10T05:22:41.247Z",
-          "when": "07/10 05:22",
-          "type": "patrol.done",
-          "actor": "patrol",
-          "line": "巡回処理完了（巡回） — 完成度 50% / 品質 OK"
-        },
-        {
-          "at": "2026-07-10T05:22:39.504Z",
-          "when": "07/10 05:22",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — writer / E4_timeline_diet_topic"
-        },
-        {
-          "at": "2026-07-10T05:22:37.676Z",
-          "when": "07/10 05:22",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — writer / E4_timeline_diet_topic"
-        },
-        {
-          "at": "2026-07-10T05:22:35.839Z",
-          "when": "07/10 05:22",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — writer / E4_timeline_diet_topic"
         }
       ],
       "distribution": [
@@ -7138,7 +7041,7 @@
         {
           "channel": "はてブ",
           "automation": "semi",
-          "status": "済 07/11 09:31",
+          "status": "済 07/11 00:31",
           "done": true
         },
         {
@@ -7303,7 +7206,7 @@
       "activity": [
         {
           "at": "2026-07-01T20:35:27.253Z",
-          "when": "07/02 05:35",
+          "when": "07/01 20:35",
           "type": "publish.manual",
           "actor": "owner",
           "line": "手動で一般公開（あなた） — 履歴補完（公開日時から）"
@@ -7319,7 +7222,7 @@
         {
           "channel": "はてブ",
           "automation": "semi",
-          "status": "済 07/11 09:32",
+          "status": "済 07/11 00:32",
           "done": true
         },
         {
@@ -7484,7 +7387,7 @@
       "activity": [
         {
           "at": "2026-07-01T20:35:27.789Z",
-          "when": "07/02 05:35",
+          "when": "07/01 20:35",
           "type": "publish.manual",
           "actor": "owner",
           "line": "手動で一般公開（あなた） — 履歴補完（公開日時から）"
@@ -7665,7 +7568,7 @@
       "activity": [
         {
           "at": "2026-07-01T20:35:28.349Z",
-          "when": "07/02 05:35",
+          "when": "07/01 20:35",
           "type": "publish.manual",
           "actor": "owner",
           "line": "手動で一般公開（あなた） — 履歴補完（公開日時から）"
@@ -7675,7 +7578,7 @@
         {
           "channel": "X",
           "automation": "semi",
-          "status": "済 07/10 12:33",
+          "status": "済 07/10 03:33",
           "done": true
         },
         {
@@ -8063,6 +7966,17 @@
       "qualityBlockers": [],
       "agentTasks": [
         {
+          "id": "hosei-yosan:J1_analytical_blocks",
+          "slug": "hosei-yosan",
+          "agent": "writer",
+          "agentLabel": "ライター",
+          "checkId": "J1_analytical_blocks",
+          "title": "[ゲート] 分析ブロック",
+          "todo": "メリデメ・利害・数値統計のいずれか1〜3種（0種NG）",
+          "command": "npm run complete:article -- --slug hosei-yosan --content-only --force",
+          "priority": 30
+        },
+        {
           "id": "hosei-yosan:J1_prosCons",
           "slug": "hosei-yosan",
           "agent": "writer",
@@ -8078,7 +7992,7 @@
       "goldPct": 50,
       "published": true,
       "specialPublish": true,
-      "specialPublishSummary": "ゲート1件・①〜④未完了",
+      "specialPublishSummary": "ゲート2件・①〜④未完了",
       "publishGateOk": true,
       "pipelinePreOk": false,
       "titleAnswerOk": true,
@@ -8174,15 +8088,26 @@
       ],
       "blockers": [
         {
+          "id": "J1_analytical_blocks",
+          "label": "分析ブロック",
+          "todo": "メリデメ・利害・数値統計のいずれか1〜3種（0種NG）",
+          "detail": "メリデメ — 内容不足（有効0種・1種以上必要）"
+        },
+        {
           "id": "J1_prosCons",
           "label": "メリデメ",
           "todo": "公表数値付きメリット2・デメリット2",
           "detail": "メリ1/2・デメ2/2（各 figure+sourceUrl 必須）"
         }
       ],
-      "blockerCount": 1,
+      "blockerCount": 2,
       "runState": "idle",
       "workItems": [
+        {
+          "id": "J1_analytical_blocks",
+          "label": "分析ブロック",
+          "state": "blocked"
+        },
         {
           "id": "J1_prosCons",
           "label": "メリデメ",
@@ -8221,55 +8146,6 @@
       "patrolFixing": false,
       "activity": [
         {
-          "at": "2026-07-11T07:46:41.268Z",
-          "when": "07/11 07:46",
-          "type": "patrol.done",
-          "actor": "patrol",
-          "line": "巡回処理完了（巡回） — 完成度 50% / 品質 OK"
-        },
-        {
-          "at": "2026-07-11T07:46:39.447Z",
-          "when": "07/11 07:46",
-          "type": "content.updated",
-          "actor": "patrol",
-          "line": "content.updated（巡回） — 巡回でコンテンツ更新（公開は維持）"
-        },
-        {
-          "at": "2026-07-11T07:46:14.712Z",
-          "when": "07/11 07:46",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — writer / J1_analytical_blocks"
-        },
-        {
-          "at": "2026-07-11T07:46:12.848Z",
-          "when": "07/11 07:46",
-          "type": "content.updated",
-          "actor": "patrol",
-          "line": "content.updated（巡回） — 巡回でコンテンツ更新（公開は維持）"
-        },
-        {
-          "at": "2026-07-11T07:45:48.492Z",
-          "when": "07/11 07:45",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — writer / J1_analytical_blocks"
-        },
-        {
-          "at": "2026-07-11T07:45:46.593Z",
-          "when": "07/11 07:45",
-          "type": "content.updated",
-          "actor": "patrol",
-          "line": "content.updated（巡回） — 巡回でコンテンツ更新（公開は維持）"
-        },
-        {
-          "at": "2026-07-11T07:45:21.447Z",
-          "when": "07/11 07:45",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — writer / J1_analytical_blocks"
-        },
-        {
           "at": "2026-07-10T05:34:21.077Z",
           "when": "07/10 05:34",
           "type": "patrol.done",
@@ -8277,22 +8153,64 @@
           "line": "巡回処理完了（巡回） — 完成度 50% / 品質 OK"
         },
         {
-          "at": "2026-07-11T07:32:38.282Z",
-          "when": "07/11 16:32",
+          "at": "2026-07-10T05:34:19.476Z",
+          "when": "07/10 05:34",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / J1_prosCons"
         },
         {
-          "at": "2026-07-11T07:32:36.934Z",
-          "when": "07/11 16:32",
+          "at": "2026-07-10T05:34:17.917Z",
+          "when": "07/10 05:34",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / J1_prosCons"
         },
         {
-          "at": "2026-07-11T07:32:35.659Z",
-          "when": "07/11 16:32",
+          "at": "2026-07-10T05:34:16.208Z",
+          "when": "07/10 05:34",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — writer / J1_prosCons"
+        },
+        {
+          "at": "2026-07-10T05:34:14.521Z",
+          "when": "07/10 05:34",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — writer / J1_prosCons"
+        },
+        {
+          "at": "2026-07-10T05:34:12.906Z",
+          "when": "07/10 05:34",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — writer / J1_prosCons"
+        },
+        {
+          "at": "2026-07-10T05:22:49.414Z",
+          "when": "07/10 05:22",
+          "type": "patrol.done",
+          "actor": "patrol",
+          "line": "巡回処理完了（巡回） — 完成度 50% / 品質 OK"
+        },
+        {
+          "at": "2026-07-10T05:22:47.791Z",
+          "when": "07/10 05:22",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — writer / J1_prosCons"
+        },
+        {
+          "at": "2026-07-10T05:22:46.132Z",
+          "when": "07/10 05:22",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — writer / J1_prosCons"
+        },
+        {
+          "at": "2026-07-10T05:22:44.449Z",
+          "when": "07/10 05:22",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / J1_prosCons"
@@ -8473,7 +8391,7 @@
       "activity": [
         {
           "at": "2026-07-01T20:35:29.501Z",
-          "when": "07/02 05:35",
+          "when": "07/01 20:35",
           "type": "publish.manual",
           "actor": "owner",
           "line": "手動で一般公開（あなた） — 履歴補完（公開日時から）"
@@ -8483,7 +8401,7 @@
         {
           "channel": "X",
           "automation": "semi",
-          "status": "済 07/10 12:33",
+          "status": "済 07/10 03:33",
           "done": true
         },
         {
@@ -8654,7 +8572,7 @@
       "activity": [
         {
           "at": "2026-07-01T20:35:30.033Z",
-          "when": "07/02 05:35",
+          "when": "07/01 20:35",
           "type": "publish.manual",
           "actor": "owner",
           "line": "手動で一般公開（あなた） — 履歴補完（公開日時から）"
@@ -8664,7 +8582,7 @@
         {
           "channel": "X",
           "automation": "semi",
-          "status": "済 07/07 12:32",
+          "status": "済 07/07 03:32",
           "done": true
         },
         {
@@ -8831,22 +8749,8 @@
       "publishedAt": null,
       "adminHiddenBy": null,
       "adminHiddenAt": null,
-      "patrolFixing": true,
+      "patrolFixing": false,
       "activity": [
-        {
-          "at": "2026-07-11T07:47:30.021Z",
-          "when": "07/11 16:47",
-          "type": "patrol.done",
-          "actor": "patrol",
-          "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
-        },
-        {
-          "at": "2026-07-11T07:36:29.018Z",
-          "when": "07/11 16:36",
-          "type": "patrol.done",
-          "actor": "patrol",
-          "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
-        },
         {
           "at": "2026-07-10T05:38:31.192Z",
           "when": "07/10 05:38",
@@ -8855,50 +8759,64 @@
           "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
         },
         {
-          "at": "2026-07-11T07:14:19.768Z",
-          "when": "07/11 16:14",
+          "at": "2026-07-10T05:26:45.482Z",
+          "when": "07/10 05:26",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
         },
         {
-          "at": "2026-07-11T07:01:04.936Z",
-          "when": "07/11 16:01",
+          "at": "2026-07-10T05:14:55.567Z",
+          "when": "07/10 05:14",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
         },
         {
-          "at": "2026-07-11T06:49:49.631Z",
-          "when": "07/11 15:49",
+          "at": "2026-07-10T05:03:06.695Z",
+          "when": "07/10 05:03",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
         },
         {
-          "at": "2026-07-11T04:38:26.366Z",
-          "when": "07/11 13:38",
+          "at": "2026-07-10T04:51:12.272Z",
+          "when": "07/10 04:51",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
         },
         {
-          "at": "2026-07-11T04:27:28.064Z",
-          "when": "07/11 13:27",
+          "at": "2026-07-10T04:36:58.494Z",
+          "when": "07/10 04:36",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
         },
         {
-          "at": "2026-07-11T04:16:17.498Z",
-          "when": "07/11 13:16",
+          "at": "2026-07-10T04:25:04.233Z",
+          "when": "07/10 04:25",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
         },
         {
-          "at": "2026-07-11T04:03:11.434Z",
-          "when": "07/11 13:03",
+          "at": "2026-07-10T04:13:26.528Z",
+          "when": "07/10 04:13",
+          "type": "patrol.done",
+          "actor": "patrol",
+          "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
+        },
+        {
+          "at": "2026-07-10T04:01:26.965Z",
+          "when": "07/10 04:01",
+          "type": "patrol.done",
+          "actor": "patrol",
+          "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
+        },
+        {
+          "at": "2026-07-10T03:49:43.352Z",
+          "when": "07/10 03:49",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
@@ -9252,7 +9170,7 @@
       "activity": [
         {
           "at": "2026-07-01T20:35:30.581Z",
-          "when": "07/02 05:35",
+          "when": "07/01 20:35",
           "type": "publish.manual",
           "actor": "owner",
           "line": "手動で一般公開（あなた） — 履歴補完（公開日時から）"
@@ -9262,7 +9180,7 @@
         {
           "channel": "X",
           "automation": "semi",
-          "status": "済 07/07 12:32",
+          "status": "済 07/07 03:32",
           "done": true
         },
         {
@@ -9303,17 +9221,6 @@
       "qualityBlockerCount": 0,
       "qualityBlockers": [],
       "agentTasks": [
-        {
-          "id": "kishida-seiken-jisshi:D2_arc_topic",
-          "slug": "kishida-seiken-jisshi",
-          "agent": "writer",
-          "agentLabel": "ライター",
-          "checkId": "D2_arc_topic",
-          "title": "[ゲート] 経緯の話題",
-          "todo": "経緯3行以上が案件キーワードと一致",
-          "command": "node scripts/complete-article.mjs --slug kishida-seiken-jisshi --content-only --force",
-          "priority": 30
-        },
         {
           "id": "kishida-seiken-jisshi:E4_timeline_diet_topic",
           "slug": "kishida-seiken-jisshi",
@@ -9426,26 +9333,15 @@
       ],
       "blockers": [
         {
-          "id": "D2_arc_topic",
-          "label": "経緯の話題",
-          "todo": "経緯3行以上が案件キーワードと一致",
-          "detail": "0/3 行が話題一致"
-        },
-        {
           "id": "E4_timeline_diet_topic",
           "label": "TL国会の話題",
           "todo": "国会TLはある分だけ話題一致。TLなし可。根拠なしの結論は不可",
           "detail": "国会TLあるが話題一致なし＋結論あり"
         }
       ],
-      "blockerCount": 2,
+      "blockerCount": 1,
       "runState": "idle",
       "workItems": [
-        {
-          "id": "D2_arc_topic",
-          "label": "経緯の話題",
-          "state": "blocked"
-        },
         {
           "id": "E4_timeline_diet_topic",
           "label": "TL国会の話題",
@@ -9484,39 +9380,11 @@
       "patrolFixing": false,
       "activity": [
         {
-          "at": "2026-07-11T07:46:43.952Z",
-          "when": "07/11 07:46",
-          "type": "patrol.done",
-          "actor": "patrol",
-          "line": "巡回処理完了（巡回） — 完成度 50% / 品質 OK"
-        },
-        {
-          "at": "2026-07-11T07:46:43.058Z",
-          "when": "07/11 07:46",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — writer / E4_timeline_diet_topic"
-        },
-        {
-          "at": "2026-07-11T07:46:42.177Z",
-          "when": "07/11 07:46",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — writer / E4_timeline_diet_topic"
-        },
-        {
-          "at": "2026-07-11T07:46:41.286Z",
-          "when": "07/11 07:46",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — writer / E4_timeline_diet_topic"
-        },
-        {
           "at": "2026-07-10T05:38:50.139Z",
           "when": "07/10 05:38",
           "type": "gate.ready",
           "actor": "patrol",
-          "line": "巡回処理完了（巡回） — 完成度 50% / 品質 OK"
+          "line": "公開ゲート到達（まだ非公開）（巡回） — 1行目がタイトルに回答済み。一般公開は手動のみ"
         },
         {
           "at": "2026-07-10T05:35:34.129Z",
@@ -9549,6 +9417,34 @@
         {
           "at": "2026-07-10T05:34:36.374Z",
           "when": "07/10 05:34",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — writer / D2_arc_topic"
+        },
+        {
+          "at": "2026-07-10T05:34:21.099Z",
+          "when": "07/10 05:34",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — writer / D2_arc_topic"
+        },
+        {
+          "at": "2026-07-10T05:23:50.050Z",
+          "when": "07/10 05:23",
+          "type": "patrol.done",
+          "actor": "patrol",
+          "line": "巡回処理完了（巡回） — 完成度 50% / 品質 OK"
+        },
+        {
+          "at": "2026-07-10T05:23:38.275Z",
+          "when": "07/10 05:23",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — writer / D2_arc_topic"
+        },
+        {
+          "at": "2026-07-10T05:23:26.211Z",
+          "when": "07/10 05:23",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / D2_arc_topic"
@@ -9739,14 +9635,14 @@
       },
       "short": {
         "slug": "komei-kokumin",
-        "generated": true,
-        "uploaded": true,
-        "visibility": "scheduled",
-        "videoId": "WEqcfLBsVcg",
-        "url": "https://www.youtube.com/shorts/WEqcfLBsVcg",
-        "studioUrl": "https://studio.youtube.com/video/WEqcfLBsVcg/edit",
-        "uploadedAt": "2026-07-05T05:33:38.898Z",
-        "label": "YTアップ済"
+        "generated": false,
+        "uploaded": false,
+        "visibility": null,
+        "videoId": null,
+        "url": null,
+        "studioUrl": null,
+        "uploadedAt": null,
+        "label": "未生成"
       },
       "xUnavailable": true,
       "xResearchStatus": "exhausted",
@@ -9758,34 +9654,6 @@
       "patrolFixing": false,
       "activity": [
         {
-          "at": "2026-07-11T07:46:49.256Z",
-          "when": "07/11 07:46",
-          "type": "patrol.done",
-          "actor": "patrol",
-          "line": "巡回処理完了（巡回） — 完成度 50% / 品質 OK"
-        },
-        {
-          "at": "2026-07-11T07:46:47.484Z",
-          "when": "07/11 07:46",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — writer / B3_topic"
-        },
-        {
-          "at": "2026-07-11T07:46:45.729Z",
-          "when": "07/11 07:46",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — writer / B3_topic"
-        },
-        {
-          "at": "2026-07-11T07:46:43.969Z",
-          "when": "07/11 07:46",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — writer / B3_topic"
-        },
-        {
           "at": "2026-07-10T05:35:48.653Z",
           "when": "07/10 05:35",
           "type": "patrol.done",
@@ -9793,22 +9661,22 @@
           "line": "巡回処理完了（巡回） — 完成度 50% / 品質 OK"
         },
         {
-          "at": "2026-07-11T07:33:46.962Z",
-          "when": "07/11 16:33",
+          "at": "2026-07-10T05:35:45.717Z",
+          "when": "07/10 05:35",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / B3_topic"
         },
         {
-          "at": "2026-07-11T07:33:44.483Z",
-          "when": "07/11 16:33",
+          "at": "2026-07-10T05:35:42.818Z",
+          "when": "07/10 05:35",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / B3_topic"
         },
         {
-          "at": "2026-07-11T07:33:41.930Z",
-          "when": "07/11 16:33",
+          "at": "2026-07-10T05:35:39.936Z",
+          "when": "07/10 05:35",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / B3_topic"
@@ -9826,13 +9694,41 @@
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / B3_topic"
+        },
+        {
+          "at": "2026-07-10T05:24:04.456Z",
+          "when": "07/10 05:24",
+          "type": "patrol.done",
+          "actor": "patrol",
+          "line": "巡回処理完了（巡回） — 完成度 50% / 品質 OK"
+        },
+        {
+          "at": "2026-07-10T05:24:01.596Z",
+          "when": "07/10 05:24",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — writer / B3_topic"
+        },
+        {
+          "at": "2026-07-10T05:23:58.775Z",
+          "when": "07/10 05:23",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — writer / B3_topic"
+        },
+        {
+          "at": "2026-07-10T05:23:55.964Z",
+          "when": "07/10 05:23",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — writer / B3_topic"
         }
       ],
       "distribution": [
         {
           "channel": "X",
           "automation": "semi",
-          "status": "済 07/06 12:32",
+          "status": "済 07/06 03:32",
           "done": true
         },
         {
@@ -9850,8 +9746,8 @@
         {
           "channel": "ショート",
           "automation": "manual",
-          "status": "YT YTアップ済 07/05 14:33",
-          "done": true
+          "status": "未生成",
+          "done": false
         }
       ],
       "stall": null,
