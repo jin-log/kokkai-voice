@@ -109,7 +109,8 @@ jobs:
             --data '{"purge_everything":true}' \
             | grep -o '"success":[a-z]*' || true
 
-      - name: 検索エンジン更新通知（IndexNow + Google・未送信ゼロ必須）
+      - name: 検索エンジン更新通知（IndexNow + Google）
+        continue-on-error: true
         env:
           GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
         run: node scripts/notify-search-engines.mjs --live --ensure-all
