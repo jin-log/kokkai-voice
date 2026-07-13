@@ -121,7 +121,7 @@ const policyCategories = Object.keys(categoryCounts).sort(sortPolicyCategories);
     <div class="admin-create__row">
       <label class="admin-create__field">
         <span class="admin-filter__label">キーワード</span>
-        <input id="new-keyword" type="search" placeholder="例: 消費税減税" class="admin-filter__input" />
+        <input id="new-keyword" type="search" placeholder="例: 消費税減税" class="admin-filter__input" autocomplete="off" />
       </label>
       <label class="admin-create__field admin-create__field--grow">
         <span class="admin-filter__label">タイトル（任意）</span>
@@ -148,6 +148,7 @@ const policyCategories = Object.keys(categoryCounts).sort(sortPolicyCategories);
         id="article-search"
         type="search"
         class="admin-filter__input"
+        autocomplete="off"
         placeholder="タイトル・slug・政策カテゴリで検索"
         autocomplete="off"
       />
