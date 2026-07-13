@@ -56,7 +56,8 @@ jobs:
             exit 0
           fi
           git commit -m "patrol: server cycle ${{ github.run_number }} (gold bump)"
-          git push
+          git pull --rebase origin main || true
+          git push || (git pull --rebase origin main && git push) || echo "push skip (concurrent)"
           echo "committed=true" >> "$GITHUB_OUTPUT"
 
       - name: 本番デプロイ起動（記事HTML同期）
