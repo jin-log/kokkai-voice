@@ -500,7 +500,7 @@ const policyCategories = Object.keys(categoryCounts).sort(sortPolicyCategories);
     const search = document.getElementById("article-search");
     if (search) search.value = "";
     document.querySelectorAll("#status-pills .admin-filter__pill").forEach((b) => {
-      b.classList.toggle("is-active", b.dataset.filter === "action");
+      b.classList.toggle("is-active", b.dataset.filter === "todo");
     });
     document.querySelectorAll("#category-pills .admin-filter__pill").forEach((b) => {
       b.classList.toggle("is-active", b.dataset.category === "");
@@ -625,7 +625,7 @@ const policyCategories = Object.keys(categoryCounts).sort(sortPolicyCategories);
   // ブラウザの自動補完・bfcacheでフィルターが誤作動しないよう明示クリア
   function clearSearchField() {
     const searchEl = document.getElementById("article-search");
-    if (searchEl) { (searchEl as HTMLInputElement).value = ""; }
+    if (searchEl) { searchEl.value = ""; }
   }
   clearSearchField();
   window.addEventListener("pageshow", (e) => {
