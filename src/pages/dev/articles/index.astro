@@ -146,7 +146,7 @@ const policyCategories = Object.keys(categoryCounts).sort(sortPolicyCategories);
       <label class="admin-filter__label" for="article-search">キーワード</label>
       <input
         id="article-search"
-        type="search"
+        type="text"
         class="admin-filter__input"
         autocomplete="off"
         placeholder="タイトル・slug・政策カテゴリで検索"
@@ -626,9 +626,10 @@ const policyCategories = Object.keys(categoryCounts).sort(sortPolicyCategories);
   // ブラウザの自動補完・bfcacheでフィルターが誤作動しないよう明示クリア
   function clearSearchField() {
     const searchEl = document.getElementById("article-search");
-    if (searchEl) { searchEl.value = ""; }
+    if (searchEl) searchEl.value = "";
   }
   clearSearchField();
+  setTimeout(clearSearchField, 200);
   window.addEventListener("pageshow", (e) => {
     if (e.persisted) { clearSearchField(); applyFilterSort(); }
   });
