@@ -15,11 +15,11 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import {
   fetchSpeech,
-  topicSpeechExcerpt,
   scoreSpeechTopicRelevance,
 } from "./lib/kokkai-api.mjs";
 import { textMatchesTopic, topicTerms, textStronglyMatchesTopic } from "../src/lib/topic-relevance.mjs";
 import { normalizeFactPhrase } from "../src/lib/diet-voice.mjs";
+import { summarizeSpeechRecord, isBadSummaryLine } from "./lib/speech-summary.mjs";
 
 const root = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
 const articlesDir = path.join(root, "data/articles");
@@ -124,15 +124,15 @@ async function fetchDietSpeeches(article, need) {
       for (const { r } of ranked) {
         if (collected.length >= need) break;
         if (!r.speechID || seen.has(r.speechID)) continue;
-        const plain = normalizeFactPhrase(topicSpeechExcerpt(r.speech, terms, 180));
-        if (!plain || plain.length < 30) continue;
-        if (!textMatchesTopic(plain, terms)) continue;
+        const summaryPlain = summarizeSpeechRecord(r, keywordFor(article));
+        if (!summaryPlain || isBadSummaryLine(summaryPlain)) continue;
+        if (!textMatchesTopic(summaryPlain, terms)) continue;
         seen.add(r.speechID);
         collected.push({
           id: `speech-${r.speechID}`,
           type: "speech",
           date: r.date,
-          summaryPlain: `${r.speaker}（${r.speakerGroup || ""}）— ${plain}`,
+          summaryPlain,
           speech: speechMeta(r),
         });
       }
