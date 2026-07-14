@@ -49,6 +49,10 @@ jobs:
           git config user.email "bot@seiji1192.site"
           git config user.name "kokkai-bot"
           git add data/x-post-log.json data/buffer-status.json
-          git diff --staged --quiet || git commit -m "marketing: 夜X単体ログ"
-          git pull --rebase origin main
-          git push
+          if git diff --staged --quiet; then
+            echo "no changes"
+            exit 0
+          fi
+          git commit -m "marketing: 夜X単体ログ"
+          git pull --rebase origin main || true
+          git push || (git pull --rebase origin main && git push) || echo "push skip (concurrent)"
