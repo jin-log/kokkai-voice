@@ -36,13 +36,49 @@ async function postHatena(page, article) {
   await page.waitForTimeout(1500);
   if (page.url().includes("/login")) throw new Error("はてな未ログイン");
 
-  const comment = page.locator('textarea[name="comment"], textarea#comment, textarea').first();
-  if (await comment.count()) await comment.fill(hatena.comment);
-  const title = page.locator('input[name="title"], input#title').first();
-  if (await title.count()) await title.fill(hatena.title);
-  const btn = page.getByRole("button", { name: /ブックマーク|登録|追加/ }).first();
-  if (!(await btn.count())) throw new Error("はてブ登録ボタンなし");
-  await btn.click();
+  // コメント欄・タイトル欄はJSで直接セット（モーダル非表示対応）
+  await page.evaluate(({ comment, title }) => {
+    const ta = document.querySelector('textarea[name="comment"], textarea#comment, textarea[name="annotation"], textarea');
+    if (ta) {
+      ta.value = comment;
+      ta.dispatchEvent(new Event("input", { bubbles: true }));
+      ta.dispatchEvent(new Event("change", { bubbles: true }));
+    }
+    const ti = document.querySelector('input[name="title"], input#title');
+    if (ti) {
+      ti.value = title;
+      ti.dispatchEvent(new Event("input", { bubbles: true }));
+      ti.dispatchEvent(new Event("change", { bubbles: true }));
+    }
+  }, { comment: hatena.comment, title: hatena.title });
+  await page.waitForTimeout(800);
+  // ボタンを複数の方法で探す
+  let clicked = false;
+  const btnSelectors = [
+    '[role="button"]:has-text("ブックマーク")',
+    'button:has-text("ブックマーク")',
+    'button:has-text("登録")',
+    'button:has-text("追加")',
+    'button[type="submit"]',
+    'input[type="submit"]',
+    '.bookmark-btn',
+    '.bookmarkadd-button',
+  ];
+  for (const sel of btnSelectors) {
+    const el = page.locator(sel).first();
+    if (await el.count() > 0) {
+      await el.click({ force: true, timeout: 5000 }).catch(() => {});
+      clicked = true;
+      break;
+    }
+  }
+  if (!clicked) {
+    // JSでsubmitを試みる
+    await page.evaluate(() => {
+      const btn = document.querySelector('button[type="submit"], input[type="submit"], .bookmarkadd-button, [class*="bookmark"][class*="button"]');
+      if (btn) btn.click();
+    });
+  }
   await page.waitForTimeout(2000);
 }
 
