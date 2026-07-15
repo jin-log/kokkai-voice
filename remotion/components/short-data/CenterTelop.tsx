@@ -37,11 +37,11 @@ export const CenterTelop: React.FC<Props> = ({
   const isHeroSlide = isBigBudget || isKodomoMirai;
   const numberSize = fontSizeForLine(
     slide.number ?? "0",
-    hasGraph ? 104 : isBigBudget ? 158 : 126,
+    hasGraph ? 110 : isBigBudget ? 158 : 140,
   );
   const textSize = fontSizeForLine(
     slide.text,
-    hasGraph ? 54 : isHeroSlide ? 82 : 64,
+    hasGraph ? 68 : isHeroSlide ? 104 : 90,
   );
 
   return (
@@ -61,7 +61,7 @@ export const CenterTelop: React.FC<Props> = ({
         {slide.year ? (
           <div
             style={{
-              fontSize: 38,
+              fontSize: 54,
               fontWeight: 800,
               color: "#94a3b8",
               fontFamily: THEME.font,
@@ -105,7 +105,7 @@ export const CenterTelop: React.FC<Props> = ({
           <div
             style={{
               marginTop: 14,
-              fontSize: hasGraph ? 34 : 40,
+              fontSize: hasGraph ? 44 : 52,
               fontWeight: 800,
               color: "#cbd5e1",
               fontFamily: THEME.font,

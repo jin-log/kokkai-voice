@@ -5,8 +5,12 @@ import { ShortF1, type ShortF1Props } from "./ShortF1";
 import { shortDataDurationInFrames } from "./lib/short-data-timing";
 import { BEAT_GAP_FRAMES, FPS } from "./theme";
 import renderProps from "./props/short-data-render.json";
+import kokuminFutanV1Props from "./props/short-data-kokumin-futan-v1.json";
+import kokuminFutanV2Props from "./props/short-data-kokumin-futan-v2.json";
 
 const shortDataDefaultProps: ShortDataV1Props = renderProps as unknown as ShortDataV1Props;
+const kokuminFutanV1: ShortDataV1Props = kokuminFutanV1Props as unknown as ShortDataV1Props;
+const kokuminFutanV2: ShortDataV1Props = kokuminFutanV2Props as unknown as ShortDataV1Props;
 
 const defaultProps: ShortF1Props = {
   slug: "shoshika",
@@ -56,6 +60,42 @@ export const RemotionRoot: React.FC = () => {
         width={1080}
         height={1920}
         defaultProps={shortDataDefaultProps}
+        calculateMetadata={({ props }) => {
+          const durationInFrames = shortDataDurationInFrames(props);
+          return {
+            durationInFrames: Math.max(durationInFrames, FPS),
+            fps: FPS,
+            width: 1080,
+            height: 1920,
+          };
+        }}
+      />
+      <Composition
+        id="KokuminFutanV1"
+        component={ShortDataV1}
+        durationInFrames={300}
+        fps={FPS}
+        width={1080}
+        height={1920}
+        defaultProps={kokuminFutanV1}
+        calculateMetadata={({ props }) => {
+          const durationInFrames = shortDataDurationInFrames(props);
+          return {
+            durationInFrames: Math.max(durationInFrames, FPS),
+            fps: FPS,
+            width: 1080,
+            height: 1920,
+          };
+        }}
+      />
+      <Composition
+        id="KokuminFutanV2"
+        component={ShortDataV1}
+        durationInFrames={300}
+        fps={FPS}
+        width={1080}
+        height={1920}
+        defaultProps={kokuminFutanV2}
         calculateMetadata={({ props }) => {
           const durationInFrames = shortDataDurationInFrames(props);
           return {
