@@ -50,6 +50,7 @@ export const TITLE_BRUSHUP = {
   "case-mr0jbdpc": "【国旗損壊罪】連立合意で法制化へ？いま国会の動き",
   "case-mqzxj4ro": "【国会議員のボーナス】期末手当はいくら？2023年給与法改正の争点",
   "kokumin-kaigi": "【国民会議】は民主主義の否定か？",
+  "kojin-joho-kaisei": "【個人情報保護法改正】同意なしで提供へ。政治家は例外？",
 };
 
 /**
