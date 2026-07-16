@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-07-16T08:00:29.153Z",
-  "total": 48,
+  "generatedAt": "2026-07-16T08:17:04.292Z",
+  "total": 49,
   "byAgent": {
-    "writer": 39,
+    "writer": 40,
     "ceo": 3,
     "x-researcher": 4,
     "legal-check": 2
@@ -95,6 +95,17 @@
       "todo": "論点・数値・可決結果が分かる第三者要約に差し替え",
       "command": "node scripts/complete-article.mjs --slug kojin-joho-kaisei --content-only --force",
       "priority": 10
+    },
+    {
+      "id": "kojin-joho-kaisei:E2_timeline_x",
+      "slug": "kojin-joho-kaisei",
+      "agent": "writer",
+      "agentLabel": "ライター",
+      "checkId": "E2_timeline_x",
+      "title": "[ゲート] タイムラインX",
+      "todo": "X投稿を3件以上タイムラインに",
+      "command": "node scripts/enrich-timeline-all.mjs --slug kojin-joho-kaisei",
+      "priority": 30
     },
     {
       "id": "kokumin-futan-suii:H1_xPosts",
