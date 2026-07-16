@@ -85,7 +85,17 @@ function renderNowSummary(a) {
   const ns = a.nowSummary ?? {};
   const bullets = ns.bullets ?? [];
   if (bullets.length) {
-    const items = bullets.map((b) => `<li>${esc(b)}</li>`).join("\n          ");
+    const items = bullets
+      .map((b, i) => {
+        const text = esc(b);
+        // 先頭の短いフレーズ（〜。まで or 20字）を強調してリズムを出す
+        const m = text.match(/^(.{8,28}?[。！])(.*)$/);
+        if (m) {
+          return `<li style="margin-bottom:0.55em"><strong style="font-weight:800">${m[1]}</strong>${m[2]}</li>`;
+        }
+        return `<li style="margin-bottom:0.55em">${i === 0 ? `<strong style="font-weight:800">${text}</strong>` : text}</li>`;
+      })
+      .join("\n          ");
     return `
         <ul class="now-box__bullets">
           ${items}
@@ -265,28 +275,150 @@ async function loadStanceData(a) {
 
 function renderSummaryLayers(a) {
   const bullets = (a.summaryBullets || [])
-    .map((b) => `<li>${esc(typeof b === "string" ? b : b.text)}</li>`)
+    .map((b) => {
+      if (typeof b === "string") {
+        return `<li style="margin-bottom:10px">${esc(b)}</li>`;
+      }
+      const head = b.key || b.headline || "";
+      const detail = b.detail || (b.text && head ? String(b.text).replace(head + " — ", "") : b.text) || "";
+      if (head && detail) {
+        return `<li style="margin-bottom:14px;list-style:none;padding:10px 12px;background:#fffbeb;border-left:3px solid #f59e0b;border-radius:0 6px 6px 0">
+            <span style="display:block;font-weight:800;color:#0f172a;margin-bottom:4px;font-size:0.95em">${esc(head)}</span>
+            <span style="display:block;color:#475569;font-size:0.88em;line-height:1.7;font-weight:400">${esc(detail)}</span>
+          </li>`;
+      }
+      return `<li style="margin-bottom:10px">${esc(b.text || head)}</li>`;
+    })
     .join("\n          ");
   const bulletsHtml = bullets
     ? `
       <section id="sec-detail" class="summary-layers" aria-label="AI要約">
       <div class="plain-box">
-        <p class="plain-box__label">AI要約（箇条書き）</p>
-        <ul class="summary-bullets">
+        <p class="plain-box__label">ポイント整理</p>
+        <ul style="padding-left:0;margin:0">
           ${bullets}
         </ul>
       </div>`
     : "";
   const plainHtml = a.plainExplanation
     ? `
-      <div class="plain-box">
-        <p class="plain-box__label">AI平易語解説</p>
-        <p>${esc(a.plainExplanation).replace(/\n\n/g, "</p><p>")}</p>
+      <div class="plain-box" style="font-weight:normal">
+        <p class="plain-box__label">読み解き</p>
+        <div style="font-weight:normal;line-height:1.9;font-size:0.93em;color:#334155">
+          <p style="margin:0 0 1em">${esc(a.plainExplanation).replace(/\n\n/g, '</p><p style="margin:0 0 1em">')}</p>
+        </div>
       </div>${bullets ? "\n      </section>" : ""}`
     : bullets
       ? "\n      </section>"
       : "";
   return bulletsHtml + plainHtml;
+}
+
+function renderProsCons(a) {
+  const pc = a.prosCons;
+  if (!pc) return "";
+  /** @type {any[]} */
+  let prosItems = [];
+  /** @type {any[]} */
+  let consItems = [];
+  if (Array.isArray(pc)) {
+    prosItems = pc.filter((i) => i.side === "pros");
+    consItems = pc.filter((i) => i.side === "cons");
+  } else {
+    prosItems = (pc.merits ?? []).map((m) => ({
+      title: m.headline || m.title,
+      body: m.text || m.body,
+      figure: m.figure,
+      sourceUrl: m.sourceUrl,
+      tags: m.tags,
+    }));
+    consItems = (pc.demerits ?? []).map((m) => ({
+      title: m.headline || m.title,
+      body: m.text || m.body,
+      figure: m.figure,
+      sourceUrl: m.sourceUrl,
+      tags: m.tags,
+    }));
+  }
+  if (!prosItems.length && !consItems.length) return "";
+  const renderTags = (tags) => {
+    if (!tags?.length) return "";
+    return `<div style="display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 10px">${tags
+      .map(
+        (t) =>
+          `<span style="display:inline-block;background:#fff;border:1px solid #fdba74;color:#9a3412;font-size:0.78em;font-weight:700;padding:3px 8px;border-radius:999px">${esc(t)}</span>`,
+      )
+      .join("")}</div>`;
+  };
+  const renderItem = (item, icon) => `
+        <div style="background:${icon === "✅" ? "#f0fdf4" : "#fff7ed"};border-left:4px solid ${icon === "✅" ? "#16a34a" : "#ea580c"};border-radius:4px;padding:12px 16px;margin-bottom:10px">
+          <p style="font-weight:800;margin:0 0 8px;font-size:0.98em;line-height:1.4">${icon} ${esc(item.title)}</p>
+          <p style="margin:0 0 6px;font-size:0.9em;line-height:1.7;font-weight:400;color:#334155">${esc(item.body)}</p>
+          ${renderTags(item.tags)}
+          ${item.figure ? `<p style="font-size:0.8em;color:#64748b;margin:0 0 4px">${esc(item.figure)}</p>` : ""}
+          ${item.sourceUrl ? `<a href="${esc(item.sourceUrl)}" target="_blank" rel="noopener" style="font-size:0.8em;color:#2563eb">出典 ↗</a>` : ""}
+        </div>`;
+  return `
+    <section id="sec-proscons" aria-labelledby="proscons-title" style="margin:2em 0">
+      <h2 id="proscons-title" style="font-size:1.1em;margin-bottom:1em">賛否・影響</h2>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+        <div>
+          <p style="font-weight:700;color:#16a34a;margin:0 0 8px">メリット</p>
+          ${prosItems.map((i) => renderItem(i, "✅")).join("")}
+        </div>
+        <div>
+          <p style="font-weight:700;color:#ea580c;margin:0 0 8px">懸念・リスク</p>
+          ${consItems.map((i) => renderItem(i, "⚠️")).join("")}
+        </div>
+      </div>
+    </section>`;
+}
+
+function renderArcSummary(a) {
+  const items = a.arcSummary ?? [];
+  if (!items.length) return "";
+  const rows = items
+    .map((item) => {
+      const bg = item.highlight ? "background:#fffbeb;border-radius:6px;padding:12px 10px;margin:6px 0;border:1px solid #fde68a" : "padding:10px 0;border-bottom:1px solid #e2e8f0";
+      const line2 = item.line2
+        ? `<p style="margin:6px 0 0;font-size:0.92em;line-height:1.65;font-weight:700;color:#0f172a">${esc(item.line2)}</p>`
+        : "";
+      return `
+      <div style="display:flex;gap:12px;${bg}">
+        <time style="flex-shrink:0;width:110px;font-size:0.85em;color:#64748b;padding-top:2px;font-weight:${item.highlight ? "700" : "400"}">${esc(item.date)}</time>
+        <div>
+          <p style="margin:0;font-size:${item.highlight ? "1em" : "0.9em"};line-height:1.6;font-weight:${item.highlight ? "700" : "400"}">${esc(item.text)}</p>
+          ${line2}
+        </div>
+      </div>`;
+    })
+    .join("\n");
+  return `
+    <section id="sec-arc" aria-labelledby="arc-title" style="margin:2em 0">
+      <h2 id="arc-title" style="font-size:1.1em;margin-bottom:0.5em">経緯</h2>
+      <div style="border-top:1px solid #e2e8f0">${rows}
+      </div>
+    </section>`;
+}
+
+function renderFigureDocs(a) {
+  const docs = a.figureDocs ?? [];
+  if (!docs.length) return "";
+  const rows = docs
+    .map(
+      (d) => `
+      <li style="margin:0 0 10px">
+        <a href="${esc(d.url)}" target="_blank" rel="noopener" style="font-weight:700;color:#2563eb">${esc(d.title)} ↗</a>
+        ${d.note ? `<span style="display:block;font-size:0.85em;color:#64748b;margin-top:2px">${esc(d.note)}</span>` : ""}
+      </li>`,
+    )
+    .join("");
+  return `
+    <section id="sec-figures" style="margin:2em 0;padding:14px 16px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px">
+      <h2 style="font-size:1.05em;margin:0 0 10px">図説・公式資料</h2>
+      <p style="margin:0 0 10px;font-size:0.88em;color:#64748b;line-height:1.6">サイト内に図を埋め込む権利・画質の制約があるため、個人情報保護委員会の公式PDF（図表あり）へ誘導します。</p>
+      <ul style="margin:0;padding-left:1.1em">${rows}</ul>
+    </section>`;
 }
 
 function renderXScreenshot(p) {
@@ -359,7 +491,7 @@ function renderXSlots(posts, article) {
   if (showsXUnavailableNotice(article)) {
     return renderXUnavailableNotice(article);
   }
-  return posts.map((p) => (p.post_url ? renderXLinkCard(p) : renderXPending(p))).join("\n");
+  return (posts ?? []).map((p) => (p.post_url ? renderXLinkCard(p) : renderXPending(p))).join("\n");
 }
 
 function renderComments() {
@@ -389,6 +521,15 @@ function renderFloatToc(a, hasStance) {
   }
   if (hasStance) {
     items.push({ href: "#stance-matrix-title", label: "公言と行動" });
+  }
+  if (a.prosCons?.length) {
+    items.push({ href: "#sec-proscons", label: "賛否・影響" });
+  }
+  if (a.figureDocs?.length) {
+    items.push({ href: "#sec-figures", label: "図説" });
+  }
+  if (a.arcSummary?.length) {
+    items.push({ href: "#sec-arc", label: "経緯" });
   }
   const glossary = a.glossary ?? a.nowSummary?.glossary ?? [];
   if (glossary.length) {
@@ -446,7 +587,7 @@ function renderArticle(a, stanceHtml = "", hasStance = false) {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>${esc(a.title)}｜${esc(SITE.name)}</title>
-  <meta name="description" content="${esc(s.excerpt.slice(0, 120))}">
+  <meta name="description" content="${esc((s?.excerpt ?? a.excerpt ?? "").slice(0, 120))}">
   <link rel="icon" href="../assets/favicon.png" type="image/png">
   <link rel="stylesheet" href="../css/tokens.css?v=${ASSET_V}">
   <link rel="stylesheet" href="../css/main.css?v=${ASSET_V}">
@@ -480,6 +621,9 @@ ${renderReactionSummary(a)}
 ${renderSummaryLayers(a)}
     </header>
 ${stanceHtml}
+${renderProsCons(a)}
+${renderFigureDocs(a)}
+${renderArcSummary(a)}
 ${renderGlossary(a)}
     <section class="timeline" id="sec-timeline" aria-label="案件タイムライン">
       <article class="timeline-item">
