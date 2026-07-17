@@ -7,6 +7,8 @@ export type ShortDataGraphPoint = {
 
 export type ShortDataSlide = {
   text: string;
+  /** 常駐ラベル（例: 許可なく企業に提供される貴方の情報） */
+  kicker?: string;
   number?: string;
   year?: string;
   sub?: string;
@@ -34,6 +36,8 @@ export type ShortDataV1Props = {
   /** 折れ線 or 棒 — 未指定時は折れ線 */
   graphType?: "line" | "bar";
   question?: string;
+  /** エンド2行目（未指定時: コメント欄のリンクから） */
+  endHint?: string;
   /** 未指定時は question のみ読み上げ（ロゴ・概要欄は読まない） */
   endNarr?: string;
   endAudioSrc?: string;

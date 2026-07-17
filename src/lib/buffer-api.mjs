@@ -160,10 +160,10 @@ export async function resolveTwitterChannel(apiKey, preferredChannelId) {
 
 /**
  * @param {string} apiKey
- * @param {{ channelId: string, text: string, threadTexts?: string[] }} opts
+ * @param {{ channelId: string, text: string, threadTexts?: string[], imageUrls?: string[] }} opts
  */
 export async function createXPost(apiKey, opts) {
-  const { channelId, text, threadTexts } = opts;
+  const { channelId, text, threadTexts, imageUrls } = opts;
   const thread =
     threadTexts && threadTexts.length > 1
       ? threadTexts.map((t) => ({ text: t }))
@@ -192,6 +192,11 @@ export async function createXPost(apiKey, opts) {
 
   if (thread && thread.length > 1) {
     input.metadata = { twitter: { thread } };
+  }
+
+  const urls = (imageUrls || []).filter(Boolean);
+  if (urls.length) {
+    input.assets = urls.map((url) => ({ image: { url } }));
   }
 
   const data = await bufferGraphql(apiKey, mutation, { input });

@@ -30,6 +30,7 @@ export const ShortDataV1: React.FC<ShortDataV1Props> = ({
   graphData = [],
   graphType = "line",
   question,
+  endHint,
   endAudioSrc,
   endDurationInFrames,
   bgVideoSrc,
@@ -101,7 +102,7 @@ export const ShortDataV1: React.FC<ShortDataV1Props> = ({
       ))}
 
       <Sequence from={endFrom} durationInFrames={endDur} name="end">
-        <EndSlide question={question} logoSrc={logoSrc} />
+        <EndSlide question={question} endHint={endHint} logoSrc={logoSrc} />
         <ProgressRail stepIndex={stepTotal - 1} stepTotal={stepTotal} />
         {endAudioSrc ? <Audio src={staticFile(endAudioSrc)} /> : null}
       </Sequence>

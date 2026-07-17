@@ -8,6 +8,7 @@ import { ga4ReportDevApi } from "./scripts/vite-ga4-report-api.mjs";
 export default defineConfig({
   site: "https://seiji1192.site",
   output: "static",
+  trailingSlash: "always",
   integrations: [
     sitemap({
       filter: (page) =>

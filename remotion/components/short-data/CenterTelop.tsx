@@ -39,9 +39,10 @@ export const CenterTelop: React.FC<Props> = ({
     slide.number ?? "0",
     hasGraph ? 110 : isBigBudget ? 158 : 140,
   );
+  const hasKicker = Boolean(slide.kicker);
   const textSize = fontSizeForLine(
     slide.text,
-    hasGraph ? 68 : isHeroSlide ? 104 : 90,
+    hasGraph ? 68 : hasKicker ? 150 : isHeroSlide ? 104 : 90,
   );
 
   return (
@@ -58,6 +59,23 @@ export const CenterTelop: React.FC<Props> = ({
       }}
     >
       <div style={{ textAlign: "center", width: "100%" }}>
+        {slide.kicker ? (
+          <div
+            style={{
+              fontSize: 36,
+              fontWeight: 800,
+              color: "#fbbf24",
+              fontFamily: THEME.font,
+              marginBottom: 28,
+              lineHeight: 1.35,
+              letterSpacing: "0.02em",
+              textShadow: "0 2px 12px rgba(0,0,0,0.55)",
+              padding: "0 12px",
+            }}
+          >
+            {slide.kicker}
+          </div>
+        ) : null}
         {slide.year ? (
           <div
             style={{

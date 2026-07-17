@@ -9,15 +9,19 @@ export const MIN_HOOK_FRAMES = 60;
 export const MIN_SLIDE_FRAMES = 72;
 export const MIN_END_FRAMES = 72;
 
+/** 明示指定時の絶対下限（リスト読み上げ用に短尺を許可） */
+const ABSOLUTE_MIN_FRAMES = 15;
+
 export function sectionFrames(
   durationInFrames: number | undefined,
   fallback: number,
   min: number,
 ): number {
+  // TTS などで明示された尺は尊重（MIN_* で潰さない）
   if (durationInFrames && durationInFrames > 0) {
-    return Math.max(durationInFrames, min);
+    return Math.max(durationInFrames, ABSOLUTE_MIN_FRAMES);
   }
-  return fallback;
+  return Math.max(fallback, min);
 }
 
 export function shortDataDurationInFrames(props: ShortDataV1Props): number {

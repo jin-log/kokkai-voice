@@ -5,15 +5,20 @@
 import { readFile, writeFile, mkdir } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { getVideoStatus, postTopComment } from "./youtube-upload.mjs";
+import {
+  findChannelPinnedComment,
+  getVideoStatus,
+  postTopComment,
+} from "./youtube-upload.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(__dirname, "../..");
 const QUEUE_PATH = path.join(root, "data/youtube-pending-comments.json");
 
-/** 公開時刻からこの秒数後にコメント試行（既定15分） */
-export const POST_BUFFER_SEC = 900;
+/** 公開時刻からこの秒数後にコメント試行（既定5分） */
+export const POST_BUFFER_SEC = 300;
 export const MAX_ATTEMPTS = 60;
+const VERIFY_LINK_HINT = "seiji1192.site";
 
 /** @typedef {{
  *   videoId: string;
@@ -28,6 +33,7 @@ export const MAX_ATTEMPTS = 60;
  *   postedAt?: string|null;
  *   lastAttemptAt?: string|null;
  *   lastError?: string|null;
+ *   verifiedAt?: string|null;
  *   attempts: number;
  * }} PendingCommentItem */
 
@@ -128,12 +134,32 @@ export async function tryPostPendingComment(item, opts = {}) {
     const res = await postTopComment(item.videoId, item.commentText);
     const threadId = res.id ?? null;
     const commentId = res.snippet?.topLevelComment?.id ?? threadId;
+
+    // APIが成功を返しても反映漏れがあるので、一覧でリンク付きコメントを再確認
+    await new Promise((r) => setTimeout(r, 2500));
+    const verified = await findChannelPinnedComment(item.videoId, VERIFY_LINK_HINT);
+    if (!verified) {
+      item.lastError = "posted_api_ok_but_not_visible";
+      if (item.attempts >= MAX_ATTEMPTS) item.status = "failed";
+      return {
+        ok: false,
+        error: "コメントAPIは成功したが動画上にリンク付きコメントが見つからない",
+        commentId,
+      };
+    }
+
     item.status = "posted";
-    item.commentId = commentId;
-    item.commentThreadId = threadId;
+    item.commentId = verified.commentId ?? commentId;
+    item.commentThreadId = verified.commentThreadId ?? threadId;
     item.postedAt = new Date().toISOString();
     item.lastError = null;
-    return { ok: true, commentId, commentThreadId: threadId };
+    item.verifiedAt = new Date().toISOString();
+    return {
+      ok: true,
+      commentId: item.commentId,
+      commentThreadId: item.commentThreadId,
+      verified: true,
+    };
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
     item.lastError = msg.slice(0, 500);
@@ -162,10 +188,16 @@ export async function processPendingComments(opts = {}) {
     if (result.skipped && result.reason?.startsWith("not_public")) continue;
     if (result.ok && !result.skipped) {
       actions.push(`${item.slug}:${item.videoId}`);
-      await log(`youtube-comment: posted ${item.slug} (${item.videoId})`);
+      await log(
+        `youtube-comment: posted+verified ${item.slug} (${item.videoId}) commentId=${result.commentId}`,
+      );
     } else if (!result.ok && !result.skipped) {
       alerts.push(`${item.slug}: ${result.error?.slice(0, 120) ?? "error"}`);
       await log(`youtube-comment: retry ${item.slug} attempt ${item.attempts}`);
+      if (item.status === "failed") {
+        alerts.push(`${item.slug}: FAILED after ${item.attempts} attempts — ${item.lastError}`);
+        await log(`youtube-comment: FAILED ${item.slug} (${item.videoId})`);
+      }
     }
   }
 

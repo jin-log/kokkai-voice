@@ -125,7 +125,7 @@ export function articleToSearchEntry(article) {
     "";
   return {
     slug: article.slug,
-    href: `/case/${article.slug}`,
+    href: `/case/${article.slug}/`,
     title: article.title,
     summary,
     tags: article.tags || [],

@@ -31,6 +31,8 @@ const skipComment = args.includes("--no-comment");
 const slug = arg("--slug");
 const fileArg = arg("--file");
 const atArg = arg("--at");
+const titleOverride = arg("--title");
+const packArg = arg("--pack");
 const visibility = args.includes("--private")
   ? "private"
   : args.includes("--unlisted")
@@ -39,7 +41,7 @@ const visibility = args.includes("--private")
 
 if (!slug) {
   console.error(
-    "Usage: npm run short:upload -- --slug <slug> [--file path] [--at 7:00] [--dry-run]",
+    "Usage: npm run short:upload -- --slug <slug> [--file path] [--pack json] [--title ...] [--at 7:00|ISO] [--dry-run]",
   );
   process.exit(1);
 }
@@ -70,14 +72,20 @@ async function main() {
 
   /** @type {ReturnType<typeof buildYoutubeUploadDraft>} */
   let draft;
-  if (await fileExists(packJson)) {
-    draft = JSON.parse(await readFile(packJson, "utf8"));
+  const packPath = packArg
+    ? path.isAbsolute(packArg)
+      ? packArg
+      : path.join(root, packArg)
+    : packJson;
+  if (await fileExists(packPath)) {
+    draft = JSON.parse(await readFile(packPath, "utf8"));
   } else {
     const article = await loadArticle(slug);
     draft = buildYoutubeUploadDraft(article, {
       videoFile: path.relative(root, videoPath).replace(/\\/g, "/"),
     });
   }
+  if (titleOverride) draft.title = titleOverride;
 
   const publishAt = atArg ? parseJstAt(atArg) : null;
   const mode = publishAt ? "scheduled" : visibility;
@@ -115,15 +123,18 @@ async function main() {
   let commentQueued = false;
   if (!skipComment && draft.pinnedComment) {
     if (publishAt) {
+      const delaySec = Number(arg("--comment-delay-sec") || "300");
       await enqueuePendingComment({
         videoId: result.videoId,
         slug,
         commentText: draft.pinnedComment,
         publishAt,
-        postBufferSec: 900,
+        postBufferSec: Number.isFinite(delaySec) ? delaySec : 300,
       });
       commentQueued = true;
-      console.log("[short:upload] コメント予約 — 公開15分後に patrol が投稿");
+      console.log(
+        `[short:upload] コメント予約 — 公開${Number.isFinite(delaySec) ? delaySec : 300}秒後に patrol が投稿→APIで存在確認`,
+      );
     } else {
       try {
         const c = await postTopComment(result.videoId, draft.pinnedComment);
@@ -150,7 +161,7 @@ async function main() {
     ...result,
     commentId,
     pinNote: publishAt
-      ? "公開15分後にコメント自動投稿（patrol）→ Studio でピン留め"
+      ? "公開5分後にコメント自動投稿（patrol）→ リンク付きかAPI確認 → Studioでピン留め"
       : "コメントのピン留めは YouTube Studio で手動",
   };
   await writeFile(resultPath, `${JSON.stringify(payload, null, 2)}\n`, "utf8");

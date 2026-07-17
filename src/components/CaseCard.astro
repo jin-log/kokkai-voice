@@ -11,7 +11,7 @@ const xCount = events.filter((e) => e.type === "x_post").length;
 const dietBadge = dietPendingBadgeLabel(article);
 ---
 
-<a class="case-card" href={`/case/${article.slug}`}>
+<a class="case-card" href={`/case/${article.slug}/`}>
   <span class="case-card__tag">
     {tagLine} · 更新 {updated}
     {dietBadge && <span class="case-card__badge case-card__badge--diet-pending">{dietBadge}</span>}

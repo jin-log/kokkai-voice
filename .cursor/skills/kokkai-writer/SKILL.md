@@ -179,7 +179,21 @@ description: >-
 - [ ] **prosCons** メリ2・デメ2（各 `figure` + `sourceUrl`）
 - [ ] policy-matrix に公約 or 国会言及の出典
 - [ ] `symbolReason` にギャップ1文
+- [ ] writer.mdc「初回提出品質」＋ designer.mdc「記事読みやすさ」を満たす
+- [ ] `node scripts/generate-case-pages.mjs` 後、localhost で見た目確認
 - [ ] `node scripts/check-case-page.mjs --slug {slug}` が exit 0
+
+---
+
+## 初回提出品質・読みやすさ
+
+**正本はルール（スキル選択に依存しない）:**
+
+- 文・必須ブロック・法解釈の切り分け → `ceo-sync/.../writer.mdc`「初回提出品質」
+- 見せ方・レイアウト・プレビュー → `ceo-sync/.../designer.mdc`「記事読みやすさ」
+- サンプル正本 → `data/articles/kojin-joho-kaisei.json`
+
+スキルは実装時の参照用。ゲートは上記ルール。
 
 ---
 
@@ -187,5 +201,6 @@ description: >-
 
 - 国会：`data/articles/shohizei-genmen.json`
 - 一般：`data/articles/case-mqwdrley.json`（手動完成例）
+- **初回品質の正本：** `data/articles/kojin-joho-kaisei.json`
 
 詳細 Before/After: `examples.md`

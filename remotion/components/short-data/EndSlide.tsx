@@ -12,14 +12,18 @@ import { THEME } from "../../theme";
 
 type Props = {
   question?: string;
+  /** 2行目（誘導） */
+  endHint?: string;
   logoSrc?: string;
 };
 
 const DEFAULT_LOGO = "assets/logo-header-nihon-seiji-naw.png";
+const DEFAULT_END_HINT = "コメント欄のリンクから";
 
 /** エンド — 質問テロップ＋ロゴ（ロゴは読み上げなし・後から表示） */
 export const EndSlide: React.FC<Props> = ({
   question = "あなたはどう思いますか？",
+  endHint = DEFAULT_END_HINT,
   logoSrc = DEFAULT_LOGO,
 }) => {
   const frame = useCurrentFrame();
@@ -87,7 +91,7 @@ export const EndSlide: React.FC<Props> = ({
               textAlign: "center",
             }}
           >
-            詳細は概要欄のリンクから
+            {endHint}
           </div>
 
           <div

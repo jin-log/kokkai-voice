@@ -7,10 +7,14 @@ import { BEAT_GAP_FRAMES, FPS } from "./theme";
 import renderProps from "./props/short-data-render.json";
 import kokuminFutanV1Props from "./props/short-data-kokumin-futan-v1.json";
 import kokuminFutanV2Props from "./props/short-data-kokumin-futan-v2.json";
+import kojinJohoV1Props from "./props/short-data-kojin-joho-v1.json";
+import kojinJohoV2Props from "./props/short-data-kojin-joho-v2.json";
 
 const shortDataDefaultProps: ShortDataV1Props = renderProps as unknown as ShortDataV1Props;
 const kokuminFutanV1: ShortDataV1Props = kokuminFutanV1Props as unknown as ShortDataV1Props;
 const kokuminFutanV2: ShortDataV1Props = kokuminFutanV2Props as unknown as ShortDataV1Props;
+const kojinJohoV1: ShortDataV1Props = kojinJohoV1Props as unknown as ShortDataV1Props;
+const kojinJohoV2: ShortDataV1Props = kojinJohoV2Props as unknown as ShortDataV1Props;
 
 const defaultProps: ShortF1Props = {
   slug: "shoshika",
@@ -96,6 +100,42 @@ export const RemotionRoot: React.FC = () => {
         width={1080}
         height={1920}
         defaultProps={kokuminFutanV2}
+        calculateMetadata={({ props }) => {
+          const durationInFrames = shortDataDurationInFrames(props);
+          return {
+            durationInFrames: Math.max(durationInFrames, FPS),
+            fps: FPS,
+            width: 1080,
+            height: 1920,
+          };
+        }}
+      />
+      <Composition
+        id="KojinJohoV1"
+        component={ShortDataV1}
+        durationInFrames={300}
+        fps={FPS}
+        width={1080}
+        height={1920}
+        defaultProps={kojinJohoV1}
+        calculateMetadata={({ props }) => {
+          const durationInFrames = shortDataDurationInFrames(props);
+          return {
+            durationInFrames: Math.max(durationInFrames, FPS),
+            fps: FPS,
+            width: 1080,
+            height: 1920,
+          };
+        }}
+      />
+      <Composition
+        id="KojinJohoV2"
+        component={ShortDataV1}
+        durationInFrames={300}
+        fps={FPS}
+        width={1080}
+        height={1920}
+        defaultProps={kojinJohoV2}
         calculateMetadata={({ props }) => {
           const durationInFrames = shortDataDurationInFrames(props);
           return {

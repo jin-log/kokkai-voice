@@ -29,6 +29,13 @@ const SHORT_COPY = {
     tagsExtra: ["大阪都構想", "大阪", "地方分権", "試算"],
     commentQuestion: "どの試算を信じますか？",
   },
+  "kojin-joho-kaisei": {
+    title: "【個人情報保護法】同意なしで提供へ。政治家は例外？ #shorts",
+    summaryJa: "2026年7月成立。AI・統計目的なら同意なしで個人データを企業に渡せる改正の要点。",
+    summaryEn: "Japan's 2026 privacy-law amendment — personal data may be shared without consent for AI/statistics.",
+    tagsExtra: ["個人情報保護法", "プライバシー", "AI", "同意なし"],
+    commentQuestion: "この法案、どう思いますか？",
+  },
 };
 
 const BASE_TAGS = [
