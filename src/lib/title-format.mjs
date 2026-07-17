@@ -1,10 +1,11 @@
 /**
- * 記事タイトル — 案件の主要素にフォーカス（オーナー方針 2026-07）
+ * 記事タイトル — 案件の主要素にフォーカス（オーナー方針 2026-07-17 更新）
  *
- * ○ 「賃上げ・最低賃金の動向」— 主題＋の動向（または数字1つだけ）
- * × 「【賃上げ・最低賃金】企業と家計への影響」— 周辺要素までタイトルに載せない
+ * ○ 読者の疑問・結論が分かる形（例: 【賃上げ】春闘5%でも最低賃金は未確定？）
+ * × 「〇〇の動向」だけの簡素形（量産・有用性低判定の原因）
+ * × 議事録切り出しをタイトルにしない
  *
- * 新規・停滞修正は簡素形。既に1行目OKの記事は TITLE_BRUSHUP をそのまま使う。
+ * TITLE_BRUSHUP を優先。STALLED_SIMPLE はレガシー互換のみ（新規に「動向」を足さない）。
  */
 const SUFFIX = /\s*—\s*あの話どうなった？\s*$/;
 
@@ -27,7 +28,7 @@ export const TITLE_BRUSHUP = {
   "bouka-taisaku": "【物価高対策】支援策の内容といまの効果",
   "shohizei-genmen": "【食料品の消費税】減税・免税の議論と最新",
   "boeeihi": "【防衛費・安保】増額の行方と安保政策の最新",
-  "chingin": "【賃上げ・最低賃金】企業と家計への影響",
+  "chingin": "【賃上げ】春闘5%でも最低賃金は未確定？",
   "nenkin": "【年金制度改革】受給年齢・支給額の変更点",
   "gaikokujin-seisaku": "【外国人政策】在留・労働・共生の最新論点",
   "shoshika": "【少子化対策】支援策の内容と出生率の動向",
@@ -54,27 +55,10 @@ export const TITLE_BRUSHUP = {
 };
 
 /**
- * 1行目×タイトル不一致で停滞中のみ — 簡素タイトル（主要素＋の動向）
- * apply-stalled-titles.mjs が適用。OKになったらここから外して TITLE_BRUSHUP へ移行可。
+ * レガシー互換のみ。新規記事・修正では使わない。
+ * 「動向」への自動変換は禁止（2026-07-17）。
  */
-export const STALLED_SIMPLE_TITLES = {
-  "case-mr0jbdpc": "国旗損壊罪の動向",
-  "case-mqzxj4ro": "国会議員のボーナスの動向",
-  "shussho-budget-seika": "出生率・子育て支援の動向",
-  "fuhou-immin-trend": "不法滞在の動向",
-  "bouka-taisaku": "物価高対策の動向",
-  "shohizei-genmen": "食料品の消費税の動向",
-  "boeeihi": "防衛費・安保の動向",
-  "chingin": "賃上げ・最低賃金の動向",
-  "nenkin": "年金制度改革の動向",
-  "gaikokujin-seisaku": "外国人政策の動向",
-  "seiji-shikin": "政治資金の動向",
-  "kaigo-iryo": "介護・医療費の動向",
-  "chiho-sosei": "地方創生の動向",
-  "casino-ir": "カジノIRの動向",
-  "kenpo": "憲法改正の動向",
-  "kishida-resign": "政権・内閣人事の動向",
-};
+export const STALLED_SIMPLE_TITLES = {};
 
 /** @param {string} title */
 export function stripLegacySuffix(title) {
@@ -86,18 +70,12 @@ export function hasBracketTitle(title) {
   return /^【.+】/.test(stripLegacySuffix(title));
 }
 
-/** 【争点】副題 → 争点の動向（新規生成用） */
+/**
+ * 【争点】副題 — 「の動向」を付けない。そのまま返す。
+ * @param {string} title
+ */
 export function simplifyBracketTitle(title) {
-  const t = stripLegacySuffix(title);
-  const m = t.match(/^【(.+?)】(.+)$/);
-  if (m) {
-    const topic = m[1].trim();
-    if (/の動向$/.test(topic)) return topic;
-    return `${topic}の動向`;
-  }
-  if (/の動向$/.test(t)) return t;
-  if (t && !/の動向$/.test(t) && !/[？?]/.test(t)) return `${t}の動向`;
-  return t;
+  return stripLegacySuffix(title);
 }
 
 /**
@@ -106,26 +84,14 @@ export function simplifyBracketTitle(title) {
  */
 export function citizenTitle(article) {
   const slug = article.slug;
-  if (slug && STALLED_SIMPLE_TITLES[slug]) return STALLED_SIMPLE_TITLES[slug];
   if (slug && TITLE_BRUSHUP[slug]) return TITLE_BRUSHUP[slug];
+  if (slug && STALLED_SIMPLE_TITLES[slug]) return STALLED_SIMPLE_TITLES[slug];
 
   let t = stripLegacySuffix(article.title || "");
-  if (hasBracketTitle(t)) return simplifyBracketTitle(t);
+  if (hasBracketTitle(t)) return t;
 
   const aanodewa = (article.title || "").match(/^(.+?)\s*—\s*あの話どうなった？\s*$/);
-  if (aanodewa) {
-    return `${aanodewa[1].trim()}の動向`;
-  }
-
-  const tteNan = t.match(/^(.+?)って何？(.*)$/);
-  if (tteNan) {
-    return `${tteNan[1].trim()}の動向`;
-  }
-
-  const comma = t.match(/^([^、,]+)[、,](.+)$/);
-  if (comma && !hasBracketTitle(comma[1])) {
-    return `${comma[1].trim()}の動向`;
-  }
+  if (aanodewa) return aanodewa[1].trim();
 
   return t;
 }
