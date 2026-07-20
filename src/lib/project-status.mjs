@@ -133,6 +133,7 @@ export function computeNextAction(article, gate, pipeline) {
     E1_timeline_count: "タイムライン6件以上（X3+国会3）",
     E2_timeline_x: "タイムラインにX3件",
     E3_timeline_diet: "タイムラインに国会3件",
+    E5_timeline_summary: "国会TLに平易語要約（空定型禁止）",
     dietPending: "dietPending: true で国会待ち先行公開（X3+出来事）",
     J1_analytical_blocks: "分析ブロック（メリデメ・利害・数値のいずれか1〜3種）",
     J1_prosCons: "メリデメ（公表数値付き各2）",

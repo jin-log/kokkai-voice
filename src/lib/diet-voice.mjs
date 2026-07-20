@@ -94,3 +94,38 @@ export function bulletsDistinctFrom(a, b) {
   }
   return true;
 }
+
+/** 〇×比較用 — 日付・会議名を落とした核文字列 */
+export function matrixCoreKey(text) {
+  return String(text || "")
+    .replace(/\d{4}-\d{2}-\d{2}/g, "")
+    .replace(/(?:衆議院|参議院|両院)?[^\s、,]{0,12}(?:委員会|本会議|合同審査会)/g, "")
+    .replace(/[、。…\s・]/g, "")
+    .trim();
+}
+
+/**
+ * 方針と行動が同一引用の切り貼りでないこと。
+ * 行動＝「日付＋会議名＋方針とほぼ同じ文」は NG（オーナー激怒ポイント）。
+ */
+export function stanceActionDistinct(stance, action) {
+  const a = matrixCoreKey(stance);
+  const b = matrixCoreKey(action);
+  if (a.length < 12 || b.length < 12) return true;
+  if (a === b) return false;
+  if (a.length >= 14 && b.includes(a)) return false;
+  if (b.length >= 14 && a.includes(b)) return false;
+  if (a.slice(0, 18) === b.slice(0, 18)) return false;
+  return true;
+}
+
+/** 方針欄に議事録原文をそのまま載せている疑い */
+export function isRawSpeechStance(text) {
+  const s = String(text || "").trim();
+  if (!s) return false;
+  if (isDietVoice(s) || isSpeechFragment(s)) return true;
+  // 第三者要約なら「〜立場／推進／反対」等が入る。長文の口語断片は原文切り出し
+  if (/ということでもあるし|を計上して。?$|政策判断。?$|どのように整理/.test(s)) return true;
+  if (s.length >= 36 && !/立場|推進|反対|慎重|求める|支持|賛成|措置|方針/.test(s)) return true;
+  return false;
+}

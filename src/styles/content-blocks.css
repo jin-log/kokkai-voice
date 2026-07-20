@@ -96,23 +96,29 @@
   background: var(--color-plain-bg);
   border: 1px solid var(--color-plain-border);
   border-radius: var(--radius-md);
-  padding: 1rem 1.1rem;
+  padding: 1.15rem 1.2rem;
   margin-bottom: 1rem;
 }
 
 .cb-now__label {
-  margin: 0 0 0.5rem;
+  margin: 0 0 0.75rem;
   font-size: 0.78rem;
   font-weight: 800;
   color: #92400e;
+  letter-spacing: 0.06em;
 }
 
-.cb-now ul {
-  margin: 0;
-  padding-left: 1.1rem;
+.cb-now .now-summary__item::before {
+  background: #b45309;
 }
 
-.cb-now li { margin: 0.25rem 0; }
+.cb-now .now-summary__lead {
+  color: #1c1917;
+}
+
+.cb-now .now-summary__detail {
+  color: #57534e;
+}
 
 .cb-block {
   background: var(--color-surface);

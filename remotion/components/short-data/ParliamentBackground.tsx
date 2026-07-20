@@ -42,6 +42,7 @@ export const ParliamentBackground: React.FC<Props> = ({
           src={staticFile(bgVideoSrc)}
           startFrom={bgStartFrame}
           muted
+          loop
           style={{
             position: "absolute",
             width: "100%",

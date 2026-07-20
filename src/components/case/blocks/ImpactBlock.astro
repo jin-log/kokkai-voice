@@ -39,6 +39,16 @@ function perspective(item, kind) {
               )}
             </p>
           )}
+          {(item.extraSources ?? []).map((src) => (
+            <p class="cb-impact-card__source">
+              <a href={src.sourceUrl} target="_blank" rel="noopener">
+                {src.sourceLabel || "出典"} ↗
+              </a>
+              {src.sourceDate && (
+                <time datetime={src.sourceDate}> · {formatDate(src.sourceDate)}</time>
+              )}
+            </p>
+          ))}
         </div>
       ))
     }
@@ -61,6 +71,16 @@ function perspective(item, kind) {
               )}
             </p>
           )}
+          {(item.extraSources ?? []).map((src) => (
+            <p class="cb-impact-card__source">
+              <a href={src.sourceUrl} target="_blank" rel="noopener">
+                {src.sourceLabel || "出典"} ↗
+              </a>
+              {src.sourceDate && (
+                <time datetime={src.sourceDate}> · {formatDate(src.sourceDate)}</time>
+              )}
+            </p>
+          ))}
         </div>
       ))
     }

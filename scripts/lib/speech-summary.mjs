@@ -15,7 +15,7 @@ import {
 } from "../../src/lib/topic-relevance.mjs";
 
 const BAD_PATTERNS =
-  /議事録要確認|判断材料になる|が高市内閣の政策方針を国会答弁|国会での方針・動き|法制化・法案審議の継続を表明|関連法案が可決・成立|関連法案の閣議決定を国会で説明|が国会で論じた|国会で答弁・質疑を行った|高市内閣が食料品消費税・減税策を国会答弁/;
+  /議事録要確認|判断材料になる|が高市内閣の政策方針を国会答弁|国会での方針・動き|法制化・法案審議の継続を表明|関連法案が可決・成立|関連法案の閣議決定を国会で説明|が国会で論じた|国会で答弁・質疑を行った|高市内閣が食料品消費税・減税策を国会答弁|本件に関する政府方針を説明|に関する政府方針を説明|要約未作成/;
 
 const RAW_EXCERPT_START =
   /^(一方、|重ねて、|まず、|つて、|一般会計の|時間が限られ|発信者は|に該当しかねない|今、政治改革|平成三十一年|私の秘書|私たち|私が|警察において|いずれにしても|あわせて、昨日)/;
@@ -39,7 +39,9 @@ export function isBadSummaryLine(text, keyword = "") {
     return true;
   }
   if (/について論点を表明—|について答弁—/.test(body)) return true;
-  if (/委員会で|ところである|あわせて、|おきまして|見られています|入らず。$|、これ。$/.test(body)) return true;
+  // 「委員会で」単体は会議名付き要約で必須なので弾かない。空定型・断片だけ弾く
+  if (/ところである|あわせて、|おきまして|見られています|入らず。$|、これ。$/.test(body)) return true;
+  if (/「[^」]*政府方針を説明」/.test(body)) return true;
   if (kw && /外国人/.test(kw) && /スパイ防止/.test(body)) return true;
   if (/高市内閣は危機管理・成長投資/.test(body) && !/物価|予備費|賃上げ/.test(body)) return true;
   if (isDietVoice(body) || isSpeechFragment(body) || isIncompleteBullet(body)) return true;

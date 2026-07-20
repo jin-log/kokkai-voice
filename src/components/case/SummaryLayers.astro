@@ -19,6 +19,20 @@ const aiDisclaimer =
     : dietSourced
       ? "AI補助による要約です。解釈を含みます。数字・引用・発言内容の正本は国会議事録リンクをご確認ください。"
       : "AI補助による要約です。解釈を含みます。数字・引用の正本は各出典リンクをご確認ください。");
+
+function splitSummaryBullet(b) {
+  if (b && typeof b === "object") {
+    const head = String(b.key || b.headline || "").trim();
+    const detail = String(b.detail || b.text || "").trim();
+    return { head, detail };
+  }
+  const s = String(b ?? "").trim();
+  const m = s.match(/^([^：:—＝]{2,28})\s*[：—＝]\s*(.+)$/u);
+  if (m) return { head: m[1].trim(), detail: m[2].trim() };
+  return { head: "", detail: s };
+}
+
+const items = bullets.map(splitSummaryBullet);
 ---
 
 {
@@ -38,13 +52,26 @@ const aiDisclaimer =
               : "上の「いまの結論」を支える事実の整理。結論そのものではなく、国会で語られた内容の要点です。"}
         </p>
         <ul class="summary-bullets">
-          {bullets.map((b) => (
-            <li>
-              <RichTextWithTermLinks
-                text={typeof b === "string" ? b : b.text}
-                article={article}
-                usedTerms={termLinkUsed}
-              />
+          {items.map((item) => (
+            <li class="summary-bullets__item">
+              {item.head ? (
+                <>
+                  <span class="summary-bullets__head">{item.head}</span>
+                  <span class="summary-bullets__detail">
+                    <RichTextWithTermLinks
+                      text={item.detail}
+                      article={article}
+                      usedTerms={termLinkUsed}
+                    />
+                  </span>
+                </>
+              ) : (
+                <RichTextWithTermLinks
+                  text={item.detail}
+                  article={article}
+                  usedTerms={termLinkUsed}
+                />
+              )}
             </li>
           ))}
         </ul>

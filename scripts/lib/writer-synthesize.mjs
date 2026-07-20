@@ -17,7 +17,17 @@ import {
   sanitizeMeritText,
   extractConclusionBullets,
 } from "./speech-summary.mjs";
-import { isDietVoice, isIncompleteBullet, isSpeechFragment, normalizeFactPhrase, toThirdPersonBullet, isWriterReadyLine, isMatrixActionReady } from "../../src/lib/diet-voice.mjs";
+import {
+  isDietVoice,
+  isIncompleteBullet,
+  isSpeechFragment,
+  normalizeFactPhrase,
+  toThirdPersonBullet,
+  isWriterReadyLine,
+  isMatrixActionReady,
+  stanceActionDistinct,
+  isRawSpeechStance,
+} from "../../src/lib/diet-voice.mjs";
 import { scorePartySymbol } from "../../src/lib/symbol-rules.mjs";
 
 /** @param {object} p */
@@ -635,6 +645,8 @@ export function synthesizePartyMatrix(bundle) {
     const policy = synthesizePolicySummary(sn, bundle.keyword);
     const action = synthesizeActionSummary(sn, bundle.keyword);
     if (!isWriterReadyLine(policy) || !isMatrixActionLine(action)) continue;
+    if (isRawSpeechStance(policy)) continue;
+    if (!stanceActionDistinct(policy, action)) continue;
     candidates.push({
       sn,
       g,

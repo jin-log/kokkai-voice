@@ -45,7 +45,12 @@ function wrapPromoLine(sentence, max = 26) {
 export function formatXMainPost(article) {
   const shortTitle = articleShortTitle(article);
   const { pageUrl } = buildSharePayload(article);
-  const raw = oneLine(article.nowSummary?.bullets?.[0] || article.summaryBullets?.[0] || "");
+  const sb0 = article.summaryBullets?.[0];
+  const sbText =
+    typeof sb0 === "string"
+      ? sb0
+      : [sb0?.key || sb0?.headline, sb0?.detail || sb0?.text].filter(Boolean).join("：");
+  const raw = oneLine(article.nowSummary?.bullets?.[0] || sbText || "");
   const sentences = raw.split(/(?<=。)/).map((s) => s.trim()).filter(Boolean);
 
   const headline = /^【/.test(shortTitle) ? shortTitle : `【${shortTitle}】`;
@@ -68,7 +73,12 @@ export function formatXMainPost(article) {
 /** @param {import('./articles.mjs').Article} article */
 export function buildMetaDescriptionDraft(article) {
   const title = articleShortTitle(article);
-  const hook = clip(article.nowSummary?.bullets?.[0] || article.summaryBullets?.[0] || "", 70);
+  const sb0meta = article.summaryBullets?.[0];
+  const sbMeta =
+    typeof sb0meta === "string"
+      ? sb0meta
+      : [sb0meta?.key || sb0meta?.headline, sb0meta?.detail || sb0meta?.text].filter(Boolean).join("：");
+  const hook = clip(article.nowSummary?.bullets?.[0] || sbMeta || "", 70);
   return clip(`${title} — あの話どうなった？ ${hook} 出典付きで整理。`, 120);
 }
 
@@ -77,7 +87,12 @@ export function buildXPosts(article) {
   const { pageUrl, xUrl } = buildSharePayload(article);
   const shortTitle = articleShortTitle(article);
   const b1 = clip(article.nowSummary?.bullets?.[0] || "", 90);
-  const b2 = clip(article.nowSummary?.bullets?.[1] || article.summaryBullets?.[0] || "", 90);
+  const sb0x = article.summaryBullets?.[0];
+  const sbX =
+    typeof sb0x === "string"
+      ? sb0x
+      : [sb0x?.key || sb0x?.headline, sb0x?.detail || sb0x?.text].filter(Boolean).join("：");
+  const b2 = clip(article.nowSummary?.bullets?.[1] || sbX || "", 90);
   const symbol = article.stanceMatrix?.parties?.find((p) => p.symbol)?.symbol || "";
 
   const mainFormatted = formatXMainPost(article);
@@ -225,7 +240,14 @@ export function buildPngBrief(article) {
       url: `https://seiji1192.site${f.path}`,
     })),
     headline: clip(shortTitle, 40),
-    bullets: bullets.map((b) => clip(b, 50)),
+    bullets: bullets.map((b) =>
+      clip(
+        typeof b === "string"
+          ? b
+          : [b?.key || b?.headline, b?.detail || b?.text].filter(Boolean).join("："),
+        50,
+      ),
+    ),
     footer: `${SITE.name} · 出典付き`,
     qrUrl: `${DOMAIN}/case/${article.slug}/`,
   };

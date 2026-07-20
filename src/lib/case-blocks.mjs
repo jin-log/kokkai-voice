@@ -33,7 +33,7 @@ export const BLOCK_CONFIG = {
     impact: true,
     stats: true,
     legacyProsCons: false,
-    narrativeArc: false,
+    narrativeArc: true,
   },
   policy_retrospective: {
     stance: false,

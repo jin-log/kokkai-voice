@@ -11,27 +11,54 @@ const updatedNote = ns.updatedAt ? ` · 要約更新: ${ns.updatedAt.slice(0, 10
 const fetchedLabel = article.fetchedAt?.slice(0, 10) ?? "—";
 const dietPending = showsDietPendingUI(article);
 const isBlocks = variant === "blocks";
+
+/** 先頭の短文を見出し、続きを本文に分ける（壁テキストを避ける） */
+function splitNowBullet(text) {
+  const s = String(text ?? "").trim();
+  const m = s.match(/^(.{6,40}?[。！？])([\s\S]+)$/u);
+  if (m && m[2].trim().length >= 8) {
+    return { lead: m[1], rest: m[2].trim() };
+  }
+  return { lead: s, rest: "" };
+}
+
+const items = bullets.map((b) => splitNowBullet(b));
 ---
 
-<div class:list={[isBlocks ? "cb-now" : "now-box"]} id="sec-now">
+<div class:list={[isBlocks ? "cb-now" : "now-box", "now-summary"]} id="sec-now">
   <p class:list={[isBlocks ? "cb-now__label" : "now-box__label"]}>
     {isBlocks ? "いまの結論" : ns.label || "いまどうなってる？"}
   </p>
   {dietPending && <DietPendingNotice article={article} variant="inline" />}
   {
-    bullets.length > 0 ? (
-      <ul class:list={[isBlocks ? undefined : "now-box__bullets"]}>
-        {bullets.map((b) => (
-          <li>
-            <RichTextWithTermLinks text={b} article={article} usedTerms={termLinkUsed} />
+    items.length > 0 ? (
+      <ol class="now-summary__list">
+        {items.map((item) => (
+          <li class="now-summary__item">
+            <p class="now-summary__lead">
+              <RichTextWithTermLinks
+                text={item.lead}
+                article={article}
+                usedTerms={termLinkUsed}
+              />
+            </p>
+            {item.rest ? (
+              <p class="now-summary__detail">
+                <RichTextWithTermLinks
+                  text={item.rest}
+                  article={article}
+                  usedTerms={termLinkUsed}
+                />
+              </p>
+            ) : null}
           </li>
         ))}
-      </ul>
+      </ol>
     ) : ns.text ? (
       <p class:list={[isBlocks ? undefined : "now-box__text"]}>{ns.text}</p>
     ) : null
   }
-  <p class:list={[isBlocks ? "now-box__updated" : "now-box__updated"]}>
+  <p class="now-box__updated">
     データ取得: {fetchedLabel}
     {!dietPending && article.apiHits != null && <> · APIヒット {article.apiHits}件</>}
     {updatedNote} · {ns.disclaimer}

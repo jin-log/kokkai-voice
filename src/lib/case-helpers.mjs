@@ -43,6 +43,16 @@ export function articleShortTitle(article) {
   return citizenTitle(article);
 }
 
+/** summaryBullets が string / {key,detail} どちらでも1行テキストに */
+export function summaryBulletText(b) {
+  if (b == null) return "";
+  if (typeof b === "string") return b.trim();
+  const head = String(b.key || b.headline || "").trim();
+  const detail = String(b.detail || b.text || "").trim();
+  if (head && detail) return `${head}：${detail}`;
+  return head || detail;
+}
+
 /** SNS・OGP用 — いまの結論優先（議事録抜粋は使わない） */
 export function articleMetaDescription(article, maxLen = 120) {
   const bullets = article.nowSummary?.bullets || [];
@@ -62,8 +72,8 @@ export function articleMetaDescription(article, maxLen = 120) {
     const t = plain.replace(/\s+/g, " ").trim();
     return t.length > maxLen ? `${t.slice(0, maxLen - 1)}…` : t;
   }
-  const ev = article.summaryBullets?.[0];
-  if (ev) return String(ev).slice(0, maxLen);
+  const ev = summaryBulletText(article.summaryBullets?.[0]);
+  if (ev) return ev.slice(0, maxLen);
   return "";
 }
 
@@ -138,7 +148,7 @@ export function caseCardMeta(article) {
   const tagLine = [...(article.tags || [])].slice(0, 2).join(" · ");
   const summary =
     article.nowSummary?.bullets?.slice(0, 2).join("。") + "。" ||
-    article.summaryBullets?.slice(0, 2).join("。") + "。" ||
+    (article.summaryBullets?.slice(0, 2).map(summaryBulletText).filter(Boolean).join("。") + "。") ||
     "";
   return { xCount, eventCount, goodPct, updated, tagLine, summary };
 }

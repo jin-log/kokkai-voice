@@ -117,6 +117,109 @@ const KNOWN = {
     tags: ["不法移民", "入管", "在留外国人", "移民"],
     use: "入管・在留政策",
   },
+  // 2026-07-18 追加バッチ
+  "forest-river-aerial": {
+    slug: "forest-river-aerial",
+    label: "森・渓流（俯瞰・縦）",
+    tags: ["自然", "環境", "地方"],
+    use: "環境・地方（抽象背景）",
+  },
+  "tokyo-skytree-bridge-night": {
+    slug: "tokyo-skytree-bridge-night",
+    label: "スカイツリー・隅田川夜景",
+    tags: ["東京", "都市", "夜景", "インフラ"],
+    use: "東京・都市政策",
+  },
+  "tokyo-highway-night": {
+    slug: "tokyo-highway-night",
+    label: "都市高速・夜景（縦）",
+    tags: ["都市", "交通", "夜景", "東京"],
+    use: "都市・インフラ",
+  },
+  "tokyo-skytree-street-night": {
+    slug: "tokyo-skytree-street-night",
+    label: "スカイツリー・街路夜景",
+    tags: ["東京", "夜景", "都市"],
+    use: "東京案件",
+  },
+  "tokyo-skyline-dusk": {
+    slug: "tokyo-skyline-dusk",
+    label: "都市夕暮れ・高速",
+    tags: ["都市", "東京", "夕暮れ", "経済"],
+    use: "経済・都市全般",
+  },
+  "tokyo-gov-sakura": {
+    slug: "tokyo-gov-sakura",
+    label: "都庁・桜（縦）",
+    tags: ["東京", "都政", "桜", "地方自治"],
+    use: "都政・リコール・都の政策",
+  },
+  "nyc-chrysler-nightwalk": {
+    slug: "nyc-chrysler-nightwalk",
+    label: "NYC夜・歩道（縦）",
+    tags: ["海外", "都市", "夜景"],
+    use: "海外・関税等（控えめ）",
+  },
+  "mountain-bike-trail": {
+    slug: "mountain-bike-trail",
+    label: "マウンテンバイク（縦）",
+    tags: ["スポーツ", "アウトドア"],
+    use: "用途薄め・控えめで",
+  },
+  "diet-building-front": {
+    slug: "diet-building-front",
+    label: "国会議事堂・正面（青空）",
+    tags: ["国会", "議事堂", "政治"],
+    use: "政治全般フック",
+  },
+  "yen-symbols-falling": {
+    slug: "yen-symbols-falling",
+    label: "円マーク落下（抽象）",
+    tags: ["円", "経済", "抽象", "予算"],
+    use: "物価・予算・税金",
+  },
+  "global-markets-globe": {
+    slug: "global-markets-globe",
+    label: "地球儀・株チャート",
+    tags: ["経済", "市場", "国際"],
+    use: "関税・経済指標",
+  },
+  "stock-chart-neon": {
+    slug: "stock-chart-neon",
+    label: "株チャート・ネオン",
+    tags: ["経済", "市場", "抽象"],
+    use: "経済・物価",
+  },
+  "report-chart-hand": {
+    slug: "report-chart-hand",
+    label: "報告書・グラフ手元",
+    tags: ["経済", "データ", "統計"],
+    use: "統計・試算説明",
+  },
+  "desk-planning-flatlay": {
+    slug: "desk-planning-flatlay",
+    label: "デスク・計画ミーティング",
+    tags: ["ビジネス", "企画"],
+    use: "政策議論・会議感（薄め）",
+  },
+  "gas-station-neon-anime": {
+    slug: "gas-station-neon-anime",
+    label: "ガソリンスタンド夜（イラスト）",
+    tags: ["エネルギー", "ガソリン"],
+    use: "ガソリン・エネルギー（雰囲気）",
+  },
+  "supermarket-aisle-blur": {
+    slug: "supermarket-aisle-blur",
+    label: "スーパー店内・ぼかし",
+    tags: ["物価", "消費", "スーパー"],
+    use: "物価高・家計",
+  },
+  "supermarket-shopper-mask": {
+    slug: "supermarket-shopper-mask",
+    label: "スーパー買い物・食品確認",
+    tags: ["物価", "消費", "食料"],
+    use: "物価高・食料品",
+  },
 };
 
 /**

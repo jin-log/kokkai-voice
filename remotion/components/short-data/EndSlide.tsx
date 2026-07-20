@@ -84,11 +84,13 @@ export const EndSlide: React.FC<Props> = ({
           <div
             style={{
               marginTop: 22,
-              fontSize: 38,
+              fontSize: 36,
               fontWeight: 800,
               color: "#2563eb",
               fontFamily: THEME.font,
               textAlign: "center",
+              lineHeight: 1.35,
+              whiteSpace: "pre-line",
             }}
           >
             {endHint}

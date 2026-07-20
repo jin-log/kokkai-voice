@@ -2,7 +2,11 @@
  * タイムライン summaryPlain の品質ガード（議事録生文・話題外Xを弾く）
  */
 import { isDietVoice, isSpeechFragment, normalizeFactPhrase } from "./diet-voice.mjs";
-import { articleTopicTerms, textMatchesTopic } from "./topic-relevance.mjs";
+import {
+  articleTopicTerms,
+  textMatchesTopic,
+  textStronglyMatchesTopic,
+} from "./topic-relevance.mjs";
 
 /** 議事録の生切り出し（○国務大臣…） */
 export function isRawDietDump(text) {
@@ -16,8 +20,19 @@ export function isRawDietDump(text) {
   return false;
 }
 
-/** X投稿が記事話題と一致するか（表示マージ含む） */
+/** 要約義務違反 — 空定型・未作成・生切り出し */
+export function isEmptySpeechSummary(text) {
+  const t = String(text || "").trim();
+  if (!t) return true;
+  if (/本件に関する政府方針を説明|に関する政府方針を説明|要約未作成/.test(t)) return true;
+  if (isRawDietDump(t)) return true;
+  return false;
+}
+
+/** X投稿が記事話題と一致するか（表示マージ含む）。核心語必須（弱い「物価」一致はNG） */
 export function isXPostOnTopic(article, text) {
+  const kw = article?.searchKeyword || "";
+  if (kw) return textStronglyMatchesTopic(String(text || ""), kw);
   return textMatchesTopic(String(text || ""), articleTopicTerms(article));
 }
 
@@ -52,11 +67,16 @@ function summarizeSpeechRow(ev, article) {
   else if (/千五百円|1500円|骨太方針/.test(raw)) gist = "骨太方針の全国平均1500円目標を継続する方針を表明";
   else gist = sentences.find((s) => s.length <= 90) || "";
   if (!gist) gist = shorten(sentences[0] || raw, 80);
-  if (/御質問|おかれましては/.test(gist) || isRawDietDump(gist)) {
-    gist = /最低賃金/.test(raw) ? "最低賃金に関する政府方針を説明" : "本件に関する政府方針を説明";
+  // 空定型「政府方針を説明」は禁止（要約義務）。作れないなら要約未作成としてゲートで落とす
+  if (
+    !gist ||
+    /御質問|おかれましては|政府方針を説明/.test(gist) ||
+    isRawDietDump(gist)
+  ) {
+    return `${speaker}${group}— ${where}要約未作成（原文リンクを確認）。`;
   }
 
-  return `${speaker}${group}— ${where}「${gist.replace(/^「|」$/g, "")}」と答弁。`;
+  return `${speaker}${group}— ${where}${gist.replace(/^「|」$/g, "").replace(/。$/, "")}。`;
 }
 
 function summarizeXRow(ev, article) {

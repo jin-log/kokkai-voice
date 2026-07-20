@@ -66,7 +66,10 @@ function sectionLines(article, sectionId) {
   if (sectionId === "summaryBullets") {
     return (article.summaryBullets ?? []).map((b, i) => ({
       field: `summaryBullets[${i}]`,
-      text: typeof b === "string" ? b : String(b?.text || ""),
+      text:
+        typeof b === "string"
+          ? b
+          : [b?.key || b?.headline, b?.detail || b?.text].filter(Boolean).join("："),
     }));
   }
   if (sectionId === "arcSummary") {

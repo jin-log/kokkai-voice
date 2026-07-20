@@ -55,6 +55,37 @@ if (!stats) return null;
     }
   </div>
 
+  {stats.chart2 && (
+    <div class="cb-chart2">
+      {stats.chart2Title && <h3 class="cb-chart2__title">{stats.chart2Title}</h3>}
+      {stats.chart2Note && <p class="cb-block__note">{stats.chart2Note}</p>}
+      <div class="cb-bar-chart" aria-label={stats.chart2.ariaLabel} role="img">
+        {
+          stats.chart2.points.map((p) => (
+            <div class="cb-bar-chart__col">
+              <div class="cb-bar-chart__bar-wrap">
+                <div
+                  class:list={["cb-bar-chart__bar", "cb-bar-chart__bar--proj", p.latest && "cb-bar-chart__bar--latest"]}
+                  style={`height:${p.heightPct}%`}
+                >
+                  <span class="cb-bar-chart__val">{p.display}</span>
+                </div>
+              </div>
+              <span class="cb-bar-chart__label">
+                {p.label.split("\n").map((line, i, arr) => (
+                  <>
+                    {line}
+                    {i < arr.length - 1 && <br />}
+                  </>
+                ))}
+              </span>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  )}
+
   {stats.table.rows.length > 0 && (
     <table class="cb-trend-table">
       <thead>
@@ -116,6 +147,19 @@ if (!stats) return null;
 </section>
 
 <style>
+  .cb-chart2 {
+    margin-top: 1.25rem;
+    padding-top: 1rem;
+    border-top: 1px dashed var(--color-border);
+  }
+  .cb-chart2__title {
+    margin: 0 0 0.35rem;
+    font-size: 1rem;
+    font-weight: 700;
+  }
+  .cb-bar-chart__bar--proj {
+    background: color-mix(in srgb, var(--color-accent, #c45c26) 72%, #1e293b);
+  }
   .cb-block__note--foot {
     margin-top: 0.75rem;
     margin-bottom: 0;

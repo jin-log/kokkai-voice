@@ -1,0 +1,29 @@
+---
+description: ショート動画完成時はローカル file:// リンク必須
+alwaysApply: true
+---
+
+# ショート完成報告 — ローカルリンク必須
+
+ショート動画（`short:generate` / `short:data:generate` / Remotion出力）を作ったら、**返答の先頭**にクリック可能なローカルリンクを書く。
+
+## 必須（これがない＝未完了）
+
+```
+[① タイトル](file:///C:/Users/bero1/Projects/kokkai-voice/output/shorts/.../xxx.mp4)
+[② タイトル](file:///C:/Users/bero1/Projects/kokkai-voice/output/shorts/.../yyy.mp4)
+```
+
+- `file:///` + 絶対パス（Winは `/` 区切り）
+- **パス文字列だけ・「フォルダを開け」だけは禁止**
+- 複数本なら全部
+
+## 続けて書くもの
+
+1. 案件ページURL（`https://seiji1192.site/case/{slug}/`）
+2. 固定コメント全文（URL入り・コードブロック）
+
+## 禁止
+
+- 本番URLだけ出してローカル再生リンクを省略
+- 「output/shorts にあります」で終わる

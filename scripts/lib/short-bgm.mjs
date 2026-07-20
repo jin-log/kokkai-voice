@@ -1,5 +1,6 @@
 import { access } from "node:fs/promises";
 import path from "node:path";
+import { getAudioDurationSec } from "./audio-duration.mjs";
 import { runFfmpeg } from "./short-video.mjs";
 
 /**
@@ -46,12 +47,18 @@ export async function ensureBgm(root, workDir) {
 }
 
 /**
+ * 映像尺に合わせて BGM をループ。足りない場合は必ず stream_loop。
+ * フェードアウトは映像終端付近（固定18秒フェードは禁止）。
  * @param {string} videoPath
  * @param {string} bgmPath
  * @param {string} output
  * @param {number} [bgmVol]
  */
 export async function mixBgmIntoVideo(videoPath, bgmPath, output, bgmVol = 0.14) {
+  const videoDur = await getAudioDurationSec(videoPath);
+  const fadeDur = 1.5;
+  const fadeOutStart = Math.max(0, Number((videoDur - fadeDur).toFixed(3)));
+
   await runFfmpeg([
     "-y",
     "-i",
@@ -61,7 +68,7 @@ export async function mixBgmIntoVideo(videoPath, bgmPath, output, bgmVol = 0.14)
     "-i",
     bgmPath,
     "-filter_complex",
-    `[1:a]volume=${bgmVol},afade=t=in:st=0:d=0.4,afade=t=out:st=18:d=1.5[bgm];[0:a][bgm]amix=inputs=2:duration=first:dropout_transition=2[a]`,
+    `[1:a]volume=${bgmVol},afade=t=in:st=0:d=0.4,afade=t=out:st=${fadeOutStart}:d=${fadeDur}[bgm];[0:a][bgm]amix=inputs=2:duration=first:dropout_transition=2[a]`,
     "-map",
     "0:v",
     "-map",

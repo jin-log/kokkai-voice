@@ -27,7 +27,9 @@ export function auditArticleQuality(article) {
   const plain = String(article.plainExplanation || "");
   const arc = article.arcSummary ?? [];
   const sb = (article.summaryBullets ?? []).map((b) =>
-    typeof b === "string" ? b : b?.text || "",
+    typeof b === "string"
+      ? b
+      : [b?.key || b?.headline, b?.detail || b?.text].filter(Boolean).join("："),
   );
 
   const titleAsksNum = TITLE_ASKS_NUMBERS.test(title);
@@ -106,7 +108,13 @@ export function auditArticleQuality(article) {
     });
   }
 
-  const procSb = sb.filter((t) => PROCEDURAL.test(t) || isSpeechFragment(t));
+  // 長文の第三者要約は OK。isSpeechFragment の「88字超＝断片」は国会切り出し用で、要点には使わない
+  const procSb = sb.filter((t) => {
+    const s = String(t || "").trim();
+    if (PROCEDURAL.test(s)) return true;
+    if (s.length > 88) return false;
+    return isSpeechFragment(s);
+  });
   if (procSb.length >= 2) {
     issues.push({
       id: "Q7_procedural_evidence",

@@ -315,18 +315,43 @@ const SLUG_CONFIG = {
       },
     ],
   },
+  "noto-fukko-budget": {
+    handles: ["kishida230", "hase3655", "CDP2017", "motto_ishikawa", "kondokazuya_"],
+    keywords: ["能登", "予備費", "復興", "復興予算", "仮設", "交付金", "復興基金"],
+    seed: [
+      {
+        url: "https://x.com/kishida230/status/1833434826256617870",
+        label: "岸田文雄 @kishida230",
+        text: "能登震災へ1088億の予備費。インフラ約960億・農林約75億・住宅約53億。累計6640億円。",
+      },
+      {
+        url: "https://x.com/CDP2017/status/1871853289593323865",
+        label: "立憲民主党 @CDP2017",
+        text: "予備費1,000億円の使途を能登復旧・復興に限定する補正予算の修正。",
+      },
+      {
+        url: "https://x.com/motto_ishikawa/status/1897210945166041346",
+        label: "石川県 @motto_ishikawa",
+        text: "創造的復興交付金500億円（国予備費）と復興基金約539.8億円。",
+      },
+    ],
+  },
 };
 
 function resolveTopicConfig(kw, slug) {
   if (SLUG_CONFIG[slug]) return SLUG_CONFIG[slug];
   const k = kw || "";
   if (TOPIC_CONFIG[k]) return TOPIC_CONFIG[k];
-  for (const [key, cfg] of Object.entries(TOPIC_CONFIG)) {
-    if (k.includes(key)) return cfg;
+  // 長いキー優先（「復興予算 予備費」が「補正予算」に誤吸着しないよう）
+  const keys = Object.keys(TOPIC_CONFIG).sort((a, b) => b.length - a.length);
+  for (const key of keys) {
+    if (k.includes(key)) return TOPIC_CONFIG[key];
   }
-  for (const [key, cfg] of Object.entries(TOPIC_CONFIG)) {
+  for (const key of keys) {
     const parts = key.split(/[\s　]+/).filter((p) => p.length >= 2);
-    if (parts.some((p) => k.includes(p))) return cfg;
+    // 汎用語だけでの吸着を避ける（予算・財政など）
+    const specific = parts.filter((p) => !/^(予算|財政|歳出|地方|地域|人口)$/.test(p));
+    if (specific.some((p) => k.includes(p))) return TOPIC_CONFIG[key];
   }
   return null;
 }

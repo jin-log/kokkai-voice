@@ -16,7 +16,12 @@ function legacySpeechEvent(article) {
     type: "speech",
     date: s.date,
     summaryPlain:
-      article.summaryBullets?.[0]?.replace(/。$/, "") ||
+      (typeof article.summaryBullets?.[0] === "string"
+        ? article.summaryBullets[0]
+        : [article.summaryBullets?.[0]?.key, article.summaryBullets?.[0]?.detail || article.summaryBullets?.[0]?.text]
+            .filter(Boolean)
+            .join("：")
+      )?.replace(/。$/, "") ||
       "国会での発言。詳細は原文リンクで確認できます。",
     speech: s,
   };

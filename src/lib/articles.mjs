@@ -118,9 +118,14 @@ export function articleToSearchEntry(article) {
     article.fetchedAt?.slice(0, 10) ||
     "";
   const started = article.primarySpeech?.date || updated;
+  const sb0 = article.summaryBullets?.[0];
+  const sbText =
+    typeof sb0 === "string"
+      ? sb0
+      : [sb0?.key || sb0?.headline, sb0?.detail || sb0?.text].filter(Boolean).join("：");
   const summary =
     article.nowSummary?.bullets?.[0] ||
-    article.summaryBullets?.[0] ||
+    sbText ||
     article.primarySpeech?.excerpt?.slice(0, 80) ||
     "";
   return {

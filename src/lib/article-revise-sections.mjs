@@ -116,7 +116,12 @@ export const REVISE_SECTIONS = [
 export function sectionContent(article, sectionId, stance = null) {
   switch (sectionId) {
     case "title_opening": {
-      const opening = article.summaryBullets?.[0] || article.nowSummary?.bullets?.[0] || "";
+      const sb0 = article.summaryBullets?.[0];
+      const sbText =
+        typeof sb0 === "string"
+          ? sb0
+          : [sb0?.key || sb0?.headline, sb0?.detail || sb0?.text].filter(Boolean).join("：");
+      const opening = sbText || article.nowSummary?.bullets?.[0] || "";
       return [`タイトル: ${article.title || "(未設定)"}`, `1行目候補: ${opening || "(未設定)"}`].join(
         "\n",
       );
@@ -124,7 +129,17 @@ export function sectionContent(article, sectionId, stance = null) {
     case "nowSummary":
       return (article.nowSummary?.bullets ?? []).map((b, i) => `${i + 1}. ${b}`).join("\n") || "(空)";
     case "summaryBullets":
-      return (article.summaryBullets ?? []).map((b, i) => `・${b}`).join("\n") || "(空)";
+      return (
+        (article.summaryBullets ?? [])
+          .map((b, i) => {
+            const t =
+              typeof b === "string"
+                ? b
+                : [b?.key || b?.headline, b?.detail || b?.text].filter(Boolean).join("：");
+            return `・${t}`;
+          })
+          .join("\n") || "(空)"
+      );
     case "arcSummary":
       return (article.arcSummary ?? [])
         .map((row) => `${row.date} — ${row.text}`)

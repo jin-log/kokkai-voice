@@ -14,6 +14,7 @@ import { waivedCheckIds } from "./case-gates.mjs";
 import { resolveProsCons } from "./case-helpers.mjs";
 import { analyticalBlocksStatus } from "./analytical-blocks.mjs";
 import { generalSummaryIsBad, isGeneralBoilerplateLine } from "./general-article.mjs";
+import { isEmptySpeechSummary } from "./timeline-sanitize.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 export const root = path.join(__dirname, "../..");
@@ -40,6 +41,7 @@ export const CHECK_LABELS = {
   E2_timeline_x: { label: "タイムラインX", todo: "X投稿を3件以上タイムラインに" },
   E3_timeline_diet: { label: "タイムライン国会", todo: "国会発言を3件以上タイムラインに" },
   E4_timeline_diet_topic: { label: "TL国会の話題", todo: "国会TLはある分だけ話題一致。TLなし可。根拠なしの結論は不可" },
+  E5_timeline_summary: { label: "TL要約", todo: "国会TLは平易語要約必須（空定型・切り出し禁止）" },
   A2_phaseA_source: { label: "一次ソース（国会待ち）", todo: "報道URLまたはタイムライン出典を追加" },
   J1_analytical_blocks: { label: "分析ブロック", todo: "メリデメ・利害・数値統計のいずれか1〜3種（0種NG）" },
   J1_prosCons: { label: "メリデメ", todo: "公表数値付きメリット2・デメリット2" },
@@ -147,7 +149,11 @@ export function checkCasePage(article, opts = {}) {
 
   // C. 根拠
   const sb = article.summaryBullets ?? [];
-  const sbTexts = sb.map((b) => (typeof b === "string" ? b : b.text));
+  const sbTexts = sb.map((b) =>
+    typeof b === "string"
+      ? b
+      : [b?.key || b?.headline, b?.detail || b?.text].filter(Boolean).join("："),
+  );
   if (article.category && article.category !== "国会") {
     const boilerplateHit = bullets.some(isGeneralBoilerplateLine)
       || sbTexts.some(isGeneralBoilerplateLine)
@@ -232,6 +238,25 @@ export function checkCasePage(article, opts = {}) {
           ? `${dietTopic}/${dietTotal} 件が話題一致`
           : "国会TLあるが話題一致なし＋結論あり",
     );
+  }
+
+  // E5: 国会TLは平易語要約必須（空定型「政府方針を説明」禁止）
+  {
+    const speechRows = tl.filter((e) => e.type === "speech");
+    const badSummary = speechRows.filter((e) => isEmptySpeechSummary(e.summaryPlain));
+    if (phaseA && speechRows.length === 0) {
+      add("E5_timeline_summary", true, "国会待ち（要約は追記時に必須）", false);
+    } else if (speechRows.length === 0) {
+      add("E5_timeline_summary", true, "国会TLなし", false);
+    } else {
+      add(
+        "E5_timeline_summary",
+        badSummary.length === 0,
+        badSummary.length === 0
+          ? `${speechRows.length}件すべて要約あり`
+          : `${badSummary.length}/${speechRows.length}件が空定型・未要約`,
+      );
+    }
   }
 
   // F. 用語

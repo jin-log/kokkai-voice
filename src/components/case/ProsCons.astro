@@ -40,6 +40,19 @@ const demerits = pc.demerits ?? [];
                   )}
                 </p>
               )}
+              {(item.extraSources ?? []).map((src) => (
+                <p class="pros-cons-card__source">
+                  <a href={src.sourceUrl} target="_blank" rel="noopener">
+                    {src.sourceLabel || "出典"} ↗
+                  </a>
+                  {src.sourceDate && (
+                    <time datetime={src.sourceDate}>
+                      {" "}
+                      · {formatDate(src.sourceDate)}
+                    </time>
+                  )}
+                </p>
+              ))}
             </li>
           ))
         }
@@ -72,6 +85,19 @@ const demerits = pc.demerits ?? [];
                   )}
                 </p>
               )}
+              {(item.extraSources ?? []).map((src) => (
+                <p class="pros-cons-card__source">
+                  <a href={src.sourceUrl} target="_blank" rel="noopener">
+                    {src.sourceLabel || "出典"} ↗
+                  </a>
+                  {src.sourceDate && (
+                    <time datetime={src.sourceDate}>
+                      {" "}
+                      · {formatDate(src.sourceDate)}
+                    </time>
+                  )}
+                </p>
+              ))}
             </li>
           ))
         }

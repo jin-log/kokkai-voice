@@ -30,11 +30,34 @@ const SHORT_COPY = {
     commentQuestion: "どの試算を信じますか？",
   },
   "kojin-joho-kaisei": {
-    title: "【個人情報保護法】同意なしで提供へ。政治家は例外？ #shorts",
-    summaryJa: "2026年7月成立。AI・統計目的なら同意なしで個人データを企業に渡せる改正の要点。",
-    summaryEn: "Japan's 2026 privacy-law amendment — personal data may be shared without consent for AI/statistics.",
+    title: "【個人情報保護法】改正は誰の利益になるのか？ #shorts",
+    summaryJa: "得するのは主に企業側。AI・統計目的なら同意なしで個人データを企業に渡せる改正の要点。",
+    summaryEn: "Who benefits from Japan's 2026 privacy-law amendment — mainly firms using data for AI/statistics.",
     tagsExtra: ["個人情報保護法", "プライバシー", "AI", "同意なし"],
-    commentQuestion: "この法案、どう思いますか？",
+    commentQuestion: "これ、あなたはどう思う？",
+  },
+  "bouka-taisaku": {
+    title: "【物価高対策】高市首相『年8万円超の支援』の中身は？ #shorts",
+    summaryJa: "年8万円超は現金一括ではない。ガソリン・電気ガス・所得減税・子育て手当などの負担軽減試算の合計。",
+    summaryEn: "PM Takaichi's 'over ¥80,000/year support' is a stacked relief estimate — not a lump-sum cash payout.",
+    tagsExtra: ["物価高", "物価高対策", "年8万円", "電気ガス", "高市早苗"],
+    commentQuestion: "これ、あなたはどう思う？",
+  },
+  "bouka-nakami": {
+    title: "【物価高対策】高市首相『年8万円超の支援』の中身は？ #shorts",
+    summaryJa: "年8万円超は現金一括ではない。ガソリン約1.2万・厳冬電気ガス約7300円・所得減税2〜4万・子育て手当2万/子などの積み上げ。",
+    summaryEn: "What's inside the '¥80,000+ support' — stacked relief items, not a uniform cash handout.",
+    tagsExtra: ["物価高", "物価高対策", "年8万円", "高市早苗"],
+    commentQuestion: "これ、あなたはどう思う？",
+    caseSlug: "bouka-taisaku",
+  },
+  "bouka-todoku": {
+    title: "【物価高対策】年8万円超の支援、どう届く？ #shorts",
+    summaryJa: "電気ガスは小売値引き、手当は市町村振込、地方交付金は自治体裁量。ふところ実感額の公式一本化は見当たらない。",
+    summaryEn: "How the support reaches households — retail discounts, municipal transfers, local discretion. No single official 'net pocket' figure.",
+    tagsExtra: ["物価高", "物価高対策", "電気ガス", "地方交付金", "高市早苗"],
+    commentQuestion: "これ、あなたはどう思う？",
+    caseSlug: "bouka-taisaku",
   },
 };
 
@@ -54,10 +77,15 @@ const BASE_TAGS = [
  * @param {import('../../src/lib/articles.mjs').Article} article
  * @param {{ videoFile?: string; postOrder?: number }} [opts]
  */
+/**
+ * @param {import('../../src/lib/articles.mjs').Article} article
+ * @param {{ videoFile?: string; postOrder?: number; copyKey?: string }} [opts]
+ */
 export function buildYoutubeUploadDraft(article, opts = {}) {
   const slug = article.slug;
-  const copy = SHORT_COPY[slug];
-  const caseUrl = `${SITE.domain}/case/${slug}/`;
+  const copy = SHORT_COPY[opts.copyKey ?? slug] ?? SHORT_COPY[slug];
+  const caseSlug = copy?.caseSlug ?? slug;
+  const caseUrl = `${SITE.domain}/case/${caseSlug}/`;
   const category = article.searchKeyword?.split(/[\s　]+/)[0] || article.category || slug;
 
   const title =

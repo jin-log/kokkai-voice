@@ -89,23 +89,63 @@ YouTube Shortsのスワイプ判断は**2秒以内**。この2秒で終わる。
 
 ## 背景動画の選び方（確定ルール）
 
-**大原則:** クリップの「感情トーン」がスライドの内容と一致すること。
+**大原則:** クリップの「感情トーン」がスライドの内容と一致すること。  
+**必須:** `data/short-stock-clips.json` の保有ストックから選ぶ。各スライドで別クリップ（同一連発禁止）。
 
 | クリップ | 感情・トーン | 使うスライド |
 |---------|------------|------------|
-| `yen-salary-envelope-vert.mp4` | 中立・財政 | 数字/負担率/税/社会保険料 |
-| `flag-waving-vert.mp4` | 国家・統計 | 推移/国全体の話 |
-| `politician-speech-vert.mp4` | 緊張・政治 | 国会発言/追及/批判 |
-| `diet-exterior-day-vert.mp4` | 権威・制度 | 法律/政策/制度 |
-| `newborn-sleeping-vert.mp4` | 生命・少子化 | 少子化関連スライド |
-| `businessman-suit-vert.mp4` | **陽気・ポジティブ** | **使用禁止**（深刻な話に不適） |
-| `justice-gavel-vert.mp4` | 司法・制裁 | 刑事事件関連のみ |
+| `yen-salary-envelope-vert` / `yen-symbols-falling-vert` | 中立・財政 | 数字/税/予算/「何万円」 |
+| `supermarket-aisle-blur-vert` / `supermarket-shopper-mask-vert` | 家計・物価 | 物価高・食料・実感額 |
+| `gas-station-neon-anime-vert` | 燃料 | ガソリン税・燃料対策 |
+| `newborn-sleeping-vert` | 子育て | 子育て手当・少子化 |
+| `tokyo-gov-sakura-vert` | 自治体 | 地方交付金・都政 |
+| `diet-building-front-vert` / `diet-exterior-day-vert` | 権威・制度 | 政策・制度・フック |
+| `politician-speech-vert` | 緊張・政治 | 国会発言/追及 |
+| `report-chart-hand-vert` / `stock-chart-neon-vert` / `global-markets-globe-vert` | データ | 試算・不明点・市場 |
+| `flag-waving-vert` | 国家・統計 | 国全体の話 |
+| `businessman-suit-vert` | **陽気・ポジティブ** | **使用禁止**（深刻な話に不適） |
+| `justice-gavel-vert` | 司法・制裁 | 刑事事件関連のみ |
 
 ### 動画モーション要件
 
 - フックの背景は **ズーム or パン** が入るクリップ優先（静止は×）
 - 各スライドで **異なるクリップ** に切り替える（パターンインタラプト）
 - `hookZoom=true` は常時ON（既存実装）
+- 背景クリップは **loop**（尺不足で黒落ちさせない）
+
+---
+
+## BGM（確定ルール）
+
+- 映像尺より BGM が短い場合は **必ずループ**（`stream_loop -1`）
+- フェードアウトは **映像終端 −1.5秒** から。固定秒（例: 18秒）での打ち切り禁止
+- 実装: `scripts/lib/short-bgm.mjs` の `mixBgmIntoVideo`
+
+---
+
+## CTAカード（テンプレ・確定）
+
+```
+これ、あなたはどう思う？
+コメント欄で教えて
+記事の全貌はコメント欄のURLから
+[+ ロゴ]
+```
+
+- `question`: 「これ、あなたはどう思う？」
+- `endHint`: 「コメント欄で教えて\n記事の全貌はコメント欄のURLから」
+- `endNarr`: 上記を自然な口語で1〜2文
+
+### 完成報告（違反＝未完了）— 順番厳守
+
+ショート完成時、チャット**先頭**に必ず書く。パス文字列だけ・「フォルダにある」は禁止。
+
+1. **ローカル再生リンク（最優先）** — `file:///C:/Users/bero1/Projects/kokkai-voice/output/shorts/.../*.mp4` を Markdown リンクで全本
+2. **案件ページURL** — `https://seiji1192.site/case/{slug}/`
+3. **固定コメント文** — URL入り全文をコードブロック
+
+正本ルール: `.cursor/rules/short-local-link.mdc`（alwaysApply）  
+実装: `scripts/lib/short-comment-cta.mjs` / `youtube-upload-draft.mjs`
 
 ---
 

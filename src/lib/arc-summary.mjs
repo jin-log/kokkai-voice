@@ -19,8 +19,13 @@ export function normalizeArcSummary(raw = []) {
 
 export function formatArcDate(iso) {
   if (!iso) return "";
-  const [y, m, d] = iso.split("-");
+  const s = String(iso).trim();
+  // 「2003年」「2028年7月頃」など既に日本語の日付ラベル
+  if (/年/.test(s) && !/^\d{4}-\d{2}/.test(s)) return s;
+  const [y, m, d] = s.split("-");
   if (!y) return "";
+  if (!m) return `${y}年`;
+  if (!d) return `${y}年${Number(m)}月`;
   return `${y}年${Number(m)}月${Number(d)}日`;
 }
 

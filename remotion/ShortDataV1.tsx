@@ -75,7 +75,7 @@ export const ShortDataV1: React.FC<ShortDataV1Props> = ({
           <AbsoluteFill>
             <ParliamentBackground
               bgVideoSrc={slide.bgVideoSrc ?? bgVideoSrc}
-              bgStartFrame={from}
+              bgStartFrame={0}
             />
             <div
               style={{

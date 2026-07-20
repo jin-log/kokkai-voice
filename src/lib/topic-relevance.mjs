@@ -74,6 +74,26 @@ const TOPIC_STRONG = {
   日本国旗: ["損壊罪", "損壊", "法制化", "制定", "連立合意", "連立政権", "刑法九十二条", "刑法92条"],
   スパイ防止法: ["スパイ防止", "スパイ", "国家情報", "情報局", "諜報"],
   国会議員のボーナス: ["ボーナス", "歳費", "期末手当", "議員報酬", "議員", "報酬"],
+  /** 「物価」だけの弱い一致（円安雑感＋皇室典範等）を弾く */
+  物価高対策: [
+    "8万",
+    "八万",
+    "年間8",
+    "年8万",
+    "電気・ガス",
+    "電気ガス",
+    "負担軽減",
+    "物価高対策",
+    "物価高への対応",
+    "物価高騰",
+    "重点支援地方交付金",
+    "暫定税率",
+    "激変緩和",
+    "子育て応援手当",
+    "予備費",
+    "値引き",
+    "物価高騰対策",
+  ],
 };
 
 /** @param {string} keyword */
@@ -84,10 +104,19 @@ export function topicTerms(keyword) {
   return [...new Set([base, ...parts, ...aliases])].filter(Boolean);
 }
 
+/** 全角英数などを半角に寄せて照合（「８万円」↔「8万円」） */
+function normalizeForTopicMatch(text) {
+  return String(text || "").normalize("NFKC");
+}
+
 /** @param {string} text @param {string[]} terms */
 export function textMatchesTopic(text, terms) {
   if (!text) return false;
-  return terms.some((t) => t.length >= 2 && text.includes(t));
+  const hay = normalizeForTopicMatch(text);
+  return terms.some((t) => {
+    const needle = normalizeForTopicMatch(t);
+    return needle.length >= 2 && hay.includes(needle);
+  });
 }
 
 /** 案件の核心語を含むか（経緯・〇×用） */
@@ -96,7 +125,8 @@ export function textStronglyMatchesTopic(text, keyword) {
   if (!textMatchesTopic(text, terms)) return false;
   const strong = TOPIC_STRONG[keyword];
   if (!strong) return true;
-  return strong.some((t) => text.includes(t));
+  const hay = normalizeForTopicMatch(text);
+  return strong.some((t) => hay.includes(normalizeForTopicMatch(t)));
 }
 
 /** @param {string} keyword */

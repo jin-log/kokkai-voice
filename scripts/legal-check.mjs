@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * 法務チェック自動スキャン（L1〜L7）
+ * 法務チェック自動スキャン（L1〜L7 + L9）
  *
  * Usage:
  *   node scripts/legal-check.mjs --slug shohizei-genmen
@@ -11,6 +11,7 @@
 import { readFile, writeFile, readdir } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { stanceActionDistinct, isRawSpeechStance } from "../src/lib/diet-voice.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(__dirname, "..");
@@ -125,6 +126,37 @@ function checkL7(text) {
     : null;
 }
 
+/** L9: 公言と行動 — 方針＝議事録切り出し／行動＝同一引用コピペ */
+async function checkL9(article) {
+  const sm = article.stanceMatrix;
+  if (!sm?.dataPath && !sm?.policySlug) return null;
+  const matrixPath = path.join(
+    root,
+    sm.dataPath || `data/policy-matrix/${sm.policySlug || article.slug}.json`,
+  );
+  let matrix;
+  try {
+    matrix = JSON.parse(await readFile(matrixPath, "utf8"));
+  } catch {
+    return null;
+  }
+  const bad = [];
+  for (const p of matrix.parties || []) {
+    const stance = p.stance?.text || "";
+    const action = p.action?.text || "";
+    const label = p.partyLabel || "?";
+    if (isRawSpeechStance(stance)) {
+      bad.push(`${label}: 方針が議事録切り出し`);
+    }
+    if (stance && action && !stanceActionDistinct(stance, action)) {
+      bad.push(`${label}: 方針と行動が同一引用の切り貼り`);
+    }
+  }
+  return bad.length
+    ? { ok: false, rule: "L9", msg: `公言と行動NG — ${bad.join(" / ")}` }
+    : null;
+}
+
 // ---- メイン ----
 
 async function checkSlug(slug) {
@@ -145,6 +177,7 @@ async function checkSlug(slug) {
     checkL5(article),
     checkL6(article),
     checkL7(text),
+    await checkL9(article),
   ].filter(Boolean);
 
   return { slug, article, filePath, issues: checks };
