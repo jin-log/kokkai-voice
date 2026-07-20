@@ -1,78 +1,13 @@
 {
-  "generatedAt": "2026-07-19T10:55:19.388Z",
-  "total": 84,
+  "generatedAt": "2026-07-20T10:24:56.703Z",
+  "total": 48,
   "byAgent": {
-    "writer": 67,
-    "legal-check": 13,
-    "x-researcher": 4
+    "writer": 39,
+    "ceo": 3,
+    "x-researcher": 4,
+    "legal-check": 2
   },
   "tasks": [
-    {
-      "id": "boeeihi:D2_arc_topic",
-      "slug": "boeeihi",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "D2_arc_topic",
-      "title": "[ゲート] 経緯の話題",
-      "todo": "経緯3行以上が案件キーワードと一致",
-      "command": "node scripts/complete-article.mjs --slug boeeihi --content-only --force",
-      "priority": 30
-    },
-    {
-      "id": "boeeihi:E5_timeline_summary",
-      "slug": "boeeihi",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "E5_timeline_summary",
-      "title": "[ゲート] TL要約",
-      "todo": "国会TLは平易語要約必須（空定型・切り出し禁止）",
-      "command": "node scripts/enrich-timeline-all.mjs --slug boeeihi",
-      "priority": 30
-    },
-    {
-      "id": "boeeihi:I1_legal",
-      "slug": "boeeihi",
-      "agent": "legal-check",
-      "agentLabel": "法務",
-      "checkId": "I1_legal",
-      "title": "[ゲート] 法務",
-      "todo": "legal-check を実行",
-      "command": "node scripts/complete-article.mjs --slug boeeihi --legal-only",
-      "priority": 30
-    },
-    {
-      "id": "bouka-taisaku:B3_topic",
-      "slug": "bouka-taisaku",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "B3_topic",
-      "title": "[ゲート] 話題一致",
-      "todo": "要約が searchKeyword と一致（2行以上）",
-      "command": "node scripts/complete-article.mjs --slug bouka-taisaku --content-only --force",
-      "priority": 30
-    },
-    {
-      "id": "bouka-taisaku:D2_arc_topic",
-      "slug": "bouka-taisaku",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "D2_arc_topic",
-      "title": "[ゲート] 経緯の話題",
-      "todo": "経緯3行以上が案件キーワードと一致",
-      "command": "node scripts/complete-article.mjs --slug bouka-taisaku --content-only --force",
-      "priority": 30
-    },
-    {
-      "id": "bouka-taisaku:I1_legal",
-      "slug": "bouka-taisaku",
-      "agent": "legal-check",
-      "agentLabel": "法務",
-      "checkId": "I1_legal",
-      "title": "[ゲート] 法務",
-      "todo": "legal-check を実行",
-      "command": "node scripts/complete-article.mjs --slug bouka-taisaku --legal-only",
-      "priority": 30
-    },
     {
       "id": "case-mqwdrley:B3_topic",
       "slug": "case-mqwdrley",
@@ -85,14 +20,25 @@
       "priority": 30
     },
     {
-      "id": "case-mqzxj4ro:E5_timeline_summary",
-      "slug": "case-mqzxj4ro",
+      "id": "case-mr0jbdpc:P1_opening_no_outcome",
+      "slug": "case-mr0jbdpc",
       "agent": "writer",
       "agentLabel": "ライター",
-      "checkId": "E5_timeline_summary",
-      "title": "[ゲート] TL要約",
-      "todo": "国会TLは平易語要約必須（空定型・切り出し禁止）",
-      "command": "node scripts/enrich-timeline-all.mjs --slug case-mqzxj4ro",
+      "checkId": "P1_opening_no_outcome",
+      "title": "[公開] 1行目がタイトルに未回答",
+      "todo": "成立/見送り/予算額など、いまどうなっているかを1行目に書く",
+      "command": "node scripts/complete-article.mjs --slug case-mr0jbdpc --content-only --force",
+      "priority": 5
+    },
+    {
+      "id": "case-mr0jbdpc:C2_evidence_distinct",
+      "slug": "case-mr0jbdpc",
+      "agent": "writer",
+      "agentLabel": "ライター",
+      "checkId": "C2_evidence_distinct",
+      "title": "[ゲート] 根拠の独自性",
+      "todo": "根拠は結論と同文禁止",
+      "command": "node scripts/complete-article.mjs --slug case-mr0jbdpc --content-only --force",
       "priority": 30
     },
     {
@@ -107,235 +53,48 @@
       "priority": 30
     },
     {
-      "id": "case-mr0jbdpc:E5_timeline_summary",
-      "slug": "case-mr0jbdpc",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "E5_timeline_summary",
-      "title": "[ゲート] TL要約",
-      "todo": "国会TLは平易語要約必須（空定型・切り出し禁止）",
-      "command": "node scripts/enrich-timeline-all.mjs --slug case-mr0jbdpc",
-      "priority": 30
-    },
-    {
-      "id": "case-mr0jbdpc:I1_legal",
-      "slug": "case-mr0jbdpc",
-      "agent": "legal-check",
-      "agentLabel": "法務",
-      "checkId": "I1_legal",
-      "title": "[ゲート] 法務",
-      "todo": "legal-check を実行",
-      "command": "node scripts/complete-article.mjs --slug case-mr0jbdpc --legal-only",
-      "priority": 30
-    },
-    {
-      "id": "chiho-sosei:B3_topic",
-      "slug": "chiho-sosei",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "B3_topic",
-      "title": "[ゲート] 話題一致",
-      "todo": "要約が searchKeyword と一致（2行以上）",
-      "command": "node scripts/complete-article.mjs --slug chiho-sosei --content-only --force",
-      "priority": 30
-    },
-    {
-      "id": "chiho-sosei:D1_arcSummary",
-      "slug": "chiho-sosei",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "D1_arcSummary",
-      "title": "[ゲート] 経緯",
-      "todo": "日付付き経緯を3行以上",
-      "command": "node scripts/complete-article.mjs --slug chiho-sosei --content-only --force",
-      "priority": 30
-    },
-    {
-      "id": "chiho-sosei:D2_arc_topic",
-      "slug": "chiho-sosei",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "D2_arc_topic",
-      "title": "[ゲート] 経緯の話題",
-      "todo": "経緯3行以上が案件キーワードと一致",
-      "command": "node scripts/complete-article.mjs --slug chiho-sosei --content-only --force",
-      "priority": 30
-    },
-    {
-      "id": "chiho-sosei:E5_timeline_summary",
-      "slug": "chiho-sosei",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "E5_timeline_summary",
-      "title": "[ゲート] TL要約",
-      "todo": "国会TLは平易語要約必須（空定型・切り出し禁止）",
-      "command": "node scripts/enrich-timeline-all.mjs --slug chiho-sosei",
-      "priority": 30
-    },
-    {
-      "id": "chiho-sosei:I1_legal",
-      "slug": "chiho-sosei",
-      "agent": "legal-check",
-      "agentLabel": "法務",
-      "checkId": "I1_legal",
-      "title": "[ゲート] 法務",
-      "todo": "legal-check を実行",
-      "command": "node scripts/complete-article.mjs --slug chiho-sosei --legal-only",
-      "priority": 30
-    },
-    {
-      "id": "energy-policy:E5_timeline_summary",
-      "slug": "energy-policy",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "E5_timeline_summary",
-      "title": "[ゲート] TL要約",
-      "todo": "国会TLは平易語要約必須（空定型・切り出し禁止）",
-      "command": "node scripts/enrich-timeline-all.mjs --slug energy-policy",
-      "priority": 30
-    },
-    {
-      "id": "gaikokujin-seisaku:E1_timeline_count",
+      "id": "gaikokujin-seisaku:P1_opening_template",
       "slug": "gaikokujin-seisaku",
       "agent": "writer",
       "agentLabel": "ライター",
-      "checkId": "E1_timeline_count",
-      "title": "[ゲート] タイムライン",
-      "todo": "出来事を6件以上（X3+国会3）",
-      "command": "node scripts/enrich-timeline-all.mjs --slug gaikokujin-seisaku",
-      "priority": 30
-    },
-    {
-      "id": "gaikokujin-seisaku:E3_timeline_diet",
-      "slug": "gaikokujin-seisaku",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "E3_timeline_diet",
-      "title": "[ゲート] タイムライン国会",
-      "todo": "国会発言を3件以上タイムラインに",
-      "command": "node scripts/enrich-timeline-all.mjs --slug gaikokujin-seisaku",
-      "priority": 30
-    },
-    {
-      "id": "hosei-yosan:B3_topic",
-      "slug": "hosei-yosan",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "B3_topic",
-      "title": "[ゲート] 話題一致",
-      "todo": "要約が searchKeyword と一致（2行以上）",
-      "command": "node scripts/complete-article.mjs --slug hosei-yosan --content-only --force",
-      "priority": 30
-    },
-    {
-      "id": "hosei-yosan:D2_arc_topic",
-      "slug": "hosei-yosan",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "D2_arc_topic",
-      "title": "[ゲート] 経緯の話題",
-      "todo": "経緯3行以上が案件キーワードと一致",
-      "command": "node scripts/complete-article.mjs --slug hosei-yosan --content-only --force",
-      "priority": 30
-    },
-    {
-      "id": "hosei-yosan:E5_timeline_summary",
-      "slug": "hosei-yosan",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "E5_timeline_summary",
-      "title": "[ゲート] TL要約",
-      "todo": "国会TLは平易語要約必須（空定型・切り出し禁止）",
-      "command": "node scripts/enrich-timeline-all.mjs --slug hosei-yosan",
-      "priority": 30
-    },
-    {
-      "id": "hosei-yosan:I1_legal",
-      "slug": "hosei-yosan",
-      "agent": "legal-check",
-      "agentLabel": "法務",
-      "checkId": "I1_legal",
-      "title": "[ゲート] 法務",
-      "todo": "legal-check を実行",
-      "command": "node scripts/complete-article.mjs --slug hosei-yosan --legal-only",
-      "priority": 30
-    },
-    {
-      "id": "kaigo-iryo:E5_timeline_summary",
-      "slug": "kaigo-iryo",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "E5_timeline_summary",
-      "title": "[ゲート] TL要約",
-      "todo": "国会TLは平易語要約必須（空定型・切り出し禁止）",
-      "command": "node scripts/enrich-timeline-all.mjs --slug kaigo-iryo",
-      "priority": 30
-    },
-    {
-      "id": "kaigo-iryo:I1_legal",
-      "slug": "kaigo-iryo",
-      "agent": "legal-check",
-      "agentLabel": "法務",
-      "checkId": "I1_legal",
-      "title": "[ゲート] 法務",
-      "todo": "legal-check を実行",
-      "command": "node scripts/complete-article.mjs --slug kaigo-iryo --legal-only",
-      "priority": 30
-    },
-    {
-      "id": "kenpo:P1_opening_off_topic",
-      "slug": "kenpo",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "P1_opening_off_topic",
+      "checkId": "P1_opening_template",
       "title": "[公開] 1行目がタイトルに未回答",
-      "todo": "1行目に案件のキーワードと具体答えを入れる",
-      "command": "node scripts/complete-article.mjs --slug kenpo --content-only --force",
+      "todo": "可決・金額・合意内容など、読者が知りたい答えを1行目に書く",
+      "command": "node scripts/complete-article.mjs --slug gaikokujin-seisaku --content-only --force",
       "priority": 5
     },
     {
-      "id": "kenpo:B3_topic",
-      "slug": "kenpo",
+      "id": "hosei-yosan:J1_analytical_blocks",
+      "slug": "hosei-yosan",
       "agent": "writer",
       "agentLabel": "ライター",
-      "checkId": "B3_topic",
-      "title": "[ゲート] 話題一致",
-      "todo": "要約が searchKeyword と一致（2行以上）",
-      "command": "node scripts/complete-article.mjs --slug kenpo --content-only --force",
+      "checkId": "J1_analytical_blocks",
+      "title": "[ゲート] 分析ブロック",
+      "todo": "メリデメ・利害・数値統計のいずれか1〜3種（0種NG）",
+      "command": "npm run complete:article -- --slug hosei-yosan --content-only --force",
       "priority": 30
     },
     {
-      "id": "kenpo:E5_timeline_summary",
-      "slug": "kenpo",
+      "id": "hosei-yosan:J1_prosCons",
+      "slug": "hosei-yosan",
       "agent": "writer",
       "agentLabel": "ライター",
-      "checkId": "E5_timeline_summary",
-      "title": "[ゲート] TL要約",
-      "todo": "国会TLは平易語要約必須（空定型・切り出し禁止）",
-      "command": "node scripts/enrich-timeline-all.mjs --slug kenpo",
+      "checkId": "J1_prosCons",
+      "title": "[ゲート] メリデメ",
+      "todo": "公表数値付きメリット2・デメリット2",
+      "command": "node scripts/generate-proscons-auto.mjs --slug hosei-yosan",
       "priority": 30
     },
     {
-      "id": "kenpo:I1_legal",
-      "slug": "kenpo",
-      "agent": "legal-check",
-      "agentLabel": "法務",
-      "checkId": "I1_legal",
-      "title": "[ゲート] 法務",
-      "todo": "legal-check を実行",
-      "command": "node scripts/complete-article.mjs --slug kenpo --legal-only",
-      "priority": 30
-    },
-    {
-      "id": "kishida-resign:E5_timeline_summary",
-      "slug": "kishida-resign",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "E5_timeline_summary",
-      "title": "[ゲート] TL要約",
-      "todo": "国会TLは平易語要約必須（空定型・切り出し禁止）",
-      "command": "node scripts/enrich-timeline-all.mjs --slug kishida-resign",
-      "priority": 30
+      "id": "kojin-joho-kaisei:Q7_procedural_evidence",
+      "slug": "kojin-joho-kaisei",
+      "agent": "ceo",
+      "agentLabel": "CEO",
+      "checkId": "Q7_procedural_evidence",
+      "title": "[品質] 要点が議事手続き・発言断片の羅列",
+      "todo": "論点・数値・可決結果が分かる第三者要約に差し替え",
+      "command": "node scripts/complete-article.mjs --slug kojin-joho-kaisei --content-only --force",
+      "priority": 10
     },
     {
       "id": "kojin-joho-kaisei:E2_timeline_x",
@@ -382,17 +141,6 @@
       "priority": 30
     },
     {
-      "id": "kokumin-futan-suii:E5_timeline_summary",
-      "slug": "kokumin-futan-suii",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "E5_timeline_summary",
-      "title": "[ゲート] TL要約",
-      "todo": "国会TLは平易語要約必須（空定型・切り出し禁止）",
-      "command": "node scripts/enrich-timeline-all.mjs --slug kokumin-futan-suii",
-      "priority": 30
-    },
-    {
       "id": "kokumin-futan-suii:I1_legal",
       "slug": "kokumin-futan-suii",
       "agent": "legal-check",
@@ -401,28 +149,6 @@
       "title": "[ゲート] 法務",
       "todo": "legal-check を実行",
       "command": "node scripts/complete-article.mjs --slug kokumin-futan-suii --legal-only",
-      "priority": 30
-    },
-    {
-      "id": "kokumin-kaigi:E5_timeline_summary",
-      "slug": "kokumin-kaigi",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "E5_timeline_summary",
-      "title": "[ゲート] TL要約",
-      "todo": "国会TLは平易語要約必須（空定型・切り出し禁止）",
-      "command": "node scripts/enrich-timeline-all.mjs --slug kokumin-kaigi",
-      "priority": 30
-    },
-    {
-      "id": "kokumin-kaigi:I1_legal",
-      "slug": "kokumin-kaigi",
-      "agent": "legal-check",
-      "agentLabel": "法務",
-      "checkId": "I1_legal",
-      "title": "[ゲート] 法務",
-      "todo": "legal-check を実行",
-      "command": "node scripts/complete-article.mjs --slug kokumin-kaigi --legal-only",
       "priority": 30
     },
     {
@@ -448,91 +174,47 @@
       "priority": 30
     },
     {
-      "id": "kyoiku-mushoka:E5_timeline_summary",
-      "slug": "kyoiku-mushoka",
+      "id": "noto-fukko-budget:P1_opening_no_number",
+      "slug": "noto-fukko-budget",
       "agent": "writer",
       "agentLabel": "ライター",
-      "checkId": "E5_timeline_summary",
-      "title": "[ゲート] TL要約",
-      "todo": "国会TLは平易語要約必須（空定型・切り出し禁止）",
-      "command": "node scripts/enrich-timeline-all.mjs --slug kyoiku-mushoka",
-      "priority": 30
+      "checkId": "P1_opening_no_number",
+      "title": "[公開] 1行目がタイトルに未回答",
+      "todo": "円・%・万人など公表数値を1行目に入れる",
+      "command": "node scripts/complete-article.mjs --slug noto-fukko-budget --content-only --force",
+      "priority": 5
     },
     {
-      "id": "nichigyo:B3_topic",
-      "slug": "nichigyo",
+      "id": "noto-fukko-budget:Q1_conclusion_numbers",
+      "slug": "noto-fukko-budget",
+      "agent": "ceo",
+      "agentLabel": "CEO",
+      "checkId": "Q1_conclusion_numbers",
+      "title": "[品質] タイトルが金額・実績を問うのに、いまの結論に公表数値がない",
+      "todo": "1行目に円・%・万人などタイトルへの直接回答を入れる（X・報道の数字を要約に反映）",
+      "command": "node scripts/complete-article.mjs --slug noto-fukko-budget --content-only --force",
+      "priority": 10
+    },
+    {
+      "id": "noto-fukko-budget:Q3_plain_no_answer",
+      "slug": "noto-fukko-budget",
+      "agent": "ceo",
+      "agentLabel": "CEO",
+      "checkId": "Q3_plain_no_answer",
+      "title": "[品質] つまり欄の冒頭がタイトルの疑問（金額・実績）に答えていない",
+      "todo": "1段落目を「結論：〇〇万円（日付）」から始める",
+      "command": "node scripts/complete-article.mjs --slug noto-fukko-budget --content-only --force",
+      "priority": 10
+    },
+    {
+      "id": "noto-fukko-budget:B3_topic",
+      "slug": "noto-fukko-budget",
       "agent": "writer",
       "agentLabel": "ライター",
       "checkId": "B3_topic",
       "title": "[ゲート] 話題一致",
       "todo": "要約が searchKeyword と一致（2行以上）",
-      "command": "node scripts/complete-article.mjs --slug nichigyo --content-only --force",
-      "priority": 30
-    },
-    {
-      "id": "nichigyo:E5_timeline_summary",
-      "slug": "nichigyo",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "E5_timeline_summary",
-      "title": "[ゲート] TL要約",
-      "todo": "国会TLは平易語要約必須（空定型・切り出し禁止）",
-      "command": "node scripts/enrich-timeline-all.mjs --slug nichigyo",
-      "priority": 30
-    },
-    {
-      "id": "noto-fukko-budget:E2_timeline_x",
-      "slug": "noto-fukko-budget",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "E2_timeline_x",
-      "title": "[ゲート] タイムラインX",
-      "todo": "X投稿を3件以上タイムラインに",
-      "command": "node scripts/enrich-timeline-all.mjs --slug noto-fukko-budget",
-      "priority": 30
-    },
-    {
-      "id": "online-casino:D2_arc_topic",
-      "slug": "online-casino",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "D2_arc_topic",
-      "title": "[ゲート] 経緯の話題",
-      "todo": "経緯3行以上が案件キーワードと一致",
-      "command": "node scripts/complete-article.mjs --slug online-casino --content-only --force",
-      "priority": 30
-    },
-    {
-      "id": "online-casino:E5_timeline_summary",
-      "slug": "online-casino",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "E5_timeline_summary",
-      "title": "[ゲート] TL要約",
-      "todo": "国会TLは平易語要約必須（空定型・切り出し禁止）",
-      "command": "node scripts/enrich-timeline-all.mjs --slug online-casino",
-      "priority": 30
-    },
-    {
-      "id": "online-casino:I1_legal",
-      "slug": "online-casino",
-      "agent": "legal-check",
-      "agentLabel": "法務",
-      "checkId": "I1_legal",
-      "title": "[ゲート] 法務",
-      "todo": "legal-check を実行",
-      "command": "node scripts/complete-article.mjs --slug online-casino --legal-only",
-      "priority": 30
-    },
-    {
-      "id": "osaka-to-metropolis:C2_evidence_distinct",
-      "slug": "osaka-to-metropolis",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "C2_evidence_distinct",
-      "title": "[ゲート] 根拠の独自性",
-      "todo": "根拠は結論と同文禁止",
-      "command": "node scripts/complete-article.mjs --slug osaka-to-metropolis --content-only --force",
+      "command": "node scripts/complete-article.mjs --slug noto-fukko-budget --content-only --force",
       "priority": 30
     },
     {
@@ -786,39 +468,6 @@
       "priority": 30
     },
     {
-      "id": "senkyo-kaikaku:E5_timeline_summary",
-      "slug": "senkyo-kaikaku",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "E5_timeline_summary",
-      "title": "[ゲート] TL要約",
-      "todo": "国会TLは平易語要約必須（空定型・切り出し禁止）",
-      "command": "node scripts/enrich-timeline-all.mjs --slug senkyo-kaikaku",
-      "priority": 30
-    },
-    {
-      "id": "shoshika:P1_opening_off_topic",
-      "slug": "shoshika",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "P1_opening_off_topic",
-      "title": "[公開] 1行目がタイトルに未回答",
-      "todo": "1行目に案件のキーワードと具体答えを入れる",
-      "command": "node scripts/complete-article.mjs --slug shoshika --content-only --force",
-      "priority": 5
-    },
-    {
-      "id": "shoshika:B3_topic",
-      "slug": "shoshika",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "B3_topic",
-      "title": "[ゲート] 話題一致",
-      "todo": "要約が searchKeyword と一致（2行以上）",
-      "command": "node scripts/complete-article.mjs --slug shoshika --content-only --force",
-      "priority": 30
-    },
-    {
       "id": "shoshika:E4_timeline_diet_topic",
       "slug": "shoshika",
       "agent": "writer",
@@ -827,50 +476,6 @@
       "title": "[ゲート] TL国会の話題",
       "todo": "国会TLはある分だけ話題一致。TLなし可。根拠なしの結論は不可",
       "command": "node scripts/enrich-timeline-all.mjs --slug shoshika",
-      "priority": 30
-    },
-    {
-      "id": "shoshika:E5_timeline_summary",
-      "slug": "shoshika",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "E5_timeline_summary",
-      "title": "[ゲート] TL要約",
-      "todo": "国会TLは平易語要約必須（空定型・切り出し禁止）",
-      "command": "node scripts/enrich-timeline-all.mjs --slug shoshika",
-      "priority": 30
-    },
-    {
-      "id": "shoshika:I1_legal",
-      "slug": "shoshika",
-      "agent": "legal-check",
-      "agentLabel": "法務",
-      "checkId": "I1_legal",
-      "title": "[ゲート] 法務",
-      "todo": "legal-check を実行",
-      "command": "node scripts/complete-article.mjs --slug shoshika --legal-only",
-      "priority": 30
-    },
-    {
-      "id": "tariff-us:E5_timeline_summary",
-      "slug": "tariff-us",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "E5_timeline_summary",
-      "title": "[ゲート] TL要約",
-      "todo": "国会TLは平易語要約必須（空定型・切り出し禁止）",
-      "command": "node scripts/enrich-timeline-all.mjs --slug tariff-us",
-      "priority": 30
-    },
-    {
-      "id": "tariff-us:I1_legal",
-      "slug": "tariff-us",
-      "agent": "legal-check",
-      "agentLabel": "法務",
-      "checkId": "I1_legal",
-      "title": "[ゲート] 法務",
-      "todo": "legal-check を実行",
-      "command": "node scripts/complete-article.mjs --slug tariff-us --legal-only",
       "priority": 30
     },
     {

@@ -1,13 +1,13 @@
 {
-  "generatedAt": "2026-07-19T10:55:52.110Z",
+  "generatedAt": "2026-07-20T10:24:56.617Z",
   "strategy": "quality-first",
   "activeCount": 45,
   "parkedCount": 0,
   "publishedCount": 30,
-  "overallGoldPct": 54,
-  "overallGatePct": 73,
-  "qualityFailed": 0,
-  "specialPublishCount": 25,
+  "overallGoldPct": 76,
+  "overallGatePct": 89,
+  "qualityFailed": 2,
+  "specialPublishCount": 12,
   "automationPolicy": [
     {
       "channel": "記事の下書きづくり",
@@ -76,30 +76,24 @@
     }
   ],
   "patrolHealth": {
-    "status": "stalled",
-    "statusLabel": "進行停止（ループ中）",
+    "status": "idle",
+    "statusLabel": "停止中",
     "paused": false,
     "pauseReason": null,
     "pauseDetail": null,
-    "globalStall": {
-      "goldPct": 76,
-      "cycles": 3,
-      "since": "2026-07-13T05:39:25.525Z",
-      "lastAt": "2026-07-13T05:46:57.971Z",
-      "message": "完成度 76% が 3 サイクル連続で変わらず、1本も完成していません"
-    },
+    "globalStall": null,
     "slugStalls": [],
     "stalledCount": 0,
-    "message": "完成度 76% が 3 サイクル連続で変わらず、1本も完成していません",
-    "analyzedAt": "2026-07-19T10:55:52.108Z",
-    "lastPatrolCycleAt": "2026-07-13T05:46:57.971Z",
-    "patrolRunning": true
+    "message": "停止中",
+    "analyzedAt": "2026-07-20T10:24:56.615Z",
+    "lastPatrolCycleAt": "2026-07-20T10:24:54.674Z",
+    "patrolRunning": false
   },
   "slugs": [
     {
       "slug": "kojin-joho-kaisei",
-      "title": "【個人情報保護法】改正は誰の利益になるのか？",
-      "shortTitle": "【個人情報保護法】改正は誰の利益になるのか？",
+      "title": "【個人情報保護法改正】同意なしで提供へ。政治家は例外？",
+      "shortTitle": "【個人情報保護法改正】同意なしで提供へ。政治家は例外？",
       "category": "法律・制度",
       "policyCategory": "法律・制度",
       "adminHidden": false,
@@ -107,11 +101,29 @@
       "publishState": "live",
       "adminBucket": "live",
       "previewUrl": "/dev/preview/kojin-joho-kaisei/",
-      "qualityOk": true,
-      "needsQualityFix": false,
-      "qualityBlockerCount": 0,
-      "qualityBlockers": [],
+      "qualityOk": false,
+      "needsQualityFix": true,
+      "qualityBlockerCount": 1,
+      "qualityBlockers": [
+        {
+          "id": "Q7_procedural_evidence",
+          "message": "要点が議事手続き・発言断片の羅列",
+          "todo": "論点・数値・可決結果が分かる第三者要約に差し替え",
+          "agent": "ceo"
+        }
+      ],
       "agentTasks": [
+        {
+          "id": "kojin-joho-kaisei:Q7_procedural_evidence",
+          "slug": "kojin-joho-kaisei",
+          "agent": "ceo",
+          "agentLabel": "CEO",
+          "checkId": "Q7_procedural_evidence",
+          "title": "[品質] 要点が議事手続き・発言断片の羅列",
+          "todo": "論点・数値・可決結果が分かる第三者要約に差し替え",
+          "command": "node scripts/complete-article.mjs --slug kojin-joho-kaisei --content-only --force",
+          "priority": 10
+        },
         {
           "id": "kojin-joho-kaisei:E2_timeline_x",
           "slug": "kojin-joho-kaisei",
@@ -128,7 +140,7 @@
       "goldPct": 50,
       "published": true,
       "specialPublish": true,
-      "specialPublishSummary": "ゲート1件・①〜④未完了",
+      "specialPublishSummary": "ゲート1件・品質NG・①〜④未完了",
       "publishGateOk": true,
       "pipelinePreOk": false,
       "titleAnswerOk": true,
@@ -234,6 +246,11 @@
       "runState": "idle",
       "workItems": [
         {
+          "id": "Q7_procedural_evidence",
+          "label": "要点が議事手続き・発言断片の羅列",
+          "state": "blocked"
+        },
+        {
           "id": "E2_timeline_x",
           "label": "タイムラインX",
           "state": "blocked"
@@ -271,22 +288,50 @@
       "patrolFixing": false,
       "activity": [
         {
+          "at": "2026-07-20T10:24:05.354Z",
+          "when": "07/20 10:24",
+          "type": "patrol.done",
+          "actor": "patrol",
+          "line": "巡回処理完了（巡回） — 完成度 50% / 品質 NG"
+        },
+        {
+          "at": "2026-07-20T10:24:03.507Z",
+          "when": "07/20 10:24",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — ceo / Q7_procedural_evidence"
+        },
+        {
+          "at": "2026-07-20T10:24:01.671Z",
+          "when": "07/20 10:24",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — ceo / Q7_procedural_evidence"
+        },
+        {
+          "at": "2026-07-20T10:23:59.757Z",
+          "when": "07/20 10:23",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — ceo / Q7_procedural_evidence"
+        },
+        {
           "at": "2026-07-16T07:50:00.000Z",
-          "when": "07/16 16:50",
+          "when": "07/16 07:50",
           "type": "publish.manual",
           "actor": "owner",
           "line": "手動で一般公開（あなた） — 履歴補完（公開日時から）"
         },
         {
           "at": "2026-07-16T09:57:10.273Z",
-          "when": "07/16 18:57",
+          "when": "07/16 09:57",
           "type": "promo.note",
           "actor": "promo",
           "line": "note投稿済み（発信） — note 投稿完了"
         },
         {
           "at": "2026-07-16T08:38:12.683Z",
-          "when": "07/16 17:38",
+          "when": "07/16 08:38",
           "type": "promo.note",
           "actor": "promo",
           "line": "note投稿済み（発信） — note 投稿完了"
@@ -296,19 +341,19 @@
         {
           "channel": "X",
           "automation": "semi",
-          "status": "済 07/17 18:30",
+          "status": "済 07/17 09:30",
           "done": true
         },
         {
           "channel": "はてブ",
           "automation": "semi",
-          "status": "済 07/16 16:56",
+          "status": "済 07/16 07:56",
           "done": true
         },
         {
           "channel": "note",
           "automation": "semi",
-          "status": "済 07/16 18:57",
+          "status": "済 07/16 09:57",
           "done": true
         },
         {
@@ -550,17 +595,6 @@
           "priority": 30
         },
         {
-          "id": "kokumin-futan-suii:E5_timeline_summary",
-          "slug": "kokumin-futan-suii",
-          "agent": "writer",
-          "agentLabel": "ライター",
-          "checkId": "E5_timeline_summary",
-          "title": "[ゲート] TL要約",
-          "todo": "国会TLは平易語要約必須（空定型・切り出し禁止）",
-          "command": "node scripts/enrich-timeline-all.mjs --slug kokumin-futan-suii",
-          "priority": 30
-        },
-        {
           "id": "kokumin-futan-suii:I1_legal",
           "slug": "kokumin-futan-suii",
           "agent": "legal-check",
@@ -576,7 +610,7 @@
       "goldPct": 17,
       "published": true,
       "specialPublish": true,
-      "specialPublishSummary": "ゲート5件・①〜④未完了",
+      "specialPublishSummary": "ゲート4件・①〜④未完了",
       "publishGateOk": true,
       "pipelinePreOk": false,
       "titleAnswerOk": true,
@@ -678,12 +712,6 @@
           "detail": "0/3 X"
         },
         {
-          "id": "E5_timeline_summary",
-          "label": "TL要約",
-          "todo": "国会TLは平易語要約必須（空定型・切り出し禁止）",
-          "detail": "3/3件が空定型・未要約"
-        },
-        {
           "id": "H1_xPosts",
           "label": "X投稿",
           "todo": "検証済みX URLを3件以上（x-researcher）",
@@ -702,17 +730,12 @@
           "detail": "pending"
         }
       ],
-      "blockerCount": 5,
+      "blockerCount": 4,
       "runState": "idle",
       "workItems": [
         {
           "id": "E2_timeline_x",
           "label": "タイムラインX",
-          "state": "blocked"
-        },
-        {
-          "id": "E5_timeline_summary",
-          "label": "TL要約",
           "state": "blocked"
         },
         {
@@ -748,7 +771,7 @@
       ],
       "nextAction": "✅ 公開中 — 要対応あり（裏で修正中・URLは維持）",
       "promo": {
-        "x": "2026-07-14T09:30:10.685Z",
+        "x": "2026-07-19T09:32:17.123Z",
         "hatena": "2026-07-14T02:46:25.383Z",
         "note": "2026-07-14T02:49:19.115Z"
       },
@@ -773,71 +796,71 @@
       "patrolFixing": false,
       "activity": [
         {
+          "at": "2026-07-20T10:23:59.739Z",
+          "when": "07/20 10:23",
+          "type": "patrol.done",
+          "actor": "patrol",
+          "line": "巡回処理完了（巡回） — 完成度 17% / 品質 OK"
+        },
+        {
+          "at": "2026-07-20T10:23:58.781Z",
+          "when": "07/20 10:23",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — writer / E2_timeline_x"
+        },
+        {
+          "at": "2026-07-20T10:23:57.782Z",
+          "when": "07/20 10:23",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — writer / E2_timeline_x"
+        },
+        {
+          "at": "2026-07-20T10:23:56.807Z",
+          "when": "07/20 10:23",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — writer / E2_timeline_x"
+        },
+        {
           "at": "2026-07-14T02:22:59.455Z",
-          "when": "07/14 11:22",
+          "when": "07/14 02:22",
           "type": "publish.manual",
           "actor": "owner",
           "line": "手動で一般公開（あなた） — 履歴補完（公開日時から）"
         },
         {
           "at": "2026-07-10T05:27:02.385Z",
-          "when": "07/10 14:27",
+          "when": "07/10 05:27",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 17% / 品質 OK"
         },
         {
           "at": "2026-07-10T05:26:58.953Z",
-          "when": "07/10 14:26",
+          "when": "07/10 05:26",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / C2_evidence_distinct"
         },
         {
           "at": "2026-07-10T05:26:55.745Z",
-          "when": "07/10 14:26",
+          "when": "07/10 05:26",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / C2_evidence_distinct"
         },
         {
           "at": "2026-07-10T05:26:52.235Z",
-          "when": "07/10 14:26",
+          "when": "07/10 05:26",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / C2_evidence_distinct"
         },
         {
           "at": "2026-07-10T05:26:48.828Z",
-          "when": "07/10 14:26",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — writer / C2_evidence_distinct"
-        },
-        {
-          "at": "2026-07-10T05:26:45.503Z",
-          "when": "07/10 14:26",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — writer / C2_evidence_distinct"
-        },
-        {
-          "at": "2026-07-10T05:15:11.050Z",
-          "when": "07/10 14:15",
-          "type": "patrol.done",
-          "actor": "patrol",
-          "line": "巡回処理完了（巡回） — 完成度 17% / 品質 OK"
-        },
-        {
-          "at": "2026-07-10T05:15:07.905Z",
-          "when": "07/10 14:15",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — writer / C2_evidence_distinct"
-        },
-        {
-          "at": "2026-07-10T05:15:04.865Z",
-          "when": "07/10 14:15",
+          "when": "07/10 05:26",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / C2_evidence_distinct"
@@ -847,19 +870,19 @@
         {
           "channel": "X",
           "automation": "semi",
-          "status": "済 07/14 18:30",
+          "status": "済 07/19 09:32",
           "done": true
         },
         {
           "channel": "はてブ",
           "automation": "semi",
-          "status": "済 07/14 11:46",
+          "status": "済 07/14 02:46",
           "done": true
         },
         {
           "channel": "note",
           "automation": "semi",
-          "status": "済 07/14 11:49",
+          "status": "済 07/14 02:49",
           "done": true
         },
         {
@@ -887,37 +910,14 @@
       "needsQualityFix": false,
       "qualityBlockerCount": 0,
       "qualityBlockers": [],
-      "agentTasks": [
-        {
-          "id": "kokumin-kaigi:E5_timeline_summary",
-          "slug": "kokumin-kaigi",
-          "agent": "writer",
-          "agentLabel": "ライター",
-          "checkId": "E5_timeline_summary",
-          "title": "[ゲート] TL要約",
-          "todo": "国会TLは平易語要約必須（空定型・切り出し禁止）",
-          "command": "node scripts/enrich-timeline-all.mjs --slug kokumin-kaigi",
-          "priority": 30
-        },
-        {
-          "id": "kokumin-kaigi:I1_legal",
-          "slug": "kokumin-kaigi",
-          "agent": "legal-check",
-          "agentLabel": "法務",
-          "checkId": "I1_legal",
-          "title": "[ゲート] 法務",
-          "todo": "legal-check を実行",
-          "command": "node scripts/complete-article.mjs --slug kokumin-kaigi --legal-only",
-          "priority": 30
-        }
-      ],
-      "gatePct": 50,
-      "goldPct": 33,
+      "agentTasks": [],
+      "gatePct": 100,
+      "goldPct": 83,
       "published": true,
-      "specialPublish": true,
-      "specialPublishSummary": "ゲート2件・①〜④未完了",
+      "specialPublish": false,
+      "specialPublishSummary": "",
       "publishGateOk": true,
-      "pipelinePreOk": false,
+      "pipelinePreOk": true,
       "titleAnswerOk": true,
       "titleAnswerDetail": "1行目がタイトルに回答している",
       "titleAnswerTodo": null,
@@ -927,7 +927,7 @@
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "matrix",
@@ -948,14 +948,14 @@
           "label": "④法務OK",
           "phase": 4,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "deployed",
           "label": "⑤本番デプロイ",
           "phase": 5,
           "preDeploy": false,
-          "ok": false
+          "ok": true
         },
         {
           "id": "debug",
@@ -971,7 +971,7 @@
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "matrix",
@@ -992,14 +992,14 @@
           "label": "④法務OK",
           "phase": 4,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "deployed",
           "label": "⑤本番デプロイ",
           "phase": 5,
           "preDeploy": false,
-          "ok": false
+          "ok": true
         },
         {
           "id": "debug",
@@ -1009,45 +1009,17 @@
           "ok": false
         }
       ],
-      "blockers": [
-        {
-          "id": "E5_timeline_summary",
-          "label": "TL要約",
-          "todo": "国会TLは平易語要約必須（空定型・切り出し禁止）",
-          "detail": "3/6件が空定型・未要約"
-        },
-        {
-          "id": "I1_legal",
-          "label": "法務",
-          "todo": "legal-check を実行",
-          "detail": "needs_owner"
-        }
-      ],
-      "blockerCount": 2,
+      "blockers": [],
+      "blockerCount": 0,
       "runState": "idle",
       "workItems": [
         {
-          "id": "E5_timeline_summary",
-          "label": "TL要約",
-          "state": "active"
-        },
-        {
-          "id": "I1_legal",
-          "label": "法務",
-          "state": "blocked"
-        },
-        {
-          "id": "pipe:content",
-          "label": "①コンテンツ",
-          "state": "blocked"
-        },
-        {
-          "id": "pipe:legal",
-          "label": "④法務OK",
+          "id": "pipe:debug",
+          "label": "⑥デバッグOK",
           "state": "blocked"
         }
       ],
-      "nextAction": "✅ 公開中 — 要対応あり（裏で修正中・URLは維持）",
+      "nextAction": "✅ 公開中 — /case/ に表示されています",
       "promo": {
         "x": null,
         "hatena": null,
@@ -1066,79 +1038,79 @@
       },
       "xUnavailable": true,
       "xResearchStatus": "exhausted",
-      "statusExplain": "サイトに載っているが、内部チェックは全部終わっていない。",
+      "statusExplain": "サイトに公開中。",
       "publishedBy": null,
       "publishedAt": null,
       "adminHiddenBy": null,
       "adminHiddenAt": null,
-      "patrolFixing": true,
+      "patrolFixing": false,
       "activity": [
         {
           "at": "2026-07-10T05:38:31.130Z",
-          "when": "07/10 14:38",
+          "when": "07/10 05:38",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
         },
         {
           "at": "2026-07-10T05:24:04.476Z",
-          "when": "07/10 14:24",
+          "when": "07/10 05:24",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
         },
         {
           "at": "2026-07-10T05:12:05.684Z",
-          "when": "07/10 14:12",
+          "when": "07/10 05:12",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
         },
         {
           "at": "2026-07-10T05:00:23.060Z",
-          "when": "07/10 14:00",
+          "when": "07/10 05:00",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
         },
         {
           "at": "2026-07-10T04:48:28.842Z",
-          "when": "07/10 13:48",
+          "when": "07/10 04:48",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
         },
         {
           "at": "2026-07-10T04:36:58.416Z",
-          "when": "07/10 13:36",
+          "when": "07/10 04:36",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
         },
         {
           "at": "2026-07-10T04:22:23.029Z",
-          "when": "07/10 13:22",
+          "when": "07/10 04:22",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
         },
         {
           "at": "2026-07-10T04:10:41.774Z",
-          "when": "07/10 13:10",
+          "when": "07/10 04:10",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
         },
         {
           "at": "2026-07-10T03:58:43.991Z",
-          "when": "07/10 12:58",
+          "when": "07/10 03:58",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
         },
         {
           "at": "2026-07-10T03:46:59.745Z",
-          "when": "07/10 12:46",
+          "when": "07/10 03:46",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
@@ -1175,8 +1147,8 @@
     },
     {
       "slug": "case-mr0jbdpc",
-      "title": "【国旗損壊罪】今国会で審議入りしたのか",
-      "shortTitle": "【国旗損壊罪】今国会で審議入りしたのか",
+      "title": "【国旗損壊罪】連立合意で法制化へ？いま国会の動き",
+      "shortTitle": "【国旗損壊罪】連立合意で法制化へ？いま国会の動き",
       "category": "国会",
       "policyCategory": "国会",
       "adminHidden": false,
@@ -1190,6 +1162,28 @@
       "qualityBlockers": [],
       "agentTasks": [
         {
+          "id": "case-mr0jbdpc:P1_opening_no_outcome",
+          "slug": "case-mr0jbdpc",
+          "agent": "writer",
+          "agentLabel": "ライター",
+          "checkId": "P1_opening_no_outcome",
+          "title": "[公開] 1行目がタイトルに未回答",
+          "todo": "成立/見送り/予算額など、いまどうなっているかを1行目に書く",
+          "command": "node scripts/complete-article.mjs --slug case-mr0jbdpc --content-only --force",
+          "priority": 5
+        },
+        {
+          "id": "case-mr0jbdpc:C2_evidence_distinct",
+          "slug": "case-mr0jbdpc",
+          "agent": "writer",
+          "agentLabel": "ライター",
+          "checkId": "C2_evidence_distinct",
+          "title": "[ゲート] 根拠の独自性",
+          "todo": "根拠は結論と同文禁止",
+          "command": "node scripts/complete-article.mjs --slug case-mr0jbdpc --content-only --force",
+          "priority": 30
+        },
+        {
           "id": "case-mr0jbdpc:E2_timeline_x",
           "slug": "case-mr0jbdpc",
           "agent": "writer",
@@ -1199,40 +1193,18 @@
           "todo": "X投稿を3件以上タイムラインに",
           "command": "node scripts/enrich-timeline-all.mjs --slug case-mr0jbdpc",
           "priority": 30
-        },
-        {
-          "id": "case-mr0jbdpc:E5_timeline_summary",
-          "slug": "case-mr0jbdpc",
-          "agent": "writer",
-          "agentLabel": "ライター",
-          "checkId": "E5_timeline_summary",
-          "title": "[ゲート] TL要約",
-          "todo": "国会TLは平易語要約必須（空定型・切り出し禁止）",
-          "command": "node scripts/enrich-timeline-all.mjs --slug case-mr0jbdpc",
-          "priority": 30
-        },
-        {
-          "id": "case-mr0jbdpc:I1_legal",
-          "slug": "case-mr0jbdpc",
-          "agent": "legal-check",
-          "agentLabel": "法務",
-          "checkId": "I1_legal",
-          "title": "[ゲート] 法務",
-          "todo": "legal-check を実行",
-          "command": "node scripts/complete-article.mjs --slug case-mr0jbdpc --legal-only",
-          "priority": 30
         }
       ],
-      "gatePct": 50,
-      "goldPct": 33,
+      "gatePct": 75,
+      "goldPct": 50,
       "published": true,
       "specialPublish": true,
-      "specialPublishSummary": "ゲート3件・①〜④未完了",
-      "publishGateOk": true,
+      "specialPublishSummary": "ゲート2件・①〜④未完了・1行目未回答",
+      "publishGateOk": false,
       "pipelinePreOk": false,
-      "titleAnswerOk": true,
-      "titleAnswerDetail": "1行目がタイトルに回答している",
-      "titleAnswerTodo": null,
+      "titleAnswerOk": false,
+      "titleAnswerDetail": "「効果・行方」系タイトルなのに1行目に結果の記述がない",
+      "titleAnswerTodo": "成立/見送り/予算額など、いまどうなっているかを1行目に書く",
       "pipeline": [
         {
           "id": "content",
@@ -1260,7 +1232,7 @@
           "label": "④法務OK",
           "phase": 4,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "deployed",
@@ -1304,7 +1276,7 @@
           "label": "④法務OK",
           "phase": 4,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "deployed",
@@ -1323,54 +1295,38 @@
       ],
       "blockers": [
         {
+          "id": "C2_evidence_distinct",
+          "label": "根拠の独自性",
+          "todo": "根拠は結論と同文禁止",
+          "detail": "根拠が結論のコピー"
+        },
+        {
           "id": "E2_timeline_x",
           "label": "タイムラインX",
           "todo": "X投稿を3件以上タイムラインに",
           "detail": "0/3 X"
-        },
-        {
-          "id": "E5_timeline_summary",
-          "label": "TL要約",
-          "todo": "国会TLは平易語要約必須（空定型・切り出し禁止）",
-          "detail": "3/6件が空定型・未要約"
-        },
-        {
-          "id": "I1_legal",
-          "label": "法務",
-          "todo": "legal-check を実行",
-          "detail": "needs_owner"
         }
       ],
-      "blockerCount": 3,
+      "blockerCount": 2,
       "runState": "idle",
       "workItems": [
         {
+          "id": "C2_evidence_distinct",
+          "label": "根拠の独自性",
+          "state": "blocked"
+        },
+        {
           "id": "E2_timeline_x",
           "label": "タイムラインX",
-          "state": "blocked"
-        },
-        {
-          "id": "E5_timeline_summary",
-          "label": "TL要約",
-          "state": "blocked"
-        },
-        {
-          "id": "I1_legal",
-          "label": "法務",
           "state": "blocked"
         },
         {
           "id": "pipe:content",
           "label": "①コンテンツ",
           "state": "blocked"
-        },
-        {
-          "id": "pipe:legal",
-          "label": "④法務OK",
-          "state": "blocked"
         }
       ],
-      "nextAction": "✅ 公開中 — 要対応あり（裏で修正中・URLは維持）",
+      "nextAction": "⚠ 公開中だが1行目がタイトルに未回答 — 非表示または修正を推奨",
       "promo": {
         "x": "2026-07-15T10:17:19.263Z",
         "hatena": "2026-07-03T04:46:15.620Z",
@@ -1378,14 +1334,14 @@
       },
       "short": {
         "slug": "case-mr0jbdpc",
-        "generated": true,
-        "uploaded": true,
-        "visibility": "scheduled",
-        "videoId": "UwHYlpVELbU",
-        "url": "https://www.youtube.com/shorts/UwHYlpVELbU",
-        "studioUrl": "https://studio.youtube.com/video/UwHYlpVELbU/edit",
-        "uploadedAt": "2026-07-05T16:47:48.411Z",
-        "label": "YTアップ済"
+        "generated": false,
+        "uploaded": false,
+        "visibility": null,
+        "videoId": null,
+        "url": null,
+        "studioUrl": null,
+        "uploadedAt": null,
+        "label": "未生成"
       },
       "xUnavailable": false,
       "xResearchStatus": "found",
@@ -1397,71 +1353,71 @@
       "patrolFixing": false,
       "activity": [
         {
+          "at": "2026-07-20T10:24:27.112Z",
+          "when": "07/20 10:24",
+          "type": "patrol.done",
+          "actor": "patrol",
+          "line": "巡回処理完了（巡回） — 完成度 50% / 品質 OK"
+        },
+        {
+          "at": "2026-07-20T10:24:20.223Z",
+          "when": "07/20 10:24",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — writer / C2_evidence_distinct"
+        },
+        {
+          "at": "2026-07-20T10:24:13.157Z",
+          "when": "07/20 10:24",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — writer / C2_evidence_distinct"
+        },
+        {
+          "at": "2026-07-20T10:24:05.371Z",
+          "when": "07/20 10:24",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — writer / C2_evidence_distinct"
+        },
+        {
           "at": "2026-07-10T05:30:20.779Z",
-          "when": "07/10 14:30",
+          "when": "07/10 05:30",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 50% / 品質 OK"
         },
         {
           "at": "2026-07-10T05:30:13.675Z",
-          "when": "07/10 14:30",
+          "when": "07/10 05:30",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / C2_evidence_distinct"
         },
         {
           "at": "2026-07-10T05:30:06.340Z",
-          "when": "07/10 14:30",
+          "when": "07/10 05:30",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / C2_evidence_distinct"
         },
         {
           "at": "2026-07-10T05:29:59.048Z",
-          "when": "07/10 14:29",
+          "when": "07/10 05:29",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / C2_evidence_distinct"
         },
         {
           "at": "2026-07-10T05:29:51.610Z",
-          "when": "07/10 14:29",
+          "when": "07/10 05:29",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / C2_evidence_distinct"
         },
         {
           "at": "2026-07-10T05:29:44.293Z",
-          "when": "07/10 14:29",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — writer / C2_evidence_distinct"
-        },
-        {
-          "at": "2026-07-10T05:15:51.895Z",
-          "when": "07/10 14:15",
-          "type": "patrol.done",
-          "actor": "patrol",
-          "line": "巡回処理完了（巡回） — 完成度 50% / 品質 OK"
-        },
-        {
-          "at": "2026-07-10T05:15:43.685Z",
-          "when": "07/10 14:15",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — writer / C2_evidence_distinct"
-        },
-        {
-          "at": "2026-07-10T05:15:35.189Z",
-          "when": "07/10 14:15",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — writer / C2_evidence_distinct"
-        },
-        {
-          "at": "2026-07-10T05:15:27.318Z",
-          "when": "07/10 14:15",
+          "when": "07/10 05:29",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / C2_evidence_distinct"
@@ -1471,26 +1427,26 @@
         {
           "channel": "X",
           "automation": "semi",
-          "status": "済 07/15 19:17",
+          "status": "済 07/15 10:17",
           "done": true
         },
         {
           "channel": "はてブ",
           "automation": "semi",
-          "status": "済 07/03 13:46",
+          "status": "済 07/03 04:46",
           "done": true
         },
         {
           "channel": "note",
           "automation": "semi",
-          "status": "済 07/03 13:59",
+          "status": "済 07/03 04:59",
           "done": true
         },
         {
           "channel": "ショート",
           "automation": "manual",
-          "status": "YT YTアップ済 07/06 01:47",
-          "done": true
+          "status": "未生成",
+          "done": false
         }
       ],
       "stall": null,
@@ -1498,8 +1454,8 @@
     },
     {
       "slug": "case-mqzxj4ro",
-      "title": "【議員ボーナス】期末手当、据え置きか引上げか",
-      "shortTitle": "【議員ボーナス】期末手当、据え置きか引上げか",
+      "title": "国会議員のボーナスの動向",
+      "shortTitle": "【国会議員のボーナス】期末手当はいくら？2023年給与法改正の争点",
       "category": "国会",
       "policyCategory": "国会",
       "adminHidden": false,
@@ -1511,26 +1467,14 @@
       "needsQualityFix": false,
       "qualityBlockerCount": 0,
       "qualityBlockers": [],
-      "agentTasks": [
-        {
-          "id": "case-mqzxj4ro:E5_timeline_summary",
-          "slug": "case-mqzxj4ro",
-          "agent": "writer",
-          "agentLabel": "ライター",
-          "checkId": "E5_timeline_summary",
-          "title": "[ゲート] TL要約",
-          "todo": "国会TLは平易語要約必須（空定型・切り出し禁止）",
-          "command": "node scripts/enrich-timeline-all.mjs --slug case-mqzxj4ro",
-          "priority": 30
-        }
-      ],
-      "gatePct": 75,
-      "goldPct": 50,
+      "agentTasks": [],
+      "gatePct": 100,
+      "goldPct": 83,
       "published": true,
-      "specialPublish": true,
-      "specialPublishSummary": "ゲート1件・①〜④未完了",
+      "specialPublish": false,
+      "specialPublishSummary": "",
       "publishGateOk": true,
-      "pipelinePreOk": false,
+      "pipelinePreOk": true,
       "titleAnswerOk": true,
       "titleAnswerDetail": "1行目がタイトルに回答している",
       "titleAnswerTodo": null,
@@ -1540,7 +1484,7 @@
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "matrix",
@@ -1568,7 +1512,7 @@
           "label": "⑤本番デプロイ",
           "phase": 5,
           "preDeploy": false,
-          "ok": false
+          "ok": true
         },
         {
           "id": "debug",
@@ -1584,7 +1528,7 @@
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "matrix",
@@ -1612,7 +1556,7 @@
           "label": "⑤本番デプロイ",
           "phase": 5,
           "preDeploy": false,
-          "ok": false
+          "ok": true
         },
         {
           "id": "debug",
@@ -1622,29 +1566,17 @@
           "ok": false
         }
       ],
-      "blockers": [
-        {
-          "id": "E5_timeline_summary",
-          "label": "TL要約",
-          "todo": "国会TLは平易語要約必須（空定型・切り出し禁止）",
-          "detail": "5/6件が空定型・未要約"
-        }
-      ],
-      "blockerCount": 1,
+      "blockers": [],
+      "blockerCount": 0,
       "runState": "idle",
       "workItems": [
         {
-          "id": "E5_timeline_summary",
-          "label": "TL要約",
-          "state": "blocked"
-        },
-        {
-          "id": "pipe:content",
-          "label": "①コンテンツ",
+          "id": "pipe:debug",
+          "label": "⑥デバッグOK",
           "state": "blocked"
         }
       ],
-      "nextAction": "✅ 公開中 — 要対応あり（裏で修正中・URLは維持）",
+      "nextAction": "✅ 公開中 — /case/ に表示されています",
       "promo": {
         "x": null,
         "hatena": "2026-07-14T02:32:34.890Z",
@@ -1663,7 +1595,7 @@
       },
       "xUnavailable": false,
       "xResearchStatus": "found",
-      "statusExplain": "サイトに載っているが、内部チェックは全部終わっていない。",
+      "statusExplain": "サイトに公開中。",
       "publishedBy": "owner",
       "publishedAt": "2026-07-01T20:35:13.073Z",
       "adminHiddenBy": null,
@@ -1672,70 +1604,70 @@
       "activity": [
         {
           "at": "2026-07-10T05:38:31.145Z",
-          "when": "07/10 14:38",
+          "when": "07/10 05:38",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
         },
         {
           "at": "2026-07-10T05:26:45.401Z",
-          "when": "07/10 14:26",
+          "when": "07/10 05:26",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
         },
         {
           "at": "2026-07-10T05:12:05.706Z",
-          "when": "07/10 14:12",
+          "when": "07/10 05:12",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
         },
         {
           "at": "2026-07-10T05:00:23.075Z",
-          "when": "07/10 14:00",
+          "when": "07/10 05:00",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
         },
         {
           "at": "2026-07-01T20:35:13.073Z",
-          "when": "07/02 05:35",
+          "when": "07/01 20:35",
           "type": "publish.manual",
           "actor": "owner",
           "line": "手動で一般公開（あなた） — 履歴補完（公開日時から）"
         },
         {
           "at": "2026-07-10T04:48:28.858Z",
-          "when": "07/10 13:48",
+          "when": "07/10 04:48",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
         },
         {
           "at": "2026-07-10T04:36:58.435Z",
-          "when": "07/10 13:36",
+          "when": "07/10 04:36",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
         },
         {
           "at": "2026-07-10T04:25:04.174Z",
-          "when": "07/10 13:25",
+          "when": "07/10 04:25",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
         },
         {
           "at": "2026-07-10T04:10:41.792Z",
-          "when": "07/10 13:10",
+          "when": "07/10 04:10",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
         },
         {
           "at": "2026-07-10T03:58:44.007Z",
-          "when": "07/10 12:58",
+          "when": "07/10 03:58",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
@@ -1751,13 +1683,13 @@
         {
           "channel": "はてブ",
           "automation": "semi",
-          "status": "済 07/14 11:32",
+          "status": "済 07/14 02:32",
           "done": true
         },
         {
           "channel": "note",
           "automation": "semi",
-          "status": "済 07/14 11:35",
+          "status": "済 07/14 02:35",
           "done": true
         },
         {
@@ -1902,14 +1834,14 @@
       },
       "short": {
         "slug": "case-mqzxgs3f",
-        "generated": true,
-        "uploaded": true,
-        "visibility": "private",
-        "videoId": "Mg0fZcOPbbE",
-        "url": "https://www.youtube.com/shorts/Mg0fZcOPbbE",
-        "studioUrl": "https://studio.youtube.com/video/Mg0fZcOPbbE/edit",
-        "uploadedAt": "2026-07-02T03:23:08.655Z",
-        "label": "YT非公開"
+        "generated": false,
+        "uploaded": false,
+        "visibility": null,
+        "videoId": null,
+        "url": null,
+        "studioUrl": null,
+        "uploadedAt": null,
+        "label": "未生成"
       },
       "xUnavailable": false,
       "xResearchStatus": "found",
@@ -1922,70 +1854,70 @@
       "activity": [
         {
           "at": "2026-07-10T05:38:31.162Z",
-          "when": "07/10 14:38",
+          "when": "07/10 05:38",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
         },
         {
           "at": "2026-07-10T05:26:45.429Z",
-          "when": "07/10 14:26",
+          "when": "07/10 05:26",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
         },
         {
           "at": "2026-07-10T05:14:55.516Z",
-          "when": "07/10 14:14",
+          "when": "07/10 05:14",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
         },
         {
           "at": "2026-07-10T05:00:23.090Z",
-          "when": "07/10 14:00",
+          "when": "07/10 05:00",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
         },
         {
           "at": "2026-07-01T20:35:24.570Z",
-          "when": "07/02 05:35",
+          "when": "07/01 20:35",
           "type": "publish.manual",
           "actor": "owner",
           "line": "手動で一般公開（あなた） — 履歴補完（公開日時から）"
         },
         {
           "at": "2026-07-10T04:48:28.873Z",
-          "when": "07/10 13:48",
+          "when": "07/10 04:48",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
         },
         {
           "at": "2026-07-10T04:36:58.454Z",
-          "when": "07/10 13:36",
+          "when": "07/10 04:36",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
         },
         {
           "at": "2026-07-10T04:25:04.198Z",
-          "when": "07/10 13:25",
+          "when": "07/10 04:25",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
         },
         {
           "at": "2026-07-10T04:13:26.494Z",
-          "when": "07/10 13:13",
+          "when": "07/10 04:13",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
         },
         {
           "at": "2026-07-10T03:58:44.025Z",
-          "when": "07/10 12:58",
+          "when": "07/10 03:58",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
@@ -2001,20 +1933,20 @@
         {
           "channel": "はてブ",
           "automation": "semi",
-          "status": "済 07/14 11:35",
+          "status": "済 07/14 02:35",
           "done": true
         },
         {
           "channel": "note",
           "automation": "semi",
-          "status": "済 07/14 11:41",
+          "status": "済 07/14 02:41",
           "done": true
         },
         {
           "channel": "ショート",
           "automation": "manual",
-          "status": "YT YT非公開 07/02 12:23",
-          "done": true
+          "status": "未生成",
+          "done": false
         }
       ],
       "stall": null,
@@ -2345,7 +2277,7 @@
       "activity": [
         {
           "at": "2026-06-29T04:34:44.409Z",
-          "when": "06/29 13:34",
+          "when": "06/29 04:34",
           "type": "publish.manual",
           "actor": "owner",
           "line": "手動で一般公開（あなた） — 履歴補完（公開日時から）"
@@ -2758,7 +2690,7 @@
       ],
       "nextAction": "✅ 公開中 — /case/ に表示されています",
       "promo": {
-        "x": "2026-07-14T09:30:10.685Z",
+        "x": "2026-07-19T09:32:17.123Z",
         "hatena": "2026-07-14T02:46:04.084Z",
         "note": "2026-07-14T02:47:22.943Z"
       },
@@ -2784,70 +2716,70 @@
       "activity": [
         {
           "at": "2026-07-10T05:38:31.176Z",
-          "when": "07/10 14:38",
+          "when": "07/10 05:38",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
         },
         {
           "at": "2026-07-10T05:26:45.455Z",
-          "when": "07/10 14:26",
+          "when": "07/10 05:26",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
         },
         {
           "at": "2026-07-10T05:14:55.546Z",
-          "when": "07/10 14:14",
+          "when": "07/10 05:14",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
         },
         {
           "at": "2026-07-10T05:03:06.677Z",
-          "when": "07/10 14:03",
+          "when": "07/10 05:03",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
         },
         {
           "at": "2026-07-01T20:45:24.178Z",
-          "when": "07/02 05:45",
+          "when": "07/01 20:45",
           "type": "publish.manual",
           "actor": "owner",
           "line": "手動で一般公開（あなた） — 履歴補完（公開日時から）"
         },
         {
           "at": "2026-07-10T04:48:28.889Z",
-          "when": "07/10 13:48",
+          "when": "07/10 04:48",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
         },
         {
           "at": "2026-07-10T04:36:58.476Z",
-          "when": "07/10 13:36",
+          "when": "07/10 04:36",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
         },
         {
           "at": "2026-07-10T04:25:04.216Z",
-          "when": "07/10 13:25",
+          "when": "07/10 04:25",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
         },
         {
           "at": "2026-07-10T04:13:26.511Z",
-          "when": "07/10 13:13",
+          "when": "07/10 04:13",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
         },
         {
           "at": "2026-07-10T04:01:26.938Z",
-          "when": "07/10 13:01",
+          "when": "07/10 04:01",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
@@ -2857,19 +2789,19 @@
         {
           "channel": "X",
           "automation": "semi",
-          "status": "済 07/14 18:30",
+          "status": "済 07/19 09:32",
           "done": true
         },
         {
           "channel": "はてブ",
           "automation": "semi",
-          "status": "済 07/14 11:46",
+          "status": "済 07/14 02:46",
           "done": true
         },
         {
           "channel": "note",
           "automation": "semi",
-          "status": "済 07/14 11:47",
+          "status": "済 07/14 02:47",
           "done": true
         },
         {
@@ -2940,17 +2872,6 @@
           "title": "[ゲート] 経緯の話題",
           "todo": "経緯3行以上が案件キーワードと一致",
           "command": "node scripts/complete-article.mjs --slug denki-gas-genmen --content-only --force",
-          "priority": 30
-        },
-        {
-          "id": "denki-gas-genmen:E5_timeline_summary",
-          "slug": "denki-gas-genmen",
-          "agent": "writer",
-          "agentLabel": "ライター",
-          "checkId": "E5_timeline_summary",
-          "title": "[ゲート] TL要約",
-          "todo": "国会TLは平易語要約必須（空定型・切り出し禁止）",
-          "command": "node scripts/enrich-timeline-all.mjs --slug denki-gas-genmen",
           "priority": 30
         }
       ],
@@ -3076,15 +2997,9 @@
           "label": "経緯の話題",
           "todo": "経緯3行以上が案件キーワードと一致",
           "detail": "2/3 行が話題一致"
-        },
-        {
-          "id": "E5_timeline_summary",
-          "label": "TL要約",
-          "todo": "国会TLは平易語要約必須（空定型・切り出し禁止）",
-          "detail": "1/3件が空定型・未要約"
         }
       ],
-      "blockerCount": 5,
+      "blockerCount": 4,
       "runState": "idle",
       "workItems": [
         {
@@ -3105,11 +3020,6 @@
         {
           "id": "D2_arc_topic",
           "label": "経緯の話題",
-          "state": "blocked"
-        },
-        {
-          "id": "E5_timeline_summary",
-          "label": "TL要約",
           "state": "blocked"
         },
         {
@@ -3209,17 +3119,6 @@
           "title": "[ゲート] 経緯の話題",
           "todo": "経緯3行以上が案件キーワードと一致",
           "command": "node scripts/complete-article.mjs --slug gakushu-shien-75000 --content-only --force",
-          "priority": 30
-        },
-        {
-          "id": "gakushu-shien-75000:E5_timeline_summary",
-          "slug": "gakushu-shien-75000",
-          "agent": "writer",
-          "agentLabel": "ライター",
-          "checkId": "E5_timeline_summary",
-          "title": "[ゲート] TL要約",
-          "todo": "国会TLは平易語要約必須（空定型・切り出し禁止）",
-          "command": "node scripts/enrich-timeline-all.mjs --slug gakushu-shien-75000",
           "priority": 30
         }
       ],
@@ -3333,15 +3232,9 @@
           "label": "経緯の話題",
           "todo": "経緯3行以上が案件キーワードと一致",
           "detail": "0/3 行が話題一致"
-        },
-        {
-          "id": "E5_timeline_summary",
-          "label": "TL要約",
-          "todo": "国会TLは平易語要約必須（空定型・切り出し禁止）",
-          "detail": "3/3件が空定型・未要約"
         }
       ],
-      "blockerCount": 3,
+      "blockerCount": 2,
       "runState": "idle",
       "workItems": [
         {
@@ -3352,11 +3245,6 @@
         {
           "id": "D2_arc_topic",
           "label": "経緯の話題",
-          "state": "blocked"
-        },
-        {
-          "id": "E5_timeline_summary",
-          "label": "TL要約",
           "state": "blocked"
         },
         {
@@ -3422,8 +3310,8 @@
     },
     {
       "slug": "noto-fukko-budget",
-      "title": "【能登半島地震】復興予算6600億円の内訳 — 必要額との差・進捗・不正の有無",
-      "shortTitle": "【能登半島地震】復興予算6600億円の内訳 — 必要額との差・進捗・不正の有無",
+      "title": "【能登半島地震】復興予算はいくら入った？",
+      "shortTitle": "【能登半島地震】復興予算はいくら入った？",
       "category": "行政",
       "policyCategory": "行政",
       "adminHidden": false,
@@ -3431,20 +3319,66 @@
       "publishState": "live",
       "adminBucket": "live",
       "previewUrl": "/dev/preview/noto-fukko-budget/",
-      "qualityOk": true,
-      "needsQualityFix": false,
-      "qualityBlockerCount": 0,
-      "qualityBlockers": [],
+      "qualityOk": false,
+      "needsQualityFix": true,
+      "qualityBlockerCount": 2,
+      "qualityBlockers": [
+        {
+          "id": "Q1_conclusion_numbers",
+          "message": "タイトルが金額・実績を問うのに、いまの結論に公表数値がない",
+          "todo": "1行目に円・%・万人などタイトルへの直接回答を入れる（X・報道の数字を要約に反映）",
+          "agent": "ceo"
+        },
+        {
+          "id": "Q3_plain_no_answer",
+          "message": "つまり欄の冒頭がタイトルの疑問（金額・実績）に答えていない",
+          "todo": "1段落目を「結論：〇〇万円（日付）」から始める",
+          "agent": "ceo"
+        }
+      ],
       "agentTasks": [
         {
-          "id": "noto-fukko-budget:E2_timeline_x",
+          "id": "noto-fukko-budget:P1_opening_no_number",
           "slug": "noto-fukko-budget",
           "agent": "writer",
           "agentLabel": "ライター",
-          "checkId": "E2_timeline_x",
-          "title": "[ゲート] タイムラインX",
-          "todo": "X投稿を3件以上タイムラインに",
-          "command": "node scripts/enrich-timeline-all.mjs --slug noto-fukko-budget",
+          "checkId": "P1_opening_no_number",
+          "title": "[公開] 1行目がタイトルに未回答",
+          "todo": "円・%・万人など公表数値を1行目に入れる",
+          "command": "node scripts/complete-article.mjs --slug noto-fukko-budget --content-only --force",
+          "priority": 5
+        },
+        {
+          "id": "noto-fukko-budget:Q1_conclusion_numbers",
+          "slug": "noto-fukko-budget",
+          "agent": "ceo",
+          "agentLabel": "CEO",
+          "checkId": "Q1_conclusion_numbers",
+          "title": "[品質] タイトルが金額・実績を問うのに、いまの結論に公表数値がない",
+          "todo": "1行目に円・%・万人などタイトルへの直接回答を入れる（X・報道の数字を要約に反映）",
+          "command": "node scripts/complete-article.mjs --slug noto-fukko-budget --content-only --force",
+          "priority": 10
+        },
+        {
+          "id": "noto-fukko-budget:Q3_plain_no_answer",
+          "slug": "noto-fukko-budget",
+          "agent": "ceo",
+          "agentLabel": "CEO",
+          "checkId": "Q3_plain_no_answer",
+          "title": "[品質] つまり欄の冒頭がタイトルの疑問（金額・実績）に答えていない",
+          "todo": "1段落目を「結論：〇〇万円（日付）」から始める",
+          "command": "node scripts/complete-article.mjs --slug noto-fukko-budget --content-only --force",
+          "priority": 10
+        },
+        {
+          "id": "noto-fukko-budget:B3_topic",
+          "slug": "noto-fukko-budget",
+          "agent": "writer",
+          "agentLabel": "ライター",
+          "checkId": "B3_topic",
+          "title": "[ゲート] 話題一致",
+          "todo": "要約が searchKeyword と一致（2行以上）",
+          "command": "node scripts/complete-article.mjs --slug noto-fukko-budget --content-only --force",
           "priority": 30
         }
       ],
@@ -3452,12 +3386,12 @@
       "goldPct": 50,
       "published": true,
       "specialPublish": true,
-      "specialPublishSummary": "ゲート1件・①〜④未完了",
-      "publishGateOk": true,
+      "specialPublishSummary": "ゲート1件・品質NG・①〜④未完了・1行目未回答",
+      "publishGateOk": false,
       "pipelinePreOk": false,
-      "titleAnswerOk": true,
-      "titleAnswerDetail": "1行目がタイトルに回答している",
-      "titleAnswerTodo": null,
+      "titleAnswerOk": false,
+      "titleAnswerDetail": "タイトルが金額・人数等を問うのに1行目に数値がない",
+      "titleAnswerTodo": "円・%・万人など公表数値を1行目に入れる",
       "pipeline": [
         {
           "id": "content",
@@ -3475,7 +3409,7 @@
         },
         {
           "id": "x",
-          "label": "③X検証1件+",
+          "label": "③X未発見（調査完了）",
           "phase": 3,
           "preDeploy": true,
           "ok": true
@@ -3519,7 +3453,7 @@
         },
         {
           "id": "x",
-          "label": "③X検証1件+",
+          "label": "③X未発見（調査完了）",
           "phase": 3,
           "preDeploy": true,
           "ok": true
@@ -3548,18 +3482,28 @@
       ],
       "blockers": [
         {
-          "id": "E2_timeline_x",
-          "label": "タイムラインX",
-          "todo": "X投稿を3件以上タイムラインに",
-          "detail": "0/3 X"
+          "id": "B3_topic",
+          "label": "話題一致",
+          "todo": "要約が searchKeyword と一致（2行以上）",
+          "detail": "1/2 行がキーワード一致（能登半島地震 復興予算）"
         }
       ],
       "blockerCount": 1,
       "runState": "idle",
       "workItems": [
         {
-          "id": "E2_timeline_x",
-          "label": "タイムラインX",
+          "id": "Q1_conclusion_numbers",
+          "label": "タイトルが金額・実績を問うのに、いまの結論に公表数値がない",
+          "state": "blocked"
+        },
+        {
+          "id": "Q3_plain_no_answer",
+          "label": "つまり欄の冒頭がタイトルの疑問（金額・実績）に答えていない",
+          "state": "blocked"
+        },
+        {
+          "id": "B3_topic",
+          "label": "話題一致",
           "state": "blocked"
         },
         {
@@ -3568,9 +3512,9 @@
           "state": "blocked"
         }
       ],
-      "nextAction": "✅ 公開中 — 要対応あり（裏で修正中・URLは維持）",
+      "nextAction": "⚠ 公開中だが1行目がタイトルに未回答 — 非表示または修正を推奨",
       "promo": {
-        "x": "2026-07-14T09:30:10.685Z",
+        "x": "2026-07-19T09:32:17.123Z",
         "hatena": "2026-07-14T02:45:58.618Z",
         "note": "2026-07-14T02:46:54.204Z"
       },
@@ -3585,8 +3529,8 @@
         "uploadedAt": null,
         "label": "未生成"
       },
-      "xUnavailable": false,
-      "xResearchStatus": "found",
+      "xUnavailable": true,
+      "xResearchStatus": "exhausted",
       "statusExplain": "サイトに載っているが、内部チェックは全部終わっていない。",
       "publishedBy": "owner",
       "publishedAt": "2026-07-01T20:39:20.684Z",
@@ -3595,71 +3539,71 @@
       "patrolFixing": false,
       "activity": [
         {
+          "at": "2026-07-20T10:24:32.765Z",
+          "when": "07/20 10:24",
+          "type": "patrol.done",
+          "actor": "patrol",
+          "line": "巡回処理完了（巡回） — 完成度 50% / 品質 NG"
+        },
+        {
+          "at": "2026-07-20T10:24:30.903Z",
+          "when": "07/20 10:24",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — ceo / Q1_conclusion_numbers"
+        },
+        {
+          "at": "2026-07-20T10:24:29.038Z",
+          "when": "07/20 10:24",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — ceo / Q1_conclusion_numbers"
+        },
+        {
+          "at": "2026-07-20T10:24:27.130Z",
+          "when": "07/20 10:24",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — ceo / Q1_conclusion_numbers"
+        },
+        {
           "at": "2026-07-10T05:30:34.600Z",
-          "when": "07/10 14:30",
+          "when": "07/10 05:30",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 50% / 品質 NG"
         },
         {
           "at": "2026-07-10T05:30:31.860Z",
-          "when": "07/10 14:30",
+          "when": "07/10 05:30",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — ceo / Q1_conclusion_numbers"
         },
         {
           "at": "2026-07-10T05:30:29.212Z",
-          "when": "07/10 14:30",
+          "when": "07/10 05:30",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — ceo / Q1_conclusion_numbers"
         },
         {
           "at": "2026-07-10T05:30:26.375Z",
-          "when": "07/10 14:30",
+          "when": "07/10 05:30",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — ceo / Q1_conclusion_numbers"
         },
         {
           "at": "2026-07-10T05:30:23.597Z",
-          "when": "07/10 14:30",
+          "when": "07/10 05:30",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — ceo / Q1_conclusion_numbers"
         },
         {
           "at": "2026-07-10T05:30:20.797Z",
-          "when": "07/10 14:30",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — ceo / Q1_conclusion_numbers"
-        },
-        {
-          "at": "2026-07-10T05:18:54.725Z",
-          "when": "07/10 14:18",
-          "type": "patrol.done",
-          "actor": "patrol",
-          "line": "巡回処理完了（巡回） — 完成度 50% / 品質 NG"
-        },
-        {
-          "at": "2026-07-10T05:18:51.827Z",
-          "when": "07/10 14:18",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — ceo / Q1_conclusion_numbers"
-        },
-        {
-          "at": "2026-07-10T05:18:48.916Z",
-          "when": "07/10 14:18",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — ceo / Q1_conclusion_numbers"
-        },
-        {
-          "at": "2026-07-10T05:18:45.918Z",
-          "when": "07/10 14:18",
+          "when": "07/10 05:30",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — ceo / Q1_conclusion_numbers"
@@ -3669,19 +3613,19 @@
         {
           "channel": "X",
           "automation": "semi",
-          "status": "済 07/14 18:30",
+          "status": "済 07/19 09:32",
           "done": true
         },
         {
           "channel": "はてブ",
           "automation": "semi",
-          "status": "済 07/14 11:45",
+          "status": "済 07/14 02:45",
           "done": true
         },
         {
           "channel": "note",
           "automation": "semi",
-          "status": "済 07/14 11:46",
+          "status": "済 07/14 02:46",
           "done": true
         },
         {
@@ -3730,17 +3674,6 @@
           "title": "[ゲート] 経緯の話題",
           "todo": "経緯3行以上が案件キーワードと一致",
           "command": "node scripts/complete-article.mjs --slug boei-tokubetsuzei --content-only --force",
-          "priority": 30
-        },
-        {
-          "id": "boei-tokubetsuzei:E5_timeline_summary",
-          "slug": "boei-tokubetsuzei",
-          "agent": "writer",
-          "agentLabel": "ライター",
-          "checkId": "E5_timeline_summary",
-          "title": "[ゲート] TL要約",
-          "todo": "国会TLは平易語要約必須（空定型・切り出し禁止）",
-          "command": "node scripts/enrich-timeline-all.mjs --slug boei-tokubetsuzei",
           "priority": 30
         }
       ],
@@ -3854,15 +3787,9 @@
           "label": "経緯の話題",
           "todo": "経緯3行以上が案件キーワードと一致",
           "detail": "2/3 行が話題一致"
-        },
-        {
-          "id": "E5_timeline_summary",
-          "label": "TL要約",
-          "todo": "国会TLは平易語要約必須（空定型・切り出し禁止）",
-          "detail": "2/3件が空定型・未要約"
         }
       ],
-      "blockerCount": 3,
+      "blockerCount": 2,
       "runState": "idle",
       "workItems": [
         {
@@ -3873,11 +3800,6 @@
         {
           "id": "D2_arc_topic",
           "label": "経緯の話題",
-          "state": "blocked"
-        },
-        {
-          "id": "E5_timeline_summary",
-          "label": "TL要約",
           "state": "blocked"
         },
         {
@@ -3999,17 +3921,6 @@
           "title": "[ゲート] 経緯の話題",
           "todo": "経緯3行以上が案件キーワードと一致",
           "command": "node scripts/complete-article.mjs --slug invoice-menzei-2026 --content-only --force",
-          "priority": 30
-        },
-        {
-          "id": "invoice-menzei-2026:E5_timeline_summary",
-          "slug": "invoice-menzei-2026",
-          "agent": "writer",
-          "agentLabel": "ライター",
-          "checkId": "E5_timeline_summary",
-          "title": "[ゲート] TL要約",
-          "todo": "国会TLは平易語要約必須（空定型・切り出し禁止）",
-          "command": "node scripts/enrich-timeline-all.mjs --slug invoice-menzei-2026",
           "priority": 30
         }
       ],
@@ -4135,15 +4046,9 @@
           "label": "経緯の話題",
           "todo": "経緯3行以上が案件キーワードと一致",
           "detail": "2/3 行が話題一致"
-        },
-        {
-          "id": "E5_timeline_summary",
-          "label": "TL要約",
-          "todo": "国会TLは平易語要約必須（空定型・切り出し禁止）",
-          "detail": "1/3件が空定型・未要約"
         }
       ],
-      "blockerCount": 5,
+      "blockerCount": 4,
       "runState": "idle",
       "workItems": [
         {
@@ -4164,11 +4069,6 @@
         {
           "id": "D2_arc_topic",
           "label": "経緯の話題",
-          "state": "blocked"
-        },
-        {
-          "id": "E5_timeline_summary",
-          "label": "TL要約",
           "state": "blocked"
         },
         {
@@ -4543,14 +4443,14 @@
       },
       "short": {
         "slug": "shussho-budget-seika",
-        "generated": true,
-        "uploaded": true,
-        "visibility": "private",
-        "videoId": "8HPZ4sC7uck",
-        "url": "https://www.youtube.com/shorts/8HPZ4sC7uck",
-        "studioUrl": "https://studio.youtube.com/video/8HPZ4sC7uck/edit",
-        "uploadedAt": "2026-06-29T22:11:20.857Z",
-        "label": "YT非公開"
+        "generated": false,
+        "uploaded": false,
+        "visibility": null,
+        "videoId": null,
+        "url": null,
+        "studioUrl": null,
+        "uploadedAt": null,
+        "label": "未生成"
       },
       "xUnavailable": true,
       "xResearchStatus": "exhausted",
@@ -4563,14 +4463,14 @@
       "activity": [
         {
           "at": "2026-07-16T14:42:37.141Z",
-          "when": "07/16 23:42",
+          "when": "07/16 14:42",
           "type": "hide.manual",
           "actor": "dup-cleanup",
           "line": "手動で非表示（dup-cleanup） — 履歴補完（非表示日時から）"
         },
         {
           "at": "2026-06-29T00:52:28.532Z",
-          "when": "06/29 09:52",
+          "when": "06/29 00:52",
           "type": "publish.manual",
           "actor": "owner",
           "line": "手動で一般公開（あなた） — 履歴補完（公開日時から）"
@@ -4580,7 +4480,7 @@
         {
           "channel": "X",
           "automation": "semi",
-          "status": "済 07/16 19:25",
+          "status": "済 07/16 10:25",
           "done": true
         },
         {
@@ -4598,8 +4498,8 @@
         {
           "channel": "ショート",
           "automation": "manual",
-          "status": "YT YT非公開 06/30 07:11",
-          "done": true
+          "status": "未生成",
+          "done": false
         }
       ],
       "stall": null,
@@ -4751,7 +4651,7 @@
       "activity": [
         {
           "at": "2026-06-29T06:31:08.767Z",
-          "when": "06/29 15:31",
+          "when": "06/29 06:31",
           "type": "publish.manual",
           "actor": "owner",
           "line": "手動で一般公開（あなた） — 履歴補完（公開日時から）"
@@ -4761,7 +4661,7 @@
         {
           "channel": "X",
           "automation": "semi",
-          "status": "済 07/16 19:25",
+          "status": "済 07/16 10:25",
           "done": true
         },
         {
@@ -4788,8 +4688,8 @@
     },
     {
       "slug": "osaka-to-metropolis",
-      "title": "【大阪都構想】3度目の住民投票へ？法定協が再開",
-      "shortTitle": "【大阪都構想】3度目の住民投票へ？法定協が再開",
+      "title": "【大阪都構想】メリット・デメリットと最新の行方",
+      "shortTitle": "【大阪都構想】メリット・デメリットと最新の行方",
       "category": "行政",
       "policyCategory": "行政",
       "adminHidden": false,
@@ -4801,26 +4701,14 @@
       "needsQualityFix": false,
       "qualityBlockerCount": 0,
       "qualityBlockers": [],
-      "agentTasks": [
-        {
-          "id": "osaka-to-metropolis:C2_evidence_distinct",
-          "slug": "osaka-to-metropolis",
-          "agent": "writer",
-          "agentLabel": "ライター",
-          "checkId": "C2_evidence_distinct",
-          "title": "[ゲート] 根拠の独自性",
-          "todo": "根拠は結論と同文禁止",
-          "command": "node scripts/complete-article.mjs --slug osaka-to-metropolis --content-only --force",
-          "priority": 30
-        }
-      ],
-      "gatePct": 75,
-      "goldPct": 50,
+      "agentTasks": [],
+      "gatePct": 100,
+      "goldPct": 100,
       "published": true,
-      "specialPublish": true,
-      "specialPublishSummary": "ゲート1件・①〜④未完了",
+      "specialPublish": false,
+      "specialPublishSummary": "",
       "publishGateOk": true,
-      "pipelinePreOk": false,
+      "pipelinePreOk": true,
       "titleAnswerOk": true,
       "titleAnswerDetail": "1行目がタイトルに回答している",
       "titleAnswerTodo": null,
@@ -4830,7 +4718,7 @@
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "matrix",
@@ -4858,14 +4746,14 @@
           "label": "⑤本番デプロイ",
           "phase": 5,
           "preDeploy": false,
-          "ok": false
+          "ok": true
         },
         {
           "id": "debug",
           "label": "⑥デバッグOK",
           "phase": 6,
           "preDeploy": false,
-          "ok": false
+          "ok": true
         }
       ],
       "gold": [
@@ -4874,7 +4762,7 @@
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "matrix",
@@ -4902,39 +4790,21 @@
           "label": "⑤本番デプロイ",
           "phase": 5,
           "preDeploy": false,
-          "ok": false
+          "ok": true
         },
         {
           "id": "debug",
           "label": "⑥デバッグOK",
           "phase": 6,
           "preDeploy": false,
-          "ok": false
+          "ok": true
         }
       ],
-      "blockers": [
-        {
-          "id": "C2_evidence_distinct",
-          "label": "根拠の独自性",
-          "todo": "根拠は結論と同文禁止",
-          "detail": "根拠が結論のコピー"
-        }
-      ],
-      "blockerCount": 1,
+      "blockers": [],
+      "blockerCount": 0,
       "runState": "idle",
-      "workItems": [
-        {
-          "id": "C2_evidence_distinct",
-          "label": "根拠の独自性",
-          "state": "blocked"
-        },
-        {
-          "id": "pipe:content",
-          "label": "①コンテンツ",
-          "state": "blocked"
-        }
-      ],
-      "nextAction": "✅ 公開中 — 要対応あり（裏で修正中・URLは維持）",
+      "workItems": [],
+      "nextAction": "✅ 公開中 — /case/ に表示されています",
       "promo": {
         "x": "2026-07-17T09:30:46.251Z",
         "hatena": null,
@@ -4953,7 +4823,7 @@
       },
       "xUnavailable": true,
       "xResearchStatus": "exhausted",
-      "statusExplain": "サイトに載っているが、内部チェックは全部終わっていない。",
+      "statusExplain": "サイトに公開中。",
       "publishedBy": null,
       "publishedAt": "2026-06-29T06:31:08.845Z",
       "adminHiddenBy": null,
@@ -4962,7 +4832,7 @@
       "activity": [
         {
           "at": "2026-06-29T06:31:08.845Z",
-          "when": "06/29 15:31",
+          "when": "06/29 06:31",
           "type": "publish.manual",
           "actor": "owner",
           "line": "手動で一般公開（あなた） — 履歴補完（公開日時から）"
@@ -4972,7 +4842,7 @@
         {
           "channel": "X",
           "automation": "semi",
-          "status": "済 07/17 18:30",
+          "status": "済 07/17 09:30",
           "done": true
         },
         {
@@ -5143,14 +5013,14 @@
       "activity": [
         {
           "at": "2026-07-16T14:42:37.143Z",
-          "when": "07/16 23:42",
+          "when": "07/16 14:42",
           "type": "hide.manual",
           "actor": "dup-cleanup",
           "line": "手動で非表示（dup-cleanup） — 履歴補完（非表示日時から）"
         },
         {
           "at": "2026-07-01T20:38:48.641Z",
-          "when": "07/02 05:38",
+          "when": "07/01 20:38",
           "type": "publish.manual",
           "actor": "owner",
           "line": "手動で一般公開（あなた） — 履歴補完（公開日時から）"
@@ -5160,19 +5030,19 @@
         {
           "channel": "X",
           "automation": "semi",
-          "status": "済 07/03 12:50",
+          "status": "済 07/03 03:50",
           "done": true
         },
         {
           "channel": "はてブ",
           "automation": "semi",
-          "status": "済 07/14 11:41",
+          "status": "済 07/14 02:41",
           "done": true
         },
         {
           "channel": "note",
           "automation": "semi",
-          "status": "済 07/14 11:45",
+          "status": "済 07/14 02:45",
           "done": true
         },
         {
@@ -5187,8 +5057,8 @@
     },
     {
       "slug": "tokyo-solar-panel",
-      "title": "【太陽光義務】個人住宅は対象外？義務を負うのは誰",
-      "shortTitle": "【太陽光義務】個人住宅は対象外？義務を負うのは誰",
+      "title": "【東京都】太陽光パネル設置義務とは？",
+      "shortTitle": "【東京都】太陽光パネル設置義務とは？",
       "category": "行政",
       "policyCategory": "行政",
       "adminHidden": false,
@@ -5360,71 +5230,71 @@
       "patrolFixing": false,
       "activity": [
         {
+          "at": "2026-07-20T10:24:38.376Z",
+          "when": "07/20 10:24",
+          "type": "patrol.done",
+          "actor": "patrol",
+          "line": "巡回処理完了（巡回） — 完成度 50% / 品質 OK"
+        },
+        {
+          "at": "2026-07-20T10:24:36.509Z",
+          "when": "07/20 10:24",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — writer / B3_topic"
+        },
+        {
+          "at": "2026-07-20T10:24:34.637Z",
+          "when": "07/20 10:24",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — writer / B3_topic"
+        },
+        {
+          "at": "2026-07-20T10:24:32.788Z",
+          "when": "07/20 10:24",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — writer / B3_topic"
+        },
+        {
           "at": "2026-07-10T05:30:48.359Z",
-          "when": "07/10 14:30",
+          "when": "07/10 05:30",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 50% / 品質 OK"
         },
         {
           "at": "2026-07-10T05:30:45.670Z",
-          "when": "07/10 14:30",
+          "when": "07/10 05:30",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / B3_topic"
         },
         {
           "at": "2026-07-10T05:30:42.826Z",
-          "when": "07/10 14:30",
+          "when": "07/10 05:30",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / B3_topic"
         },
         {
           "at": "2026-07-10T05:30:40.015Z",
-          "when": "07/10 14:30",
+          "when": "07/10 05:30",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / B3_topic"
         },
         {
           "at": "2026-07-10T05:30:37.315Z",
-          "when": "07/10 14:30",
+          "when": "07/10 05:30",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / B3_topic"
         },
         {
           "at": "2026-07-10T05:30:34.615Z",
-          "when": "07/10 14:30",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — writer / B3_topic"
-        },
-        {
-          "at": "2026-07-10T05:19:09.330Z",
-          "when": "07/10 14:19",
-          "type": "patrol.done",
-          "actor": "patrol",
-          "line": "巡回処理完了（巡回） — 完成度 50% / 品質 OK"
-        },
-        {
-          "at": "2026-07-10T05:19:06.444Z",
-          "when": "07/10 14:19",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — writer / B3_topic"
-        },
-        {
-          "at": "2026-07-10T05:19:03.555Z",
-          "when": "07/10 14:19",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — writer / B3_topic"
-        },
-        {
-          "at": "2026-07-10T05:19:00.629Z",
-          "when": "07/10 14:19",
+          "when": "07/10 05:30",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / B3_topic"
@@ -5434,7 +5304,7 @@
         {
           "channel": "X",
           "automation": "semi",
-          "status": "済 07/17 18:30",
+          "status": "済 07/17 09:30",
           "done": true
         },
         {
@@ -5609,7 +5479,7 @@
       ],
       "nextAction": "✅ 公開中 — 要対応あり（裏で修正中・URLは維持）",
       "promo": {
-        "x": "2026-07-07T03:32:52.512Z",
+        "x": "2026-07-18T09:09:15.203Z",
         "hatena": "2026-07-14T02:35:26.022Z",
         "note": "2026-07-14T02:42:15.419Z"
       },
@@ -5634,71 +5504,71 @@
       "patrolFixing": false,
       "activity": [
         {
+          "at": "2026-07-20T10:24:44.023Z",
+          "when": "07/20 10:24",
+          "type": "patrol.done",
+          "actor": "patrol",
+          "line": "巡回処理完了（巡回） — 完成度 50% / 品質 OK"
+        },
+        {
+          "at": "2026-07-20T10:24:42.151Z",
+          "when": "07/20 10:24",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — writer / B3_topic"
+        },
+        {
+          "at": "2026-07-20T10:24:40.268Z",
+          "when": "07/20 10:24",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — writer / B3_topic"
+        },
+        {
+          "at": "2026-07-20T10:24:38.396Z",
+          "when": "07/20 10:24",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — writer / B3_topic"
+        },
+        {
           "at": "2026-07-10T05:31:02.429Z",
-          "when": "07/10 14:31",
+          "when": "07/10 05:31",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 50% / 品質 OK"
         },
         {
           "at": "2026-07-10T05:30:59.689Z",
-          "when": "07/10 14:30",
+          "when": "07/10 05:30",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / B3_topic"
         },
         {
           "at": "2026-07-10T05:30:56.683Z",
-          "when": "07/10 14:30",
+          "when": "07/10 05:30",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / B3_topic"
         },
         {
           "at": "2026-07-10T05:30:53.882Z",
-          "when": "07/10 14:30",
+          "when": "07/10 05:30",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / B3_topic"
         },
         {
           "at": "2026-07-10T05:30:51.090Z",
-          "when": "07/10 14:30",
+          "when": "07/10 05:30",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / B3_topic"
         },
         {
           "at": "2026-07-10T05:30:48.375Z",
-          "when": "07/10 14:30",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — writer / B3_topic"
-        },
-        {
-          "at": "2026-07-10T05:19:23.994Z",
-          "when": "07/10 14:19",
-          "type": "patrol.done",
-          "actor": "patrol",
-          "line": "巡回処理完了（巡回） — 完成度 50% / 品質 OK"
-        },
-        {
-          "at": "2026-07-10T05:19:21.051Z",
-          "when": "07/10 14:19",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — writer / B3_topic"
-        },
-        {
-          "at": "2026-07-10T05:19:18.215Z",
-          "when": "07/10 14:19",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — writer / B3_topic"
-        },
-        {
-          "at": "2026-07-10T05:19:15.283Z",
-          "when": "07/10 14:19",
+          "when": "07/10 05:30",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / B3_topic"
@@ -5708,19 +5578,19 @@
         {
           "channel": "X",
           "automation": "semi",
-          "status": "済 07/07 12:32",
+          "status": "済 07/18 09:09",
           "done": true
         },
         {
           "channel": "はてブ",
           "automation": "semi",
-          "status": "済 07/14 11:35",
+          "status": "済 07/14 02:35",
           "done": true
         },
         {
           "channel": "note",
           "automation": "semi",
-          "status": "済 07/14 11:42",
+          "status": "済 07/14 02:42",
           "done": true
         },
         {
@@ -5735,8 +5605,8 @@
     },
     {
       "slug": "tokyo-recall",
-      "title": "【都知事リコール】署名はいつから集められる？",
-      "shortTitle": "【都知事リコール】署名はいつから集められる？",
+      "title": "東京リコールとは — 制度と団体の動き",
+      "shortTitle": "東京リコールとは — 制度と団体の動き",
       "category": "地方",
       "policyCategory": "地方",
       "adminHidden": false,
@@ -5919,71 +5789,71 @@
       "patrolFixing": false,
       "activity": [
         {
+          "at": "2026-07-20T10:24:49.625Z",
+          "when": "07/20 10:24",
+          "type": "patrol.done",
+          "actor": "patrol",
+          "line": "巡回処理完了（巡回） — 完成度 50% / 品質 OK"
+        },
+        {
+          "at": "2026-07-20T10:24:47.758Z",
+          "when": "07/20 10:24",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — writer / B3_topic"
+        },
+        {
+          "at": "2026-07-20T10:24:45.901Z",
+          "when": "07/20 10:24",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — writer / B3_topic"
+        },
+        {
+          "at": "2026-07-20T10:24:44.041Z",
+          "when": "07/20 10:24",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — writer / B3_topic"
+        },
+        {
           "at": "2026-07-10T05:31:16.228Z",
-          "when": "07/10 14:31",
+          "when": "07/10 05:31",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 50% / 品質 OK"
         },
         {
           "at": "2026-07-10T05:31:13.437Z",
-          "when": "07/10 14:31",
+          "when": "07/10 05:31",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / B3_topic"
         },
         {
           "at": "2026-07-10T05:31:10.687Z",
-          "when": "07/10 14:31",
+          "when": "07/10 05:31",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / B3_topic"
         },
         {
           "at": "2026-07-10T05:31:07.968Z",
-          "when": "07/10 14:31",
+          "when": "07/10 05:31",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / B3_topic"
         },
         {
           "at": "2026-07-10T05:31:05.239Z",
-          "when": "07/10 14:31",
+          "when": "07/10 05:31",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / B3_topic"
         },
         {
           "at": "2026-07-10T05:31:02.442Z",
-          "when": "07/10 14:31",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — writer / B3_topic"
-        },
-        {
-          "at": "2026-07-10T05:19:39.010Z",
-          "when": "07/10 14:19",
-          "type": "patrol.done",
-          "actor": "patrol",
-          "line": "巡回処理完了（巡回） — 完成度 50% / 品質 OK"
-        },
-        {
-          "at": "2026-07-10T05:19:36.048Z",
-          "when": "07/10 14:19",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — writer / B3_topic"
-        },
-        {
-          "at": "2026-07-10T05:19:33.032Z",
-          "when": "07/10 14:19",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — writer / B3_topic"
-        },
-        {
-          "at": "2026-07-10T05:19:30.045Z",
-          "when": "07/10 14:19",
+          "when": "07/10 05:31",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / B3_topic"
@@ -5993,19 +5863,19 @@
         {
           "channel": "X",
           "automation": "semi",
-          "status": "済 07/03 12:50",
+          "status": "済 07/03 03:50",
           "done": true
         },
         {
           "channel": "はてブ",
           "automation": "semi",
-          "status": "済 07/14 11:46",
+          "status": "済 07/14 02:46",
           "done": true
         },
         {
           "channel": "note",
           "automation": "semi",
-          "status": "済 07/14 11:47",
+          "status": "済 07/14 02:47",
           "done": true
         },
         {
@@ -6020,8 +5890,8 @@
     },
     {
       "slug": "bouka-taisaku",
-      "title": "【物価高対策】高市首相が発言した「年8万超の支援」、中身は？",
-      "shortTitle": "【物価高対策】高市首相が発言した「年8万超の支援」、中身は？",
+      "title": "物価高対策の動向",
+      "shortTitle": "【物価高対策】支援策の内容といまの効果",
       "category": "国会",
       "policyCategory": "国会",
       "adminHidden": false,
@@ -6033,48 +5903,14 @@
       "needsQualityFix": false,
       "qualityBlockerCount": 0,
       "qualityBlockers": [],
-      "agentTasks": [
-        {
-          "id": "bouka-taisaku:B3_topic",
-          "slug": "bouka-taisaku",
-          "agent": "writer",
-          "agentLabel": "ライター",
-          "checkId": "B3_topic",
-          "title": "[ゲート] 話題一致",
-          "todo": "要約が searchKeyword と一致（2行以上）",
-          "command": "node scripts/complete-article.mjs --slug bouka-taisaku --content-only --force",
-          "priority": 30
-        },
-        {
-          "id": "bouka-taisaku:D2_arc_topic",
-          "slug": "bouka-taisaku",
-          "agent": "writer",
-          "agentLabel": "ライター",
-          "checkId": "D2_arc_topic",
-          "title": "[ゲート] 経緯の話題",
-          "todo": "経緯3行以上が案件キーワードと一致",
-          "command": "node scripts/complete-article.mjs --slug bouka-taisaku --content-only --force",
-          "priority": 30
-        },
-        {
-          "id": "bouka-taisaku:I1_legal",
-          "slug": "bouka-taisaku",
-          "agent": "legal-check",
-          "agentLabel": "法務",
-          "checkId": "I1_legal",
-          "title": "[ゲート] 法務",
-          "todo": "legal-check を実行",
-          "command": "node scripts/complete-article.mjs --slug bouka-taisaku --legal-only",
-          "priority": 30
-        }
-      ],
-      "gatePct": 50,
-      "goldPct": 33,
+      "agentTasks": [],
+      "gatePct": 100,
+      "goldPct": 100,
       "published": true,
-      "specialPublish": true,
-      "specialPublishSummary": "ゲート3件・①〜④未完了",
+      "specialPublish": false,
+      "specialPublishSummary": "",
       "publishGateOk": true,
-      "pipelinePreOk": false,
+      "pipelinePreOk": true,
       "titleAnswerOk": true,
       "titleAnswerDetail": "1行目がタイトルに回答している",
       "titleAnswerTodo": null,
@@ -6084,7 +5920,7 @@
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "matrix",
@@ -6095,7 +5931,7 @@
         },
         {
           "id": "x",
-          "label": "③X検証1件+",
+          "label": "③X未発見（調査完了）",
           "phase": 3,
           "preDeploy": true,
           "ok": true
@@ -6105,21 +5941,21 @@
           "label": "④法務OK",
           "phase": 4,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "deployed",
           "label": "⑤本番デプロイ",
           "phase": 5,
           "preDeploy": false,
-          "ok": false
+          "ok": true
         },
         {
           "id": "debug",
           "label": "⑥デバッグOK",
           "phase": 6,
           "preDeploy": false,
-          "ok": false
+          "ok": true
         }
       ],
       "gold": [
@@ -6128,7 +5964,7 @@
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "matrix",
@@ -6139,7 +5975,7 @@
         },
         {
           "id": "x",
-          "label": "③X検証1件+",
+          "label": "③X未発見（調査完了）",
           "phase": 3,
           "preDeploy": true,
           "ok": true
@@ -6149,75 +5985,30 @@
           "label": "④法務OK",
           "phase": 4,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "deployed",
           "label": "⑤本番デプロイ",
           "phase": 5,
           "preDeploy": false,
-          "ok": false
+          "ok": true
         },
         {
           "id": "debug",
           "label": "⑥デバッグOK",
           "phase": 6,
           "preDeploy": false,
-          "ok": false
+          "ok": true
         }
       ],
-      "blockers": [
-        {
-          "id": "B3_topic",
-          "label": "話題一致",
-          "todo": "要約が searchKeyword と一致（2行以上）",
-          "detail": "1/2 行がキーワード一致（物価高対策）"
-        },
-        {
-          "id": "D2_arc_topic",
-          "label": "経緯の話題",
-          "todo": "経緯3行以上が案件キーワードと一致",
-          "detail": "1/3 行が話題一致"
-        },
-        {
-          "id": "I1_legal",
-          "label": "法務",
-          "todo": "legal-check を実行",
-          "detail": "needs_owner"
-        }
-      ],
-      "blockerCount": 3,
+      "blockers": [],
+      "blockerCount": 0,
       "runState": "idle",
-      "workItems": [
-        {
-          "id": "B3_topic",
-          "label": "話題一致",
-          "state": "blocked"
-        },
-        {
-          "id": "D2_arc_topic",
-          "label": "経緯の話題",
-          "state": "blocked"
-        },
-        {
-          "id": "I1_legal",
-          "label": "法務",
-          "state": "blocked"
-        },
-        {
-          "id": "pipe:content",
-          "label": "①コンテンツ",
-          "state": "blocked"
-        },
-        {
-          "id": "pipe:legal",
-          "label": "④法務OK",
-          "state": "blocked"
-        }
-      ],
-      "nextAction": "✅ 公開中 — 要対応あり（裏で修正中・URLは維持）",
+      "workItems": [],
+      "nextAction": "✅ 公開中 — /case/ に表示されています",
       "promo": {
-        "x": "2026-07-09T03:32:32.620Z",
+        "x": "2026-07-18T09:09:15.203Z",
         "hatena": "2026-07-14T02:39:59.716Z",
         "note": "2026-07-14T02:40:29.521Z"
       },
@@ -6232,9 +6023,9 @@
         "uploadedAt": null,
         "label": "未生成"
       },
-      "xUnavailable": false,
-      "xResearchStatus": null,
-      "statusExplain": "サイトに載っているが、内部チェックは全部終わっていない。",
+      "xUnavailable": true,
+      "xResearchStatus": "exhausted",
+      "statusExplain": "サイトに公開中。",
       "publishedBy": "owner",
       "publishedAt": "2026-07-01T20:35:25.627Z",
       "adminHiddenBy": null,
@@ -6243,7 +6034,7 @@
       "activity": [
         {
           "at": "2026-07-01T20:35:25.627Z",
-          "when": "07/02 05:35",
+          "when": "07/01 20:35",
           "type": "publish.manual",
           "actor": "owner",
           "line": "手動で一般公開（あなた） — 履歴補完（公開日時から）"
@@ -6253,19 +6044,19 @@
         {
           "channel": "X",
           "automation": "semi",
-          "status": "済 07/09 12:32",
+          "status": "済 07/18 09:09",
           "done": true
         },
         {
           "channel": "はてブ",
           "automation": "semi",
-          "status": "済 07/14 11:39",
+          "status": "済 07/14 02:39",
           "done": true
         },
         {
           "channel": "note",
           "automation": "semi",
-          "status": "済 07/14 11:40",
+          "status": "済 07/14 02:40",
           "done": true
         },
         {
@@ -6280,8 +6071,8 @@
     },
     {
       "slug": "shohizei-genmen",
-      "title": "【食料品減税】2年限定つなぎ？給付つき控除と並行",
-      "shortTitle": "【食料品減税】2年限定つなぎ？給付つき控除と並行",
+      "title": "食料品の消費税の動向",
+      "shortTitle": "【食料品の消費税】減税・免税の議論と最新",
       "category": "国会",
       "policyCategory": "国会",
       "adminHidden": false,
@@ -6424,7 +6215,7 @@
       "activity": [
         {
           "at": "2026-07-01T20:35:26.163Z",
-          "when": "07/02 05:35",
+          "when": "07/01 20:35",
           "type": "publish.manual",
           "actor": "owner",
           "line": "手動で一般公開（あなた） — 履歴補完（公開日時から）"
@@ -6434,19 +6225,19 @@
         {
           "channel": "X",
           "automation": "semi",
-          "status": "済 07/15 19:17",
+          "status": "済 07/15 10:17",
           "done": true
         },
         {
           "channel": "はてブ",
           "automation": "semi",
-          "status": "済 07/14 11:40",
+          "status": "済 07/14 02:40",
           "done": true
         },
         {
           "channel": "note",
           "automation": "semi",
-          "status": "済 07/14 11:42",
+          "status": "済 07/14 02:42",
           "done": true
         },
         {
@@ -6461,8 +6252,8 @@
     },
     {
       "slug": "boeeihi",
-      "title": "【防衛費】財源は？安保三文書との関係",
-      "shortTitle": "【防衛費】財源は？安保三文書との関係",
+      "title": "防衛費・安保の動向",
+      "shortTitle": "【防衛費・安保】増額の行方と安保政策の最新",
       "category": "国会",
       "policyCategory": "国会",
       "adminHidden": false,
@@ -6474,48 +6265,14 @@
       "needsQualityFix": false,
       "qualityBlockerCount": 0,
       "qualityBlockers": [],
-      "agentTasks": [
-        {
-          "id": "boeeihi:D2_arc_topic",
-          "slug": "boeeihi",
-          "agent": "writer",
-          "agentLabel": "ライター",
-          "checkId": "D2_arc_topic",
-          "title": "[ゲート] 経緯の話題",
-          "todo": "経緯3行以上が案件キーワードと一致",
-          "command": "node scripts/complete-article.mjs --slug boeeihi --content-only --force",
-          "priority": 30
-        },
-        {
-          "id": "boeeihi:E5_timeline_summary",
-          "slug": "boeeihi",
-          "agent": "writer",
-          "agentLabel": "ライター",
-          "checkId": "E5_timeline_summary",
-          "title": "[ゲート] TL要約",
-          "todo": "国会TLは平易語要約必須（空定型・切り出し禁止）",
-          "command": "node scripts/enrich-timeline-all.mjs --slug boeeihi",
-          "priority": 30
-        },
-        {
-          "id": "boeeihi:I1_legal",
-          "slug": "boeeihi",
-          "agent": "legal-check",
-          "agentLabel": "法務",
-          "checkId": "I1_legal",
-          "title": "[ゲート] 法務",
-          "todo": "legal-check を実行",
-          "command": "node scripts/complete-article.mjs --slug boeeihi --legal-only",
-          "priority": 30
-        }
-      ],
-      "gatePct": 50,
-      "goldPct": 33,
+      "agentTasks": [],
+      "gatePct": 100,
+      "goldPct": 100,
       "published": true,
-      "specialPublish": true,
-      "specialPublishSummary": "ゲート3件・①〜④未完了",
+      "specialPublish": false,
+      "specialPublishSummary": "",
       "publishGateOk": true,
-      "pipelinePreOk": false,
+      "pipelinePreOk": true,
       "titleAnswerOk": true,
       "titleAnswerDetail": "1行目がタイトルに回答している",
       "titleAnswerTodo": null,
@@ -6525,7 +6282,7 @@
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "matrix",
@@ -6546,21 +6303,21 @@
           "label": "④法務OK",
           "phase": 4,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "deployed",
           "label": "⑤本番デプロイ",
           "phase": 5,
           "preDeploy": false,
-          "ok": false
+          "ok": true
         },
         {
           "id": "debug",
           "label": "⑥デバッグOK",
           "phase": 6,
           "preDeploy": false,
-          "ok": false
+          "ok": true
         }
       ],
       "gold": [
@@ -6569,7 +6326,7 @@
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "matrix",
@@ -6590,73 +6347,28 @@
           "label": "④法務OK",
           "phase": 4,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "deployed",
           "label": "⑤本番デプロイ",
           "phase": 5,
           "preDeploy": false,
-          "ok": false
+          "ok": true
         },
         {
           "id": "debug",
           "label": "⑥デバッグOK",
           "phase": 6,
           "preDeploy": false,
-          "ok": false
+          "ok": true
         }
       ],
-      "blockers": [
-        {
-          "id": "D2_arc_topic",
-          "label": "経緯の話題",
-          "todo": "経緯3行以上が案件キーワードと一致",
-          "detail": "2/3 行が話題一致"
-        },
-        {
-          "id": "E5_timeline_summary",
-          "label": "TL要約",
-          "todo": "国会TLは平易語要約必須（空定型・切り出し禁止）",
-          "detail": "4/6件が空定型・未要約"
-        },
-        {
-          "id": "I1_legal",
-          "label": "法務",
-          "todo": "legal-check を実行",
-          "detail": "needs_owner"
-        }
-      ],
-      "blockerCount": 3,
+      "blockers": [],
+      "blockerCount": 0,
       "runState": "idle",
-      "workItems": [
-        {
-          "id": "D2_arc_topic",
-          "label": "経緯の話題",
-          "state": "blocked"
-        },
-        {
-          "id": "E5_timeline_summary",
-          "label": "TL要約",
-          "state": "blocked"
-        },
-        {
-          "id": "I1_legal",
-          "label": "法務",
-          "state": "blocked"
-        },
-        {
-          "id": "pipe:content",
-          "label": "①コンテンツ",
-          "state": "blocked"
-        },
-        {
-          "id": "pipe:legal",
-          "label": "④法務OK",
-          "state": "blocked"
-        }
-      ],
-      "nextAction": "✅ 公開中 — 要対応あり（裏で修正中・URLは維持）",
+      "workItems": [],
+      "nextAction": "✅ 公開中 — /case/ に表示されています",
       "promo": {
         "x": null,
         "hatena": null,
@@ -6675,7 +6387,7 @@
       },
       "xUnavailable": true,
       "xResearchStatus": "exhausted",
-      "statusExplain": "サイトに載っているが、内部チェックは全部終わっていない。",
+      "statusExplain": "サイトに公開中。",
       "publishedBy": null,
       "publishedAt": null,
       "adminHiddenBy": null,
@@ -6857,7 +6569,7 @@
       "activity": [
         {
           "at": "2026-07-08T19:48:22.239Z",
-          "when": "07/09 04:48",
+          "when": "07/08 19:48",
           "type": "publish.manual",
           "actor": "owner",
           "line": "手動で一般公開（あなた） — 履歴補完（公開日時から）"
@@ -6867,19 +6579,19 @@
         {
           "channel": "X",
           "automation": "semi",
-          "status": "済 07/15 19:17",
+          "status": "済 07/15 10:17",
           "done": true
         },
         {
           "channel": "はてブ",
           "automation": "semi",
-          "status": "済 07/14 11:46",
+          "status": "済 07/14 02:46",
           "done": true
         },
         {
           "channel": "note",
           "automation": "semi",
-          "status": "済 07/14 11:48",
+          "status": "済 07/14 02:48",
           "done": true
         },
         {
@@ -6907,26 +6619,14 @@
       "needsQualityFix": false,
       "qualityBlockerCount": 0,
       "qualityBlockers": [],
-      "agentTasks": [
-        {
-          "id": "nenkin:E5_timeline_summary",
-          "slug": "nenkin",
-          "agent": "writer",
-          "agentLabel": "ライター",
-          "checkId": "E5_timeline_summary",
-          "title": "[ゲート] TL要約",
-          "todo": "国会TLは平易語要約必須（空定型・切り出し禁止）",
-          "command": "node scripts/enrich-timeline-all.mjs --slug nenkin",
-          "priority": 30
-        }
-      ],
-      "gatePct": 75,
-      "goldPct": 50,
+      "agentTasks": [],
+      "gatePct": 100,
+      "goldPct": 100,
       "published": false,
       "specialPublish": false,
       "specialPublishSummary": "",
       "publishGateOk": true,
-      "pipelinePreOk": false,
+      "pipelinePreOk": true,
       "titleAnswerOk": true,
       "titleAnswerDetail": "1行目がタイトルに回答している",
       "titleAnswerTodo": null,
@@ -6936,7 +6636,7 @@
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "matrix",
@@ -6964,14 +6664,14 @@
           "label": "⑤本番デプロイ",
           "phase": 5,
           "preDeploy": false,
-          "ok": false
+          "ok": true
         },
         {
           "id": "debug",
           "label": "⑥デバッグOK",
           "phase": 6,
           "preDeploy": false,
-          "ok": false
+          "ok": true
         }
       ],
       "gold": [
@@ -6980,7 +6680,7 @@
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "matrix",
@@ -7008,38 +6708,20 @@
           "label": "⑤本番デプロイ",
           "phase": 5,
           "preDeploy": false,
-          "ok": false
+          "ok": true
         },
         {
           "id": "debug",
           "label": "⑥デバッグOK",
           "phase": 6,
           "preDeploy": false,
-          "ok": false
+          "ok": true
         }
       ],
-      "blockers": [
-        {
-          "id": "E5_timeline_summary",
-          "label": "TL要約",
-          "todo": "国会TLは平易語要約必須（空定型・切り出し禁止）",
-          "detail": "4/6件が空定型・未要約"
-        }
-      ],
-      "blockerCount": 1,
+      "blockers": [],
+      "blockerCount": 0,
       "runState": "idle",
-      "workItems": [
-        {
-          "id": "E5_timeline_summary",
-          "label": "TL要約",
-          "state": "blocked"
-        },
-        {
-          "id": "pipe:content",
-          "label": "①コンテンツ",
-          "state": "blocked"
-        }
-      ],
+      "workItems": [],
       "nextAction": "👁️ 非表示中 — 「表示に戻す」でトップに出せます",
       "promo": {
         "x": null,
@@ -7068,7 +6750,7 @@
       "activity": [
         {
           "at": "2026-07-16T14:42:37.140Z",
-          "when": "07/16 23:42",
+          "when": "07/16 14:42",
           "type": "hide.manual",
           "actor": "dup-cleanup",
           "line": "手動で非表示（dup-cleanup） — 履歴補完（非表示日時から）"
@@ -7105,8 +6787,8 @@
     },
     {
       "slug": "gaikokujin-seisaku",
-      "title": "【外国人政策】高市内閣はゼロベースで見直したのか。人口戦略は？",
-      "shortTitle": "【外国人政策】高市内閣はゼロベースで見直したのか。人口戦略は？",
+      "title": "外国人政策の動向",
+      "shortTitle": "【外国人政策】在留・労働・共生の最新論点",
       "category": "国会",
       "policyCategory": "国会",
       "adminHidden": false,
@@ -7120,25 +6802,207 @@
       "qualityBlockers": [],
       "agentTasks": [
         {
-          "id": "gaikokujin-seisaku:E1_timeline_count",
+          "id": "gaikokujin-seisaku:P1_opening_template",
           "slug": "gaikokujin-seisaku",
           "agent": "writer",
           "agentLabel": "ライター",
-          "checkId": "E1_timeline_count",
-          "title": "[ゲート] タイムライン",
-          "todo": "出来事を6件以上（X3+国会3）",
-          "command": "node scripts/enrich-timeline-all.mjs --slug gaikokujin-seisaku",
-          "priority": 30
+          "checkId": "P1_opening_template",
+          "title": "[公開] 1行目がタイトルに未回答",
+          "todo": "可決・金額・合意内容など、読者が知りたい答えを1行目に書く",
+          "command": "node scripts/complete-article.mjs --slug gaikokujin-seisaku --content-only --force",
+          "priority": 5
+        }
+      ],
+      "gatePct": 100,
+      "goldPct": 100,
+      "published": true,
+      "specialPublish": true,
+      "specialPublishSummary": "1行目未回答",
+      "publishGateOk": false,
+      "pipelinePreOk": true,
+      "titleAnswerOk": false,
+      "titleAnswerDetail": "1行目が「国会で議論された」等の定型だけ",
+      "titleAnswerTodo": "可決・金額・合意内容など、読者が知りたい答えを1行目に書く",
+      "pipeline": [
+        {
+          "id": "content",
+          "label": "①コンテンツ",
+          "phase": 1,
+          "preDeploy": true,
+          "ok": true
         },
         {
-          "id": "gaikokujin-seisaku:E3_timeline_diet",
-          "slug": "gaikokujin-seisaku",
+          "id": "matrix",
+          "label": "②〇×2党確定",
+          "phase": 2,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "x",
+          "label": "③X未発見（調査完了）",
+          "phase": 3,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "legal",
+          "label": "④法務OK",
+          "phase": 4,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "deployed",
+          "label": "⑤本番デプロイ",
+          "phase": 5,
+          "preDeploy": false,
+          "ok": true
+        },
+        {
+          "id": "debug",
+          "label": "⑥デバッグOK",
+          "phase": 6,
+          "preDeploy": false,
+          "ok": true
+        }
+      ],
+      "gold": [
+        {
+          "id": "content",
+          "label": "①コンテンツ",
+          "phase": 1,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "matrix",
+          "label": "②〇×2党確定",
+          "phase": 2,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "x",
+          "label": "③X未発見（調査完了）",
+          "phase": 3,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "legal",
+          "label": "④法務OK",
+          "phase": 4,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "deployed",
+          "label": "⑤本番デプロイ",
+          "phase": 5,
+          "preDeploy": false,
+          "ok": true
+        },
+        {
+          "id": "debug",
+          "label": "⑥デバッグOK",
+          "phase": 6,
+          "preDeploy": false,
+          "ok": true
+        }
+      ],
+      "blockers": [],
+      "blockerCount": 0,
+      "runState": "idle",
+      "workItems": [],
+      "nextAction": "⚠ 公開中だが1行目がタイトルに未回答 — 非表示または修正を推奨",
+      "promo": {
+        "x": null,
+        "hatena": "2026-07-11T00:31:49.376Z",
+        "note": "2026-07-14T02:33:04.944Z"
+      },
+      "short": {
+        "slug": "gaikokujin-seisaku",
+        "generated": false,
+        "uploaded": false,
+        "visibility": null,
+        "videoId": null,
+        "url": null,
+        "studioUrl": null,
+        "uploadedAt": null,
+        "label": "未生成"
+      },
+      "xUnavailable": true,
+      "xResearchStatus": "exhausted",
+      "statusExplain": "サイトに載っているが、内部チェックは全部終わっていない。",
+      "publishedBy": "owner",
+      "publishedAt": "2026-07-01T17:31:13.446Z",
+      "adminHiddenBy": null,
+      "adminHiddenAt": null,
+      "patrolFixing": false,
+      "activity": [
+        {
+          "at": "2026-07-01T17:31:13.446Z",
+          "when": "07/01 17:31",
+          "type": "publish.manual",
+          "actor": "owner",
+          "line": "手動で一般公開（あなた） — 履歴補完（公開日時から）"
+        }
+      ],
+      "distribution": [
+        {
+          "channel": "X",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "はてブ",
+          "automation": "semi",
+          "status": "済 07/11 00:31",
+          "done": true
+        },
+        {
+          "channel": "note",
+          "automation": "semi",
+          "status": "済 07/14 02:33",
+          "done": true
+        },
+        {
+          "channel": "ショート",
+          "automation": "manual",
+          "status": "未生成",
+          "done": false
+        }
+      ],
+      "stall": null,
+      "ownerTodo": false
+    },
+    {
+      "slug": "shoshika",
+      "title": "【少子化対策】支援策の内容と出生率の動向",
+      "shortTitle": "【少子化対策】支援策の内容と出生率の動向",
+      "category": "国会",
+      "policyCategory": "国会",
+      "adminHidden": false,
+      "pageReady": true,
+      "publishState": "live",
+      "adminBucket": "live",
+      "previewUrl": "/dev/preview/shoshika/",
+      "qualityOk": true,
+      "needsQualityFix": false,
+      "qualityBlockerCount": 0,
+      "qualityBlockers": [],
+      "agentTasks": [
+        {
+          "id": "shoshika:E4_timeline_diet_topic",
+          "slug": "shoshika",
           "agent": "writer",
           "agentLabel": "ライター",
-          "checkId": "E3_timeline_diet",
-          "title": "[ゲート] タイムライン国会",
-          "todo": "国会発言を3件以上タイムラインに",
-          "command": "node scripts/enrich-timeline-all.mjs --slug gaikokujin-seisaku",
+          "checkId": "E4_timeline_diet_topic",
+          "title": "[ゲート] TL国会の話題",
+          "todo": "国会TLはある分だけ話題一致。TLなし可。根拠なしの結論は不可",
+          "command": "node scripts/enrich-timeline-all.mjs --slug shoshika",
           "priority": 30
         }
       ],
@@ -7146,7 +7010,7 @@
       "goldPct": 50,
       "published": true,
       "specialPublish": true,
-      "specialPublishSummary": "ゲート2件・①〜④未完了",
+      "specialPublishSummary": "ゲート1件・①〜④未完了",
       "publishGateOk": true,
       "pipelinePreOk": false,
       "titleAnswerOk": true,
@@ -7242,29 +7106,18 @@
       ],
       "blockers": [
         {
-          "id": "E1_timeline_count",
-          "label": "タイムライン",
-          "todo": "出来事を6件以上（X3+国会3）",
-          "detail": "5件 · 国会2/3（X未発見）"
-        },
-        {
-          "id": "E3_timeline_diet",
-          "label": "タイムライン国会",
-          "todo": "国会発言を3件以上タイムラインに",
-          "detail": "2/3 国会"
+          "id": "E4_timeline_diet_topic",
+          "label": "TL国会の話題",
+          "todo": "国会TLはある分だけ話題一致。TLなし可。根拠なしの結論は不可",
+          "detail": "国会TLあるが話題一致なし＋結論あり"
         }
       ],
-      "blockerCount": 2,
+      "blockerCount": 1,
       "runState": "idle",
       "workItems": [
         {
-          "id": "E1_timeline_count",
-          "label": "タイムライン",
-          "state": "blocked"
-        },
-        {
-          "id": "E3_timeline_diet",
-          "label": "タイムライン国会",
+          "id": "E4_timeline_diet_topic",
+          "label": "TL国会の話題",
           "state": "blocked"
         },
         {
@@ -7276,11 +7129,11 @@
       "nextAction": "✅ 公開中 — 要対応あり（裏で修正中・URLは維持）",
       "promo": {
         "x": null,
-        "hatena": "2026-07-11T00:31:49.376Z",
-        "note": "2026-07-14T02:33:04.944Z"
+        "hatena": null,
+        "note": null
       },
       "short": {
-        "slug": "gaikokujin-seisaku",
+        "slug": "shoshika",
         "generated": false,
         "uploaded": false,
         "visibility": null,
@@ -7293,299 +7146,6 @@
       "xUnavailable": true,
       "xResearchStatus": "exhausted",
       "statusExplain": "サイトに載っているが、内部チェックは全部終わっていない。",
-      "publishedBy": "owner",
-      "publishedAt": "2026-07-01T17:31:13.446Z",
-      "adminHiddenBy": null,
-      "adminHiddenAt": null,
-      "patrolFixing": false,
-      "activity": [
-        {
-          "at": "2026-07-01T17:31:13.446Z",
-          "when": "07/02 02:31",
-          "type": "publish.manual",
-          "actor": "owner",
-          "line": "手動で一般公開（あなた） — 履歴補完（公開日時から）"
-        }
-      ],
-      "distribution": [
-        {
-          "channel": "X",
-          "automation": "semi",
-          "status": "未",
-          "done": false
-        },
-        {
-          "channel": "はてブ",
-          "automation": "semi",
-          "status": "済 07/11 09:31",
-          "done": true
-        },
-        {
-          "channel": "note",
-          "automation": "semi",
-          "status": "済 07/14 11:33",
-          "done": true
-        },
-        {
-          "channel": "ショート",
-          "automation": "manual",
-          "status": "未生成",
-          "done": false
-        }
-      ],
-      "stall": null,
-      "ownerTodo": false
-    },
-    {
-      "slug": "shoshika",
-      "title": "【少子化】支援策は増えたのに出生率は？",
-      "shortTitle": "【少子化】支援策は増えたのに出生率は？",
-      "category": "国会",
-      "policyCategory": "国会",
-      "adminHidden": false,
-      "pageReady": true,
-      "publishState": "live",
-      "adminBucket": "live",
-      "previewUrl": "/dev/preview/shoshika/",
-      "qualityOk": true,
-      "needsQualityFix": false,
-      "qualityBlockerCount": 0,
-      "qualityBlockers": [],
-      "agentTasks": [
-        {
-          "id": "shoshika:P1_opening_off_topic",
-          "slug": "shoshika",
-          "agent": "writer",
-          "agentLabel": "ライター",
-          "checkId": "P1_opening_off_topic",
-          "title": "[公開] 1行目がタイトルに未回答",
-          "todo": "1行目に案件のキーワードと具体答えを入れる",
-          "command": "node scripts/complete-article.mjs --slug shoshika --content-only --force",
-          "priority": 5
-        },
-        {
-          "id": "shoshika:B3_topic",
-          "slug": "shoshika",
-          "agent": "writer",
-          "agentLabel": "ライター",
-          "checkId": "B3_topic",
-          "title": "[ゲート] 話題一致",
-          "todo": "要約が searchKeyword と一致（2行以上）",
-          "command": "node scripts/complete-article.mjs --slug shoshika --content-only --force",
-          "priority": 30
-        },
-        {
-          "id": "shoshika:E4_timeline_diet_topic",
-          "slug": "shoshika",
-          "agent": "writer",
-          "agentLabel": "ライター",
-          "checkId": "E4_timeline_diet_topic",
-          "title": "[ゲート] TL国会の話題",
-          "todo": "国会TLはある分だけ話題一致。TLなし可。根拠なしの結論は不可",
-          "command": "node scripts/enrich-timeline-all.mjs --slug shoshika",
-          "priority": 30
-        },
-        {
-          "id": "shoshika:E5_timeline_summary",
-          "slug": "shoshika",
-          "agent": "writer",
-          "agentLabel": "ライター",
-          "checkId": "E5_timeline_summary",
-          "title": "[ゲート] TL要約",
-          "todo": "国会TLは平易語要約必須（空定型・切り出し禁止）",
-          "command": "node scripts/enrich-timeline-all.mjs --slug shoshika",
-          "priority": 30
-        },
-        {
-          "id": "shoshika:I1_legal",
-          "slug": "shoshika",
-          "agent": "legal-check",
-          "agentLabel": "法務",
-          "checkId": "I1_legal",
-          "title": "[ゲート] 法務",
-          "todo": "legal-check を実行",
-          "command": "node scripts/complete-article.mjs --slug shoshika --legal-only",
-          "priority": 30
-        }
-      ],
-      "gatePct": 50,
-      "goldPct": 33,
-      "published": true,
-      "specialPublish": true,
-      "specialPublishSummary": "ゲート4件・①〜④未完了・1行目未回答",
-      "publishGateOk": false,
-      "pipelinePreOk": false,
-      "titleAnswerOk": false,
-      "titleAnswerDetail": "1行目が案件キーワード（少子化）と一致しない",
-      "titleAnswerTodo": "1行目に案件のキーワードと具体答えを入れる",
-      "pipeline": [
-        {
-          "id": "content",
-          "label": "①コンテンツ",
-          "phase": 1,
-          "preDeploy": true,
-          "ok": false
-        },
-        {
-          "id": "matrix",
-          "label": "②〇×2党確定",
-          "phase": 2,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "x",
-          "label": "③X未発見（調査完了）",
-          "phase": 3,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "legal",
-          "label": "④法務OK",
-          "phase": 4,
-          "preDeploy": true,
-          "ok": false
-        },
-        {
-          "id": "deployed",
-          "label": "⑤本番デプロイ",
-          "phase": 5,
-          "preDeploy": false,
-          "ok": false
-        },
-        {
-          "id": "debug",
-          "label": "⑥デバッグOK",
-          "phase": 6,
-          "preDeploy": false,
-          "ok": false
-        }
-      ],
-      "gold": [
-        {
-          "id": "content",
-          "label": "①コンテンツ",
-          "phase": 1,
-          "preDeploy": true,
-          "ok": false
-        },
-        {
-          "id": "matrix",
-          "label": "②〇×2党確定",
-          "phase": 2,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "x",
-          "label": "③X未発見（調査完了）",
-          "phase": 3,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "legal",
-          "label": "④法務OK",
-          "phase": 4,
-          "preDeploy": true,
-          "ok": false
-        },
-        {
-          "id": "deployed",
-          "label": "⑤本番デプロイ",
-          "phase": 5,
-          "preDeploy": false,
-          "ok": false
-        },
-        {
-          "id": "debug",
-          "label": "⑥デバッグOK",
-          "phase": 6,
-          "preDeploy": false,
-          "ok": false
-        }
-      ],
-      "blockers": [
-        {
-          "id": "B3_topic",
-          "label": "話題一致",
-          "todo": "要約が searchKeyword と一致（2行以上）",
-          "detail": "1/2 行がキーワード一致（少子化）"
-        },
-        {
-          "id": "E4_timeline_diet_topic",
-          "label": "TL国会の話題",
-          "todo": "国会TLはある分だけ話題一致。TLなし可。根拠なしの結論は不可",
-          "detail": "国会TLあるが話題一致なし＋結論あり"
-        },
-        {
-          "id": "E5_timeline_summary",
-          "label": "TL要約",
-          "todo": "国会TLは平易語要約必須（空定型・切り出し禁止）",
-          "detail": "6/6件が空定型・未要約"
-        },
-        {
-          "id": "I1_legal",
-          "label": "法務",
-          "todo": "legal-check を実行",
-          "detail": "needs_owner"
-        }
-      ],
-      "blockerCount": 4,
-      "runState": "idle",
-      "workItems": [
-        {
-          "id": "B3_topic",
-          "label": "話題一致",
-          "state": "blocked"
-        },
-        {
-          "id": "E4_timeline_diet_topic",
-          "label": "TL国会の話題",
-          "state": "blocked"
-        },
-        {
-          "id": "E5_timeline_summary",
-          "label": "TL要約",
-          "state": "blocked"
-        },
-        {
-          "id": "I1_legal",
-          "label": "法務",
-          "state": "blocked"
-        },
-        {
-          "id": "pipe:content",
-          "label": "①コンテンツ",
-          "state": "blocked"
-        },
-        {
-          "id": "pipe:legal",
-          "label": "④法務OK",
-          "state": "blocked"
-        }
-      ],
-      "nextAction": "⚠ 公開中だが1行目がタイトルに未回答 — 非表示または修正を推奨",
-      "promo": {
-        "x": null,
-        "hatena": null,
-        "note": null
-      },
-      "short": {
-        "slug": "shoshika",
-        "generated": true,
-        "uploaded": false,
-        "visibility": null,
-        "videoId": null,
-        "url": null,
-        "studioUrl": null,
-        "uploadedAt": null,
-        "label": "生成済・未アップ"
-      },
-      "xUnavailable": true,
-      "xResearchStatus": "exhausted",
-      "statusExplain": "サイトに載っているが、内部チェックは全部終わっていない。",
       "publishedBy": null,
       "publishedAt": null,
       "adminHiddenBy": null,
@@ -7593,71 +7153,71 @@
       "patrolFixing": false,
       "activity": [
         {
+          "at": "2026-07-20T10:24:52.446Z",
+          "when": "07/20 10:24",
+          "type": "patrol.done",
+          "actor": "patrol",
+          "line": "巡回処理完了（巡回） — 完成度 50% / 品質 OK"
+        },
+        {
+          "at": "2026-07-20T10:24:51.510Z",
+          "when": "07/20 10:24",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — writer / E4_timeline_diet_topic"
+        },
+        {
+          "at": "2026-07-20T10:24:50.580Z",
+          "when": "07/20 10:24",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — writer / E4_timeline_diet_topic"
+        },
+        {
+          "at": "2026-07-20T10:24:49.644Z",
+          "when": "07/20 10:24",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — writer / E4_timeline_diet_topic"
+        },
+        {
           "at": "2026-07-10T05:34:04.850Z",
-          "when": "07/10 14:34",
+          "when": "07/10 05:34",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 50% / 品質 OK"
         },
         {
           "at": "2026-07-10T05:34:03.330Z",
-          "when": "07/10 14:34",
+          "when": "07/10 05:34",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / E4_timeline_diet_topic"
         },
         {
           "at": "2026-07-10T05:34:01.634Z",
-          "when": "07/10 14:34",
+          "when": "07/10 05:34",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / E4_timeline_diet_topic"
         },
         {
           "at": "2026-07-10T05:34:00.012Z",
-          "when": "07/10 14:34",
+          "when": "07/10 05:34",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / E4_timeline_diet_topic"
         },
         {
           "at": "2026-07-10T05:33:58.439Z",
-          "when": "07/10 14:33",
+          "when": "07/10 05:33",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / E4_timeline_diet_topic"
         },
         {
           "at": "2026-07-10T05:33:56.708Z",
-          "when": "07/10 14:33",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — writer / E4_timeline_diet_topic"
-        },
-        {
-          "at": "2026-07-10T05:19:47.083Z",
-          "when": "07/10 14:19",
-          "type": "patrol.done",
-          "actor": "patrol",
-          "line": "巡回処理完了（巡回） — 完成度 50% / 品質 OK"
-        },
-        {
-          "at": "2026-07-10T05:19:45.281Z",
-          "when": "07/10 14:19",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — writer / E4_timeline_diet_topic"
-        },
-        {
-          "at": "2026-07-10T05:19:43.716Z",
-          "when": "07/10 14:19",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — writer / E4_timeline_diet_topic"
-        },
-        {
-          "at": "2026-07-10T05:19:42.190Z",
-          "when": "07/10 14:19",
+          "when": "07/10 05:33",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / E4_timeline_diet_topic"
@@ -7685,7 +7245,7 @@
         {
           "channel": "ショート",
           "automation": "manual",
-          "status": "生成済・未アップ",
+          "status": "未生成",
           "done": false
         }
       ],
@@ -7718,24 +7278,13 @@
           "todo": "国会TLはある分だけ話題一致。TLなし可。根拠なしの結論は不可",
           "command": "node scripts/enrich-timeline-all.mjs --slug kyoiku-mushoka",
           "priority": 30
-        },
-        {
-          "id": "kyoiku-mushoka:E5_timeline_summary",
-          "slug": "kyoiku-mushoka",
-          "agent": "writer",
-          "agentLabel": "ライター",
-          "checkId": "E5_timeline_summary",
-          "title": "[ゲート] TL要約",
-          "todo": "国会TLは平易語要約必須（空定型・切り出し禁止）",
-          "command": "node scripts/enrich-timeline-all.mjs --slug kyoiku-mushoka",
-          "priority": 30
         }
       ],
       "gatePct": 75,
       "goldPct": 50,
       "published": true,
       "specialPublish": true,
-      "specialPublishSummary": "ゲート2件・①〜④未完了",
+      "specialPublishSummary": "ゲート1件・①〜④未完了",
       "publishGateOk": true,
       "pipelinePreOk": false,
       "titleAnswerOk": true,
@@ -7835,25 +7384,14 @@
           "label": "TL国会の話題",
           "todo": "国会TLはある分だけ話題一致。TLなし可。根拠なしの結論は不可",
           "detail": "国会TLあるが話題一致なし＋結論あり"
-        },
-        {
-          "id": "E5_timeline_summary",
-          "label": "TL要約",
-          "todo": "国会TLは平易語要約必須（空定型・切り出し禁止）",
-          "detail": "6/6件が空定型・未要約"
         }
       ],
-      "blockerCount": 2,
+      "blockerCount": 1,
       "runState": "idle",
       "workItems": [
         {
           "id": "E4_timeline_diet_topic",
           "label": "TL国会の話題",
-          "state": "active"
-        },
-        {
-          "id": "E5_timeline_summary",
-          "label": "TL要約",
           "state": "blocked"
         },
         {
@@ -7886,74 +7424,74 @@
       "publishedAt": "2026-07-01T20:35:26.702Z",
       "adminHiddenBy": null,
       "adminHiddenAt": null,
-      "patrolFixing": true,
+      "patrolFixing": false,
       "activity": [
         {
           "at": "2026-07-10T05:34:12.884Z",
-          "when": "07/10 14:34",
+          "when": "07/10 05:34",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 50% / 品質 OK"
         },
         {
           "at": "2026-07-10T05:34:11.243Z",
-          "when": "07/10 14:34",
+          "when": "07/10 05:34",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / E4_timeline_diet_topic"
         },
         {
           "at": "2026-07-10T05:34:09.646Z",
-          "when": "07/10 14:34",
+          "when": "07/10 05:34",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / E4_timeline_diet_topic"
         },
         {
           "at": "2026-07-10T05:34:08.000Z",
-          "when": "07/10 14:34",
+          "when": "07/10 05:34",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / E4_timeline_diet_topic"
         },
         {
           "at": "2026-07-10T05:34:06.450Z",
-          "when": "07/10 14:34",
+          "when": "07/10 05:34",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / E4_timeline_diet_topic"
         },
         {
           "at": "2026-07-10T05:34:04.872Z",
-          "when": "07/10 14:34",
+          "when": "07/10 05:34",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / E4_timeline_diet_topic"
         },
         {
           "at": "2026-07-10T05:22:41.247Z",
-          "when": "07/10 14:22",
+          "when": "07/10 05:22",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 50% / 品質 OK"
         },
         {
           "at": "2026-07-10T05:22:39.504Z",
-          "when": "07/10 14:22",
+          "when": "07/10 05:22",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / E4_timeline_diet_topic"
         },
         {
           "at": "2026-07-10T05:22:37.676Z",
-          "when": "07/10 14:22",
+          "when": "07/10 05:22",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / E4_timeline_diet_topic"
         },
         {
           "at": "2026-07-10T05:22:35.839Z",
-          "when": "07/10 14:22",
+          "when": "07/10 05:22",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / E4_timeline_diet_topic"
@@ -7969,13 +7507,13 @@
         {
           "channel": "はてブ",
           "automation": "semi",
-          "status": "済 07/11 09:31",
+          "status": "済 07/11 00:31",
           "done": true
         },
         {
           "channel": "note",
           "automation": "semi",
-          "status": "済 07/14 11:33",
+          "status": "済 07/14 02:33",
           "done": true
         },
         {
@@ -8003,26 +7541,14 @@
       "needsQualityFix": false,
       "qualityBlockerCount": 0,
       "qualityBlockers": [],
-      "agentTasks": [
-        {
-          "id": "energy-policy:E5_timeline_summary",
-          "slug": "energy-policy",
-          "agent": "writer",
-          "agentLabel": "ライター",
-          "checkId": "E5_timeline_summary",
-          "title": "[ゲート] TL要約",
-          "todo": "国会TLは平易語要約必須（空定型・切り出し禁止）",
-          "command": "node scripts/enrich-timeline-all.mjs --slug energy-policy",
-          "priority": 30
-        }
-      ],
-      "gatePct": 75,
-      "goldPct": 50,
+      "agentTasks": [],
+      "gatePct": 100,
+      "goldPct": 100,
       "published": true,
-      "specialPublish": true,
-      "specialPublishSummary": "ゲート1件・①〜④未完了",
+      "specialPublish": false,
+      "specialPublishSummary": "",
       "publishGateOk": true,
-      "pipelinePreOk": false,
+      "pipelinePreOk": true,
       "titleAnswerOk": true,
       "titleAnswerDetail": "1行目がタイトルに回答している",
       "titleAnswerTodo": null,
@@ -8032,7 +7558,7 @@
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "matrix",
@@ -8060,14 +7586,14 @@
           "label": "⑤本番デプロイ",
           "phase": 5,
           "preDeploy": false,
-          "ok": false
+          "ok": true
         },
         {
           "id": "debug",
           "label": "⑥デバッグOK",
           "phase": 6,
           "preDeploy": false,
-          "ok": false
+          "ok": true
         }
       ],
       "gold": [
@@ -8076,7 +7602,7 @@
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "matrix",
@@ -8104,39 +7630,21 @@
           "label": "⑤本番デプロイ",
           "phase": 5,
           "preDeploy": false,
-          "ok": false
+          "ok": true
         },
         {
           "id": "debug",
           "label": "⑥デバッグOK",
           "phase": 6,
           "preDeploy": false,
-          "ok": false
+          "ok": true
         }
       ],
-      "blockers": [
-        {
-          "id": "E5_timeline_summary",
-          "label": "TL要約",
-          "todo": "国会TLは平易語要約必須（空定型・切り出し禁止）",
-          "detail": "3/6件が空定型・未要約"
-        }
-      ],
-      "blockerCount": 1,
+      "blockers": [],
+      "blockerCount": 0,
       "runState": "idle",
-      "workItems": [
-        {
-          "id": "E5_timeline_summary",
-          "label": "TL要約",
-          "state": "blocked"
-        },
-        {
-          "id": "pipe:content",
-          "label": "①コンテンツ",
-          "state": "blocked"
-        }
-      ],
-      "nextAction": "✅ 公開中 — 要対応あり（裏で修正中・URLは維持）",
+      "workItems": [],
+      "nextAction": "✅ 公開中 — /case/ に表示されています",
       "promo": {
         "x": null,
         "hatena": "2026-07-11T00:32:00.182Z",
@@ -8155,7 +7663,7 @@
       },
       "xUnavailable": true,
       "xResearchStatus": "exhausted",
-      "statusExplain": "サイトに載っているが、内部チェックは全部終わっていない。",
+      "statusExplain": "サイトに公開中。",
       "publishedBy": "owner",
       "publishedAt": "2026-07-01T20:35:27.253Z",
       "adminHiddenBy": null,
@@ -8164,7 +7672,7 @@
       "activity": [
         {
           "at": "2026-07-01T20:35:27.253Z",
-          "when": "07/02 05:35",
+          "when": "07/01 20:35",
           "type": "publish.manual",
           "actor": "owner",
           "line": "手動で一般公開（あなた） — 履歴補完（公開日時から）"
@@ -8180,13 +7688,13 @@
         {
           "channel": "はてブ",
           "automation": "semi",
-          "status": "済 07/11 09:32",
+          "status": "済 07/11 00:32",
           "done": true
         },
         {
           "channel": "note",
           "automation": "semi",
-          "status": "済 07/14 11:34",
+          "status": "済 07/14 02:34",
           "done": true
         },
         {
@@ -8214,26 +7722,14 @@
       "needsQualityFix": false,
       "qualityBlockerCount": 0,
       "qualityBlockers": [],
-      "agentTasks": [
-        {
-          "id": "seiji-shikin:E5_timeline_summary",
-          "slug": "seiji-shikin",
-          "agent": "writer",
-          "agentLabel": "ライター",
-          "checkId": "E5_timeline_summary",
-          "title": "[ゲート] TL要約",
-          "todo": "国会TLは平易語要約必須（空定型・切り出し禁止）",
-          "command": "node scripts/enrich-timeline-all.mjs --slug seiji-shikin",
-          "priority": 30
-        }
-      ],
-      "gatePct": 75,
-      "goldPct": 50,
+      "agentTasks": [],
+      "gatePct": 100,
+      "goldPct": 100,
       "published": false,
       "specialPublish": false,
       "specialPublishSummary": "",
       "publishGateOk": true,
-      "pipelinePreOk": false,
+      "pipelinePreOk": true,
       "titleAnswerOk": true,
       "titleAnswerDetail": "1行目がタイトルに回答している",
       "titleAnswerTodo": null,
@@ -8243,7 +7739,7 @@
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "matrix",
@@ -8271,14 +7767,14 @@
           "label": "⑤本番デプロイ",
           "phase": 5,
           "preDeploy": false,
-          "ok": false
+          "ok": true
         },
         {
           "id": "debug",
           "label": "⑥デバッグOK",
           "phase": 6,
           "preDeploy": false,
-          "ok": false
+          "ok": true
         }
       ],
       "gold": [
@@ -8287,7 +7783,7 @@
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "matrix",
@@ -8315,38 +7811,20 @@
           "label": "⑤本番デプロイ",
           "phase": 5,
           "preDeploy": false,
-          "ok": false
+          "ok": true
         },
         {
           "id": "debug",
           "label": "⑥デバッグOK",
           "phase": 6,
           "preDeploy": false,
-          "ok": false
+          "ok": true
         }
       ],
-      "blockers": [
-        {
-          "id": "E5_timeline_summary",
-          "label": "TL要約",
-          "todo": "国会TLは平易語要約必須（空定型・切り出し禁止）",
-          "detail": "2/6件が空定型・未要約"
-        }
-      ],
-      "blockerCount": 1,
+      "blockers": [],
+      "blockerCount": 0,
       "runState": "idle",
-      "workItems": [
-        {
-          "id": "E5_timeline_summary",
-          "label": "TL要約",
-          "state": "blocked"
-        },
-        {
-          "id": "pipe:content",
-          "label": "①コンテンツ",
-          "state": "blocked"
-        }
-      ],
+      "workItems": [],
       "nextAction": "👁️ 非表示中 — 「表示に戻す」でトップに出せます",
       "promo": {
         "x": null,
@@ -8375,14 +7853,14 @@
       "activity": [
         {
           "at": "2026-07-16T14:42:37.142Z",
-          "when": "07/16 23:42",
+          "when": "07/16 14:42",
           "type": "hide.manual",
           "actor": "dup-cleanup",
           "line": "手動で非表示（dup-cleanup） — 履歴補完（非表示日時から）"
         },
         {
           "at": "2026-07-01T20:35:27.789Z",
-          "when": "07/02 05:35",
+          "when": "07/01 20:35",
           "type": "publish.manual",
           "actor": "owner",
           "line": "手動で一般公開（あなた） — 履歴補完（公開日時から）"
@@ -8398,13 +7876,13 @@
         {
           "channel": "はてブ",
           "automation": "semi",
-          "status": "済 07/14 11:40",
+          "status": "済 07/14 02:40",
           "done": true
         },
         {
           "channel": "note",
           "automation": "semi",
-          "status": "済 07/14 11:43",
+          "status": "済 07/14 02:43",
           "done": true
         },
         {
@@ -8419,8 +7897,8 @@
     },
     {
       "slug": "senkyo-kaikaku",
-      "title": "【選挙制度改革】定数削減案は本会議でどう扱われたか",
-      "shortTitle": "【選挙制度改革】定数削減案は本会議でどう扱われたか",
+      "title": "【選挙制度改革】論点と各党の主張",
+      "shortTitle": "【選挙制度改革】論点と各党の主張",
       "category": "国会",
       "policyCategory": "国会",
       "adminHidden": false,
@@ -8432,26 +7910,14 @@
       "needsQualityFix": false,
       "qualityBlockerCount": 0,
       "qualityBlockers": [],
-      "agentTasks": [
-        {
-          "id": "senkyo-kaikaku:E5_timeline_summary",
-          "slug": "senkyo-kaikaku",
-          "agent": "writer",
-          "agentLabel": "ライター",
-          "checkId": "E5_timeline_summary",
-          "title": "[ゲート] TL要約",
-          "todo": "国会TLは平易語要約必須（空定型・切り出し禁止）",
-          "command": "node scripts/enrich-timeline-all.mjs --slug senkyo-kaikaku",
-          "priority": 30
-        }
-      ],
-      "gatePct": 75,
-      "goldPct": 50,
+      "agentTasks": [],
+      "gatePct": 100,
+      "goldPct": 100,
       "published": true,
-      "specialPublish": true,
-      "specialPublishSummary": "ゲート1件・①〜④未完了",
+      "specialPublish": false,
+      "specialPublishSummary": "",
       "publishGateOk": true,
-      "pipelinePreOk": false,
+      "pipelinePreOk": true,
       "titleAnswerOk": true,
       "titleAnswerDetail": "1行目がタイトルに回答している",
       "titleAnswerTodo": null,
@@ -8461,7 +7927,7 @@
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "matrix",
@@ -8489,14 +7955,14 @@
           "label": "⑤本番デプロイ",
           "phase": 5,
           "preDeploy": false,
-          "ok": false
+          "ok": true
         },
         {
           "id": "debug",
           "label": "⑥デバッグOK",
           "phase": 6,
           "preDeploy": false,
-          "ok": false
+          "ok": true
         }
       ],
       "gold": [
@@ -8505,7 +7971,7 @@
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "matrix",
@@ -8533,39 +7999,21 @@
           "label": "⑤本番デプロイ",
           "phase": 5,
           "preDeploy": false,
-          "ok": false
+          "ok": true
         },
         {
           "id": "debug",
           "label": "⑥デバッグOK",
           "phase": 6,
           "preDeploy": false,
-          "ok": false
+          "ok": true
         }
       ],
-      "blockers": [
-        {
-          "id": "E5_timeline_summary",
-          "label": "TL要約",
-          "todo": "国会TLは平易語要約必須（空定型・切り出し禁止）",
-          "detail": "3/6件が空定型・未要約"
-        }
-      ],
-      "blockerCount": 1,
+      "blockers": [],
+      "blockerCount": 0,
       "runState": "idle",
-      "workItems": [
-        {
-          "id": "E5_timeline_summary",
-          "label": "TL要約",
-          "state": "blocked"
-        },
-        {
-          "id": "pipe:content",
-          "label": "①コンテンツ",
-          "state": "blocked"
-        }
-      ],
-      "nextAction": "✅ 公開中 — 要対応あり（裏で修正中・URLは維持）",
+      "workItems": [],
+      "nextAction": "✅ 公開中 — /case/ に表示されています",
       "promo": {
         "x": "2026-07-10T03:33:52.852Z",
         "hatena": "2026-07-14T02:40:54.851Z",
@@ -8584,7 +8032,7 @@
       },
       "xUnavailable": true,
       "xResearchStatus": "exhausted",
-      "statusExplain": "サイトに載っているが、内部チェックは全部終わっていない。",
+      "statusExplain": "サイトに公開中。",
       "publishedBy": "owner",
       "publishedAt": "2026-07-01T20:35:28.349Z",
       "adminHiddenBy": null,
@@ -8593,7 +8041,7 @@
       "activity": [
         {
           "at": "2026-07-01T20:35:28.349Z",
-          "when": "07/02 05:35",
+          "when": "07/01 20:35",
           "type": "publish.manual",
           "actor": "owner",
           "line": "手動で一般公開（あなた） — 履歴補完（公開日時から）"
@@ -8603,19 +8051,19 @@
         {
           "channel": "X",
           "automation": "semi",
-          "status": "済 07/10 12:33",
+          "status": "済 07/10 03:33",
           "done": true
         },
         {
           "channel": "はてブ",
           "automation": "semi",
-          "status": "済 07/14 11:40",
+          "status": "済 07/14 02:40",
           "done": true
         },
         {
           "channel": "note",
           "automation": "semi",
-          "status": "済 07/14 11:43",
+          "status": "済 07/14 02:43",
           "done": true
         },
         {
@@ -8630,8 +8078,8 @@
     },
     {
       "slug": "kaigo-iryo",
-      "title": "【介護・医療】財源の重点配分は進んだか",
-      "shortTitle": "【介護・医療】財源の重点配分は進んだか",
+      "title": "介護・医療費の動向",
+      "shortTitle": "【介護・医療費】負担増の議論と支援策",
       "category": "国会",
       "policyCategory": "国会",
       "adminHidden": false,
@@ -8643,37 +8091,14 @@
       "needsQualityFix": false,
       "qualityBlockerCount": 0,
       "qualityBlockers": [],
-      "agentTasks": [
-        {
-          "id": "kaigo-iryo:E5_timeline_summary",
-          "slug": "kaigo-iryo",
-          "agent": "writer",
-          "agentLabel": "ライター",
-          "checkId": "E5_timeline_summary",
-          "title": "[ゲート] TL要約",
-          "todo": "国会TLは平易語要約必須（空定型・切り出し禁止）",
-          "command": "node scripts/enrich-timeline-all.mjs --slug kaigo-iryo",
-          "priority": 30
-        },
-        {
-          "id": "kaigo-iryo:I1_legal",
-          "slug": "kaigo-iryo",
-          "agent": "legal-check",
-          "agentLabel": "法務",
-          "checkId": "I1_legal",
-          "title": "[ゲート] 法務",
-          "todo": "legal-check を実行",
-          "command": "node scripts/complete-article.mjs --slug kaigo-iryo --legal-only",
-          "priority": 30
-        }
-      ],
-      "gatePct": 50,
-      "goldPct": 33,
+      "agentTasks": [],
+      "gatePct": 100,
+      "goldPct": 100,
       "published": true,
-      "specialPublish": true,
-      "specialPublishSummary": "ゲート2件・①〜④未完了",
+      "specialPublish": false,
+      "specialPublishSummary": "",
       "publishGateOk": true,
-      "pipelinePreOk": false,
+      "pipelinePreOk": true,
       "titleAnswerOk": true,
       "titleAnswerDetail": "1行目がタイトルに回答している",
       "titleAnswerTodo": null,
@@ -8683,7 +8108,7 @@
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "matrix",
@@ -8704,21 +8129,21 @@
           "label": "④法務OK",
           "phase": 4,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "deployed",
           "label": "⑤本番デプロイ",
           "phase": 5,
           "preDeploy": false,
-          "ok": false
+          "ok": true
         },
         {
           "id": "debug",
           "label": "⑥デバッグOK",
           "phase": 6,
           "preDeploy": false,
-          "ok": false
+          "ok": true
         }
       ],
       "gold": [
@@ -8727,7 +8152,7 @@
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "matrix",
@@ -8748,62 +8173,28 @@
           "label": "④法務OK",
           "phase": 4,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "deployed",
           "label": "⑤本番デプロイ",
           "phase": 5,
           "preDeploy": false,
-          "ok": false
+          "ok": true
         },
         {
           "id": "debug",
           "label": "⑥デバッグOK",
           "phase": 6,
           "preDeploy": false,
-          "ok": false
+          "ok": true
         }
       ],
-      "blockers": [
-        {
-          "id": "E5_timeline_summary",
-          "label": "TL要約",
-          "todo": "国会TLは平易語要約必須（空定型・切り出し禁止）",
-          "detail": "3/6件が空定型・未要約"
-        },
-        {
-          "id": "I1_legal",
-          "label": "法務",
-          "todo": "legal-check を実行",
-          "detail": "needs_owner"
-        }
-      ],
-      "blockerCount": 2,
+      "blockers": [],
+      "blockerCount": 0,
       "runState": "idle",
-      "workItems": [
-        {
-          "id": "E5_timeline_summary",
-          "label": "TL要約",
-          "state": "blocked"
-        },
-        {
-          "id": "I1_legal",
-          "label": "法務",
-          "state": "blocked"
-        },
-        {
-          "id": "pipe:content",
-          "label": "①コンテンツ",
-          "state": "blocked"
-        },
-        {
-          "id": "pipe:legal",
-          "label": "④法務OK",
-          "state": "blocked"
-        }
-      ],
-      "nextAction": "✅ 公開中 — 要対応あり（裏で修正中・URLは維持）",
+      "workItems": [],
+      "nextAction": "✅ 公開中 — /case/ に表示されています",
       "promo": {
         "x": null,
         "hatena": null,
@@ -8822,7 +8213,7 @@
       },
       "xUnavailable": true,
       "xResearchStatus": "exhausted",
-      "statusExplain": "サイトに載っているが、内部チェックは全部終わっていない。",
+      "statusExplain": "サイトに公開中。",
       "publishedBy": null,
       "publishedAt": null,
       "adminHiddenBy": null,
@@ -8860,8 +8251,8 @@
     },
     {
       "slug": "chiho-sosei",
-      "title": "【地方創生】地域未来戦略、夏までに何をまとめる？",
-      "shortTitle": "【地方創生】地域未来戦略、夏までに何をまとめる？",
+      "title": "地方創生の動向",
+      "shortTitle": "【地方創生】交付金と地域政策の最新",
       "category": "国会",
       "policyCategory": "国会",
       "adminHidden": false,
@@ -8873,70 +8264,14 @@
       "needsQualityFix": false,
       "qualityBlockerCount": 0,
       "qualityBlockers": [],
-      "agentTasks": [
-        {
-          "id": "chiho-sosei:B3_topic",
-          "slug": "chiho-sosei",
-          "agent": "writer",
-          "agentLabel": "ライター",
-          "checkId": "B3_topic",
-          "title": "[ゲート] 話題一致",
-          "todo": "要約が searchKeyword と一致（2行以上）",
-          "command": "node scripts/complete-article.mjs --slug chiho-sosei --content-only --force",
-          "priority": 30
-        },
-        {
-          "id": "chiho-sosei:D1_arcSummary",
-          "slug": "chiho-sosei",
-          "agent": "writer",
-          "agentLabel": "ライター",
-          "checkId": "D1_arcSummary",
-          "title": "[ゲート] 経緯",
-          "todo": "日付付き経緯を3行以上",
-          "command": "node scripts/complete-article.mjs --slug chiho-sosei --content-only --force",
-          "priority": 30
-        },
-        {
-          "id": "chiho-sosei:D2_arc_topic",
-          "slug": "chiho-sosei",
-          "agent": "writer",
-          "agentLabel": "ライター",
-          "checkId": "D2_arc_topic",
-          "title": "[ゲート] 経緯の話題",
-          "todo": "経緯3行以上が案件キーワードと一致",
-          "command": "node scripts/complete-article.mjs --slug chiho-sosei --content-only --force",
-          "priority": 30
-        },
-        {
-          "id": "chiho-sosei:E5_timeline_summary",
-          "slug": "chiho-sosei",
-          "agent": "writer",
-          "agentLabel": "ライター",
-          "checkId": "E5_timeline_summary",
-          "title": "[ゲート] TL要約",
-          "todo": "国会TLは平易語要約必須（空定型・切り出し禁止）",
-          "command": "node scripts/enrich-timeline-all.mjs --slug chiho-sosei",
-          "priority": 30
-        },
-        {
-          "id": "chiho-sosei:I1_legal",
-          "slug": "chiho-sosei",
-          "agent": "legal-check",
-          "agentLabel": "法務",
-          "checkId": "I1_legal",
-          "title": "[ゲート] 法務",
-          "todo": "legal-check を実行",
-          "command": "node scripts/complete-article.mjs --slug chiho-sosei --legal-only",
-          "priority": 30
-        }
-      ],
-      "gatePct": 50,
-      "goldPct": 33,
+      "agentTasks": [],
+      "gatePct": 100,
+      "goldPct": 100,
       "published": true,
-      "specialPublish": true,
-      "specialPublishSummary": "ゲート5件・①〜④未完了",
+      "specialPublish": false,
+      "specialPublishSummary": "",
       "publishGateOk": true,
-      "pipelinePreOk": false,
+      "pipelinePreOk": true,
       "titleAnswerOk": true,
       "titleAnswerDetail": "1行目がタイトルに回答している",
       "titleAnswerTodo": null,
@@ -8946,7 +8281,7 @@
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "matrix",
@@ -8967,21 +8302,21 @@
           "label": "④法務OK",
           "phase": 4,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "deployed",
           "label": "⑤本番デプロイ",
           "phase": 5,
           "preDeploy": false,
-          "ok": false
+          "ok": true
         },
         {
           "id": "debug",
           "label": "⑥デバッグOK",
           "phase": 6,
           "preDeploy": false,
-          "ok": false
+          "ok": true
         }
       ],
       "gold": [
@@ -8990,7 +8325,7 @@
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "matrix",
@@ -9011,95 +8346,28 @@
           "label": "④法務OK",
           "phase": 4,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "deployed",
           "label": "⑤本番デプロイ",
           "phase": 5,
           "preDeploy": false,
-          "ok": false
+          "ok": true
         },
         {
           "id": "debug",
           "label": "⑥デバッグOK",
           "phase": 6,
           "preDeploy": false,
-          "ok": false
+          "ok": true
         }
       ],
-      "blockers": [
-        {
-          "id": "B3_topic",
-          "label": "話題一致",
-          "todo": "要約が searchKeyword と一致（2行以上）",
-          "detail": "1/2 行がキーワード一致（地方創生 地域未来戦略）"
-        },
-        {
-          "id": "D1_arcSummary",
-          "label": "経緯",
-          "todo": "日付付き経緯を3行以上",
-          "detail": "2/3 行（日付付き）"
-        },
-        {
-          "id": "D2_arc_topic",
-          "label": "経緯の話題",
-          "todo": "経緯3行以上が案件キーワードと一致",
-          "detail": "1/3 行が話題一致"
-        },
-        {
-          "id": "E5_timeline_summary",
-          "label": "TL要約",
-          "todo": "国会TLは平易語要約必須（空定型・切り出し禁止）",
-          "detail": "3/6件が空定型・未要約"
-        },
-        {
-          "id": "I1_legal",
-          "label": "法務",
-          "todo": "legal-check を実行",
-          "detail": "needs_owner"
-        }
-      ],
-      "blockerCount": 5,
+      "blockers": [],
+      "blockerCount": 0,
       "runState": "idle",
-      "workItems": [
-        {
-          "id": "B3_topic",
-          "label": "話題一致",
-          "state": "blocked"
-        },
-        {
-          "id": "D1_arcSummary",
-          "label": "経緯",
-          "state": "blocked"
-        },
-        {
-          "id": "D2_arc_topic",
-          "label": "経緯の話題",
-          "state": "blocked"
-        },
-        {
-          "id": "E5_timeline_summary",
-          "label": "TL要約",
-          "state": "blocked"
-        },
-        {
-          "id": "I1_legal",
-          "label": "法務",
-          "state": "blocked"
-        },
-        {
-          "id": "pipe:content",
-          "label": "①コンテンツ",
-          "state": "blocked"
-        },
-        {
-          "id": "pipe:legal",
-          "label": "④法務OK",
-          "state": "blocked"
-        }
-      ],
-      "nextAction": "✅ 公開中 — 要対応あり（裏で修正中・URLは維持）",
+      "workItems": [],
+      "nextAction": "✅ 公開中 — /case/ に表示されています",
       "promo": {
         "x": null,
         "hatena": null,
@@ -9118,7 +8386,7 @@
       },
       "xUnavailable": true,
       "xResearchStatus": "exhausted",
-      "statusExplain": "サイトに載っているが、内部チェックは全部終わっていない。",
+      "statusExplain": "サイトに公開中。",
       "publishedBy": null,
       "publishedAt": null,
       "adminHiddenBy": null,
@@ -9156,8 +8424,8 @@
     },
     {
       "slug": "hosei-yosan",
-      "title": "【補正予算】何にいくら積んだのか",
-      "shortTitle": "【補正予算】何にいくら積んだのか",
+      "title": "【補正予算】追加支出の内容と背景",
+      "shortTitle": "【補正予算】追加支出の内容と背景",
       "category": "国会",
       "policyCategory": "国会",
       "adminHidden": false,
@@ -9171,370 +8439,25 @@
       "qualityBlockers": [],
       "agentTasks": [
         {
-          "id": "hosei-yosan:B3_topic",
+          "id": "hosei-yosan:J1_analytical_blocks",
           "slug": "hosei-yosan",
           "agent": "writer",
           "agentLabel": "ライター",
-          "checkId": "B3_topic",
-          "title": "[ゲート] 話題一致",
-          "todo": "要約が searchKeyword と一致（2行以上）",
-          "command": "node scripts/complete-article.mjs --slug hosei-yosan --content-only --force",
+          "checkId": "J1_analytical_blocks",
+          "title": "[ゲート] 分析ブロック",
+          "todo": "メリデメ・利害・数値統計のいずれか1〜3種（0種NG）",
+          "command": "npm run complete:article -- --slug hosei-yosan --content-only --force",
           "priority": 30
         },
         {
-          "id": "hosei-yosan:D2_arc_topic",
+          "id": "hosei-yosan:J1_prosCons",
           "slug": "hosei-yosan",
           "agent": "writer",
           "agentLabel": "ライター",
-          "checkId": "D2_arc_topic",
-          "title": "[ゲート] 経緯の話題",
-          "todo": "経緯3行以上が案件キーワードと一致",
-          "command": "node scripts/complete-article.mjs --slug hosei-yosan --content-only --force",
-          "priority": 30
-        },
-        {
-          "id": "hosei-yosan:E5_timeline_summary",
-          "slug": "hosei-yosan",
-          "agent": "writer",
-          "agentLabel": "ライター",
-          "checkId": "E5_timeline_summary",
-          "title": "[ゲート] TL要約",
-          "todo": "国会TLは平易語要約必須（空定型・切り出し禁止）",
-          "command": "node scripts/enrich-timeline-all.mjs --slug hosei-yosan",
-          "priority": 30
-        },
-        {
-          "id": "hosei-yosan:I1_legal",
-          "slug": "hosei-yosan",
-          "agent": "legal-check",
-          "agentLabel": "法務",
-          "checkId": "I1_legal",
-          "title": "[ゲート] 法務",
-          "todo": "legal-check を実行",
-          "command": "node scripts/complete-article.mjs --slug hosei-yosan --legal-only",
-          "priority": 30
-        }
-      ],
-      "gatePct": 50,
-      "goldPct": 33,
-      "published": true,
-      "specialPublish": true,
-      "specialPublishSummary": "ゲート4件・①〜④未完了",
-      "publishGateOk": true,
-      "pipelinePreOk": false,
-      "titleAnswerOk": true,
-      "titleAnswerDetail": "1行目がタイトルに回答している",
-      "titleAnswerTodo": null,
-      "pipeline": [
-        {
-          "id": "content",
-          "label": "①コンテンツ",
-          "phase": 1,
-          "preDeploy": true,
-          "ok": false
-        },
-        {
-          "id": "matrix",
-          "label": "②〇×2党確定",
-          "phase": 2,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "x",
-          "label": "③X未発見（調査完了）",
-          "phase": 3,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "legal",
-          "label": "④法務OK",
-          "phase": 4,
-          "preDeploy": true,
-          "ok": false
-        },
-        {
-          "id": "deployed",
-          "label": "⑤本番デプロイ",
-          "phase": 5,
-          "preDeploy": false,
-          "ok": false
-        },
-        {
-          "id": "debug",
-          "label": "⑥デバッグOK",
-          "phase": 6,
-          "preDeploy": false,
-          "ok": false
-        }
-      ],
-      "gold": [
-        {
-          "id": "content",
-          "label": "①コンテンツ",
-          "phase": 1,
-          "preDeploy": true,
-          "ok": false
-        },
-        {
-          "id": "matrix",
-          "label": "②〇×2党確定",
-          "phase": 2,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "x",
-          "label": "③X未発見（調査完了）",
-          "phase": 3,
-          "preDeploy": true,
-          "ok": true
-        },
-        {
-          "id": "legal",
-          "label": "④法務OK",
-          "phase": 4,
-          "preDeploy": true,
-          "ok": false
-        },
-        {
-          "id": "deployed",
-          "label": "⑤本番デプロイ",
-          "phase": 5,
-          "preDeploy": false,
-          "ok": false
-        },
-        {
-          "id": "debug",
-          "label": "⑥デバッグOK",
-          "phase": 6,
-          "preDeploy": false,
-          "ok": false
-        }
-      ],
-      "blockers": [
-        {
-          "id": "B3_topic",
-          "label": "話題一致",
-          "todo": "要約が searchKeyword と一致（2行以上）",
-          "detail": "1/2 行がキーワード一致（補正予算）"
-        },
-        {
-          "id": "D2_arc_topic",
-          "label": "経緯の話題",
-          "todo": "経緯3行以上が案件キーワードと一致",
-          "detail": "1/3 行が話題一致"
-        },
-        {
-          "id": "E5_timeline_summary",
-          "label": "TL要約",
-          "todo": "国会TLは平易語要約必須（空定型・切り出し禁止）",
-          "detail": "3/6件が空定型・未要約"
-        },
-        {
-          "id": "I1_legal",
-          "label": "法務",
-          "todo": "legal-check を実行",
-          "detail": "needs_owner"
-        }
-      ],
-      "blockerCount": 4,
-      "runState": "idle",
-      "workItems": [
-        {
-          "id": "B3_topic",
-          "label": "話題一致",
-          "state": "active"
-        },
-        {
-          "id": "D2_arc_topic",
-          "label": "経緯の話題",
-          "state": "blocked"
-        },
-        {
-          "id": "E5_timeline_summary",
-          "label": "TL要約",
-          "state": "blocked"
-        },
-        {
-          "id": "I1_legal",
-          "label": "法務",
-          "state": "blocked"
-        },
-        {
-          "id": "pipe:content",
-          "label": "①コンテンツ",
-          "state": "blocked"
-        },
-        {
-          "id": "pipe:legal",
-          "label": "④法務OK",
-          "state": "blocked"
-        }
-      ],
-      "nextAction": "✅ 公開中 — 要対応あり（裏で修正中・URLは維持）",
-      "promo": {
-        "x": null,
-        "hatena": "2026-07-14T02:41:00.214Z",
-        "note": "2026-07-14T02:44:14.546Z"
-      },
-      "short": {
-        "slug": "hosei-yosan",
-        "generated": false,
-        "uploaded": false,
-        "visibility": null,
-        "videoId": null,
-        "url": null,
-        "studioUrl": null,
-        "uploadedAt": null,
-        "label": "未生成"
-      },
-      "xUnavailable": true,
-      "xResearchStatus": "exhausted",
-      "statusExplain": "サイトに載っているが、内部チェックは全部終わっていない。",
-      "publishedBy": "owner",
-      "publishedAt": "2026-07-01T20:35:28.917Z",
-      "adminHiddenBy": null,
-      "adminHiddenAt": null,
-      "patrolFixing": true,
-      "activity": [
-        {
-          "at": "2026-07-10T05:34:21.077Z",
-          "when": "07/10 14:34",
-          "type": "patrol.done",
-          "actor": "patrol",
-          "line": "巡回処理完了（巡回） — 完成度 50% / 品質 OK"
-        },
-        {
-          "at": "2026-07-10T05:34:19.476Z",
-          "when": "07/10 14:34",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — writer / J1_prosCons"
-        },
-        {
-          "at": "2026-07-10T05:34:17.917Z",
-          "when": "07/10 14:34",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — writer / J1_prosCons"
-        },
-        {
-          "at": "2026-07-10T05:34:16.208Z",
-          "when": "07/10 14:34",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — writer / J1_prosCons"
-        },
-        {
-          "at": "2026-07-10T05:34:14.521Z",
-          "when": "07/10 14:34",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — writer / J1_prosCons"
-        },
-        {
-          "at": "2026-07-10T05:34:12.906Z",
-          "when": "07/10 14:34",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — writer / J1_prosCons"
-        },
-        {
-          "at": "2026-07-10T05:22:49.414Z",
-          "when": "07/10 14:22",
-          "type": "patrol.done",
-          "actor": "patrol",
-          "line": "巡回処理完了（巡回） — 完成度 50% / 品質 OK"
-        },
-        {
-          "at": "2026-07-10T05:22:47.791Z",
-          "when": "07/10 14:22",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — writer / J1_prosCons"
-        },
-        {
-          "at": "2026-07-10T05:22:46.132Z",
-          "when": "07/10 14:22",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — writer / J1_prosCons"
-        },
-        {
-          "at": "2026-07-10T05:22:44.449Z",
-          "when": "07/10 14:22",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — writer / J1_prosCons"
-        }
-      ],
-      "distribution": [
-        {
-          "channel": "X",
-          "automation": "semi",
-          "status": "未",
-          "done": false
-        },
-        {
-          "channel": "はてブ",
-          "automation": "semi",
-          "status": "済 07/14 11:41",
-          "done": true
-        },
-        {
-          "channel": "note",
-          "automation": "semi",
-          "status": "済 07/14 11:44",
-          "done": true
-        },
-        {
-          "channel": "ショート",
-          "automation": "manual",
-          "status": "未生成",
-          "done": false
-        }
-      ],
-      "stall": null,
-      "ownerTodo": false
-    },
-    {
-      "slug": "nichigyo",
-      "title": "【政治とカネ】裏金後、献金ルールは変わったか",
-      "shortTitle": "【政治とカネ】裏金後、献金ルールは変わったか",
-      "category": "国会",
-      "policyCategory": "国会",
-      "adminHidden": false,
-      "pageReady": true,
-      "publishState": "live",
-      "adminBucket": "live",
-      "previewUrl": "/dev/preview/nichigyo/",
-      "qualityOk": true,
-      "needsQualityFix": false,
-      "qualityBlockerCount": 0,
-      "qualityBlockers": [],
-      "agentTasks": [
-        {
-          "id": "nichigyo:B3_topic",
-          "slug": "nichigyo",
-          "agent": "writer",
-          "agentLabel": "ライター",
-          "checkId": "B3_topic",
-          "title": "[ゲート] 話題一致",
-          "todo": "要約が searchKeyword と一致（2行以上）",
-          "command": "node scripts/complete-article.mjs --slug nichigyo --content-only --force",
-          "priority": 30
-        },
-        {
-          "id": "nichigyo:E5_timeline_summary",
-          "slug": "nichigyo",
-          "agent": "writer",
-          "agentLabel": "ライター",
-          "checkId": "E5_timeline_summary",
-          "title": "[ゲート] TL要約",
-          "todo": "国会TLは平易語要約必須（空定型・切り出し禁止）",
-          "command": "node scripts/enrich-timeline-all.mjs --slug nichigyo",
+          "checkId": "J1_prosCons",
+          "title": "[ゲート] メリデメ",
+          "todo": "公表数値付きメリット2・デメリット2",
+          "command": "node scripts/generate-proscons-auto.mjs --slug hosei-yosan",
           "priority": 30
         }
       ],
@@ -9638,29 +8561,29 @@
       ],
       "blockers": [
         {
-          "id": "B3_topic",
-          "label": "話題一致",
-          "todo": "要約が searchKeyword と一致（2行以上）",
-          "detail": "1/2 行がキーワード一致（裏金）"
+          "id": "J1_analytical_blocks",
+          "label": "分析ブロック",
+          "todo": "メリデメ・利害・数値統計のいずれか1〜3種（0種NG）",
+          "detail": "メリデメ — 内容不足（有効0種・1種以上必要）"
         },
         {
-          "id": "E5_timeline_summary",
-          "label": "TL要約",
-          "todo": "国会TLは平易語要約必須（空定型・切り出し禁止）",
-          "detail": "1/6件が空定型・未要約"
+          "id": "J1_prosCons",
+          "label": "メリデメ",
+          "todo": "公表数値付きメリット2・デメリット2",
+          "detail": "メリ1/2・デメ2/2（各 figure+sourceUrl 必須）"
         }
       ],
       "blockerCount": 2,
       "runState": "idle",
       "workItems": [
         {
-          "id": "B3_topic",
-          "label": "話題一致",
+          "id": "J1_analytical_blocks",
+          "label": "分析ブロック",
           "state": "blocked"
         },
         {
-          "id": "E5_timeline_summary",
-          "label": "TL要約",
+          "id": "J1_prosCons",
+          "label": "メリデメ",
           "state": "blocked"
         },
         {
@@ -9670,6 +8593,250 @@
         }
       ],
       "nextAction": "✅ 公開中 — 要対応あり（裏で修正中・URLは維持）",
+      "promo": {
+        "x": null,
+        "hatena": "2026-07-14T02:41:00.214Z",
+        "note": "2026-07-14T02:44:14.546Z"
+      },
+      "short": {
+        "slug": "hosei-yosan",
+        "generated": false,
+        "uploaded": false,
+        "visibility": null,
+        "videoId": null,
+        "url": null,
+        "studioUrl": null,
+        "uploadedAt": null,
+        "label": "未生成"
+      },
+      "xUnavailable": true,
+      "xResearchStatus": "exhausted",
+      "statusExplain": "サイトに載っているが、内部チェックは全部終わっていない。",
+      "publishedBy": "owner",
+      "publishedAt": "2026-07-01T20:35:28.917Z",
+      "adminHiddenBy": null,
+      "adminHiddenAt": null,
+      "patrolFixing": false,
+      "activity": [
+        {
+          "at": "2026-07-10T05:34:21.077Z",
+          "when": "07/10 05:34",
+          "type": "patrol.done",
+          "actor": "patrol",
+          "line": "巡回処理完了（巡回） — 完成度 50% / 品質 OK"
+        },
+        {
+          "at": "2026-07-10T05:34:19.476Z",
+          "when": "07/10 05:34",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — writer / J1_prosCons"
+        },
+        {
+          "at": "2026-07-10T05:34:17.917Z",
+          "when": "07/10 05:34",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — writer / J1_prosCons"
+        },
+        {
+          "at": "2026-07-10T05:34:16.208Z",
+          "when": "07/10 05:34",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — writer / J1_prosCons"
+        },
+        {
+          "at": "2026-07-10T05:34:14.521Z",
+          "when": "07/10 05:34",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — writer / J1_prosCons"
+        },
+        {
+          "at": "2026-07-10T05:34:12.906Z",
+          "when": "07/10 05:34",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — writer / J1_prosCons"
+        },
+        {
+          "at": "2026-07-10T05:22:49.414Z",
+          "when": "07/10 05:22",
+          "type": "patrol.done",
+          "actor": "patrol",
+          "line": "巡回処理完了（巡回） — 完成度 50% / 品質 OK"
+        },
+        {
+          "at": "2026-07-10T05:22:47.791Z",
+          "when": "07/10 05:22",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — writer / J1_prosCons"
+        },
+        {
+          "at": "2026-07-10T05:22:46.132Z",
+          "when": "07/10 05:22",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — writer / J1_prosCons"
+        },
+        {
+          "at": "2026-07-10T05:22:44.449Z",
+          "when": "07/10 05:22",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — writer / J1_prosCons"
+        }
+      ],
+      "distribution": [
+        {
+          "channel": "X",
+          "automation": "semi",
+          "status": "未",
+          "done": false
+        },
+        {
+          "channel": "はてブ",
+          "automation": "semi",
+          "status": "済 07/14 02:41",
+          "done": true
+        },
+        {
+          "channel": "note",
+          "automation": "semi",
+          "status": "済 07/14 02:44",
+          "done": true
+        },
+        {
+          "channel": "ショート",
+          "automation": "manual",
+          "status": "未生成",
+          "done": false
+        }
+      ],
+      "stall": null,
+      "ownerTodo": false
+    },
+    {
+      "slug": "nichigyo",
+      "title": "【政治とカネ】献金問題と規制の動向",
+      "shortTitle": "【政治とカネ】献金問題と規制の動向",
+      "category": "国会",
+      "policyCategory": "国会",
+      "adminHidden": false,
+      "pageReady": true,
+      "publishState": "live",
+      "adminBucket": "live",
+      "previewUrl": "/dev/preview/nichigyo/",
+      "qualityOk": true,
+      "needsQualityFix": false,
+      "qualityBlockerCount": 0,
+      "qualityBlockers": [],
+      "agentTasks": [],
+      "gatePct": 100,
+      "goldPct": 100,
+      "published": true,
+      "specialPublish": false,
+      "specialPublishSummary": "",
+      "publishGateOk": true,
+      "pipelinePreOk": true,
+      "titleAnswerOk": true,
+      "titleAnswerDetail": "1行目がタイトルに回答している",
+      "titleAnswerTodo": null,
+      "pipeline": [
+        {
+          "id": "content",
+          "label": "①コンテンツ",
+          "phase": 1,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "matrix",
+          "label": "②〇×2党確定",
+          "phase": 2,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "x",
+          "label": "③X未発見（調査完了）",
+          "phase": 3,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "legal",
+          "label": "④法務OK",
+          "phase": 4,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "deployed",
+          "label": "⑤本番デプロイ",
+          "phase": 5,
+          "preDeploy": false,
+          "ok": true
+        },
+        {
+          "id": "debug",
+          "label": "⑥デバッグOK",
+          "phase": 6,
+          "preDeploy": false,
+          "ok": true
+        }
+      ],
+      "gold": [
+        {
+          "id": "content",
+          "label": "①コンテンツ",
+          "phase": 1,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "matrix",
+          "label": "②〇×2党確定",
+          "phase": 2,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "x",
+          "label": "③X未発見（調査完了）",
+          "phase": 3,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "legal",
+          "label": "④法務OK",
+          "phase": 4,
+          "preDeploy": true,
+          "ok": true
+        },
+        {
+          "id": "deployed",
+          "label": "⑤本番デプロイ",
+          "phase": 5,
+          "preDeploy": false,
+          "ok": true
+        },
+        {
+          "id": "debug",
+          "label": "⑥デバッグOK",
+          "phase": 6,
+          "preDeploy": false,
+          "ok": true
+        }
+      ],
+      "blockers": [],
+      "blockerCount": 0,
+      "runState": "idle",
+      "workItems": [],
+      "nextAction": "✅ 公開中 — /case/ に表示されています",
       "promo": {
         "x": "2026-07-10T03:33:52.852Z",
         "hatena": "2026-07-14T02:41:05.631Z",
@@ -9688,7 +8855,7 @@
       },
       "xUnavailable": true,
       "xResearchStatus": "exhausted",
-      "statusExplain": "サイトに載っているが、内部チェックは全部終わっていない。",
+      "statusExplain": "サイトに公開中。",
       "publishedBy": "owner",
       "publishedAt": "2026-07-01T20:35:29.501Z",
       "adminHiddenBy": null,
@@ -9697,7 +8864,7 @@
       "activity": [
         {
           "at": "2026-07-01T20:35:29.501Z",
-          "when": "07/02 05:35",
+          "when": "07/01 20:35",
           "type": "publish.manual",
           "actor": "owner",
           "line": "手動で一般公開（あなた） — 履歴補完（公開日時から）"
@@ -9707,19 +8874,19 @@
         {
           "channel": "X",
           "automation": "semi",
-          "status": "済 07/10 12:33",
+          "status": "済 07/10 03:33",
           "done": true
         },
         {
           "channel": "はてブ",
           "automation": "semi",
-          "status": "済 07/14 11:41",
+          "status": "済 07/14 02:41",
           "done": true
         },
         {
           "channel": "note",
           "automation": "semi",
-          "status": "済 07/14 11:44",
+          "status": "済 07/14 02:44",
           "done": true
         },
         {
@@ -9733,62 +8900,28 @@
       "ownerTodo": false
     },
     {
-      "slug": "online-casino",
-      "title": "【オンラインカジノ】誘導規制はどこまで",
-      "shortTitle": "【オンラインカジノ】誘導規制はどこまで",
+      "slug": "casino-ir",
+      "title": "カジノIRの動向",
+      "shortTitle": "【カジノIR】大阪を中心に進むIntegrated Resort",
       "category": "国会",
       "policyCategory": "国会",
       "adminHidden": false,
       "pageReady": true,
       "publishState": "live",
       "adminBucket": "live",
-      "previewUrl": "/dev/preview/online-casino/",
+      "previewUrl": "/dev/preview/casino-ir/",
       "qualityOk": true,
       "needsQualityFix": false,
       "qualityBlockerCount": 0,
       "qualityBlockers": [],
-      "agentTasks": [
-        {
-          "id": "online-casino:D2_arc_topic",
-          "slug": "online-casino",
-          "agent": "writer",
-          "agentLabel": "ライター",
-          "checkId": "D2_arc_topic",
-          "title": "[ゲート] 経緯の話題",
-          "todo": "経緯3行以上が案件キーワードと一致",
-          "command": "node scripts/complete-article.mjs --slug online-casino --content-only --force",
-          "priority": 30
-        },
-        {
-          "id": "online-casino:E5_timeline_summary",
-          "slug": "online-casino",
-          "agent": "writer",
-          "agentLabel": "ライター",
-          "checkId": "E5_timeline_summary",
-          "title": "[ゲート] TL要約",
-          "todo": "国会TLは平易語要約必須（空定型・切り出し禁止）",
-          "command": "node scripts/enrich-timeline-all.mjs --slug online-casino",
-          "priority": 30
-        },
-        {
-          "id": "online-casino:I1_legal",
-          "slug": "online-casino",
-          "agent": "legal-check",
-          "agentLabel": "法務",
-          "checkId": "I1_legal",
-          "title": "[ゲート] 法務",
-          "todo": "legal-check を実行",
-          "command": "node scripts/complete-article.mjs --slug online-casino --legal-only",
-          "priority": 30
-        }
-      ],
-      "gatePct": 50,
-      "goldPct": 33,
+      "agentTasks": [],
+      "gatePct": 100,
+      "goldPct": 100,
       "published": true,
-      "specialPublish": true,
-      "specialPublishSummary": "ゲート3件・①〜④未完了",
+      "specialPublish": false,
+      "specialPublishSummary": "",
       "publishGateOk": true,
-      "pipelinePreOk": false,
+      "pipelinePreOk": true,
       "titleAnswerOk": true,
       "titleAnswerDetail": "1行目がタイトルに回答している",
       "titleAnswerTodo": null,
@@ -9798,7 +8931,7 @@
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "matrix",
@@ -9819,21 +8952,21 @@
           "label": "④法務OK",
           "phase": 4,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "deployed",
           "label": "⑤本番デプロイ",
           "phase": 5,
           "preDeploy": false,
-          "ok": false
+          "ok": true
         },
         {
           "id": "debug",
           "label": "⑥デバッグOK",
           "phase": 6,
           "preDeploy": false,
-          "ok": false
+          "ok": true
         }
       ],
       "gold": [
@@ -9842,7 +8975,7 @@
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "matrix",
@@ -9863,80 +8996,35 @@
           "label": "④法務OK",
           "phase": 4,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "deployed",
           "label": "⑤本番デプロイ",
           "phase": 5,
           "preDeploy": false,
-          "ok": false
+          "ok": true
         },
         {
           "id": "debug",
           "label": "⑥デバッグOK",
           "phase": 6,
           "preDeploy": false,
-          "ok": false
+          "ok": true
         }
       ],
-      "blockers": [
-        {
-          "id": "D2_arc_topic",
-          "label": "経緯の話題",
-          "todo": "経緯3行以上が案件キーワードと一致",
-          "detail": "2/3 行が話題一致"
-        },
-        {
-          "id": "E5_timeline_summary",
-          "label": "TL要約",
-          "todo": "国会TLは平易語要約必須（空定型・切り出し禁止）",
-          "detail": "4/6件が空定型・未要約"
-        },
-        {
-          "id": "I1_legal",
-          "label": "法務",
-          "todo": "legal-check を実行",
-          "detail": "needs_owner"
-        }
-      ],
-      "blockerCount": 3,
+      "blockers": [],
+      "blockerCount": 0,
       "runState": "idle",
-      "workItems": [
-        {
-          "id": "D2_arc_topic",
-          "label": "経緯の話題",
-          "state": "blocked"
-        },
-        {
-          "id": "E5_timeline_summary",
-          "label": "TL要約",
-          "state": "blocked"
-        },
-        {
-          "id": "I1_legal",
-          "label": "法務",
-          "state": "blocked"
-        },
-        {
-          "id": "pipe:content",
-          "label": "①コンテンツ",
-          "state": "blocked"
-        },
-        {
-          "id": "pipe:legal",
-          "label": "④法務OK",
-          "state": "blocked"
-        }
-      ],
-      "nextAction": "✅ 公開中 — 要対応あり（裏で修正中・URLは維持）",
+      "workItems": [],
+      "nextAction": "✅ 公開中 — /case/ に表示されています",
       "promo": {
-        "x": null,
-        "hatena": null,
-        "note": null
+        "x": "2026-07-18T09:09:15.203Z",
+        "hatena": "2026-07-14T02:41:10.809Z",
+        "note": "2026-07-14T02:45:13.953Z"
       },
       "short": {
-        "slug": "online-casino",
+        "slug": "casino-ir",
         "generated": false,
         "uploaded": false,
         "visibility": null,
@@ -9948,7 +9036,7 @@
       },
       "xUnavailable": true,
       "xResearchStatus": "exhausted",
-      "statusExplain": "サイトに載っているが、内部チェックは全部終わっていない。",
+      "statusExplain": "サイトに公開中。",
       "publishedBy": "owner",
       "publishedAt": "2026-07-01T20:35:30.033Z",
       "adminHiddenBy": null,
@@ -9957,7 +9045,7 @@
       "activity": [
         {
           "at": "2026-07-01T20:35:30.033Z",
-          "when": "07/02 05:35",
+          "when": "07/01 20:35",
           "type": "publish.manual",
           "actor": "owner",
           "line": "手動で一般公開（あなた） — 履歴補完（公開日時から）"
@@ -9967,20 +9055,20 @@
         {
           "channel": "X",
           "automation": "semi",
-          "status": "未",
-          "done": false
+          "status": "済 07/18 09:09",
+          "done": true
         },
         {
           "channel": "はてブ",
           "automation": "semi",
-          "status": "未",
-          "done": false
+          "status": "済 07/14 02:41",
+          "done": true
         },
         {
           "channel": "note",
           "automation": "semi",
-          "status": "未",
-          "done": false
+          "status": "済 07/14 02:45",
+          "done": true
         },
         {
           "channel": "ショート",
@@ -9994,82 +9082,37 @@
     },
     {
       "slug": "kenpo",
-      "title": "【憲法改正】来春発議？審査会の争点は",
-      "shortTitle": "【憲法改正】来春発議？審査会の争点は",
+      "title": "憲法改正の動向",
+      "shortTitle": "【憲法改正】9条・緊急事態条項など争点整理",
       "category": "国会",
       "policyCategory": "国会",
       "adminHidden": false,
       "pageReady": false,
-      "publishState": "wip",
-      "adminBucket": "prep",
+      "publishState": "draft",
+      "adminBucket": "ready",
       "previewUrl": "/dev/preview/kenpo/",
       "qualityOk": true,
       "needsQualityFix": false,
       "qualityBlockerCount": 0,
       "qualityBlockers": [],
-      "agentTasks": [
-        {
-          "id": "kenpo:P1_opening_off_topic",
-          "slug": "kenpo",
-          "agent": "writer",
-          "agentLabel": "ライター",
-          "checkId": "P1_opening_off_topic",
-          "title": "[公開] 1行目がタイトルに未回答",
-          "todo": "1行目に案件のキーワードと具体答えを入れる",
-          "command": "node scripts/complete-article.mjs --slug kenpo --content-only --force",
-          "priority": 5
-        },
-        {
-          "id": "kenpo:B3_topic",
-          "slug": "kenpo",
-          "agent": "writer",
-          "agentLabel": "ライター",
-          "checkId": "B3_topic",
-          "title": "[ゲート] 話題一致",
-          "todo": "要約が searchKeyword と一致（2行以上）",
-          "command": "node scripts/complete-article.mjs --slug kenpo --content-only --force",
-          "priority": 30
-        },
-        {
-          "id": "kenpo:E5_timeline_summary",
-          "slug": "kenpo",
-          "agent": "writer",
-          "agentLabel": "ライター",
-          "checkId": "E5_timeline_summary",
-          "title": "[ゲート] TL要約",
-          "todo": "国会TLは平易語要約必須（空定型・切り出し禁止）",
-          "command": "node scripts/enrich-timeline-all.mjs --slug kenpo",
-          "priority": 30
-        },
-        {
-          "id": "kenpo:I1_legal",
-          "slug": "kenpo",
-          "agent": "legal-check",
-          "agentLabel": "法務",
-          "checkId": "I1_legal",
-          "title": "[ゲート] 法務",
-          "todo": "legal-check を実行",
-          "command": "node scripts/complete-article.mjs --slug kenpo --legal-only",
-          "priority": 30
-        }
-      ],
-      "gatePct": 50,
-      "goldPct": 33,
+      "agentTasks": [],
+      "gatePct": 100,
+      "goldPct": 83,
       "published": false,
       "specialPublish": false,
       "specialPublishSummary": "",
-      "publishGateOk": false,
-      "pipelinePreOk": false,
-      "titleAnswerOk": false,
-      "titleAnswerDetail": "1行目が案件キーワード（憲法改正）と一致しない",
-      "titleAnswerTodo": "1行目に案件のキーワードと具体答えを入れる",
+      "publishGateOk": true,
+      "pipelinePreOk": true,
+      "titleAnswerOk": true,
+      "titleAnswerDetail": "1行目がタイトルに回答している",
+      "titleAnswerTodo": null,
       "pipeline": [
         {
           "id": "content",
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "matrix",
@@ -10090,7 +9133,7 @@
           "label": "④法務OK",
           "phase": 4,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "deployed",
@@ -10104,7 +9147,7 @@
           "label": "⑥デバッグOK",
           "phase": 6,
           "preDeploy": false,
-          "ok": false
+          "ok": true
         }
       ],
       "gold": [
@@ -10113,7 +9156,7 @@
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "matrix",
@@ -10134,7 +9177,7 @@
           "label": "④法務OK",
           "phase": 4,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "deployed",
@@ -10148,59 +9191,14 @@
           "label": "⑥デバッグOK",
           "phase": 6,
           "preDeploy": false,
-          "ok": false
+          "ok": true
         }
       ],
-      "blockers": [
-        {
-          "id": "B3_topic",
-          "label": "話題一致",
-          "todo": "要約が searchKeyword と一致（2行以上）",
-          "detail": "0/2 行がキーワード一致（憲法改正）"
-        },
-        {
-          "id": "E5_timeline_summary",
-          "label": "TL要約",
-          "todo": "国会TLは平易語要約必須（空定型・切り出し禁止）",
-          "detail": "3/6件が空定型・未要約"
-        },
-        {
-          "id": "I1_legal",
-          "label": "法務",
-          "todo": "legal-check を実行",
-          "detail": "needs_owner"
-        }
-      ],
-      "blockerCount": 3,
+      "blockers": [],
+      "blockerCount": 0,
       "runState": "idle",
-      "workItems": [
-        {
-          "id": "B3_topic",
-          "label": "話題一致",
-          "state": "blocked"
-        },
-        {
-          "id": "E5_timeline_summary",
-          "label": "TL要約",
-          "state": "blocked"
-        },
-        {
-          "id": "I1_legal",
-          "label": "法務",
-          "state": "blocked"
-        },
-        {
-          "id": "pipe:content",
-          "label": "①コンテンツ",
-          "state": "blocked"
-        },
-        {
-          "id": "pipe:legal",
-          "label": "④法務OK",
-          "state": "blocked"
-        }
-      ],
-      "nextAction": "✏️ 公開待ち — 1行目が案件キーワード（憲法改正）と一致しない（①〜④は巡回が続行）",
+      "workItems": [],
+      "nextAction": "📋 1行目OK — プレビュー確認後「公開する」を押してください",
       "promo": {
         "x": null,
         "hatena": null,
@@ -10219,7 +9217,7 @@
       },
       "xUnavailable": true,
       "xResearchStatus": "exhausted",
-      "statusExplain": "巡回が記事を仕上げている。公開ボタンはまだ出ない。",
+      "statusExplain": "内容は読める状態。プレビュー確認後「公開する」でサイトに載る。",
       "publishedBy": null,
       "publishedAt": null,
       "adminHiddenBy": null,
@@ -10228,70 +9226,70 @@
       "activity": [
         {
           "at": "2026-07-10T05:38:31.192Z",
-          "when": "07/10 14:38",
+          "when": "07/10 05:38",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
         },
         {
           "at": "2026-07-10T05:26:45.482Z",
-          "when": "07/10 14:26",
+          "when": "07/10 05:26",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
         },
         {
           "at": "2026-07-10T05:14:55.567Z",
-          "when": "07/10 14:14",
+          "when": "07/10 05:14",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
         },
         {
           "at": "2026-07-10T05:03:06.695Z",
-          "when": "07/10 14:03",
+          "when": "07/10 05:03",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
         },
         {
           "at": "2026-07-10T04:51:12.272Z",
-          "when": "07/10 13:51",
+          "when": "07/10 04:51",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
         },
         {
           "at": "2026-07-10T04:36:58.494Z",
-          "when": "07/10 13:36",
+          "when": "07/10 04:36",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
         },
         {
           "at": "2026-07-10T04:25:04.233Z",
-          "when": "07/10 13:25",
+          "when": "07/10 04:25",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
         },
         {
           "at": "2026-07-10T04:13:26.528Z",
-          "when": "07/10 13:13",
+          "when": "07/10 04:13",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
         },
         {
           "at": "2026-07-10T04:01:26.965Z",
-          "when": "07/10 13:01",
+          "when": "07/10 04:01",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
         },
         {
           "at": "2026-07-10T03:49:43.352Z",
-          "when": "07/10 12:49",
+          "when": "07/10 03:49",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
@@ -10324,7 +9322,7 @@
         }
       ],
       "stall": null,
-      "ownerTodo": false
+      "ownerTodo": true
     },
     {
       "slug": "tariff-us",
@@ -10341,37 +9339,14 @@
       "needsQualityFix": false,
       "qualityBlockerCount": 0,
       "qualityBlockers": [],
-      "agentTasks": [
-        {
-          "id": "tariff-us:E5_timeline_summary",
-          "slug": "tariff-us",
-          "agent": "writer",
-          "agentLabel": "ライター",
-          "checkId": "E5_timeline_summary",
-          "title": "[ゲート] TL要約",
-          "todo": "国会TLは平易語要約必須（空定型・切り出し禁止）",
-          "command": "node scripts/enrich-timeline-all.mjs --slug tariff-us",
-          "priority": 30
-        },
-        {
-          "id": "tariff-us:I1_legal",
-          "slug": "tariff-us",
-          "agent": "legal-check",
-          "agentLabel": "法務",
-          "checkId": "I1_legal",
-          "title": "[ゲート] 法務",
-          "todo": "legal-check を実行",
-          "command": "node scripts/complete-article.mjs --slug tariff-us --legal-only",
-          "priority": 30
-        }
-      ],
-      "gatePct": 50,
-      "goldPct": 33,
+      "agentTasks": [],
+      "gatePct": 100,
+      "goldPct": 100,
       "published": true,
-      "specialPublish": true,
-      "specialPublishSummary": "ゲート2件・①〜④未完了",
+      "specialPublish": false,
+      "specialPublishSummary": "",
       "publishGateOk": true,
-      "pipelinePreOk": false,
+      "pipelinePreOk": true,
       "titleAnswerOk": true,
       "titleAnswerDetail": "1行目がタイトルに回答している",
       "titleAnswerTodo": null,
@@ -10381,7 +9356,7 @@
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "matrix",
@@ -10402,21 +9377,21 @@
           "label": "④法務OK",
           "phase": 4,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "deployed",
           "label": "⑤本番デプロイ",
           "phase": 5,
           "preDeploy": false,
-          "ok": false
+          "ok": true
         },
         {
           "id": "debug",
           "label": "⑥デバッグOK",
           "phase": 6,
           "preDeploy": false,
-          "ok": false
+          "ok": true
         }
       ],
       "gold": [
@@ -10425,7 +9400,7 @@
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "matrix",
@@ -10446,62 +9421,28 @@
           "label": "④法務OK",
           "phase": 4,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "deployed",
           "label": "⑤本番デプロイ",
           "phase": 5,
           "preDeploy": false,
-          "ok": false
+          "ok": true
         },
         {
           "id": "debug",
           "label": "⑥デバッグOK",
           "phase": 6,
           "preDeploy": false,
-          "ok": false
+          "ok": true
         }
       ],
-      "blockers": [
-        {
-          "id": "E5_timeline_summary",
-          "label": "TL要約",
-          "todo": "国会TLは平易語要約必須（空定型・切り出し禁止）",
-          "detail": "5/6件が空定型・未要約"
-        },
-        {
-          "id": "I1_legal",
-          "label": "法務",
-          "todo": "legal-check を実行",
-          "detail": "needs_owner"
-        }
-      ],
-      "blockerCount": 2,
+      "blockers": [],
+      "blockerCount": 0,
       "runState": "idle",
-      "workItems": [
-        {
-          "id": "E5_timeline_summary",
-          "label": "TL要約",
-          "state": "blocked"
-        },
-        {
-          "id": "I1_legal",
-          "label": "法務",
-          "state": "blocked"
-        },
-        {
-          "id": "pipe:content",
-          "label": "①コンテンツ",
-          "state": "blocked"
-        },
-        {
-          "id": "pipe:legal",
-          "label": "④法務OK",
-          "state": "blocked"
-        }
-      ],
-      "nextAction": "✅ 公開中 — 要対応あり（裏で修正中・URLは維持）",
+      "workItems": [],
+      "nextAction": "✅ 公開中 — /case/ に表示されています",
       "promo": {
         "x": null,
         "hatena": null,
@@ -10520,7 +9461,7 @@
       },
       "xUnavailable": true,
       "xResearchStatus": "exhausted",
-      "statusExplain": "サイトに載っているが、内部チェックは全部終わっていない。",
+      "statusExplain": "サイトに公開中。",
       "publishedBy": null,
       "publishedAt": null,
       "adminHiddenBy": null,
@@ -10558,8 +9499,8 @@
     },
     {
       "slug": "kishida-resign",
-      "title": "【高市内閣】重点は賃上げと補正予算の絞り込み",
-      "shortTitle": "【高市内閣】重点は賃上げと補正予算の絞り込み",
+      "title": "政権・内閣人事の動向",
+      "shortTitle": "【政権・内閣人事】首相交代と政策の行方",
       "category": "国会",
       "policyCategory": "国会",
       "adminHidden": false,
@@ -10571,26 +9512,14 @@
       "needsQualityFix": false,
       "qualityBlockerCount": 0,
       "qualityBlockers": [],
-      "agentTasks": [
-        {
-          "id": "kishida-resign:E5_timeline_summary",
-          "slug": "kishida-resign",
-          "agent": "writer",
-          "agentLabel": "ライター",
-          "checkId": "E5_timeline_summary",
-          "title": "[ゲート] TL要約",
-          "todo": "国会TLは平易語要約必須（空定型・切り出し禁止）",
-          "command": "node scripts/enrich-timeline-all.mjs --slug kishida-resign",
-          "priority": 30
-        }
-      ],
-      "gatePct": 75,
-      "goldPct": 50,
+      "agentTasks": [],
+      "gatePct": 100,
+      "goldPct": 100,
       "published": true,
-      "specialPublish": true,
-      "specialPublishSummary": "ゲート1件・①〜④未完了",
+      "specialPublish": false,
+      "specialPublishSummary": "",
       "publishGateOk": true,
-      "pipelinePreOk": false,
+      "pipelinePreOk": true,
       "titleAnswerOk": true,
       "titleAnswerDetail": "1行目がタイトルに回答している",
       "titleAnswerTodo": null,
@@ -10600,7 +9529,7 @@
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "matrix",
@@ -10628,14 +9557,14 @@
           "label": "⑤本番デプロイ",
           "phase": 5,
           "preDeploy": false,
-          "ok": false
+          "ok": true
         },
         {
           "id": "debug",
           "label": "⑥デバッグOK",
           "phase": 6,
           "preDeploy": false,
-          "ok": false
+          "ok": true
         }
       ],
       "gold": [
@@ -10644,7 +9573,7 @@
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "matrix",
@@ -10672,39 +9601,21 @@
           "label": "⑤本番デプロイ",
           "phase": 5,
           "preDeploy": false,
-          "ok": false
+          "ok": true
         },
         {
           "id": "debug",
           "label": "⑥デバッグOK",
           "phase": 6,
           "preDeploy": false,
-          "ok": false
+          "ok": true
         }
       ],
-      "blockers": [
-        {
-          "id": "E5_timeline_summary",
-          "label": "TL要約",
-          "todo": "国会TLは平易語要約必須（空定型・切り出し禁止）",
-          "detail": "2/6件が空定型・未要約"
-        }
-      ],
-      "blockerCount": 1,
+      "blockers": [],
+      "blockerCount": 0,
       "runState": "idle",
-      "workItems": [
-        {
-          "id": "E5_timeline_summary",
-          "label": "TL要約",
-          "state": "blocked"
-        },
-        {
-          "id": "pipe:content",
-          "label": "①コンテンツ",
-          "state": "blocked"
-        }
-      ],
-      "nextAction": "✅ 公開中 — 要対応あり（裏で修正中・URLは維持）",
+      "workItems": [],
+      "nextAction": "✅ 公開中 — /case/ に表示されています",
       "promo": {
         "x": "2026-07-07T03:32:52.512Z",
         "hatena": "2026-07-14T02:32:30.103Z",
@@ -10723,7 +9634,7 @@
       },
       "xUnavailable": true,
       "xResearchStatus": "exhausted",
-      "statusExplain": "サイトに載っているが、内部チェックは全部終わっていない。",
+      "statusExplain": "サイトに公開中。",
       "publishedBy": "owner",
       "publishedAt": "2026-07-01T20:35:30.581Z",
       "adminHiddenBy": null,
@@ -10732,7 +9643,7 @@
       "activity": [
         {
           "at": "2026-07-01T20:35:30.581Z",
-          "when": "07/02 05:35",
+          "when": "07/01 20:35",
           "type": "publish.manual",
           "actor": "owner",
           "line": "手動で一般公開（あなた） — 履歴補完（公開日時から）"
@@ -10742,19 +9653,19 @@
         {
           "channel": "X",
           "automation": "semi",
-          "status": "済 07/07 12:32",
+          "status": "済 07/07 03:32",
           "done": true
         },
         {
           "channel": "はてブ",
           "automation": "semi",
-          "status": "済 07/14 11:32",
+          "status": "済 07/14 02:32",
           "done": true
         },
         {
           "channel": "note",
           "automation": "semi",
-          "status": "済 07/14 11:34",
+          "status": "済 07/14 02:34",
           "done": true
         },
         {
@@ -10793,17 +9704,6 @@
           "todo": "国会TLはある分だけ話題一致。TLなし可。根拠なしの結論は不可",
           "command": "node scripts/enrich-timeline-all.mjs --slug kishida-seiken-jisshi",
           "priority": 30
-        },
-        {
-          "id": "kishida-seiken-jisshi:E5_timeline_summary",
-          "slug": "kishida-seiken-jisshi",
-          "agent": "writer",
-          "agentLabel": "ライター",
-          "checkId": "E5_timeline_summary",
-          "title": "[ゲート] TL要約",
-          "todo": "国会TLは平易語要約必須（空定型・切り出し禁止）",
-          "command": "node scripts/enrich-timeline-all.mjs --slug kishida-seiken-jisshi",
-          "priority": 30
         }
       ],
       "gatePct": 75,
@@ -10910,25 +9810,14 @@
           "label": "TL国会の話題",
           "todo": "国会TLはある分だけ話題一致。TLなし可。根拠なしの結論は不可",
           "detail": "国会TLあるが話題一致なし＋結論あり"
-        },
-        {
-          "id": "E5_timeline_summary",
-          "label": "TL要約",
-          "todo": "国会TLは平易語要約必須（空定型・切り出し禁止）",
-          "detail": "5/6件が空定型・未要約"
         }
       ],
-      "blockerCount": 2,
+      "blockerCount": 1,
       "runState": "idle",
       "workItems": [
         {
           "id": "E4_timeline_diet_topic",
           "label": "TL国会の話題",
-          "state": "active"
-        },
-        {
-          "id": "E5_timeline_summary",
-          "label": "TL要約",
           "state": "blocked"
         },
         {
@@ -10961,74 +9850,74 @@
       "publishedAt": null,
       "adminHiddenBy": "dup-cleanup",
       "adminHiddenAt": "2026-07-16T14:42:37.143Z",
-      "patrolFixing": true,
+      "patrolFixing": false,
       "activity": [
         {
           "at": "2026-07-16T14:42:37.143Z",
-          "when": "07/16 23:42",
+          "when": "07/16 14:42",
           "type": "hide.manual",
           "actor": "dup-cleanup",
           "line": "手動で非表示（dup-cleanup） — 履歴補完（非表示日時から）"
         },
         {
           "at": "2026-07-10T05:38:50.139Z",
-          "when": "07/10 14:38",
+          "when": "07/10 05:38",
           "type": "gate.ready",
           "actor": "patrol",
           "line": "公開ゲート到達（まだ非公開）（巡回） — 1行目がタイトルに回答済み。一般公開は手動のみ"
         },
         {
           "at": "2026-07-10T05:35:34.129Z",
-          "when": "07/10 14:35",
+          "when": "07/10 05:35",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 50% / 品質 OK"
         },
         {
           "at": "2026-07-10T05:35:21.352Z",
-          "when": "07/10 14:35",
+          "when": "07/10 05:35",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / D2_arc_topic"
         },
         {
           "at": "2026-07-10T05:35:08.701Z",
-          "when": "07/10 14:35",
+          "when": "07/10 05:35",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / D2_arc_topic"
         },
         {
           "at": "2026-07-10T05:34:51.049Z",
-          "when": "07/10 14:34",
+          "when": "07/10 05:34",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / D2_arc_topic"
         },
         {
           "at": "2026-07-10T05:34:36.374Z",
-          "when": "07/10 14:34",
+          "when": "07/10 05:34",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / D2_arc_topic"
         },
         {
           "at": "2026-07-10T05:34:21.099Z",
-          "when": "07/10 14:34",
+          "when": "07/10 05:34",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / D2_arc_topic"
         },
         {
           "at": "2026-07-10T05:23:50.050Z",
-          "when": "07/10 14:23",
+          "when": "07/10 05:23",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 50% / 品質 OK"
         },
         {
           "at": "2026-07-10T05:23:38.275Z",
-          "when": "07/10 14:23",
+          "when": "07/10 05:23",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / D2_arc_topic"
@@ -11065,8 +9954,8 @@
     },
     {
       "slug": "komei-kokumin",
-      "title": "【デジタル教科書】紙は廃止？無償給与の対象は",
-      "shortTitle": "【デジタル教科書】紙は廃止？無償給与の対象は",
+      "title": "学校教育法改正とデジタル教科書",
+      "shortTitle": "学校教育法改正とデジタル教科書",
       "category": "教育",
       "policyCategory": "教育",
       "adminHidden": false,
@@ -11203,7 +10092,7 @@
         {
           "id": "B3_topic",
           "label": "話題一致",
-          "state": "active"
+          "state": "blocked"
         },
         {
           "id": "pipe:content",
@@ -11219,14 +10108,14 @@
       },
       "short": {
         "slug": "komei-kokumin",
-        "generated": true,
-        "uploaded": true,
-        "visibility": "scheduled",
-        "videoId": "WEqcfLBsVcg",
-        "url": "https://www.youtube.com/shorts/WEqcfLBsVcg",
-        "studioUrl": "https://studio.youtube.com/video/WEqcfLBsVcg/edit",
-        "uploadedAt": "2026-07-05T05:33:38.898Z",
-        "label": "YTアップ済"
+        "generated": false,
+        "uploaded": false,
+        "visibility": null,
+        "videoId": null,
+        "url": null,
+        "studioUrl": null,
+        "uploadedAt": null,
+        "label": "未生成"
       },
       "xUnavailable": true,
       "xResearchStatus": "exhausted",
@@ -11235,74 +10124,74 @@
       "publishedAt": "2026-07-05T05:10:47.621Z",
       "adminHiddenBy": null,
       "adminHiddenAt": null,
-      "patrolFixing": true,
+      "patrolFixing": false,
       "activity": [
         {
           "at": "2026-07-10T05:35:48.653Z",
-          "when": "07/10 14:35",
+          "when": "07/10 05:35",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 50% / 品質 OK"
         },
         {
           "at": "2026-07-10T05:35:45.717Z",
-          "when": "07/10 14:35",
+          "when": "07/10 05:35",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / B3_topic"
         },
         {
           "at": "2026-07-10T05:35:42.818Z",
-          "when": "07/10 14:35",
+          "when": "07/10 05:35",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / B3_topic"
         },
         {
           "at": "2026-07-10T05:35:39.936Z",
-          "when": "07/10 14:35",
+          "when": "07/10 05:35",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / B3_topic"
         },
         {
           "at": "2026-07-10T05:35:37.119Z",
-          "when": "07/10 14:35",
+          "when": "07/10 05:35",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / B3_topic"
         },
         {
           "at": "2026-07-10T05:35:34.146Z",
-          "when": "07/10 14:35",
+          "when": "07/10 05:35",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / B3_topic"
         },
         {
           "at": "2026-07-10T05:24:04.456Z",
-          "when": "07/10 14:24",
+          "when": "07/10 05:24",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 50% / 品質 OK"
         },
         {
           "at": "2026-07-10T05:24:01.596Z",
-          "when": "07/10 14:24",
+          "when": "07/10 05:24",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / B3_topic"
         },
         {
           "at": "2026-07-10T05:23:58.775Z",
-          "when": "07/10 14:23",
+          "when": "07/10 05:23",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / B3_topic"
         },
         {
           "at": "2026-07-10T05:23:55.964Z",
-          "when": "07/10 14:23",
+          "when": "07/10 05:23",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / B3_topic"
@@ -11312,26 +10201,26 @@
         {
           "channel": "X",
           "automation": "semi",
-          "status": "済 07/06 12:32",
+          "status": "済 07/06 03:32",
           "done": true
         },
         {
           "channel": "はてブ",
           "automation": "semi",
-          "status": "済 07/14 11:46",
+          "status": "済 07/14 02:46",
           "done": true
         },
         {
           "channel": "note",
           "automation": "semi",
-          "status": "済 07/14 11:48",
+          "status": "済 07/14 02:48",
           "done": true
         },
         {
           "channel": "ショート",
           "automation": "manual",
-          "status": "YT YTアップ済 07/05 14:33",
-          "done": true
+          "status": "未生成",
+          "done": false
         }
       ],
       "stall": null,
@@ -11339,6 +10228,6 @@
     }
   ],
   "deltaGoldPct": 0,
-  "previousGoldPct": 54,
-  "deployedAt": "2026-07-19T10:55:52.114Z"
+  "previousGoldPct": 76,
+  "deployedAt": "2026-07-16T14:52:43.841Z"
 }
