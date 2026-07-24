@@ -1,9 +1,10 @@
 {
-  "generatedAt": "2026-07-24T05:11:32.070Z",
-  "total": 75,
+  "generatedAt": "2026-07-24T09:41:50.482Z",
+  "total": 73,
   "byAgent": {
-    "writer": 58,
+    "writer": 53,
     "legal-check": 13,
+    "ceo": 3,
     "x-researcher": 4
   },
   "tasks": [
@@ -151,26 +152,48 @@
       "priority": 30
     },
     {
-      "id": "hosei-yosan:B3_topic",
+      "id": "hosei-yosan:P1_opening_no_number",
       "slug": "hosei-yosan",
       "agent": "writer",
       "agentLabel": "ライター",
-      "checkId": "B3_topic",
-      "title": "[ゲート] 話題一致",
-      "todo": "要約が searchKeyword と一致（2行以上）",
+      "checkId": "P1_opening_no_number",
+      "title": "[公開] 1行目がタイトルに未回答",
+      "todo": "円・%・万人など公表数値を1行目に入れる",
       "command": "node scripts/complete-article.mjs --slug hosei-yosan --content-only --force",
-      "priority": 30
+      "priority": 5
     },
     {
-      "id": "hosei-yosan:D2_arc_topic",
+      "id": "hosei-yosan:Q1_conclusion_numbers",
       "slug": "hosei-yosan",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "D2_arc_topic",
-      "title": "[ゲート] 経緯の話題",
-      "todo": "経緯3行以上が案件キーワードと一致",
+      "agent": "ceo",
+      "agentLabel": "CEO",
+      "checkId": "Q1_conclusion_numbers",
+      "title": "[品質] タイトルが金額・実績を問うのに、いまの結論に公表数値がない",
+      "todo": "1行目に円・%・万人などタイトルへの直接回答を入れる（X・報道の数字を要約に反映）",
       "command": "node scripts/complete-article.mjs --slug hosei-yosan --content-only --force",
-      "priority": 30
+      "priority": 10
+    },
+    {
+      "id": "hosei-yosan:Q3_plain_no_answer",
+      "slug": "hosei-yosan",
+      "agent": "ceo",
+      "agentLabel": "CEO",
+      "checkId": "Q3_plain_no_answer",
+      "title": "[品質] つまり欄の冒頭がタイトルの疑問（金額・実績）に答えていない",
+      "todo": "1段落目を「結論：〇〇万円（日付）」から始める",
+      "command": "node scripts/complete-article.mjs --slug hosei-yosan --content-only --force",
+      "priority": 10
+    },
+    {
+      "id": "hosei-yosan:Q6_procedural_arc",
+      "slug": "hosei-yosan",
+      "agent": "ceo",
+      "agentLabel": "CEO",
+      "checkId": "Q6_procedural_arc",
+      "title": "[品質] 経緯に採決手続き・委員長報告など中身のない行が混ざっている",
+      "todo": "可決内容・支給額・法案名など事実行に差し替え",
+      "command": "node scripts/complete-article.mjs --slug hosei-yosan --content-only --force",
+      "priority": 10
     },
     {
       "id": "hosei-yosan:E5_timeline_summary",
@@ -217,28 +240,6 @@
       "priority": 30
     },
     {
-      "id": "kenpo:P1_opening_off_topic",
-      "slug": "kenpo",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "P1_opening_off_topic",
-      "title": "[公開] 1行目がタイトルに未回答",
-      "todo": "1行目に案件のキーワードと具体答えを入れる",
-      "command": "node scripts/complete-article.mjs --slug kenpo --content-only --force",
-      "priority": 5
-    },
-    {
-      "id": "kenpo:B3_topic",
-      "slug": "kenpo",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "B3_topic",
-      "title": "[ゲート] 話題一致",
-      "todo": "要約が searchKeyword と一致（2行以上）",
-      "command": "node scripts/complete-article.mjs --slug kenpo --content-only --force",
-      "priority": 30
-    },
-    {
       "id": "kenpo:E5_timeline_summary",
       "slug": "kenpo",
       "agent": "writer",
@@ -269,17 +270,6 @@
       "title": "[ゲート] TL要約",
       "todo": "国会TLは平易語要約必須（空定型・切り出し禁止）",
       "command": "node scripts/enrich-timeline-all.mjs --slug kishida-resign",
-      "priority": 30
-    },
-    {
-      "id": "kojin-joho-kaisei:E2_timeline_x",
-      "slug": "kojin-joho-kaisei",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "E2_timeline_x",
-      "title": "[ゲート] タイムラインX",
-      "todo": "X投稿を3件以上タイムラインに",
-      "command": "node scripts/enrich-timeline-all.mjs --slug kojin-joho-kaisei",
       "priority": 30
     },
     {
@@ -415,28 +405,6 @@
       "priority": 30
     },
     {
-      "id": "noto-fukko-budget:E2_timeline_x",
-      "slug": "noto-fukko-budget",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "E2_timeline_x",
-      "title": "[ゲート] タイムラインX",
-      "todo": "X投稿を3件以上タイムラインに",
-      "command": "node scripts/enrich-timeline-all.mjs --slug noto-fukko-budget",
-      "priority": 30
-    },
-    {
-      "id": "online-casino:D2_arc_topic",
-      "slug": "online-casino",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "D2_arc_topic",
-      "title": "[ゲート] 経緯の話題",
-      "todo": "経緯3行以上が案件キーワードと一致",
-      "command": "node scripts/complete-article.mjs --slug online-casino --content-only --force",
-      "priority": 30
-    },
-    {
       "id": "online-casino:E5_timeline_summary",
       "slug": "online-casino",
       "agent": "writer",
@@ -445,6 +413,17 @@
       "title": "[ゲート] TL要約",
       "todo": "国会TLは平易語要約必須（空定型・切り出し禁止）",
       "command": "node scripts/enrich-timeline-all.mjs --slug online-casino",
+      "priority": 30
+    },
+    {
+      "id": "online-casino:F1_glossary",
+      "slug": "online-casino",
+      "agent": "writer",
+      "agentLabel": "ライター",
+      "checkId": "F1_glossary",
+      "title": "[ゲート] 用語解説",
+      "todo": "用語を2語以上",
+      "command": "node scripts/complete-article.mjs --slug online-casino --content-only --force",
       "priority": 30
     },
     {
