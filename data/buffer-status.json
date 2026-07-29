@@ -1,14 +1,14 @@
 {
-  "updatedAt": "2026-07-28T12:02:36.826Z",
+  "updatedAt": "2026-07-29T12:07:20.618Z",
   "configured": true,
-  "ok": true,
-  "status": "ok",
-  "statusLabel": "連携OK",
-  "message": "seiji1192site に投稿可能",
+  "ok": false,
+  "status": "error",
+  "statusLabel": "エラー",
+  "message": "Buffer HTTP 401: Access token is not valid",
   "channelId": "6a41fc165ab6d2f10682fefa",
   "channelName": "seiji1192site",
-  "lastCheckAt": "2026-07-28T12:02:36.825Z",
-  "lastCheckOk": true,
+  "lastCheckAt": "2026-07-29T12:07:20.617Z",
+  "lastCheckOk": false,
   "lastPostAt": "2026-07-28T05:42:53.939Z",
   "lastPostSlug": "digest-2026-07-28",
   "lastPostOk": true,
@@ -158,7 +158,10 @@
       "error": null
     }
   ],
-  "fixSteps": [],
+  "fixSteps": [
+    "数分待って再チェック",
+    "buffer.com で X 連携状態を確認"
+  ],
   "organizationId": "6a41fbe4e6593eecb7dd0a03",
   "channelService": "twitter",
   "queuePaused": false
