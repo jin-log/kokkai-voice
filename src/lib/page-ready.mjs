@@ -8,7 +8,14 @@ import { fileURLToPath } from "node:url";
 import { hasDietSourceContent, isPhaseAPublish, isDietDisclaimerMismatch } from "./diet-pending.mjs";
 import { isXUnavailable, X_UNAVAILABLE_ADMIN_MESSAGE } from "./x-research-policy.mjs";
 import { countTopicBullets, isTitleReady, countTopicArcLines, countTopicDietTimeline, countDietTimelineEntries, isMatrixTopicRelevant, isMatrixTopicConsistent, isConclusionQuality, isDietTimelineTopicOk, textStronglyMatchesTopic } from "./topic-relevance.mjs";
-import { isDietVoice, bulletsDistinctFrom, isSpeechFragment } from "./diet-voice.mjs";
+import {
+  isDietVoice,
+  bulletsDistinctFrom,
+  isSpeechFragment,
+  isRawSpeechStance,
+  isRawSpeechAction,
+  stanceActionDistinct,
+} from "./diet-voice.mjs";
 import { isValidSymbol } from "./symbol-rules.mjs";
 import { waivedCheckIds } from "./case-gates.mjs";
 import { resolveProsCons } from "./case-helpers.mjs";
@@ -55,6 +62,10 @@ export const CHECK_LABELS = {
   G4_parties_source: { label: "党の出典URL", todo: "各党に sourceUrl" },
   G5_parties_symbol: { label: "◎〇▲×", todo: "各党の記号を確定（v2）" },
   G6_matrix_topic: { label: "〇×の話題", todo: "1党以上が案件キーワードと一致。一致なしで結論だけは不可" },
+  G7_matrix_stance_voice: {
+    label: "〇×の要約品質",
+    todo: "方針＝第三者要約／行動＝動詞。議事録切り出し・同一引用コピペは不可（L9と同基準）",
+  },
   H1_xPosts: { label: "X投稿", todo: "検証済みX URLを3件以上（x-researcher）" },
   H2_x_topic: { label: "Xの話題", todo: "X投稿本文が案件キーワードと一致（x-researcher）" },
   H3_x_screenshot: { label: "Xスクショ", todo: "npm run x:capture -- --slug <slug>（デバッガー）" },
@@ -370,6 +381,32 @@ export function checkCasePage(article, opts = {}) {
     matrixTopicOk
       ? `${matrixTopicCount}党が話題一致`
       : "〇×に話題一致なし＋結論あり",
+  );
+  // G7: 方針＝議事録切り出し／方針と行動の同一引用コピペは公開不可（法務L9と同基準）
+  const matrixVoiceBad = [];
+  for (const p of parties) {
+    const label = p.partyLabel || "?";
+    const stance = String(p.stance?.text || "").trim();
+    const action = String(p.action?.text || "").trim();
+    if (stance && isRawSpeechStance(stance)) {
+      matrixVoiceBad.push(`${label}:方針が切り出し`);
+    }
+    if (action && isRawSpeechAction(action)) {
+      matrixVoiceBad.push(`${label}:行動が切り出し`);
+    }
+    if (stance && action && !stanceActionDistinct(stance, action)) {
+      matrixVoiceBad.push(`${label}:方針＝行動のコピペ`);
+    }
+  }
+  const matrixVoiceOk = parties.length === 0 || matrixVoiceBad.length === 0;
+  add(
+    "G7_matrix_stance_voice",
+    matrixVoiceOk,
+    matrixVoiceOk
+      ? parties.length
+        ? `方針・行動とも要約OK（${parties.length}党）`
+        : "政党なし"
+      : matrixVoiceBad.slice(0, 3).join(" / "),
   );
 
   // H. X — 公開前必須（未検証URL・空枠では出さない）

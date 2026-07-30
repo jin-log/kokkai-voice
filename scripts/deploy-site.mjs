@@ -36,6 +36,8 @@ function run(cmd, args) {
 if (!process.env.CLOUDFLARE_API_TOKEN) {
   delete process.env.CLOUDFLARE_API_TOKEN;
 }
+// AdSense有用性：公開記事の品質blockerがあればデプロイ拒否
+run("npm", ["run", "audit:articles:ci"]);
 run("npm", ["run", "build"]);
 run("node", ["scripts/copy-functions.mjs"]);
 run("npx", [

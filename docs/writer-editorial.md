@@ -216,8 +216,9 @@
 行動＝「日付＋委員会名＋方針と同じ原文」は **即不合格**（引用そのまま切り取り）。
 
 - 方針＝第三者要約（立場）／行動＝動詞＋対象（質疑・答弁・提出）
-- 検出: `stanceActionDistinct`（`src/lib/diet-voice.mjs`）・法務 **L9**
+- 検出: `stanceActionDistinct` / `isRawSpeechStance`（`src/lib/diet-voice.mjs`）・法務 **L9**・公開ゲート **G7_matrix_stance_voice**
 - 自動生成が破ったら手修正。`v1-auto` のまま公開しない
+- **`legalReview: ok` の手書きは禁止** — 必ず `node scripts/legal-check.mjs --slug … --fix`（L9込み）で通す
 
 経緯は **古い順ではなく新しい順** で、必ず含める:
 

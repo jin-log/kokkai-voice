@@ -119,13 +119,34 @@ export function stanceActionDistinct(stance, action) {
   return true;
 }
 
+/** 口語・質疑の生断片（「〜とか」「まあ」「じゃないですか」等） */
+const COLLOQUIAL_FRAGMENT =
+  /とか、|とか副|まあ[、]|じゃないですか|じゃないです|けれども、そっち|言うて|っていうか|んですか[。？]?$/;
+
 /** 方針欄に議事録原文をそのまま載せている疑い */
 export function isRawSpeechStance(text) {
   const s = String(text || "").trim();
   if (!s) return false;
   if (isDietVoice(s) || isSpeechFragment(s)) return true;
+  if (COLLOQUIAL_FRAGMENT.test(s)) return true;
   // 第三者要約なら「〜立場／推進／反対」等が入る。長文の口語断片は原文切り出し
   if (/ということでもあるし|を計上して。?$|政策判断。?$|どのように整理/.test(s)) return true;
   if (s.length >= 36 && !/立場|推進|反対|慎重|求める|支持|賛成|措置|方針/.test(s)) return true;
+  return false;
+}
+
+/**
+ * 行動欄の生切り出し疑い。
+ * 方針用の「立場/推進」必須ルールは適用しない（行動は動詞文のため）。
+ */
+export function isRawSpeechAction(text) {
+  const s = String(text || "").trim();
+  if (!s) return false;
+  if (isDietVoice(s)) return true;
+  if (COLLOQUIAL_FRAGMENT.test(s)) return true;
+  if (SPEECH_FRAGMENT.test(s) || SPEECH_TAIL.test(s)) return true;
+  if (/…$|のでしょうか|でしょうか。/.test(s)) return true;
+  // 方針文を日付付きで貼っただけ（「〜立場。」のまま）
+  if (/立場[。．]?$/.test(s) && !/提出|可決|成立|質疑|答弁|採決|公布/.test(s)) return true;
   return false;
 }

@@ -34,8 +34,14 @@ export function reactionNums(article) {
 }
 
 export function articlePolicyTitle(article, matrix) {
-  if (matrix?.policyLabel) return matrix.policyLabel;
-  return (article.title || "").replace(/\s*—\s*あの話どうなった？\s*$/, "").trim();
+  const raw =
+    matrix?.policyLabel ||
+    (article.title || "").replace(/\s*—\s*あの話どうなった？\s*$/, "");
+  // 「〜の動向に対する公言と行動」見出しを出さない
+  return String(raw || "")
+    .replace(/の動向\s*$/g, "")
+    .replace(/の動向(?=[にをはがでと\s—\-])/g, "")
+    .trim();
 }
 
 /** 表示用短タイトル（【】形式） */

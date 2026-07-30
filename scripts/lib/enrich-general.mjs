@@ -209,10 +209,23 @@ export async function enrichGeneralArticle(article, root) {
   article.plainExplanation = `${keyword}について、公開されている報道・声明を時系列で整理しています。\n\n${sources.map((s) => `・${s.date}：${s.snippet}`).join("\n")}\n\nここでの要約は出典の見出し・リード文を平易に並べたものです。事実認定や有罪・無罪の判断はしていません。`;
 
   const kw = keyword.split(/[\s　]+/).filter(Boolean);
-  article.glossary = [
+  const topicBlob = `${keyword} ${article.title || ""} ${(article.tags || []).join(" ")}`;
+  const glossary = [
     { term: kw[0] || "争点", definition: "この記事で追っているテーマの核心" },
-    { term: "公選法", definition: "選挙の公正を守る法律。虚偽の経歴記載などが問題になることがある" },
-  ].slice(0, 4);
+  ];
+  // 公選法は選挙・告発案件のみ（汎用デフォルト禁止）
+  if (/公選法|選挙|告発|虚偽|学歴/.test(topicBlob)) {
+    glossary.push({
+      term: "公選法",
+      definition: "選挙の公正を守る法律。虚偽の経歴記載などが問題になることがある",
+    });
+  } else if (kw[1]) {
+    glossary.push({
+      term: kw[1],
+      definition: `${kw[0] || "本件"}に関連する用語`,
+    });
+  }
+  article.glossary = glossary.slice(0, 4);
   const { mergeInternalLinks } = await import("../../src/lib/internal-link-graph.mjs");
   mergeInternalLinks(article);
 

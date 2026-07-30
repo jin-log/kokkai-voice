@@ -11,6 +11,7 @@ const G_CHECKS = [
   "G4_parties_source",
   "G5_parties_symbol",
   "G6_matrix_topic",
+  "G7_matrix_stance_voice",
 ];
 
 /**

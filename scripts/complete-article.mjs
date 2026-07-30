@@ -156,15 +156,20 @@ function mergeUniqueBullets(target, source, max = 3) {
   return target;
 }
 
-function isGoodNowBullet(text) {
+function isGoodNowBullet(text, keyword = "") {
   const b = String(text || "").trim();
-  if (!b || b.length < 12 || isBoilerplateTopicLine(b) || isBadSummaryLine(b)) return false;
-  if (/お尋ねがございました|についてお尋ね|受け止めとジェンダー/.test(b)) return false;
+  if (!b || b.length < 12 || isBoilerplateTopicLine(b) || isBadSummaryLine(b, keyword)) return false;
+  if (/お尋ねがございました|についてお尋ね|受け止めとジェンダー|本件に関する政府方針を説明/.test(b)) {
+    return false;
+  }
   if (isSpeechFragment(b) || isIncompleteBullet(b)) return false;
+  if (keyword && !textStronglyMatchesTopic(b, keyword) && !textMatchesTopic(b, topicTerms(keyword))) {
+    return false;
+  }
   if (isDietVoice(b) && !/閣議|発足|予算|法案|賃上げ|投資|歳出|消費税|高市内閣/.test(b)) {
     return false;
   }
-  return isWriterReadyLine(b) || /閣議|発足|予算|法案|連立|追及|答弁|賃上げ|投資|歳出|消費税|兆円|高市内閣/.test(b);
+  return isWriterReadyLine(b) || /閣議|発足|予算|法案|連立|追及|答弁|賃上げ|投資|歳出|消費税|兆円|高市内閣|答え：|結論：/.test(b);
 }
 
 /** speechFull 要約（buildArticleLayers）を primary に、不足時のみライター層で補完 */
@@ -180,17 +185,19 @@ function buildNowBulletsPrimary(records, keyword, best, factBundle, meta) {
   );
   mergeUniqueBullets(
     nowBullets,
-    composeAllFallback(factBundle, meta).filter(isGoodNowBullet),
+    composeAllFallback(factBundle, meta).filter((b) => isGoodNowBullet(b, keyword)),
     3,
   );
 
   const layerCandidates = [
     ...(layers.nowSummary?.bullets ?? []),
   ];
+  // 関連度が低い発言は結論候補に入れない（誤マッチ混入防止）
+  const minLayerScore = 12;
   const ranked = records
     .filter((r) => r.speech && r.speechID !== best.speechID)
     .map((r) => ({ r, score: scoreSpeechTopicRelevance(r, keyword) }))
-    .filter((x) => x.score > 8)
+    .filter((x) => x.score >= minLayerScore)
     .sort((a, b) => b.score - a.score);
 
   for (const { r } of ranked.slice(0, 6)) {
@@ -204,7 +211,11 @@ function buildNowBulletsPrimary(records, keyword, best, factBundle, meta) {
     };
     layerCandidates.push(...(buildArticleLayers(r.speech, topicKw, subMeta).nowSummary?.bullets ?? []));
   }
-  mergeUniqueBullets(nowBullets, layerCandidates.filter(isGoodNowBullet), 3);
+  mergeUniqueBullets(
+    nowBullets,
+    layerCandidates.filter((b) => isGoodNowBullet(b, keyword)),
+    3,
+  );
 
   return { nowBullets, layers };
 }
@@ -262,13 +273,15 @@ async function enrichKokkai(article, articleSlug) {
     factBundle,
     meta,
   );
-  let nowBullets = primaryBullets;
+  let nowBullets = primaryBullets.filter((b) => isGoodNowBullet(b, searchKeyword));
   if (nowBullets.length < 1) {
-    throw new Error(`[writer] 結論が空 — 原材料不足または変換失敗`);
+    throw new Error(`[writer] 結論が空 — 原材料不足または変換失敗（関連度・品質フィルタ後）`);
   }
-  nowBullets = ensureTopicInLines(nowBullets, searchKeyword);
+  nowBullets = ensureTopicInLines(nowBullets, searchKeyword).filter((b) =>
+    isGoodNowBullet(b, searchKeyword),
+  );
   if (nowBullets.length < 1) {
-    throw new Error(`[writer] 結論が空 — 話題語のある行が足りない`);
+    throw new Error(`[writer] 結論が空 — 話題語のある行が足りない（誤マッチ除外後）`);
   }
   let arcFromWriter = synthesizeArcSummary(factBundle);
   if (arcFromWriter.length < 3) {
@@ -335,7 +348,7 @@ async function enrichKokkai(article, articleSlug) {
     speechFull: best.speech ?? null,
   };
 
-  const minSpeechScore = 8;
+  const minSpeechScore = 12;
   const topicTermList = topicTerms(searchKeyword);
   const byDate = new Map();
   for (const r of records) {
@@ -362,7 +375,7 @@ async function enrichKokkai(article, articleSlug) {
 
   article.timeline = [...byDate.entries()]
     .sort(([a], [b]) => b.localeCompare(a))
-    .slice(0, 6)
+    .slice(0, 8)
     .map(([date, { record, excerpt }], i) => {
       const sn = {
         date,
@@ -373,11 +386,13 @@ async function enrichKokkai(article, articleSlug) {
         house: record.nameOfHouse,
         excerpt,
       };
+      const summaryPlain = synthesizeTimelinePlain(sn, searchKeyword);
+      if (!summaryPlain || isBadSummaryLine(summaryPlain, searchKeyword)) return null;
       return {
         id: `${articleSlug}-tl-${i}`,
         type: "speech",
         date,
-        summaryPlain: synthesizeTimelinePlain(sn, searchKeyword),
+        summaryPlain,
         speech: {
           speechID: record.speechID,
           issueID: record.issueID,
@@ -392,7 +407,9 @@ async function enrichKokkai(article, articleSlug) {
           meetingURL: record.meetingURL,
         },
       };
-    });
+    })
+    .filter(Boolean)
+    .slice(0, 6);
 
   await writePolicyMatrixKokkai(article, records, { force, articleSlug });
   return article;

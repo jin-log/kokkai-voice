@@ -103,9 +103,16 @@ export function sanitizeTimelineEntry(ev, article) {
   }
 
   if (ev.type === "speech") {
-    if (isRawDietDump(ev.summaryPlain)) {
-      return { ...ev, summaryPlain: summarizeSpeechRow(ev, article) };
+    // プレースホルダー／要約失敗行は公開しない（AdSense有用性）
+    if (isEmptySpeechSummary(ev.summaryPlain) && !isRawDietDump(ev.summaryPlain)) {
+      return null;
     }
+    if (isRawDietDump(ev.summaryPlain)) {
+      const next = { ...ev, summaryPlain: summarizeSpeechRow(ev, article) };
+      if (isEmptySpeechSummary(next.summaryPlain)) return null;
+      return next;
+    }
+    if (isEmptySpeechSummary(ev.summaryPlain)) return null;
     return ev;
   }
 

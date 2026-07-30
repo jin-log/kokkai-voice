@@ -13,7 +13,7 @@ export const INTERNAL_LINK_GRAPH = {
         aliases: ["在留外国人"],
         definition: "合法在留の総数。不法残留者数とは別の統計系列。",
         relatedSlug: "gaikokujin-seisaku",
-        relatedTitle: "外国人政策の動向",
+        relatedTitle: "外国人政策の見直しと人口戦略",
         relatedKicker: "不法残留とは別系列",
         relatedStat: "400万人超",
         relatedStatLabel: "2025年",
@@ -23,7 +23,7 @@ export const INTERNAL_LINK_GRAPH = {
         aliases: ["不法残留者", "不法滞在"],
         definition: "在留期限を過ぎたまま国内にいる人数。在留外国人数とは別集計。",
         relatedSlug: "gaikokujin-seisaku",
-        relatedTitle: "外国人政策の動向",
+        relatedTitle: "外国人政策の見直しと人口戦略",
         relatedKicker: "在留外国人総数とは別",
         relatedStat: "約6.8万人",
         relatedStatLabel: "2025年7月",
@@ -38,13 +38,13 @@ export const INTERNAL_LINK_GRAPH = {
         aliases: ["不法滞在", "不法残留"],
         definition: "在留資格を超えた就労や期限超過の残留。在留外国人数とは別の論点。",
         relatedSlug: "fuhou-immin-trend",
-        relatedTitle: "不法滞在の動向",
+        relatedTitle: "不法滞在者数の推移",
         relatedKicker: "残留者数の推移",
         relatedStat: "2年連続減",
         relatedStatLabel: "2025年",
       },
     ],
-    relatedArticles: ["fuhou-immin-trend", "senkyo-kaikaku"],
+    relatedArticles: ["fuhou-immin-trend"],
   },
   "shussho-budget-seika": {
     glossaryLinks: [
@@ -146,6 +146,10 @@ function applyLinkFields(target, link) {
     if (link[key] != null && link[key] !== "") target[key] = link[key];
   }
   if (link.definition && !target.definition) target.definition = link.definition;
+  // レガシー「〜の動向」アンカーを残さない
+  if (typeof target.relatedTitle === "string") {
+    target.relatedTitle = target.relatedTitle.replace(/の動向/g, "").trim() || target.relatedTitle;
+  }
 }
 
 /**
@@ -225,9 +229,12 @@ export function resolveRelatedArticles(article, allArticles, count = 3) {
 function toRelatedItem(target, fromSlug) {
   const graph = INTERNAL_LINK_GRAPH[fromSlug];
   const edge = graph?.glossaryLinks?.find((g) => g.relatedSlug === target.slug);
+  // リンク先の現行タイトルを優先（キャッシュ relatedTitle の「動向」残存を防ぐ）
+  const live = articleShortTitle(target);
+  const cached = String(edge?.relatedTitle || "").replace(/の動向/g, "").trim();
   return {
     slug: target.slug,
-    title: edge?.relatedTitle || articleShortTitle(target),
+    title: live || cached,
     kicker: edge?.relatedKicker || "",
     stat: edge?.relatedStat || "",
     statLabel: edge?.relatedStatLabel || "",
