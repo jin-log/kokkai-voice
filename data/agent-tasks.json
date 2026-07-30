@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-07-30T22:08:12.567Z",
-  "total": 42,
+  "generatedAt": "2026-07-30T23:04:56.553Z",
+  "total": 41,
   "byAgent": {
-    "ceo": 6,
+    "ceo": 7,
     "x-researcher": 3,
-    "writer": 31,
+    "writer": 29,
     "legal-check": 2
   },
   "tasks": [
@@ -64,26 +64,15 @@
       "priority": 30
     },
     {
-      "id": "gaikokujin-seisaku:E1_timeline_count",
+      "id": "gaikokujin-seisaku:Q11_placeholder_tl",
       "slug": "gaikokujin-seisaku",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "E1_timeline_count",
-      "title": "[ゲート] タイムライン",
-      "todo": "出来事を6件以上（X3+国会3）",
-      "command": "node scripts/enrich-timeline-all.mjs --slug gaikokujin-seisaku",
-      "priority": 30
-    },
-    {
-      "id": "gaikokujin-seisaku:E3_timeline_diet",
-      "slug": "gaikokujin-seisaku",
-      "agent": "writer",
-      "agentLabel": "ライター",
-      "checkId": "E3_timeline_diet",
-      "title": "[ゲート] タイムライン国会",
-      "todo": "国会発言を3件以上タイムラインに",
-      "command": "node scripts/enrich-timeline-all.mjs --slug gaikokujin-seisaku",
-      "priority": 30
+      "agent": "ceo",
+      "agentLabel": "CEO",
+      "checkId": "Q11_placeholder_tl",
+      "title": "[品質] タイムラインにプレースホルダー／要約失敗が 1 件",
+      "todo": "「本件に関する政府方針を説明」等の行を削除するか中身のある要約に差し替え",
+      "command": "node scripts/run-case-pipeline.mjs --slug gaikokujin-seisaku",
+      "priority": 10
     },
     {
       "id": "kenpo:P1_opening_off_topic",
