@@ -12,10 +12,10 @@ import { SITE } from "../../lib/site-config.mjs";
   <SiteHeader showSearch />
   <main class="container legal-page">
     <h1>プライバシーポリシー</h1>
-    <p class="legal-page__updated">最終更新: 2026年6月30日</p>
+    <p class="legal-page__updated">最終更新: 2026年8月5日</p>
 
     <p>
-      「{SITE.name}」（{SITE.domain}、以下「当サイト」）は、政府・国会の公式サイトではなく、個人運営の解説メディアです。当サイトにおける個人情報の取扱いは以下のとおりです。
+      「{SITE.name}」（{SITE.domain}、以下「当サイト」）は、政府・国会の公式サイトではなく、個人運営の解説メディアです。当サイトにおける個人情報の取扱いは以下のとおりです。運営者個人名はサイト上で公開しません。
     </p>
 
     <h2>1. 収集する情報</h2>
@@ -54,10 +54,21 @@ import { SITE } from "../../lib/site-config.mjs";
           rel="noopener noreferrer">プライバシーポリシー ↗</a>）
       </li>
       <li>
-        <strong>Google AdSense</strong> — 広告配信（導入時。Cookie を用いる場合があります。<a
-          href="https://policies.google.com/privacy"
-          target="_blank"
-          rel="noopener noreferrer">Google プライバシーポリシー ↗</a>）
+        <strong>Google AdSense</strong> — 広告配信のため、第三者（Google を含む）が Cookie
+        等を使用して、当サイトや他サイトへの過去のアクセス情報に基づく広告を配信する場合があります。
+        パーソナライズド広告の設定・オプトアウトは
+        <a href="https://adssettings.google.com/" target="_blank" rel="noopener noreferrer"
+          >Google 広告設定</a
+        >
+        および
+        <a href="https://policies.google.com/technologies/ads" target="_blank" rel="noopener noreferrer"
+          >広告についての説明</a
+        >
+        を参照してください。詳細は
+        <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer"
+          >Google プライバシーポリシー</a
+        >
+        もご覧ください。
       </li>
       <li>
         <strong>国会議事録 API</strong> — 国立国会図書館の公開 API から発言情報を取得（訪問者の個人情報は送信しません）
@@ -80,7 +91,9 @@ import { SITE } from "../../lib/site-config.mjs";
 
     <h2>6. お問い合わせ</h2>
     <p>
-      本ポリシーに関するお問い合わせは、当サイトのお問い合わせフォーム（準備中）または運営 X アカウント（{SITE.xHandle}）よりご連絡ください。
+      本ポリシーに関するお問い合わせは、運営 X アカウント（
+      <a href={SITE.xUrl} target="_blank" rel="noopener noreferrer">{SITE.xHandle}</a>
+      ）の DM よりご連絡ください。運営者個人名はサイト上では公開しません。
     </p>
   </main>
   <SiteFooter />
