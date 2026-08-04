@@ -1,13 +1,13 @@
 {
-  "generatedAt": "2026-08-04T18:58:06.213Z",
+  "generatedAt": "2026-08-04T19:08:12.023Z",
   "strategy": "quality-first",
   "activeCount": 45,
   "parkedCount": 0,
   "publishedCount": 30,
-  "overallGoldPct": 74,
-  "overallGatePct": 89,
-  "qualityFailed": 7,
-  "specialPublishCount": 9,
+  "overallGoldPct": 79,
+  "overallGatePct": 93,
+  "qualityFailed": 1,
+  "specialPublishCount": 4,
   "automationPolicy": [
     {
       "channel": "記事の下書きづくり",
@@ -85,8 +85,8 @@
     "slugStalls": [],
     "stalledCount": 0,
     "message": "停止中",
-    "analyzedAt": "2026-08-04T18:58:06.211Z",
-    "lastPatrolCycleAt": "2026-08-04T18:58:04.846Z",
+    "analyzedAt": "2026-08-04T19:08:12.021Z",
+    "lastPatrolCycleAt": "2026-08-04T19:08:10.405Z",
     "patrolRunning": false
   },
   "slugs": [
@@ -101,37 +101,18 @@
       "publishState": "live",
       "adminBucket": "live",
       "previewUrl": "/dev/preview/kojin-joho-kaisei/",
-      "qualityOk": false,
-      "needsQualityFix": true,
-      "qualityBlockerCount": 1,
-      "qualityBlockers": [
-        {
-          "id": "Q11_placeholder_tl",
-          "message": "タイムラインにプレースホルダー／要約失敗が 2 件",
-          "todo": "「本件に関する政府方針を説明」等の行を削除するか中身のある要約に差し替え",
-          "agent": "ceo"
-        }
-      ],
-      "agentTasks": [
-        {
-          "id": "kojin-joho-kaisei:Q11_placeholder_tl",
-          "slug": "kojin-joho-kaisei",
-          "agent": "ceo",
-          "agentLabel": "CEO",
-          "checkId": "Q11_placeholder_tl",
-          "title": "[品質] タイムラインにプレースホルダー／要約失敗が 2 件",
-          "todo": "「本件に関する政府方針を説明」等の行を削除するか中身のある要約に差し替え",
-          "command": "node scripts/run-case-pipeline.mjs --slug kojin-joho-kaisei",
-          "priority": 10
-        }
-      ],
-      "gatePct": 75,
-      "goldPct": 50,
+      "qualityOk": true,
+      "needsQualityFix": false,
+      "qualityBlockerCount": 0,
+      "qualityBlockers": [],
+      "agentTasks": [],
+      "gatePct": 100,
+      "goldPct": 83,
       "published": true,
-      "specialPublish": true,
-      "specialPublishSummary": "品質NG・①〜④未完了",
+      "specialPublish": false,
+      "specialPublishSummary": "",
       "publishGateOk": true,
-      "pipelinePreOk": false,
+      "pipelinePreOk": true,
       "titleAnswerOk": true,
       "titleAnswerDetail": "1行目がタイトルに回答している",
       "titleAnswerTodo": null,
@@ -141,7 +122,7 @@
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "matrix",
@@ -169,7 +150,7 @@
           "label": "⑤本番デプロイ",
           "phase": 5,
           "preDeploy": false,
-          "ok": false
+          "ok": true
         },
         {
           "id": "debug",
@@ -185,7 +166,7 @@
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "matrix",
@@ -213,7 +194,7 @@
           "label": "⑤本番デプロイ",
           "phase": 5,
           "preDeploy": false,
-          "ok": false
+          "ok": true
         },
         {
           "id": "debug",
@@ -228,17 +209,12 @@
       "runState": "idle",
       "workItems": [
         {
-          "id": "Q11_placeholder_tl",
-          "label": "タイムラインにプレースホルダー／要約失敗が 2 件",
-          "state": "blocked"
-        },
-        {
-          "id": "pipe:content",
-          "label": "①コンテンツ",
+          "id": "pipe:debug",
+          "label": "⑥デバッグOK",
           "state": "blocked"
         }
       ],
-      "nextAction": "✅ 公開中 — 要対応あり（裏で修正中・URLは維持）",
+      "nextAction": "✅ 公開中 — /case/ に表示されています",
       "promo": {
         "x": "2026-07-22T10:53:57.174Z",
         "hatena": "2026-07-16T07:56:22.092Z",
@@ -257,13 +233,20 @@
       },
       "xUnavailable": false,
       "xResearchStatus": "done",
-      "statusExplain": "サイトに載っているが、内部チェックは全部終わっていない。",
+      "statusExplain": "サイトに公開中。",
       "publishedBy": "owner",
       "publishedAt": "2026-07-16T07:50:00.000Z",
       "adminHiddenBy": null,
       "adminHiddenAt": null,
       "patrolFixing": false,
       "activity": [
+        {
+          "at": "2026-08-04T19:08:07.983Z",
+          "when": "08/04 19:08",
+          "type": "patrol.done",
+          "actor": "patrol",
+          "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
+        },
         {
           "at": "2026-07-16T07:50:00.000Z",
           "when": "07/16 07:50",
@@ -645,8 +628,8 @@
       "patrolFixing": false,
       "activity": [
         {
-          "at": "2026-08-04T18:58:02.493Z",
-          "when": "08/04 18:58",
+          "at": "2026-08-04T19:08:08.005Z",
+          "when": "08/04 19:08",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
@@ -895,8 +878,8 @@
       "patrolFixing": false,
       "activity": [
         {
-          "at": "2026-08-04T18:58:02.515Z",
-          "when": "08/04 18:58",
+          "at": "2026-08-04T19:08:08.025Z",
+          "when": "08/04 19:08",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
@@ -1005,37 +988,18 @@
       "publishState": "live",
       "adminBucket": "live",
       "previewUrl": "/dev/preview/case-mr0jbdpc/",
-      "qualityOk": false,
-      "needsQualityFix": true,
-      "qualityBlockerCount": 1,
-      "qualityBlockers": [
-        {
-          "id": "Q11_placeholder_tl",
-          "message": "タイムラインにプレースホルダー／要約失敗が 4 件",
-          "todo": "「本件に関する政府方針を説明」等の行を削除するか中身のある要約に差し替え",
-          "agent": "ceo"
-        }
-      ],
-      "agentTasks": [
-        {
-          "id": "case-mr0jbdpc:Q11_placeholder_tl",
-          "slug": "case-mr0jbdpc",
-          "agent": "ceo",
-          "agentLabel": "CEO",
-          "checkId": "Q11_placeholder_tl",
-          "title": "[品質] タイムラインにプレースホルダー／要約失敗が 4 件",
-          "todo": "「本件に関する政府方針を説明」等の行を削除するか中身のある要約に差し替え",
-          "command": "node scripts/run-case-pipeline.mjs --slug case-mr0jbdpc",
-          "priority": 10
-        }
-      ],
-      "gatePct": 75,
-      "goldPct": 50,
+      "qualityOk": true,
+      "needsQualityFix": false,
+      "qualityBlockerCount": 0,
+      "qualityBlockers": [],
+      "agentTasks": [],
+      "gatePct": 100,
+      "goldPct": 83,
       "published": true,
-      "specialPublish": true,
-      "specialPublishSummary": "品質NG・①〜④未完了",
+      "specialPublish": false,
+      "specialPublishSummary": "",
       "publishGateOk": true,
-      "pipelinePreOk": false,
+      "pipelinePreOk": true,
       "titleAnswerOk": true,
       "titleAnswerDetail": "1行目がタイトルに回答している",
       "titleAnswerTodo": null,
@@ -1045,7 +1009,7 @@
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "matrix",
@@ -1073,7 +1037,7 @@
           "label": "⑤本番デプロイ",
           "phase": 5,
           "preDeploy": false,
-          "ok": false
+          "ok": true
         },
         {
           "id": "debug",
@@ -1089,7 +1053,7 @@
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "matrix",
@@ -1117,7 +1081,7 @@
           "label": "⑤本番デプロイ",
           "phase": 5,
           "preDeploy": false,
-          "ok": false
+          "ok": true
         },
         {
           "id": "debug",
@@ -1132,17 +1096,12 @@
       "runState": "idle",
       "workItems": [
         {
-          "id": "Q11_placeholder_tl",
-          "label": "タイムラインにプレースホルダー／要約失敗が 4 件",
-          "state": "blocked"
-        },
-        {
-          "id": "pipe:content",
-          "label": "①コンテンツ",
+          "id": "pipe:debug",
+          "label": "⑥デバッグOK",
           "state": "blocked"
         }
       ],
-      "nextAction": "✅ 公開中 — 要対応あり（裏で修正中・URLは維持）",
+      "nextAction": "✅ 公開中 — /case/ に表示されています",
       "promo": {
         "x": "2026-07-20T12:02:43.833Z",
         "hatena": "2026-07-03T04:46:15.620Z",
@@ -1161,13 +1120,20 @@
       },
       "xUnavailable": false,
       "xResearchStatus": "found",
-      "statusExplain": "サイトに載っているが、内部チェックは全部終わっていない。",
+      "statusExplain": "サイトに公開中。",
       "publishedBy": "owner",
       "publishedAt": "2026-07-01T17:29:52.342Z",
       "adminHiddenBy": null,
       "adminHiddenAt": null,
       "patrolFixing": false,
       "activity": [
+        {
+          "at": "2026-08-04T19:08:08.049Z",
+          "when": "08/04 19:08",
+          "type": "patrol.done",
+          "actor": "patrol",
+          "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
+        },
         {
           "at": "2026-07-10T05:30:20.779Z",
           "when": "07/10 05:30",
@@ -1226,13 +1192,6 @@
         },
         {
           "at": "2026-07-10T05:15:35.189Z",
-          "when": "07/10 05:15",
-          "type": "patrol.start",
-          "actor": "patrol",
-          "line": "巡回処理開始（巡回） — writer / C2_evidence_distinct"
-        },
-        {
-          "at": "2026-07-10T05:15:27.318Z",
           "when": "07/10 05:15",
           "type": "patrol.start",
           "actor": "patrol",
@@ -1419,8 +1378,8 @@
       "patrolFixing": false,
       "activity": [
         {
-          "at": "2026-08-04T18:58:02.534Z",
-          "when": "08/04 18:58",
+          "at": "2026-08-04T19:08:08.071Z",
+          "when": "08/04 19:08",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
@@ -1529,29 +1488,11 @@
       "publishState": "live",
       "adminBucket": "live",
       "previewUrl": "/dev/preview/case-mqzxgs3f/",
-      "qualityOk": false,
-      "needsQualityFix": true,
-      "qualityBlockerCount": 1,
-      "qualityBlockers": [
-        {
-          "id": "Q11_placeholder_tl",
-          "message": "タイムラインにプレースホルダー／要約失敗が 1 件",
-          "todo": "「本件に関する政府方針を説明」等の行を削除するか中身のある要約に差し替え",
-          "agent": "ceo"
-        }
-      ],
+      "qualityOk": true,
+      "needsQualityFix": false,
+      "qualityBlockerCount": 0,
+      "qualityBlockers": [],
       "agentTasks": [
-        {
-          "id": "case-mqzxgs3f:Q11_placeholder_tl",
-          "slug": "case-mqzxgs3f",
-          "agent": "ceo",
-          "agentLabel": "CEO",
-          "checkId": "Q11_placeholder_tl",
-          "title": "[品質] タイムラインにプレースホルダー／要約失敗が 1 件",
-          "todo": "「本件に関する政府方針を説明」等の行を削除するか中身のある要約に差し替え",
-          "command": "node scripts/run-case-pipeline.mjs --slug case-mqzxgs3f",
-          "priority": 10
-        },
         {
           "id": "case-mqzxgs3f:H2_x_topic",
           "slug": "case-mqzxgs3f",
@@ -1564,11 +1505,11 @@
           "priority": 20
         }
       ],
-      "gatePct": 50,
-      "goldPct": 33,
+      "gatePct": 75,
+      "goldPct": 50,
       "published": true,
       "specialPublish": true,
-      "specialPublishSummary": "ゲート1件・品質NG・①〜④未完了",
+      "specialPublishSummary": "ゲート1件・①〜④未完了",
       "publishGateOk": true,
       "pipelinePreOk": false,
       "titleAnswerOk": true,
@@ -1580,7 +1521,7 @@
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "matrix",
@@ -1624,7 +1565,7 @@
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "matrix",
@@ -1674,18 +1615,8 @@
       "runState": "idle",
       "workItems": [
         {
-          "id": "Q11_placeholder_tl",
-          "label": "タイムラインにプレースホルダー／要約失敗が 1 件",
-          "state": "blocked"
-        },
-        {
           "id": "H2_x_topic",
           "label": "Xの話題",
-          "state": "blocked"
-        },
-        {
-          "id": "pipe:content",
-          "label": "①コンテンツ",
           "state": "blocked"
         },
         {
@@ -2608,13 +2539,6 @@
       "patrolFixing": false,
       "activity": [
         {
-          "at": "2026-08-04T18:58:02.553Z",
-          "when": "08/04 18:58",
-          "type": "patrol.done",
-          "actor": "patrol",
-          "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
-        },
-        {
           "at": "2026-07-10T05:38:31.176Z",
           "when": "07/10 05:38",
           "type": "patrol.done",
@@ -2673,6 +2597,13 @@
         {
           "at": "2026-07-10T04:13:26.511Z",
           "when": "07/10 04:13",
+          "type": "patrol.done",
+          "actor": "patrol",
+          "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
+        },
+        {
+          "at": "2026-07-10T04:01:26.938Z",
+          "when": "07/10 04:01",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
@@ -3278,37 +3209,18 @@
       "publishState": "live",
       "adminBucket": "live",
       "previewUrl": "/dev/preview/noto-fukko-budget/",
-      "qualityOk": false,
-      "needsQualityFix": true,
-      "qualityBlockerCount": 1,
-      "qualityBlockers": [
-        {
-          "id": "Q11_placeholder_tl",
-          "message": "タイムラインにプレースホルダー／要約失敗が 3 件",
-          "todo": "「本件に関する政府方針を説明」等の行を削除するか中身のある要約に差し替え",
-          "agent": "ceo"
-        }
-      ],
-      "agentTasks": [
-        {
-          "id": "noto-fukko-budget:Q11_placeholder_tl",
-          "slug": "noto-fukko-budget",
-          "agent": "ceo",
-          "agentLabel": "CEO",
-          "checkId": "Q11_placeholder_tl",
-          "title": "[品質] タイムラインにプレースホルダー／要約失敗が 3 件",
-          "todo": "「本件に関する政府方針を説明」等の行を削除するか中身のある要約に差し替え",
-          "command": "node scripts/run-case-pipeline.mjs --slug noto-fukko-budget",
-          "priority": 10
-        }
-      ],
-      "gatePct": 75,
-      "goldPct": 50,
+      "qualityOk": true,
+      "needsQualityFix": false,
+      "qualityBlockerCount": 0,
+      "qualityBlockers": [],
+      "agentTasks": [],
+      "gatePct": 100,
+      "goldPct": 83,
       "published": true,
-      "specialPublish": true,
-      "specialPublishSummary": "品質NG・①〜④未完了",
+      "specialPublish": false,
+      "specialPublishSummary": "",
       "publishGateOk": true,
-      "pipelinePreOk": false,
+      "pipelinePreOk": true,
       "titleAnswerOk": true,
       "titleAnswerDetail": "1行目がタイトルに回答している",
       "titleAnswerTodo": null,
@@ -3318,7 +3230,7 @@
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "matrix",
@@ -3346,7 +3258,7 @@
           "label": "⑤本番デプロイ",
           "phase": 5,
           "preDeploy": false,
-          "ok": false
+          "ok": true
         },
         {
           "id": "debug",
@@ -3362,7 +3274,7 @@
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "matrix",
@@ -3390,7 +3302,7 @@
           "label": "⑤本番デプロイ",
           "phase": 5,
           "preDeploy": false,
-          "ok": false
+          "ok": true
         },
         {
           "id": "debug",
@@ -3405,17 +3317,12 @@
       "runState": "idle",
       "workItems": [
         {
-          "id": "Q11_placeholder_tl",
-          "label": "タイムラインにプレースホルダー／要約失敗が 3 件",
-          "state": "blocked"
-        },
-        {
-          "id": "pipe:content",
-          "label": "①コンテンツ",
+          "id": "pipe:debug",
+          "label": "⑥デバッグOK",
           "state": "blocked"
         }
       ],
-      "nextAction": "✅ 公開中 — 要対応あり（裏で修正中・URLは維持）",
+      "nextAction": "✅ 公開中 — /case/ に表示されています",
       "promo": {
         "x": "2026-07-24T10:35:36.477Z",
         "hatena": "2026-07-14T02:45:58.618Z",
@@ -3434,7 +3341,7 @@
       },
       "xUnavailable": false,
       "xResearchStatus": "found",
-      "statusExplain": "サイトに載っているが、内部チェックは全部終わっていない。",
+      "statusExplain": "サイトに公開中。",
       "publishedBy": "owner",
       "publishedAt": "2026-07-01T20:39:20.684Z",
       "adminHiddenBy": null,
@@ -4688,29 +4595,29 @@
       "patrolFixing": false,
       "activity": [
         {
-          "at": "2026-08-04T18:57:56.598Z",
-          "when": "08/04 18:57",
+          "at": "2026-08-04T19:08:02.000Z",
+          "when": "08/04 19:08",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 67% / 品質 OK"
         },
         {
-          "at": "2026-08-04T18:57:54.639Z",
-          "when": "08/04 18:57",
+          "at": "2026-08-04T19:08:00.017Z",
+          "when": "08/04 19:08",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / G7_matrix_stance_voice"
         },
         {
-          "at": "2026-08-04T18:57:52.398Z",
-          "when": "08/04 18:57",
+          "at": "2026-08-04T19:07:58.065Z",
+          "when": "08/04 19:07",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / G7_matrix_stance_voice"
         },
         {
-          "at": "2026-08-04T18:57:50.411Z",
-          "when": "08/04 18:57",
+          "at": "2026-08-04T19:07:56.103Z",
+          "when": "08/04 19:07",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / G7_matrix_stance_voice"
@@ -5301,29 +5208,29 @@
       "patrolFixing": false,
       "activity": [
         {
-          "at": "2026-08-04T18:58:02.472Z",
-          "when": "08/04 18:58",
+          "at": "2026-08-04T19:08:07.960Z",
+          "when": "08/04 19:08",
           "type": "patrol.done",
           "actor": "patrol",
           "line": "巡回処理完了（巡回） — 完成度 67% / 品質 OK"
         },
         {
-          "at": "2026-08-04T18:58:00.519Z",
-          "when": "08/04 18:58",
+          "at": "2026-08-04T19:08:05.995Z",
+          "when": "08/04 19:08",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / G7_matrix_stance_voice"
         },
         {
-          "at": "2026-08-04T18:57:58.575Z",
-          "when": "08/04 18:57",
+          "at": "2026-08-04T19:08:04.005Z",
+          "when": "08/04 19:08",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / G7_matrix_stance_voice"
         },
         {
-          "at": "2026-08-04T18:57:56.616Z",
-          "when": "08/04 18:57",
+          "at": "2026-08-04T19:08:02.018Z",
+          "when": "08/04 19:08",
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / G7_matrix_stance_voice"
@@ -5795,13 +5702,6 @@
       "patrolFixing": false,
       "activity": [
         {
-          "at": "2026-08-04T18:58:02.571Z",
-          "when": "08/04 18:58",
-          "type": "patrol.done",
-          "actor": "patrol",
-          "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
-        },
-        {
           "at": "2026-07-10T05:31:16.228Z",
           "when": "07/10 05:31",
           "type": "patrol.done",
@@ -5863,6 +5763,13 @@
           "type": "patrol.start",
           "actor": "patrol",
           "line": "巡回処理開始（巡回） — writer / B3_topic"
+        },
+        {
+          "at": "2026-07-10T05:19:30.045Z",
+          "when": "07/10 05:19",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — writer / B3_topic"
         }
       ],
       "distribution": [
@@ -5905,37 +5812,18 @@
       "publishState": "live",
       "adminBucket": "live",
       "previewUrl": "/dev/preview/bouka-taisaku/",
-      "qualityOk": false,
-      "needsQualityFix": true,
-      "qualityBlockerCount": 1,
-      "qualityBlockers": [
-        {
-          "id": "Q11_placeholder_tl",
-          "message": "タイムラインにプレースホルダー／要約失敗が 2 件",
-          "todo": "「本件に関する政府方針を説明」等の行を削除するか中身のある要約に差し替え",
-          "agent": "ceo"
-        }
-      ],
-      "agentTasks": [
-        {
-          "id": "bouka-taisaku:Q11_placeholder_tl",
-          "slug": "bouka-taisaku",
-          "agent": "ceo",
-          "agentLabel": "CEO",
-          "checkId": "Q11_placeholder_tl",
-          "title": "[品質] タイムラインにプレースホルダー／要約失敗が 2 件",
-          "todo": "「本件に関する政府方針を説明」等の行を削除するか中身のある要約に差し替え",
-          "command": "node scripts/run-case-pipeline.mjs --slug bouka-taisaku",
-          "priority": 10
-        }
-      ],
-      "gatePct": 75,
-      "goldPct": 50,
+      "qualityOk": true,
+      "needsQualityFix": false,
+      "qualityBlockerCount": 0,
+      "qualityBlockers": [],
+      "agentTasks": [],
+      "gatePct": 100,
+      "goldPct": 100,
       "published": true,
-      "specialPublish": true,
-      "specialPublishSummary": "品質NG・①〜④未完了",
+      "specialPublish": false,
+      "specialPublishSummary": "",
       "publishGateOk": true,
-      "pipelinePreOk": false,
+      "pipelinePreOk": true,
       "titleAnswerOk": true,
       "titleAnswerDetail": "1行目がタイトルに回答している",
       "titleAnswerTodo": null,
@@ -5945,7 +5833,7 @@
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "matrix",
@@ -5973,14 +5861,14 @@
           "label": "⑤本番デプロイ",
           "phase": 5,
           "preDeploy": false,
-          "ok": false
+          "ok": true
         },
         {
           "id": "debug",
           "label": "⑥デバッグOK",
           "phase": 6,
           "preDeploy": false,
-          "ok": false
+          "ok": true
         }
       ],
       "gold": [
@@ -5989,7 +5877,7 @@
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "matrix",
@@ -6017,32 +5905,21 @@
           "label": "⑤本番デプロイ",
           "phase": 5,
           "preDeploy": false,
-          "ok": false
+          "ok": true
         },
         {
           "id": "debug",
           "label": "⑥デバッグOK",
           "phase": 6,
           "preDeploy": false,
-          "ok": false
+          "ok": true
         }
       ],
       "blockers": [],
       "blockerCount": 0,
       "runState": "idle",
-      "workItems": [
-        {
-          "id": "Q11_placeholder_tl",
-          "label": "タイムラインにプレースホルダー／要約失敗が 2 件",
-          "state": "blocked"
-        },
-        {
-          "id": "pipe:content",
-          "label": "①コンテンツ",
-          "state": "blocked"
-        }
-      ],
-      "nextAction": "✅ 公開中 — 要対応あり（裏で修正中・URLは維持）",
+      "workItems": [],
+      "nextAction": "✅ 公開中 — /case/ に表示されています",
       "promo": {
         "x": "2026-07-23T10:54:04.772Z",
         "hatena": "2026-07-14T02:39:59.716Z",
@@ -6061,7 +5938,7 @@
       },
       "xUnavailable": false,
       "xResearchStatus": null,
-      "statusExplain": "サイトに載っているが、内部チェックは全部終わっていない。",
+      "statusExplain": "サイトに公開中。",
       "publishedBy": "owner",
       "publishedAt": "2026-07-01T20:35:25.627Z",
       "adminHiddenBy": null,
@@ -6862,37 +6739,18 @@
       "publishState": "live",
       "adminBucket": "live",
       "previewUrl": "/dev/preview/gaikokujin-seisaku/",
-      "qualityOk": false,
-      "needsQualityFix": true,
-      "qualityBlockerCount": 1,
-      "qualityBlockers": [
-        {
-          "id": "Q11_placeholder_tl",
-          "message": "タイムラインにプレースホルダー／要約失敗が 1 件",
-          "todo": "「本件に関する政府方針を説明」等の行を削除するか中身のある要約に差し替え",
-          "agent": "ceo"
-        }
-      ],
-      "agentTasks": [
-        {
-          "id": "gaikokujin-seisaku:Q11_placeholder_tl",
-          "slug": "gaikokujin-seisaku",
-          "agent": "ceo",
-          "agentLabel": "CEO",
-          "checkId": "Q11_placeholder_tl",
-          "title": "[品質] タイムラインにプレースホルダー／要約失敗が 1 件",
-          "todo": "「本件に関する政府方針を説明」等の行を削除するか中身のある要約に差し替え",
-          "command": "node scripts/run-case-pipeline.mjs --slug gaikokujin-seisaku",
-          "priority": 10
-        }
-      ],
-      "gatePct": 75,
-      "goldPct": 50,
+      "qualityOk": true,
+      "needsQualityFix": false,
+      "qualityBlockerCount": 0,
+      "qualityBlockers": [],
+      "agentTasks": [],
+      "gatePct": 100,
+      "goldPct": 100,
       "published": true,
-      "specialPublish": true,
-      "specialPublishSummary": "品質NG・①〜④未完了",
+      "specialPublish": false,
+      "specialPublishSummary": "",
       "publishGateOk": true,
-      "pipelinePreOk": false,
+      "pipelinePreOk": true,
       "titleAnswerOk": true,
       "titleAnswerDetail": "1行目がタイトルに回答している",
       "titleAnswerTodo": null,
@@ -6902,7 +6760,7 @@
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "matrix",
@@ -6930,14 +6788,14 @@
           "label": "⑤本番デプロイ",
           "phase": 5,
           "preDeploy": false,
-          "ok": false
+          "ok": true
         },
         {
           "id": "debug",
           "label": "⑥デバッグOK",
           "phase": 6,
           "preDeploy": false,
-          "ok": false
+          "ok": true
         }
       ],
       "gold": [
@@ -6946,7 +6804,7 @@
           "label": "①コンテンツ",
           "phase": 1,
           "preDeploy": true,
-          "ok": false
+          "ok": true
         },
         {
           "id": "matrix",
@@ -6974,32 +6832,21 @@
           "label": "⑤本番デプロイ",
           "phase": 5,
           "preDeploy": false,
-          "ok": false
+          "ok": true
         },
         {
           "id": "debug",
           "label": "⑥デバッグOK",
           "phase": 6,
           "preDeploy": false,
-          "ok": false
+          "ok": true
         }
       ],
       "blockers": [],
       "blockerCount": 0,
       "runState": "idle",
-      "workItems": [
-        {
-          "id": "Q11_placeholder_tl",
-          "label": "タイムラインにプレースホルダー／要約失敗が 1 件",
-          "state": "blocked"
-        },
-        {
-          "id": "pipe:content",
-          "label": "①コンテンツ",
-          "state": "blocked"
-        }
-      ],
-      "nextAction": "✅ 公開中 — 要対応あり（裏で修正中・URLは維持）",
+      "workItems": [],
+      "nextAction": "✅ 公開中 — /case/ に表示されています",
       "promo": {
         "x": null,
         "hatena": "2026-07-11T00:31:49.376Z",
@@ -7018,7 +6865,7 @@
       },
       "xUnavailable": true,
       "xResearchStatus": "exhausted",
-      "statusExplain": "サイトに載っているが、内部チェックは全部終わっていない。",
+      "statusExplain": "サイトに公開中。",
       "publishedBy": "owner",
       "publishedAt": "2026-07-01T17:31:13.446Z",
       "adminHiddenBy": null,
@@ -9120,6 +8967,34 @@
       "patrolFixing": false,
       "activity": [
         {
+          "at": "2026-08-04T19:07:56.086Z",
+          "when": "08/04 19:07",
+          "type": "patrol.done",
+          "actor": "patrol",
+          "line": "巡回処理完了（巡回） — 完成度 50% / 品質 OK"
+        },
+        {
+          "at": "2026-08-04T19:07:54.133Z",
+          "when": "08/04 19:07",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — writer / G5_parties_symbol"
+        },
+        {
+          "at": "2026-08-04T19:07:52.196Z",
+          "when": "08/04 19:07",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — writer / G5_parties_symbol"
+        },
+        {
+          "at": "2026-08-04T19:07:50.188Z",
+          "when": "08/04 19:07",
+          "type": "patrol.start",
+          "actor": "patrol",
+          "line": "巡回処理開始（巡回） — writer / G5_parties_symbol"
+        },
+        {
           "at": "2026-07-01T20:35:30.033Z",
           "when": "07/01 20:35",
           "type": "publish.manual",
@@ -9662,15 +9537,7 @@
       "adminHiddenBy": null,
       "adminHiddenAt": null,
       "patrolFixing": false,
-      "activity": [
-        {
-          "at": "2026-08-04T18:58:02.597Z",
-          "when": "08/04 18:58",
-          "type": "patrol.done",
-          "actor": "patrol",
-          "line": "巡回処理完了（巡回） — 完成度 83% / 品質 OK"
-        }
-      ],
+      "activity": [],
       "distribution": [
         {
           "channel": "X",
@@ -10423,6 +10290,6 @@
     }
   ],
   "deltaGoldPct": 0,
-  "previousGoldPct": 74,
+  "previousGoldPct": 79,
   "deployedAt": "2026-07-16T14:52:43.841Z"
 }
