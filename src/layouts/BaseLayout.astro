@@ -66,13 +66,25 @@ const cfBeaconToken = "99a12445d1fc46a186cb3189f679088d";
     <meta name="twitter:image:alt" content={ogImageAlt} />
     <link rel="icon" href="/assets/favicon.png" type="image/png" />
     <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png" />
+    {/* AdSense所有権確認: 静的<head>必須（JS動的注入だけでは検出されない） */}
+    {showAds && (
+      <>
+        <meta name="google-adsense-account" content={adsClient} />
+        <script
+          is:inline
+          async
+          src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adsClient}`}
+          crossorigin="anonymous"
+        />
+      </>
+    )}
   </head>
   <body class:list={[bodyClass]} data-case={bodyDataCase}>
     <slot />
     {includeAppJs && <script is:inline src={`/js/app.js?v=${ASSET_V}`}></script>}
     <script
       is:inline
-      define:vars={{ gaId, adsClient, showAds, productionHosts, cfBeaconToken }}
+      define:vars={{ gaId, productionHosts, cfBeaconToken }}
     >
       (function () {
         var host = location.hostname;
@@ -104,17 +116,6 @@ const cfBeaconToken = "99a12445d1fc46a186cb3189f679088d";
           window.gtag = gtag;
           gtag("js", new Date());
           gtag("config", gaId, { anonymize_ip: true });
-        }
-        if (showAds && adsClient) {
-          var adsMeta = document.createElement("meta");
-          adsMeta.name = "google-adsense-account";
-          adsMeta.content = adsClient;
-          document.head.appendChild(adsMeta);
-          loadScript(
-            "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=" +
-              encodeURIComponent(adsClient),
-            { crossorigin: "anonymous" },
-          );
         }
         if (cfBeaconToken) {
           var cf = document.createElement("script");
