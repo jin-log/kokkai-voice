@@ -4,42 +4,86 @@ import SiteHeader from "../../components/SiteHeader.astro";
 import SiteFooter from "../../components/SiteFooter.astro";
 import PreReleaseBanner from "../../components/PreReleaseBanner.astro";
 import { SITE } from "../../lib/site-config.mjs";
+import { loadAllArticles } from "../../lib/articles.mjs";
+import { loadContentHubs } from "../../lib/content-hubs.mjs";
+
+const articles = await loadAllArticles();
+const hubs = loadContentHubs();
+const caseCount = articles.length;
 ---
 
 <BaseLayout
   title={`このサイトについて｜${SITE.name}`}
-  description={`${SITE.name}の目的・編集方針・データソース。政府公式サイトではない個人運営の政治解説メディアです。`}
+  description={`${SITE.name}の目的・編集方針・データソース。政府公式サイトではない個人運営の政治解説メディアです。国会議事録APIと公開情報をもとに案件を整理します。`}
 >
   <PreReleaseBanner />
   <SiteHeader showSearch />
   <main class="container legal-page">
     <h1>このサイトについて</h1>
-    <p class="legal-page__updated">最終更新: 2026年6月29日</p>
+    <p class="legal-page__updated">最終更新: 2026年8月5日</p>
 
     <p>
       「{SITE.name}」（{SITE.domain}）は、<strong>政府・国会の公式サイトではありません</strong>。
-      個人運営の解説メディアです。
+      個人が運営する解説メディアです。政党・候補者の選挙運動や支持表明は行いません。
     </p>
 
-    <h2>何をしているか</h2>
+    <h2>サイトの目的</h2>
     <p>
-      物価・税金・社会保障など、政治の「あの話、どうなった？」を案件ごとに整理します。
-      国会議事録 API と報道・公開情報をもとに、<strong>公言</strong>と<strong>その後に起きたこと</strong>（起きていなければ経過時間）を並べます。
+      物価・税金・社会保障・選挙制度など、政治の「あの話、どうなった？」を<strong>案件ごと</strong>に追います。
+      発言の切り抜きだけで終わらせず、公言した内容と、その後に起きたこと（または起きていないことと経過時間）を、出典付きで並べます。
     </p>
+    <p>
+      現在、公開中の案件は約{caseCount}件です。一覧は
+      <a href="/search/">案件を探す</a>、トップの案件カード、各テーマまとめから辿れます。
+    </p>
+
+    <h2>何をしているか（ページの見方）</h2>
+    <ul>
+      <li><strong>いまの結論</strong> — 読者が最初に持ち帰れる到達点（成立／未了／数字／方針など）</li>
+      <li><strong>公言と行動</strong> — 立場と、その後の提出・採決・公表などの事実を表で整理</li>
+      <li><strong>タイムライン</strong> — 日付ごとの経緯（議事録・報道・公表）</li>
+      <li><strong>メリット・デメリット</strong> — 賛否や得失を出典付きで対比（案件により省略あり）</li>
+      <li><strong>用語解説</strong> — その案件で出てくる言葉の短い定義</li>
+    </ul>
 
     <h2>編集方針</h2>
     <ul>
-      <li>党や政治家の「評価」はしません。出典付きの事実整理です。</li>
+      <li>党や政治家の「評価」「格付け」はしません。出典付きの事実整理です。</li>
       <li>AI による平易語要約には「解釈を含む」注記を付けます。数字・引用の正本は国会議事録・各出典リンクです。</li>
       <li>「検討中」だけで終わらせず、約束・期限・経過日数を可能な範囲で明示します。</li>
-      <li>投票の呼びかけ・特定候補への支持はしません。</li>
+      <li>投票の呼びかけ・特定候補への支持・寄付の勧誘はしません。</li>
+      <li>誤りの指摘や追ってほしい案件は、下記のお問い合わせ先へ。</li>
     </ul>
 
     <h2>データソース</h2>
+    <p>主な根拠は次のとおりです。各案件ページに個別の出典 URL を載せています。</p>
     <ul>
-      <li>国立国会図書館 国会議事録 API（無料・公開）</li>
-      <li>報道・公的機関の公開 URL</li>
-      <li>X（旧 Twitter）投稿 — 元 URL を掲載（改変しません）</li>
+      <li>
+        <strong>国立国会図書館 国会議事録 API</strong>（無料・公開）—
+        <a href="https://kokkai.ndl.go.jp/" target="_blank" rel="noopener noreferrer">kokkai.ndl.go.jp</a>
+        経由で発言・会議情報を取得し、案件キーワードに合うものを整理します。
+      </li>
+      <li><strong>報道・公的機関の公開 URL</strong> — 省庁・自治体・議会の公表資料、報道各社の記事など</li>
+      <li>
+        <strong>X（旧 Twitter）投稿</strong> — 議員・関係者の投稿を元 URL・スクショ付きで掲載（文面は改変しません）。API は使いません。
+      </li>
+    </ul>
+    <p>
+      議事録の全文や採決結果の最終確認は、必ず各出典（国会会議録・官報・省庁サイト等）で行ってください。
+    </p>
+
+    <h2>テーマまとめ</h2>
+    <p>関連案件を横断で読めるページです。</p>
+    <ul>
+      {
+        hubs.map((hub) => (
+          <li>
+            <a href={`/theme/${hub.slug}/`}>{hub.title}</a>
+            {" — "}
+            {hub.tagline}
+          </li>
+        ))
+      }
     </ul>
 
     <h2>コメント</h2>
@@ -49,11 +93,16 @@ import { SITE } from "../../lib/site-config.mjs";
       不適切な投稿は <a href={SITE.xUrl} target="_blank" rel="noopener noreferrer">{SITE.xHandle}</a> または各コメントの通報ボタンからお知らせください。
     </p>
 
+    <h2>プライバシー・広告</h2>
+    <p>
+      アクセス解析や広告配信のため、Cookie 等を使う場合があります。詳細は
+      <a href="/privacy-policy/">プライバシーポリシー</a> をご覧ください。
+    </p>
+
     <h2>お問い合わせ</h2>
     <p>
-      運営者個人名はサイト上では公開しません。
-      お問い合わせは <a href={SITE.xUrl} target="_blank" rel="noopener noreferrer">X {SITE.xHandle}</a> または
-      <a href="/privacy-policy/">プライバシーポリシー</a> をご覧ください。
+      運営者個人名はサイト上では公開しません（プライバシー保護のため）。
+      お問い合わせ・訂正依頼は <a href={SITE.xUrl} target="_blank" rel="noopener noreferrer">X {SITE.xHandle}</a> へお願いします。
     </p>
   </main>
   <SiteFooter />

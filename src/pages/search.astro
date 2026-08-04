@@ -5,20 +5,30 @@ import PreReleaseBanner from "../components/PreReleaseBanner.astro";
 import SiteFooter from "../components/SiteFooter.astro";
 import { SITE } from "../lib/site-config.mjs";
 import { loadAllArticles, articleToSearchEntry } from "../lib/articles.mjs";
+import { loadContentHubs } from "../lib/content-hubs.mjs";
 
 const articles = await loadAllArticles();
 const searchCases = articles.map(articleToSearchEntry);
 const categories = [
   ...new Set(articles.flatMap((a) => [...(a.tags || []), a.category].filter(Boolean))),
 ].sort();
+
+/** ビルド時の初期一覧（関心順）— JSなしでもクローラーがリンクを読める */
+const initialCases = [...searchCases].sort((a, b) => b.heat - a.heat);
+const hubs = loadContentHubs();
 ---
 
-<BaseLayout title={`検索｜${SITE.name}`}>
+<BaseLayout
+  title={`検索｜${SITE.name}`}
+  description={`${SITE.name}の案件一覧。${articles.length}件の政治案件をカテゴリ・キーワードで探せます。国会議事録と公開情報をもとに整理。`}
+>
   <PreReleaseBanner />
   <SiteHeader showSearch />
   <main class="container search-page">
     <h1 class="search-page__title">案件を探す</h1>
-    <p class="search-page__lead" data-search-meta>読み込み中…</p>
+    <p class="search-page__lead" data-search-meta>
+      全案件 — {initialCases.length} 件 · 注目順
+    </p>
 
     <div class="category-chips" role="group" aria-label="カテゴリで絞り込み" data-category-chips>
       <button type="button" class="category-chip category-chip--active" data-category="">
@@ -41,7 +51,7 @@ const categories = [
           data-sort="heat"
           role="tab"
           aria-selected="true"
-          title="😊＋😠・コメント×2・直近7日PV">関心順</button
+          title="😊＋😠・コメント×2・直近7日PV">注目順</button
         >
         <button
           type="button"
@@ -68,15 +78,107 @@ const categories = [
           title="案件開始日（古い→新しい）">時系列</button
         >
       </div>
-      <p class="sort-hint" data-sort-desc aria-live="polite"></p>
+      <p class="sort-hint" data-sort-desc aria-live="polite">
+        注目順 — いま最も関心が高い案件から表示しています。カテゴリやキーワードで絞り込めます。
+      </p>
     </div>
 
-    <div class="search-results" data-search-results></div>
+    {
+      hubs.length > 0 && (
+        <nav class="search-hubs" aria-label="テーマまとめ">
+          <h2 class="search-hubs__title">テーマから探す</h2>
+          <ul class="search-hubs__list">
+            {hubs.map((hub) => (
+              <li>
+                <a href={`/theme/${hub.slug}/`}>{hub.title}</a>
+                <span class="search-hubs__tagline">{hub.tagline}</span>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      )
+    }
+
+    <!-- 静的HTMLの初期一覧（JS無効・クローラー用）。絞り込み時は search.js が差し替え -->
+    <div class="search-results" data-search-results>
+      {
+        initialCases.map((c) => {
+          const pct = Math.round((c.smile / (c.smile + c.angry || 1)) * 100);
+          const ready = c.href && c.href !== "#";
+          return ready ? (
+            <a class="search-result search-result--link" href={c.href}>
+              <div class="search-result__tags">
+                {c.tags.map((t) => (
+                  <span class="tag">{t}</span>
+                ))}
+              </div>
+              <h2 class="search-result__title">{c.title}</h2>
+              <p class="search-result__summary">{c.summary}</p>
+              <div class="search-result__meta">
+                <span>
+                  😊 {pct}% · 注目 {c.heat.toLocaleString()}
+                </span>
+                <span>更新 {c.updated}</span>
+              </div>
+            </a>
+          ) : (
+            <article class="search-result search-result--soon">
+              <div class="search-result__tags">
+                {c.tags.map((t) => (
+                  <span class="tag">{t}</span>
+                ))}
+              </div>
+              <h2 class="search-result__title">{c.title}</h2>
+              <p class="search-result__summary">{c.summary}</p>
+              <span class="search-result__badge">準備中</span>
+            </article>
+          );
+        })
+      }
+    </div>
   </main>
 
-  <SiteFooter note="MVP — ソートは記事データ由来のデモスコア。本番は D1 + Workers API。" />
+  <SiteFooter note="案件一覧は静的HTMLで配信。絞り込み・並び替えはブラウザ側で動作します。" />
   <script is:inline define:vars={{ searchCases }}>
     window.__SEARCH_CASES__ = searchCases;
   </script>
   <script is:inline src="/js/search.js"></script>
 </BaseLayout>
+
+<style>
+  .search-hubs {
+    margin: 0 0 1.5rem;
+    padding: 1rem 0;
+    border-top: 1px solid var(--color-border, #e5e5e5);
+    border-bottom: 1px solid var(--color-border, #e5e5e5);
+  }
+  .search-hubs__title {
+    font-size: 0.95rem;
+    margin: 0 0 0.65rem;
+  }
+  .search-hubs__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.5rem;
+  }
+  @media (min-width: 640px) {
+    .search-hubs__list {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .search-hubs__list a {
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .search-hubs__list a:hover {
+    text-decoration: underline;
+  }
+  .search-hubs__tagline {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--color-text-muted, #666);
+    margin-top: 0.15rem;
+  }
+</style>
