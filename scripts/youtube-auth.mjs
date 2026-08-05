@@ -6,8 +6,11 @@
  *   npm run youtube:auth
  *
  * 前提: secrets/youtube-oauth.json（Desktop OAuth クライアント）
+ * ブラウザ: secrets/browser/chrome-profile.json の seiji1192 専用 Chrome（Profile 9）を使う。
+ * Cursor 内蔵ブラウザや既定ブラウザでのゼロからログインはしない。
  */
 import http from "node:http";
+import { access } from "node:fs/promises";
 import { spawn } from "node:child_process";
 import {
   buildAuthUrl,
@@ -15,9 +18,47 @@ import {
   loadOAuthClient,
   tokenPath,
 } from "./lib/youtube-oauth.mjs";
+import { loadChromeProfileConfig } from "./lib/chrome-profile.mjs";
 
-/** @param {string} url */
-function openBrowser(url) {
+const WIN_CHROME = [
+  "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+  "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe",
+];
+
+/** @returns {Promise<string|null>} */
+async function resolveChromeExe() {
+  for (const p of WIN_CHROME) {
+    try {
+      await access(p);
+      return p;
+    } catch {
+      /* next */
+    }
+  }
+  return null;
+}
+
+/**
+ * seiji1192 専用 Chrome（Profile 9）で OAuth URL を開く
+ * @param {string} url
+ */
+async function openBrowser(url) {
+  const cfg = await loadChromeProfileConfig();
+  const chromeExe = process.platform === "win32" ? await resolveChromeExe() : null;
+
+  if (chromeExe && cfg?.profileDirectory) {
+    const label = cfg.label || cfg.profileDirectory;
+    // 起動中の普段 Chrome に Profile 指定で URL を渡す（Cursor 内蔵ブラウザは使わない）
+    console.log(`[youtube:auth] 専用 Chrome で開く: ${label} (${cfg.profileDirectory})`);
+    spawn(
+      chromeExe,
+      [`--profile-directory=${cfg.profileDirectory}`, "--new-window", url],
+      { detached: true, stdio: "ignore" },
+    ).unref();
+    return;
+  }
+
+  console.warn("[youtube:auth] chrome-profile.json なし — 既定ブラウザにフォールバック");
   try {
     if (process.platform === "win32") {
       spawn("cmd", ["/c", "start", "", url], { detached: true, stdio: "ignore" }).unref();
@@ -61,12 +102,11 @@ async function main() {
   }
 
   const authUrl = buildAuthUrl(client);
-  console.log("[youtube:auth] チャンネル用 Google で次のURLを開いて許可してください:");
+  console.log("[youtube:auth] seiji1192 専用 Chrome で許可してください（ログイン済みのはず）:");
   console.log("");
   console.log(authUrl);
   console.log("");
   console.log(`  待受: ${client.redirect_uri}`);
-  console.log("  （ブラウザが自動で開かない場合は上のURLをChromeにコピペ）");
 
   const code = await new Promise((resolve, reject) => {
     const server = http.createServer((req, res) => {
@@ -99,7 +139,7 @@ async function main() {
     });
 
     server.listen(new URL(client.redirect_uri).port || 8765, "127.0.0.1", () => {
-      openBrowser(authUrl);
+      openBrowser(authUrl).catch((e) => reject(e));
     });
 
     server.on("error", reject);

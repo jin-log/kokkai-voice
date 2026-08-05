@@ -56,8 +56,8 @@ cd C:\Users\bero1\Projects\kokkai-voice
 npm run youtube:auth
 ```
 
-1. ブラウザが開く
-2. **日本の政治now チャンネルの Google アカウント**でログイン
+1. **seiji1192 専用 Chrome（Profile 9）** で OAuth URL が開く（`chrome-profile.json`）
+2. 既にログイン済みなら許可だけ。Cursor 内蔵ブラウザや別プロフィールでゼロからログインしない
 3. 「このアプリは確認されていません」→ **詳細** → **（安全ではないページ）に移動**（テストモードのため）
 4. YouTube へのアクセスを **許可**
 5. `secrets/youtube-token.json` ができる
