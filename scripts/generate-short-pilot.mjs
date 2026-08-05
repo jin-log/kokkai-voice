@@ -19,6 +19,7 @@ import { beatsForArticle } from "./lib/short-beats.mjs";
 import { ensureBgm, mixBgmIntoVideo } from "./lib/short-bgm.mjs";
 import { renderRemotionShort } from "./lib/render-short-remotion.mjs";
 import { synthesizeToMp3, voicevoxInstallHint } from "./lib/short-tts.mjs";
+import { pickClipForBeat } from "./lib/short-bg-pick.mjs";
 import { ensureDir, ensureMotionBackground, listStockClips, processStockClip } from "./lib/short-video.mjs";
 import { buildYoutubeUploadDraft } from "./lib/youtube-upload-draft.mjs";
 
@@ -76,14 +77,16 @@ async function preparePublicAssets(root, sl) {
  * @param {string} workDir
  * @param {string} publicDir
  * @param {string} sl
+ * @param {import('../src/lib/articles.mjs').Article} article
  * @param {import('./lib/short-beats.mjs').ShortBeat[]} beats
  */
-async function prepareBeatBackgrounds(root, workDir, publicDir, sl, beats) {
-  const clips = await listStockClips(root);
+async function prepareBeatBackgrounds(root, workDir, publicDir, sl, article, beats) {
+  const fallbackClips = await listStockClips(root);
   /** @type {Record<string, string>} */
   const beatVideos = {};
+  const usedClipIds = new Set();
 
-  if (clips.length === 0) {
+  if (fallbackClips.length === 0) {
     console.log("[short] stock clips なし → 単一背景を生成");
     const bgLoopPath = await ensureMotionBackground(root, workDir, sl);
     const publicBg = path.join(publicDir, "bg-loop.mp4");
@@ -98,12 +101,14 @@ async function prepareBeatBackgrounds(root, workDir, publicDir, sl, beats) {
   let clipIdx = 0;
   for (const beat of beats) {
     if (beat.style === "cta") continue;
-    const src = clips[clipIdx % clips.length];
+    const picked = await pickClipForBeat({ root, article, beat, usedClipIds });
+    const src = picked.path ?? fallbackClips[clipIdx % fallbackClips.length];
+    if (picked.path) usedClipIds.add(picked.clipId);
     clipIdx += 1;
     const processed = path.join(workDir, `${beat.id}-bg.mp4`);
     const publicOut = path.join(publicDir, `${beat.id}-bg.mp4`);
-    console.log(`  [bg:${beat.id}] ${path.basename(src)}`);
-    await processStockClip(src, processed, 25);
+    console.log(`  [bg:${beat.id}] ${picked.clipId} (${picked.reason}) ← ${path.basename(src)}`);
+    await processStockClip(src, processed, 8);
     await copyFile(processed, publicOut);
     beatVideos[beat.id] = `.short-render/${sl}/${beat.id}-bg.mp4`;
   }
@@ -113,12 +118,32 @@ async function prepareBeatBackgrounds(root, workDir, publicDir, sl, beats) {
 /** @type {Record<string, string>} */
 const BEAT_BG_KEY = {
   hook: "hook",
+  hook1: "hook",
+  hook2: "hook",
   gap: "number",
   budget: "number",
   rate: "number",
   born: "quote",
   kokkai: "quote",
   why: "quote",
+  when: "number",
+  when1: "number",
+  when2: "number",
+  when3: "quote",
+  bridge: "quote",
+  bridge1: "quote",
+  bridge2: "number",
+  bridge3: "quote",
+  payoff: "quote",
+  pay1: "quote",
+  pay2: "quote",
+  pay3: "number",
+  pay4: "number",
+  num1: "number",
+  num2: "number",
+  num3: "number",
+  status: "number",
+  bill: "quote",
   cta: "hook",
 };
 
@@ -138,7 +163,7 @@ async function main() {
   const fallbackBg = bgRels.hook ?? bgRels.number ?? bgRels.quote;
 
   console.log("[short] motion background…");
-  const beatBgVideos = await prepareBeatBackgrounds(root, workDir, publicDir, slug, beats);
+  const beatBgVideos = await prepareBeatBackgrounds(root, workDir, publicDir, slug, article, beats);
 
   const engines = [];
   /** @type {import('../remotion/ShortF1.tsx').BeatRender[]} */

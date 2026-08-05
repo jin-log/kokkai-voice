@@ -1,5 +1,13 @@
 /**
  * F1 ビート定義 — 0〜2秒フック・疑問投げ・テロップ主役（docs/shorts-consult-research.md）
+ *
+ * ## 横展開テンプレ（2026-08-05 確定・shohizei-genmen 採用）
+ * - テロップは **1行1枚**。ボディは **約2秒台**（TTS短文＋tempo 1.35）
+ * - フックは **2枚分割**（数字クレーム → 矛盾）。0〜3秒帯で切る
+ * - 背景は `SLUG_BEAT_CLIPS` で **トピック関連素材**を手指定（汎用夜景禁止）
+ * - CTAナレは短く（「どう思う？コメントで教えて。」）
+ * - 生成: `npm run short:generate -- --slug <slug> --tempo 1.35` → 確認後 upload
+ *
  * @typedef {{ id: string, style: 'hook'|'question'|'number'|'body'|'diet'|'cta', telop: string[], narr: string }} ShortBeat
  */
 import {
@@ -100,6 +108,156 @@ export const F1_BEATS = {
       narr: "スパイ防止法制と何が別で、何がセットか。国会で争点になっている。",
     },
     ctaBeat("case-mqzxgs3f", "スパイ防止法"),
+  ],
+  /** rank1 — フック0〜3秒で2カット、ボディは2〜3秒/枚 */
+  "shohizei-genmen": [
+    {
+      id: "hook1",
+      style: "hook",
+      telop: ["食料品の税が1%に？"],
+      narr: "来春から1パーセント？",
+    },
+    {
+      id: "hook2",
+      style: "hook",
+      telop: ["法律はまだない"],
+      narr: "法律はまだない。",
+    },
+    {
+      id: "when1",
+      style: "number",
+      telop: ["2027年4月から2年"],
+      narr: "2027年4月から2年。",
+    },
+    {
+      id: "when2",
+      style: "number",
+      telop: ["飲食料品を1%に"],
+      narr: "飲食料品を1パーセントに。",
+    },
+    {
+      id: "when3",
+      style: "diet",
+      telop: ["首相が準備を指示"],
+      narr: "首相が準備を指示。",
+    },
+    {
+      id: "bridge1",
+      style: "body",
+      telop: ["つなぎの位置づけ"],
+      narr: "つなぎの位置づけ。",
+    },
+    {
+      id: "bridge2",
+      style: "body",
+      telop: ["給付に回す案も"],
+      narr: "給付に回す案も出た。",
+    },
+    {
+      id: "bridge3",
+      style: "body",
+      telop: ["合意はしていない"],
+      narr: "合意はしていない。",
+    },
+    {
+      id: "pay1",
+      style: "diet",
+      telop: ["閣議決定もこれから"],
+      narr: "閣議決定もこれから。",
+    },
+    {
+      id: "pay2",
+      style: "diet",
+      telop: ["法案提出もこれから"],
+      narr: "法案提出もこれから。",
+    },
+    {
+      id: "pay3",
+      style: "number",
+      telop: ["法律ができるまで"],
+      narr: "法律ができるまで、",
+    },
+    {
+      id: "pay4",
+      style: "number",
+      telop: ["税率はいま据え置き"],
+      narr: "税率はいま据え置き。",
+    },
+    {
+      id: "cta",
+      style: "cta",
+      telop: commentTelopLines(),
+      narr: "どう思う？コメントで教えて。",
+    },
+  ],
+  /** rank2 — shohizei テンプレ横展開 */
+  "tariff-us": [
+    {
+      id: "hook1",
+      style: "hook",
+      telop: ["車の対米関税15%"],
+      narr: "車の対米関税、15パーセント。",
+    },
+    {
+      id: "hook2",
+      style: "hook",
+      telop: ["輸出額はもう2割減"],
+      narr: "輸出額はもう2割減った。",
+    },
+    {
+      id: "when1",
+      style: "number",
+      telop: ["日米合意で15%"],
+      narr: "日米合意で15パーセント。",
+    },
+    {
+      id: "when2",
+      style: "number",
+      telop: ["相互も自動車も同率"],
+      narr: "相互も自動車も同じ税率。",
+    },
+    {
+      id: "when3",
+      style: "body",
+      telop: ["日本側の関税下げなし"],
+      narr: "日本側の関税引き下げはない。",
+    },
+    {
+      id: "num1",
+      style: "number",
+      telop: ["対米輸出▲10.2%"],
+      narr: "対米輸出は10.2パーセント減。",
+    },
+    {
+      id: "num2",
+      style: "number",
+      telop: ["自動車輸出額▲22.7%"],
+      narr: "自動車の輸出額は22.7パーセント減。",
+    },
+    {
+      id: "num3",
+      style: "number",
+      telop: ["GDP▲0.4ポイント試算"],
+      narr: "GDPは0.4ポイント下押しの試算。",
+    },
+    {
+      id: "pay1",
+      style: "body",
+      telop: ["年2兆円超の負担減"],
+      narr: "関税負担は年2兆円超の削減とも説明。",
+    },
+    {
+      id: "pay2",
+      style: "diet",
+      telop: ["合意から約1年"],
+      narr: "合意から約1年が経った。",
+    },
+    {
+      id: "cta",
+      style: "cta",
+      telop: commentTelopLines(),
+      narr: "どう思う？コメントで教えて。",
+    },
   ],
 };
 

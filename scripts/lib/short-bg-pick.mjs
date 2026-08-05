@@ -46,6 +46,32 @@ export const SLUG_BEAT_CLIPS = {
   "osaka-to-metropolis": {
     hook: "osaka-castle",
   },
+  "shohizei-genmen": {
+    hook1: "supermarket-aisle-blur",
+    hook2: "supermarket-shopper-mask",
+    when1: "yen-symbols-falling",
+    when2: "supermarket-aisle-blur",
+    when3: "diet-building-front",
+    bridge1: "supermarket-shopper-mask",
+    bridge2: "yen-salary-envelope",
+    bridge3: "diet-exterior-day",
+    pay1: "diet-building-front",
+    pay2: "politician-speech",
+    pay3: "supermarket-aisle-blur",
+    pay4: "yen-symbols-falling",
+  },
+  "tariff-us": {
+    hook1: "global-markets-globe",
+    hook2: "stock-chart-neon",
+    when1: "flag-waving",
+    when2: "yen-symbols-falling",
+    when3: "diet-building-front",
+    num1: "report-chart-hand",
+    num2: "stock-chart-neon",
+    num3: "yen-salary-envelope",
+    pay1: "yen-symbols-falling",
+    pay2: "diet-exterior-day",
+  },
 };
 
 /** @type {{ re: RegExp, clipId: string, score: number }[]} */
@@ -59,6 +85,10 @@ const TEXT_RULES = [
   { re: /学校教育|教科書|教員|文部科学|デジタル教科/, clipId: "diet-exterior-day", score: 50 },
   { re: /成立|法案|改正法|附帯決議|憲法/, clipId: "flag-waving", score: 45 },
   { re: /出生率|少子化|こども未来|出生数|合計特殊出生/, clipId: "newborn-sleeping", score: 45 },
+  { re: /関税|トランプ|対米|輸出|貿易|MFN|232条/, clipId: "global-markets-globe", score: 60 },
+  { re: /GDP|輸出額|試算|チャート|株/, clipId: "stock-chart-neon", score: 55 },
+  { re: /食料品|飲食料|消費税|減税|スーパー|値札|レシート/, clipId: "supermarket-aisle-blur", score: 60 },
+  { re: /食料品|飲食料|物価高|買い物/, clipId: "supermarket-shopper-mask", score: 55 },
   { re: /予算|兆円|歳出|税|給与|年金|物価|3\.6兆/, clipId: "yen-salary-envelope", score: 45 },
   { re: /エネルギ|再エネ|ソーラ|電力|原発|太陽光/, clipId: "solar-energy-field", score: 48 },
   { re: /介護|高齢|医療費|福祉|社会保障/, clipId: "elderly-care", score: 48 },
